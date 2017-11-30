@@ -1,24 +1,14 @@
-<style lang="less"> 
-    .page {
-        margin-top:20px;
-    }
-   
-</style>
-
-
 
 <template>
 
 <div>
 
-
-<h1>Hello worl!</h1>
+ <Button type="primary">新建订单</Button>
 
  <Table :columns="columns1" :data="data1"></Table>
 
-
  <Page :total="100" class="page"></Page>
- 
+
 
 </div>
   
@@ -73,3 +63,18 @@
         }
     }
 </script>
+
+
+
+<style lang="less"> 
+
+
+    .page {
+        margin-top:20px;
+    }
+
+    
+   
+</style>
+
+

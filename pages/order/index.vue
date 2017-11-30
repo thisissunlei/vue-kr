@@ -20,6 +20,7 @@
  <Page :total="100" class="page"></Page>
  
 
+
 </div>
   
 </template>

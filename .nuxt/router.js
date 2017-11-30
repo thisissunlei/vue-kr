@@ -3,9 +3,10 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _0dc6096c = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
-const _79596108 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _5f15731c = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _31457df0 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
+const _7b850af6 = () => import('../pages/ordercenter/meeting.vue' /* webpackChunkName: "pages/ordercenter/meeting" */).then(m => m.default || m)
+const _bdc5f1e4 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
 
 
 
@@ -43,17 +44,22 @@ export function createRouter () {
     routes: [
 		{
 			path: "/",
-			component: _0dc6096c,
+			component: _31457df0,
 			name: "index"
 		},
 		{
 			path: "/demo",
-			component: _79596108,
+			component: _34da7960,
 			name: "demo"
 		},
 		{
+			path: "/ordercenter/meeting",
+			component: _7b850af6,
+			name: "ordercenter-meeting"
+		},
+		{
 			path: "/demo/my",
-			component: _5f15731c,
+			component: _bdc5f1e4,
 			name: "demo-my"
 		}
     ],

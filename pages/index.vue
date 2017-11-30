@@ -30,6 +30,40 @@
                     {
                         title: 'Address',
                         key: 'address'
+                    },
+                    {
+                        title:'action',
+                        key:'acction',
+                        render:(h,params)=>{
+                            return h('div',[
+                                h('Button',{
+                                    props:{
+                                        type:'primary',
+                                        size:'small'
+                                    },
+                                    style:{
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            console.log('===========',params)
+                                        }
+                                    }
+                                }, 'View'),
+                                h('Button', {
+                                    props: {
+                                        type: 'error',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            console.log(params.index)
+                                        }
+                                    }
+                                }, 'Delete')
+
+                                ])
+                        }
                     }
                 ],
                 data1: [

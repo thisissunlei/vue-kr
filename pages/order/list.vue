@@ -7,8 +7,9 @@
     <h1>Hello worl222!</h1>
     <Table  :columns="columns1" :data="data1"></Table>
     <div style="margin: 10px;overflow: hidden">
+        <Button type="primary">导出</Button>
         <div style="float: right;">
-            <Page :total="pageSize" ></Page>
+            <Page :total="pageSize" show-total show-elevator></Page>
         </div>
     </div>
 
@@ -62,7 +63,7 @@
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        render:(h)=>{
+                        render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
                                     props: {
@@ -74,7 +75,8 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.show(params.index)
+                                            this.show(params
+                                            )
                                         }
                                     }
                                 }, '查看'),
@@ -88,7 +90,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params.index)
+                                            this.remove(params)
                                         }
                                     }
                                 }, '作废')
@@ -140,14 +142,15 @@
                 ]
         },
         methods:{
-            show (index) {
+            show (params) {
+                console.log('params====',params)
                 this.$Modal.info({
                     title: 'User Info',
                     content: '啦啦记得和'
                 })
             },
-            remove (index) {
-                this.data1.splice(index, 1);
+            remove (params) {
+                console.log('params222====',params)
             }
            
         }

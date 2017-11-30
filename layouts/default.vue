@@ -17,8 +17,18 @@
 		.nav {
 			margin-left:200px;
 			height:60px;
+   
 		}
+
+        .user {
+            float:right;
+        }
+
+       
+
 	}
+
+
 
 	.sidebar {
 		position:fixed;
@@ -75,7 +85,23 @@
             智能硬件
         </MenuItem>
 
+
+         <Submenu name="3" class="user">
+            <template slot="title">
+               <Avatar icon="person" size="large" />
+               张屈
+            </template>
+            <MenuGroup title="基本信息">
+                <MenuItem name="3-4">个人中心</MenuItem>
+                <MenuItem name="3-5">退出</MenuItem>
+            </MenuGroup>
+        </Submenu>
+         
     </Menu>
+
+
+
+
 	</div>
 
 	<div class="sidebar">

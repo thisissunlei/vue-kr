@@ -5,6 +5,10 @@ Vue.use(Router)
 
 const _668c50b9 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 const _bc72df62 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
+const _5c914d1a = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
+const _9905c810 = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
+const _04e780e8 = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
+const _ebfbafe6 = () => import('../pages/bill/list.vue' /* webpackChunkName: "pages/bill/list" */).then(m => m.default || m)
 const _10c6ee7f = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
 
 
@@ -50,6 +54,26 @@ export function createRouter () {
 			path: "/demo",
 			component: _bc72df62,
 			name: "demo"
+		},
+		{
+			path: "/bill",
+			component: _5c914d1a,
+			name: "bill"
+		},
+		{
+			path: "/order",
+			component: _9905c810,
+			name: "order"
+		},
+		{
+			path: "/order/list",
+			component: _04e780e8,
+			name: "order-list"
+		},
+		{
+			path: "/bill/list",
+			component: _ebfbafe6,
+			name: "bill-list"
 		},
 		{
 			path: "/demo/my",

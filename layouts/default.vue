@@ -1,64 +1,99 @@
+<style lang="less">
 
-<style lang="less"> 
+    .layout{
+        border: 1px solid #d7dde4;
+        background: #f5f7f9;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
 
-	*{
-		margin:0;
-		padding:0;
-	}
 
-	body{
-		position:relative;
-	}
+    }
 
-	.header {
-		height:60px;
-		border-bottom:1px solid #eee;
+    .layout-breadcrumb{
+        padding: 10px 15px 0;
+    }
 
-		.nav {
-			margin-left:200px;
-			height:60px;
-   
-		}
+    .layout-content{
+        min-height: 200px;
+        margin: 15px;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 4px;
+    }
+    .layout-content-main{
+        padding: 10px;
+    }
+    .layout-copy{
+        text-align: center;
+        padding: 10px 0 20px;
+        color: #9ea7b4;
+    }
+    .layout-menu-left{
+        background: #464c5b;
+          height:990px;
+    }
+    .layout-header{
+        height: 60px;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0,0,0,.1);
+
+        .open-sidebar{
+              float:left;
+        }
 
         .user {
             float:right;
         }
-
        
-
-	}
-
-
-
-	.sidebar {
-		position:fixed;
-		width:240px;
-		background-color:#fff;
-		border-right:1px solid #eee;
-		top:60px;
-		left:0;
-		bottom:0;
-
-	}
-
-	.main {
-		margin-left:240px;
-		padding-left:20px;
-		padding-top:20px;
-		padding-right:20px;
-	}
-
+    }
+    .layout-logo-left{
+        width: 90%;
+        height: 30px;
+        background: #5b6270;
+        border-radius: 3px;
+        margin: 15px auto;
+    }
+    .layout-ceiling-main a{
+        color: #9ba7b5;
+    }
+    .layout-hide-text .layout-text{
+        display: none;
+    }
+    .ivu-col{
+        transition: width .2s ease-in-out;
+    }
 </style>
-
-
-
 <template>
+    <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
+        <Row type="flex">
+            <Col :span="spanLeft" class="layout-menu-left">
+                        <Menu active-name="1" theme="dark" width="auto">
+                    <div class="layout-logo-left"></div>
+                    <MenuItem name="1">
+                        <Icon type="ios-navigate" :size="iconSize"></Icon>
+                        <span class="layout-text">合同管理</span>
+                    </MenuItem>
+                    <MenuItem name="2">
+                        <Icon type="ios-keypad" :size="iconSize"></Icon>
+                        <span class="layout-text">基础配置</span>
+                    </MenuItem>
+                    <MenuItem name="3">
+                        <Icon type="ios-analytics" :size="iconSize"></Icon>
+                        <span class="layout-text">活动列表</span>
+                    </MenuItem>
+                </Menu>
+            </Col>
+            <Col :span="spanRight">
+                <div class="layout-header">
 
-<div>
+                    <Menu mode="horizontal" :theme="theme1" active-name="1" class="nav">
 
-	<div class="header">
-
-	<Menu mode="horizontal" :theme="theme1" active-name="1" class="nav">
+                     <MenuItem name="0">
+             <Button type="text" @click="toggleClick" >
+                            <Icon type="navicon" size="32"></Icon>
+                        </Button>
+        </MenuItem>
         <MenuItem name="1">
             首页
         </MenuItem>
@@ -85,7 +120,6 @@
             智能硬件
         </MenuItem>
 
-
          <Submenu name="3" class="user">
             <template slot="title">
                <Avatar icon="person" size="large" />
@@ -100,44 +134,49 @@
     </Menu>
 
 
-
-
-	</div>
-
-	<div class="sidebar">
-
-	 <Menu  active-name="1" class="nav">
-        <MenuGroup title="内容管理">
-            <MenuItem name="1">
-                <Icon type="document-text"></Icon>
-                文章管理
-            </MenuItem>
-            <MenuItem name="2">
-                <Icon type="chatbubbles"></Icon>
-                评论管理
-            </MenuItem>
-        </MenuGroup>
-        <MenuGroup title="统计分析">
-            <MenuItem name="3">
-                <Icon type="heart"></Icon>
-                用户留存
-            </MenuItem>
-            <MenuItem name="4">
-                <Icon type="heart-broken"></Icon>
-                流失用户
-            </MenuItem>
-        </MenuGroup>
-    </Menu>
-
-
-	</div>
-
-	<div class="main">
-  		<nuxt/>
-	</div>
-
-  	<div class="footer"></div>
-
-</div>
-
+                </div>
+                <div class="layout-breadcrumb">
+                    <Breadcrumb>
+                        <BreadcrumbItem href="#">Index</BreadcrumbItem>
+                        <BreadcrumbItem href="#">Apps</BreadcrumbItem>
+                        <BreadcrumbItem>App</BreadcrumbItem>
+                    </Breadcrumb>
+                </div>
+                <div class="layout-content">
+                    <div class="layout-content-main">
+                        <nuxt/>
+                    </div>
+                </div>
+                <div class="layout-copy">
+                    2011-2016 &copy; TalkingData
+                </div>
+            </Col>
+        </Row>
+    </div>
 </template>
+<script>
+    export default {
+        data () {
+            return {
+                spanLeft: 5,
+                spanRight: 19
+            }
+        },
+        computed: {
+            iconSize () {
+                return this.spanLeft === 5 ? 14 : 24;
+            }
+        },
+        methods: {
+            toggleClick () {
+                if (this.spanLeft === 5) {
+                    this.spanLeft = 2;
+                    this.spanRight = 22;
+                } else {
+                    this.spanLeft = 5;
+                    this.spanRight = 19;
+                }
+            }
+        }
+    }
+</script>

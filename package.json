@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "axios": "^0.17.1",
     "iview": "^2.7.3",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "nuxt": "^1.0.0-rc11"
   }
 }

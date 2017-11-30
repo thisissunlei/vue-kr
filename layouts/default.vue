@@ -11,12 +11,12 @@
 	}
 
 	.header {
-		height:50px;
+		height:60px;
 		border-bottom:1px solid #eee;
 
 		.nav {
 			margin-left:200px;
-			height:50px;
+			height:60px;
 		}
 	}
 
@@ -25,7 +25,7 @@
 		width:240px;
 		background-color:#fff;
 		border-right:1px solid #eee;
-		top:50px;
+		top:60px;
 		left:0;
 		bottom:0;
 

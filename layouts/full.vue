@@ -39,13 +39,11 @@
         box-shadow: 0 1px 1px rgba(0,0,0,.1);
 
         .open-sidebar{
-              float:left;
+              display:inline-block;
         }
-
-        .user {
-            float:right;
+        .nav {
+            display:inline-block;
         }
-       
     }
     .layout-logo-left{
         width: 90%;
@@ -134,6 +132,7 @@
     </Menu>
 
 
+
                 </div>
                 <div class="layout-breadcrumb">
                     <Breadcrumb>
@@ -143,9 +142,7 @@
                     </Breadcrumb>
                 </div>
                 <div class="layout-content">
-                    <div class="layout-content-main">
-                        <nuxt/>
-                    </div>
+                    <div class="layout-content-main">Content</div>
                 </div>
                 <div class="layout-copy">
                     2011-2016 &copy; TalkingData

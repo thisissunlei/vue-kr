@@ -1,0 +1,16 @@
+{
+  "name": "kr-vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "iview": "^2.7.3",
+    "nuxt": "^1.0.0-rc11"
+  }
+}

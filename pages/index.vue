@@ -1,3 +1,12 @@
+<style lang="less"> 
+    .page {
+        margin-top:20px;
+    }
+   
+</style>
+
+
+
 <template>
 
 <div>
@@ -7,6 +16,9 @@
 
  <Table :columns="columns1" :data="data1"></Table>
 
+
+ <Page :total="100" class="page"></Page>
+ 
 
 
 </div>

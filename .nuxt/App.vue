@@ -14,7 +14,9 @@ import '../node_modules/iview/dist/styles/iview.css'
 
 let layouts = {
 
-  "_default": () => import('../layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m)
+  "_default": () => import('../layouts/default.vue'  /* webpackChunkName: "layouts/default" */).then(m => m.default || m),
+
+  "_full": () => import('../layouts/full.vue'  /* webpackChunkName: "layouts/full" */).then(m => m.default || m)
 
 }
 

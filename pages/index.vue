@@ -8,6 +8,9 @@
  <Table :columns="columns1" :data="data1"></Table>
 
 
+ <Page :total="100"></Page>
+ 
+
 
 </div>
   

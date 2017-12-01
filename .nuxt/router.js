@@ -4,16 +4,17 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _a9f3b728 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _22396ea0 = () => import('../pages/orderManage/index.vue' /* webpackChunkName: "pages/orderManage/index" */).then(m => m.default || m)
 const _fe27d708 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _8defc52a = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
 const _9e4644c0 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
-const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
-const _668f6ad0 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
+const _8defc52a = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
 const _1e1aa172 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
 const _37e5f5d6 = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
-const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
-const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _668f6ad0 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
+const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
 const _57c2f10a = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
+const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
 
 
 
@@ -55,14 +56,14 @@ export function createRouter () {
 			name: "index"
 		},
 		{
+			path: "/orderManage",
+			component: _22396ea0,
+			name: "orderManage"
+		},
+		{
 			path: "/demo",
 			component: _fe27d708,
 			name: "demo"
-		},
-		{
-			path: "/order",
-			component: _8defc52a,
-			name: "order"
 		},
 		{
 			path: "/bill",
@@ -70,14 +71,9 @@ export function createRouter () {
 			name: "bill"
 		},
 		{
-			path: "/bill/list",
-			component: _cc8e7e7a,
-			name: "bill-list"
-		},
-		{
-			path: "/order/orderDetail",
-			component: _668f6ad0,
-			name: "order-orderDetail"
+			path: "/order",
+			component: _8defc52a,
+			name: "order"
 		},
 		{
 			path: "/demo/my",
@@ -90,9 +86,19 @@ export function createRouter () {
 			name: "order-list"
 		},
 		{
-			path: "/bill/list/settleAccounts",
-			component: _2cf64e30,
-			name: "bill-list-settleAccounts"
+			path: "/order/orderDetail",
+			component: _668f6ad0,
+			name: "order-orderDetail"
+		},
+		{
+			path: "/bill/list",
+			component: _cc8e7e7a,
+			name: "bill-list"
+		},
+		{
+			path: "/bill/list/antiSettlement",
+			component: _57c2f10a,
+			name: "bill-list-antiSettlement"
 		},
 		{
 			path: "/bill/list/billHighSearch",
@@ -100,9 +106,9 @@ export function createRouter () {
 			name: "bill-list-billHighSearch"
 		},
 		{
-			path: "/bill/list/antiSettlement",
-			component: _57c2f10a,
-			name: "bill-list-antiSettlement"
+			path: "/bill/list/settleAccounts",
+			component: _2cf64e30,
+			name: "bill-list-settleAccounts"
 		}
     ],
     fallback: false

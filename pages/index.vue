@@ -27,58 +27,8 @@
 
 
 <script>
-    export default {
-        data () {
-            return {
-                columns1: [
-                    {
-                        title: 'Name',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    },
-                    {
-                        title:'action',
-                        key:'acction',
-                        render:(h,params)=>{
-                            return h('div',[
-                                h('Button',{
-                                    props:{
-                                        type:'primary',
-                                        size:'small'
-                                    },
-                                    style:{
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            console.log('===========',params)
-                                        }
-                                    }
-                                }, 'View'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            console.log(params.index)
-                                        }
-                                    }
-                                }, 'Delete')
+    var detail=[
 
-                                ])
-                        }
-                    }
-                ],
-                data1: [
                     {
                         name: 'John Brown',
                         age: 18,
@@ -102,8 +52,36 @@
                         age: 26,
                         address: 'Ottawa No. 2 Lake Park',
                         date: '2016-10-04'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        age: 26,
+                        address: 'Ottawa No. 2 Lake Park',
+                        date: '2016-10-04'
                     }
                 ]
+    export default {
+        data () {
+            return {
+                columns1: [
+                    {
+                        title: 'Name',
+                        key: 'name'
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    },
+                    {
+                        title: 'Date',
+                        key: 'date'
+                    }
+                ],
+                data1:detail
             }
         }
     }

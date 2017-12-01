@@ -5,11 +5,15 @@ Vue.use(Router)
 
 const _668c50b9 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 const _bc72df62 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _5c914d1a = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
 const _9905c810 = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
-const _04e780e8 = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
-const _ebfbafe6 = () => import('../pages/bill/list.vue' /* webpackChunkName: "pages/bill/list" */).then(m => m.default || m)
+const _5c914d1a = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
+const _3d41b0d0 = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
+const _9c752936 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
 const _10c6ee7f = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _04e780e8 = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
+const _44361cc3 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
+const _2a95b7c3 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _6f02bf9d = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
 
 
 
@@ -56,14 +60,29 @@ export function createRouter () {
 			name: "demo"
 		},
 		{
+			path: "/order",
+			component: _9905c810,
+			name: "order"
+		},
+		{
 			path: "/bill",
 			component: _5c914d1a,
 			name: "bill"
 		},
 		{
-			path: "/order",
-			component: _9905c810,
-			name: "order"
+			path: "/bill/list",
+			component: _3d41b0d0,
+			name: "bill-list"
+		},
+		{
+			path: "/order/orderDetail",
+			component: _9c752936,
+			name: "order-orderDetail"
+		},
+		{
+			path: "/demo/my",
+			component: _10c6ee7f,
+			name: "demo-my"
 		},
 		{
 			path: "/order/list",
@@ -71,14 +90,19 @@ export function createRouter () {
 			name: "order-list"
 		},
 		{
-			path: "/bill/list",
-			component: _ebfbafe6,
-			name: "bill-list"
+			path: "/bill/list/settleAccounts",
+			component: _44361cc3,
+			name: "bill-list-settleAccounts"
 		},
 		{
-			path: "/demo/my",
-			component: _10c6ee7f,
-			name: "demo-my"
+			path: "/bill/list/billHighSearch",
+			component: _2a95b7c3,
+			name: "bill-list-billHighSearch"
+		},
+		{
+			path: "/bill/list/antiSettlement",
+			component: _6f02bf9d,
+			name: "bill-list-antiSettlement"
 		}
     ],
     fallback: false

@@ -1,50 +1,24 @@
-<style lang="less"> 
-    label{
-        width:250px;
-        line-height: 14px;
-        color: #333333;
-        padding-bottom: 10px;
-        display: inline-block;
-    }
-    form{
-        width:540px;
-        margin:0 auto;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-      clear: both;
-      content: '.';
-      height: 0;
-      display: block;
-      visibility: hidden;
-    }
-    .u-input{
-        width:250px;
-        float:left; 
-        margin-bottom:10px;
-        &:nth-child(2n-1){
-          margin-right:30px;  
-        }
-    }
-    .u-search{
+<style lang="less">
+ .u-search{
         height:22px;
-        margin:16px 20px;
-        span{
+        margin:16px 0;
+        .u-high-search{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url(./../images/upperSearch.png) no-repeat center;
             background-size: contain;  
             float:right;
+            margin-right: 20px;
         }
-        
 
     }
-   
 </style>
+
 <template>
-<div class="order">
-    <div class="u-search" @click="showSearch">
-        <span></span>   
+<div class="g-bill">
+    <div class="u-search" >
+        <Button type="primary">批量结算</Button>
+        <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <Table  :columns="columns1" :data="data1"></Table>
     <div style="margin: 10px;overflow: hidden">
@@ -60,79 +34,51 @@
         cancel-text="取消"
         width="660"
      >
-        <form class="u-clearfix">
-            <div class="u-input">
-               <label>订单编号</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单编号" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>客户名称</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入客户名称" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>社区名称</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>订单总额</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单总额" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>订单生成时间</label>
-               <DatePicker 
-                    type="date" 
-                    placeholder="请选择订单生成时间" 
-                    style="width: 250px"
-               ></DatePicker> 
-            </div>
-            <div class="u-input">
-               <label>订单状态</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单状态" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>支付状态</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入支付状态" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-        </form>
+        <HighSearch></HighSearch>
+    </Modal>
+    <Modal
+        v-model="openSettle"
+        title="结账提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="443"
+     >
+       <settleAccounts> </settleAccounts>
+    </Modal>
+    <Modal
+        v-model="openAntiSettle"
+        title="反结账提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="443"
+     >
+       <antiSettlement> </antiSettlement>
     </Modal>
 </div>
 </template>
 
 
 <script>
+import HighSearch from './billHighSearch';
+import settleAccounts from './settleAccounts';
+import antiSettlement from './antiSettlement';
+
     export default {
-        name: 'Meeting',
+        name: 'Bill',
+        components:{
+            HighSearch,
+            settleAccounts,
+            antiSettlement
+        },
         data () {
             return {
                 pageSize:1,
                 openSearch:false,
+                openSettle:false,
+                openAntiSettle:false,
                 columns1: [
                     {
-                        title: '订单编号',
+                        title: '账单编号',
                         key: 'number',
                         align:'center'
                     },
@@ -147,22 +93,27 @@
                         align:'center'
                     },
                     {
-                        title: '订单总额',
+                        title: '账单类型',
                         key: 'amount',
                         align:'center'
                     },
                     {
-                        title: '订单生成时间',
-                        key: 'date',
+                        title: '账单金额',
+                        key: 'pay',
                         align:'center'
                     },
                     {
-                        title: '订单状态',
+                        title: '结账金额',
                         key: 'orderstatus',
                         align:'center'
                     },
                     {
-                        title: '支付状态',
+                        title: '付款截止日期',
+                        key: 'date',
+                        align:'center'
+                    },
+                    {
+                        title: '账单状态',
                         key: 'pay',
                         align:'center'
                     },
@@ -197,10 +148,24 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params)
+                                            this.showSettle(params)
                                         }
                                     }
-                                }, '作废')
+                                }, '结账'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showAntiSettle(params)
+                                        }
+                                    }
+                                }, '反结账')
                             ]);  
                         }
                     }
@@ -236,6 +201,8 @@
                         pay:'待付款',
                     }
                 ]
+           
+            
         },
         methods:{
             showSearch (params) {
@@ -244,8 +211,12 @@
             openView(){
 
             },
-            remove (params) {
-                console.log('params222====',params)
+            showSettle (params) {
+                this.openSettle=true;
+                
+            },
+            showAntiSettle(params){
+                this.openAntiSettle=true;
             }
            
         }

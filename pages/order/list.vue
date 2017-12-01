@@ -42,7 +42,7 @@
    
 </style>
 <template>
-<div>
+<div class="order">
     <div class="u-search" @click="showSearch">
         <span></span>   
     </div>
@@ -246,9 +246,6 @@
             },
             remove (params) {
                 console.log('params222====',params)
-            },
-            changeSearch(status){
-                this.openSearch=status;
             }
            
         }

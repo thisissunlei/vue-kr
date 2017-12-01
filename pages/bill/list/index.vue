@@ -5,7 +5,7 @@
         .u-high-search{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url(./../images/upperSearch.png) no-repeat center;
             background-size: contain;  
             float:right;
             margin-right: 20px;
@@ -15,7 +15,7 @@
 </style>
 
 <template>
-<div>
+<div class="g-bill">
     <div class="u-search" >
         <Button type="primary">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span>   
@@ -36,21 +36,46 @@
      >
         <HighSearch></HighSearch>
     </Modal>
+    <Modal
+        v-model="openSettle"
+        title="结账提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="443"
+     >
+       <settleAccounts> </settleAccounts>
+    </Modal>
+    <Modal
+        v-model="openAntiSettle"
+        title="反结账提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="443"
+     >
+       <antiSettlement> </antiSettlement>
+    </Modal>
 </div>
 </template>
 
 
 <script>
-import HighSearch from './highSearch';
+import HighSearch from './billHighSearch';
+import settleAccounts from './settleAccounts';
+import antiSettlement from './antiSettlement';
+
     export default {
         name: 'Bill',
         components:{
-            HighSearch
+            HighSearch,
+            settleAccounts,
+            antiSettlement
         },
         data () {
             return {
                 pageSize:1,
                 openSearch:false,
+                openSettle:false,
+                openAntiSettle:false,
                 columns1: [
                     {
                         title: '账单编号',
@@ -74,7 +99,7 @@ import HighSearch from './highSearch';
                     },
                     {
                         title: '账单金额',
-                        key: 'date',
+                        key: 'pay',
                         align:'center'
                     },
                     {
@@ -84,7 +109,7 @@ import HighSearch from './highSearch';
                     },
                     {
                         title: '付款截止日期',
-                        key: 'pay',
+                        key: 'date',
                         align:'center'
                     },
                     {
@@ -123,7 +148,7 @@ import HighSearch from './highSearch';
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params)
+                                            this.showSettle(params)
                                         }
                                     }
                                 }, '结账'),
@@ -137,7 +162,7 @@ import HighSearch from './highSearch';
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params)
+                                            this.showAntiSettle(params)
                                         }
                                     }
                                 }, '反结账')
@@ -186,11 +211,12 @@ import HighSearch from './highSearch';
             openView(){
 
             },
-            remove (params) {
-                console.log('params222====',params)
+            showSettle (params) {
+                this.openSettle=true;
+                
             },
-            changeSearch(status){
-                this.openSearch=status;
+            showAntiSettle(params){
+                this.openAntiSettle=true;
             }
            
         }

@@ -3,17 +3,17 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _31457df0 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
-const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _fa3355f2 = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
-const _64cb4284 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
-const _5439ca5f = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
-const _29c54598 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
-const _bdc5f1e4 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
-const _d0092c0e = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
-const _25505414 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
-const _0bafef14 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
-const _501cf6ee = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
+const _a9f3b728 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _fe27d708 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
+const _8defc52a = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
+const _9e4644c0 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
+const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
+const _668f6ad0 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
+const _1e1aa172 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _37e5f5d6 = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
+const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
+const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _57c2f10a = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
 
 
 
@@ -51,57 +51,57 @@ export function createRouter () {
     routes: [
 		{
 			path: "/",
-			component: _31457df0,
+			component: _a9f3b728,
 			name: "index"
 		},
 		{
 			path: "/demo",
-			component: _34da7960,
+			component: _fe27d708,
 			name: "demo"
 		},
 		{
 			path: "/order",
-			component: _fa3355f2,
+			component: _8defc52a,
 			name: "order"
 		},
 		{
 			path: "/bill",
-			component: _64cb4284,
+			component: _9e4644c0,
 			name: "bill"
 		},
 		{
 			path: "/bill/list",
-			component: _5439ca5f,
+			component: _cc8e7e7a,
 			name: "bill-list"
 		},
 		{
 			path: "/order/orderDetail",
-			component: _29c54598,
+			component: _668f6ad0,
 			name: "order-orderDetail"
 		},
 		{
 			path: "/demo/my",
-			component: _bdc5f1e4,
+			component: _1e1aa172,
 			name: "demo-my"
 		},
 		{
 			path: "/order/list",
-			component: _d0092c0e,
+			component: _37e5f5d6,
 			name: "order-list"
 		},
 		{
 			path: "/bill/list/settleAccounts",
-			component: _25505414,
+			component: _2cf64e30,
 			name: "bill-list-settleAccounts"
 		},
 		{
 			path: "/bill/list/billHighSearch",
-			component: _0bafef14,
+			component: _1355e930,
 			name: "bill-list-billHighSearch"
 		},
 		{
 			path: "/bill/list/antiSettlement",
-			component: _501cf6ee,
+			component: _57c2f10a,
 			name: "bill-list-antiSettlement"
 		}
     ],

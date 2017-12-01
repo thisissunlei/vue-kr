@@ -95,11 +95,11 @@
             </div>
             <div class="u-input">
                <label>订单生成时间</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单生成时间" 
+               <DatePicker 
+                    type="date" 
+                    placeholder="请选择订单生成时间" 
                     style="width: 250px"
-               ></Input> 
+               ></DatePicker> 
             </div>
             <div class="u-input">
                <label>订单状态</label>
@@ -142,7 +142,7 @@
                         align:'center'
                     },
                     {
-                        title: '社区姓名',
+                        title: '社区名称',
                         key: 'communityName',
                         align:'center'
                     },

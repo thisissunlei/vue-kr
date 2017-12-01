@@ -4,12 +4,14 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _31457df0 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
-const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _64cb4284 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
 const _fa3355f2 = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
-const _d0092c0e = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
-const _5d3458dc = () => import('../pages/bill/list.vue' /* webpackChunkName: "pages/bill/list" */).then(m => m.default || m)
+const _64cb4284 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
+const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
+const _29c54598 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
 const _bdc5f1e4 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _5d3458dc = () => import('../pages/bill/list.vue' /* webpackChunkName: "pages/bill/list" */).then(m => m.default || m)
+const _18d57ba8 = () => import('../pages/bill/highSearch.vue' /* webpackChunkName: "pages/bill/highSearch" */).then(m => m.default || m)
+const _d0092c0e = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
 
 
 
@@ -51,9 +53,9 @@ export function createRouter () {
 			name: "index"
 		},
 		{
-			path: "/demo",
-			component: _34da7960,
-			name: "demo"
+			path: "/order",
+			component: _fa3355f2,
+			name: "order"
 		},
 		{
 			path: "/bill",
@@ -61,14 +63,19 @@ export function createRouter () {
 			name: "bill"
 		},
 		{
-			path: "/order",
-			component: _fa3355f2,
-			name: "order"
+			path: "/demo",
+			component: _34da7960,
+			name: "demo"
 		},
 		{
-			path: "/order/list",
-			component: _d0092c0e,
-			name: "order-list"
+			path: "/order/orderDetail",
+			component: _29c54598,
+			name: "order-orderDetail"
+		},
+		{
+			path: "/demo/my",
+			component: _bdc5f1e4,
+			name: "demo-my"
 		},
 		{
 			path: "/bill/list",
@@ -76,9 +83,14 @@ export function createRouter () {
 			name: "bill-list"
 		},
 		{
-			path: "/demo/my",
-			component: _bdc5f1e4,
-			name: "demo-my"
+			path: "/bill/highSearch",
+			component: _18d57ba8,
+			name: "bill-highSearch"
+		},
+		{
+			path: "/order/list",
+			component: _d0092c0e,
+			name: "order-list"
 		}
     ],
     fallback: false

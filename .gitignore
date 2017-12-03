@@ -1,3 +1,14 @@
 node_modules
 
 dist
+
+.nuxt/router.js
+
+npm-debug.log
+npm-debug.log.*
+
+*.DS_STORE
+*.DS_STORE
+
+*.DS_Store
+*.DS_Store

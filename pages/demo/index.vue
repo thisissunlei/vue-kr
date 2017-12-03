@@ -1,59 +1,33 @@
 <template>
 	<div>
-    <Form :model="formLeft" label-position="left" :label-width="100">
-        <FormItem label="Title">
-            <Input v-model="formLeft.input1"></Input>
-        </FormItem>
-        <FormItem label="Title name">
-            <Input v-model="formLeft.input2"></Input>
-        </FormItem>
-        <FormItem label="Aligned title">
-            <Input v-model="formLeft.input3"></Input>
-        </FormItem>
-    </Form>
-    <Form :model="formRight" label-position="right" :label-width="100">
-        <FormItem label="Title">
-            <Input v-model="formRight.input1"></Input>
-        </FormItem>
-        <FormItem label="Title name">
-            <Input v-model="formRight.input2"></Input>
-        </FormItem>
-        <FormItem label="Aligned title">
-            <Input v-model="formRight.input3"></Input>
-        </FormItem>
-    </Form>
-    <Form :model="formTop" label-position="top">
-        <FormItem label="Title">
-            <Input v-model="formTop.input1"></Input>
-        </FormItem>
-        <FormItem label="Title name">
-            <Input v-model="formTop.input2"></Input>
-        </FormItem>
-        <FormItem label="Aligned title">
-            <Input v-model="formTop.input3"></Input>
-        </FormItem>
-    </Form>
+        <Button type="primary" @click="show">批量结算</Button>
+    
     </div>
 </template>
 <script>
+import axios from '../../plugins/api.js';
+
     export default {
         data () {
             return {
-                formLeft: {
-                    input1: '',
-                    input2: '',
-                    input3: ''
-                },
-                formRight: {
-                    input1: '',
-                    input2: '',
-                    input3: ''
-                },
-                formTop: {
-                    input1: '',
-                    input2: '',
-                    input3: ''
+                
+            }
+        },
+        methods: {
+            show: function() {
+                let params = {
+                    communityId:4,
+                    floor:this.floor,
+                    mainBillId:3162,
+                    startDate:'2017-11-27 00:00:00',
+                    endDate:'2017-12-02 00:00:00',
                 }
+               axios.get('krspace-finance-web/cmt/floor-graph/select-info?', params, r => {
+                    console.log('r', r);
+                
+                }, e => {
+                    console.log('error',e)
+                })
             }
         }
     }

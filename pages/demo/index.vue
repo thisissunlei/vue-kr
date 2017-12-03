@@ -13,6 +13,11 @@ import axios from '../../plugins/http.js';
                 
             }
         },
+        head(){
+            return {
+                title:'vue-------bad'
+            }
+        },
         methods: {
             show: function() {
                 let params = {

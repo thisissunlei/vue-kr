@@ -1,5 +1,7 @@
 // 配置API接口地址
 var root = '/api/';
+//引入apis
+import APIS from '../assets/apis/index';
 // 引用axios
 var axios = require('axios')
 // 自定义判断元素类型JS
@@ -32,13 +34,14 @@ function filterNull (o) {
   另外，不同的项目的处理方法也是不一致的，这里出错就是简单的alert
 */
 
-function apiAxios (method, url, params, success, failure) {
+function apiAxios (method, name, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
+  console.log('apis-------->',APIS[name].url)
   axios({
     method: method,
-    url: url,
+    url: APIS[name].url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,

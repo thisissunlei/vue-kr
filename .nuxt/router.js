@@ -4,16 +4,17 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _31457df0 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
-const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
 const _fa3355f2 = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
 const _64cb4284 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
-const _5439ca5f = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
-const _29c54598 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
+const _34da7960 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
 const _bdc5f1e4 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _29c54598 = () => import('../pages/order/orderDetail.vue' /* webpackChunkName: "pages/order/orderDetail" */).then(m => m.default || m)
+const _5439ca5f = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
 const _d0092c0e = () => import('../pages/order/list.vue' /* webpackChunkName: "pages/order/list" */).then(m => m.default || m)
 const _25505414 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
 const _0bafef14 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
 const _501cf6ee = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
+const _e4f5b20a = () => import('../pages/bill/list/billDetail.vue' /* webpackChunkName: "pages/bill/list/billDetail" */).then(m => m.default || m)
 
 
 
@@ -55,11 +56,6 @@ export function createRouter () {
 			name: "index"
 		},
 		{
-			path: "/demo",
-			component: _34da7960,
-			name: "demo"
-		},
-		{
 			path: "/order",
 			component: _fa3355f2,
 			name: "order"
@@ -70,9 +66,14 @@ export function createRouter () {
 			name: "bill"
 		},
 		{
-			path: "/bill/list",
-			component: _5439ca5f,
-			name: "bill-list"
+			path: "/demo",
+			component: _34da7960,
+			name: "demo"
+		},
+		{
+			path: "/demo/my",
+			component: _bdc5f1e4,
+			name: "demo-my"
 		},
 		{
 			path: "/order/orderDetail",
@@ -80,9 +81,9 @@ export function createRouter () {
 			name: "order-orderDetail"
 		},
 		{
-			path: "/demo/my",
-			component: _bdc5f1e4,
-			name: "demo-my"
+			path: "/bill/list",
+			component: _5439ca5f,
+			name: "bill-list"
 		},
 		{
 			path: "/order/list",
@@ -103,6 +104,11 @@ export function createRouter () {
 			path: "/bill/list/antiSettlement",
 			component: _501cf6ee,
 			name: "bill-list-antiSettlement"
+		},
+		{
+			path: "/bill/list/billDetail",
+			component: _e4f5b20a,
+			name: "bill-list-billDetail"
 		}
     ],
     fallback: false

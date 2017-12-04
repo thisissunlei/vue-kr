@@ -1,54 +1,47 @@
-
 <template>
-
     <div class='bill-list'>
-
-        <Tabs active-key="key1">
-            <Tab-pane label="入驻订单" key="key1">   
-                <div class="bill-search" @click="showSearch">
-                    <span></span>   
-                </div> 
-                <Table :columns="joinOrder" :data="joinData"></Table>
-                <Page :total="100" class="join_page"></Page>
-                <Modal
-                    v-model="openSearch"
-                    title="高级搜索"
-                    ok-text="确定"
-                    cancel-text="取消"
-                    width="660"
-                >
-                    <HeightSearch></HeightSearch>
-               </Modal>
-            </Tab-pane>
-            <Tab-pane label="减租订单" key="key2">
-                123
-            </Tab-pane>
-        </Tabs>
-        
-        
+            <div class="bill-search" @click="showSearch">
+                <span></span>   
+            </div> 
+            <Table :columns="joinOrder" :data="joinData"></Table>
+            <div style="margin: 10px;overflow: hidden">
+                    <Button type="primary">导出</Button>
+                    <div style="float: right;">
+                        <Page :total="pageSize" show-total show-elevator></Page>
+                    </div>
+            </div>
+            <Modal
+                v-model="openSearch"
+                title="高级搜索"
+                ok-text="确定"
+                cancel-text="取消"
+                width="660"
+            >
+                <HeightSearch></HeightSearch>
+            </Modal>
     </div>
-  
 </template>
 
 
 <script>
+    import axios from '../../../plugins/http.js';
     import HeightSearch from './heightSearch';
     var detail=[
-                {
-                    name: 'John Brown',
-                    age: 18,
-                    address: 'New York',
-                    date: '2016-10-03'
-                },
-                {
-                    name: 'Jim Green',
-                    age: 24,
-                    address: 'London',
-                    date: '2016-10-01'
-                },
+            {
+                name: 'John Brown',
+                age: 18,
+                address: 'New York',
+                date: '2016-10-03'
+            },
+            {
+                name: 'Jim Green',
+                age: 24,
+                address: 'London',
+                date: '2016-10-01'
+            },
     ]
     export default {
-        name:'order',
+        name:'join',
         components:{
             HeightSearch,
         },
@@ -171,13 +164,15 @@
                 this.openSearch=true;
             },
             searchSubmit (params){
-                console.log('parmas---',params);
+                
             },
             openView(params){
+                 location.href=`./watchView/12`;
+                 //location.href=`./watchView/orderId`;
                  console.log('-------',params);
             },
             openCancel(params){
-
+                
             },
             openEdit(params){
 
@@ -185,16 +180,25 @@
             openApplication(params){
 
             }
-        }
+        },
+        created:function(){
+            let {params}=this.$route
+            let from={
+                orderId:params.orderId
+            };
+            var _this=this;
+            this.basicInfo={};
+            axios.get('order-detail', from, r => {
+                    
+                        console.log('r', r);
+                    
+                }, e => {
+                    console.log('error',e)
+                })	
+	     }
     }
 </script>
 
 <style lang='less'>
- .bill-list{
-   .join_page{
-      margin-top:30px;
-      float:right;
-  }
- }
-  
+ 
 </style>

@@ -48,20 +48,20 @@
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
-			<Table :columns="cost" :data="data1"></Table>
+			<Table :columns="cost" :data="costInfo"></Table>
 		</DetailStyle>
 		<DetailStyle info="相关账单">
-			<Table :columns="billlist" :data="data1"></Table>
+			<Table :columns="bill" :data="billInfo"></Table>
 		</DetailStyle>
 	</div>
 </div>	
 </template>
 <script>
-
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import sectionTitle from '~/components/sectionTitle.vue';
+import dateUtils from 'vue-dateutils';
 export default {
 	components:{
 		DetailStyle,
@@ -73,40 +73,64 @@ export default {
 			cost:[
 				{
 				 title: '订单总额',
-                 key: 'number',
+                 key: 'totalAmount',
                  align:'center'	
 				},
 				{
 				 title: '退款金额',
-                 key: 'number',
+                 key: 'refundAmount',
                  align:'center'	
 				}
 			],
-			billlist:[
+			bill:[
 				{
 				 title: '账单编号',
-                 key: 'number',
+                 key: 'billNo',
                  align:'center'	
 				},
 				{
 				 title: '账单类型',
-                 key: 'number',
-                 align:'center'	
+                 key: 'billType',
+				 align:'center'	,
+				 render(h, obj){
+					if(obj.row.billType==='MEETING'){
+						return '会议室账单';
+					}else if(obj.row.billType==='PRINT'){
+						return '打印服务账单 ';
+					}else if(obj.row.billType==='CONTRACT'){
+						return '工位服务订单';
+					}
+				 }
 				},
 				{
 				 title: '账单生成日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'billStartTime',
+				 align:'center'	,
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
+					 return time;
+				 }
 				},
 				{
 				 title: '付款截止日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'billEndTime',
+				 align:'center'	,
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
+					 return time;
+				 }
 				},
 				{
 				 title: '账单状态',
-                 key: 'number',
-                 align:'center'	
+                 key: 'payStatus',
+				 align:'center'	,
+				 render(h, obj){
+					if(obj.row.payStatus==='WAIT'){
+						return '待付款';
+					}else if(obj.row.payStatus==='PAID'){
+						return '已付款 ';
+					}
+				 }
 				}
 			]
 		}
@@ -118,9 +142,43 @@ export default {
 		};
 		var _this=this;
 		this.basicInfo={};
+		this.costInfo=[{
+				refundAmount:'-￥250.00',
+				totalAmount:'￥300.00'
+		}]
+		this.billInfo=[
+			{
+				billNo:'HYSZD201712010001',
+				billType:'MEETING',
+				billStartTime:1511404234000,
+				billEndTime:1511063377000,
+				payStatus:'WAIT'
+			},
+			{
+				billNo:'HYSZD201712010001',
+				billType:'PRINT',
+				billStartTime:1509372919000,
+				billEndTime:1509372919000,
+				payStatus:'PAID'
+			},
+			{
+				billNo:'HYSZD201712010001',
+				billType:'CONTRACT',
+				billStartTime:1505704034000,
+				billEndTime:1505704034000,
+				payStatus:'WAIT'
+			}
+		]
 		axios.get('order-detail', from, r => {
-				
-                    console.log('r', r);
+			console.log('r', r);
+			_this.basicInfo=r;
+			_this.coseInfo=[
+				{
+				refundAmount:r.refundAmount,
+				totalAmount:r.totalAmount
+				}
+			]
+			_this.billInfo=r.billList;
                 
            	}, e => {
                 console.log('error',e)

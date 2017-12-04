@@ -136,12 +136,12 @@ export default {
                  key: 'payStatus',
 				 align:'center'	,
 				 render(h, obj){
-					if(obj.row.payStatus==='WAIT'){
-						return <span class="u-txt-red">待付款</span>;
-					}else if(obj.row.payStatus==='PAID'){
-						return <span class="u-txt">已付款</span>;
-					}
-				 }
+						if(obj.row.payStatus==='WAIT'){
+							return <span class="u-txt-red">待付款</span>;
+						}else if(obj.row.payStatus==='PAID'){
+							return <span class="u-txt">已付款</span>;
+						}
+				 	}
 				}
 			]
 		}
@@ -195,9 +195,9 @@ export default {
 		axios.get('order-detail', from, r => {
 			console.log('r', r);
 			_this.basicInfo=r;
-			_this.orderStartTime=r.orderStartTime;
-			_this.orderEndTime=r.orderEndTime;
-			_this.cTime=r.cTime;
+			_this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.orderStartTime));
+			_this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.orderEndTime));
+			_this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.cTime));
 			_this.payStatus=r.payStatus=='WAIT'?'待付款':'已付款';
 			_this.coseInfo=[
 				{

@@ -1,5 +1,6 @@
 <style lang="less"> 
-    .u-search{
+.g-order{
+  .u-search{
         height:22px;
         margin:16px 20px;
         span{
@@ -9,8 +10,9 @@
             background-size: contain;  
             float:right;
         }
-        
-
+    }
+    .u-table{
+        padding:0 20px;
     }
     .u-cancel-title{
         width:85%;
@@ -18,20 +20,34 @@
         font-size:14px;
         text-indent: 28px;
     }
-   
+    .u-txt-red{
+	    color:#FF6868;
+	}
+    .u-txt{
+        color:#666;
+    }
+    .u-txt-orange{
+        color: #F5A623;
+    }
+}   
 </style>
 <template>
-<div class="order">
-    <div class="u-search" @click="showSearch">
-        <span></span>   
+<div class="g-order">
+    <sectionTitle label="会议室订单管理"></sectionTitle>
+    <div class="u-search" >
+        <span @click="showSearch"></span>   
     </div>
-    <Table  :columns="columns1" :data="data1"></Table>
-    <div style="margin: 10px;overflow: hidden">
-        <Button type="primary">导出</Button>
-        <div style="float: right;">
-            <Page :total="pageSize" show-total show-elevator></Page>
+    <div class="u-table">
+        <Table  :columns="columns" :data="tableData" ref="table" stripe></Table>
+        <div style="margin: 10px 0 ;overflow: hidden">
+            <Button type="primary" @click="onExport">导出</Button>
+            <div style="float: right;">
+                <Page :total="pageSize" page-size="15" @on-change="changePage" show-total show-elevator></Page>
+            </div>
         </div>
     </div>
+    
+    
      <Modal
         v-model="openSearch"
         title="高级搜索"
@@ -60,26 +76,31 @@
 <script>
 import axios from '~/plugins/http.js';
 import HighSearch from './orderHighSearch';
-    export default {
+import sectionTitle from '~/components/sectionTitle.vue';
+import dateUtils from 'vue-dateutils';
+
+
+export default {
         name: 'Meeting',
         components:{
             HighSearch,
+            sectionTitle
         },
         data () {
             return {
-                pageSize:1,
                 openSearch:false,
                 openCancel:false,
-                columns1: [
+                tableData:this.getTableData(),
+                columns: [
                     {
                         title: '订单编号',
-                        key: 'number',
+                        key: 'orderNo',
                         align:'center'
                     },
                     {
                         title: '客户名称',
-                        key: 'name',
-                        align:'center'
+                        key: 'customerName',
+                        align:'center',
                     },
                     {
                         title: '社区名称',
@@ -88,28 +109,50 @@ import HighSearch from './orderHighSearch';
                     },
                     {
                         title: '订单总额',
-                        key: 'amount',
+                        key: 'totalAmount',
                         align:'center'
                     },
                     {
                         title: '订单生成时间',
-                        key: 'date',
-                        align:'center'
+                        key: 'createTime',
+                        align:'center',
+                        width:160,
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
+                            return time;
+                        }
                     },
                     {
                         title: '订单状态',
                         key: 'orderstatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='VALID'){
+                                return <span class="u-txt">已生效</span>;
+                            }else if(obj.row.orderStatus==='CANCEL'){
+                                return <span class="u-txt-orange">已作废</span>;
+                            }else if(obj.row.orderStatus==='REFUND'){
+                                return <span class="u-txt-red">已退订</span>;
+                            }
+                        }
                     },
                     {
                         title: '支付状态',
-                        key: 'pay',
-                        align:'center'
+                        key: 'payStatus',
+                        align:'center',
+                        render(h, obj){
+                                if(obj.row.payStatus==='WAIT'){
+                                    return <span class="u-txt-red">待付款</span>;
+                                }else if(obj.row.payStatus==='PAID'){
+                                    return <span class="u-txt">已付款</span>;
+                                }
+                            }
                     },
                     {
                         title: '操作',
                         key: 'operation',
                         align:'center',
+                        width:120,
                         render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
@@ -150,35 +193,6 @@ import HighSearch from './orderHighSearch';
                 
             }
         },
-        created:function(){
-            this.data1=[
-                    {
-                        number: 18,
-                        name: 'John Brown',
-                        communityName:'创业大街',
-                        amount:5535,
-                        date: '2016-10-03',
-                        orderstatus:'已完成',
-                        pay:'待付款',
-                    },{
-                        number: 12,
-                        name: 'John Brown',
-                        communityName:'创业大街',
-                        amount:5535,
-                        date: '2016-10-03',
-                        orderstatus:'已完成',
-                        pay:'待付款',
-                    },{
-                        number: 12,
-                        name: 'John Brown',
-                        communityName:'创业大街',
-                        amount:5535,
-                        date: '2016-10-03',
-                        orderstatus:'已完成',
-                        pay:'待付款',
-                    }
-                ]
-        },
         methods:{
             showSearch (params) {
                 this.openSearch=true;
@@ -204,8 +218,34 @@ import HighSearch from './orderHighSearch';
                     console.log('error',e)
                 })
                
+            },
+            onExport(){
+                 console.log('导出')
+            },
+            getTableData(index){
+                 let data = [];
+                  for (let i = 0; i < 10; i++) {
+                      data.push({
+                        orderNo: Math.floor(Math.random () * 1000000 + 100000),
+                        customerName: 'Business'+Math.floor(Math.random () * 100 + 1),
+                        communityName: '创业大街'+ Math.floor(Math.random () * 100 + 1),
+                        totalAmount:5535,
+                        createTime: 1505704034000,
+                        orderStatus:'VALID',
+                        payStatus:'WAIT',  
+                      })
+                  }   
+                   
+                   
+                    
+            
+                 this.pageSize=100;
+                  return data;
+            },
+            changePage (index) {
+                this.tableData = this.getTableData(index);
             }
-           
+
         }
 
     }

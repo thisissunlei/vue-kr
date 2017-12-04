@@ -13,52 +13,12 @@
                 <Modal
                     v-model="openSearch"
                     title="高级搜索"
-                    @on-searchSubmit="确定"
+                    ok-text="确定"
+                    cancel-text="取消"
                     width="660"
                 >
-
-                    <i-form :model="formTop" label-position="top">
-                        <Form-item label="订单编号" class='bill-search-class'>
-                            <i-input 
-                             v-model="mode" 
-                             placeholder="请输入订单编号"
-                             style="width: 252px"
-                            ></i-input>
-                        </Form-item>
-                        <Form-item label="客户名称" 
-                          class='bill-search-class'>
-                            <i-input 
-                             v-model="name" 
-                             placeholder="请输入客户名称"
-                             style="width: 252px"
-                            ></i-input>
-                        </Form-item>
-                        <Form-item label="社区名称" 
-                         class='bill-search-class'>
-                            <i-input 
-                             v-model="community" 
-                             placeholder="请输入社区名称"
-                             style="width: 252px"
-                            ></i-input>
-                        </Form-item>
-                         <Form-item label="订单状态" 
-                          class='bill-search-class'>
-                            <i-input 
-                             v-model="community" 
-                             placeholder="请输入订单状态"
-                             style="width: 252px"
-                            ></i-input>
-                        </Form-item>
-                         <Form-item label="支付状态" 
-                          class='bill-search-class'>
-                            <i-input 
-                             v-model="community" 
-                             placeholder="请输入支付状态"
-                             style="width: 252px"
-                            ></i-input>
-                        </Form-item>
-                    </i-form>
-                </Modal>
+                    <HeightSearch></HeightSearch>
+               </Modal>
             </Tab-pane>
             <Tab-pane label="减租订单" key="key2">
                 123
@@ -72,6 +32,7 @@
 
 
 <script>
+    import HeightSearch from './heightSearch';
     var detail=[
                 {
                     name: 'John Brown',
@@ -87,6 +48,10 @@
                 },
     ]
     export default {
+        name:'order',
+        components:{
+            HeightSearch,
+        },
         data () {
             return {
                 pageSize:1,
@@ -136,8 +101,65 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
-                        render () {
-                            return <Button-group><i-button type="text">查看</i-button><i-button type="text">作废</i-button><i-button type="text">编辑</i-button><i-button type="text">申请合同</i-button></Button-group>;                       
+                        render:(h,params)=>{
+                           return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openView(params)
+                                        }
+                                    }
+                                }, '查看'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openCancel(params)
+                                        }
+                                    }
+                                }, '作废'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openEdit(params)
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openApplication(params)
+                                        }
+                                    }
+                                }, '申请合同')
+                            ]);  
                         }
                     }
                 ],
@@ -150,6 +172,18 @@
             },
             searchSubmit (params){
                 console.log('parmas---',params);
+            },
+            openView(params){
+                 console.log('-------',params);
+            },
+            openCancel(params){
+
+            },
+            openEdit(params){
+
+            },
+            openApplication(params){
+
             }
         }
     }
@@ -161,25 +195,6 @@
       margin-top:30px;
       float:right;
   }
-  .bill-search{
-        height:22px;
-        margin:16px 20px;
-        span{
-            width:22px;
-            height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
-            background-size: contain;  
-            float:right;
-            cursor:pointer;
-        }
-   }
  }
-
- .bill-search-class{
-       display:inline-block;
-       width:50%;
-       padding-left:32px;
- }
-  
   
 </style>

@@ -6,6 +6,12 @@
 				margin-bottom:30px;
 			}
 		}
+		.u-txt-red{
+			color:#FF6868;
+		}
+		.u-txt{
+			color:#666;
+		}
 	}
 </style>
 <template>
@@ -26,25 +32,30 @@
 				{{basicInfo.totalAmount}}
 			</labelText>
 			<labelText label="预订开始时间：">
-				{{basicInfo.orderStartTime}}
+				{{orderStartTime}}
+				
 			</labelText>
 			<labelText label="预订结束时间：">
-				{{basicInfo.orderEndTime}}
+				{{orderEndTime}}
 			</labelText>
 			<labelText label="会议室所在社区名称：">
 				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="客户名称：">
-				{{basicInfo.customerName}}
+				<a href="">
+					{{basicInfo.customerName}}
+				</a>
 			</labelText>
 			<labelText label="订单创建人员：">
+				<a href="">
 				{{basicInfo.createrName}}
+				</a>
 			</labelText>
 			<labelText label="订单创建时间：">
-				{{basicInfo.cTime}}
+				{{cTime}}
 			</labelText>
 			<labelText label="支付状态：">
-				{{basicInfo.payStatus}}
+				{{payStatus}}
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
@@ -126,9 +137,9 @@ export default {
 				 align:'center'	,
 				 render(h, obj){
 					if(obj.row.payStatus==='WAIT'){
-						return '待付款';
+						return <span class="u-txt-red">待付款</span>;
 					}else if(obj.row.payStatus==='PAID'){
-						return '已付款 ';
+						return <span class="u-txt">已付款</span>;
 					}
 				 }
 				}
@@ -141,7 +152,10 @@ export default {
 			orderId:params.orderId
 		};
 		var _this=this;
-		this.basicInfo={};
+		//假数据--开始
+		this.basicInfo={
+
+		};
 		this.costInfo=[{
 				refundAmount:'-￥250.00',
 				totalAmount:'￥300.00'
@@ -169,9 +183,22 @@ export default {
 				payStatus:'WAIT'
 			}
 		]
+		let payStatus='PAID'
+		this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1511404234000));
+		this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1509372919000));
+		this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1505704034000));
+		this.payStatus=payStatus=='WAIT'?'待付款':'已付款';
+		//假数据--结束
+
+
+
 		axios.get('order-detail', from, r => {
 			console.log('r', r);
 			_this.basicInfo=r;
+			_this.orderStartTime=r.orderStartTime;
+			_this.orderEndTime=r.orderEndTime;
+			_this.cTime=r.cTime;
+			_this.payStatus=r.payStatus=='WAIT'?'待付款':'已付款';
 			_this.coseInfo=[
 				{
 				refundAmount:r.refundAmount,

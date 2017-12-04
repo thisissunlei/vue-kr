@@ -11,6 +11,7 @@ import App from './App.vue'
 import { getContext, getLocation } from './utils'
 
 import plugin0 from 'plugin0'
+import plugin1 from 'plugin1'
 
 
 // Component: <no-ssr>
@@ -127,9 +128,10 @@ async function createApp (ssrContext) {
   
 
   
+  if (typeof plugin0 === 'function') await plugin0(ctx, inject)
   
   if (process.browser) { 
-    if (typeof plugin0 === 'function') await plugin0(ctx, inject)
+    if (typeof plugin1 === 'function') await plugin1(ctx, inject)
   }
 
   if (process.server && ssrContext && ssrContext.url) {

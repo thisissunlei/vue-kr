@@ -9,7 +9,7 @@
 import Vue from 'vue'
 import NuxtLoading from './components/nuxt-loading.vue'
 
-import '../node_modules/iview/dist/styles/iview.css'
+import '/Users/dongfanai/kr-vue/node_modules/.2.7.4@iview/dist/styles/iview.css'
 
 
 let layouts = {

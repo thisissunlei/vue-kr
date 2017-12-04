@@ -164,7 +164,10 @@ export default {
                  key: 'number',
                  align:'center'	
 				}  
-            ]
+			],
+			serviceData:[],
+			treatmentData:[],
+			contractData:[]
 		}
 	},
 	created:function(){
@@ -174,13 +177,13 @@ export default {
 		};
 		var _this=this;
 		this.basicInfo={};
-		axios.get('order-detail', from, r => {
+		/*axios.get('order-detail', from, r => {
 				
                     console.log('r', r);
                 
            	}, e => {
                 console.log('error',e)
-            })
+            })*/
 	}
 }
 </script>

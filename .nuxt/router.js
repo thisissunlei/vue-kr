@@ -5,19 +5,22 @@ Vue.use(Router)
 
 const _a9f3b728 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 const _8defc52a = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
-const _9e4644c0 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
 const _fe27d708 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
+const _9e4644c0 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
 const _1e1aa172 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
 const _5fb6b050 = () => import('../pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
-const _66d0900d = () => import('../pages/orderCenter/orderManage/heightSearch.vue' /* webpackChunkName: "pages/orderCenter/orderManage/heightSearch" */).then(m => m.default || m)
-const _513ea508 = () => import('../pages/orderCenter/orderManage/list.vue' /* webpackChunkName: "pages/orderCenter/orderManage/list" */).then(m => m.default || m)
-const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
-const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _302981e4 = () => import('../pages/orderCenter/orderManage/index.vue' /* webpackChunkName: "pages/orderCenter/orderManage/index" */).then(m => m.default || m)
+const _6d7ab482 = () => import('../pages/orderCenter/orderManage/reduceList.vue' /* webpackChunkName: "pages/orderCenter/orderManage/reduceList" */).then(m => m.default || m)
 const _57c2f10a = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
 const _79948f17 = () => import('../pages/bill/list/billDetail.vue' /* webpackChunkName: "pages/bill/list/billDetail" */).then(m => m.default || m)
 const _0116225e = () => import('../pages/order/list/orderHighSearch.vue' /* webpackChunkName: "pages/order/list/orderHighSearch" */).then(m => m.default || m)
+const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
+const _66d0900d = () => import('../pages/orderCenter/orderManage/heightSearch.vue' /* webpackChunkName: "pages/orderCenter/orderManage/heightSearch" */).then(m => m.default || m)
+const _d06fdc74 = () => import('../pages/orderCenter/orderManage/joinList.vue' /* webpackChunkName: "pages/orderCenter/orderManage/joinList" */).then(m => m.default || m)
 const _673d626f = () => import('../pages/orderCenter/orderManage/create/join.vue' /* webpackChunkName: "pages/orderCenter/orderManage/create/join" */).then(m => m.default || m)
+const _a5efaea0 = () => import('../pages/orderCenter/orderManage/watchView/_detaiId.vue' /* webpackChunkName: "pages/orderCenter/orderManage/watchView/_detaiId" */).then(m => m.default || m)
 const _61dda104 = () => import('../pages/order/list/orderDetail/_orderId.vue' /* webpackChunkName: "pages/order/list/orderDetail/_orderId" */).then(m => m.default || m)
 
 
@@ -65,19 +68,14 @@ export function createRouter () {
 			name: "order"
 		},
 		{
-			path: "/bill",
-			component: _9e4644c0,
-			name: "bill"
-		},
-		{
 			path: "/demo",
 			component: _fe27d708,
 			name: "demo"
 		},
 		{
-			path: "/bill/list",
-			component: _cc8e7e7a,
-			name: "bill-list"
+			path: "/bill",
+			component: _9e4644c0,
+			name: "bill"
 		},
 		{
 			path: "/demo/my",
@@ -85,29 +83,24 @@ export function createRouter () {
 			name: "demo-my"
 		},
 		{
+			path: "/bill/list",
+			component: _cc8e7e7a,
+			name: "bill-list"
+		},
+		{
 			path: "/order/list",
 			component: _5fb6b050,
 			name: "order-list"
 		},
 		{
-			path: "/orderCenter/orderManage/heightSearch",
-			component: _66d0900d,
-			name: "orderCenter-orderManage-heightSearch"
+			path: "/orderCenter/orderManage",
+			component: _302981e4,
+			name: "orderCenter-orderManage"
 		},
 		{
-			path: "/orderCenter/orderManage/list",
-			component: _513ea508,
-			name: "orderCenter-orderManage-list"
-		},
-		{
-			path: "/bill/list/settleAccounts",
-			component: _2cf64e30,
-			name: "bill-list-settleAccounts"
-		},
-		{
-			path: "/bill/list/billHighSearch",
-			component: _1355e930,
-			name: "bill-list-billHighSearch"
+			path: "/orderCenter/orderManage/reduceList",
+			component: _6d7ab482,
+			name: "orderCenter-orderManage-reduceList"
 		},
 		{
 			path: "/bill/list/antiSettlement",
@@ -125,9 +118,34 @@ export function createRouter () {
 			name: "order-list-orderHighSearch"
 		},
 		{
+			path: "/bill/list/billHighSearch",
+			component: _1355e930,
+			name: "bill-list-billHighSearch"
+		},
+		{
+			path: "/bill/list/settleAccounts",
+			component: _2cf64e30,
+			name: "bill-list-settleAccounts"
+		},
+		{
+			path: "/orderCenter/orderManage/heightSearch",
+			component: _66d0900d,
+			name: "orderCenter-orderManage-heightSearch"
+		},
+		{
+			path: "/orderCenter/orderManage/joinList",
+			component: _d06fdc74,
+			name: "orderCenter-orderManage-joinList"
+		},
+		{
 			path: "/orderCenter/orderManage/create/join",
 			component: _673d626f,
 			name: "orderCenter-orderManage-create-join"
+		},
+		{
+			path: "/orderCenter/orderManage/watchView/:detaiId?",
+			component: _a5efaea0,
+			name: "orderCenter-orderManage-watchView-detaiId"
 		},
 		{
 			path: "/order/list/orderDetail/:orderId?",

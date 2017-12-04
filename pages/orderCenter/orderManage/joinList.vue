@@ -46,6 +46,7 @@
             HeightSearch,
         },
         data () {
+            
             return {
                 pageSize:1,
                 openSearch:false,
@@ -167,7 +168,7 @@
                 
             },
             openView(params){
-                 location.href=`./watchView/12`;
+                 location.href=`./orderManage/watchView/12`;
                  //location.href=`./watchView/orderId`;
                  console.log('-------',params);
             },
@@ -183,18 +184,17 @@
         },
         created:function(){
             let {params}=this.$route
-            let from={
-                orderId:params.orderId
-            };
             var _this=this;
             this.basicInfo={};
-            axios.get('order-detail', from, r => {
-                    
-                        console.log('r', r);
+            //列表
+            /*axios.get('order-list','', r => {
+                       
+                    console.log('r', r);
                     
                 }, e => {
                     console.log('error',e)
-                })	
+            })*/
+
 	     }
     }
 </script>

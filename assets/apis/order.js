@@ -9,7 +9,7 @@ module.exports = {
     'get-mainbill-community': {
         url: '/krspace-finance-web/finaVerify/data/get-mainbill-community?',
         method: 'get'
-    },
+  },
   //订单中心-订单作废
  'cancel-order': {
       url: '/krspace-op-web/order/metting-room/cancel?',
@@ -17,7 +17,7 @@ module.exports = {
   },
    //订单中心-订单列表
  'order-list': {
-      url: 'krspace-op-web/order/metting-room/list?',
+      url: '/krspace-op-web/order/metting-room/list?',
       method: 'get'
   },
    //订单中心-订单详情

@@ -1,6 +1,5 @@
 
 module.exports = {
-
 	plugins: [{
 		src: '~plugins/iview',
 		ssr: false
@@ -11,11 +10,12 @@ module.exports = {
 	},
 	proxy: [
 		['/api', {
-			target: 'http://optest.krspace.cn'
+			target: 'http://optest01.krspace.cn'
 		}]
 	],
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/proxy'
 	],
+
 }

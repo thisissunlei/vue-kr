@@ -10,4 +10,19 @@ module.exports = {
         url: '/krspace-finance-web/finaVerify/data/get-mainbill-community?',
         method: 'get'
     },
+  //订单中心-订单作废
+ 'cancel-order': {
+      url: '/krspace-op-web/order/metting-room/cancel?',
+      method: 'get'
+  },
+   //订单中心-订单列表
+ 'order-list': {
+      url: 'krspace-op-web/order/metting-room/list?',
+      method: 'get'
+  },
+   //订单中心-订单详情
+ 'order-detail': {
+      url: 'krspace-op-web/order/metting-room/detail?orderId={orderId}',
+      method: 'get'
+  },
 }

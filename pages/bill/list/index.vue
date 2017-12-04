@@ -12,6 +12,20 @@
         }
 
     }
+    .g-bill{
+        table{
+            td,th{
+               &:nth-child(7){
+                    width:120px;
+                 } 
+            }
+            td,th{
+                &:last-child{
+                    width:170px;
+                 }
+            }
+        }
+    }
 </style>
 
 <template>

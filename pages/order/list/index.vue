@@ -1,43 +1,22 @@
 <style lang="less"> 
-    label{
-        width:250px;
-        line-height: 14px;
-        color: #333333;
-        padding-bottom: 10px;
-        display: inline-block;
-    }
-    form{
-        width:540px;
-        margin:0 auto;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-      clear: both;
-      content: '.';
-      height: 0;
-      display: block;
-      visibility: hidden;
-    }
-    .u-input{
-        width:250px;
-        float:left; 
-        margin-bottom:10px;
-        &:nth-child(2n-1){
-          margin-right:30px;  
-        }
-    }
     .u-search{
         height:22px;
         margin:16px 20px;
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url(./../images/upperSearch.png) no-repeat center;
             background-size: contain;  
             float:right;
         }
         
 
+    }
+    .u-cancel-title{
+        width:85%;
+        margin:10px auto;
+        font-size:14px;
+        text-indent: 28px;
     }
    
 </style>
@@ -60,76 +39,37 @@
         cancel-text="取消"
         width="660"
      >
-        <form class="u-clearfix">
-            <div class="u-input">
-               <label>订单编号</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单编号" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>客户名称</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入客户名称" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>社区名称</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>订单总额</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单总额" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>订单生成时间</label>
-               <DatePicker 
-                    type="date" 
-                    placeholder="请选择订单生成时间" 
-                    style="width: 250px"
-               ></DatePicker> 
-            </div>
-            <div class="u-input">
-               <label>订单状态</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入订单状态" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-            <div class="u-input">
-               <label>支付状态</label>
-               <Input 
-                    v-model="value" 
-                    placeholder="请输入支付状态" 
-                    style="width: 250px"
-               ></Input> 
-            </div>
-        </form>
+        <HighSearch></HighSearch>
+    </Modal>
+    <Modal
+        v-model="openCancel"
+        title="提示信息"
+        ok-text="确定"
+        cancel-text="取消"
+        width="490"
+        @on-ok="orderCancel"
+     >
+        <div class="u-cancel-title">
+             距离会议室预订开始时间还有X小时X分钟，此次作废订单需要承担x%手续费，确定要作废此订单吗？
+        </div>
     </Modal>
 </div>
 </template>
 
 
 <script>
+import axios from '../../../plugins/http.js';
+import HighSearch from './orderHighSearch';
     export default {
         name: 'Meeting',
+        components:{
+            HighSearch,
+        },
         data () {
             return {
                 pageSize:1,
                 openSearch:false,
+                openCancel:false,
                 columns1: [
                     {
                         title: '订单编号',
@@ -182,7 +122,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params
+                                            this.openView(params.row
                                             )
                                         }
                                     }
@@ -197,7 +137,9 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.remove(params)
+                                            this.cancel(
+                                                params.row
+                                                )
                                         }
                                     }
                                 }, '作废')
@@ -241,11 +183,27 @@
             showSearch (params) {
                 this.openSearch=true;
             },
-            openView(){
-
+            openView(params){
+                
+                //location.href=`./list/orderDetail/${params.orderId}`;
+                location.href=`./list/orderDetail/12`
             },
-            remove (params) {
-                console.log('params222====',params)
+            cancel (params) {
+                this.openCancel=true;
+                this.itemDetail=params;
+            },
+            orderCancel(){
+            let itemDetail=this.itemDetail;
+            let  params={
+                    orderId:itemDetail.orderId
+                }
+                axios.get('cancel-order', params, r => {
+                    console.log('r', r);
+                
+                }, e => {
+                    console.log('error',e)
+                })
+               
             }
            
         }

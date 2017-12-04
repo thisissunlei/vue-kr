@@ -164,7 +164,10 @@ export default {
                  key: 'number',
                  align:'center'	
 				}  
-            ]
+			],
+			serviceData:[],
+			treatmentData:[],
+			contractData:[]
 		}
 	},
 	created:function(){

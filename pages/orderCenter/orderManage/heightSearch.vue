@@ -21,7 +21,7 @@
 
     </style>  
     <template>         
-            <i-form :model="formTop" label-position="top">
+            <i-form  label-position="top">
                 <Form-item label="订单编号" 
                     class='bill-search-class'>
                     <i-input 
@@ -69,7 +69,10 @@
         name:'hightSearch',
         data (){
             return{
-                status:[]
+                status:[],
+                community:'',
+                name:'',
+                mode:''
             }
         }
     }

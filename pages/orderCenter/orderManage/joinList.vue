@@ -167,7 +167,7 @@
                 
             },
             openView(params){
-                 location.href=`./watchView/12`;
+                 location.href=`./orderManage/watchView/12`;
                  //location.href=`./watchView/orderId`;
                  console.log('-------',params);
             },
@@ -178,7 +178,7 @@
 
             },
             openApplication(params){
-
+                
             }
         },
         created:function(){

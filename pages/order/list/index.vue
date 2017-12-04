@@ -122,7 +122,7 @@ import HighSearch from './orderHighSearch';
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params
+                                            this.openView(params.row
                                             )
                                         }
                                     }
@@ -137,7 +137,9 @@ import HighSearch from './orderHighSearch';
                                     },
                                     on: {
                                         click: () => {
-                                            this.cancel(params)
+                                            this.cancel(
+                                                params.row
+                                                )
                                         }
                                     }
                                 }, '作废')
@@ -181,12 +183,14 @@ import HighSearch from './orderHighSearch';
             showSearch (params) {
                 this.openSearch=true;
             },
-            openView(){
-
+            openView(params){
+                
+                //location.href=`./list/orderDetail/${params.orderId}`;
+                location.href=`./list/orderDetail/12`
             },
             cancel (params) {
                 this.openCancel=true;
-                this.itemDetail=params.row;
+                this.itemDetail=params;
             },
             orderCancel(){
             let itemDetail=this.itemDetail;

@@ -12,13 +12,13 @@ const _1e1aa172 = () => import('../pages/demo/my.vue' /* webpackChunkName: "page
 const _5fb6b050 = () => import('../pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
 const _66d0900d = () => import('../pages/orderCenter/orderManage/heightSearch.vue' /* webpackChunkName: "pages/orderCenter/orderManage/heightSearch" */).then(m => m.default || m)
 const _513ea508 = () => import('../pages/orderCenter/orderManage/list.vue' /* webpackChunkName: "pages/orderCenter/orderManage/list" */).then(m => m.default || m)
-const _7e66e176 = () => import('../pages/order/list/orderDetail.vue' /* webpackChunkName: "pages/order/list/orderDetail" */).then(m => m.default || m)
 const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
 const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
 const _57c2f10a = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
 const _79948f17 = () => import('../pages/bill/list/billDetail.vue' /* webpackChunkName: "pages/bill/list/billDetail" */).then(m => m.default || m)
 const _0116225e = () => import('../pages/order/list/orderHighSearch.vue' /* webpackChunkName: "pages/order/list/orderHighSearch" */).then(m => m.default || m)
 const _673d626f = () => import('../pages/orderCenter/orderManage/create/join.vue' /* webpackChunkName: "pages/orderCenter/orderManage/create/join" */).then(m => m.default || m)
+const _61dda104 = () => import('../pages/order/list/orderDetail/_orderId.vue' /* webpackChunkName: "pages/order/list/orderDetail/_orderId" */).then(m => m.default || m)
 
 
 
@@ -100,11 +100,6 @@ export function createRouter () {
 			name: "orderCenter-orderManage-list"
 		},
 		{
-			path: "/order/list/orderDetail",
-			component: _7e66e176,
-			name: "order-list-orderDetail"
-		},
-		{
 			path: "/bill/list/settleAccounts",
 			component: _2cf64e30,
 			name: "bill-list-settleAccounts"
@@ -133,6 +128,11 @@ export function createRouter () {
 			path: "/orderCenter/orderManage/create/join",
 			component: _673d626f,
 			name: "orderCenter-orderManage-create-join"
+		},
+		{
+			path: "/order/list/orderDetail/:orderId?",
+			component: _61dda104,
+			name: "order-list-orderDetail-orderId"
 		}
     ],
     fallback: false

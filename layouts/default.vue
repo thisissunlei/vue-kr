@@ -22,7 +22,7 @@
         border-radius: 4px;
     }
     .layout-content-main{
-        padding: 10px;
+        // padding: 10px;
     }
     .layout-copy{
         text-align: center;
@@ -87,7 +87,7 @@
             <Col :span="spanRight">
                 <div class="layout-header">
 
-                    <Menu mode="horizontal" :theme="theme1" active-name="1" class="nav">
+                    <Menu mode="horizontal"  active-name="1" class="nav">
 
                      <MenuItem name="0">
              <Button type="text" @click="toggleClick" >
@@ -159,7 +159,8 @@
         data () {
             return {
                 spanLeft: 5,
-                spanRight: 19
+                spanRight: 19,
+
             }
         },
         computed: {

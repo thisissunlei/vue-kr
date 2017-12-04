@@ -17,8 +17,8 @@ module.exports = {
   },
    //订单中心-订单详情
  'order-detail': {
-      url: 'krspace-op-web/order/metting-room/detail?',
+      url: 'krspace-op-web/order/metting-room/detail?orderId={orderId}',
       method: 'get'
   },
-  
+
 }

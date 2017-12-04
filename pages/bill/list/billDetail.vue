@@ -1,16 +1,5 @@
 <style lang="less">
-.u-clearfix { zoom:1; }
-.u-clearfix:after {
-  clear: both;
-  content: '.';
-  height: 0;
-  display: block;
-  visibility: hidden;
-}
-.left{
-	float: left;
-}
-	.g-bill-detail{
+.g-bill-detail{
 		margin:-10px;
 		.m-detail-header{
 			height:50px;
@@ -27,9 +16,6 @@
 		}
 		.m-detail-content{
 			padding:30px 24px;
-			
-			
-			
 			
 		}
 		
@@ -85,7 +71,12 @@
 <script>
 import DetailStyle from './../../../components/detailStyle';
 import labelText from './../../../components/labelText';
+
 export default {
+	components:{
+		DetailStyle,
+		labelText
+	},
 	data(){
 		return{
 			columns:[
@@ -111,10 +102,6 @@ export default {
 				}
 			]
 		}
-	},
-	components:{
-		DetailStyle,
-		labelText
 	},
 	created:function(){
 		this.basicInfo={

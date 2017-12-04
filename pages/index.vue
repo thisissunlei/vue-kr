@@ -20,6 +20,7 @@
  <Page :total="100" class="page"></Page>
  
 
+
 </div>
   
 </template>
@@ -27,6 +28,7 @@
 
 <script>
     var detail=[
+
                     {
                         name: 'John Brown',
                         age: 18,

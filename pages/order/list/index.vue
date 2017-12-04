@@ -42,7 +42,7 @@
         <div style="margin: 10px 0 ;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
-                <Page :total="pageSize" page-size="15" @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" page-size="15" @on-change="changePage" show-total show-elevator></Page>
             </div>
         </div>
     </div>
@@ -91,6 +91,11 @@ export default {
                 openSearch:false,
                 openCancel:false,
                 tableData:this.getTableData(),
+                totalCount:1,
+                params:{
+                    page:1,
+                    pageSize:15
+                },
                 columns: [
                     {
                         title: '订单编号',
@@ -223,24 +228,18 @@ export default {
                  console.log('导出')
             },
             getTableData(index){
-                 let data = [];
-                  for (let i = 0; i < 10; i++) {
-                      data.push({
-                        orderNo: Math.floor(Math.random () * 1000000 + 100000),
-                        customerName: 'Business'+Math.floor(Math.random () * 100 + 1),
-                        communityName: '创业大街'+ Math.floor(Math.random () * 100 + 1),
-                        totalAmount:5535,
-                        createTime: 1505704034000,
-                        orderStatus:'VALID',
-                        payStatus:'WAIT',  
-                      })
-                  }   
-                   
-                   
-                    
-            
-                 this.pageSize=100;
-                  return data;
+                let data = [];
+                let params=this.params;
+                var _this=this;
+                axios.get('order-list', params, r => {
+                    console.log('r', r);
+                    data=r.data;
+                    _this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+                  
+                return data;
             },
             changePage (index) {
                 this.tableData = this.getTableData(index);

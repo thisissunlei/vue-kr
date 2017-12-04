@@ -18,6 +18,9 @@
 	.ui-content-title{
 		margin-bottom: 24px;
 	}
+	.ui-circle{
+		font-weight: bold;
+	}
 	.ui-circle:before{
 		content:'';
 		width:7px;

@@ -3,22 +3,22 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const _a9f3b728 = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
-const _8defc52a = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
-const _9e4644c0 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
-const _fe27d708 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
-const _cc8e7e7a = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
-const _1e1aa172 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
-const _5fb6b050 = () => import('../pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
-const _66d0900d = () => import('../pages/orderCenter/orderManage/heightSearch.vue' /* webpackChunkName: "pages/orderCenter/orderManage/heightSearch" */).then(m => m.default || m)
-const _513ea508 = () => import('../pages/orderCenter/orderManage/list.vue' /* webpackChunkName: "pages/orderCenter/orderManage/list" */).then(m => m.default || m)
-const _2cf64e30 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
-const _1355e930 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
-const _57c2f10a = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
-const _79948f17 = () => import('../pages/bill/list/billDetail.vue' /* webpackChunkName: "pages/bill/list/billDetail" */).then(m => m.default || m)
-const _0116225e = () => import('../pages/order/list/orderHighSearch.vue' /* webpackChunkName: "pages/order/list/orderHighSearch" */).then(m => m.default || m)
-const _673d626f = () => import('../pages/orderCenter/orderManage/create/join.vue' /* webpackChunkName: "pages/orderCenter/orderManage/create/join" */).then(m => m.default || m)
-const _61dda104 = () => import('../pages/order/list/orderDetail/_orderId.vue' /* webpackChunkName: "pages/order/list/orderDetail/_orderId" */).then(m => m.default || m)
+const _0a00302c = () => import('../pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
+const _5a966b2e = () => import('../pages/order/index.vue' /* webpackChunkName: "pages/order/index" */).then(m => m.default || m)
+const _0c8798e2 = () => import('../pages/bill/index.vue' /* webpackChunkName: "pages/bill/index" */).then(m => m.default || m)
+const _46d26084 = () => import('../pages/demo/index.vue' /* webpackChunkName: "pages/demo/index" */).then(m => m.default || m)
+const _f9aa827e = () => import('../pages/bill/list/index.vue' /* webpackChunkName: "pages/bill/list/index" */).then(m => m.default || m)
+const _56b17d70 = () => import('../pages/demo/my.vue' /* webpackChunkName: "pages/demo/my" */).then(m => m.default || m)
+const _14f2699a = () => import('../pages/order/list/index.vue' /* webpackChunkName: "pages/order/list/index" */).then(m => m.default || m)
+const _201ddccf = () => import('../pages/orderCenter/orderManage/heightSearch.vue' /* webpackChunkName: "pages/orderCenter/orderManage/heightSearch" */).then(m => m.default || m)
+const _50404784 = () => import('../pages/orderCenter/orderManage/list.vue' /* webpackChunkName: "pages/orderCenter/orderManage/list" */).then(m => m.default || m)
+const _484f2df2 = () => import('../pages/bill/list/settleAccounts.vue' /* webpackChunkName: "pages/bill/list/settleAccounts" */).then(m => m.default || m)
+const _2eaec8f2 = () => import('../pages/bill/list/billHighSearch.vue' /* webpackChunkName: "pages/bill/list/billHighSearch" */).then(m => m.default || m)
+const _731bd0cc = () => import('../pages/bill/list/antiSettlement.vue' /* webpackChunkName: "pages/bill/list/antiSettlement" */).then(m => m.default || m)
+const _3a479fd9 = () => import('../pages/bill/list/billDetail.vue' /* webpackChunkName: "pages/bill/list/billDetail" */).then(m => m.default || m)
+const _ac93ccc0 = () => import('../pages/order/list/orderHighSearch.vue' /* webpackChunkName: "pages/order/list/orderHighSearch" */).then(m => m.default || m)
+const _4edb1526 = () => import('../pages/orderCenter/orderManage/create/join.vue' /* webpackChunkName: "pages/orderCenter/orderManage/create/join" */).then(m => m.default || m)
+const _323fe302 = () => import('../pages/order/list/orderDetail/_orderId.vue' /* webpackChunkName: "pages/order/list/orderDetail/_orderId" */).then(m => m.default || m)
 
 
 
@@ -56,82 +56,82 @@ export function createRouter () {
     routes: [
 		{
 			path: "/",
-			component: _a9f3b728,
+			component: _0a00302c,
 			name: "index"
 		},
 		{
 			path: "/order",
-			component: _8defc52a,
+			component: _5a966b2e,
 			name: "order"
 		},
 		{
 			path: "/bill",
-			component: _9e4644c0,
+			component: _0c8798e2,
 			name: "bill"
 		},
 		{
 			path: "/demo",
-			component: _fe27d708,
+			component: _46d26084,
 			name: "demo"
 		},
 		{
 			path: "/bill/list",
-			component: _cc8e7e7a,
+			component: _f9aa827e,
 			name: "bill-list"
 		},
 		{
 			path: "/demo/my",
-			component: _1e1aa172,
+			component: _56b17d70,
 			name: "demo-my"
 		},
 		{
 			path: "/order/list",
-			component: _5fb6b050,
+			component: _14f2699a,
 			name: "order-list"
 		},
 		{
 			path: "/orderCenter/orderManage/heightSearch",
-			component: _66d0900d,
+			component: _201ddccf,
 			name: "orderCenter-orderManage-heightSearch"
 		},
 		{
 			path: "/orderCenter/orderManage/list",
-			component: _513ea508,
+			component: _50404784,
 			name: "orderCenter-orderManage-list"
 		},
 		{
 			path: "/bill/list/settleAccounts",
-			component: _2cf64e30,
+			component: _484f2df2,
 			name: "bill-list-settleAccounts"
 		},
 		{
 			path: "/bill/list/billHighSearch",
-			component: _1355e930,
+			component: _2eaec8f2,
 			name: "bill-list-billHighSearch"
 		},
 		{
 			path: "/bill/list/antiSettlement",
-			component: _57c2f10a,
+			component: _731bd0cc,
 			name: "bill-list-antiSettlement"
 		},
 		{
 			path: "/bill/list/billDetail",
-			component: _79948f17,
+			component: _3a479fd9,
 			name: "bill-list-billDetail"
 		},
 		{
 			path: "/order/list/orderHighSearch",
-			component: _0116225e,
+			component: _ac93ccc0,
 			name: "order-list-orderHighSearch"
 		},
 		{
 			path: "/orderCenter/orderManage/create/join",
-			component: _673d626f,
+			component: _4edb1526,
 			name: "orderCenter-orderManage-create-join"
 		},
 		{
 			path: "/order/list/orderDetail/:orderId?",
-			component: _61dda104,
+			component: _323fe302,
 			name: "order-list-orderDetail-orderId"
 		}
     ],

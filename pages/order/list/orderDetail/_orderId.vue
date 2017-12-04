@@ -1,19 +1,5 @@
 <style lang="less"> 
 .g-order-detail{
-		margin:-10px;
-		.m-detail-header{
-			height:50px;
-			border-bottom: 1px solid #E8E9E9;
-			line-height: 50px;
-			font-size: 16px;
-			color: #666666;
-			.u-border-left{
-				width:0;
-				height:24px;
-				border:2px solid  #499DF1;
-				margin-right:20px;
-			}
-		}
 		.m-detail-content{
 			padding:30px 24px;
 			.ivu-table-wrapper{
@@ -24,10 +10,7 @@
 </style>
 <template>
 <div class="g-order-detail">
-	<div class="m-detail-header">
-		<span class="u-border-left"></span>
-		会议室订单详情
-	</div>
+	<sectionTitle label="会议室订单详情"></sectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="订单编号：">
@@ -75,14 +58,15 @@
 </template>
 <script>
 
-import axios from '../../../../plugins/http.js';
-import DetailStyle from './../../../../components/detailStyle';
-import labelText from './../../../../components/labelText';
-
+import axios from '~/plugins/http.js';
+import DetailStyle from '~/components/detailStyle';
+import labelText from '~/components/labelText';
+import sectionTitle from '~/components/sectionTitle.vue';
 export default {
 	components:{
 		DetailStyle,
-		labelText
+		labelText,
+		sectionTitle
 	},
 	data(){
 		return{

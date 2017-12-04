@@ -58,7 +58,7 @@
 
 
 <script>
-import axios from '../../../plugins/http.js';
+import axios from '~/plugins/http.js';
 import HighSearch from './orderHighSearch';
     export default {
         name: 'Meeting',

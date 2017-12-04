@@ -22,7 +22,7 @@ import axios from '../../plugins/http.js';
             show: function() {
                 let params = {
                     communityId:4,
-                    floor:this.floor,
+                    floor:'2,3,4',
                     mainBillId:3162,
                     startDate:'2017-11-27 00:00:00',
                     endDate:'2017-12-02 00:00:00',

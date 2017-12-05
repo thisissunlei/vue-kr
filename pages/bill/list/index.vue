@@ -1,15 +1,16 @@
 <style lang="less">
 .g-bill{
  .u-search{
-        height:22px;
+        height:32px;
         margin:16px 0;
+        padding:0 20px;
         .u-high-search{
             width:22px;
             height:22px;
             background:url('~/assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
-            margin-right: 20px;
+           
         }
     }
     .ivu-table-cell{
@@ -34,6 +35,7 @@
 
 <template>
 <div class="g-bill">
+    <sectionTitle label="已出账单管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span>   
@@ -41,7 +43,7 @@
     <div class="u-table">
         <Table  :columns="columns1" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
-            <Button type="primary">导出</Button>
+            <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
                 <Page :total="pageSize" show-total show-elevator></Page>
             </div>
@@ -83,13 +85,15 @@ import HighSearch from './billHighSearch';
 import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
+import sectionTitle from '~/components/sectionTitle.vue';
 
     export default {
         name: 'Bill',
         components:{
             HighSearch,
             settleAccounts,
-            antiSettlement
+            antiSettlement,
+            sectionTitle
         },
         data () {
             return {
@@ -182,8 +186,7 @@ import dateUtils from 'vue-dateutils';
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params
-                                            )
+                                            this.openView(params.row)
                                         }
                                     }
                                 }, '查看'),
@@ -197,7 +200,7 @@ import dateUtils from 'vue-dateutils';
                                     },
                                     on: {
                                         click: () => {
-                                            this.showSettle(params)
+                                            this.showSettle(params.row)
                                         }
                                     }
                                 }, '结账'),
@@ -211,7 +214,7 @@ import dateUtils from 'vue-dateutils';
                                     },
                                     on: {
                                         click: () => {
-                                            this.showAntiSettle(params)
+                                            this.showAntiSettle(params.row)
                                         }
                                     }
                                 }, '反结账')
@@ -266,8 +269,8 @@ import dateUtils from 'vue-dateutils';
             showSearch (params) {
                 this.openSearch=true;
             },
-            openView(){
-
+            openView(params){
+                 location.href=`./list/billDetail/${params.orderId}`;
             },
             showSettle (params) {
                 this.openSettle=true;
@@ -275,7 +278,10 @@ import dateUtils from 'vue-dateutils';
             },
             showAntiSettle(params){
                 this.openAntiSettle=true;
-            }
+            },
+            onExport(){
+                 console.log('导出')
+            },
            
         }
 

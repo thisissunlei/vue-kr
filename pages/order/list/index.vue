@@ -76,7 +76,7 @@
 <script>
 import axios from '~/plugins/http.js';
 import HighSearch from './orderHighSearch';
-import sectionTitle from '~/components/sectionTitle.vue';
+import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
 
 
@@ -170,8 +170,8 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params.row
-                                            )
+                                            this.openView(params.row)
+                                            
                                         }
                                     }
                                 }, '查看'),
@@ -185,9 +185,9 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.cancel(
-                                                params.row
-                                                )
+                                            this.cancel(params.row)
+                                                
+                                                
                                         }
                                     }
                                 }, '作废')

@@ -1,5 +1,5 @@
 <template>
-    <div class='bill-list'>
+    <div class='m-bill-wrap'>
         <Tabs active-key="key1">
             <Tab-pane label="入驻订单" key="key1">   
                 <JoinList></JoinList>

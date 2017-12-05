@@ -1,25 +1,10 @@
 <style lang='less'>
-
-    .bill-search{
-            height:22px;
-            margin:16px 20px;
-            span{
-                width:22px;
-                height:22px;
-                background:url(images/upperSearch.png) no-repeat center;
-                background-size: contain;  
-                float:right;
-                cursor:pointer;
-            }
-    }
-
     .bill-search-class{
         display:inline-block;
         width:50%;
         padding-left:32px;
     }
-
-    </style>  
+</style>  
     <template>         
             <i-form  label-position="top">
                 <Form-item label="订单编号" 

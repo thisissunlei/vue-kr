@@ -1,6 +1,6 @@
 <template>
-    <div class='bill-list'>
-            <div class="bill-search" @click="showSearch">
+    <div class='m-bill-list'>
+            <div class="m-bill-search" @click="showSearch">
                 <span></span>   
             </div> 
             <Table :columns="joinOrder" :data="joinData"></Table>
@@ -211,5 +211,16 @@
 </script>
 
 <style lang='less'>
- 
+ .m-bill-search{
+        height:22px;
+        margin:16px 20px;
+        span{
+            width:22px;
+            height:22px;
+            background:url(images/upperSearch.png) no-repeat center;
+            background-size: contain;  
+            float:right;
+            cursor:pointer;
+        }
+    }
 </style>

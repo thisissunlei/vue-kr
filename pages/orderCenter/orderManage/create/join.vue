@@ -25,8 +25,21 @@
                     color:#FF6868
                 }
             }
-            .row-table{
-
+            .button-list{
+                font-size: 14px;
+                color: #499df1;
+                display: inline-block;
+                border:1px solid #499df1;
+                border-radius: 4px;
+                margin-right: 5px;
+                height: 32px;
+                line-height: 32px;
+                padding:0 14px;
+                cursor: pointer;
+            }
+            .active{
+                background-color: #499df1;
+                color: #fff;
             }
         }
     }
@@ -51,6 +64,11 @@
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="community">
                     <selectCommunities name="formItem.community" :onchange="changeCommunity"></selectCommunities>
+                    </FormItem>
+                </Col>
+                <Col class="col">
+                    <FormItem label="销售员" style="width:252px">
+                    <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -163,20 +181,32 @@
                     </FormItem>
                  </Col>
                  <Col class="col">
-                    <FormItem label="履约保证金总额" style="width:252px">
-                        <Input v-model="formItem.deposit" placeholder="履约保证金总额"></Input>
-                        <div>
-                            <span v-for="types in youhui" :key="types.value" class="button-list">{{ types.label }}</span>
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.endDate" disabled ></DatePicker >
+                    </FormItem> 
+                 </Col>
+            </Row>
+            <Row>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
                         </div>
-                    </FormItem>
+
+                 </Col>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                        </div>
                  </Col>
             </Row>
             
                 
             </DetailStyle>
-        <FormItem>
-            <Button type="primary" @click="handleSubmit('formItem')">Submit</Button>
-            <Button type="ghost" style="margin-left: 8px">Cancel</Button>
+        <FormItem style="padding-left:24px;margin-top:40px">
+            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
 
@@ -188,6 +218,7 @@
 import sectionTitle from '~/components/sectionTitle.vue'
 import selectCommunities from '~/components/selectCommunities.vue'
 import selectCustomers from '~/components/selectCustomers.vue'
+import selectSaler from '~/components/selectSaler.vue'
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 
@@ -210,6 +241,15 @@ import DetailStyle from '~/components/detailStyle';
                 selectAll:false,
                 discountError:false,
                 index:1,
+                depositType:'',
+                disabled:false,
+                depositList:[
+                    {label:'2个月',value:'2个月'},
+                    {label:'3个月',value:'3个月'},
+                    {label:'4个月',value:'4个月'},
+                    {label:'5个月',value:'5个月'},
+                    {label:'6个月',value:'6个月'},
+                ],
                 youhui:[
                     {
                         label:'折扣',
@@ -340,7 +380,8 @@ import DetailStyle from '~/components/detailStyle';
             sectionTitle,
             selectCommunities,
             DetailStyle,
-            selectCustomers
+            selectCustomers,
+            selectSaler
         },
         methods: {
             handleSubmit:function(name) {
@@ -360,10 +401,13 @@ import DetailStyle from '~/components/detailStyle';
                     discountError = false;
                     message = '只能有一个折扣。'
                 }
+                let _this = this;
+                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid && discountError) {
                         this.$Message.success('Success!');
                     } else {
+                        _this.disabled = false;
                         this.$Message.error(message);
                     }
                 })
@@ -427,6 +471,9 @@ import DetailStyle from '~/components/detailStyle';
                 }
 
             },
+            changeSaler:function(value){
+                this.formItem.saler = value;
+            },
             floorsChange:function(value){
                 console.log('-----',value)
             },
@@ -459,6 +506,9 @@ import DetailStyle from '~/components/detailStyle';
                     status: 1
                 });
             },
+            selectDeposit:function(value){
+                this.depositType = value
+            }
 
                     
                

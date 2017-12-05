@@ -19,6 +19,15 @@
             >
                 <HeightSearch></HeightSearch>
             </Modal>
+            <Modal
+                v-model="openNullify"
+                title="提示信息"
+                ok-text="确定"
+                cancel-text="取消"
+                width="500"
+            >
+                <Nullify></Nullify>
+            </Modal>
     </div>
 </template>
 
@@ -26,6 +35,7 @@
 <script>
     import axios from '../../../plugins/http.js';
     import HeightSearch from './heightSearch';
+    import Nullify from './nullify';
     var detail=[
             {
                 name: 'John Brown',
@@ -44,12 +54,14 @@
         name:'join',
         components:{
             HeightSearch,
+            Nullify
         },
         data () {
             
             return {
                 pageSize:1,
                 openSearch:false,
+                openNullify:false,
                 joinOrder: [
                     {
                         title: '订单编号',
@@ -169,11 +181,10 @@
             },
             openView(params){
                  location.href=`./orderManage/watchView/12`;
-                 //location.href=`./watchView/orderId`;
-                 console.log('-------',params);
+                 //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){
-                
+                this.openNullify=true;
             },
             openEdit(params){
 

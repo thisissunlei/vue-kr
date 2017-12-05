@@ -54,7 +54,7 @@
     </div>
      <Modal
         v-model="openSearch"
-        title="高级搜索"
+        title="高级查询"
         ok-text="确定"
         cancel-text="取消"
         width="660"
@@ -90,11 +90,11 @@
 
 
 <script>
-import HighSearch from './billHighSearch';
+import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
-import sectionTitle from '~/components/sectionTitle.vue';
+import sectionTitle from '~/components/sectionTitle';
 
     export default {
         name: 'Bill',

@@ -33,7 +33,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="会议室订单管理"></sectionTitle>
+    <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
         <span @click="showSearch"></span>   
     </div>
@@ -75,16 +75,15 @@
 
 <script>
 import axios from '~/plugins/http.js';
-import HighSearch from './highSearch';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
-
+import HighSearch from './highSearch';
 
 export default {
-        name: 'Meeting',
+        name: 'receive',
         components:{
-            HighSearch,
-            sectionTitle
+            sectionTitle,
+            HighSearch
         },
         data () {
             return {
@@ -98,7 +97,7 @@ export default {
                 },
                 columns: [
                     {
-                        title: '订单编号',
+                        title: '交易流水号',
                         key: 'orderNo',
                         align:'center'
                     },
@@ -108,27 +107,22 @@ export default {
                         align:'center',
                     },
                     {
-                        title: '社区名称',
-                        key: 'communityName',
-                        align:'center'
-                    },
-                    {
-                        title: '订单总额',
-                        key: 'totalAmount',
-                        align:'center'
-                    },
-                    {
-                        title: '订单生成时间',
+                        title: '回款日期',
                         key: 'createTime',
                         align:'center',
-                        width:160,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
                             return time;
                         }
                     },
                     {
-                        title: '订单状态',
+                        title: '回款金额（元）',
+                        key: 'totalAmount',
+                        align:'center'
+                    },
+                    
+                    {
+                        title: '回款方式',
                         key: 'orderstatus',
                         align:'center',
                         render(h, obj){
@@ -142,16 +136,16 @@ export default {
                         }
                     },
                     {
-                        title: '支付状态',
-                        key: 'payStatus',
+                        title: '付款账户',
+                        key: 'totalAmount',
                         align:'center',
-                        render(h, obj){
-                                if(obj.row.payStatus==='WAIT'){
-                                    return <span class="u-txt-red">待付款</span>;
-                                }else if(obj.row.payStatus==='PAID'){
-                                    return <span class="u-txt">已付款</span>;
-                                }
-                            }
+                        width:160,
+                        
+                    },
+                    {
+                        title: '收款账户',
+                        key: 'payStatus',
+                        align:'center'
                     },
                     {
                         title: '操作',
@@ -170,8 +164,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params.row)
-                                            
+                                            this.openView(params.row);
                                         }
                                     }
                                 }, '查看'),
@@ -185,18 +178,19 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.cancel(params.row)
-                                                
-                                                
+                                            this.bindPerson(params.row);
                                         }
                                     }
-                                }, '作废')
+                                }, '绑定客户')
                             ]);  
                         }
                     }
                 ]
                 
             }
+        },
+        created:function(){
+
         },
         methods:{
             showSearch (params) {
@@ -207,9 +201,8 @@ export default {
                 location.href=`./list/orderDetail/${params.orderId}`;
                 //location.href=`./list/orderDetail/12`
             },
-            cancel (params) {
-                this.openCancel=true;
-                this.itemDetail=params;
+            bindPerson (params) {
+                console.log('1111')
             },
             orderCancel(){
             let itemDetail=this.itemDetail;

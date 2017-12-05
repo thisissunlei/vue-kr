@@ -1,17 +1,17 @@
 <style lang="less">
 .g-bill{
- .u-search{
-        height:32px;
-        margin:16px 0;
-        padding:0 20px;
-        .u-high-search{
-            width:22px;
-            height:22px;
-            background:url('~/assets/images/upperSearch.png') no-repeat center;
-            background-size: contain;  
-            float:right;
-           
-        }
+    .u-search{
+            height:32px;
+            margin:16px 0;
+            padding:0 20px;
+            .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;  
+                float:right;
+            
+            }
     }
     .ivu-table-cell{
         padding:0;
@@ -20,15 +20,18 @@
         padding:0 20px;
     }
     .u-txt-red{
-	    color:#FF6868;
-	}
+        color:#FF6868;
+    }
     .u-txt{
         color:#666;
     }
     .u-txt-orange{
         color: #F5A623;
     }
-   
+    .ivu-modal-footer{
+        border:none;
+    }
+
         
 }
 </style>
@@ -41,7 +44,7 @@
         <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <div class="u-table">
-        <Table  :columns="columns1" :data="billList"></Table>
+        <Table  border ref="selection" :columns="columns1" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
@@ -66,6 +69,9 @@
         width="443"
      >
        <settleAccounts> </settleAccounts>
+       <div slot="footer">
+		
+	   </div>
     </Modal>
     <Modal
         v-model="openAntiSettle"
@@ -75,6 +81,9 @@
         width="443"
      >
        <antiSettlement> </antiSettlement>
+       <div slot="footer">
+		
+	   </div>
     </Modal>
 </div>
 </template>
@@ -102,6 +111,11 @@ import sectionTitle from '~/components/sectionTitle.vue';
                 openSettle:false,
                 openAntiSettle:false,
                 columns1: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '账单编号',
                         key: 'billNo',
@@ -270,7 +284,8 @@ import sectionTitle from '~/components/sectionTitle.vue';
                 this.openSearch=true;
             },
             openView(params){
-                 location.href=`./list/billDetail/${params.orderId}`;
+                 //location.href=`./billDetail/${params.orderId}`;
+                 location.href='./billDetail/12';
             },
             showSettle (params) {
                 this.openSettle=true;

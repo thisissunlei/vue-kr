@@ -32,32 +32,32 @@ module.exports = {
   },
   //获取反结算信息
   'get-release': {
-    url: 'krspace-op-web/bill/release?',
+    url: 'krspace-pay/bill/release?',
     method: 'get'
   },
   //批量结算
   'batch-pay': {
-    url: 'krspace-op-web/bill/batch-pay?',
+    url: 'krspace-pay/bill/batch-pay?',
     method: 'get'
   },
   //获取账单列表
   'get-bill-list': {
-    url: 'krspace-op-web/bill/list?',
+    url: 'krspace-pay/bill/list?',
     method: 'get'
   },
   //账单结算
   'bill-pay': {
-    url: 'krspace-op-web/bill/pay?',
+    url: 'krspace-pay/bill/pay?',
     method: 'get'
   },
   //账单结算查询
   'get-balance': {
-    url: 'krspace-op-web/bill/get-balance?',
+    url: 'krspace-pay/bill/get-balance?',
     method: 'get'
   },
   //账单详情
-  'get-detail': {
-    url: 'krspace-op-web/bil/detail?',
+  'get-bill-detail': {
+    url: 'krspace-pay/bil/detail?',
     method: 'get'
   },
 }

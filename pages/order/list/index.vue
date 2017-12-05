@@ -11,6 +11,9 @@
             float:right;
         }
     }
+    .ivu-table-cell{
+        padding:0;
+    }
     .u-table{
         padding:0 20px;
     }

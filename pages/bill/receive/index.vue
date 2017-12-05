@@ -11,6 +11,9 @@
             float:right;
         }
     }
+    .ivu-table-cell{
+        padding:0;
+    }
     .u-table{
         padding:0 20px;
     }
@@ -42,7 +45,7 @@
         <div style="margin: 10px 0 ;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
-                <Page :total="totalCount" page-size="15" @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" :pageSize="pageSize" @on-change="changePage" show-total show-elevator></Page>
             </div>
         </div>
     </div>
@@ -58,15 +61,15 @@
         <HighSearch></HighSearch>
     </Modal>
     <Modal
-        v-model="openCancel"
-        title="提示信息"
+        v-model="openBind"
+        title="绑定客户"
         ok-text="确定"
         cancel-text="取消"
         width="490"
         @on-ok="orderCancel"
      >
         <div class="u-cancel-title">
-             距离会议室预订开始时间还有X小时X分钟，此次作废订单需要承担x%手续费，确定要作废此订单吗？
+            绑定客户
         </div>
     </Modal>
 </div>
@@ -88,9 +91,10 @@ export default {
         data () {
             return {
                 openSearch:false,
-                openCancel:false,
+                openBind:false,
                 tableData:this.getTableData(),
                 totalCount:1,
+                pageSize:15,
                 params:{
                     page:1,
                     pageSize:15
@@ -99,7 +103,8 @@ export default {
                     {
                         title: '交易流水号',
                         key: 'orderNo',
-                        align:'center'
+                        align:'center',
+                        width:145
                     },
                     {
                         title: '客户名称',
@@ -110,6 +115,7 @@ export default {
                         title: '回款日期',
                         key: 'createTime',
                         align:'center',
+                        width:150,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
                             return time;
@@ -117,7 +123,7 @@ export default {
                     },
                     {
                         title: '回款金额（元）',
-                        key: 'totalAmount',
+                        key: 'Amount',
                         align:'center'
                     },
                     
@@ -126,12 +132,10 @@ export default {
                         key: 'orderstatus',
                         align:'center',
                         render(h, obj){
-                            if(obj.row.orderStatus==='VALID'){
-                                return <span class="u-txt">已生效</span>;
-                            }else if(obj.row.orderStatus==='CANCEL'){
-                                return <span class="u-txt-orange">已作废</span>;
-                            }else if(obj.row.orderStatus==='REFUND'){
-                                return <span class="u-txt-red">已退订</span>;
+                            if(obj.row.orderstatus==='VALID'){
+                                return <span class="u-txt">银行转账</span>;
+                            }else if(obj.row.orderstatus==='CANCEL'){
+                                return <span class="u-txt-orange">支付宝</span>;
                             }
                         }
                     },
@@ -139,19 +143,20 @@ export default {
                         title: '付款账户',
                         key: 'totalAmount',
                         align:'center',
-                        width:160,
+                        width:145,
                         
                     },
                     {
                         title: '收款账户',
                         key: 'payStatus',
-                        align:'center'
+                        align:'center',
+                        width:145
                     },
                     {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:120,
+                        width:110,
                         render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
@@ -190,7 +195,18 @@ export default {
             }
         },
         created:function(){
+            this.tableData=[
+                {
+                    orderNo:'0220171201100000001',
+                    customerName:'罗焘如',
+                    createTime:1505704034000,
+                    Amount:'29000.00',
+                    totalAmount:'0220171201100000001',
+                    payStatus:'0220171201100000001',
+                    orderstatus:'VALID'
 
+                }
+            ]
         },
         methods:{
             showSearch (params) {
@@ -198,11 +214,11 @@ export default {
             },
             openView(params){
                 
-                location.href=`./list/orderDetail/${params.orderId}`;
-                //location.href=`./list/orderDetail/12`
+                //location.href=`./receive/receiveDetail/${params.orderId}`;
+                location.href=`./receive/receiveDetail/12`
             },
             bindPerson (params) {
-                console.log('1111')
+                this.openBind=true;
             },
             orderCancel(){
             let itemDetail=this.itemDetail;

@@ -1,48 +1,51 @@
 <style lang="less"> 
-form{
-    width:540px;
-    margin:0 auto;
-}
-.u-clearfix { zoom:1; }
-.u-clearfix:after {
-    clear: both;
-    content: '.';
-    height: 0;
-    display: block;
-    visibility: hidden;
-}
-.u-input{
-    width:250px;
-    float:left; 
-    margin-bottom:10px;
-    &:nth-child(2n-1){
-        margin-right:30px;  
+.g-high-search{
+    form{
+        width:540px;
+        margin:0 auto;
     }
-    &.u-right{
-        margin-right:30px;  
+    .u-clearfix { zoom:1; }
+    .u-clearfix:after {
+        clear: both;
+        content: '.';
+        height: 0;
+        display: block;
+        visibility: hidden;
     }
-    &.u-right-none{
-        margin-right:0;
+    .u-input{
+        width:250px;
+        float:left; 
+        margin-bottom:10px;
+        &:nth-child(2n-1){
+            margin-right:30px;  
+        }
+        &.u-right{
+            margin-right:30px;  
+        }
+        &.u-right-none{
+            margin-right:0;
+        }
     }
-}
-.u-date{
-   width:530px; 
-   label{
-       width:100%;
-       display: block;
-   }
-   .u-date-txt{
-    font-size: 14px;
-    color: #666666;
-    display: inline-block;
-    width:30px;
-    text-align: center
-   }
+    .u-date{
+        width:530px; 
+        label{
+            width:100%;
+            display: block;
+        }
+        .u-date-txt{
+            font-size: 14px;
+            color: #666666;
+            display: inline-block;
+            width:30px;
+            text-align: center
+        }
+    }
 }
 
     
 </style>
 <template>
+<div class="g-high-search">
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
             <FormItem label="交易流水号" class="u-input">
                 <Input 
@@ -95,9 +98,8 @@ form{
                     style="width: 250px"
                ></Input>
             </FormItem>
-             
-            
         </Form>
+</div>
 </template>	
 <script>
 export default{

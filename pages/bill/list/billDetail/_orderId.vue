@@ -43,10 +43,10 @@
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
-			<Table :columns="cost" :data="costInfo"></Table>
+			<Table border :columns="cost" :data="costInfo"></Table>
 		</DetailStyle>	
 		<DetailStyle info="结算记录">
-			<Table :columns="settle" :data="settleInfo"></Table>
+			<Table border :columns="settle" :data="settleInfo"></Table>
 		</DetailStyle>
 	</div>
 </div>

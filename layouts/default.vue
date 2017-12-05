@@ -6,8 +6,6 @@
         position: relative;
         border-radius: 4px;
         overflow: hidden;
-
-
     }
 
     .layout-breadcrumb{
@@ -31,7 +29,7 @@
     }
     .layout-menu-left{
         background: #464c5b;
-          height:990px;
+        height:990px;
     }
     .layout-header{
         height: 60px;
@@ -60,6 +58,7 @@
     .layout-hide-text .layout-text{
         display: none;
     }
+
     .ivu-col{
         transition: width .2s ease-in-out;
     }
@@ -168,6 +167,7 @@
             }
         },
         methods: {
+        
             toggleClick () {
                 if (this.spanLeft === 5) {
                     this.spanLeft = 2;

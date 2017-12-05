@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "template": "node task/loadTemplate.js",
     "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -5,15 +5,15 @@
 
 
 <template>
-    <div class="com-select-community">
+    <div class="com-select-customers">
          <Select
             :v-model="name"
             filterable
             remote
-            :remote-method="remoteMethod1"
+            @on-query-change="remoteCustomer"
             :loading="loading1"
             @on-change="changeContent">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -27,21 +27,20 @@ import axios from '~/plugins/http.js';
         data () {
             return {
                 loading1:false,
-                options1:[],
+                customerOptions:[],
             };
         },
         created:function(){
-            console.log('com-select-community')
             this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
-                console.log('changeContent',value)
+                console.log('changeContent')
                 this.onchange(value)
-                console.log('onchange',value)
             },
-            remoteMethod1 (query) {
-                console.log('remoteMethod1',query)
+            remoteCustomer (query) {
+                console.log('remoteCustomer',query)
+
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -55,24 +54,23 @@ import axios from '~/plugins/http.js';
             },
             getCusomerList:function(name){
                 let params = {
-                    communityName:name
+                    company:name
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-mainbill-community', params, r => {
-                    console.log('r', r);
-                    list = r.data;
+                axios.get('get-customer', params, r => {
+                    console.log('r---->', r);
+                    list = r.data.customerList;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.communityname;
+                        obj.label = item.company;
                         obj.value = item.id+'';
                         return obj;
                     });
-                    _this.options1 = list;
+                    _this.customerOptions = list;
                 }, e => {
                     console.log('error',e)
                 })
-                return list;
 
             }
                     

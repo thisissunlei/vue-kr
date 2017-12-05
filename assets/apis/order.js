@@ -25,4 +25,9 @@ module.exports = {
       url: 'krspace-op-web/order/metting-room/detail?orderId={orderId}',
       method: 'get'
   },
+  //获取客户
+  'get-customer': {
+      url: 'krspace-finance-web/customer/my-customers?',
+      method: 'get'
+  },
 }

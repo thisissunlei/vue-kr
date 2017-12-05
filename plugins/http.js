@@ -38,10 +38,18 @@ function apiAxios (method, name, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
-  console.log('apis-------->',APIS[name].url)
+
+  var server=APIS[name].url;
+
+  /*if(server.indexOf('mockjsdata') !==-1){
+     root='rap.krspace.cn';
+  }*/
+  
+  console.log('apis-------->',server);
+  
   axios({
     method: method,
-    url: APIS[name].url,
+    url: server,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,

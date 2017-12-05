@@ -59,7 +59,8 @@
         data () {
             
             return {
-                pageSize:1,
+                page:1,
+                pageSize:10,
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
@@ -194,17 +195,19 @@
             }
         },
         created:function(){
-            let {params}=this.$route
+            let params={
+                page:this.page,
+                pageSize:this.pageSize
+            }
             var _this=this;
-            this.basicInfo={};
             //列表
-            /*axios.get('order-list','', r => {
-                       
+            axios.get('join-bill-list',params, r => {
+                         
                     console.log('r', r);
                     
                 }, e => {
                     console.log('error',e)
-            })*/
+            })
 
 	     }
     }

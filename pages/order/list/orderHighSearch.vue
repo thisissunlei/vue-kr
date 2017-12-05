@@ -19,6 +19,20 @@ form{
         margin-right:30px;  
     }
 }
+.u-date{
+   width:530px; 
+   label{
+       width:100%;
+       display: block;
+   }
+   .u-date-txt{
+    font-size: 14px;
+    color: #666666;
+    display: inline-block;
+    width:30px;
+    text-align: center
+   }
+}
 
     
 </style>
@@ -39,21 +53,20 @@ form{
                ></Input>  
             </FormItem>
             
-            <FormItem label="订单开始时间" class="u-input">
-                 <DatePicker 
+            <FormItem label="收入确认时间" class="u-input  u-date">
+                <DatePicker 
                     v-model="formItem.beginTime"
                     type="date" 
-                    placeholder="请选择订单生成时间" 
+                    placeholder="请选择开始时间" 
                     style="width: 250px"
-               ></DatePicker>  
-            </FormItem>
-             <FormItem label="订单结束时间" class="u-input">
-                 <DatePicker 
+               ></DatePicker>
+               <span class="u-date-txt">至</span>
+               <DatePicker 
                     v-model="formItem.endTime"
                     type="date" 
-                    placeholder="请选择订单生成时间" 
+                    placeholder="请选择结束时间" 
                     style="width: 250px"
-               ></DatePicker>  
+               ></DatePicker>   
             </FormItem>
             <FormItem label="社区名称" class="u-input">
                <Select 

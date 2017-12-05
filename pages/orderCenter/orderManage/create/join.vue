@@ -73,19 +73,6 @@
                     <FormItem label="租赁时长" style="width:252px" prop="time">
                         <Input v-model="formItem.time" placeholder="Enter your e-mail"></Input>
                     </FormItem>
-            <!--         
-            <FormItem label="楼层" style="width:252px" prop="floor">
-                <Select v-model="formItem.floor" style="width:100px" >
-                    <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
-                </Select>
-            </FormItem>
-             <FormItem label="City" prop="city">
-            <Select v-model="formItem.city" placeholder="Select your city">
-                <Option value="beijing">New York</Option>
-                <Option value="shanghai">London</Option>
-                <Option value="shenzhen">Sydney</Option>
-            </Select>
-        </FormItem> -->
                 </Col>
             </Row>
                 
@@ -142,8 +129,6 @@
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
             <Row>
-                    <!-- <Input type="text" v-model="item.value" placeholder="Enter something..." style="width:200px"></Input>
-                    <Input type="text" v-model="item.value" placeholder="Enter something..." style="width:200px"></Input> -->
                  <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -171,6 +156,22 @@
                     </Col>   
             </Row>
         </FormItem>
+            <Row>
+                 <Col class="col">
+                    <FormItem label="服务费总额" style="width:252px">
+                        <Input v-model="formItem.totalMoney" placeholder="服务费总额" disabled></Input>
+                    </FormItem>
+                 </Col>
+                 <Col class="col">
+                    <FormItem label="履约保证金总额" style="width:252px">
+                        <Input v-model="formItem.deposit" placeholder="履约保证金总额"></Input>
+                        <div>
+                            <span v-for="types in youhui" :key="types.value" class="button-list">{{ types.label }}</span>
+                        </div>
+                    </FormItem>
+                 </Col>
+            </Row>
+            
                 
             </DetailStyle>
         <FormItem>
@@ -458,6 +459,7 @@ import DetailStyle from '~/components/detailStyle';
                     status: 1
                 });
             },
+
                     
                
         }

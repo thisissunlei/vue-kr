@@ -1,5 +1,3 @@
-// 配置API接口地址
-var root = '/api/';
 //引入apis
 import APIS from '../assets/apis/index';
 // 引用axios
@@ -38,7 +36,12 @@ function apiAxios (method, name, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
-  console.log('apis-------->',APIS[name].url)
+  let root = '/api/';
+  let url = APIS[name].url;
+  if(url.indexOf('mockjsdata') !==-1){
+       root='https://cnodejs.org/api/v1';
+    }
+
   axios({
     method: method,
     url: APIS[name].url,

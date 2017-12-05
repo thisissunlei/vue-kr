@@ -13,8 +13,7 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                ok-text="确定"
-                cancel-text="取消"
+                @on-ok="heighSubmit"
                 width="660"
             >
                 <HeightSearch></HeightSearch>
@@ -22,8 +21,7 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                ok-text="确定"
-                cancel-text="取消"
+                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify></Nullify>
@@ -182,21 +180,24 @@
             showSearch (params) {
                 this.openSearch=true;
             },
-            searchSubmit (params){
-                
-            },
             openView(params){
-                 location.href=`./orderManage/12/joinView`;
-                 //location.href=`./watchView/${params.orderId}`;
+                location.href=`./orderManage/12/joinView`;
+                //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){
                 this.openNullify=true;
             },
             openEdit(params){
-
+                
             },
             openApplication(params){
                 
+            },
+            nullifySubmit (){
+                console.log('作废');
+            },
+            heighSubmit (){
+                console.log('高级');
             },
             getListData(params){
                 var _this=this;

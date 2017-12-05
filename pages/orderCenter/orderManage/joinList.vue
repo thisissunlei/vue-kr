@@ -7,7 +7,7 @@
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary">导出</Button>
                     <div style="float: right;">
-                        <Page :total="pageSize" show-total show-elevator></Page>
+                        <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
                     </div>
             </div>
             <Modal
@@ -36,20 +36,6 @@
     import axios from '../../../plugins/http.js';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
-    var detail=[
-            {
-                name: 'John Brown',
-                age: 18,
-                address: 'New York',
-                date: '2016-10-03'
-            },
-            {
-                name: 'Jim Green',
-                age: 24,
-                address: 'London',
-                date: '2016-10-01'
-            },
-    ]
     export default {
         name:'join',
         components:{
@@ -59,49 +45,53 @@
         data () {
             
             return {
-                page:1,
-                pageSize:10,
+                totalCount:1,
+                params:{
+                    page:1,
+                    pageSize:15
+                },
+                joinData:[],
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
                     {
                         title: '订单编号',
-                        key: 'name',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '客户名称',
-                        key: 'age',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '社区名称',
-                        key: 'address',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '服务费总额',
-                        key: 'date',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '履约保证金',
-                        key: 'name',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '订单类型',
-                        key: 'age',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '订单状态',
-                        key: 'address',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
                         title: '支付状态',
-                        key: 'date',
+                        key: 'communityName',
                         align:'center'
                     },
                     {
@@ -169,9 +159,11 @@
                             ]);  
                         }
                     }
-                ],
-                joinData:detail
+                ]
             }
+        },
+        created:function(){
+            this.getListData(this.params);
         },
         methods:{
             showSearch (params) {
@@ -192,24 +184,22 @@
             },
             openApplication(params){
                 
+            },
+            getListData(params){
+                var _this=this;
+                axios.get('join-bill-list', params, r => {
+                    _this.totalCount=r.data.totalCount;
+                    _this.joinData=r.data.items;
+                }, e => {
+                    _this.$Message.info(e);
+                })   
+            },
+            changePage (index) {
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
             }
         },
-        created:function(){
-            let params={
-                page:this.page,
-                pageSize:this.pageSize
-            }
-            var _this=this;
-            //列表
-            axios.get('join-bill-list',params, r => {
-                         
-                    console.log('r', r);
-                    
-                }, e => {
-                    console.log('error',e)
-            })
-
-	     }
     }
 </script>
 

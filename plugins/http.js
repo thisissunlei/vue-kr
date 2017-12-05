@@ -1,5 +1,3 @@
-// 配置API接口地址
-var root = '/api/';
 //引入apis
 import APIS from '../assets/apis/index';
 // 引用axios
@@ -38,18 +36,14 @@ function apiAxios (method, name, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
-
-  var server=APIS[name].url;
-
-  /*if(server.indexOf('mockjsdata') !==-1){
-     root='rap.krspace.cn';
-  }*/
-  
-  console.log('apis-------->',server);
-  
+  let root = '/api/';
+  let url = APIS[name].url;
+  if(url.indexOf('mockjs') !==-1){
+       root='http://rap.krspace.cn';
+  }
   axios({
     method: method,
-    url: server,
+    url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,

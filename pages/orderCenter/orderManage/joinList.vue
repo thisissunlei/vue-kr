@@ -1,8 +1,20 @@
 <template>
     <div class='m-bill-list'>
-            <div class="m-bill-search" @click="showSearch">
-                <span></span>   
-            </div> 
+            <div style='text-align:right;margin-bottom:10px'>
+               <div style='display:inline-block;margin:10px 20px;'>
+                    <span style='padding-right:10px'>客户名称</span>
+                    <i-input 
+                        v-model="customerName" 
+                        placeholder="请输入客户名称"
+                        style="width: 252px"
+                    ></i-input>
+                </div>
+                <div class="m-bill-search" @click="showSearch">
+                  <span></span>   
+                </div> 
+           </div>
+
+
             <Table :columns="joinOrder" :data="joinData"></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary">导出</Button>
@@ -50,6 +62,7 @@
                     page:1,
                     pageSize:15
                 },
+                customerName:"",
                 joinData:[],
                 openSearch:false,
                 openNullify:false,
@@ -230,8 +243,10 @@
 
 <style lang='less'>
  .m-bill-search{
+        display:inline-block;
         height:22px;
         margin:16px 20px;
+        vertical-align: bottom;
         span{
             width:22px;
             height:22px;

@@ -6,7 +6,7 @@
         span{
             width:22px;
             height:22px;
-            background:url(./../images/upperSearch.png) no-repeat center;
+            background:url('~/assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
         }
@@ -204,8 +204,8 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./list/orderDetail/${params.orderId}`;
-                location.href=`./list/orderDetail/12`
+                location.href=`./list/orderDetail/${params.orderId}`;
+                //location.href=`./list/orderDetail/12`
             },
             cancel (params) {
                 this.openCancel=true;

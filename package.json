@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "template": "node task/loadTemplate.js",
     "dev": "nuxt ",
     "start": "export BASE_URL=http://optest.krspace.cn && nuxt ",
     "starts": "export NODE_ENV=test && nuxt ",
+    "generate": "nuxt generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

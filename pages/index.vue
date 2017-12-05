@@ -20,30 +20,15 @@
  <Page :total="100" class="page"></Page>
  
 
+
 </div>
   
 </template>
 
 
 <script>
-    export default {
-        data () {
-            return {
-                columns1: [
-                    {
-                        title: 'Name',
-                        key: 'name'
-                    },
-                    {
-                        title: 'Age',
-                        key: 'age'
-                    },
-                    {
-                        title: 'Address',
-                        key: 'address'
-                    }
-                ],
-                data1: [
+    var detail=[
+
                     {
                         name: 'John Brown',
                         age: 18,
@@ -67,8 +52,36 @@
                         age: 26,
                         address: 'Ottawa No. 2 Lake Park',
                         date: '2016-10-04'
+                    },
+                    {
+                        name: 'Jon Snow',
+                        age: 26,
+                        address: 'Ottawa No. 2 Lake Park',
+                        date: '2016-10-04'
                     }
                 ]
+    export default {
+        data () {
+            return {
+                columns1: [
+                    {
+                        title: 'Name',
+                        key: 'name'
+                    },
+                    {
+                        title: 'Age',
+                        key: 'age'
+                    },
+                    {
+                        title: 'Address',
+                        key: 'address'
+                    },
+                    {
+                        title: 'Date',
+                        key: 'date'
+                    }
+                ],
+                data1:detail
             }
         }
     }

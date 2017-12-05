@@ -20,7 +20,7 @@
         border-radius: 4px;
     }
     .layout-content-main{
-        padding: 10px;
+        // padding: 10px;
     }
     .layout-copy{
         text-align: center;
@@ -86,7 +86,7 @@
             <Col :span="spanRight">
                 <div class="layout-header">
 
-                    <Menu mode="horizontal" :theme="theme1" active-name="1" class="nav">
+                    <Menu mode="horizontal"  active-name="1" class="nav">
 
                      <MenuItem name="0">
              <Button type="text" @click="toggleClick" >
@@ -134,20 +134,20 @@
 
 
                 </div>
-                <div class="layout-breadcrumb">
+                <!-- <div class="layout-breadcrumb">
                     <Breadcrumb>
                         <BreadcrumbItem href="#">Index</BreadcrumbItem>
                         <BreadcrumbItem href="#">Apps</BreadcrumbItem>
                         <BreadcrumbItem>App</BreadcrumbItem>
                     </Breadcrumb>
-                </div>
+                </div> -->
                 <div class="layout-content">
                     <div class="layout-content-main">
                         <nuxt/>
                     </div>
                 </div>
                 <div class="layout-copy">
-                    2011-2016 &copy; TalkingData
+                    &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
                 </div>
             </Col>
         </Row>
@@ -158,7 +158,8 @@
         data () {
             return {
                 spanLeft: 5,
-                spanRight: 19
+                spanRight: 19,
+
             }
         },
         computed: {

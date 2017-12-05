@@ -180,7 +180,7 @@
                 
             },
             openView(params){
-                 location.href=`./orderManage/watchView/12`;
+                 location.href=`./orderManage/12/joinView`;
                  //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){

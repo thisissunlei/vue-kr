@@ -22,12 +22,42 @@ module.exports = {
   },
    //订单中心-订单详情
  'order-detail': {
-      url: 'krspace-op-web/order/metting-room/detail?orderId={orderId}',
+      url: 'krspace-op-web/order/metting-room/detail?',
       method: 'get'
   },
   //获取客户
   'get-customer': {
       url: 'krspace-finance-web/customer/my-customers?',
       method: 'get'
+  },
+  //获取反结算信息
+  'get-release': {
+    url: 'krspace-op-web/bill/release?',
+    method: 'get'
+  },
+  //批量结算
+  'batch-pay': {
+    url: 'krspace-op-web/bill/batch-pay?',
+    method: 'get'
+  },
+  //获取账单列表
+  'get-bill-list': {
+    url: 'krspace-op-web/bill/list?',
+    method: 'get'
+  },
+  //账单结算
+  'bill-pay': {
+    url: 'krspace-op-web/bill/pay?',
+    method: 'get'
+  },
+  //账单结算查询
+  'get-balance': {
+    url: 'krspace-op-web/bill/get-balance?',
+    method: 'get'
+  },
+  //账单详情
+  'get-detail': {
+    url: 'krspace-op-web/bil/detail?',
+    method: 'get'
   },
 }

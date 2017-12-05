@@ -73,6 +73,7 @@ import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import sectionTitle from '~/components/sectionTitle.vue';
 import dateUtils from 'vue-dateutils';
+
 export default {
 	components:{
 		DetailStyle,
@@ -147,11 +148,6 @@ export default {
 		}
 	},
 	created:function(){
-		let {params}=this.$route
-		let from={
-			orderId:params.orderId
-		};
-		var _this=this;
 		//假数据--开始
 		this.basicInfo={
 
@@ -190,30 +186,36 @@ export default {
 		this.payStatus=payStatus=='WAIT'?'待付款':'已付款';
 		//假数据--结束
 
-
-
-		axios.get('order-detail', from, r => {
-			console.log('r', r);
-			_this.basicInfo=r;
-			_this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.orderStartTime));
-			_this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.orderEndTime));
-			_this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.cTime));
-			_this.payStatus=r.payStatus=='WAIT'?'待付款':'已付款';
-			_this.coseInfo=[
-				{
-				refundAmount:r.refundAmount,
-				totalAmount:r.totalAmount
-				}
-			]
-			_this.billInfo=r.billList;
-                
+		this.getInfo();
+		
+	},
+	methods:{
+		getInfo(){
+			var _this=this;
+			let {params}=this.$route
+			let from={
+				orderId:params.orderId
+			};
+			axios.get('order-detail', from, r => {
+				console.log('r', r);
+				let data=r.data;
+				_this.basicInfo=data;
+				_this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
+				_this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
+				_this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.cTime));
+				_this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
+				_this.coseInfo=[
+					{
+					refundAmount:data.refundAmount,
+					totalAmount:data.totalAmount
+					}
+				]
+				_this.billInfo=data.billList;
+					
            	}, e => {
                 console.log('error',e)
             })
-
-		
-		
-		
+		},
 	}
 
 }

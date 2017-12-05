@@ -109,15 +109,16 @@
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
                 </Col>
+
                 </Row>
                 <Row class="row-table">
                     <Col span="1" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
-                        <Checkbox v-model="selectAll"></Checkbox>
+                        <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
                     <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
-                        优惠类型
+                       <span> 优惠类型</span>
                     </Col>
                     <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
                         <span>开始时间</span>
@@ -133,36 +134,41 @@
                     <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
                         <span>优惠金额</span>
                     </Col>
+                    
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
-                v-if="item.status"
                 :key="index"
-                :prop="'items.' + index + '.value'"
-                :rules="{required: true, message: 'Item ' + item.index +' can not be empty', trigger: 'blur'}">
+                :prop="'items.' + index + '.type'"
+                :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
             <Row>
                     <!-- <Input type="text" v-model="item.value" placeholder="Enter something..." style="width:200px"></Input>
                     <Input type="text" v-model="item.value" placeholder="Enter something..." style="width:200px"></Input> -->
-                    <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
+                 <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center">
-                        优惠类型
+                    <Col span="4" style="background: #fff;padding:0 15px;height:50px;line-height:50px;text-align:center">
+                         <Select v-model="item.type" @on-change="changeType">
+                            <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
+                        </Select>
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center">
-                        <span>开始时间</span>
+                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                       <DatePicker type="date" placeholder="开始时间" v-if="item.type !== 'qianmian'" v-model="item.beginDate" ></DatePicker>
+                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center">
-                        <span>结束时间</span>
+                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
+                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                    </Col>
+                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
+                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
+
                         
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center">
-                        <span>折扣</span>
-                        
-                    </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center">
-                        <span>优惠金额</span>
-                    </Col>
+                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                        <Input v-model="item.money" placeholder="金额" disabled></Input>
+                    </Col>   
             </Row>
         </FormItem>
                 
@@ -197,23 +203,27 @@ import DetailStyle from '~/components/detailStyle';
                 }else{
                     callback();
                 }
-                // 模拟异步验证效果
-                // setTimeout(() => {
-                //     if (!Number.isInteger(value)) {
-                //         callback(new Error('Please enter a numeric value'));
-                //     } else {
-                //         if (value < 18) {
-                //             callback(new Error('Must be over 18 years of age'));
-                //         } else {
-                //             callback();
-                //         }
-                //     }
-                // }, 1000);
             };
             return {
                 loading1:false,
                 selectAll:false,
+                discountError:false,
                 index:1,
+                youhui:[
+                    {
+                        label:'折扣',
+                        value:'zhekou'
+                    },
+                    {
+                        label:'前免',
+                        value:'qianmian'
+                    },
+                    {
+                        label:'后免',
+                        value:'houmian'
+                    }
+
+                ],
                 columns4: [
                     {
                         type: 'selection',
@@ -333,14 +343,73 @@ import DetailStyle from '~/components/detailStyle';
         },
         methods: {
             handleSubmit:function(name) {
-                console.log('handleSubmit',this.formItem)
+                let discountError = true;
+                let message = '请填写完表单';
+                let typeList = this.formItem.items.map((item)=>{
+                    return item.type;
+                })
+                let qianmian = typeList.join(",").split('qianmian').length-1;
+                let houmian = typeList.join(",").split('houmian').length-1;
+                let zhekou = typeList.join(",").split('zhekou').length-1;
+                if(qianmian + houmian>1){
+                    discountError = false;
+                    message = '只能有一个免租期。'
+                }
+                if(zhekou>1){
+                    discountError = false;
+                    message = '只能有一个折扣。'
+                }
                 this.$refs[name].validate((valid) => {
-                    if (valid) {
+                    if (valid && discountError) {
                         this.$Message.success('Success!');
                     } else {
-                        this.$Message.error('Fail!');
+                        this.$Message.error(message);
                     }
                 })
+            },
+            selectDiscount:function(value){
+                console.log('selectAll',value);
+                let items = this.formItem.items;
+                items = items.map((item)=>{
+                    let obj = item;
+                    obj.select = value;
+                    return obj;
+                })
+                this.formItem.items = items;
+            },
+            deleteDiscount:function(){
+                let items = this.formItem.items;
+                let select = []
+                select = items.map((item)=>{
+                    return item.selelct;
+                })
+                items = items.filter(function(item, index) {
+                    if (item.select) {
+                        return false;
+                    }
+                return true;
+                });
+                this.formItem.items = items;
+                console.log('deleteDiscount',items);
+
+            },
+            //优惠类型选择
+            changeType:function(value){
+                let items = [];
+                items = this.formItem.items.map((item)=>{
+                    if(item.type == 'qianmian'){
+                        item.endDate = new Date()
+                        item.zhekou = '';
+                    }else if(item.type == 'houmian'){
+                        item.endDate = new Date()
+                        item.zhekou = '';
+                    }else if(item.type == 'zhekou'){
+                        item.beginDate = new Date()
+                        item.endDate = new Date()
+                    }
+                    return item;
+                })
+                this.formItem.items = items;
             },
             changeCommunity:function(value){
                 if(value){
@@ -375,7 +444,6 @@ import DetailStyle from '~/components/detailStyle';
 
             },
             selectRow:function(selection){
-                console.log('selectRow',selection)
                 let selectionList = [];
                 selectionList = selection.map((item)=>{
                     return item.id

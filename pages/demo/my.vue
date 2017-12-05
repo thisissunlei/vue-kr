@@ -8,6 +8,7 @@
     warn="描述原因，作废失败"
     v-on:changeOpen="onChangeOpen"
 ></Message>
+<planMap :stationsubmit="submits"></planMap>
 
 <p @click="show">按钮</p>
 
@@ -18,9 +19,11 @@
 </template>
 <script>
 import Message from '~/components/Message';
+import planMap from '~/components/planMap.vue';
 export default {
   components:{
-        Message
+        Message,
+        planMap
     },
     data(){
         return{
@@ -33,7 +36,10 @@ export default {
      },
      onChangeOpen(data){
          this.openMessage=data;
-     }
+     },
+     submits:function(){
+                alert('haha')
+            }
   }
  
 }

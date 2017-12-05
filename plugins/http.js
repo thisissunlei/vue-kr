@@ -53,22 +53,19 @@ function apiAxios (method, name, params, success, failure) {
   //success
   .then(function (res) {
     console.log('success',res,'data',res.data);
-    if (success) {
+    if (res.status === 200) {
+      if (success) {
         success(res.data)
       }
-    // if (res.data.success === true) {
-    //   if (success) {
-    //     success(res.data)
-    //   }
-    // } else {
-    //   if (failure) {
-    //     failure(res.data)
-    //   } else {
-    //   // console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
+    } else {
+      if (failure) {
+        failure(res.data)
+      } else {
+      console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
         
-    //     // window.alert('error: ' + JSON.stringify(res.data))
-    //   }
-    // }
+        // window.alert('error: ' + JSON.stringify(res.data))
+      }
+    }
   })
   //failure
   .catch(function (err) {

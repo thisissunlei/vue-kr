@@ -209,7 +209,19 @@
             <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
+    
+    <Modal
+        v-model="openStation"
+        title="选择工位"
+        ok-text="保存"
+        cancel-text="取消"
+        width="750"
+        @on-visible-change="jj"
+     >
+      <keep-alive>  <planMap :stationsubmit="submits" :floors="floors"></planMap></keep-alive>
+    </Modal>
 
+        
     </div>
 </template>
 
@@ -221,6 +233,8 @@ import selectCustomers from '~/components/selectCustomers.vue'
 import selectSaler from '~/components/selectSaler.vue'
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
+import planMap from '~/components/planMap.vue';
+
 
 
 
@@ -238,6 +252,7 @@ import DetailStyle from '~/components/detailStyle';
             };
             return {
                 loading1:false,
+                openStation:true,
                 selectAll:false,
                 discountError:false,
                 index:1,
@@ -332,6 +347,7 @@ import DetailStyle from '~/components/detailStyle';
                     value:'2',
                     label:'2'
                 }],
+                floor:'3',
                 selectedStation:[],
                 formItem: {
                     customer: '',
@@ -381,7 +397,11 @@ import DetailStyle from '~/components/detailStyle';
             selectCommunities,
             DetailStyle,
             selectCustomers,
-            selectSaler
+            selectSaler,
+            planMap
+        },
+        created(){
+            // this.openStation = false
         },
         methods: {
             handleSubmit:function(name) {
@@ -489,7 +509,23 @@ import DetailStyle from '~/components/detailStyle';
                 this.data1 = stationVos;
             },
             showStation:function(){
-
+                // this.$Modal.confirm({
+                //     render: (h) => {
+                //         return h('planMap', {
+                //             // props: {
+                //             //     value: this.value,
+                //             //     autofocus: true,
+                //             //     placeholder: 'Please enter your name...'
+                //             // },
+                //             on: {
+                //                 // input: (val) => {
+                //                 //     this.value = val;
+                //                 // }
+                //             }
+                //         })
+                //     }
+                // })
+                this.openStation = true;
             },
             selectRow:function(selection){
                 let selectionList = [];
@@ -508,6 +544,12 @@ import DetailStyle from '~/components/detailStyle';
             },
             selectDeposit:function(value){
                 this.depositType = value
+            },
+            submits:function(value){
+                console.log('submits')
+            },
+            jj:function(){
+                console.log('dddd')
             }
 
                     

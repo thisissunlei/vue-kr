@@ -56,12 +56,12 @@
                 joinOrder: [
                     {
                         title: '订单编号',
-                        key: 'communityName',
+                        key: 'orderNum',
                         align:'center'
                     },
                     {
                         title: '客户名称',
-                        key: 'communityName',
+                        key: 'customerName',
                         align:'center'
                     },
                     {
@@ -71,27 +71,40 @@
                     },
                     {
                         title: '服务费总额',
-                        key: 'communityName',
+                        key: 'rentAmount',
                         align:'center'
                     },
                     {
                         title: '履约保证金',
-                        key: 'communityName',
+                        key: 'depositAmount',
                         align:'center'
                     },
                     {
                         title: '订单类型',
-                        key: 'communityName',
-                        align:'center'
+                        key: 'orderType',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderType==='IN'){
+                                return <span class="u-txt">入驻服务订单</span>;
+                            }else if(obj.row.orderType==='INCREASE'){
+                                return <span class="u-txt-orange">增租服务订单</span>;
+                            }else if(obj.row.orderType==='CONTINUE'){
+                                return <span class="u-txt-red">续租服务订单</span>;
+                            }else if(obj.row.orderType==='REDUCE'){
+                                return <span class="u-txt-orange">减租服务订单</span>;
+                            }else if(obj.row.orderType==='LEAVE'){
+                                return <span class="u-txt-red">退费离场服务订单</span>;
+                            }
+                        }
                     },
                     {
                         title: '订单状态',
-                        key: 'communityName',
+                        key: 'orderStatus',
                         align:'center'
                     },
                     {
                         title: '支付状态',
-                        key: 'communityName',
+                        key: 'payStatus',
                         align:'center'
                     },
                     {

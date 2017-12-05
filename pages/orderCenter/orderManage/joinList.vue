@@ -34,6 +34,8 @@
     import axios from '../../../plugins/http.js';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
+    import dateUtils from 'vue-dateutils';
+
     export default {
         name:'join',
         components:{
@@ -104,6 +106,15 @@
                         title: '支付状态',
                         key: 'payStatus',
                         align:'center'
+                    },
+                    {
+                        title: '创建时间',
+                        key: 'ctime',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            return time;
+                        }
                     },
                     {
                         title: '操作',
@@ -188,7 +199,7 @@
                 this.openNullify=true;
             },
             openEdit(params){
-                
+
             },
             openApplication(params){
                 
@@ -196,8 +207,8 @@
             nullifySubmit (){
                 console.log('作废');
             },
-            heighSubmit (){
-                console.log('高级');
+            heighSubmit (params){
+                console.log('高级',params);
             },
             getListData(params){
                 var _this=this;

@@ -38,7 +38,8 @@
 		name:'antiSettlement',
 		data (){
 			return{
-				amount:'300'
+				amount:'300',
+				value:'',
 			}
 		}
 	}

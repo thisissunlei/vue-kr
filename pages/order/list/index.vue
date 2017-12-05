@@ -38,7 +38,7 @@
         <span @click="showSearch"></span>   
     </div>
     <div class="u-table">
-        <Table  :columns="columns" :data="tableData" ref="table" stripe></Table>
+        <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">

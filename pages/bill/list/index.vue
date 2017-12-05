@@ -44,7 +44,7 @@
         <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <div class="u-table">
-        <Table  border ref="selection" :columns="columns1" :data="billList"></Table>
+        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
@@ -113,7 +113,7 @@ import sectionTitle from '~/components/sectionTitle.vue';
                 columns1: [
                     {
                         type: 'selection',
-                        width: 60,
+                        width: 50,
                         align: 'center'
                     },
                     {
@@ -242,6 +242,7 @@ import sectionTitle from '~/components/sectionTitle.vue';
         created:function(){
             this.billList=[
 			{
+                orderId:'44',
 				billNo:'HYSZD201712010001',
 				billType:'MEETING',
 				billStartTime:1511404234000,
@@ -253,6 +254,7 @@ import sectionTitle from '~/components/sectionTitle.vue';
                 payAmount:'￥100'
 			},
 			{
+                orderId:'45',
 				billNo:'HYSZD201712010001',
 				billType:'PRINT',
 				billStartTime:1509372919000,
@@ -264,6 +266,7 @@ import sectionTitle from '~/components/sectionTitle.vue';
                 payAmount:'￥100'
 			},
 			{
+                orderId:'46',
 				billNo:'HYSZD201712010001',
 				billType:'CONTRACT',
 				billStartTime:1505704034000,
@@ -297,7 +300,10 @@ import sectionTitle from '~/components/sectionTitle.vue';
             onExport(){
                  console.log('导出')
             },
-           
+            onSelectList(data){
+                console.log('date====>>>>>0000',data)
+            }
+            
         }
 
     }

@@ -1,31 +1,24 @@
 <style lang="less"> 
-    label{
-        width:250px;
-        line-height: 14px;
-        color: #333333;
-        padding-bottom: 10px;
-        display: inline-block;
+form{
+    width:540px;
+    margin:0 auto;
+}
+.u-clearfix { zoom:1; }
+.u-clearfix:after {
+    clear: both;
+    content: '.';
+    height: 0;
+    display: block;
+    visibility: hidden;
+}
+.u-input{
+    width:250px;
+    float:left; 
+    margin-bottom:10px;
+    &:nth-child(2n-1){
+        margin-right:30px;  
     }
-    form{
-        width:540px;
-        margin:0 auto;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-      clear: both;
-      content: '.';
-      height: 0;
-      display: block;
-      visibility: hidden;
-    }
-    .u-input{
-        width:250px;
-        float:left; 
-        margin-bottom:10px;
-        &:nth-child(2n-1){
-          margin-right:30px;  
-        }
-    }
+}
 
     
 </style>

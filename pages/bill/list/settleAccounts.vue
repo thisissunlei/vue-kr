@@ -38,7 +38,8 @@
 		name:'settleAccounts',
 		data (){
 			return{
-				amount:'200'
+				amount:'200',
+				value:''
 			}
 		}
 	}

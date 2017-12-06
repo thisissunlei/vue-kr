@@ -522,6 +522,7 @@ import dateUtils from 'vue-dateutils';
                     communityId:this.formItem.community,
                     mainBillId:3162,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
                 }
                 this.openStation = true;
@@ -549,7 +550,7 @@ import dateUtils from 'vue-dateutils';
                 console.log('submits')
             },
             jj:function(){
-                console.log('==')
+
             }
                     
                

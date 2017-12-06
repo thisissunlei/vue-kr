@@ -1,7 +1,7 @@
 <template>
 	<div class = "plan-map-content">
 		<div class="num-type">
-			<Select v-model="floor" style="width:100px" @on-change="floorsChange">
+			<Select v-model="params.floor" style="width:100px" @on-change="floorsChange">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
 		    </Select>
 		    <Input v-model="inputStart" placeholder="inputStart" style="width: 50px"></Input>至
@@ -60,8 +60,10 @@ import axios from '~/plugins/http.js';
         },
         watch:{
         	params:function(){
-        		this.getData()
-        		console.log('watch-----params',this.params)
+        		console.log('=========>>>>>>')
+        		if(this.params.floor){
+        			this.getData()
+        		}
         	}
         },
         props:['stationsubmit','params','floors'],
@@ -77,8 +79,8 @@ import axios from '~/plugins/http.js';
 			//获取平面图基础数据
 			getData:function(){
 				let params = this.params;
-				console.log('===getData=====',params)
 				let selectedObjs = []
+				console.log('getData====>',params)
 				axios.get('getplanmap', params, r => {
 					// console.log('r', r);
 					let response = r.data;
@@ -227,9 +229,16 @@ import axios from '~/plugins/http.js';
 			},
 			//更换楼层
 			floorsChange:function (value) {
-				this.Map.destory();
-				this.scaleNumber = 50;
-				this.getData()
+				console.log('floorsChange',this.Map)
+
+				if(this.Map){
+					console.log('========this.Map',this.Map)
+					this.Map.destory();
+					this.scaleNumber = 50;
+					this.getData();
+					console.log('create------end')
+				}
+				
 			},
 			submitStation:function(){
 				this.Map.destory();

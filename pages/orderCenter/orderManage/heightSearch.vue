@@ -57,7 +57,7 @@
                         style="width: 252px"
                     >
                         <Option 
-                            v-for="item in statusList" 
+                            v-for="item in typeList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -137,6 +137,28 @@
                         value:'已付款',
                         label:'已付款'
                     }
+                ],
+                typeList:[
+                    {
+                        value:'IN',
+                        label:'入驻服务订单'
+                    },
+                    {
+                        value:'INCREASE',
+                        label:'增值服务订单'
+                    },
+                    {
+                        value:'CONTINUE',
+                        label:'续租服务订单'
+                    },
+                    {
+                        value:'REDUCE',
+                        label:'减租服务订单'
+                    },
+                    {
+                        value:'LEAVE',
+                        label:'退费离场服务订单'
+                    } 
                 ]
             }
         },

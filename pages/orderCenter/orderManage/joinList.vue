@@ -4,9 +4,10 @@
                <div style='display:inline-block;margin:10px 20px;'>
                     <span style='padding-right:10px'>客户名称</span>
                     <i-input 
-                        v-model="customerName" 
+                        v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
+                        @on-change="changeCustomer"
                     ></i-input>
                 </div>
                 <div class="m-bill-search" @click="showSearch">
@@ -25,7 +26,8 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                @on-ok="heighSubmit"
+                ok-text="确定"
+                cancel-text="取消"
                 width="660"
             >
                 <HeightSearch></HeightSearch>
@@ -60,9 +62,9 @@
                 totalCount:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:"",
                 },
-                customerName:"",
                 joinData:[],
                 openSearch:false,
                 openNullify:false,
@@ -205,7 +207,7 @@
                 this.openSearch=true;
             },
             openView(params){
-                location.href=`./orderManage/12/joinView`;
+                location.href=`./12/joinView`;
                 //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){
@@ -235,6 +237,11 @@
             changePage (index) {
                 let params=this.params;
                 params.page=index;
+                this.getListData(params);
+            },
+            changeCustomer(param){
+                let params=this.params;
+                params.customerName=param.target.value;
                 this.getListData(params);
             }
         },

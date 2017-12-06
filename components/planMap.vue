@@ -12,7 +12,7 @@
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
-		<!-- <Button @click="prompt">click</Button> -->
+		<Button @click="prompt">click</Button>
 		<Button @click="submitAllStation">提交数据</Button>
 		<div id = "plan-map-content"  style ='width:700px;height:450px;border:1px solid #000'>
 
@@ -30,11 +30,8 @@ import Map from '~/plugins/Map.js';
 import axios from '~/plugins/http.js';
     export default {
         data () {
-        	this.getData()
+        	// this.getData()
             return {
-                spanLeft: 5,
-                spanRight: 19,
-                msg:'ssss',
                 data:'',
                 selectedObjs:[],
                 deleteArr:[],
@@ -42,35 +39,32 @@ import axios from '~/plugins/http.js';
                 newfloor:{},
                 submitData:[],
                 scaleNumber:40,
-                floors:[{
-                	value:4,
-                	label:4
-                },{
-                	value:3,
-                	label:3
-                },{
-                	value:2,
-                	label:2
-                }],
-                floor:3,
                 Map:'',
                 inputEnd:'',
                 inputStart:'',
-                originData:[]
+                originData:[],
+                floor:''
 
             }
         },
         destroyed(){
         	console.log('======================>>>>>')
         },
-        created(){
+        created:function(){
         	this.getData()
         	console.log('created======================>>>>>')
         },
-        // watch(){
-        // 	console.log('watch',this)
-        // },
-        props:['stationsubmit'],
+        updated:function(){
+        	console.log('updated======================>>>>>')
+
+        },
+        watch:{
+        	params:function(){
+        		this.getData()
+        		console.log('watch-----params',this.params)
+        	}
+        },
+        props:['stationsubmit','params','floors'],
         // computed: {
         //     floor :function(){
         //         console.log('floor=======')
@@ -79,17 +73,11 @@ import axios from '~/plugins/http.js';
         methods: {
 			prompt: function() {
 				this.getData()
-				this.msg = this.floor;
 			},
 			//获取平面图基础数据
 			getData:function(){
-				let params = {
-					communityId:4,
-					floor:this.floor,
-					mainBillId:3162,
-					startDate:'2017-11-27 00:00:00',
-					endDate:'2017-12-02 00:00:00',
-				}
+				let params = this.params;
+				console.log('===getData=====',params)
 				let selectedObjs = []
 				axios.get('getplanmap', params, r => {
 					// console.log('r', r);

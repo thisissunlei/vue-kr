@@ -84,7 +84,7 @@
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.endDate" style="display:block"></DatePicker>
+                    <DatePicker type="date" placeholder="Select date" v-model="formItem.endDate" style="display:block" ></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -218,7 +218,7 @@
         width="750"
         @on-visible-change="jj"
      >
-      <keep-alive>  <planMap :stationsubmit="submits" :floors="floors"></planMap></keep-alive>
+        <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params"></planMap>
     </Modal>
 
         
@@ -234,6 +234,7 @@ import selectSaler from '~/components/selectSaler.vue'
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/planMap.vue';
+import dateUtils from 'vue-dateutils';
 
 
 
@@ -249,12 +250,13 @@ import planMap from '~/components/planMap.vue';
             };
             return {
                 loading1:false,
-                openStation:true,
+                openStation:false,
                 selectAll:false,
                 discountError:false,
                 index:1,
                 depositType:'',
                 disabled:false,
+                params:{},
                 depositList:[
                     {label:'2个月',value:'2个月'},
                     {label:'3个月',value:'3个月'},
@@ -503,23 +505,27 @@ import planMap from '~/components/planMap.vue';
                 this.data1 = stationVos;
             },
             showStation:function(){
-                // this.$Modal.confirm({
-                //     render: (h) => {
-                //         return h('planMap', {
-                //             // props: {
-                //             //     value: this.value,
-                //             //     autofocus: true,
-                //             //     placeholder: 'Please enter your name...'
-                //             // },
-                //             on: {
-                //                 // input: (val) => {
-                //                 //     this.value = val;
-                //                 // }
-                //             }
-                //         })
-                //     }
-                // })
+                if(!this.formItem.community){
+                    this.$Message.error('请先选择社区')
+                    return;
+                }
+                if(!this.formItem.beginDate){
+                    this.$Message.error('请先选择开始时间')
+                    return;
+                }
+                if(!this.formItem.endDate){
+                    this.$Message.error('请先选择结束时间')
+                    return;
+                }
+                let params = {
+                    floor:3,
+                    communityId:this.formItem.community,
+                    mainBillId:3162,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
+                }
                 this.openStation = true;
+                this.params = params;
             },
             selectRow:function(selection){
                 let selectionList = [];

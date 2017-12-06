@@ -101,13 +101,19 @@
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
                 </Col>
+                
                 </Row>
-                    <Table border ref="selection" :columns="columns4" :data="data1" @on-selection-change="selectRow"></Table>
-                    <div class="total-money">
+                <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
+                    <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
                         <span class="money">12,000.00 </span>
                         <span class="money">壹万两仟元整</span>
                     </div>
+                </Col>
+                </Row>
+                    
                 
             </DetailStyle>
             <DetailStyle info="优惠信息">
@@ -305,35 +311,35 @@ import dateUtils from 'vue-dateutils';
                         key: 'address'
                     }
                 ],
-                data1: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        id:1,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        id:2,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        id:3,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        id:4,
-                        address: 'Ottawa No. 2 Lake Park',
-                        date: '2016-10-04'
-                    }
+                stationList: [
+                    // {
+                    //     name: 'John Brown',
+                    //     age: 18,
+                    //     id:1,
+                    //     address: 'New York No. 1 Lake Park',
+                    //     date: '2016-10-03'
+                    // },
+                    // {
+                    //     name: 'Jim Green',
+                    //     age: 24,
+                    //     id:2,
+                    //     address: 'London No. 1 Lake Park',
+                    //     date: '2016-10-01'
+                    // },
+                    // {
+                    //     name: 'Joe Black',
+                    //     age: 30,
+                    //     id:3,
+                    //     address: 'Sydney No. 1 Lake Park',
+                    //     date: '2016-10-02'
+                    // },
+                    // {
+                    //     name: 'Jon Snow',
+                    //     age: 26,
+                    //     id:4,
+                    //     address: 'Ottawa No. 2 Lake Park',
+                    //     date: '2016-10-04'
+                    // }
                 ],
                 floors:[{
                     value:'4',

@@ -38,7 +38,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="回款管理"></sectionTitle>
+    <sectionTitle label="交易记录"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>   

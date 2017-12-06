@@ -12,9 +12,9 @@
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
-		<Button @click="prompt">click</Button>
+		<!-- <Button @click="prompt">click</Button> -->
 		<Button @click="submitAllStation">提交数据</Button>
-		<div id = "plan-map-content"  style ='width:700px;height:500px;border:1px solid #000'>
+		<div id = "plan-map-content"  style ='width:700px;height:450px;border:1px solid #000'>
 
 		</div>
 	</div>
@@ -23,7 +23,6 @@
 	.plan-map-content{
 		width: 700px;
 		height: 500px;
-		/*border:1px solid red;*/
 	}
 </style>
 <script>
@@ -31,6 +30,7 @@ import Map from '~/plugins/Map.js';
 import axios from '~/plugins/http.js';
     export default {
         data () {
+        	this.getData()
             return {
                 spanLeft: 5,
                 spanRight: 19,
@@ -60,12 +60,22 @@ import axios from '~/plugins/http.js';
 
             }
         },
-        props:['stationsubmit'],
-        computed: {
-            iconSize () {
-                return this.spanLeft === 5 ? 14 : 24;
-            }
+        destroyed(){
+        	console.log('======================>>>>>')
         },
+        created(){
+        	this.getData()
+        	console.log('created======================>>>>>')
+        },
+        // watch(){
+        // 	console.log('watch',this)
+        // },
+        props:['stationsubmit'],
+        // computed: {
+        //     floor :function(){
+        //         console.log('floor=======')
+        //     }
+        // },
         methods: {
 			prompt: function() {
 				this.getData()
@@ -82,7 +92,7 @@ import axios from '~/plugins/http.js';
 				}
 				let selectedObjs = []
 				axios.get('getplanmap', params, r => {
-					console.log('r', r);
+					// console.log('r', r);
 					let response = r.data;
 					let floors = [];
 					let name = "";

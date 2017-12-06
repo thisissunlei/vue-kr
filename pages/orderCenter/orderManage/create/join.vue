@@ -241,9 +241,6 @@ import planMap from '~/components/planMap.vue';
     export default {
         data() {
             const validateFloor = (rule, value, callback) => {
-                console.log('validateFloor--rule',rule)
-                console.log('validateFloor ---value', value)
-                console.log('validateFloor---callback',callback)
                 if (!value) {
                     return callback(new Error('Age cannot be empty'));
                 }else{
@@ -298,7 +295,6 @@ import planMap from '~/components/planMap.vue';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            console.log('=====>',h,params)
                             return h('strong', params.row.name+'至'+params.row.date)
                         }
                     },
@@ -433,7 +429,6 @@ import planMap from '~/components/planMap.vue';
                 })
             },
             selectDiscount:function(value){
-                console.log('selectAll',value);
                 let items = this.formItem.items;
                 items = items.map((item)=>{
                     let obj = item;
@@ -455,7 +450,6 @@ import planMap from '~/components/planMap.vue';
                 return true;
                 });
                 this.formItem.items = items;
-                console.log('deleteDiscount',items);
 
             },
             //优惠类型选择
@@ -549,9 +543,8 @@ import planMap from '~/components/planMap.vue';
                 console.log('submits')
             },
             jj:function(){
-                console.log('dddd')
+                console.log('==')
             }
-
                     
                
         }

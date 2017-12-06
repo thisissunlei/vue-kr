@@ -16,7 +16,7 @@
 
 </style>  
     <template>         
-            <i-form :model="formItem" label-position="top">
+            <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="订单编号" 
                     class='bill-search-class'>
                     <i-input 
@@ -112,7 +112,7 @@
                         style="width: 252px"
                 ></DatePicker>   
              </FormItem>
-            </i-form>
+            </Form>
 </template>
 <script>
     export default{

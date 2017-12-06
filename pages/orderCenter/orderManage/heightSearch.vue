@@ -112,7 +112,7 @@
                         style="width: 252px"
                 ></DatePicker>   
              </FormItem>
-            </Form>
+         </Form>
 </template>
 <script>
     import axios from '../../../plugins/http.js';
@@ -189,6 +189,12 @@
                 }, e => {
                     console.log('error',e)
             })
+        },
+        updated:function(){
+            this.$emit('bindData', this.formItem);
+        },
+        destroyed:function(){
+            console.log('--------des');
         }
     }
 </script>

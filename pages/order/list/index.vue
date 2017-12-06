@@ -207,8 +207,8 @@ export default {
             },
             openView(params){
                 
-                location.href=`./list/orderDetail/${params.orderId}`;
-                //location.href=`./list/orderDetail/12`
+                location.href=`./list/detail/${params.orderId}`;
+                //location.href=`./list/detail/12`
             },
             cancel (params) {
                 this.openCancel=true;

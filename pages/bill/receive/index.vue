@@ -217,8 +217,8 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./receive/receiveDetail/${params.orderId}`;
-                location.href=`./receive/receiveDetail/12`
+                //location.href=`./receive/detail/${params.orderId}`;
+                location.href=`./receive/detail/12`
             },
             bindPerson (params) {
                 this.openBind=true;

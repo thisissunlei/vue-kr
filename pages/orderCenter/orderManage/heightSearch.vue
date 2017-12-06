@@ -41,7 +41,7 @@
                         filterable
                     >
                         <Option 
-                            v-for="item in statusList" 
+                            v-for="item in communityList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -73,7 +73,7 @@
                         style="width: 252px"
                     >
                         <Option 
-                            v-for="item in statusList" 
+                            v-for="item in orderList" 
                             :value="item.value" 
                             :key="item.value"
                          >
@@ -89,7 +89,7 @@
                         style="width: 252px"
                     >
                         <Option 
-                            v-for="item in statusList" 
+                            v-for="item in payList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -115,6 +115,7 @@
             </Form>
 </template>
 <script>
+    import axios from '../../../plugins/http.js';
     export default{
         data (){
             return{
@@ -128,15 +129,33 @@
                    cEndDate:'',
                    cStartDate:''
                 },
-                statusList:[
+                orderList:[
                     {
-                        value:'待付款',
-                        label:'待付款'
+                        value:'NOT_EFFECTIVE',
+                        label:'未生效'
                     },
                     {
-                        value:'已付款',
-                        label:'已付款'
+                        value:'EFFECTIVE',
+                        label:'已生效'
+                    },
+                    {
+                        value:'INVALID',
+                        label:'已作废'
                     }
+                ],
+                payList:[
+                   {
+                        value:'WAIT_PAY',
+                        label:'待支付'
+                    },
+                    {
+                        value:'COMPLETE',
+                        label:'已付清'
+                    },
+                    {
+                        value:'UN_COMPLETE',
+                        label:'未付清'
+                    } 
                 ],
                 typeList:[
                     {
@@ -159,9 +178,18 @@
                         value:'LEAVE',
                         label:'退费离场服务订单'
                     } 
-                ]
+                ],
+                communityList:[]
             }
         },
+        created:function(){
+            var _this=this;
+            axios.get('join-bill-community','', r => {    
+                    console.log('r', r);     
+                }, e => {
+                    console.log('error',e)
+            })
+        }
     }
 </script>
 

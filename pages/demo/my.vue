@@ -3,7 +3,7 @@
 
 
 <Message 
-    type="error" 
+    type="success" 
     :openMessage="openMessage"
     warn="描述原因，作废失败"
     v-on:changeOpen="onChangeOpen"

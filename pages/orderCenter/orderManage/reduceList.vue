@@ -7,9 +7,10 @@
                         v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        @on-change="changeCustomer"
+                        @on-change="lowerChange"
                     ></i-input>
                 </div>
+                <div class='m-search' @click="lowerSubmit">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
                   <span></span>   
                 </div> 
@@ -26,11 +27,10 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                ok-text="确定"
-                cancel-text="取消"
                 width="660"
+                @on-ok='upperSubmit'
             >
-                <HeightSearch></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange"></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -45,7 +45,7 @@
 
 
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
@@ -59,6 +59,7 @@
         data () {
             
             return {
+                upperData:{},
                 totalCount:1,
                 params:{
                     page:1,
@@ -85,18 +86,41 @@
                         align:'center'
                     },
                     {
-                        title: '减租开始日期',
+                        title: '服务费总额',
                         key: 'rentAmount',
                         align:'center'
                     },
                     {
-                        title: '减租金额',
+                        title: '履约保证金',
                         key: 'depositAmount',
                         align:'center'
                     },
                     {
+                        title: '订单类型',
+                        key: 'orderType',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderType==='IN'){
+                                return <span class="u-txt">入驻服务订单</span>;
+                            }else if(obj.row.orderType==='INCREASE'){
+                                return <span class="u-txt-orange">增租服务订单</span>;
+                            }else if(obj.row.orderType==='CONTINUE'){
+                                return <span class="u-txt-red">续租服务订单</span>;
+                            }else if(obj.row.orderType==='REDUCE'){
+                                return <span class="u-txt-orange">减租服务订单</span>;
+                            }else if(obj.row.orderType==='LEAVE'){
+                                return <span class="u-txt-red">退费离场服务订单</span>;
+                            }
+                        }
+                    },
+                    {
                         title: '订单状态',
                         key: 'orderStatus',
+                        align:'center'
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatus',
                         align:'center'
                     },
                     {
@@ -186,7 +210,6 @@
             },
             openView(params){
                 location.href=`./12/joinView`;
-                //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){
                 this.openNullify=true;
@@ -200,11 +223,8 @@
             nullifySubmit (){
                 console.log('作废');
             },
-            heighSubmit (params){
-                console.log('高级',params);
-            },
             outSubmit (){
-                console.log(',,,,');
+                console.log('导出');
             },
             getListData(params){
                 var _this=this;
@@ -220,12 +240,20 @@
                 params.page=index;
                 this.getListData(params);
             },
-            changeCustomer(param){
-                let params=this.params;
-                params.customerName=param.target.value;
-                this.getListData(params);
+            lowerChange(param){
+                this.params.customerName=param.target.value;
+            },
+            lowerSubmit(){
+                this.getListData(this.params);
+            },
+            upperChange(params){
+                this.upperData=params;
+            },
+            upperSubmit(){
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
             }
-        },
+        }
     }
 </script>
 
@@ -244,4 +272,9 @@
             cursor:pointer;
         }
     }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
 </style>

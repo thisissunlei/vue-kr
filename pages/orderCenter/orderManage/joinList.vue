@@ -30,7 +30,7 @@
                 width="660"
                 @on-ok='upperSubmit'
             >
-                <HeightSearch v-on:bindData="upperChange"></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -45,13 +45,14 @@
 
 
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
 
     export default {
         name:'join',
+        props:['mask'],
         components:{
             HeightSearch,
             Nullify
@@ -207,6 +208,9 @@
         methods:{
             showSearch (params) {
                 this.openSearch=true;
+                for(var item in this.params){
+                    this.upperData[item]='';
+                }
             },
             openView(params){
                 location.href=`./12/joinView`;
@@ -252,8 +256,8 @@
             upperSubmit(){
                 this.params=Object.assign({},this.params,this.upperData);
                 this.getListData(this.params);
-            },
-        },
+            }
+        }
     }
 </script>
 
@@ -266,7 +270,7 @@
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
             cursor:pointer;

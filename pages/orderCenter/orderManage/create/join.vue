@@ -349,7 +349,7 @@ import dateUtils from 'vue-dateutils';
                 selectedStation:[],
                 formItem: {
                     customer: '',
-                    community: '',
+                    community: '4',
                     beginDate: new Date(),
                     endDate: '',
                     time:'',
@@ -518,7 +518,7 @@ import dateUtils from 'vue-dateutils';
                     return;
                 }
                 let params = {
-                    floor:3,
+                    floor:'3',
                     communityId:this.formItem.community,
                     mainBillId:3162,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),

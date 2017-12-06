@@ -1,7 +1,7 @@
 //平面图
 var Map = function (elementId, configs) {
 
-    console.log('=======Map')
+    console.log('=======Map',configs.stations)
     
     var movePositionArr = [];
     //画布上下文    

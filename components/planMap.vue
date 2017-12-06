@@ -1,7 +1,7 @@
 <template>
 	<div class = "plan-map-content">
 		<div class="num-type">
-			<Select v-model="params.floor" style="width:100px" @on-change="floorsChange">
+			<Select v-model="params.floor" style="width:100px" @on-change="floorsChange" placeholder="floor">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
 		    </Select>
 		    <Input v-model="inputStart" placeholder="inputStart" style="width: 50px"></Input>至
@@ -12,7 +12,7 @@
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
-		<Button @click="prompt">click</Button>
+		<!-- <Button @click="prompt">click</Button> -->
 		<Button @click="submitAllStation">提交数据</Button>
 		<div id = "plan-map-content"  style ='width:700px;height:450px;border:1px solid #000'>
 
@@ -30,7 +30,6 @@ import Map from '~/plugins/Map.js';
 import axios from '~/plugins/http.js';
     export default {
         data () {
-        	// this.getData()
             return {
                 data:'',
                 selectedObjs:[],
@@ -48,23 +47,21 @@ import axios from '~/plugins/http.js';
             }
         },
         destroyed(){
-        	console.log('======================>>>>>')
         },
         created:function(){
-        	this.getData()
-        	console.log('created======================>>>>>')
         },
         updated:function(){
-        	console.log('updated======================>>>>>')
-
         },
         watch:{
         	params:function(){
-        		console.log('=========>>>>>>')
         		if(this.params.floor){
+        			this.floor = this.params.floor;
         			this.getData()
         		}
-        	}
+        	},
+        	// floor:function(value){
+        	// 	console.log('floor------>',value)
+        	// }
         },
         props:['stationsubmit','params','floors'],
         // computed: {
@@ -73,16 +70,11 @@ import axios from '~/plugins/http.js';
         //     }
         // },
         methods: {
-			prompt: function() {
-				this.getData()
-			},
 			//获取平面图基础数据
 			getData:function(){
 				let params = this.params;
 				let selectedObjs = []
-				console.log('getData====>',params)
 				axios.get('getplanmap', params, r => {
-					// console.log('r', r);
 					let response = r.data;
 					let floors = [];
 					let name = "";
@@ -165,8 +157,8 @@ import axios from '~/plugins/http.js';
 							let cellName = Number(item.cellName);
 							var x = item.cellCoordX;
 							var y = item.cellCoordY;
-							obj.x = Number(x);
-							obj.y = Number(y);
+							obj.x = Number(item.cellCoordX);
+							obj.y = Number(item.cellCoordY);
 							obj.width = Number(item.cellWidth);
 							obj.height = Number(item.cellHeight);
 							obj.name = item.cellName;
@@ -290,7 +282,5 @@ import axios from '~/plugins/http.js';
 				console.log('datachange-->save', allDataObj)
 			}
         },
-        created() {
-        }
     }
 </script>

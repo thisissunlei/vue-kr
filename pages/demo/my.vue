@@ -10,7 +10,7 @@
 ></Message>
 
 <p @click="show">按钮</p>
-
+<selectCommunities></SelectCommunities>
 
 
 </div>
@@ -18,9 +18,11 @@
 </template>
 <script>
 import Message from '~/components/Message';
-export default {
+import SelectCommunities from '~/components/selectCommunities';
+export default { 
   components:{
-        Message
+        Message,
+        SelectCommunities
     },
     data(){
         return{

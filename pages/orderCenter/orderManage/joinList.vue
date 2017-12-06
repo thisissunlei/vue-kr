@@ -7,7 +7,7 @@
                         v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        @on-change="changeCustomer"
+                        @on-change="lowerChange"
                     ></i-input>
                 </div>
                 <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -28,8 +28,9 @@
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
+                @on-ok='upperSubmit'
             >
-                <HeightSearch></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange"></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -58,6 +59,7 @@
         data () {
             
             return {
+                upperData:{},
                 totalCount:1,
                 params:{
                     page:1,
@@ -238,12 +240,19 @@
                 params.page=index;
                 this.getListData(params);
             },
-            changeCustomer(param){
+            lowerChange(param){
                 this.params.customerName=param.target.value;
             },
             lowerSubmit(){
                 this.getListData(this.params);
-            }
+            },
+            upperChange(params){
+                this.upperData=params;
+            },
+            upperSubmit(){
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
+            },
         },
     }
 </script>

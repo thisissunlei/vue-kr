@@ -105,7 +105,7 @@ export default {
                 columns: [
                     {
                         title: '交易流水号',
-                        key: 'orderNo',
+                        key: 'thirdTradeNo',
                         align:'center',
                         width:145
                     },
@@ -116,42 +116,42 @@ export default {
                     },
                     {
                         title: '回款日期',
-                        key: 'createTime',
+                        key: 'ctime',
                         align:'center',
                         width:150,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
                             return time;
                         }
                     },
                     {
                         title: '回款金额（元）',
-                        key: 'Amount',
+                        key: 'amount',
                         align:'center'
                     },
                     
                     {
                         title: '回款方式',
-                        key: 'orderstatus',
+                        key: 'payWay',
                         align:'center',
                         render(h, obj){
-                            if(obj.row.orderstatus==='VALID'){
+                            if(obj.row.payWay==='BANKTRANSFER'){
                                 return <span class="u-txt">银行转账</span>;
-                            }else if(obj.row.orderstatus==='CANCEL'){
+                            }else if(obj.row.payWay==='ALIPAY'){
                                 return <span class="u-txt-orange">支付宝</span>;
                             }
                         }
                     },
                     {
                         title: '付款账户',
-                        key: 'totalAmount',
+                        key: 'payAccount',
                         align:'center',
                         width:145,
                         
                     },
                     {
                         title: '收款账户',
-                        key: 'payStatus',
+                        key: 'receivceAccount',
                         align:'center',
                         width:145
                     },
@@ -200,13 +200,13 @@ export default {
         created:function(){
             this.tableData=[
                 {
-                    orderNo:'0220171201100000001',
+                    thirdTradeNo:'0220171201100000001',
                     customerName:'罗焘如',
-                    createTime:1505704034000,
-                    Amount:'29000.00',
-                    totalAmount:'0220171201100000001',
-                    payStatus:'0220171201100000001',
-                    orderstatus:'VALID'
+                    ctime:1505704034000,
+                    amount:'29000.00',
+                    payAccount:'0220171201100000001',
+                    receivceAccount:'0220171201100000001',
+                    payWay:'VALID'
 
                 }
             ]
@@ -217,8 +217,8 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./receive/receiveDetail/${params.orderId}`;
-                location.href=`./receive/receiveDetail/12`
+                //location.href=`./receive/detail/${params.orderId}`;
+                location.href=`./receive/detail/12`
             },
             bindPerson (params) {
                 this.openBind=true;

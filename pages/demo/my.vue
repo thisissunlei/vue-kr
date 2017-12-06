@@ -3,14 +3,14 @@
 
 
 <Message 
-    type="error" 
+    type="success" 
     :openMessage="openMessage"
     warn="描述原因，作废失败"
     v-on:changeOpen="onChangeOpen"
 ></Message>
 
 <p @click="show">按钮</p>
-
+<selectCommunities></SelectCommunities>
 
 
 </div>
@@ -18,9 +18,11 @@
 </template>
 <script>
 import Message from '~/components/Message';
-export default {
+import SelectCommunities from '~/components/selectCommunities';
+export default { 
   components:{
-        Message
+        Message,
+        SelectCommunities
     },
     data(){
         return{

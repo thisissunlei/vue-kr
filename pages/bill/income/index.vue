@@ -10,7 +10,6 @@
                 background:url('~/assets/images/upperSearch.png') no-repeat center;
                 background-size: contain;  
                 float:right;
-            
             }
     }
     .ivu-table-cell{
@@ -18,29 +17,15 @@
     }
     .u-table{
         padding:0 20px;
-    }
-    .u-txt-red{
-        color:#FF6868;
-    }
-    .u-txt{
-        color:#666;
-    }
-    .u-txt-orange{
-        color: #F5A623;
-    }
-    .ivu-modal-footer{
-        border:none;
-    }
-
-        
+    }  
 }
 </style>
 
 <template>
 <div class="g-bill">
-    <sectionTitle label="已出账单管理"></sectionTitle>
+    <sectionTitle label="收入管理"></sectionTitle>
     <div class="u-search" >
-        <Button type="primary">批量结算</Button>
+        <Button type="primary" @click="showIncome">挂收入</Button>
         <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <div class="u-table">
@@ -61,48 +46,31 @@
      >
         <HighSearch></HighSearch>
     </Modal>
-    <Modal
-        v-model="openSettle"
-        title="结账提示"
+     <Modal
+        v-model="openIncome"
+        title="挂收入"
         ok-text="确定"
         cancel-text="取消"
-        width="443"
+        width="660"
      >
-       <settleAccounts> </settleAccounts>
-       <div slot="footer">
-		
-	   </div>
+        <AddIncome></AddIncome>
     </Modal>
-    <Modal
-        v-model="openAntiSettle"
-        title="反结账提示"
-        ok-text="确定"
-        cancel-text="取消"
-        width="443"
-     >
-       <antiSettlement> </antiSettlement>
-       <div slot="footer">
-		
-	   </div>
-    </Modal>
+    
 </div>
 </template>
 
 
 <script>
 import HighSearch from './highSearch';
-import settleAccounts from './settleAccounts';
-import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import sectionTitle from '~/components/sectionTitle';
-
+import AddIncome from './addIncome';
     export default {
-        name: 'Bill',
+        name: 'income',
         components:{
             HighSearch,
-            settleAccounts,
-            antiSettlement,
-            sectionTitle
+            sectionTitle,
+            AddIncome
         },
         data () {
             return {
@@ -110,6 +78,7 @@ import sectionTitle from '~/components/sectionTitle';
                 openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,
+                openIncome:false,
                 columns1: [
                     {
                         type: 'selection',
@@ -117,7 +86,7 @@ import sectionTitle from '~/components/sectionTitle';
                         align: 'center'
                     },
                     {
-                        title: '账单编号',
+                        title: '收入编号',
                         key: 'billNo',
                         align:'center',
                         width:160
@@ -126,16 +95,31 @@ import sectionTitle from '~/components/sectionTitle';
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        width:100
+                        width:150
                     },
                     {
-                        title: '社区名称',
+                        title: '所在社区',
                         key: 'communityName',
                         align:'center',
-                        width:100
+                        width:150
                     },
                     {
-                        title: '账单类型',
+                        title: '含税收入',
+                        key: 'payAmount',
+                        align:'center'
+                    },
+                    {
+                        title: '收入确认时间',
+                        key: 'billEndTime',
+                        align:'center',
+                        width:110,
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
+                            return time;
+                        }
+                    },
+                     {
+                        title: '收入类型',
                         key: 'billType',
                         align:'center',
                         width:110,
@@ -150,44 +134,10 @@ import sectionTitle from '~/components/sectionTitle';
                         }
                     },
                     {
-                        title: '账单金额',
-                        key: 'amount',
-                        align:'center'
-                    },
-                    {
-                        title: '结账金额',
-                        key: 'payAmount',
-                        align:'center'
-                    },
-                    {
-                        title: '付款截止日期',
-                        key: 'billEndTime',
-                        align:'center',
-                        width:110,
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-                            return time;
-                        }
-                    },
-                    {
-                        title: '账单状态',
-                        key: 'billStatus',
-                        align:'center',
-                        render(h, obj){
-                                if(obj.row.payStatus==='WAIT'){
-                                    return <span class="u-txt-red">待付款</span>;
-                                }else if(obj.row.payStatus==='PAID'){
-                                    return <span class="u-txt">已付款</span>;
-                                }else if(obj.row.payStatus==='PAYMENT'){
-                                    return <span class="u-txt-orange">未付清</span>;
-                                }
-                            }
-                    },
-                    {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:170,
+                        width:100,
                         render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
@@ -203,35 +153,7 @@ import sectionTitle from '~/components/sectionTitle';
                                             this.openView(params.row)
                                         }
                                     }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showSettle(params.row)
-                                        }
-                                    }
-                                }, '结账'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showAntiSettle(params.row)
-                                        }
-                                    }
-                                }, '反结账')
+                                }, '查看')
                             ]);  
                         }
                     }
@@ -287,21 +209,17 @@ import sectionTitle from '~/components/sectionTitle';
                 this.openSearch=true;
             },
             openView(params){
-                 //location.href=`./detail/${params.orderId}`;
-                 location.href='./detail/12';
-            },
-            showSettle (params) {
-                this.openSettle=true;
-                
-            },
-            showAntiSettle(params){
-                this.openAntiSettle=true;
+                 //location.href=`./income/detail/${params.orderId}`;
+                 location.href='./income/detail/12';
             },
             onExport(){
                  console.log('导出')
             },
             onSelectList(data){
                 console.log('date====>>>>>0000',data)
+            },
+            showIncome(){
+               this.openIncome=true;
             }
             
         }

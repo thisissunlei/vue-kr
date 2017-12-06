@@ -5,4 +5,10 @@ module.exports = {
     url: '/mockjs/66/api/krspace-op-web/order-seat-add/list',
     method: 'get'
   },
+  //入驻订单列表-获取社区
+  'join-bill-community': {
+    url: '/krspace-op-web/cmt/community/select/use/type/list',
+    method: 'get'
+   },
+
 }

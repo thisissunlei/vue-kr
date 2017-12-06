@@ -10,6 +10,7 @@
                         @on-change="changeCustomer"
                     ></i-input>
                 </div>
+                <div class='m-search' @click="lowerSubmit">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
                   <span></span>   
                 </div> 
@@ -18,7 +19,7 @@
 
             <Table :columns="joinOrder" :data="joinData"></Table>
             <div style="margin: 10px;overflow: hidden">
-                    <Button type="primary">导出</Button>
+                    <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
                         <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
                     </div>
@@ -26,8 +27,6 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                ok-text="确定"
-                cancel-text="取消"
                 width="660"
             >
                 <HeightSearch></HeightSearch>
@@ -136,8 +135,8 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
+                           var btnRender=[
+                               h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -150,8 +149,22 @@
                                             this.openView(params)
                                         }
                                     }
-                                }, '查看'),
-                                h('Button', {
+                                }, '查看'), h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openApplication(params)
+                                        }
+                                    }
+                                }, '申请合同')];
+                           if(params.row.orderStatus=='已完成'){
+                               btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -178,22 +191,9 @@
                                             this.openEdit(params)
                                         }
                                     }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
-                                    }
-                                }, '申请合同')
-                            ]);  
+                                }, '编辑'))
+                           }
+                           return h('div',btnRender);  
                         }
                     }
                 ]
@@ -208,7 +208,6 @@
             },
             openView(params){
                 location.href=`./12/joinView`;
-                //location.href=`./watchView/${params.orderId}`;
             },
             openCancel(params){
                 this.openNullify=true;
@@ -222,8 +221,8 @@
             nullifySubmit (){
                 console.log('作废');
             },
-            heighSubmit (params){
-                console.log('高级',params);
+            outSubmit (){
+                console.log('导出');
             },
             getListData(params){
                 var _this=this;
@@ -240,9 +239,10 @@
                 this.getListData(params);
             },
             changeCustomer(param){
-                let params=this.params;
-                params.customerName=param.target.value;
-                this.getListData(params);
+                this.params.customerName=param.target.value;
+            },
+            lowerSubmit(){
+                this.getListData(this.params);
             }
         },
     }
@@ -263,4 +263,9 @@
             cursor:pointer;
         }
     }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
 </style>

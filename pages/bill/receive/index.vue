@@ -1,15 +1,17 @@
 <style lang="less"> 
 .g-order{
-  .u-search{
-        height:22px;
-        margin:16px 20px;
-        span{
-            width:22px;
-            height:22px;
-            background:url('~/assets/images/upperSearch.png') no-repeat center;
-            background-size: contain;  
-            float:right;
-        }
+   .u-search{
+            height:32px;
+            margin:16px 0;
+            padding:0 20px;
+            .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;  
+                float:right;
+            
+            }
     }
     .ivu-table-cell{
         padding:0;
@@ -38,7 +40,8 @@
 <div class="g-order">
     <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
-        <span @click="showSearch"></span>   
+        <Button type="primary">导入回款明细</Button>
+        <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>

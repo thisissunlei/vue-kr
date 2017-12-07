@@ -55,10 +55,6 @@ import axios from '~/plugins/http.js';
         	console.log('mounted')
         },
         updated:function(){
-        	console.log('=updated=======')
-        	if(this.stationData != this.stationArr){
-        		this.stationArr = this.stationData
-        	}
         },
         beforeUpdate:function(){
         	console.log('beforeUpdate')
@@ -69,23 +65,26 @@ import axios from '~/plugins/http.js';
         			if(!!this.Map){
         				this.Map.destory();
         			}
+        			this.selectedObjs = this.stationData.submitData;
         			this.getData()
         		}
         	},
         	stationData:function(val){
+        		console.log('stationData',this.stationData.submitData)
         		this.selectedObjs = this.stationData.submitData;
         	},
         	stationArr:function(val){
 				
 				this.$emit("on-result-change", val); //③组件内对myResult变更后向外部发送事件通知
+				this.inputStart = '';
+				this.inputEnd = ''
         	},
         	startToEnd:function(val){
         		let {submitData,deleteData} = this.stationArr;
-        		submitData.select = val;
+        		submitData =submitData.concat(val);
         		this.stationArr = {
         			deleteData:deleteData,
         			submitData:submitData,
-        			clearAll:false
         		}
         	},
         },
@@ -211,7 +210,7 @@ import axios from '~/plugins/http.js';
 								select.whereFloor = item.floor;
 								select.belongType = item.belongType;
 								select.belongId = Number(item.belongId);
-								select.id = Number(item.id);
+								select.id = Number(item.belongId);
 								select.canFigureId = item.canFigureId;
 								select.type = obj.belongType;
 								select.price = item.price;

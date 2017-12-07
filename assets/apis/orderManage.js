@@ -10,5 +10,10 @@ module.exports = {
     url: '/krspace-op-web/cmt/community/select/use/type/list',
     method: 'get'
    },
+   //减租订单列表
+  'reduce-bill-list': {
+    url: '/mockjs/66/api/krspace-op-web/order-seat-reduce/list',
+    method: 'get'
+  },
 
 }

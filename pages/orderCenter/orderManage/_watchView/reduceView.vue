@@ -62,9 +62,9 @@
 </template>
 <script>
 
-import axios from '../../../../plugins/http.js';
-import DetailStyle from './../../../../components/detailStyle';
-import labelText from './../../../../components/labelText';
+import axios from 'kr/axios';
+import DetailStyle from '~/components/detailStyle';
+import labelText from '~/components/labelText';
 
 export default {
 	components:{

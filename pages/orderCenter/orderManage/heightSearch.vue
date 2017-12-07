@@ -42,10 +42,10 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.value" 
-                            :key="item.value"
+                            :value="item.id" 
+                            :key="item.id"
                         >
-                            {{ item.label }}
+                            {{ item.name }}
                         </Option>
                    </Select> 
                 </Form-item>
@@ -115,8 +115,9 @@
          </Form>
 </template>
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     export default{
+        props:['mask'],
         data (){
             return{
                 formItem:{
@@ -185,17 +186,14 @@
         created:function(){
             var _this=this;
             axios.get('join-bill-community','', r => {    
-                    console.log('r', r);     
+                   _this.communityList=r.data.items 
                 }, e => {
-                    console.log('error',e)
+                  _this.$Message.info(e);
             })
         },
         updated:function(){
             this.$emit('bindData', this.formItem);
         },
-        destroyed:function(){
-            console.log('--------des');
-        }
     }
 </script>
 

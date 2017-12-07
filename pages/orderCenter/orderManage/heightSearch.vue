@@ -188,6 +188,8 @@
                 }else{
                     this.dateError=false; 
                 }
+            }else{
+                this.dateError=false; 
             }
             this.$emit('bindData', this.formItem,this.dateError);
         },

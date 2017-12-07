@@ -223,7 +223,9 @@
         ok-text="保存"
         cancel-text="取消"
         width="750"
-        @on-visible-change="jj"
+        @on-ok="submitStation"
+        @on-cancel="cancelStation"
+         class-name="vertical-center-modal"
      >
         <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
     </Modal>
@@ -265,15 +267,9 @@ import dateUtils from 'vue-dateutils';
                 delStation:[],
                 payType:'',
                 stationData:{
-                    submitData:[
-                    {
-                        belongId:2041,
-                        belongType:'STATION',
-                        id:2041,
-                        name:"03181"
-                    }
-                    ],
-                    deleteArr:[]
+                    submitData:[],
+                    deleteData:[],
+                    clearAll:false
                 },
                 stationAll:{},
                 payList:[
@@ -480,6 +476,12 @@ import dateUtils from 'vue-dateutils';
                 }else{
                     this.formItem.community = '';
                 }
+                this.stationData={
+                    submitData:[],
+                    deleteData:[],
+                    clearAll:true
+                };
+                this.stationList = [];
             },
             changeCustomer:function(value){
                 if(value){
@@ -487,6 +489,8 @@ import dateUtils from 'vue-dateutils';
                 }else{
                     this.formItem.customer = '';
                 }
+                
+
 
             },
             changeSaler:function(value){
@@ -561,16 +565,25 @@ import dateUtils from 'vue-dateutils';
             submits:function(value){
                 console.log('submits')
             },
-            jj:function(){
-                
+            submitStation:function(){
+                console.log('===============jj')
                 this.stationList = this.stationData.submitData;
-                this.delStation = this.stationData.deleteArr;
+                this.delStation = this.stationData.deleteData;
 
             },
             onResultChange:function(val){
+                console.log('onResultChange',val)
                 this.stationData = val;
                 
-            }
+            },
+            cancelStation:function(){
+                this.stationData = {
+                    submitData:[],
+                    deleteData:[],
+                    clearAll:true
+                };
+
+            },
                     
                
         }

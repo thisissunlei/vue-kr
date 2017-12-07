@@ -12,9 +12,7 @@
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
-		<!-- <Button @click="prompt">click</Button> -->
-		<Button @click="submitAllStation">提交数据</Button>
-		<div id = "plan-map-content"  style ='width:700px;height:450px;border:1px solid #000'>
+		<div id = "plan-map-content"  style ='width:700px;height:350px;border:1px solid #000'>
 
 		</div>
 	</div>
@@ -22,7 +20,7 @@
 <style>
 	.plan-map-content{
 		width: 700px;
-		height: 500px;
+		height: 400px;
 	}
 </style>
 <script>
@@ -53,9 +51,17 @@ import axios from '~/plugins/http.js';
         },
         destroyed(){
         },
-        created:function(){
+        mounted:function(){
+        	console.log('mounted')
         },
         updated:function(){
+        	console.log('=updated=======')
+        	if(this.stationData != this.stationArr){
+        		this.stationArr = this.stationData
+        	}
+        },
+        beforeUpdate:function(){
+        	console.log('beforeUpdate')
         },
         watch:{
         	params:function(){
@@ -70,44 +76,18 @@ import axios from '~/plugins/http.js';
         		this.selectedObjs = this.stationData.submitData;
         	},
         	stationArr:function(val){
-
-        		let submitDataAll = [];
-                let deleteDataArr = [];
-                for(let i in val.submitData){
-                    submitDataAll = submitDataAll.concat(val.submitData[i]);
-                }
-                for(let i in val.deleteArr){
-                    deleteDataArr = deleteDataArr.concat(val.deleteArr[i]);
-                }
-                submitDataAll = submitDataAll.map(function(item,index){
-                    var obj1 = {};
-                    let belongType = 1;
-                    if( item.belongType == "SPACE"){
-                        belongType = 2;
-                    }
-                    obj1.id = item.belongId;
-                    obj1.type = belongType;
-                    obj1.whereFloor = item.whereFloor;
-                    obj1.name = item.name;
-                    obj1.price = item.price;
-                    return obj1
-
-                })
-                let station = {
-                    submitData:submitDataAll,
-                    deleteArr:deleteDataArr
-                }
-
-        		this.$emit("on-result-change",station);//③组件内对myResult变更后向外部发送事件通知
+				
+				this.$emit("on-result-change", val); //③组件内对myResult变更后向外部发送事件通知
         	},
         	startToEnd:function(val){
-        		let {submitData,deleteArr} = this.stationArr;
+        		let {submitData,deleteData} = this.stationArr;
         		submitData.select = val;
         		this.stationArr = {
-        			deleteArr:deleteArr,
-        			submitData:submitData
+        			deleteData:deleteData,
+        			submitData:submitData,
+        			clearAll:false
         		}
-        	}
+        	},
         },
         props:['stationsubmit','params','floors','stationData'],
         methods: {
@@ -174,6 +154,7 @@ import axios from '~/plugins/http.js';
 				this.newfloor=floors[0].value;
 				// this.submitData=allDataObj;
 				this.canvasEles()
+				console.log('getData',this.stationData)
 
 				})
 			},
@@ -187,7 +168,6 @@ import axios from '~/plugins/http.js';
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
-				console.log('selectedObjs=====>',selectedObjs)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];
@@ -218,8 +198,8 @@ import axios from '~/plugins/http.js';
 								if (selectedObjs[j].belongType == 2) {
 									belongType = "SPACE";
 								}
+								// console.log('渲染',selectedObjs[j].belongType,belongType,selectedObjs[j])
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
-									console.log('======================')
 									obj.checked = true;
 
 								}
@@ -261,8 +241,13 @@ import axios from '~/plugins/http.js';
 					}
 
 				}
+				console.log('渲染',this.stationData)
+
 				this.Map = Map("plan-map-content", dainitializeConfigs);
-				this.startToEnd = startToEnd;
+				if(startToEnd.length){
+					this.startToEnd = startToEnd;
+				}
+				
 			},
 			//放大比例
 			rangeSelect :function(event){
@@ -283,13 +268,8 @@ import axios from '~/plugins/http.js';
 				this.Map.destory();
 				this.canvasEles();
 			},
-			//提交数据
-			submitAllStation:function(){
-				let {submitData,deleteArr} =this;
-				this.stationsubmit(submitData)
-
-			},
 			dataChange: function(data, allData) {
+				console.log('dataChange')
 				const {
 					selectedObjs,
 					newfloor,
@@ -316,11 +296,36 @@ import axios from '~/plugins/http.js';
 				delDataObj["a" + newfloor] = [].concat(del);
 				this.submitData = allDataObj;
 				this.deleteArr = delDataObj;
-				let stationArr = {
-					submitData :allDataObj,
-					deleteArr : delDataObj
+				//处理工位数据
+
+				let submitDataAll = [];
+				let deleteDataArr = [];
+				for (let i in allDataObj) {
+					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
-				this.stationArr = stationArr;
+				for (let i in delDataObj) {
+					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
+				}
+				submitDataAll = submitDataAll.map(function(item, index) {
+					var obj1 = {};
+					let belongType = 1;
+					if (item.belongType == "SPACE") {
+						belongType = 2;
+					}
+					obj1.id = item.belongId;
+					obj1.type = belongType;
+					obj1.belongType = belongType;
+					obj1.whereFloor = item.whereFloor;
+					obj1.name = item.name;
+					obj1.price = item.price;
+					return obj1
+
+				})
+				let station = {
+					submitData: submitDataAll,
+					deleteData: deleteDataArr,
+				}
+				this.stationArr = station;
 			}
         },
     }

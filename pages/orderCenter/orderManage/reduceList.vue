@@ -28,9 +28,12 @@
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
-                @on-ok='upperSubmit'
             >
                 <HeightSearch v-on:bindData="upperChange" mask='reduce'></HeightSearch>
+                <div slot="footer">
+                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                </div>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -49,6 +52,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    import CommonFuc from '~/components/commonFuc';
 
     export default {
         name:'join',
@@ -61,6 +65,7 @@
             
             return {
                 upperData:{},
+                upperError:false,
                 totalCount:1,
                 params:{
                     page:1,
@@ -187,13 +192,9 @@
             this.getListData(this.params);
         },
         methods:{
-            showSearch (params) {
-                this.openSearch=true;
-                for(var item in this.params){
-                    if(item!='page'&&item!='pageSize'){
-                        this.upperData[item]='';
-                    }
-                }
+            showSearch () {
+                this.openSearch=!this.openSearch;
+                 CommonFuc.clearForm(this.params,this.upperData);
             },
             openView(params){
                 location.href=`./${params.row.id}/reduceView`;
@@ -218,6 +219,7 @@
                 axios.get('reduce-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
+                    _this.openSearch=false;
                 }, e => {
                     _this.$Message.info(e);
                 })   
@@ -233,10 +235,14 @@
             lowerSubmit(){
                 this.getListData(this.params);
             },
-            upperChange(params){
+            upperChange(params,error){
+                this.upperError=error;
                 this.upperData=params;
             },
             upperSubmit(){
+                if(this.upperError){
+                    return ;
+                }
                 this.params=Object.assign({},this.params,this.upperData);
                 this.getListData(this.params);
             }

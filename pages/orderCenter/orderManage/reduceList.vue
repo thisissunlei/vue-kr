@@ -196,7 +196,7 @@
                 }
             },
             openView(params){
-                location.href=`./12/joinView`;
+                location.href=`./${params.row.id}/reduceView`;
             },
             openCancel(params){
                 this.openNullify=true;

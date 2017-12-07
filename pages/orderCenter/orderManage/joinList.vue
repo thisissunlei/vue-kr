@@ -107,22 +107,36 @@
                                 return <span class="u-txt-orange">增租服务订单</span>;
                             }else if(obj.row.orderType==='CONTINUE'){
                                 return <span class="u-txt-red">续租服务订单</span>;
-                            }else if(obj.row.orderType==='REDUCE'){
-                                return <span class="u-txt-orange">减租服务订单</span>;
-                            }else if(obj.row.orderType==='LEAVE'){
-                                return <span class="u-txt-red">退费离场服务订单</span>;
                             }
                         }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '支付状态',
                         key: 'payStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT_PAY'){
+                                return <span class="u-txt">待支付</span>;
+                            }else if(obj.row.payStatus==='COMPLETE'){
+                                return <span class="u-txt-orange">已付清</span>;
+                            }else if(obj.row.payStatus==='UN_COMPLETE'){
+                                return <span class="u-txt-red">未付清</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -215,7 +229,12 @@
                 }
             },
             openView(params){
-                location.href=`./12/joinView`;
+                if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
+                    location.href=`./${params.row.id}/joinView`;
+                }
+                if(params.row.orderType=='CONTINUE'){
+                    location.href=`./${params.row.id}/renewView`;
+                }
             },
             openCancel(params){
                 this.openNullify=true;

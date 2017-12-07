@@ -49,6 +49,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    
 
     export default {
         name:'join',
@@ -229,12 +230,13 @@
                 }
             },
             openView(params){
-                if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
+                location.href=`./12/joinView`;
+                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
                     location.href=`./${params.row.id}/joinView`;
                 }
                 if(params.row.orderType=='CONTINUE'){
                     location.href=`./${params.row.id}/renewView`;
-                }
+                }*/
             },
             openCancel(params){
                 this.openNullify=true;

@@ -86,6 +86,7 @@
 import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
+import CommonFuc from '~/components/commonFuc';
 
 export default {
 	components:{
@@ -171,6 +172,7 @@ export default {
 		}
 	},
 	created:function(){
+		console.log('CommonFuc',CommonFuc.smalltoBIG(-1890));
 		let {params}=this.$route
 		let from={
 			orderId:params.orderId

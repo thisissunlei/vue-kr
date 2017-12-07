@@ -30,7 +30,7 @@
                 width="660"
                 @on-ok='upperSubmit'
             >
-                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='reduce'></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -190,7 +190,9 @@
             showSearch (params) {
                 this.openSearch=true;
                 for(var item in this.params){
-                    this.upperData[item]='';
+                    if(item!='page'&&item!='pageSize'){
+                        this.upperData[item]='';
+                    }
                 }
             },
             openView(params){

@@ -209,7 +209,9 @@
             showSearch (params) {
                 this.openSearch=true;
                 for(var item in this.params){
-                    this.upperData[item]='';
+                    if(item!='page'&&item!='pageSize'){
+                        this.upperData[item]='';
+                    }
                 }
             },
             openView(params){

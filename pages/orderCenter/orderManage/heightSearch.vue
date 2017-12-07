@@ -17,16 +17,14 @@
 </style>  
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="订单编号" 
-                    class='bill-search-class'>
+                <Form-item label="订单编号"  class='bill-search-class'>
                     <i-input 
                         v-model="formItem.orderNum" 
                         placeholder="请输入订单编号"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="客户名称" 
-                    class='bill-search-class'>
+                <Form-item label="客户名称" class='bill-search-class'>
                     <i-input 
                         v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
@@ -49,8 +47,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单类型" 
-                    class='bill-search-class'>
+                <Form-item label="订单类型" class='bill-search-class' v-show='type'>
                     <Select 
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
@@ -65,8 +62,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单状态" 
-                    class='bill-search-class'>
+                <Form-item label="订单状态" class='bill-search-class'>
                     <Select 
                         v-model="formItem.orderStatus" 
                         placeholder="请输入订单状态" 
@@ -81,8 +77,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                    <Form-item label="支付状态" 
-                    class='bill-search-class'>
+                    <Form-item label="支付状态" class='bill-search-class' v-show='type'>
                     <Select 
                         v-model="formItem.payStatus" 
                         placeholder="请输入支付状态" 
@@ -130,6 +125,7 @@
                    cEndDate:'',
                    cStartDate:''
                 },
+                type:this.mask=='join'?true:false,
                 orderList:[
                     {
                         value:'NOT_EFFECTIVE',
@@ -170,15 +166,7 @@
                     {
                         value:'CONTINUE',
                         label:'续租服务订单'
-                    },
-                    {
-                        value:'REDUCE',
-                        label:'减租服务订单'
-                    },
-                    {
-                        value:'LEAVE',
-                        label:'退费离场服务订单'
-                    } 
+                    }
                 ],
                 communityList:[]
             }

@@ -7,12 +7,16 @@
         height:22px;
         margin:16px 20px;
         vertical-align: bottom;
+
         span{
             width:22px;
             height:22px;
             background-size: contain;  
             float:right;
             cursor:pointer;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;  
+            float:right;
         }
     }
     .m-search{
@@ -50,6 +54,14 @@
                 <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
             </div>
         </div>
+        <Modal
+            v-model="openSearch"
+            title="高级搜索"
+            width="660"
+            @on-ok='upperSubmit'
+        >
+            <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+        </Modal>
     </div>
   
 </template>
@@ -57,11 +69,13 @@
     import axios from 'kr/axios';
     import sectionTitle from '~/components/sectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
+    import HeightSearch from './heightSearch';
     
     export default {
         components: {
             sectionTitle,
             krUpload,
+            HeightSearch
         },
         data () {
             return {
@@ -70,6 +84,7 @@
                     pageSize:15,
                     customerName:"",
                 },
+                openSearch:false,
                 detail:[],
                 totalCount:1,
                 columns: [
@@ -201,16 +216,25 @@
                     _this.$Message.info(e);
                 })   
             },
+            //分页事件
             changePage (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
+                // let params=this.params;
+                // params.page=index;
+                // this.getListData(params);
             },
+            //搜索change事件
             changeCustomer(param){
                 // this.params.customerName=param.target.value;
             },
+            //搜索框
             lowerSubmit(){
-                this.getListData(this.params);
+                // this.getListData(this.params);
+            },
+            upperSubmit(){
+
+            },
+            upperChange(){
+
             }
         },
         

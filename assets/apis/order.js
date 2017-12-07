@@ -70,5 +70,11 @@ module.exports = {
     url: 'krspace-pay/payment/bind?',
     method: 'post'
   },
+  //账单中心--获取客户 
+  'getCompanyInfo':{
+    url:'/krspace-finance-web/member/csr-list?',
+    method:'get'
+},
+
 
 }

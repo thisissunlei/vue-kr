@@ -38,7 +38,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="交易记录"></sectionTitle>
+    <sectionTitle label="交易流水"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>   
@@ -80,7 +80,7 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
+import axios from 'kr/axios';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';

@@ -166,7 +166,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='已完成'){
+                           if(params.row.orderStatus=='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',

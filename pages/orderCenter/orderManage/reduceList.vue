@@ -30,7 +30,7 @@
                 width="660"
                 @on-ok='upperSubmit'
             >
-                <HeightSearch v-on:bindData="upperChange"></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -52,6 +52,7 @@
 
     export default {
         name:'join',
+        props:['mask'],
         components:{
             HeightSearch,
             Nullify
@@ -86,41 +87,22 @@
                         align:'center'
                     },
                     {
-                        title: '服务费总额',
+                        title: '减租开始日期',
+                        key: 'startDate',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            return time;
+                        }
+                    },
+                    {
+                        title: '减租金额',
                         key: 'rentAmount',
                         align:'center'
                     },
                     {
-                        title: '履约保证金',
-                        key: 'depositAmount',
-                        align:'center'
-                    },
-                    {
-                        title: '订单类型',
-                        key: 'orderType',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.orderType==='IN'){
-                                return <span class="u-txt">入驻服务订单</span>;
-                            }else if(obj.row.orderType==='INCREASE'){
-                                return <span class="u-txt-orange">增租服务订单</span>;
-                            }else if(obj.row.orderType==='CONTINUE'){
-                                return <span class="u-txt-red">续租服务订单</span>;
-                            }else if(obj.row.orderType==='REDUCE'){
-                                return <span class="u-txt-orange">减租服务订单</span>;
-                            }else if(obj.row.orderType==='LEAVE'){
-                                return <span class="u-txt-red">退费离场服务订单</span>;
-                            }
-                        }
-                    },
-                    {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
-                    },
-                    {
-                        title: '支付状态',
-                        key: 'payStatus',
                         align:'center'
                     },
                     {
@@ -165,7 +147,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='已完成'){
+                           if(params.row.orderStatus=='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -207,6 +189,9 @@
         methods:{
             showSearch (params) {
                 this.openSearch=true;
+                for(var item in this.params){
+                    this.upperData[item]='';
+                }
             },
             openView(params){
                 location.href=`./12/joinView`;
@@ -228,7 +213,7 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('join-bill-list', params, r => {
+                axios.get('reduce-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                 }, e => {
@@ -266,7 +251,7 @@
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
             cursor:pointer;

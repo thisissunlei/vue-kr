@@ -185,7 +185,16 @@
             })
         },
         updated:function(){
-            this.$emit('bindData', this.formItem);
+            if(this.formItem.cStartDate&&this.formItem.cEndDate){
+                if(this.formItem.cStartDate>this.formItem.cEndDate){
+                    this.dateError=true;
+                }else{
+                    this.dateError=false; 
+                }
+            }else{
+                this.dateError=false; 
+            }
+            this.$emit('bindData', this.formItem,this.dateError);
         },
     }
 </script>

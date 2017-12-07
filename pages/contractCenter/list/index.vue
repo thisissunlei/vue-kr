@@ -30,9 +30,13 @@
 <template>
 
     <div>
-        <kr-upload></kr-upload>
         <sectionTitle label = "合同列表"></sectionTitle>
         <div style='text-align:right;margin-bottom:10px'>
+            <Button 
+                type="primary" 
+                style="float: left;margin:10px 20px;"
+                @click="batchBtnClick"
+            >批量下载</Button>
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
                 <i-input 
@@ -62,6 +66,7 @@
         >
             <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
         </Modal>
+        
     </div>
   
 </template>
@@ -84,6 +89,8 @@
                     pageSize:15,
                     customerName:"",
                 },
+                upperData:{},
+                upperError:false,
                 openSearch:false,
                 detail:[],
                 totalCount:1,
@@ -216,6 +223,10 @@
                     _this.$Message.info(e);
                 })   
             },
+            //批量下载按钮点击
+            batchBtnClick(){
+
+            },
             //分页事件
             changePage (index) {
                 // let params=this.params;
@@ -228,13 +239,17 @@
             },
             //搜索框
             lowerSubmit(){
-                // this.getListData(this.params);
+                this.getListData(this.params);
             },
+            // 高级查询修改
+            upperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
+            },
+             //高级查询确定
             upperSubmit(){
-
-            },
-            upperChange(){
-
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
             }
         },
         

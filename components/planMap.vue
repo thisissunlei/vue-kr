@@ -280,8 +280,6 @@ import axios from '~/plugins/http.js';
 				}
 			},
 			submitStation:function(){
-				this.inputStart = '';
-				this.inputEnd = '';
 				this.Map.destory();
 				this.canvasEles();
 			},

@@ -92,21 +92,22 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <FormItem label="创建日期" class="bill-search">
+                <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
                         v-model="formItem.cStartDate"
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
-                ></DatePicker>
-                <span class="u-date-txt">至</span>
-                <DatePicker 
+                    ></DatePicker>
+                   <span class="u-date-txt">至</span>
+                    <DatePicker 
                         v-model="formItem.cEndDate"
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
-                ></DatePicker>   
-             </FormItem>
+                    ></DatePicker>   
+             </Form-item>
+             <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
          </Form>
 </template>
 <script>
@@ -115,6 +116,7 @@
         props:['mask'],
         data (){
             return{
+                dateError:false,
                 formItem:{
                    orderNum:'',
                    customerName:'',
@@ -180,7 +182,14 @@
             })
         },
         updated:function(){
-            this.$emit('bindData', this.formItem);
+            if(this.formItem.cStartDate&&this.formItem.cEndDate){
+                if(this.formItem.cStartDate>this.formItem.cEndDate){
+                    this.dateError=true;
+                }else{
+                    this.dateError=false; 
+                }
+            }
+            this.$emit('bindData', this.formItem,this.dateError);
         },
     }
 </script>

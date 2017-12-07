@@ -36,6 +36,7 @@
                 line-height: 32px;
                 padding:0 14px;
                 cursor: pointer;
+                margin-bottom: 10px;
             }
             .active{
                 background-color: #499df1;
@@ -84,12 +85,12 @@
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.endDate" style="display:block" ></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" ></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
                     <FormItem label="租赁时长" style="width:252px" prop="time">
-                        <Input v-model="formItem.time" placeholder="Enter your e-mail"></Input>
+                        <Input v-model="formItem.time" placeholder="租赁时长"></Input>
                     </FormItem>
                 </Col>
             </Row>
@@ -128,7 +129,7 @@
                     <Col span="1" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
                         <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
                        <span> 优惠类型</span>
                     </Col>
                     <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
@@ -142,7 +143,7 @@
                         <span>折扣</span>
                         
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="5" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
                         <span>优惠金额</span>
                     </Col>
                     
@@ -156,7 +157,7 @@
                  <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
-                    <Col span="4" style="background: #fff;padding:0 15px;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" style="background: #fff;padding:0 15px;height:50px;line-height:50px;text-align:center">
                          <Select v-model="item.type" @on-change="changeType">
                             <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                         </Select>
@@ -169,7 +170,7 @@
                         <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="5" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
                         <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
                         <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
 
@@ -196,7 +197,7 @@
                  <Col class="col">
                     <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
                         </div>
 
                  </Col>
@@ -224,7 +225,7 @@
         width="750"
         @on-visible-change="jj"
      >
-        <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params"></planMap>
+        <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
     </Modal>
 
         
@@ -255,13 +256,27 @@ import dateUtils from 'vue-dateutils';
                 }
             };
             return {
-                loading1:false,
                 openStation:false,
                 selectAll:false,
                 discountError:false,
                 index:1,
                 depositType:'',
                 disabled:false,
+                delStation:[],
+                payType:'',
+                stationData:{
+                    submitData:[],
+                    deleteArr:[]
+                },
+                stationAll:{},
+                payList:[
+                    {value:'ONE',label:'月付'},
+                    {value:'TWO',label:'两月付'},
+                    {value:'THREE',label:'季付'},
+                    {value:'SIX',label:'半年付'},
+                    {value:'TWELVE',label:'年付'},
+                    {value:'ALL',label:'全款'},
+                ],
                 params:{},
                 depositList:[
                     {label:'2个月',value:'2个月'},
@@ -312,34 +327,6 @@ import dateUtils from 'vue-dateutils';
                     }
                 ],
                 stationList: [
-                    // {
-                    //     name: 'John Brown',
-                    //     age: 18,
-                    //     id:1,
-                    //     address: 'New York No. 1 Lake Park',
-                    //     date: '2016-10-03'
-                    // },
-                    // {
-                    //     name: 'Jim Green',
-                    //     age: 24,
-                    //     id:2,
-                    //     address: 'London No. 1 Lake Park',
-                    //     date: '2016-10-01'
-                    // },
-                    // {
-                    //     name: 'Joe Black',
-                    //     age: 30,
-                    //     id:3,
-                    //     address: 'Sydney No. 1 Lake Park',
-                    //     date: '2016-10-02'
-                    // },
-                    // {
-                    //     name: 'Jon Snow',
-                    //     age: 26,
-                    //     id:4,
-                    //     address: 'Ottawa No. 2 Lake Park',
-                    //     date: '2016-10-04'
-                    // }
                 ],
                 floors:[{
                     value:'4',
@@ -351,11 +338,10 @@ import dateUtils from 'vue-dateutils';
                     value:'2',
                     label:'2'
                 }],
-                floor:'3',
                 selectedStation:[],
                 formItem: {
                     customer: '',
-                    community: '4',
+                    community: '',
                     beginDate: new Date(),
                     endDate: '',
                     time:'',
@@ -432,7 +418,10 @@ import dateUtils from 'vue-dateutils';
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
-                        this.$Message.error(message);
+
+                        this.$Notice.error({
+                            title:message
+                        });
                     }
                 })
             },
@@ -512,15 +501,21 @@ import dateUtils from 'vue-dateutils';
             },
             showStation:function(){
                 if(!this.formItem.community){
-                    this.$Message.error('请先选择社区')
+                    this.$Notice.error({
+                            title:'请先选择社区'
+                        });
                     return;
                 }
                 if(!this.formItem.beginDate){
-                    this.$Message.error('请先选择开始时间')
+                    this.$Notice.error({
+                            title:'请先选择开始时间'
+                        });
                     return;
                 }
                 if(!this.formItem.endDate){
-                    this.$Message.error('请先选择结束时间')
+                    this.$Notice.error({
+                            title:'请先选择结束时间'
+                        });
                     return;
                 }
                 let params = {
@@ -550,13 +545,25 @@ import dateUtils from 'vue-dateutils';
                 });
             },
             selectDeposit:function(value){
+
                 this.depositType = value
+            },
+            selectPayType:function(value){
+                this.payType = value
             },
             submits:function(value){
                 console.log('submits')
             },
             jj:function(){
-
+                let val = this.stationData;
+                console.log('jj',val.submitData)
+                // this.stationList = val.submitData;
+                // this.delStation = val.deleteArr;
+            },
+            onResultChange:function(val){
+                console.log('====onResultChange=====',val)
+                this.stationData = val;
+                // this.result=val;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
             }
                     
                

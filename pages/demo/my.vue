@@ -16,7 +16,7 @@
 </Dialog>
 
 <p @click="show">按钮</p>
-
+<selectCommunities></SelectCommunities>
 
 
 </div>
@@ -26,11 +26,14 @@
 import Message from '~/components/Message';
 import planMap from '~/components/planMap.vue';
 import Dialog from '~/components/Dialog.vue';
+import SelectCommunities from '~/components/selectCommunities';
+
 export default {
   components:{
         Message,
         planMap,
-        Dialog
+        Dialog,
+        SelectCommunities
     },
     data(){
         return{

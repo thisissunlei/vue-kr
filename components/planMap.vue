@@ -29,20 +29,24 @@
 import Map from '~/plugins/Map.js';
 import axios from '~/plugins/http.js';
     export default {
+        props:['stationsubmit','params','floors','stationData'],
+
         data () {
             return {
-                data:'',
-                selectedObjs:[],
-                deleteArr:[],
-                otherData:{},
+                data:'',//平面图基础数据
+                selectedObjs:[],//编辑带回的数据
+                deleteArr:[],//删除的工位
+                // otherData:{},
                 newfloor:{},
-                submitData:[],
-                scaleNumber:40,
+                submitData:[],//已选择工位
+                scaleNumber:40,//比例
                 Map:'',
-                inputEnd:'',
-                inputStart:'',
-                originData:[],
-                floor:''
+                inputEnd:'',//开始工位
+                inputStart:'',//结束工位
+                originData:[],//预备删除
+                floor:'',//楼层
+                stationArr:this.stationData,//提交父组件字段
+                // stationAll:this.stationData//①创建props属性result的副本--myResult
 
             }
         },
@@ -59,11 +63,15 @@ import axios from '~/plugins/http.js';
         			this.getData()
         		}
         	},
-        	// floor:function(value){
-        	// 	console.log('floor------>',value)
-        	// }
+        	stationData:function(val){
+        		// this.stationArr = val;
+        		 // this.myResult = val;//②监听外部对props属性result的变更，并同步到组件内的data属性myResult中
+        	},
+        	stationArr:function(val){
+        		this.$emit("on-result-change",val);//③组件内对myResult变更后向外部发送事件通知
+        	}
         },
-        props:['stationsubmit','params','floors'],
+        props:['stationsubmit','params','floors','stationData'],
         // computed: {
         //     floor :function(){
         //         console.log('floor=======')
@@ -89,7 +97,7 @@ import axios from '~/plugins/http.js';
 							value: "" + item.floor,
 							label: "" + item.floor
 						});
-						name = item.communityName;
+						// name = item.communityName;
 						item.figures.map(function(eveItem, eveIndex) {
 							for (let j = 0; j < selectedObjs.length; j++) {
 								let belongType = "STATION";
@@ -126,12 +134,13 @@ import axios from '~/plugins/http.js';
 				})
 				//同步数据
 				this.data=response;
-				this.otherData={
-					floors:floors,
-					name:name
-				};
+				// this.otherData={
+				// 	floors:floors,
+				// 	name:name
+				// };//可删
 				this.newfloor=floors[0].value;
-				this.submitData=allDataObj;
+				// console.log('getData',allDataObj,this.submitData)
+				// this.submitData=allDataObj;
 				this.canvasEles()
 
 				})
@@ -168,9 +177,12 @@ import axios from '~/plugins/http.js';
 							obj.id = Number(item.id);
 							obj.canFigureId = item.canFigureId;
 							obj.type = obj.belongType;
+							obj.price = item.price;
+							obj.checked = false;
 							if (item.status) {
 								obj.status = item.status;
 							}
+							// obj.checked = true;
 							for (let j = 0; j < selectedObjs.length; j++) {
 								let belongType = "STATION";
 								if (selectedObjs[j].belongType == 2) {
@@ -216,51 +228,44 @@ import axios from '~/plugins/http.js';
 				var scaleSize = Number(event.target.value);
 				var scaleNumber = parseInt(event.target.value * 100);
 				this.scaleNumber = scaleNumber
-				console.log('scaleNumber',scaleNumber)
+				// console.log('scaleNumber',scaleNumber)
 		        this.Map.setScale(scaleSize);
 			},
 			//更换楼层
 			floorsChange:function (value) {
-				console.log('floorsChange',this.Map)
-
 				if(this.Map){
-					console.log('========this.Map',this.Map)
 					this.Map.destory();
 					this.scaleNumber = 50;
 					this.getData();
-					console.log('create------end')
 				}
-				
 			},
 			submitStation:function(){
 				this.Map.destory();
-				console.log('submitStation---',this.scaleNumber)
-				// this.scaleNumber = 50;
-				// this.getData()
 				this.canvasEles();
 			},
 			//提交数据
 			submitAllStation:function(){
-				let {submitData,deleteArr,originData} =this;
+				let {submitData,deleteArr} =this;
 				console.log('submitData',submitData)
 				console.log('deleteArr',deleteArr)
-				console.log('originData',originData)
 				this.stationsubmit(submitData)
 
 			},
 			dataChange: function(data, allData) {
-				console.log('dataChange', data, allData);
+				// console.log('dataChange', data, allData);
+				// console.log(',this.submitData',this.submitData)
 				const {
 					selectedObjs,
 					newfloor,
 					submitData,
 					deleteArr,
-					originData
+					// originData
 				} = this;
 				let del = [].concat(selectedObjs);
 				var allDataObj = Object.assign({}, submitData);
 				var delDataObj = Object.assign({}, deleteArr);
-				allData = [].concat(allData, originData);
+				console.log('==========>',allDataObj)
+				allData = [].concat(allData);
 
 				for (let i = 0; i < allData.length; i++) {
 					for (let j = 0; j < del.length; j++) {
@@ -275,11 +280,13 @@ import axios from '~/plugins/http.js';
 				}
 				allDataObj["a" + newfloor] = [].concat(allData);
 				delDataObj["a" + newfloor] = [].concat(del);
-
-				this.submitData = allDataObj,
-				this.deleteArr = delDataObj,
-				this.isOperation = false,
-				console.log('datachange-->save', allDataObj)
+				this.submitData = allDataObj;
+				this.deleteArr = delDataObj;
+				let stationArr = {
+					submitData :allDataObj,
+					deleteArr : delDataObj
+				}
+				this.stationArr = stationArr;
 			}
         },
     }

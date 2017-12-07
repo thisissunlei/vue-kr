@@ -38,13 +38,12 @@ function apiAxios (method, name, params, success, failure) {
   }
   let root = '/api/';
   let url = APIS[name].url;
-  if(url.indexOf('mockjsdata') !==-1){
-       root='https://cnodejs.org/api/v1';
-    }
-
+  if(url.indexOf('mockjs') !==-1){
+       root='http://rap.krspace.cn';
+  }
   axios({
     method: method,
-    url: APIS[name].url,
+    url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,

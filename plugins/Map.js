@@ -163,7 +163,7 @@ var Map = function (elementId, configs) {
             },
             '2': {
                 status: 'admit',
-                mark: '有意向',
+                mark: '不可选工位',
                 textColor: '#666',
                 backgroundColor: '#eee',
             },
@@ -627,6 +627,9 @@ var Map = function (elementId, configs) {
             const { drag, checked, removed, status } = this.props;
 
             if (removed) {
+                return;
+            }
+            if(!this.props.name){
                 return;
             }
 

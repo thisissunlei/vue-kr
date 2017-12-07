@@ -265,7 +265,14 @@ import dateUtils from 'vue-dateutils';
                 delStation:[],
                 payType:'',
                 stationData:{
-                    submitData:[],
+                    submitData:[
+                    {
+                        belongId:2041,
+                        belongType:'STATION',
+                        id:2041,
+                        name:"03181"
+                    }
+                    ],
                     deleteArr:[]
                 },
                 stationAll:{},
@@ -312,18 +319,18 @@ import dateUtils from 'vue-dateutils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'age'
+                        key: 'price'
                     },
                     {
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', params.row.name+'至'+params.row.date)
+                            return h('strong', this.formItem.beginDate+'至'+this.formItem.endDate)
                         }
                     },
                     {
                         title: '小计',
-                        key: 'address'
+                        key: 'price'
                     }
                 ],
                 stationList: [
@@ -489,7 +496,7 @@ import dateUtils from 'vue-dateutils';
                 console.log('-----',value)
             },
             deleteStation:function(){
-                let stationVos = this.data1;
+                let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
                 stationVos = stationVos.filter(function(item, index) {
                     if (selectedStation.indexOf(item.id) != -1) {
@@ -497,7 +504,7 @@ import dateUtils from 'vue-dateutils';
                     }
                 return true;
                 });
-                this.data1 = stationVos;
+                this.stationList = stationVos;
             },
             showStation:function(){
                 if(!this.formItem.community){
@@ -519,7 +526,7 @@ import dateUtils from 'vue-dateutils';
                     return;
                 }
                 let params = {
-                    floor:'3',
+                    floor:'3,4,2',
                     communityId:this.formItem.community,
                     mainBillId:3162,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
@@ -555,15 +562,37 @@ import dateUtils from 'vue-dateutils';
                 console.log('submits')
             },
             jj:function(){
-                let val = this.stationData;
-                console.log('jj',val.submitData)
-                // this.stationList = val.submitData;
-                // this.delStation = val.deleteArr;
+                
+                this.stationList = this.stationData.submitData;
+                this.delStation = this.stationData.deleteArr;
+
             },
             onResultChange:function(val){
-                console.log('====onResultChange=====',val)
-                this.stationData = val;
-                // this.result=val;//④外层调用组件方注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
+                let submitDataAll = [];
+                let deleteDataArr = [];
+                for(let i in val.submitData){
+                    submitDataAll = submitDataAll.concat(val.submitData[i]);
+                }
+                for(let i in val.deleteArr){
+                    deleteDataArr = deleteDataArr.concat(val.deleteArr[i]);
+                }
+                submitDataAll = submitDataAll.map(function(item,index){
+                    var obj1 = {};
+                    let belongType = 1;
+                    if( item.belongType == "SPACE"){
+                        belongType = 2;
+                    }
+                    obj1.id = item.belongId;
+                    obj1.type = belongType;
+                    obj1.whereFloor = item.whereFloor;
+                    obj1.name = item.name;
+                    return obj1
+
+                })
+                this.stationData = {
+                    submitData:submitDataAll,
+                    deleteArr:deleteDataArr
+                }
             }
                     
                

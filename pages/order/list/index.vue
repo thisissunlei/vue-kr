@@ -77,7 +77,7 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
+import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';

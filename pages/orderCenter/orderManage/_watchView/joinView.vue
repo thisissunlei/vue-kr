@@ -95,6 +95,7 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
 			service:[
 				{
 				 title: '工位/房间编号',

@@ -45,13 +45,13 @@ import axios from '~/plugins/http.js';
                 inputStart:'',//结束工位
                 originData:[],//预备删除
                 floor:'',
+                startToEnd:[],
                 stationArr:this.stationData,//提交父组件字段
                 // stationAll:this.stationData//①创建props属性result的副本--myResult
 
             }
         },
         destroyed(){
-        	console.log('destroyed=====>')
         },
         created:function(){
         },
@@ -68,12 +68,45 @@ import axios from '~/plugins/http.js';
         	},
         	stationData:function(val){
         		this.selectedObjs = this.stationData.submitData;
-        		console.log('======',this.stationData.submitData)
-        		// this.stationArr = val;
-        		 // this.myResult = val;//②监听外部对props属性result的变更，并同步到组件内的data属性myResult中
         	},
         	stationArr:function(val){
-        		this.$emit("on-result-change",val);//③组件内对myResult变更后向外部发送事件通知
+
+        		let submitDataAll = [];
+                let deleteDataArr = [];
+                for(let i in val.submitData){
+                    submitDataAll = submitDataAll.concat(val.submitData[i]);
+                }
+                for(let i in val.deleteArr){
+                    deleteDataArr = deleteDataArr.concat(val.deleteArr[i]);
+                }
+                submitDataAll = submitDataAll.map(function(item,index){
+                    var obj1 = {};
+                    let belongType = 1;
+                    if( item.belongType == "SPACE"){
+                        belongType = 2;
+                    }
+                    obj1.id = item.belongId;
+                    obj1.type = belongType;
+                    obj1.whereFloor = item.whereFloor;
+                    obj1.name = item.name;
+                    obj1.price = item.price;
+                    return obj1
+
+                })
+                let station = {
+                    submitData:submitDataAll,
+                    deleteArr:deleteDataArr
+                }
+
+        		this.$emit("on-result-change",station);//③组件内对myResult变更后向外部发送事件通知
+        	},
+        	startToEnd:function(val){
+        		let {submitData,deleteArr} = this.stationArr;
+        		submitData.select = val;
+        		this.stationArr = {
+        			deleteArr:deleteArr,
+        			submitData:submitData
+        		}
         	}
         },
         props:['stationsubmit','params','floors','stationData'],
@@ -146,15 +179,14 @@ import axios from '~/plugins/http.js';
 			},
 			//处理数据进行渲染
 			canvasEles: function() {
-				let inputStart = this.inputStart;
-				let inputEnd = this.inputEnd;
 				const _this = this;
 				var dainitializeConfigs = {};
-				let start = Number(inputStart);
-				let end = Number(inputEnd);
+				let start = Number(this.inputStart);
+				let end = Number(this.inputEnd);
 				let data = this.data;
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
+				let startToEnd = []
 				console.log('selectedObjs=====>',selectedObjs)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
@@ -192,8 +224,19 @@ import axios from '~/plugins/http.js';
 
 								}
 							}
-							if (cellName >= start && cellName <= end) {
+							if (cellName >= start && cellName <= end && !item.status) {
 								obj.checked = true;
+								let select = {};
+								select.name = item.cellName;
+								select.whereFloor = item.floor;
+								select.belongType = item.belongType;
+								select.belongId = Number(item.belongId);
+								select.id = Number(item.id);
+								select.canFigureId = item.canFigureId;
+								select.type = obj.belongType;
+								select.price = item.price;
+
+								startToEnd.push(select)
 							}
 
 							return obj;
@@ -219,6 +262,7 @@ import axios from '~/plugins/http.js';
 
 				}
 				this.Map = Map("plan-map-content", dainitializeConfigs);
+				this.startToEnd = startToEnd;
 			},
 			//放大比例
 			rangeSelect :function(event){
@@ -236,6 +280,8 @@ import axios from '~/plugins/http.js';
 				}
 			},
 			submitStation:function(){
+				this.inputStart = '';
+				this.inputEnd = '';
 				this.Map.destory();
 				this.canvasEles();
 			},

@@ -568,31 +568,8 @@ import dateUtils from 'vue-dateutils';
 
             },
             onResultChange:function(val){
-                let submitDataAll = [];
-                let deleteDataArr = [];
-                for(let i in val.submitData){
-                    submitDataAll = submitDataAll.concat(val.submitData[i]);
-                }
-                for(let i in val.deleteArr){
-                    deleteDataArr = deleteDataArr.concat(val.deleteArr[i]);
-                }
-                submitDataAll = submitDataAll.map(function(item,index){
-                    var obj1 = {};
-                    let belongType = 1;
-                    if( item.belongType == "SPACE"){
-                        belongType = 2;
-                    }
-                    obj1.id = item.belongId;
-                    obj1.type = belongType;
-                    obj1.whereFloor = item.whereFloor;
-                    obj1.name = item.name;
-                    return obj1
-
-                })
-                this.stationData = {
-                    submitData:submitDataAll,
-                    deleteArr:deleteDataArr
-                }
+                this.stationData = val;
+                
             }
                     
                

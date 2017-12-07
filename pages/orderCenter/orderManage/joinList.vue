@@ -49,6 +49,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    import CommonFuc from '~/components/commonFuc';
     
 
     export default {
@@ -223,11 +224,7 @@
         methods:{
             showSearch (params) {
                 this.openSearch=true;
-                for(var item in this.params){
-                    if(item!='page'&&item!='pageSize'){
-                        this.upperData[item]='';
-                    }
-                }
+                CommonFuc.clearForm(this.params,this.upperData);
             },
             openView(params){
                 location.href=`./12/joinView`;

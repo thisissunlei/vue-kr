@@ -7,7 +7,7 @@
                         v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        @on-change="changeCustomer"
+                        @on-change="lowerChange"
                     ></i-input>
                 </div>
                 <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -28,8 +28,9 @@
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
+                @on-ok='upperSubmit'
             >
-                <HeightSearch></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -44,13 +45,15 @@
 
 
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    
 
     export default {
         name:'join',
+        props:['mask'],
         components:{
             HeightSearch,
             Nullify
@@ -58,6 +61,7 @@
         data () {
             
             return {
+                upperData:{},
                 totalCount:1,
                 params:{
                     page:1,
@@ -104,22 +108,36 @@
                                 return <span class="u-txt-orange">增租服务订单</span>;
                             }else if(obj.row.orderType==='CONTINUE'){
                                 return <span class="u-txt-red">续租服务订单</span>;
-                            }else if(obj.row.orderType==='REDUCE'){
-                                return <span class="u-txt-orange">减租服务订单</span>;
-                            }else if(obj.row.orderType==='LEAVE'){
-                                return <span class="u-txt-red">退费离场服务订单</span>;
                             }
                         }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '支付状态',
                         key: 'payStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT_PAY'){
+                                return <span class="u-txt">待支付</span>;
+                            }else if(obj.row.payStatus==='COMPLETE'){
+                                return <span class="u-txt-orange">已付清</span>;
+                            }else if(obj.row.payStatus==='UN_COMPLETE'){
+                                return <span class="u-txt-red">未付清</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -163,7 +181,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='已完成'){
+                           if(params.row.orderStatus=='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -205,9 +223,20 @@
         methods:{
             showSearch (params) {
                 this.openSearch=true;
+                for(var item in this.params){
+                    if(item!='page'&&item!='pageSize'){
+                        this.upperData[item]='';
+                    }
+                }
             },
             openView(params){
                 location.href=`./12/joinView`;
+                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
+                    location.href=`./${params.row.id}/joinView`;
+                }
+                if(params.row.orderType=='CONTINUE'){
+                    location.href=`./${params.row.id}/renewView`;
+                }*/
             },
             openCancel(params){
                 this.openNullify=true;
@@ -238,13 +267,20 @@
                 params.page=index;
                 this.getListData(params);
             },
-            changeCustomer(param){
+            lowerChange(param){
                 this.params.customerName=param.target.value;
             },
             lowerSubmit(){
                 this.getListData(this.params);
+            },
+            upperChange(params){
+                this.upperData=params;
+            },
+            upperSubmit(){
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
             }
-        },
+        }
     }
 </script>
 
@@ -257,7 +293,7 @@
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
             cursor:pointer;

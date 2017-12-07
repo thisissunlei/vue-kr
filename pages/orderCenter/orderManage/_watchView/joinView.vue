@@ -83,9 +83,10 @@
 </template>
 <script>
 
-import axios from '../../../../plugins/http.js';
-import DetailStyle from './../../../../components/detailStyle';
-import labelText from './../../../../components/labelText';
+import axios from 'kr/axios';
+import DetailStyle from '~/components/detailStyle';
+import labelText from '~/components/labelText';
+import CommonFuc from '~/components/commonFuc';
 
 export default {
 	components:{
@@ -94,6 +95,7 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
 			service:[
 				{
 				 title: '工位/房间编号',
@@ -171,6 +173,7 @@ export default {
 		}
 	},
 	created:function(){
+		console.log('CommonFuc',CommonFuc.smalltoBIG(-1890));
 		let {params}=this.$route
 		let from={
 			orderId:params.orderId
@@ -183,7 +186,7 @@ export default {
                 
            	}, e => {
                 console.log('error',e)
-            })*/
+        })*/
 	}
 }
 </script>

@@ -90,6 +90,7 @@
 
 
 <script>
+import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';

@@ -7,9 +7,10 @@
                         v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        @on-change="changeCustomer"
+                        @on-change="lowerChange"
                     ></i-input>
                 </div>
+                <div class='m-search' @click="lowerSubmit">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
                   <span></span>   
                 </div> 
@@ -26,11 +27,10 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                ok-text="确定"
-                cancel-text="取消"
                 width="660"
+                @on-ok='upperSubmit'
             >
-                <HeightSearch></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='reduce'></HeightSearch>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -45,13 +45,14 @@
 
 
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
 
     export default {
         name:'join',
+        props:['mask'],
         components:{
             HeightSearch,
             Nullify
@@ -59,6 +60,7 @@
         data () {
             
             return {
+                upperData:{},
                 totalCount:1,
                 params:{
                     page:1,
@@ -86,12 +88,16 @@
                     },
                     {
                         title: '减租开始日期',
-                        key: 'rentAmount',
-                        align:'center'
+                        key: 'startDate',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            return time;
+                        }
                     },
                     {
                         title: '减租金额',
-                        key: 'depositAmount',
+                        key: 'rentAmount',
                         align:'center'
                     },
                     {
@@ -141,7 +147,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='已完成'){
+                           if(params.row.orderStatus=='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -183,10 +189,14 @@
         methods:{
             showSearch (params) {
                 this.openSearch=true;
+                for(var item in this.params){
+                    if(item!='page'&&item!='pageSize'){
+                        this.upperData[item]='';
+                    }
+                }
             },
             openView(params){
-                location.href=`./12/joinView`;
-                //location.href=`./watchView/${params.orderId}`;
+                location.href=`./${params.row.id}/reduceView`;
             },
             openCancel(params){
                 this.openNullify=true;
@@ -200,15 +210,12 @@
             nullifySubmit (){
                 console.log('作废');
             },
-            heighSubmit (params){
-                console.log('高级',params);
-            },
             outSubmit (){
-                console.log(',,,,');
+                console.log('导出');
             },
             getListData(params){
                 var _this=this;
-                axios.get('join-bill-list', params, r => {
+                axios.get('reduce-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                 }, e => {
@@ -220,12 +227,20 @@
                 params.page=index;
                 this.getListData(params);
             },
-            changeCustomer(param){
-                let params=this.params;
-                params.customerName=param.target.value;
-                this.getListData(params);
+            lowerChange(param){
+                this.params.customerName=param.target.value;
+            },
+            lowerSubmit(){
+                this.getListData(this.params);
+            },
+            upperChange(params){
+                this.upperData=params;
+            },
+            upperSubmit(){
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
             }
-        },
+        }
     }
 </script>
 
@@ -238,10 +253,15 @@
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
             cursor:pointer;
         }
     }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
 </style>

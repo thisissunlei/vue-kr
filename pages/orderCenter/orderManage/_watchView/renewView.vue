@@ -31,47 +31,49 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="客户名称：">
-				{{basicInfo.orderNo}}
+				<a href="">
+					{{basicInfo.customerName}}
+				</a>
 			</labelText>
 			<labelText label="社区名称：">
-				{{basicInfo.orderStatus}}
+				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="销售人员：">
-				{{basicInfo.roomName}}
+				{{basicInfo.salerName}}
 			</labelText>
 			<labelText label="创建时间：">
-				{{basicInfo.totalAmount}}
+				{{ctime}}
 			</labelText>
          </DetailStyle>
          <DetailStyle info="续租信息">
 			<labelText label="续租开始日期：">
-				{{basicInfo.orderStartTime}}
+				{{startDate}}
 			</labelText>
 			<labelText label="续租结束日期：">
-				{{basicInfo.orderEndTime}}
+				{{endDate}}
 			</labelText>
 			<labelText label="分期方式：">
-				{{basicInfo.communityName}}
+				{{basicInfo.installmentType}}
 			</labelText>
 			<labelText label="首付款日期：">
-				{{basicInfo.customerName}}
+				{{payDate}}
 			</labelText>
          </DetailStyle>
          <DetailStyle info="金额信息">
 			<Table :columns="service" :data="serviceData"></Table>
-            <labelText label="服务费总计：">
-				{{basicInfo.customerName}}
+            <labelText label="服务费总计：" style='font-weight:bold;'>
+				{{basicInfo.rentAmount}}  {{capitalService}}
 			</labelText>
             <Table :columns="treatment" :data="treatmentData"></Table>
-            <labelText label="优惠总计：">
-				{{basicInfo.customerName}}
+            <labelText label="优惠总计：" style='font-weight:bold;'>
+				{{basicInfo.amount}}  {{capitalTreatment}}
 			</labelText>
             <div>
-                <labelText label="服务费总额：">
-                    {{basicInfo.customerName}}
+                <labelText label="服务费总额：" style='color:red;'>
+                    {{basicInfo.rentAmount}}
                 </labelText>
-                <labelText label="履约保证金总额：">
-                    {{basicInfo.customerName}}
+                <labelText label="履约保证金总额：" style='color:red;'>
+                    {{basicInfo.depositAmount}}
                 </labelText>
             </div>
 		</DetailStyle>
@@ -86,6 +88,8 @@
 import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
+import CommonFuc from '~/components/commonFuc';
+import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
@@ -94,30 +98,45 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
+			capitalService:'',
+			capitalTreatment:'',
+			ctime:'',
+			startDate:'',
+			endDate:'',
+			payDate:'',
 			service:[
 				{
 				 title: '工位/房间编号',
-                 key: 'number',
+                 key: 'seatName',
                  align:'center'	
 				},
 				{
 				 title: '标准单价(元/月)',
-                 key: 'number',
+                 key: 'seatName',
                  align:'center'	
                 },
                 {
 				 title: '开始日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'startDate',
+				 align:'center',
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
+					 return time;
+				 }	
                 },
                 {
 				 title: '结束日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'endDate',
+				 align:'center',
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
+					 return time;
+				 }	
                 },
                 {
 				 title: '小计',
-                 key: 'number',
+                 key: 'amount',
                  align:'center'	
 				}
 			],
@@ -171,19 +190,25 @@ export default {
 		}
 	},
 	created:function(){
-		let {params}=this.$route
+		let {params}=this.$route;
 		let from={
-			orderId:params.orderId
+			id:params.watchView
 		};
 		var _this=this;
-		this.basicInfo={};
-		/*axios.get('order-detail', from, r => {
-				
-                    console.log('r', r);
-                
+	    axios.get('reduce-bill-detail', from, r => {
+				   _this.basicInfo=r.data;
+				   
+				   _this.capitalService=CommonFuc.smalltoBIG(r.data.rentAmount);
+				   _this.capitalTreatment=CommonFuc.smalltoBIG(r.data.amount);
+				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime));
+				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate));
+				   _this.endDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate));
+				   _this.payDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime));
+				   _this.serviceData=r.data.orderSeatDetailVo;
+
            	}, e => {
-                console.log('error',e)
-            })*/
+                _this.$Message.info(e);
+        })
 	}
 }
 </script>

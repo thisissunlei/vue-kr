@@ -17,16 +17,14 @@
 </style>  
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="订单编号" 
-                    class='bill-search-class'>
+                <Form-item label="订单编号"  class='bill-search-class'>
                     <i-input 
                         v-model="formItem.orderNum" 
                         placeholder="请输入订单编号"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="客户名称" 
-                    class='bill-search-class'>
+                <Form-item label="客户名称" class='bill-search-class'>
                     <i-input 
                         v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
@@ -49,8 +47,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单类型" 
-                    class='bill-search-class'>
+                <Form-item label="订单类型" class='bill-search-class' v-show='type'>
                     <Select 
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
@@ -65,8 +62,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单状态" 
-                    class='bill-search-class'>
+                <Form-item label="订单状态" class='bill-search-class'>
                     <Select 
                         v-model="formItem.orderStatus" 
                         placeholder="请输入订单状态" 
@@ -81,8 +77,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                    <Form-item label="支付状态" 
-                    class='bill-search-class'>
+                    <Form-item label="支付状态" class='bill-search-class' v-show='type'>
                     <Select 
                         v-model="formItem.payStatus" 
                         placeholder="请输入支付状态" 
@@ -97,21 +92,22 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <FormItem label="创建日期" class="bill-search">
+                <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
                         v-model="formItem.cStartDate"
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
-                ></DatePicker>
-                <span class="u-date-txt">至</span>
-                <DatePicker 
+                    ></DatePicker>
+                   <span class="u-date-txt">至</span>
+                    <DatePicker 
                         v-model="formItem.cEndDate"
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
-                ></DatePicker>   
-             </FormItem>
+                    ></DatePicker>   
+             </Form-item>
+             <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
          </Form>
 </template>
 <script>
@@ -120,6 +116,7 @@
         props:['mask'],
         data (){
             return{
+                dateError:false,
                 formItem:{
                    orderNum:'',
                    customerName:'',
@@ -130,6 +127,7 @@
                    cEndDate:'',
                    cStartDate:''
                 },
+                type:this.mask=='join'?true:false,
                 orderList:[
                     {
                         value:'NOT_EFFECTIVE',
@@ -170,15 +168,7 @@
                     {
                         value:'CONTINUE',
                         label:'续租服务订单'
-                    },
-                    {
-                        value:'REDUCE',
-                        label:'减租服务订单'
-                    },
-                    {
-                        value:'LEAVE',
-                        label:'退费离场服务订单'
-                    } 
+                    }
                 ],
                 communityList:[]
             }
@@ -192,7 +182,16 @@
             })
         },
         updated:function(){
-            this.$emit('bindData', this.formItem);
+            if(this.formItem.cStartDate&&this.formItem.cEndDate){
+                if(this.formItem.cStartDate>this.formItem.cEndDate){
+                    this.dateError=true;
+                }else{
+                    this.dateError=false; 
+                }
+            }else{
+                this.dateError=false; 
+            }
+            this.$emit('bindData', this.formItem,this.dateError);
         },
     }
 </script>

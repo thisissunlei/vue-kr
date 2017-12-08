@@ -28,9 +28,12 @@
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
-                @on-ok='upperSubmit'
             >
                 <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <div slot="footer">
+                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                </div>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -49,6 +52,8 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    import CommonFuc from '~/components/commonFuc';
+    
 
     export default {
         name:'join',
@@ -61,6 +66,7 @@
             
             return {
                 upperData:{},
+                upperError:false,
                 totalCount:1,
                 params:{
                     page:1,
@@ -107,22 +113,36 @@
                                 return <span class="u-txt-orange">增租服务订单</span>;
                             }else if(obj.row.orderType==='CONTINUE'){
                                 return <span class="u-txt-red">续租服务订单</span>;
-                            }else if(obj.row.orderType==='REDUCE'){
-                                return <span class="u-txt-orange">减租服务订单</span>;
-                            }else if(obj.row.orderType==='LEAVE'){
-                                return <span class="u-txt-red">退费离场服务订单</span>;
                             }
                         }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '支付状态',
                         key: 'payStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT_PAY'){
+                                return <span class="u-txt">待支付</span>;
+                            }else if(obj.row.payStatus==='COMPLETE'){
+                                return <span class="u-txt-orange">已付清</span>;
+                            }else if(obj.row.payStatus==='UN_COMPLETE'){
+                                return <span class="u-txt-red">未付清</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -206,14 +226,18 @@
             this.getListData(this.params);
         },
         methods:{
-            showSearch (params) {
-                this.openSearch=true;
-                for(var item in this.params){
-                    this.upperData[item]='';
-                }
+            showSearch () {
+                this.openSearch=!this.openSearch;
+                CommonFuc.clearForm(this.params,this.upperData);
             },
             openView(params){
-                location.href=`./12/joinView`;
+                location.href=location.href+`/12/joinView`;
+                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
+                    location.href=location.href+`/${params.row.id}/joinView`;
+                }
+                if(params.row.orderType=='CONTINUE'){
+                    location.href=location.href+`/${params.row.id}/renewView`;
+                }*/
             },
             openCancel(params){
                 this.openNullify=true;
@@ -235,6 +259,7 @@
                 axios.get('join-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
+                    _this.openSearch=false;
                 }, e => {
                     _this.$Message.info(e);
                 })   
@@ -250,10 +275,14 @@
             lowerSubmit(){
                 this.getListData(this.params);
             },
-            upperChange(params){
+            upperChange(params,error){
+                this.upperError=error;
                 this.upperData=params;
             },
             upperSubmit(){
+                if(this.upperError){
+                    return ;
+                }
                 this.params=Object.assign({},this.params,this.upperData);
                 this.getListData(this.params);
             }

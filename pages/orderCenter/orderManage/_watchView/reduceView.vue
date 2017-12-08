@@ -1,5 +1,5 @@
 <style lang="less"> 
-    .g-order-detail{
+.g-order-detail{
 		margin:-10px;
 		.m-detail-header{
 			height:50px;
@@ -31,29 +31,31 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="客户名称：">
-				{{basicInfo.orderNo}}
+				<a href="">
+					{{basicInfo.customerName}}
+				</a>
 			</labelText>
 			<labelText label="社区名称：">
-				{{basicInfo.orderStatus}}
+				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="操作人员：">
-				{{basicInfo.roomName}}
+				{{basicInfo.salerName}}
 			</labelText>
 			<labelText label="操作时间：">
-				{{basicInfo.totalAmount}}
+				{{ctime}}
 			</labelText>
          </DetailStyle>
          <DetailStyle info="减租信息">
-			<labelText label="减租开始日期：">
-				{{basicInfo.orderStartTime}}
+			<labelText label="减租开始时间：">
+				{{startDate}}
 			</labelText>
-			<labelText label="减租服务费(元)">
-				{{basicInfo.orderEndTime}}
+            <labelText label="减租服务费：">
+				{{basicInfo.rentAmount}}
 			</labelText>
-			<labelText label="减租工位(房间)">
-				{{basicInfo.communityName}}
+            <labelText label="减租工位/房间：">
+				{{basicInfo.amount}}
 			</labelText>
-         </DetailStyle>
+		</DetailStyle>
 		<DetailStyle info="相关合同">
 			<Table :columns="contract" :data="contractData"></Table>
 		</DetailStyle>
@@ -65,6 +67,7 @@
 import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
+import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
@@ -73,6 +76,9 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
+			ctime:'',
+			startDate:'',
             contract:[
                {
 				 title: '合同编号',
@@ -94,19 +100,20 @@ export default {
 		}
 	},
 	created:function(){
-		let {params}=this.$route
+		let {params}=this.$route;
 		let from={
-			orderId:params.orderId
+			id:params.watchView
 		};
 		var _this=this;
-		this.basicInfo={};
-		/*axios.get('order-detail', from, r => {
+	    axios.get('reduce-bill-detail', from, r => {
+				   _this.basicInfo=r.data;
 				
-                    console.log('r', r);
-                
+				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime));
+				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate));
+
            	}, e => {
-                console.log('error',e)
-            })*/
+                _this.$Message.info(e);
+        })
 	}
 }
 </script>

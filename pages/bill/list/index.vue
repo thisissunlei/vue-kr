@@ -180,14 +180,14 @@ import sectionTitle from '~/components/sectionTitle';
                     },
                     {
                         title: '账单状态',
-                        key: 'billPayStatus',
+                        key: 'payStatus',
                         align:'center',
                         render(h, obj){
-                                if(obj.row.billPayStatus==='WAIT'){
+                                if(obj.row.payStatus==='WAIT'){
                                     return <span class="u-txt-red">待付款</span>;
-                                }else if(obj.row.billPayStatus==='PAID'){
+                                }else if(obj.row.payStatus==='PAID'){
                                     return <span class="u-txt">已付款</span>;
-                                }else if(obj.row.billPayStatus==='PAYMENT'){
+                                }else if(obj.row.payStatus==='PAYMENT'){
                                     return <span class="u-txt-orange">未付清</span>;
                                 }
                             }
@@ -198,50 +198,99 @@ import sectionTitle from '~/components/sectionTitle';
                         align:'center',
                         width:135,
                         render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showSettle(params.row)
-                                        }
-                                    }
-                                }, '结账'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showAntiSettle(params.row)
-                                        }
-                                    }
-                                }, '反结账')
-                            ]);  
+                            if(params.row.payStatus==='PAYMENT'){
+                                 return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            }, '反结账')
+                                        ]);  
+                            }else if(params.row.payStatus==='PAID'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看')
+                                        ]);
+                            }else if(params.row.payStatus==='WAIT'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账')
+                                        ]);
+                            }
                         }
                     }
                 ]
@@ -249,15 +298,14 @@ import sectionTitle from '~/components/sectionTitle';
             }
         },
         created:function(){
-            this.getTableData();
+            this.getTableData(this.tabParams);
         },
         methods:{
             showSearch (params) {
                 this.openSearch=true;
             },
             openView(params){
-                console.log('params====>>>>',params)
-                 //location.href=`./detail/${params.billId}`;
+                location.href=`./list/detail/${params.billId}`;
             },
             showSettle (params) {
                 this.openSettle=true;
@@ -272,20 +320,13 @@ import sectionTitle from '~/components/sectionTitle';
             onSelectList(data){
                 //console.log('date====>>>>>0000',data)
             },
-            getTableData(){
-                let data = [];
-                let params={
-                    page:1,
-                    pageSize:15
-                };
+            getTableData(params){
                 axios.get('get-bill-list', params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)
                 })
-                  
-                return data;
             },
             
         }

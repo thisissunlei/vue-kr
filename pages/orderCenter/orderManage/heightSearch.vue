@@ -105,9 +105,9 @@
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
-                    ></DatePicker>   
+                    ></DatePicker> 
+                    <div style='color:red;' v-show='dateError'>开始日期不能大于结束日期</div>  
              </Form-item>
-             <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
          </Form>
 </template>
 <script>

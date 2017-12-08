@@ -56,7 +56,6 @@
 
     export default {
         name:'join',
-        props:['mask'],
         components:{
             HeightSearch,
             Nullify

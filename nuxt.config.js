@@ -15,7 +15,7 @@ module.exports = {
 	},
 	proxy: [
 		['/api', {
-			target: 'http://optest.krspace.cn'
+			target: 'http://optest01.krspace.cn'
 		}]
 	],
 	modules: [

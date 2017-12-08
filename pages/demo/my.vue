@@ -11,18 +11,24 @@
 
 <p @click="show">按钮</p>
 <selectCommunities></SelectCommunities>
-
+<searchCompany 
+    name="customerName"
+    style="width: 250px"
+    :onchange="onchange"
+></searchCompany>  
 
 </div>
   
 </template>
 <script>
+import searchCompany from '~/components/searchCompany';
 import Message from '~/components/Message';
 import SelectCommunities from '~/components/selectCommunities';
 export default { 
   components:{
         Message,
-        SelectCommunities
+        SelectCommunities,
+        searchCompany
     },
     data(){
         return{
@@ -35,7 +41,11 @@ export default {
      },
      onChangeOpen(data){
          this.openMessage=data;
-     }
+     } ,
+    onchange(data){
+        console.log('date-------',data)
+    }
+	
   }
  
 }

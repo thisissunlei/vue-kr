@@ -136,7 +136,7 @@ export default {
 	methods:{
 		getInfo(){
 			var _this=this;
-			let {params}=this.$route
+			let {params}=this.$route;
 			let from={
 				billId:params.billId
 			};

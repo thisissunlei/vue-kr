@@ -198,51 +198,99 @@ import sectionTitle from '~/components/sectionTitle';
                         align:'center',
                         width:135,
                         render:(h,params)=>{
-                            console.log('=======>>>>',params)
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showSettle(params.row)
-                                        }
-                                    }
-                                }, '结账'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showAntiSettle(params.row)
-                                        }
-                                    }
-                                }, '反结账')
-                            ]);  
+                            if(params.row.payStatus==='PAYMENT'){
+                                 return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            }, '反结账')
+                                        ]);  
+                            }else if(params.row.payStatus==='PAID'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看')
+                                        ]);
+                            }else if(params.row.payStatus==='WAIT'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账')
+                                        ]);
+                            }
                         }
                     }
                 ]

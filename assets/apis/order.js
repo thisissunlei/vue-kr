@@ -57,7 +57,7 @@ module.exports = {
   },
   //账单详情
   'get-bill-detail': {
-    url: 'krspace-pay/bil/detail?',
+    url: 'krspace-pay/bill/detail?',
     method: 'get'
   },
   //回款列表

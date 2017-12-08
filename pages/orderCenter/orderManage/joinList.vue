@@ -227,7 +227,7 @@
         methods:{
             showSearch () {
                 this.openSearch=!this.openSearch;
-                CommonFuc.clearForm(this.params,this.upperData);
+                CommonFuc.clearForm(this.upperData);
             },
             openView(params){
                 location.href=location.href+`/12/joinView`;

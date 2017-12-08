@@ -360,7 +360,7 @@ import sectionTitle from '~/components/sectionTitle';
                 let params={
                     billIds:this.billIds
                 }
-                axios.post('batch-pay',{billIds:1} , r => {
+                axios.post('batch-pay',{billIds:this.billIds} , r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {

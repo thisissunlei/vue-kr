@@ -27,11 +27,9 @@
     } 
     
     /*清空表单*/
-    function clearForm(hostParams,originParams){
-        for(var item in hostParams){
-            if(item!='page'&&item!='pageSize'){
-                originParams[item]='';
-            }
+    function clearForm(originParams){
+        for(var item in originParams){
+             originParams[item]='';
          }
     }
    

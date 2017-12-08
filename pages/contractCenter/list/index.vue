@@ -31,6 +31,12 @@
 
     <div>
         <sectionTitle label = "合同列表"></sectionTitle>
+        <h1  @click="h1Click">点击</h1>
+            <krUpload 
+                :onSuccess="handleSuccess"
+                :on-error="handleError"
+                :on-format-error="handleFormatError"
+                :format="['jpg','jpeg','png']" action="//jsonplaceholder.typicode.com/posts/" ></krUpload>
         <div style='text-align:right;margin-bottom:10px'>
             <Button 
                 type="primary" 
@@ -72,6 +78,7 @@
 </template>
 <script>
     import axios from 'kr/axios';
+    import hoc from '~/components/hoc.js'
     import sectionTitle from '~/components/sectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
@@ -89,6 +96,8 @@
                     pageSize:15,
                     customerName:"",
                 },
+                loadingStatus: false,
+                file: null,
                 upperData:{},
                 upperError:false,
                 openSearch:false,
@@ -193,6 +202,29 @@
             })   
         },
         methods:{
+            handleFormatError(){
+                console.log("格式不正确=======")
+            },
+            //上传失败
+            handleError(){
+                console.log("上传失败---------");
+            },
+            //上传成功
+            handleSuccess(){
+
+            },
+            handleUpload(file){
+               this.file = file;
+                return false;
+            },
+            h1Click(){
+                this.loadingStatus = true;
+                setTimeout(() => {
+                    this.file = null;
+                    this.loadingStatus = false;
+                    this.$Message.success('Success')
+                }, 1500)
+            },
             showSearch (params) {
                 this.openSearch=true;
             },

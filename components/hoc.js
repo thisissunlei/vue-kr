@@ -33,7 +33,7 @@ export default function hoc(container) {
             const data = {
                 props: this.$props
             }
-            
+            console.log(container.props,"999999")
             return (
                 <div>
                     <container 

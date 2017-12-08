@@ -476,10 +476,13 @@ import dateUtils from 'vue-dateutils';
                 }else{
                     this.formItem.community = '';
                 }
+                this.clearStation()
+                
+            },
+            clearStation:function(){
                 this.stationData={
                     submitData:[],
                     deleteData:[],
-                    clearAll:true
                 };
                 this.stationList = [];
             },
@@ -489,9 +492,6 @@ import dateUtils from 'vue-dateutils';
                 }else{
                     this.formItem.customer = '';
                 }
-                
-
-
             },
             changeSaler:function(value){
                 this.formItem.saler = value;

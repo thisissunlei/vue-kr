@@ -31,25 +31,29 @@
     .u-txt-orange{
         color: #F5A623;
     }
-    .ivu-modal-footer{
-        border:none;
-    }
-
+    
         
 }
+.u-tip{
+        text-align: center;
+        font-size:14px;
+        margin-top: 34px;
+        margin-bottom: 36px;
+}
+
 </style>
 
 <template>
 <div class="g-bill">
     <sectionTitle label="已出账单管理"></sectionTitle>
     <div class="u-search" >
-        <Button type="primary">批量结算</Button>
+        <Button type="primary" @click="onBillPay">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span>   
     </div>
     <div class="u-table">
         <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
         <div style="margin: 10px;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page :total="totalCount" show-total show-elevator></Page>
             </div>
@@ -72,7 +76,7 @@
         width="443"
      >
        <settleAccounts> </settleAccounts>
-       <div slot="footer">
+       <div slot="footer" style="border:none;">
 		
 	   </div>
     </Modal>
@@ -84,9 +88,18 @@
         width="443"
      >
        <antiSettlement> </antiSettlement>
-       <div slot="footer">
+       <div slot="footer" style="border:none;">
 		
 	   </div>
+    </Modal>
+    <Modal
+        v-model="openClose"
+        title="提示"
+        ok-text="确定"
+        cancel-text="取消"
+        width="443"
+     >
+      <p class="u-tip">请先选择结算数据！</p>
     </Modal>
 </div>
 </template>
@@ -114,7 +127,9 @@ import sectionTitle from '~/components/sectionTitle';
                 openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,
+                openClose:false,
                 billList:[],
+                billIds:[],
                 tabParams:{
                     page:1,
                     pageSize:15
@@ -198,51 +213,99 @@ import sectionTitle from '~/components/sectionTitle';
                         align:'center',
                         width:135,
                         render:(h,params)=>{
-                            console.log('=======>>>>',params)
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showSettle(params.row)
-                                        }
-                                    }
-                                }, '结账'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showAntiSettle(params.row)
-                                        }
-                                    }
-                                }, '反结账')
-                            ]);  
+                            if(params.row.payStatus==='PAYMENT'){
+                                 return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            }, '反结账')
+                                        ]);  
+                            }else if(params.row.payStatus==='PAID'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看')
+                                        ]);
+                            }else if(params.row.payStatus==='WAIT'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账')
+                                        ]);
+                            }
                         }
                     }
                 ]
@@ -270,7 +333,11 @@ import sectionTitle from '~/components/sectionTitle';
                  console.log('导出')
             },
             onSelectList(data){
-                //console.log('date====>>>>>0000',data)
+                let billIds=[];
+                data.map((item)=>{
+                    billIds.push(item.billId)
+                })
+                this.billIds=billIds;
             },
             getTableData(params){
                 axios.get('get-bill-list', params, r => {
@@ -279,6 +346,19 @@ import sectionTitle from '~/components/sectionTitle';
                 }, e => {
                     console.log('error',e)
                 })
+            },
+            onBillPay(){
+                if(this.billIds.length<=0){
+                     this.openClose=true; 
+                     return;  
+                }
+                axios.post('batch-pay',{billIds:this.billIds} , r => {
+                    this.billList=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+
             },
             
         }

@@ -190,16 +190,7 @@
             }
         },
         mounted(){
-            let that = this;
-            axios.get('get-list-contract',{
-                    page:1,
-                    pageSize:15,
-                    customerName:"",
-                }, r => {
-                    that.detail = [].concat(r.data.items)
-            }, e => {
-                    // _this.$Message.info(e);
-            })   
+           this.getListData(this.params);
         },
         methods:{
             handleFormatError(){
@@ -250,7 +241,7 @@
                 var _this=this;
                 axios.get('join-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
-                    _this.joinData=r.data.items;
+                    _this.detail=r.data.items;
                 }, e => {
                     _this.$Message.info(e);
                 })   

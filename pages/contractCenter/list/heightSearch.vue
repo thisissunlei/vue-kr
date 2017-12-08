@@ -16,7 +16,7 @@
 
 </style>  
     <template>         
-            <Form ref="formItem" :model="formItem" :rules="ruleCustom"  label-position="top">
+            <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="合同编号" prop="orderNum"  class='bill-search-class'>
                     <i-input 
                         v-model="formItem.orderNum" 
@@ -77,24 +77,23 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                  
-                <FormItem label="创建日期" class="bill-search" prop = "cStartDate">
+                <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
                         v-model="formItem.cStartDate"
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
                     ></DatePicker>
-                </FormItem>
-                <span class="u-date-txt">至</span>
-                <FormItem label="创建日期" class="bill-search" prop = "cEndDate">
+                   <span class="u-date-txt">至</span>
                     <DatePicker 
-                            v-model="formItem.cEndDate"
-                            type="date" 
-                            placeholder="创建结束日期" 
-                            style="width: 252px"
+                        v-model="formItem.cEndDate"
+                        type="date" 
+                        placeholder="创建结束日期" 
+                        style="width: 252px"
                     ></DatePicker>   
-                </FormItem>
+                    <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
+             </Form-item>
+            
          </Form>
 </template>
 <script>
@@ -102,27 +101,9 @@
     export default{
         props:['mask'],
         data (){
-            const validateStart = (rule, value, callback) => {
-                console.log(value,"PPPPPPP",rule)
-                if (value && this.formItem.cEndDate) {
-                    
-                    callback(new Error('Please enter your password again'));
-                } else {
-                    callback();
-                }
-            };
-            const validateEnd = (rule, value, callback) => {
-               console.log(value,"=========")
-                // if (value === '') {
-                //     callback(new Error('Please enter your password again'));
-                // }  else {
-                //     callback();
-                // }
-            };
-            const validateNum = (rule, value, callback) =>{
-                console.log(value,"--------")
-            }
+            
             return{
+                dateError:false,
                 formItem:{
                    orderNum:'',
                    customerName:'',
@@ -133,17 +114,7 @@
                    cEndDate:'',
                    cStartDate:''
                 },
-                 ruleCustom: {
-                    orderNum:[
-                        { validator: validateNum, trigger: 'change' }
-                    ],
-                    cEndDate: [
-                        { validator: validateStart, trigger: 'change' }
-                    ],
-                    cStartDate: [
-                        { validator: validateEnd, trigger: 'change' }
-                    ],
-                },
+               
                 type:this.mask=='join'?true:false,
                 orderList:[
                     {

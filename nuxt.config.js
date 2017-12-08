@@ -1,5 +1,4 @@
 var path = require('path')
-console.log(path.join(process.cwd(), 'plugins/http'),"ooooooooo---ooooooo")
 module.exports = {
 	plugins: [{
 		src: '~plugins/iview',
@@ -9,7 +8,6 @@ module.exports = {
 	build: {
 		vendor: ['axios'],
 		extend(webpackConfig, { isDev, isClient, isServer }) {
-			console.log(webpackConfig.resolve.alias,"kkkk")
 			// webpackConfig.resolve.alias['axios'] = path.resolve(__dirname, 'plugins/http');
 			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
 			// path.join(process.cwd(), '/src/Page/App/index.js')

@@ -27,11 +27,11 @@ import axios from '~/plugins/http.js';
         data () {
             return {
                 loading1:false,
-                companyOptions:[{}],
+                companyOptions:[],
             };
         },
         created:function(){
-            this.getCusomerList('')
+            this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
@@ -45,7 +45,7 @@ import axios from '~/plugins/http.js';
                         this.getCusomerList(query)
                     }, 200);
                 } else {
-                    this.getCusomerList('')
+                    this.getCusomerList(' ')
 
                 }
             },

@@ -111,6 +111,11 @@ import sectionTitle from '~/components/sectionTitle';
                 openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,
+                billList:this.getTableData(),
+                params:{
+                    page:1,
+                    pageSize:15
+                },
                 columns1: [
                     {
                         type: 'selection',
@@ -241,44 +246,44 @@ import sectionTitle from '~/components/sectionTitle';
             }
         },
         created:function(){
-            this.billList=[
-			{
-                orderId:'44',
-				billNo:'HYSZD201712010001',
-				billType:'MEETING',
-				billStartTime:1511404234000,
-				billEndTime:1511063377000,
-                payStatus:'WAIT',
-                customerName:'绝地反',
-                communityName:'创业大街社区',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'45',
-				billNo:'HYSZD201712010001',
-				billType:'PRINT',
-				billStartTime:1509372919000,
-				billEndTime:1509372919000,
-				payStatus:'PAID',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'46',
-				billNo:'HYSZD201712010001',
-				billType:'CONTRACT',
-				billStartTime:1505704034000,
-				billEndTime:1505704034000,
-				payStatus:'PAYMENT',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			}
-		]
+        //     this.billList=[
+		// 	{
+        //         orderId:'44',
+		// 		billNo:'HYSZD201712010001',
+		// 		billType:'MEETING',
+		// 		billStartTime:1511404234000,
+		// 		billEndTime:1511063377000,
+        //         payStatus:'WAIT',
+        //         customerName:'绝地反',
+        //         communityName:'创业大街社区',
+        //         amount:'￥200',
+        //         payAmount:'￥100'
+		// 	},
+		// 	{
+        //         orderId:'45',
+		// 		billNo:'HYSZD201712010001',
+		// 		billType:'PRINT',
+		// 		billStartTime:1509372919000,
+		// 		billEndTime:1509372919000,
+		// 		payStatus:'PAID',
+        //         customerName:'绝地反击和',
+        //         communityName:'创业大街',
+        //         amount:'￥200',
+        //         payAmount:'￥100'
+		// 	},
+		// 	{
+        //         orderId:'46',
+		// 		billNo:'HYSZD201712010001',
+		// 		billType:'CONTRACT',
+		// 		billStartTime:1505704034000,
+		// 		billEndTime:1505704034000,
+		// 		payStatus:'PAYMENT',
+        //         customerName:'绝地反击和',
+        //         communityName:'创业大街',
+        //         amount:'￥200',
+        //         payAmount:'￥100'
+		// 	}
+		// ]
            
            
             
@@ -303,7 +308,25 @@ import sectionTitle from '~/components/sectionTitle';
             },
             onSelectList(data){
                 console.log('date====>>>>>0000',data)
-            }
+            },
+            getTableData(){
+                let data = [];
+                let params={
+                    page:1,
+                    pageSize:15
+                }
+                //this.params;
+                var _this=this;
+                axios.get('get-bill-list', params, r => {
+                    console.log('r', r);
+                    data=r.data;
+                    _this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+                  
+                return data;
+            },
             
         }
 

@@ -47,10 +47,12 @@
                ></Input> 
             </FormItem>
             <FormItem label="客户名称" class="u-input">
-               <searchCompany 
+                 <Input 
+                    v-model="formItem.customerName" 
+                    placeholder="请输入客户名称" 
                     style="width: 250px"
-                    :onchange="onchange"
-               ></searchCompany>  
+               ></Input>
+               
             </FormItem>
             
             <FormItem label="社区名称" class="u-input">
@@ -110,11 +112,11 @@
 </div>
 </template>	
 <script>
-import searchCompany from '~/components/searchCompany';
+
 export default{
     name:'highSearch',
     components:{
-        searchCompany
+       
     },
     data (){
 		return{
@@ -155,9 +157,7 @@ export default{
 		}
     },
     methods:{
-        onchange(data){
-            console.log('date-------',data)
-        }
+        
     }
 	
 }

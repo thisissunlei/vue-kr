@@ -96,7 +96,7 @@
                         key: 'startDate',
                         align:'center',
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
                             return time;
                         }
                     },
@@ -197,7 +197,7 @@
                  CommonFuc.clearForm(this.params,this.upperData);
             },
             openView(params){
-                location.href=`./${params.row.id}/reduceView`;
+                location.href=location.href+`/${params.row.id}/reduceView`;
             },
             openCancel(params){
                 this.openNullify=true;

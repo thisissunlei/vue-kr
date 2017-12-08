@@ -509,6 +509,7 @@ import dateUtils from 'vue-dateutils';
                 return true;
                 });
                 this.stationList = stationVos;
+                this.stationData.submitData = stationVos;
             },
             showStation:function(){
                 if(!this.formItem.community){
@@ -566,7 +567,6 @@ import dateUtils from 'vue-dateutils';
                 console.log('submits')
             },
             submitStation:function(){
-                console.log('===============jj')
                 this.stationList = this.stationData.submitData;
                 this.delStation = this.stationData.deleteData;
 
@@ -578,9 +578,8 @@ import dateUtils from 'vue-dateutils';
             },
             cancelStation:function(){
                 this.stationData = {
-                    submitData:[],
+                    submitData:this.stationList,
                     deleteData:[],
-                    clearAll:true
                 };
 
             },

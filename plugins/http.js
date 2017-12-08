@@ -1,5 +1,7 @@
 //引入apis
 import APIS from '../assets/apis/index';
+
+import Qs from 'qs';
 // 引用axios
 var axios = require('axios')
 // 自定义判断元素类型JS
@@ -20,6 +22,7 @@ function filterNull (o) {
       o[key] = filterNull(o[key])
     }
   }
+  console.log('00000----')
   return o
 }
 /*
@@ -41,13 +44,15 @@ function apiAxios (method, name, params, success, failure) {
   if(url.indexOf('mockjs') !==-1){
        root='http://rap.krspace.cn';
   }
+
   axios({
     method: method,
     url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
-    withCredentials: false
+    withCredentials: false,
+    
   })
   //success
   .then(function (res) {
@@ -70,7 +75,7 @@ function apiAxios (method, name, params, success, failure) {
   .catch(function (err) {
     let res = err.response
     if (err) {
-      console.log('api error, HTTP CODE: ' + res.status)
+      console.log('api error, HTTP CODE: ' + res)
       // window.alert('api error, HTTP CODE: ' + res.status)
     }
   })

@@ -17,21 +17,21 @@
 </style>  
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="订单编号"  class='bill-search-class'>
+                <Form-item label="合同编号" prop="orderNum"  class='bill-search-class'>
                     <i-input 
                         v-model="formItem.orderNum" 
-                        placeholder="请输入订单编号"
+                        placeholder="请输入合同编号"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="客户名称" class='bill-search-class'>
+                <Form-item label="客户名称" prop="customerName" class='bill-search-class'>
                     <i-input 
                         v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="社区名称" class='bill-search-class'> 
+                <Form-item label="社区名称" prop="communityName" class='bill-search-class'> 
                     <Select 
                         v-model="formItem.communityName" 
                         placeholder="请输入社区名称" 
@@ -47,7 +47,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单类型" class='bill-search-class' v-show='type'>
+                <Form-item label="合同类型" prop="orderType" class='bill-search-class' v-show='type'>
                     <Select 
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
@@ -62,10 +62,10 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单状态" class='bill-search-class'>
+                <Form-item label="合同状态" prop="orderStatus" class='bill-search-class'>
                     <Select 
                         v-model="formItem.orderStatus" 
-                        placeholder="请输入订单状态" 
+                        placeholder="请输入合同状态" 
                         style="width: 252px"
                     >
                         <Option 
@@ -73,21 +73,6 @@
                             :value="item.value" 
                             :key="item.value"
                          >
-                            {{ item.label }}
-                        </Option>
-                   </Select> 
-                </Form-item>
-                    <Form-item label="支付状态" class='bill-search-class' v-show='type'>
-                    <Select 
-                        v-model="formItem.payStatus" 
-                        placeholder="请输入支付状态" 
-                        style="width: 252px"
-                    >
-                        <Option 
-                            v-for="item in payList" 
-                            :value="item.value" 
-                            :key="item.value"
-                        >
                             {{ item.label }}
                         </Option>
                    </Select> 
@@ -105,9 +90,10 @@
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
-                    ></DatePicker> 
-                    <div style='color:red;' v-show='dateError'>开始日期不能大于结束日期</div>  
+                    ></DatePicker>   
+                    <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
              </Form-item>
+            
          </Form>
 </template>
 <script>
@@ -115,6 +101,7 @@
     export default{
         props:['mask'],
         data (){
+            
             return{
                 dateError:false,
                 formItem:{
@@ -127,6 +114,7 @@
                    cEndDate:'',
                    cStartDate:''
                 },
+               
                 type:this.mask=='join'?true:false,
                 orderList:[
                     {
@@ -141,20 +129,6 @@
                         value:'INVALID',
                         label:'已作废'
                     }
-                ],
-                payList:[
-                   {
-                        value:'WAIT_PAY',
-                        label:'待支付'
-                    },
-                    {
-                        value:'COMPLETE',
-                        label:'已付清'
-                    },
-                    {
-                        value:'UN_COMPLETE',
-                        label:'未付清'
-                    } 
                 ],
                 typeList:[
                     {

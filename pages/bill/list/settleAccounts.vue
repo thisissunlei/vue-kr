@@ -34,13 +34,40 @@
 	</div>
 </template>
 <script>
+import axios from 'kr/axios';
+
 	export default {
 		name:'settleAccounts',
+		props:['detail'],
 		data (){
 			return{
 				amount:'200',
 				value:''
 			}
+		},
+		methods:{
+			getAmount(){
+				let params={
+					customerId:this.detail.customerId
+				};
+				axios.get('get-balance', params, r => {
+                    this.amount=r.data.balance;
+                }, e => {
+                    console.log('error',e)
+                })
+			},
+		},
+		watch: {
+			$props: {
+			deep: true,
+			handler(nextProps) {
+				//xxx
+				console.log("nextProps",nextProps);
+				console.log("this.detail.customerId",this.detail.customerId)
+				this.getAmount()
+			}
 		}
+  }
+		
 	}
 </script>

@@ -41,6 +41,11 @@ module.exports = {
     url: 'krspace-pay/bill/release?',
     method: 'get'
   },
+  //获取客户
+  'get-customer': {
+      url: 'krspace-finance-web/customer/my-customers?',
+      method: 'get'
+  },
   //批量结算
   'batch-pay': {
     url: 'krspace-pay/bill/batch-pay?',
@@ -58,12 +63,12 @@ module.exports = {
   },
   //账单结算查询
   'get-balance': {
-    url: 'krspace-pay/bill/get-balance?',
+    url: 'krspace-pay/wallet/get-balance?',
     method: 'get'
   },
   //账单详情
   'get-bill-detail': {
-    url: 'krspace-pay/bil/detail?',
+    url: 'krspace-pay/bill/detail?',
     method: 'get'
   },
   //回款列表
@@ -76,5 +81,11 @@ module.exports = {
     url: 'krspace-pay/payment/bind?',
     method: 'post'
   },
+  //账单中心--获取客户 
+  'getCompanyInfo':{
+    url:'/krspace-finance-web/member/csr-list?',
+    method:'get'
+},
+
 
 }

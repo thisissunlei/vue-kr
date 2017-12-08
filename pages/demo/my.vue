@@ -3,7 +3,7 @@
 
 
 <Message 
-    type="error" 
+    type="success" 
     :openMessage="openMessage"
     warn="描述原因，作废失败"
     v-on:changeOpen="onChangeOpen"
@@ -17,12 +17,17 @@
 
 <p @click="show">按钮</p>
 <selectCommunities></SelectCommunities>
-
+<searchCompany 
+    name="customerName"
+    style="width: 250px"
+    :onchange="onchange"
+></searchCompany>  
 
 </div>
   
 </template>
 <script>
+import searchCompany from '~/components/searchCompany';
 import Message from '~/components/Message';
 import planMap from '~/components/planMap.vue';
 import Dialog from '~/components/Dialog.vue';
@@ -33,7 +38,8 @@ export default {
         Message,
         planMap,
         Dialog,
-        SelectCommunities
+        SelectCommunities,
+        searchCompany
     },
     data(){
         return{
@@ -53,6 +59,11 @@ export default {
      submits:function(){
                 alert('haha')
             }
+     } ,
+    onchange(data){
+        console.log('date-------',data)
+    }
+	
   }
  
 }

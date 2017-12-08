@@ -7,9 +7,10 @@
                         v-model="params.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                        @on-change="changeCustomer"
+                        @on-change="lowerChange"
                     ></i-input>
                 </div>
+                <div class='m-search' @click="lowerSubmit">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
                   <span></span>   
                 </div> 
@@ -18,7 +19,7 @@
 
             <Table :columns="joinOrder" :data="joinData"></Table>
             <div style="margin: 10px;overflow: hidden">
-                    <Button type="primary">导出</Button>
+                    <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
                         <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
                     </div>
@@ -26,11 +27,13 @@
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
-                ok-text="确定"
-                cancel-text="取消"
                 width="660"
             >
-                <HeightSearch></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <div slot="footer">
+                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                </div>
             </Modal>
             <Modal
                 v-model="openNullify"
@@ -45,10 +48,12 @@
 
 
 <script>
-    import axios from '../../../plugins/http.js';
+    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
+    import CommonFuc from '~/components/commonFuc';
+    
 
     export default {
         name:'join',
@@ -59,6 +64,8 @@
         data () {
             
             return {
+                upperData:{},
+                upperError:false,
                 totalCount:1,
                 params:{
                     page:1,
@@ -105,22 +112,36 @@
                                 return <span class="u-txt-orange">增租服务订单</span>;
                             }else if(obj.row.orderType==='CONTINUE'){
                                 return <span class="u-txt-red">续租服务订单</span>;
-                            }else if(obj.row.orderType==='REDUCE'){
-                                return <span class="u-txt-orange">减租服务订单</span>;
-                            }else if(obj.row.orderType==='LEAVE'){
-                                return <span class="u-txt-red">退费离场服务订单</span>;
                             }
                         }
                     },
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '支付状态',
                         key: 'payStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT_PAY'){
+                                return <span class="u-txt">待支付</span>;
+                            }else if(obj.row.payStatus==='COMPLETE'){
+                                return <span class="u-txt-orange">已付清</span>;
+                            }else if(obj.row.payStatus==='UN_COMPLETE'){
+                                return <span class="u-txt-red">未付清</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -136,8 +157,8 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
+                           var btnRender=[
+                               h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -150,8 +171,22 @@
                                             this.openView(params)
                                         }
                                     }
-                                }, '查看'),
-                                h('Button', {
+                                }, '查看'), h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openApplication(params)
+                                        }
+                                    }
+                                }, '申请合同')];
+                           if(params.row.orderStatus=='未生效'){
+                               btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -178,22 +213,9 @@
                                             this.openEdit(params)
                                         }
                                     }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
-                                    }
-                                }, '申请合同')
-                            ]);  
+                                }, '编辑'))
+                           }
+                           return h('div',btnRender);  
                         }
                     }
                 ]
@@ -203,12 +225,18 @@
             this.getListData(this.params);
         },
         methods:{
-            showSearch (params) {
-                this.openSearch=true;
+            showSearch () {
+                this.openSearch=!this.openSearch;
+                CommonFuc.clearForm(this.upperData);
             },
             openView(params){
-                location.href=`./12/joinView`;
-                //location.href=`./watchView/${params.orderId}`;
+                location.href=location.href+`/12/joinView`;
+                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
+                    location.href=location.href+`/${params.row.id}/joinView`;
+                }
+                if(params.row.orderType=='CONTINUE'){
+                    location.href=location.href+`/${params.row.id}/renewView`;
+                }*/
             },
             openCancel(params){
                 this.openNullify=true;
@@ -222,14 +250,15 @@
             nullifySubmit (){
                 console.log('作废');
             },
-            heighSubmit (params){
-                console.log('高级',params);
+            outSubmit (){
+                console.log('导出');
             },
             getListData(params){
                 var _this=this;
                 axios.get('join-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
+                    _this.openSearch=false;
                 }, e => {
                     _this.$Message.info(e);
                 })   
@@ -239,12 +268,24 @@
                 params.page=index;
                 this.getListData(params);
             },
-            changeCustomer(param){
-                let params=this.params;
-                params.customerName=param.target.value;
-                this.getListData(params);
+            lowerChange(param){
+                this.params.customerName=param.target.value;
+            },
+            lowerSubmit(){
+                this.getListData(this.params);
+            },
+            upperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
+            },
+            upperSubmit(){
+                if(this.upperError){
+                    return ;
+                }
+                this.params=Object.assign({},this.params,this.upperData);
+                this.getListData(this.params);
             }
-        },
+        }
     }
 </script>
 
@@ -257,10 +298,15 @@
         span{
             width:22px;
             height:22px;
-            background:url(images/upperSearch.png) no-repeat center;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
             cursor:pointer;
         }
     }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
 </style>

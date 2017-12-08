@@ -47,11 +47,12 @@
                ></Input> 
             </FormItem>
             <FormItem label="客户名称" class="u-input">
-               <Input 
+                 <Input 
                     v-model="formItem.customerName" 
                     placeholder="请输入客户名称" 
                     style="width: 250px"
-               ></Input>  
+               ></Input>
+               
             </FormItem>
             
             <FormItem label="社区名称" class="u-input">
@@ -111,8 +112,12 @@
 </div>
 </template>	
 <script>
+
 export default{
     name:'highSearch',
+    components:{
+       
+    },
     data (){
 		return{
 			formItem:{
@@ -150,7 +155,10 @@ export default{
                 }
             ]
 		}
-	}
+    },
+    methods:{
+        
+    }
 	
 }
 </script>

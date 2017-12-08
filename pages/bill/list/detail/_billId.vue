@@ -18,19 +18,21 @@
 				{{basicInfo.billNo}}
 			</labelText>	
 			<labelText label="账单类型：">
-				{{billType}}
+				{{basicInfo.billType}}
 			</labelText>
 			<labelText label="客户名称：">
-				{{basicInfo.customerName}}
+				<a href="">
+					{{basicInfo.customerName}}
+				</a>
 			</labelText>
 			<labelText label="社区名称：">
 				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="付款截止日期：">
-				{{billEndTime}}
+				{{basicInfo.billEndTime}}
 			</labelText>
 			<labelText label="账单状态：">
-				{{billStatus}}
+				{{basicInfo.billStatus}}
 			</labelText>
 			<labelText label="账单总金额：">
 				{{basicInfo.amount}}
@@ -39,7 +41,7 @@
 				{{basicInfo.paidAmount}}
 			</labelText>
 			<labelText label="账单生成时间：">
-				{{createTime}}
+				{{basicInfo.createTime}}
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
@@ -52,7 +54,7 @@
 </div>
 </template>
 <script>
-import axios from '~/plugins/http.js';
+import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import sectionTitle from '~/components/sectionTitle.vue';
@@ -66,6 +68,9 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
+			costInfo:[],
+			settleInfo:[],
 			cost:[
 				{
 				 title: '订单编号',
@@ -126,97 +131,39 @@ export default {
 		}
 	},
 	created:function(){
-		//假数据--开始
-		this.basicInfo={
-		};
-		this.costInfo=[{
-				orderNo:'02201711121111110001',
-				remark:'地球会议室创业大街社区，预订时段：2017-11-11 11：00 ~2017-11-11…',
-				amount:'￥300.00'
-		}]
-		this.settleInfo=[
-			{
-				id:'HYSZD201712010001',
-				srcType:'BALANCE',
-				createTime:1511404234000,
-				amount:'￥100.00',
-				createrName:'啦啦啦'
-			},
-			{
-				id:'HYSZD201712010001',
-				srcType:'PAYONLINE',
-				createTime:1509372919000,
-				amount:'￥200.00',
-				createrName:'哈哈'
-			},
-			{
-				id:'HYSZD201712010001',
-				srcType:'BALANCE',
-				createTime:1505704034000,
-				amount:'￥300.00',
-				createrName:'坚实的积分'
-			}
-		]
-		let billType='MEETING';
-		let billStatus='WAIT';
-		this.billEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1511404234000));
-		this.createTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1509372919000));
-		
-		if(billType=='MEETING'){
-			this.billType='会议室账单';
-		}else if (billType=='PRINT'){
-			this.billType='打印服务账单';
-		}else if (billType=='CONTRACT'){
-			this.billType='工位服务订单';
-		}
-		if(billStatus=='WAIT'){
-			this.billStatus='待付款';
-		}else if (billStatus=='PAID'){
-			this.billStatus='已付清';
-		}else if (billStatus=='PAYMENT'){
-			this.billStatus='未付清';
-		}
-		//假数据--结束
-			
 		this.getInfo();
-		
-		
 	},
 	methods:{
 		getInfo(){
 			var _this=this;
-			let {params}=this.$route
+			let {params}=this.$route;
 			let from={
-				orderId:params.orderId
+				billId:params.billId
 			};
-			axios.get('order-detail', from, r => {
-				console.log('r', r);
+			axios.get('get-bill-detail', from, r => {
 				let data=r.data;
-				_this.basicInfo=data;
-				_this.coseInfo=data.feeList
-				_this.settleInfo=data.billList;
-				_this.billEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.billEndTime));
-				_this.createTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.createTime));
-				
-				if(data.billType=='MEETING'){
-					_this.billType='会议室账单';
-				}else if (data.billType=='PRINT'){
-					_this.billType='打印服务账单';
-				}else if (data.billType=='CONTRACT'){
-					_this.billType='工位服务订单';
+				if(data.bizType=='MEETING'){
+					data.billType='会议室账单';
+				}else if (data.bizType=='PRINT'){
+					data.billType='打印服务账单';
+				}else if (data.bizType=='CONTRACT'){
+					data.billType='工位服务订单';
 				}
-				if(data.billStatus=='WAIT'){
-					_this.billStatus='待付款';
-				}else if (data.billStatus=='PAID'){
-					_this.billStatus='已付清';
-				}else if (data.billStatus=='PAYMENT'){
-					_this.billStatus='未付清';
+				if(data.payStatus=='WAIT'){
+					data.billStatus='待付款';
+				}else if (data.payStatus=='PAID'){
+					data.billStatus='已付清';
+				}else if (data.payStatus=='PAYMENT'){
+					data.billStatus='未付清';
 				}
-                
+				this.basicInfo=data;
+				this.costInfo=data.feeList;
+				this.settleInfo=data.payList;
            	}, e => {
                 console.log('error',e)
-            })
-		},
+			})
+			
+		}
 	}
 
 

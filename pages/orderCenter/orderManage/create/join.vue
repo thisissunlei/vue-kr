@@ -42,6 +42,36 @@
                 background-color: #499df1;
                 color: #fff;
             }
+            .discount-table-head{
+                background: #F5F6FA;
+                height:50px;
+                line-height:50px;
+                text-align:center;
+                font-weight: 500;
+                border:1px solid #e9eaec;
+                border-left:none;
+                border-right:none;
+                // border-left:1px solid #e9eaec;
+                
+            }
+            .discount-table-content{
+                background: #fff;
+                padding:0 15px;
+                height:50px;
+                line-height:50px;
+                text-align:center;
+                // border-left:1px solid #e9eaec;
+                // border-bottom:1px solid #e9eaec;
+            }
+            .lastRow{
+                border-bottom:1px solid #e9eaec;   
+                margin-bottom: 0;             
+            }
+            // .row-table{
+            //     border:1px solid #e9eaec;
+            //     border-top:none;
+            //     border-bottom:none
+            // }   
         }
     }
 
@@ -125,25 +155,25 @@
                 </Col>
 
                 </Row>
-                <Row class="row-table">
-                    <Col span="1" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                <Row >
+                    <Col span="1" class="discount-table-head"  >
                         <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
-                    <Col span="6" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" class="discount-table-head" >
                        <span> 优惠类型</span>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>开始时间</span>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>结束时间</span>
                         
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>折扣</span>
                         
                     </Col>
-                    <Col span="5" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
                         <span>优惠金额</span>
                     </Col>
                     
@@ -151,35 +181,46 @@
                     <FormItem
                 v-for="(item, index) in formItem.items"
                 :key="index"
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row>
-                 <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
+            <Row v-bind:class="{lastRow:index==formItem.items.length-1}">
+                 <Col span="1" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
-                    <Col span="6" style="background: #fff;padding:0 15px;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" @on-change="changeType">
                             <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px" ></DatePicker>
+                    <Col span="4" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="4" class="discount-table-content">
                         <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                     </Col>
-                    <Col span="5" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="5" class="discount-table-content">
                         <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
                         <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="4" class="discount-table-content" style="border-right:1px solid #e9eaec;">
                         <Input v-model="item.money" placeholder="金额" disabled></Input>
                     </Col>   
             </Row>
         </FormItem>
+                 <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <div class="total-money" v-if="formItem.items.length">
+                        <span>服务费总计</span>
+                        <span class="money">12,000.00 </span>
+                        <span class="money">壹万两仟元整</span>
+                    </div>
+                    </Col>
+                </Row>
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">

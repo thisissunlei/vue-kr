@@ -38,24 +38,36 @@ import axios from 'kr/axios';
 
 	export default {
 		name:'settleAccounts',
+		props:['detail'],
 		data (){
 			return{
 				amount:'200',
 				value:''
 			}
 		},
-		created:function(){
-            this.getAmount();
-        },
 		methods:{
 			getAmount(){
-				let params={};
-				axios.get('get-bill-list', params, r => {
-                    this.amount=r.data.items;
+				let params={
+					customerId:this.detail.customerId
+				};
+				axios.get('get-balance', params, r => {
+                    this.amount=r.data.balance;
                 }, e => {
                     console.log('error',e)
                 })
 			},
+		},
+		watch: {
+			$props: {
+			deep: true,
+			handler(nextProps) {
+				//xxx
+				console.log("nextProps",nextProps);
+				console.log("this.detail.customerId",this.detail.customerId)
+				this.getAmount()
+			}
 		}
+  }
+		
 	}
 </script>

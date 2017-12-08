@@ -23,7 +23,7 @@
 <template>
 	<div class="u-wrap">
 		<div class="u-text">
-			结账金额：<span class="u-txt-red">￥{{amount}}</span>	
+			结账金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>	
 		</div>
 		 <Input 
 		 	v-model="value" 
@@ -38,21 +38,17 @@ import axios from 'kr/axios';
 
 	export default {
 		name:'antiSettlement',
+		props:['detail'],
 		data (){
 			return{
-				amount:'300',
 				value:'',
 			}
 		},
-		created:function(){
-            this.getAmount();
-        },
 		methods:{
 			getAmount(){
 				let params={};
 				axios.get('get-bill-list', params, r => {
                     this.amount=r.data.items;
-                    
                 }, e => {
                     console.log('error',e)
                 })

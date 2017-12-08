@@ -1,5 +1,7 @@
 //引入apis
 import APIS from '../assets/apis/index';
+
+import Qs from 'qs';
 // 引用axios
 var axios = require('axios')
 // 自定义判断元素类型JS
@@ -41,13 +43,20 @@ function apiAxios (method, name, params, success, failure) {
   if(url.indexOf('mockjs') !==-1){
        root='http://rap.krspace.cn';
   }
+
   axios({
     method: method,
     url: url,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
-    withCredentials: false
+    withCredentials: false,
+    transformRequest:[function (data) {
+      data = Qs.stringify(data);
+      return data;
+    }],
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    
   })
   //success
   .then(function (res) {

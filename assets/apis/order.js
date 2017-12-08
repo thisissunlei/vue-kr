@@ -30,11 +30,6 @@ module.exports = {
       url: 'krspace-finance-web/customer/my-customers?',
       method: 'get'
   },
-  //获取反结算信息
-  'get-release': {
-    url: 'krspace-pay/bill/release?',
-    method: 'get'
-  },
   //批量结算
   'batch-pay': {
     url: 'krspace-pay/bill/batch-pay?',
@@ -52,7 +47,7 @@ module.exports = {
   },
   //账单结算查询
   'get-balance': {
-    url: 'krspace-pay/bill/get-balance?',
+    url: 'krspace-pay/wallet/get-balance?',
     method: 'get'
   },
   //账单详情

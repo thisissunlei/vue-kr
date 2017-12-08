@@ -40,6 +40,9 @@
         margin-top: 34px;
         margin-bottom: 36px;
 }
+.ivu-modal-footer{
+    border:none;
+}
 
 </style>
 
@@ -75,10 +78,8 @@
         cancel-text="取消"
         width="443"
      >
-       <settleAccounts> </settleAccounts>
-       <div slot="footer" style="border:none;">
-		
-	   </div>
+       <settleAccounts :detail="itemDetail"> </settleAccounts>
+       <div slot="footer" style="border:none;"></div>
     </Modal>
     <Modal
         v-model="openAntiSettle"
@@ -87,7 +88,7 @@
         cancel-text="取消"
         width="443"
      >
-       <antiSettlement> </antiSettlement>
+       <antiSettlement :detail="itemDetail"> </antiSettlement>
        <div slot="footer" style="border:none;">
 		
 	   </div>
@@ -130,6 +131,7 @@ import sectionTitle from '~/components/sectionTitle';
                 openClose:false,
                 billList:[],
                 billIds:[],
+                itemDetail:{},
                 tabParams:{
                     page:1,
                     pageSize:15
@@ -323,10 +325,13 @@ import sectionTitle from '~/components/sectionTitle';
                 location.href=`./list/detail/${params.billId}`;
             },
             showSettle (params) {
+                this.itemDetail=params;
+                console.log('params===',params)
                 this.openSettle=true;
                 
             },
             showAntiSettle(params){
+                this.itemDetail=params;
                 this.openAntiSettle=true;
             },
             onExport(){
@@ -352,7 +357,10 @@ import sectionTitle from '~/components/sectionTitle';
                      this.openClose=true; 
                      return;  
                 }
-                axios.post('batch-pay',{billIds:this.billIds} , r => {
+                let params={
+                    billIds:this.billIds
+                }
+                axios.post('batch-pay',{billIds:1} , r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {

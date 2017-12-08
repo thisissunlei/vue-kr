@@ -249,7 +249,7 @@ import sectionTitle from '~/components/sectionTitle';
             }
         },
         created:function(){
-            this.getTableData();
+            this.getTableData(this.tabParams);
         },
         methods:{
             showSearch (params) {
@@ -272,12 +272,8 @@ import sectionTitle from '~/components/sectionTitle';
             onSelectList(data){
                 //console.log('date====>>>>>0000',data)
             },
-            getTableData(){
+            getTableData(params){
                 let data = [];
-                let params={
-                    page:1,
-                    pageSize:15
-                };
                 axios.get('get-bill-list', params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;

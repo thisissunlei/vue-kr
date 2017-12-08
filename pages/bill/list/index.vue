@@ -180,14 +180,14 @@ import sectionTitle from '~/components/sectionTitle';
                     },
                     {
                         title: '账单状态',
-                        key: 'billPayStatus',
+                        key: 'payStatus',
                         align:'center',
                         render(h, obj){
-                                if(obj.row.billPayStatus==='WAIT'){
+                                if(obj.row.payStatus==='WAIT'){
                                     return <span class="u-txt-red">待付款</span>;
-                                }else if(obj.row.billPayStatus==='PAID'){
+                                }else if(obj.row.payStatus==='PAID'){
                                     return <span class="u-txt">已付款</span>;
-                                }else if(obj.row.billPayStatus==='PAYMENT'){
+                                }else if(obj.row.payStatus==='PAYMENT'){
                                     return <span class="u-txt-orange">未付清</span>;
                                 }
                             }
@@ -198,6 +198,7 @@ import sectionTitle from '~/components/sectionTitle';
                         align:'center',
                         width:135,
                         render:(h,params)=>{
+                            console.log('=======>>>>',params)
                            return h('div', [
                                 h('Button', {
                                     props: {
@@ -256,8 +257,7 @@ import sectionTitle from '~/components/sectionTitle';
                 this.openSearch=true;
             },
             openView(params){
-                console.log('params====>>>>',params)
-                 //location.href=`./detail/${params.billId}`;
+                location.href=`./list/detail/${params.billId}`;
             },
             showSettle (params) {
                 this.openSettle=true;
@@ -273,15 +273,12 @@ import sectionTitle from '~/components/sectionTitle';
                 //console.log('date====>>>>>0000',data)
             },
             getTableData(params){
-                let data = [];
                 axios.get('get-bill-list', params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)
                 })
-                  
-                return data;
             },
             
         }

@@ -149,11 +149,11 @@ export default {
 				}else if (data.bizType=='CONTRACT'){
 					data.billType='工位服务订单';
 				}
-				if(data.billPayStatus=='WAIT'){
+				if(data.payStatus=='WAIT'){
 					data.billStatus='待付款';
-				}else if (data.billPayStatus=='PAID'){
+				}else if (data.payStatus=='PAID'){
 					data.billStatus='已付清';
-				}else if (data.billPayStatus=='PAYMENT'){
+				}else if (data.payStatus=='PAYMENT'){
 					data.billStatus='未付清';
 				}
 				this.basicInfo=data;

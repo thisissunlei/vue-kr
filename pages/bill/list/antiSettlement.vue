@@ -34,6 +34,8 @@
 	</div>
 </template>
 <script>
+import axios from 'kr/axios';
+
 	export default {
 		name:'antiSettlement',
 		data (){
@@ -41,6 +43,20 @@
 				amount:'300',
 				value:'',
 			}
+		},
+		created:function(){
+            this.getAmount();
+        },
+		methods:{
+			getAmount(){
+				let params={};
+				axios.get('get-bill-list', params, r => {
+                    this.amount=r.data.items;
+                    
+                }, e => {
+                    console.log('error',e)
+                })
+			},
 		}
 	}
 </script>

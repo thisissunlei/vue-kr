@@ -78,14 +78,14 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block"></DatePicker>
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                     
                 </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" ></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -162,8 +162,7 @@
                             <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
-                       <DatePicker type="date" placeholder="开始时间" v-if="item.type !== 'qianmian'" v-model="item.beginDate" ></DatePicker>
+                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
                     </Col>
                     <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
@@ -582,6 +581,10 @@ import dateUtils from 'vue-dateutils';
                     deleteData:[],
                 };
 
+            },
+            changeTime:function(){
+                console.log('=changeTime========')
+                this.clearStation()
             },
                     
                

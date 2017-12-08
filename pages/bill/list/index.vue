@@ -13,6 +13,9 @@
             
             }
     }
+    .ivu-checkbox-wrapper{
+        margin-right:0;
+    }
     .ivu-table-cell{
         padding:0;
     }
@@ -48,13 +51,13 @@
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
-                <Page :total="pageSize" show-total show-elevator></Page>
+                <Page :total="totalCount" show-total show-elevator></Page>
             </div>
         </div>
     </div>
      <Modal
         v-model="openSearch"
-        title="高级搜索"
+        title="高级查询"
         ok-text="确定"
         cancel-text="取消"
         width="660"
@@ -90,11 +93,12 @@
 
 
 <script>
-import HighSearch from './billHighSearch';
+import axios from 'kr/axios';
+import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
-import sectionTitle from '~/components/sectionTitle.vue';
+import sectionTitle from '~/components/sectionTitle';
 
     export default {
         name: 'Bill',
@@ -106,27 +110,32 @@ import sectionTitle from '~/components/sectionTitle.vue';
         },
         data () {
             return {
-                pageSize:1,
+                totalCount:0,
                 openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,
+                billList:[],
+                tabParams:{
+                    page:1,
+                    pageSize:15
+                },
                 columns1: [
                     {
                         type: 'selection',
-                        width: 50,
+                        width: 35,
                         align: 'center'
                     },
                     {
                         title: '账单编号',
                         key: 'billNo',
                         align:'center',
-                        width:160
+                        width:115
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        width:100
+                        width:190
                     },
                     {
                         title: '社区名称',
@@ -136,15 +145,15 @@ import sectionTitle from '~/components/sectionTitle.vue';
                     },
                     {
                         title: '账单类型',
-                        key: 'billType',
+                        key: 'bizType',
                         align:'center',
-                        width:110,
+                        width:90,
                         render(h, obj){
-                            if(obj.row.billType==='MEETING'){
+                            if(obj.row.bizType==='MEETING'){
                                 return '会议室账单';
-                            }else if(obj.row.billType==='PRINT'){
+                            }else if(obj.row.bizType==='PRINT'){
                                 return '打印服务账单 ';
-                            }else if(obj.row.billType==='CONTRACT'){
+                            }else if(obj.row.bizType==='CONTRACT'){
                                 return '工位服务订单';
                             }
                         }
@@ -156,14 +165,14 @@ import sectionTitle from '~/components/sectionTitle.vue';
                     },
                     {
                         title: '结账金额',
-                        key: 'payAmount',
+                        key: 'paidAmount',
                         align:'center'
                     },
                     {
                         title: '付款截止日期',
                         key: 'billEndTime',
                         align:'center',
-                        width:110,
+                        width:90,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
                             return time;
@@ -171,7 +180,7 @@ import sectionTitle from '~/components/sectionTitle.vue';
                     },
                     {
                         title: '账单状态',
-                        key: 'billStatus',
+                        key: 'payStatus',
                         align:'center',
                         render(h, obj){
                                 if(obj.row.payStatus==='WAIT'){
@@ -187,52 +196,101 @@ import sectionTitle from '~/components/sectionTitle.vue';
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:170,
+                        width:135,
                         render:(h,params)=>{
-                           return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showSettle(params.row)
-                                        }
-                                    }
-                                }, '结账'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showAntiSettle(params.row)
-                                        }
-                                    }
-                                }, '反结账')
-                            ]);  
+                            if(params.row.payStatus==='PAYMENT'){
+                                 return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            }, '反结账')
+                                        ]);  
+                            }else if(params.row.payStatus==='PAID'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看')
+                                        ]);
+                            }else if(params.row.payStatus==='WAIT'){
+                                return h('div', [
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openView(params.row)
+                                                    }
+                                                }
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },on: {
+                                                    click: () => {
+                                                        this.showSettle(params.row)
+                                                    }
+                                                }
+                                            }, '结账')
+                                        ]);
+                            }
                         }
                     }
                 ]
@@ -240,55 +298,14 @@ import sectionTitle from '~/components/sectionTitle.vue';
             }
         },
         created:function(){
-            this.billList=[
-			{
-                orderId:'44',
-				billNo:'HYSZD201712010001',
-				billType:'MEETING',
-				billStartTime:1511404234000,
-				billEndTime:1511063377000,
-                payStatus:'WAIT',
-                customerName:'绝地反',
-                communityName:'创业大街社区',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'45',
-				billNo:'HYSZD201712010001',
-				billType:'PRINT',
-				billStartTime:1509372919000,
-				billEndTime:1509372919000,
-				payStatus:'PAID',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'46',
-				billNo:'HYSZD201712010001',
-				billType:'CONTRACT',
-				billStartTime:1505704034000,
-				billEndTime:1505704034000,
-				payStatus:'PAYMENT',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			}
-		]
-           
-           
-            
+            this.getTableData(this.tabParams);
         },
         methods:{
             showSearch (params) {
                 this.openSearch=true;
             },
             openView(params){
-                 //location.href=`./billDetail/${params.orderId}`;
-                 location.href='./billDetail/12';
+                location.href=`./list/detail/${params.billId}`;
             },
             showSettle (params) {
                 this.openSettle=true;
@@ -301,8 +318,16 @@ import sectionTitle from '~/components/sectionTitle.vue';
                  console.log('导出')
             },
             onSelectList(data){
-                console.log('date====>>>>>0000',data)
-            }
+                //console.log('date====>>>>>0000',data)
+            },
+            getTableData(params){
+                axios.get('get-bill-list', params, r => {
+                    this.billList=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+            },
             
         }
 

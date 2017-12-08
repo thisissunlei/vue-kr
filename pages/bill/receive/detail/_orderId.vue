@@ -16,59 +16,44 @@
 </style>
 <template>
 <div class="g-order-detail">
-	<sectionTitle label="会议室订单详情"></sectionTitle>
+	<sectionTitle label="回款详情"></sectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
-			<labelText label="订单编号：">
+			<labelText label="回款流水号：">
 				{{basicInfo.orderNo}}
 			</labelText>
-			<labelText label="订单状态：">
+			<labelText label="回款方式：">
 				{{basicInfo.orderStatus}}
-			</labelText>
-			<labelText label="预订会议室名称：">
-				{{basicInfo.roomName}}
-			</labelText>
-			<labelText label="订单总额：">
-				{{basicInfo.totalAmount}}
-			</labelText>
-			<labelText label="预订开始时间：">
-				{{orderStartTime}}
-				
-			</labelText>
-			<labelText label="预订结束时间：">
-				{{orderEndTime}}
-			</labelText>
-			<labelText label="会议室所在社区名称：">
-				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="客户名称：">
 				<a href="">
-					{{basicInfo.customerName}}
+					{{basicInfo.roomName}}
 				</a>
 			</labelText>
-			<labelText label="订单创建人员：">
-				<a href="">
-				{{basicInfo.createrName}}
-				</a>
+			<labelText label="付款账号：">
+				{{basicInfo.totalAmount}}
 			</labelText>
-			<labelText label="订单创建时间：">
-				{{cTime}}
+			<labelText label="回款金额：">
+				{{orderStartTime}}
 			</labelText>
-			<labelText label="支付状态：">
-				{{payStatus}}
+			<labelText label="回款时间：">
+				{{orderEndTime}}
+			</labelText>
+			<labelText label="社区名称：">
+				{{basicInfo.communityName}}
+			</labelText>
+			<labelText label="我司收款账号：">
+				{{basicInfo.customerName}}
 			</labelText>
 		</DetailStyle>
-		<DetailStyle info="费用明细">
-			<Table border :columns="cost" :data="costInfo"></Table>
-		</DetailStyle>
-		<DetailStyle info="相关账单">
-			<Table border :columns="bill" :data="billInfo"></Table>
+		<DetailStyle info="操作记录">
+			<Table border :columns="operation" :data="operationInfo"></Table>
 		</DetailStyle>
 	</div>
 </div>	
 </template>
 <script>
-import axios from '~/plugins/http.js';
+import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import sectionTitle from '~/components/sectionTitle.vue';
@@ -82,67 +67,30 @@ export default {
 	},
 	data(){
 		return{
-			cost:[
+			operation:[
 				{
-				 title: '订单总额',
-                 key: 'totalAmount',
-                 align:'center'	
+					title: '序号',
+					key: 'billNo',
+					align:'center'	
 				},
 				{
-				 title: '退款金额',
-                 key: 'refundAmount',
-                 align:'center'	
-				}
-			],
-			bill:[
-				{
-				 title: '账单编号',
-                 key: 'billNo',
-                 align:'center'	
-				},
-				{
-				 title: '账单类型',
-                 key: 'billType',
-				 align:'center'	,
-				 render(h, obj){
-					if(obj.row.billType==='MEETING'){
-						return '会议室账单';
-					}else if(obj.row.billType==='PRINT'){
-						return '打印服务账单 ';
-					}else if(obj.row.billType==='CONTRACT'){
-						return '工位服务订单';
+					title: '操作时间',
+					key: 'billStartTime',
+					align:'center'	,
+					render(h, obj){
+						let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
+						return time;
 					}
-				 }
 				},
 				{
-				 title: '账单生成日期',
-                 key: 'billStartTime',
-				 align:'center'	,
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
-					 return time;
-				 }
+					title: '操作人',
+					key: 'billNo',
+					align:'center'	
 				},
 				{
-				 title: '付款截止日期',
-                 key: 'billEndTime',
-				 align:'center'	,
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-					 return time;
-				 }
-				},
-				{
-				 title: '账单状态',
-                 key: 'payStatus',
-				 align:'center'	,
-				 render(h, obj){
-						if(obj.row.payStatus==='WAIT'){
-							return <span class="u-txt-red">待付款</span>;
-						}else if(obj.row.payStatus==='PAID'){
-							return <span class="u-txt">已付款</span>;
-						}
-				 	}
+					title: '操作内容',
+					key: 'billNo',
+					align:'center'	
 				}
 			]
 		}

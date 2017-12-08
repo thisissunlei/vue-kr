@@ -13,7 +13,7 @@ module.exports = {
   //订单中心-订单作废
  'cancel-order': {
       url: '/krspace-op-web/order/metting-room/cancel?',
-      method: 'get'
+      method: 'post'
   },
    //订单中心-订单列表
  'order-list': {
@@ -38,7 +38,7 @@ module.exports = {
   //批量结算
   'batch-pay': {
     url: 'krspace-pay/bill/batch-pay?',
-    method: 'get'
+    method: 'post'
   },
   //获取账单列表
   'get-bill-list': {
@@ -48,7 +48,7 @@ module.exports = {
   //账单结算
   'bill-pay': {
     url: 'krspace-pay/bill/pay?',
-    method: 'get'
+    method: 'post'
   },
   //账单结算查询
   'get-balance': {
@@ -57,7 +57,24 @@ module.exports = {
   },
   //账单详情
   'get-bill-detail': {
-    url: 'krspace-pay/bil/detail?',
+    url: 'krspace-pay/bill/detail?',
     method: 'get'
   },
+  //回款列表
+  'get-payment-list': {
+    url: 'krspace-pay/payment/list?',
+    method: 'get'
+  },
+  //绑定客户
+  'payment-bind': {
+    url: 'krspace-pay/payment/bind?',
+    method: 'post'
+  },
+  //账单中心--获取客户 
+  'getCompanyInfo':{
+    url:'/krspace-finance-web/member/csr-list?',
+    method:'get'
+},
+
+
 }

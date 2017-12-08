@@ -1,52 +1,41 @@
 <style lang="less">
-.g-bill-detail{
-		.m-detail-content{
-			padding:30px 24px;
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-		}
-
+.g-income-detail{
+	.m-detail-content{
+		padding:30px 24px;
 	}
+}
 </style>
 <template>
-<div class="g-bill-detail">
-	<sectionTitle label="账单详情"></sectionTitle>
+<div class="g-income-detail">
+	<sectionTitle label="收入详情"></sectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
-			<labelText label="账单编号：">
+			<labelText label="收入编号：">
 				{{basicInfo.billNo}}
 			</labelText>	
-			<labelText label="账单类型：">
+			<labelText label="收入类型：">
 				{{billType}}
-			</labelText>
-			<labelText label="客户名称：">
-				{{basicInfo.customerName}}
 			</labelText>
 			<labelText label="社区名称：">
 				{{basicInfo.communityName}}
 			</labelText>
-			<labelText label="付款截止日期：">
-				{{billEndTime}}
+			<labelText label="客户名称：">
+				<a href="">
+					{{basicInfo.customerName}}
+				</a>
 			</labelText>
-			<labelText label="账单状态：">
-				{{billStatus}}
-			</labelText>
-			<labelText label="账单总金额：">
+			<labelText label="含税收入：">
 				{{basicInfo.amount}}
 			</labelText>
-			<labelText label="实际付款金额：">
+			<labelText label="收入确认时间：">
+				{{billEndTime}}
+			</labelText>
+			<labelText label="操作人员：">
 				{{basicInfo.paidAmount}}
 			</labelText>
-			<labelText label="账单生成时间：">
+			<labelText label="操作时间：">
 				{{createTime}}
 			</labelText>
-		</DetailStyle>
-		<DetailStyle info="费用明细">
-			<Table border :columns="cost" :data="costInfo"></Table>
-		</DetailStyle>	
-		<DetailStyle info="结算记录">
-			<Table border :columns="settle" :data="settleInfo"></Table>
 		</DetailStyle>
 	</div>
 </div>

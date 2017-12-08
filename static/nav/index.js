@@ -17,9 +17,22 @@
      * 查找被点击的数据
      */
     function getClickNav(arr,str) {
+        
         for(var i=0;i<arr.length;i++){
             var every = arr[i];
-            if(every.router === str){
+            var href = "";
+            if (location.hash.indexOf("#/") != -1) {
+                str = location.hash.split("#/")[1]
+                href = every.router;
+            } else {
+               
+                
+                href = "http://" + location.hostname + "/" + every.router;
+                console.log(href,str, "KKKKKKK")
+            }
+            
+            if (href === str){
+               
                 return every;
             }else{
                 if (every.menuItems && every.menuItems.length){
@@ -43,7 +56,7 @@
         
     }
     GlobalRouter.prototype.pushCloseRoutrs = function(){
-        var router = location.hash.split("#/")[1];
+        var router = location.href.split("#/")[1];
         if (navUtils.closeRoutrs.indexOf(router)==-1){
             navUtils.closeRoutrs.push(router)
         }
@@ -53,16 +66,16 @@
     };
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
-        if (location.hash.indexOf("#/")!=-1){
-            var router = location.hash.split("#/")[1];
+        
+            var router = location.href;
             // console.log(getClickNav([].concat(NavItems), router),"------")
             var activeData = getClickNav([].concat(NavItems), router);
+           
             navUtils.activeData = Object.assign({},activeData);
             var j_sidebar = document.getElementById('j_sidebar');
             var j_header = document.getElementById('j_header');
             var j_menu_btn = document.getElementById('j_menu_btn');
             var docBody = document.body;
-            console.log("++++++++++", navUtils.closeRoutrs.indexOf(router),router)            
             if (navUtils.closeRoutrs.indexOf(router)!=-1){
                 navUtils.isHome = true;
                 globalNav.allSwitch("false")
@@ -73,7 +86,7 @@
             j_sidebar.innerHTML = globalNav.getCreateSidebarHtmlStr();
             j_header.innerHTML = globalNav.getCreateHeaderHtmlStr();
            
-        }
+        
     };
     GlobalRouter.prototype.init = function () {
         window.addEventListener('load', this.refresh.bind(this), false);
@@ -142,7 +155,7 @@
     GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
         var sidebarNavs = Object.assign({},navUtils.activeData);
         var html = '';
-        var router = location.hash.split("#/")[1];
+        var router = location.href.split("#/")[1];
         if (!sidebarNavs) {
             return html;
         }   
@@ -193,12 +206,19 @@
         }
 
         navs.map(function (item) {
-            var href = item.router;
+            var href ="";
+           
+            console.log("hhhhhhhhhhh")
             if(item.menuItems && item.menuItems.length){
                 href = item.menuItems[0].menuItems[0].router;
             }
+            if (item.type && item.type == "vue") {
+                href = "http://" + location.hostname + "/" + href;
+            } else {
+                href = "#/" + href;
+            }
             
-            html += '<li class=' + (item.router == router ? 'active' : 'default') + '><a href="#/' + href + '" data-url = "' + href+'">' + item.primaryText + '</a></li>';
+            html += '<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
 
@@ -275,7 +295,6 @@
         var j_header = document.getElementById('j_header');
         var j_menu_btn = document.getElementById('j_menu_btn');
         var docBody = document.body;
-        console.log(isOpen,"IIIIIIIII")
         if ((isOpen && isOpen == "false")){
             j_sidebar.style.display = 'none';
             docBody.style.paddingLeft = '0px';
@@ -525,7 +544,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware()];
+        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware(),getOrderCenter()];
         
         return arr;
     }
@@ -1293,4 +1312,29 @@
                     },],
             }
     }
+    function getOrderCenter() {
+        return {
+            primaryText: "订单中心",
+            router: 'finance',
+            type:'vue',
+            menuItems: [
+                {
+                    primaryText: "订单合同",
+                    router: 'manage',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    menuItems: [
+                        {
+                            primaryText: "入驻合同管理",
+                            router: 'contractCenter/list',
+                            type:'vue',
+                            menuCode: 'fina_verify_page'
+                        },
+                    ]
+                },
+               
+            ]
+        }
+    }
+
 })(window);

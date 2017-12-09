@@ -57,12 +57,12 @@ module.exports = {
   },
   //回款列表
   'get-payment-list': {
-    url: 'krspace-pay/payment/list?',
+    url: '/krspace-pay/payment/list?',
     method: 'get'
   },
   //绑定客户
   'payment-bind': {
-    url: 'krspace-pay/payment/bind?',
+    url: '/krspace-pay/payment/bind?',
     method: 'post'
   },
   //账单中心--获取客户 

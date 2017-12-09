@@ -95,7 +95,7 @@ export default {
             return {
                 openSearch:false,
                 openBind:false,
-                tableData:this.getTableData(),
+                tableData:[],
                 totalCount:1,
                 pageSize:15,
                 params:{
@@ -198,18 +198,19 @@ export default {
             }
         },
         created:function(){
-            this.tableData=[
-                {
-                    thirdTradeNo:'0220171201100000001',
-                    customerName:'罗焘如',
-                    ctime:1505704034000,
-                    amount:'29000.00',
-                    payAccount:'0220171201100000001',
-                    receivceAccount:'0220171201100000001',
-                    payWay:'VALID'
+            this.getTableData();
+            // this.tableData=[
+            //     {
+            //         thirdTradeNo:'0220171201100000001',
+            //         customerName:'罗焘如',
+            //         ctime:1505704034000,
+            //         amount:'29000.00',
+            //         payAccount:'0220171201100000001',
+            //         receivceAccount:'0220171201100000001',
+            //         payWay:'VALID'
 
-                }
-            ]
+            //     }
+            // ]
         },
         methods:{
             showSearch (params) {
@@ -217,8 +218,8 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./receive/detail/${params.orderId}`;
-                location.href=`./receive/detail/12`
+                //location.href=`./payment/detail/${params.orderId}`;
+                location.href=`./payment/detail/12`
             },
             bindPerson (params) {
                 this.openBind=true;
@@ -242,11 +243,10 @@ export default {
             getTableData(index){
                 let data = [];
                 let params=this.params;
-                var _this=this;
-                axios.get('order-list', params, r => {
+                axios.get('get-payment-list', params, r => {
                     console.log('r', r);
-                    data=r.data;
-                    _this.totalCount=r.data.totalCount;
+                    this.tableData=r.data;
+                    this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)
                 })

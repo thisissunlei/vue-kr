@@ -56,7 +56,12 @@
      >
         <AddIncome v-on:formData="getAddData"></AddIncome>
     </Modal>
-    
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -67,12 +72,14 @@ import HighSearch from './highSearch';
 import dateUtils from 'vue-dateutils';
 import sectionTitle from '~/components/sectionTitle';
 import AddIncome from './addIncome';
+import Message from '~/components/Message';
     export default {
         name: 'income',
         components:{
             HighSearch,
             sectionTitle,
-            AddIncome
+            AddIncome,
+            Message
         },
         data () {
             return {
@@ -81,6 +88,9 @@ import AddIncome from './addIncome';
                 openSettle:false,
                 openAntiSettle:false,
                 openIncome:false,
+                openMessage:false,
+                MessageType:'success',
+                warn:'',
                 tabParams:{
                     page:1,
                     pageSize:15
@@ -198,11 +208,17 @@ import AddIncome from './addIncome';
                 let params=this.addData;
                 console.log('this.addData.dealDate',this.addData.dealDate)
                 axios.post('add-income', params, r => {
-                    this.$Modal.success(r.message)
+                    this.MessageType="success";
+                    this.warn="挂收入成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
                 }, e => {
-                    this.$Modal.error(e.message)
+                    
                 })
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            } ,
             
         }
 

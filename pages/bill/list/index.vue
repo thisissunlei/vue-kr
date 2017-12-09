@@ -66,9 +66,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
-        
+        @on-ok="searchSubmit"
      >
-        <HighSearch></HighSearch>
+        <HighSearch  v-on:formData="getSearchData"></HighSearch>
     </Modal>
     <Modal
         v-model="openSettle"
@@ -76,8 +76,12 @@
         ok-text="确定"
         cancel-text="取消"
         width="443"
+        @on-ok="settleSubmit"
      >
-       <settleAccounts :detail="itemDetail"> </settleAccounts>
+       <settleAccounts 
+            :detail="itemDetail"
+             v-on:formData="getSettleData"
+        > </settleAccounts>
     </Modal>
     <Modal
         v-model="openAntiSettle"
@@ -85,8 +89,12 @@
         ok-text="确定"
         cancel-text="取消"
         width="443"
+        @on-ok="antiSettleSubmit"
      >
-       <antiSettlement :detail="itemDetail"> </antiSettlement>
+       <antiSettlement 
+            :detail="itemDetail"
+            v-on:formData="getAntiSettleData"
+        > </antiSettlement>
     </Modal>
     <Modal
         v-model="openClose"
@@ -321,9 +329,7 @@ import sectionTitle from '~/components/sectionTitle';
             },
             showSettle (params) {
                 this.itemDetail=params;
-                console.log('params===',params)
                 this.openSettle=true;
-                
             },
             showAntiSettle(params){
                 this.itemDetail=params;
@@ -363,6 +369,39 @@ import sectionTitle from '~/components/sectionTitle';
                 })
 
             },
+            getSettleData(form){
+                this.settleData=form;
+            },
+            getAntiSettleData(form){
+                this.antiSettleData=form;
+            },
+            getSearchData(form){
+                this.searchData=form;
+            },
+            settleSubmit(){
+                let params={
+                    amount:this.settleData,
+                    billId:this.itemDetail.billId
+                }
+                axios.post('bill-pay',params, r => {
+                    this.billList=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+            },
+            antiSettleSubmit(){
+                let params={};
+                axios.post('batch-pay',params, r => {
+                    this.billList=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+            },
+            searchSubmit(){
+                this.getTableData(this.searchData)
+            }
             
         }
 

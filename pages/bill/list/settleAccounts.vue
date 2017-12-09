@@ -46,9 +46,9 @@ import axios from 'kr/axios';
 			}
 		},
 		methods:{
-			getAmount(){
+			getAmount(customerId){
 				let params={
-					customerId:this.detail.customerId
+					customerId:customerId
 				};
 				axios.get('get-balance', params, r => {
                     this.amount=r.data.balance;
@@ -61,10 +61,7 @@ import axios from 'kr/axios';
 			$props: {
 				deep: true,
 				handler(nextProps) {
-					//xxx
-					console.log("nextProps",nextProps);
-					console.log("this.detail.customerId",this.detail.customerId)
-					this.getAmount()
+					this.getAmount(this.detail.customerId)
 				}
 			}
 		},

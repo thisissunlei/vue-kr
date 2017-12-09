@@ -63,7 +63,6 @@
                 v-model="customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
-                @on-change="lowerChange"
             ></Input>
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>

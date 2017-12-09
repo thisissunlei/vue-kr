@@ -42,6 +42,13 @@
         display: block;
         visibility: hidden;
     }
+    .m-search{
+        color:#2b85e4; 
+        display:inline-block;
+        margin-left:10px;
+        font-size:14px;
+        cursor:pointer;
+    }
     
 }   
 .u-bind{
@@ -55,7 +62,15 @@
     <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">导入回款明细</Button>
-        <span class="u-high-search" @click="showSearch"></span>   
+        <span class="u-high-search" @click="showSearch"></span>  
+        <div style='display:inline-block;float:right;padding-right:20px;'>
+            <Input 
+                v-model="customerName" 
+                placeholder="请输入客户名称"
+                style="width: 252px"
+            ></Input>
+            <div class='m-search' @click="lowerSubmit">搜索</div>
+         </div> 
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
@@ -141,6 +156,7 @@ export default {
                 openMessage:false,
                 MessageType:'',
                 warn:'',
+                customerName:'',
                 columns: [
                     {
                         title: '交易流水号',
@@ -303,7 +319,11 @@ export default {
             },
              searchSubmit(){
                 this.getTableData(this.searchData)
-            }
+            },
+             lowerSubmit(){
+                this.params.customerName=this.customerName;
+                this.getTableData(this.params);
+            },
 
         }
 

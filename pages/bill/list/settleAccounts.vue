@@ -59,15 +59,18 @@ import axios from 'kr/axios';
 		},
 		watch: {
 			$props: {
-			deep: true,
-			handler(nextProps) {
-				//xxx
-				console.log("nextProps",nextProps);
-				console.log("this.detail.customerId",this.detail.customerId)
-				this.getAmount()
+				deep: true,
+				handler(nextProps) {
+					//xxx
+					console.log("nextProps",nextProps);
+					console.log("this.detail.customerId",this.detail.customerId)
+					this.getAmount()
+				}
 			}
-		}
-  }
+		},
+		updated:function(){
+        	this.$emit('formData', this.value);
+    	},
 		
 	}
 </script>

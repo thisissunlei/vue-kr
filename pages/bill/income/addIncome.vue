@@ -102,7 +102,7 @@ import SelectCommunities from '~/components/selectCommunities';
 
 export default{
     name:'highSearch',
-     components:{
+    components:{
         SelectCommunities,
         searchCompany
     },

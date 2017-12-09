@@ -20,30 +20,30 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="回款流水号：">
-				{{basicInfo.orderNo}}
+				{{basicInfo.tradeNo}}
 			</labelText>
 			<labelText label="回款方式：">
-				{{basicInfo.orderStatus}}
+				{{basicInfo.payType}}
 			</labelText>
 			<labelText label="客户名称：">
 				<a href="">
-					{{basicInfo.roomName}}
+					{{basicInfo.customerName}}
 				</a>
 			</labelText>
 			<labelText label="付款账号：">
-				{{basicInfo.totalAmount}}
+				{{basicInfo.payAccount}}
 			</labelText>
 			<labelText label="回款金额：">
-				{{orderStartTime}}
+				{{basicInfo.amount}}
 			</labelText>
 			<labelText label="回款时间：">
-				{{orderEndTime}}
+				{{ctime}}
 			</labelText>
 			<labelText label="社区名称：">
 				{{basicInfo.communityName}}
 			</labelText>
 			<labelText label="我司收款账号：">
-				{{basicInfo.customerName}}
+				{{basicInfo.receiveAccount}}
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="操作记录">
@@ -67,6 +67,9 @@ export default {
 	},
 	data(){
 		return{
+			operationInfo:[],
+			basicInfo:{},
+			ctime:'',
 			operation:[
 				{
 					title: '序号',
@@ -96,69 +99,24 @@ export default {
 		}
 	},
 	created:function(){
-		//假数据--开始
-		this.basicInfo={
-
-		};
-		this.costInfo=[{
-				refundAmount:'-￥250.00',
-				totalAmount:'￥300.00'
-		}]
-		this.billInfo=[
-			{
-				billNo:'HYSZD201712010001',
-				billType:'MEETING',
-				billStartTime:1511404234000,
-				billEndTime:1511063377000,
-				payStatus:'WAIT'
-			},
-			{
-				billNo:'HYSZD201712010001',
-				billType:'PRINT',
-				billStartTime:1509372919000,
-				billEndTime:1509372919000,
-				payStatus:'PAID'
-			},
-			{
-				billNo:'HYSZD201712010001',
-				billType:'CONTRACT',
-				billStartTime:1505704034000,
-				billEndTime:1505704034000,
-				payStatus:'WAIT'
-			}
-		]
-		let payStatus='PAID'
-		this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1511404234000));
-		this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1509372919000));
-		this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1505704034000));
-		this.payStatus=payStatus=='WAIT'?'待付款':'已付款';
-		//假数据--结束
-
 		this.getInfo();
-		
 	},
 	methods:{
 		getInfo(){
 			var _this=this;
 			let {params}=this.$route
 			let from={
-				orderId:params.orderId
+				paymentId:params.paymentId
 			};
-			axios.get('order-detail', from, r => {
-				console.log('r', r);
+			axios.get('get-payment-detail', from, r => {
 				let data=r.data;
-				_this.basicInfo=data;
-				_this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
-				_this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
-				_this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.cTime));
-				_this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
-				_this.coseInfo=[
-					{
-					refundAmount:data.refundAmount,
-					totalAmount:data.totalAmount
-					}
-				]
-				_this.billInfo=data.billList;
+				this.basicInfo=data;
+				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
+				if(data.payWay=='BANKTRANSFER'){
+					data.payType='银行转账	';
+				}else if (data.payWay=='ALIAPPPAY'){
+					data.payType='支付宝 ';
+				}
 					
            	}, e => {
                 console.log('error',e)

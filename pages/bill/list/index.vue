@@ -40,9 +40,7 @@
         margin-top: 34px;
         margin-bottom: 36px;
 }
-.ivu-modal-footer{
-    border:none;
-}
+
 
 </style>
 
@@ -68,6 +66,7 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        
      >
         <HighSearch></HighSearch>
     </Modal>
@@ -79,7 +78,6 @@
         width="443"
      >
        <settleAccounts :detail="itemDetail"> </settleAccounts>
-       <div slot="footer" style="border:none;"></div>
     </Modal>
     <Modal
         v-model="openAntiSettle"
@@ -89,9 +87,6 @@
         width="443"
      >
        <antiSettlement :detail="itemDetail"> </antiSettlement>
-       <div slot="footer" style="border:none;">
-		
-	   </div>
     </Modal>
     <Modal
         v-model="openClose"

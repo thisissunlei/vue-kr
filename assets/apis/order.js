@@ -60,6 +60,11 @@ module.exports = {
     url: '/krspace-pay/payment/list?',
     method: 'get'
   },
+  //回款详情
+  'get-payment-detail': {
+    url: '/krspace-pay/payment/detail?',
+    method: 'get'
+  },
   //绑定客户
   'payment-bind': {
     url: '/krspace-pay/payment/bind?',

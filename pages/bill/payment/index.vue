@@ -38,7 +38,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="交易流水"></sectionTitle>
+    <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>   
@@ -105,20 +105,21 @@ export default {
                 columns: [
                     {
                         title: '交易流水号',
-                        key: 'thirdTradeNo',
+                        key: 'tradeNo',
                         align:'center',
-                        width:145
+                        width:130
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
+                         width:190,
                     },
                     {
                         title: '回款日期',
                         key: 'ctime',
                         align:'center',
-                        width:150,
+                        width:130,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
                             return time;
@@ -137,7 +138,7 @@ export default {
                         render(h, obj){
                             if(obj.row.payWay==='BANKTRANSFER'){
                                 return <span class="u-txt">银行转账</span>;
-                            }else if(obj.row.payWay==='ALIPAY'){
+                            }else if(obj.row.payWay==='ALIAPPPAY'){
                                 return <span class="u-txt-orange">支付宝</span>;
                             }
                         }
@@ -146,14 +147,14 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center',
-                        width:145,
+                        width:120,
                         
                     },
                     {
                         title: '收款账户',
-                        key: 'receivceAccount',
+                        key: 'receiveAccount',
                         align:'center',
-                        width:145
+                        width:120
                     },
                     {
                         title: '操作',
@@ -198,19 +199,7 @@ export default {
             }
         },
         created:function(){
-            this.getTableData();
-            // this.tableData=[
-            //     {
-            //         thirdTradeNo:'0220171201100000001',
-            //         customerName:'罗焘如',
-            //         ctime:1505704034000,
-            //         amount:'29000.00',
-            //         payAccount:'0220171201100000001',
-            //         receivceAccount:'0220171201100000001',
-            //         payWay:'VALID'
-
-            //     }
-            // ]
+            this.getTableData(this.params);
         },
         methods:{
             showSearch (params) {
@@ -218,8 +207,8 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./payment/detail/${params.orderId}`;
-                location.href=`./payment/detail/12`
+                location.href=`./payment/detail/${params.id}`;
+               
             },
             bindPerson (params) {
                 this.openBind=true;
@@ -240,9 +229,7 @@ export default {
             onExport(){
                  console.log('导出')
             },
-            getTableData(index){
-                let data = [];
-                let params=this.params;
+            getTableData(params){
                 axios.get('get-payment-list', params, r => {
                     console.log('r', r);
                     this.tableData=r.data.items;
@@ -250,11 +237,13 @@ export default {
                 }, e => {
                     console.log('error',e)
                 })
-                  
-                return data;
             },
             changePage (index) {
-                this.tableData = this.getTableData(index);
+                this.params={
+                    page:index,
+                    pageSize:15
+                }
+                this.tableData = this.getTableData(this.params);
             }
 
         }

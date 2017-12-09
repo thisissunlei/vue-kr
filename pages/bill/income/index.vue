@@ -48,7 +48,13 @@
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" show-total show-elevator></Page>
+                <Page   
+                    :total="totalCount" 
+                    :page-size="pageSize"
+                    show-total 
+                    show-elevator
+                    @on-change="changePage"
+                ></Page>
             </div>
         </div>
     </div>
@@ -107,9 +113,10 @@ import Message from '~/components/Message';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                pageSize:4,
                 tabParams:{
                     page:1,
-                    pageSize:15
+                    pageSize:4
                 },
                 billList:[],
                 addData:{},
@@ -158,7 +165,7 @@ import Message from '~/components/Message';
                                 return '会议室';
                             }else if(obj.row.incomeType==='PRINT'){
                                 return '打印服务 ';
-                            }else if(obj.row.incomeType==='CONTRACT'){
+                            }else if(obj.row.incomeType==='RENT'){
                                 return '工位服务';
                             }
                         }
@@ -249,6 +256,13 @@ import Message from '~/components/Message';
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
+            changePage(page){
+               let Params={
+                    page:page,
+                    pageSize:4
+                }
+                this.getTableData(Params);
+            }
 
             
         }

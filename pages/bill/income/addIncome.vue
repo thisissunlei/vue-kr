@@ -118,15 +118,15 @@ export default{
             incomeType:[
                 {
                     value:'MEETING',
-                    label:'会议室账单'
+                    label:'会议室服务费'
                 },
                 {
                     value:'PRINT',
-                    label:'打印服务账单 '
+                    label:'打印服务费'
                 },
                 {
-                    value:'CONTRACT',
-                    label:'工位服务订单'
+                    value:'RENT',
+                    label:'工位租金'
                 },
             ],
             communityList:[

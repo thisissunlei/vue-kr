@@ -113,10 +113,10 @@ import Message from '~/components/Message';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                pageSize:1,
+                pageSize:15,
                 tabParams:{
                     page:1,
-                    pageSize:1
+                    pageSize:15
                 },
                 billList:[],
                 addData:{},

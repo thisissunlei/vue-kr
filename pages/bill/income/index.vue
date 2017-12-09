@@ -175,8 +175,7 @@ import AddIncome from './addIncome';
                 this.openSearch=true;
             },
             openView(params){
-                 //location.href=`./income/detail/${params.billId}`;
-                 location.href='./income/detail/1';
+                 location.href=`./income/detail/${params.billId}`;
             },
             onExport(){
                  console.log('导出')

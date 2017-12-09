@@ -91,6 +91,7 @@ import Message from '~/components/Message';
                 openIncome:false,
                 openMessage:false,
                 warn:'',
+                MessageType:'',
                 tabParams:{
                     page:1,
                     pageSize:15

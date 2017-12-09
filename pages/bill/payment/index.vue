@@ -138,6 +138,7 @@ export default {
                     customerId:'',
                 },
                 openMessage:false,
+                MessageType:'',
                 warn:'',
                 columns: [
                     {

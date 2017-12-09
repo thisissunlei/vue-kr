@@ -49,7 +49,7 @@
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
             <FormItem label="交易流水号" class="u-input">
                 <Input 
-                    v-model="formItem.billNo" 
+                    v-model="formItem.tradeNo" 
                     placeholder="请输入交易流水号" 
                     style="width: 250px"
                ></Input> 
@@ -64,26 +64,28 @@
             <FormItem label="回款日期"  class="u-input u-date">
                 <DatePicker 
                     type="date" 
-                    v-model="formItem.billStartTime" 
+                    v-model="formItem.startTime" 
                     placeholder="请选择开始日期" 
                     style="width: 250px;"
+                     @on-change="startChange"
                ></DatePicker> 
                 <span class="u-date-txt">至</span>
                <DatePicker 
                     type="date" 
-                    v-model="formItem.billEndTime" 
+                    v-model="formItem.endTime" 
                     placeholder="请选择结束日期" 
                     style="width: 250px;"
+                    @on-change="endChange"
                ></DatePicker> 
             </FormItem>
             <FormItem label="回款方式" class="u-input u-right">
                   <Select 
-                    v-model="formItem.billType" 
+                    v-model="formItem.payWay" 
                     style="width:250px"
                     placeholder="请选择回款方式" 
                     >
                     <Option 
-                        v-for="item in typeList" 
+                        v-for="item in payWay" 
                         :value="item.value" 
                         :key="item.value"
                     >
@@ -107,32 +109,36 @@ export default{
     data (){
 		return{
 			formItem:{
-                billNo:'',
-                customerName:'',
-                communityIds:'',
-                billType:'',
-                beginTime:'',
+                tradeNo:'',
+                startTime:'',
                 endTime:'',
-                billStartTime:'',
-                billEndTime:'',
+                payWay:'',
+                customerName:'',
             },
-            typeList:[
+            payWay:[
                 {
-                    value:'MEETING',
+                    value:'BANKTRANSFER',
                     label:'银行转账'
                 },
                 {
-                    value:'PRINT',
+                    value:'ALIAPPPAY',
                     label:'支付宝 '
-                },
-                {
-                    value:'CONTRACT',
-                    label:'工位服务订单'
-                },
+                }
             ],
             
 		}
-	}
+    },
+     methods:{
+        startChange(data){
+            this.formItem.customerId=data;
+        },
+        endChange(date){
+            this.formItem.dealDate=date;
+        }
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 	
 }
 </script>

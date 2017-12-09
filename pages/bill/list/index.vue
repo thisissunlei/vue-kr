@@ -358,9 +358,9 @@ import sectionTitle from '~/components/sectionTitle';
                      return;  
                 }
                 let params={
-                    billIds:this.billIds
+                    billIds:JSON.stringify(this.billIds)
                 }
-                axios.post('batch-pay',{billIds:this.billIds} , r => {
+                axios.post('batch-pay',params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {

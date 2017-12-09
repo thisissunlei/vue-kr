@@ -1,6 +1,5 @@
 //引入apis
 import APIS from '../assets/apis/index';
-
 import Qs from 'qs';
 // 引用axios
 var axios = require('axios')
@@ -22,7 +21,6 @@ function filterNull (o) {
       o[key] = filterNull(o[key])
     }
   }
-  console.log('00000----')
   return o
 }
 /*
@@ -52,7 +50,6 @@ function apiAxios (method, name, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     withCredentials: false,
-    
   })
   //success
   .then(function (res) {
@@ -82,6 +79,17 @@ function apiAxios (method, name, params, success, failure) {
     }
   })
 }
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.interceptors.request.use((config) => {
+  if(config.method  == 'post'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
+  return config;
+},(error) =>{
+   _.toast("错误的传参");
+  return Promise.reject(error);
+});
 
 // 返回在vue模板中的调用接口
 export default {

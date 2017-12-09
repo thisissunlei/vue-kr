@@ -34,7 +34,21 @@
     .u-txt-orange{
         color: #F5A623;
     }
+    .u-clearfix { zoom:1; }
+    .u-clearfix:after {
+        clear: both;
+        content: '.';
+        height: 0;
+        display: block;
+        visibility: hidden;
+    }
+    
 }   
+.u-bind{
+  width:310px;
+  margin:25px auto 0;      
+   
+}
 </style>
 <template>
 <div class="g-order">
@@ -46,7 +60,7 @@
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page :total="totalCount" :pageSize="pageSize" @on-change="changePage" show-total show-elevator></Page>
             </div>
@@ -69,12 +83,26 @@
         ok-text="确定"
         cancel-text="取消"
         width="490"
-        @on-ok="orderCancel"
+        @on-ok="bindSubmit"
      >
         <div class="u-cancel-title">
-            绑定客户
+            <Form  :model="formItem" label-position="left"  :label-width="60"  class="u-bind u-clearfix">
+                <FormItem label="客户名称">
+                    <searchCompany
+                        v-model="formItem.customerId" 
+                        style="width: 250px"
+                        :onchange="onchange"
+                    ></searchCompany>
+                </FormItem>
+            </Form>
         </div>
     </Modal>
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -84,12 +112,16 @@ import axios from 'kr/axios';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
+import searchCompany from '~/components/searchCompany';
+import Message from '~/components/Message';
 
 export default {
         name: 'receive',
         components:{
             sectionTitle,
-            HighSearch
+            HighSearch,
+            searchCompany,
+            Message
         },
         data () {
             return {
@@ -102,6 +134,11 @@ export default {
                     page:1,
                     pageSize:15
                 },
+                formItem:{
+                    customerId:'',
+                },
+                openMessage:false,
+                warn:'',
                 columns: [
                     {
                         title: '交易流水号',
@@ -211,27 +248,14 @@ export default {
                
             },
             bindPerson (params) {
+                this.itemDetail=params;
                 this.openBind=true;
-            },
-            orderCancel(){
-            let itemDetail=this.itemDetail;
-            let  params={
-                    orderId:itemDetail.orderId
-                }
-                axios.get('cancel-order', params, r => {
-                    console.log('r', r);
-                
-                }, e => {
-                    console.log('error',e)
-                })
-               
             },
             onExport(){
                  console.log('导出')
             },
             getTableData(params){
                 axios.get('get-payment-list', params, r => {
-                    console.log('r', r);
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
@@ -244,7 +268,28 @@ export default {
                     pageSize:15
                 }
                 this.tableData = this.getTableData(this.params);
-            }
+            },
+             onchange(data){
+                this.formItem.customerId=data;
+            },
+            bindSubmit(){
+                this.formItem.paymentId=this.itemDetail.id;
+                axios.post('payment-bind', this.formItem, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="客户绑定成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.params);
+                })
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
 
         }
 

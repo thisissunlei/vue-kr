@@ -90,7 +90,6 @@ import Message from '~/components/Message';
                 openAntiSettle:false,
                 openIncome:false,
                 openMessage:false,
-                MessageType:'success',
                 warn:'',
                 tabParams:{
                     page:1,
@@ -209,12 +208,16 @@ import Message from '~/components/Message';
                 let params=this.addData;
                 console.log('this.addData.dealDate',this.addData.dealDate)
                 axios.post('add-income', params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=e.message;
+                        this.openMessage=true;
+                        return;
+                    }
                     this.MessageType="success";
                     this.warn="挂收入成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, e => {
-                    
                 })
             },
             onChangeOpen(data){

@@ -40,22 +40,31 @@
 <div class="g-high-search">
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
             <FormItem label="客户名称" class="u-input">
-               <Input 
-                    v-model="formItem.customerName" 
-                    placeholder="请输入客户名称" 
+                <searchCompany
+                    v-model="formItem.customerId" 
                     style="width: 250px"
-               ></Input>  
+                    :onchange="onchange"
+                ></searchCompany>
             </FormItem>
              <FormItem label="社区名称" class="u-input">
-                <Input 
-                    v-model="formItem.communityIds" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               ></Input>
+                 <Select 
+                    v-model="formItem.communityId" 
+                    style="width:250px"
+                    placeholder="请选择社区" 
+                >
+                    <Option 
+                        v-for="item in communityList" 
+                        :value="item.id" 
+                        :key="item.id"
+                    >
+                        {{ item.name }}
+                    </Option>
+                </Select>
+                 
             </FormItem>
             <FormItem label="含税收入" class="u-input">
                 <Input 
-                    v-model="formItem.billNo" 
+                    v-model="formItem.amount" 
                     placeholder="请输入账单编号" 
                     style="width: 250px"
                ></Input> 
@@ -63,19 +72,19 @@
             <FormItem label="确认收入日期" class="u-input">
                 <DatePicker 
                     type="date" 
-                    v-model="formItem.billStartTime" 
                     placeholder="请选择确认收入日期" 
                     style="width: 250px;"
+                    @on-change="dateChange"
                ></DatePicker>
             </FormItem>
             <FormItem label="收入类型" class="u-input">
                   <Select 
-                    v-model="formItem.billType" 
+                    v-model="formItem.incomeType" 
                     style="width:250px"
                     placeholder="请输入账单类型" 
                 >
                     <Option 
-                        v-for="item in typeList" 
+                        v-for="item in incomeType" 
                         :value="item.value" 
                         :key="item.value"
                     >
@@ -83,33 +92,31 @@
                     </Option>
                 </Select>
             </FormItem>
-            <FormItem label="操作者" class="u-input">
-                <Input 
-                    v-model="formItem.billNo" 
-                    placeholder="请输入账单编号" 
-                    style="width: 250px"
-               ></Input> 
-            </FormItem>
             </FormItem>
         </Form>
 </div>
 </template>	
 <script>
+import axios from 'kr/axios';
+import searchCompany from '~/components/searchCompany';
+import SelectCommunities from '~/components/selectCommunities';
+
 export default{
     name:'highSearch',
+     components:{
+        SelectCommunities,
+        searchCompany
+    },
     data (){
 		return{
 			formItem:{
-                billNo:'',
-                customerName:'',
-                communityIds:'',
-                billType:'',
-                beginTime:'',
-                endTime:'',
-                billStartTime:'',
-                billEndTime:'',
+                amount:'',
+                communityId:'',
+                customerId:'',
+                dealDate:'',
+                incomeType:'',
             },
-            typeList:[
+            incomeType:[
                 {
                     value:'MEETING',
                     label:'会议室账单'
@@ -123,18 +130,30 @@ export default{
                     label:'工位服务订单'
                 },
             ],
-            statusList:[
-                {
-                    value:'待付款',
-                    label:'待付款'
-                },
-                {
-                    value:'已付款',
-                    label:'已付款'
-                }
-            ]
+            communityList:[
+
+            ],
 		}
-	}
+    },
+    created:function(){
+        axios.get('join-bill-community','', r => {    
+                this.communityList=r.data.items 
+            }, e => {
+                this.$Message.info(e);
+        })
+    },
+    methods:{
+        onchange(data){
+            this.formItem.customerId=data;
+        },
+        dateChange(date){
+            this.formItem.dealDate=date;
+        }
+        
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 	
 }
 </script>

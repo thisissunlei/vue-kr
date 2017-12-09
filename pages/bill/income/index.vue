@@ -52,8 +52,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="addSubmit"
      >
-        <AddIncome></AddIncome>
+        <AddIncome v-on:formData="getAddData"></AddIncome>
     </Modal>
     
 </div>
@@ -85,23 +86,19 @@ import AddIncome from './addIncome';
                     pageSize:15
                 },
                 billList:[],
+                addData:{},
                 columns1: [
-                    {
-                        type: 'selection',
-                        width: 50,
-                        align: 'center'
-                    },
                     {
                         title: '收入编号',
                         key: 'id',
                         align:'center',
-                        width:160
+                        width:80
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        width:150
+                        width:180
                     },
                     {
                         title: '所在社区',
@@ -175,16 +172,16 @@ import AddIncome from './addIncome';
                 this.openSearch=true;
             },
             openView(params){
-                 location.href=`./income/detail/${params.billId}`;
+                 location.href=`./income/detail/${params.id}`;
             },
             onExport(){
                  console.log('导出')
             },
-            onSelectList(data){
-                console.log('date====>>>>>0000',data)
-            },
             showIncome(){
                this.openIncome=true;
+            },
+            onSelectList(){
+
             },
             getTableData(params){
                 axios.get('get-income-list', params, r => {
@@ -194,6 +191,18 @@ import AddIncome from './addIncome';
                     console.log('error',e)
                 })
             },
+            getAddData(form){
+                this.addData=form;
+            },
+            addSubmit(form){
+                let params=this.addData;
+                console.log('this.addData.dealDate',this.addData.dealDate)
+                axios.post('add-income', params, r => {
+                    this.$Modal.success(r.message)
+                }, e => {
+                    this.$Modal.error(e.message)
+                })
+            }
             
         }
 

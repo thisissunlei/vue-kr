@@ -105,6 +105,12 @@
      >
       <p class="u-tip">请先选择结算数据！</p>
     </Modal>
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -116,6 +122,7 @@ import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import sectionTitle from '~/components/sectionTitle';
+import Message from '~/components/Message';
 
     export default {
         name: 'Bill',
@@ -123,7 +130,8 @@ import sectionTitle from '~/components/sectionTitle';
             HighSearch,
             settleAccounts,
             antiSettlement,
-            sectionTitle
+            sectionTitle,
+            Message
         },
         data () {
             return {
@@ -139,6 +147,9 @@ import sectionTitle from '~/components/sectionTitle';
                     page:1,
                     pageSize:15
                 },
+                openMessage:false,
+                warn:'',
+                MessageType:'',
                 columns1: [
                     {
                         type: 'selection',
@@ -384,24 +395,44 @@ import sectionTitle from '~/components/sectionTitle';
                     billId:this.itemDetail.billId
                 }
                 axios.post('bill-pay',params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="结算成功！"
+                    this.openMessage=true;
                 }, e => {
-                    console.log('error',e)
+                    
                 })
             },
             antiSettleSubmit(){
-                let params={};
-                axios.post('batch-pay',params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                let params={
+                    amount:this.antiSettleData,
+                    billId:this.itemDetail.billId
+                }
+                axios.post('bill-release',params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="反结算成功"
+                    this.openMessage=true;
                 }, e => {
-                    console.log('error',e)
+                    
                 })
             },
             searchSubmit(){
                 this.getTableData(this.searchData)
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
             
         }
 

@@ -26,7 +26,7 @@
 			结账金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>	
 		</div>
 		 <Input 
-		 	v-model="value" 
+		 	v-model="value"  
 		 	placeholder="请输入反结账金额" 
 		 	size="large"
 		 	style="width: 252px;margin-bottom:30px;"
@@ -44,15 +44,8 @@ import axios from 'kr/axios';
 				value:'',
 			}
 		},
-		methods:{
-			getAmount(){
-				let params={};
-				axios.get('get-bill-list', params, r => {
-                    this.amount=r.data.items;
-                }, e => {
-                    console.log('error',e)
-                })
-			},
-		}
+		updated:function(){
+        	this.$emit('formData', this.value);
+    	}
 	}
 </script>

@@ -43,8 +43,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="searchSubmit"
      >
-        <HighSearch></HighSearch>
+        <HighSearch v-on:formData="getSearchData"></HighSearch>
     </Modal>
      <Modal
         v-model="openIncome"
@@ -218,7 +219,14 @@ import Message from '~/components/Message';
             },
             onChangeOpen(data){
                 this.openMessage=data;
-            } ,
+            },
+            getSearchData(form){
+                this.searchData=form;
+            },
+            searchSubmit(){
+                this.getTableData(this.searchData)
+            }
+
             
         }
 

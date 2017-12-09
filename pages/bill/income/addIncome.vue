@@ -60,7 +60,6 @@
                         {{ item.name }}
                     </Option>
                 </Select>
-                 
             </FormItem>
             <FormItem label="含税收入" class="u-input">
                 <Input 

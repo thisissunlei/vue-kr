@@ -39,102 +39,55 @@
 <template>
 <div class="g-high-search">
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
-            <FormItem label="收入编号" class="u-input">
-                <Input 
-                    v-model="formItem.billNo" 
-                    placeholder="请输入账单编号" 
-                    style="width: 250px"
-               ></Input> 
-            </FormItem>
             <FormItem label="客户名称" class="u-input">
                <Input 
                     v-model="formItem.customerName" 
                     placeholder="请输入客户名称" 
                     style="width: 250px"
-               ></Input>  
-            </FormItem>
-            <FormItem label="收入类型" class="u-input">
-                  <Select 
-                    v-model="formItem.billType" 
-                    style="width:250px"
-                    placeholder="请输入账单类型" 
-                >
-                    <Option 
-                        v-for="item in typeList" 
-                        :value="item.value" 
-                        :key="item.value"
-                    >
-                        {{ item.label }}
-                    </Option>
-                </Select>
-            </FormItem>
-            <FormItem label="社区名称" class="u-input">
-                <Input 
-                    v-model="formItem.communityIds" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
                ></Input>
             </FormItem>
-            </FormItem>
-            <FormItem label="收入确认时间"  class="u-input u-date">
-                <DatePicker 
-                    type="date" 
-                    v-model="formItem.billStartTime" 
-                    placeholder="请选择开始日期" 
-                    style="width: 250px;"
-               ></DatePicker> 
-                <span class="u-date-txt">至</span>
-               <DatePicker 
-                    type="date" 
-                    v-model="formItem.billEndTime" 
-                    placeholder="请选择结束日期" 
-                    style="width: 250px;"
-               ></DatePicker> 
-            </FormItem>
+            <FormItem label="社区名称" class="u-input">
+                    <Select 
+                        v-model="formItem.communityId" 
+                        style="width:250px"
+                        placeholder="请选择社区" 
+                    >
+                        <Option 
+                            v-for="item in communityList" 
+                            :value="item.id" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                    </Select>
+                </FormItem>
         </Form>
 </div>
 </template>	
 <script>
+import axios from 'kr/axios';
+
 export default{
     name:'highSearch',
-    data (){
+    data(){
 		return{
 			formItem:{
-                billNo:'',
                 customerName:'',
-                communityIds:'',
-                billType:'',
-                beginTime:'',
-                endTime:'',
-                billStartTime:'',
-                billEndTime:'',
+                communityId:''
             },
-            typeList:[
-                {
-                    value:'MEETING',
-                    label:'会议室账单'
-                },
-                {
-                    value:'PRINT',
-                    label:'打印服务账单 '
-                },
-                {
-                    value:'CONTRACT',
-                    label:'工位服务订单'
-                },
-            ],
-            statusList:[
-                {
-                    value:'待付款',
-                    label:'待付款'
-                },
-                {
-                    value:'已付款',
-                    label:'已付款'
-                }
-            ]
+            communityList:[],
 		}
-	}
+    },
+    created:function(){
+        axios.get('join-bill-community','', r => {    
+                this.communityList=r.data.items 
+            }, e => {
+                this.$Message.info(e);
+        })
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 	
 }
 </script>

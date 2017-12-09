@@ -245,7 +245,7 @@ export default {
                 let params=this.params;
                 axios.get('get-payment-list', params, r => {
                     console.log('r', r);
-                    this.tableData=r.data;
+                    this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)

@@ -142,10 +142,10 @@ export default{
     },
      methods:{
         startChange(data){
-            this.formItem.customerId=data;
+            this.formItem.startTime=data;
         },
         endChange(date){
-            this.formItem.dealDate=date;
+            this.formItem.endTime=date;
         }
     },
     updated:function(){

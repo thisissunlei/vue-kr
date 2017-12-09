@@ -207,11 +207,10 @@ import Message from '~/components/Message';
             },
             addSubmit(form){
                 let params=this.addData;
-                console.log('this.addData.dealDate',this.addData.dealDate)
                 axios.post('add-income', params, r => {
                     if(r.code==-1){
                         this.MessageType="error";
-                        this.warn=e.message;
+                        this.warn=r.message;
                         this.openMessage=true;
                         return;
                     }

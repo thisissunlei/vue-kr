@@ -60,7 +60,7 @@
                             {{ item.name }}
                         </Option>
                     </Select>
-                </FormItem>
+            </FormItem>
         </Form>
 </div>
 </template>	

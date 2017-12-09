@@ -17,7 +17,14 @@
     }
     .u-table{
         padding:0 20px;
-    }  
+    } 
+    .m-search{
+        color:#2b85e4; 
+        display:inline-block;
+        margin-left:10px;
+        font-size:14px;
+        cursor:pointer;
+    } 
 }
 </style>
 
@@ -26,7 +33,16 @@
     <sectionTitle label="收入管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="showIncome">挂收入</Button>
-        <span class="u-high-search" @click="showSearch"></span>   
+        <span class="u-high-search" @click="showSearch"></span>  
+        <div style='display:inline-block;float:right;padding-right:20px;'>
+            <Input 
+                v-model="customerName" 
+                placeholder="请输入客户名称"
+                style="width: 252px"
+                @on-change="lowerChange"
+            ></Input>
+            <div class='m-search' @click="lowerSubmit">搜索</div>
+         </div> 
     </div>
     <div class="u-table">
         <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
@@ -228,7 +244,11 @@ import Message from '~/components/Message';
             },
             searchSubmit(){
                 this.getTableData(this.searchData)
-            }
+            },
+            lowerSubmit(){
+                this.tabParams.customerName=this.customerName;
+                this.getTableData(this.tabParams);
+            },
 
             
         }

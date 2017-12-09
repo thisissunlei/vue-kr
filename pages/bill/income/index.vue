@@ -31,9 +31,9 @@
     <div class="u-table">
         <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
         <div style="margin: 10px;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="pageSize" show-total show-elevator></Page>
+                <Page :total="totalCount" show-total show-elevator></Page>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@ import AddIncome from './addIncome';
         },
         data () {
             return {
-                pageSize:1,
+                totalCount:0,
                 openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,

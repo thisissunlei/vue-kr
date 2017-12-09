@@ -112,11 +112,18 @@ export default {
 				let data=r.data;
 				this.basicInfo=data;
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
-				if(data.payWay=='BANKTRANSFER'){
-					data.payType='银行转账	';
-				}else if (data.payWay=='ALIAPPPAY'){
-					data.payType='支付宝 ';
+				if(data.payWay==='ALIAPPPAY'){
+					data.payType='支付宝app';
+				}else if(data.payWay==='ALIWEBPAY'){
+					data.payType='支付宝网银';
+				}else if(data.payWay==='WXPAY'){
+					data.payType='微信';
+				}else if(data.payWay==='BANKONLINE'){
+					data.payType='网银';
+				}else if(data.payWay==='BANKTRANSFER'){
+					data.payType='银行转账';
 				}
+				
 					
            	}, e => {
                 console.log('error',e)

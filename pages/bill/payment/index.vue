@@ -75,7 +75,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch></HighSearch>
+        <HighSearch  v-on:formData="getSearchData"></HighSearch>
     </Modal>
     <Modal
         v-model="openBind"
@@ -174,10 +174,16 @@ export default {
                         key: 'payWay',
                         align:'center',
                         render(h, obj){
-                            if(obj.row.payWay==='BANKTRANSFER'){
+                            if(obj.row.payWay==='ALIAPPPAY'){
+                                return <span class="u-txt">支付宝app</span>;
+                            }else if(obj.row.payWay==='ALIWEBPAY'){
+                                return <span class="u-txt">支付宝网银</span>;
+                            }else if(obj.row.payWay==='WXPAY'){
+                                return <span class="u-txt">微信</span>;
+                            }else if(obj.row.payWay==='BANKONLINE'){
+                                return <span class="u-txt">网银</span>;
+                            }else if(obj.row.payWay==='BANKTRANSFER'){
                                 return <span class="u-txt">银行转账</span>;
-                            }else if(obj.row.payWay==='ALIAPPPAY'){
-                                return <span class="u-txt-orange">支付宝</span>;
                             }
                         }
                     },
@@ -290,6 +296,9 @@ export default {
             },
             onChangeOpen(data){
                 this.openMessage=data;
+            },
+            getSearchData(form){
+                this.searchData=form;
             },
 
         }

@@ -183,7 +183,6 @@ export default{
         }
     },
     updated:function(){
-        console.log('00000',this.formItem.billEndTime)
         this.$emit('formData', this.formItem);
     },
 	

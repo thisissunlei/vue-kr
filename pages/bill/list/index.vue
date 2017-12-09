@@ -373,8 +373,16 @@ import Message from '~/components/Message';
                     billIds:JSON.stringify(this.billIds)
                 }
                 axios.post('batch-pay',params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="结算成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
                 }, e => {
                     console.log('error',e)
                 })
@@ -404,6 +412,7 @@ import Message from '~/components/Message';
                     this.MessageType="success";
                     this.warn="结算成功！"
                     this.openMessage=true;
+                    this.getTableData(this.tabParams);
                 }, e => {
                     
                 })
@@ -423,6 +432,7 @@ import Message from '~/components/Message';
                     this.MessageType="success";
                     this.warn="反结算成功"
                     this.openMessage=true;
+                    this.getTableData(this.tabParams);
                 }, e => {
                     
                 })

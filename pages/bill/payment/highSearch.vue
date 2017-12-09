@@ -121,8 +121,20 @@ export default{
                     label:'银行转账'
                 },
                 {
+                    value:'BANKONLINE',
+                    label:'网银 '
+                },
+                {
+                    value:'WXPAY',
+                    label:'微信'
+                },
+                {
+                    value:'ALIWEBPAY',
+                    label:'支付宝网银 '
+                },
+                {
                     value:'ALIAPPPAY',
-                    label:'支付宝 '
+                    label:'支付宝app '
                 }
             ],
             

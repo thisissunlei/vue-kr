@@ -74,6 +74,7 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="searchSubmit"
      >
         <HighSearch  v-on:formData="getSearchData"></HighSearch>
     </Modal>
@@ -300,6 +301,9 @@ export default {
             getSearchData(form){
                 this.searchData=form;
             },
+             searchSubmit(){
+                this.getTableData(this.searchData)
+            }
 
         }
 

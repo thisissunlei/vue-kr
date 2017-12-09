@@ -8,9 +8,10 @@
                 width:22px;
                 height:22px;
                 background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
+                background-size: contain;
                 float:right;
-            
+                cursor:pointer;
+
             }
     }
     .ivu-checkbox-wrapper{
@@ -40,6 +41,13 @@
         margin-top: 34px;
         margin-bottom: 36px;
 }
+.m-search{
+    color:#2b85e4; 
+    display:inline-block;
+    margin-left:10px;
+    font-size:14px;
+    cursor:pointer;
+}
 
 
 </style>
@@ -49,7 +57,17 @@
     <sectionTitle label="已出账单管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onBillPay">批量结算</Button>
-        <span class="u-high-search" @click="showSearch"></span>   
+        <span class="u-high-search" @click="showSearch"></span> 
+        <div style='display:inline-block;float:right;padding-right:20px;'>
+            <Input 
+                v-model="customerName" 
+                placeholder="请输入客户名称"
+                style="width: 252px"
+                @on-change="lowerChange"
+            ></Input>
+            <div class='m-search' @click="lowerSubmit">搜索</div>
+         </div>
+          
     </div>
     <div class="u-table">
         <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
@@ -145,11 +163,12 @@ import Message from '~/components/Message';
                 itemDetail:{},
                 tabParams:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
                 },
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                customerName:'',
                 columns1: [
                     {
                         type: 'selection',
@@ -442,6 +461,10 @@ import Message from '~/components/Message';
             },
             onChangeOpen(data){
                 this.openMessage=data;
+            },
+            lowerSubmit(){
+                this.tabParams.customerName=this.customerName;
+                this.getTableData(this.tabParams);
             },
             
         }

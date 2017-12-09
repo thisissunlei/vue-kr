@@ -75,5 +75,10 @@ module.exports = {
   url:'/krspace-pay/income/list?',
   method:'get'
 },
+//账单中心--收入管理--收入详情
+'get-income-detail':{
+  url:'/krspace-pay/income/detail?',
+  method:'get'
+},
 
 }

@@ -70,6 +70,10 @@ module.exports = {
     url:'/krspace-finance-web/member/csr-list?',
     method:'get'
 },
-
+//账单中心--收入管理--收入列表
+'get-income-list':{
+  url:'/krspace-pay/income/list?',
+  method:'get'
+},
 
 }

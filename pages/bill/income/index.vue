@@ -61,6 +61,7 @@
 
 
 <script>
+import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import dateUtils from 'vue-dateutils';
 import sectionTitle from '~/components/sectionTitle';
@@ -79,6 +80,11 @@ import AddIncome from './addIncome';
                 openSettle:false,
                 openAntiSettle:false,
                 openIncome:false,
+                tabParams:{
+                    page:1,
+                    pageSize:15
+                },
+                billList:[],
                 columns1: [
                     {
                         type: 'selection',
@@ -87,7 +93,7 @@ import AddIncome from './addIncome';
                     },
                     {
                         title: '收入编号',
-                        key: 'billNo',
+                        key: 'id',
                         align:'center',
                         width:160
                     },
@@ -105,31 +111,31 @@ import AddIncome from './addIncome';
                     },
                     {
                         title: '含税收入',
-                        key: 'payAmount',
+                        key: 'amount',
                         align:'center'
                     },
                     {
                         title: '收入确认时间',
-                        key: 'billEndTime',
+                        key: 'dealDate',
                         align:'center',
                         width:110,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate));
                             return time;
                         }
                     },
                      {
                         title: '收入类型',
-                        key: 'billType',
+                        key: 'incomeType',
                         align:'center',
                         width:110,
                         render(h, obj){
-                            if(obj.row.billType==='MEETING'){
-                                return '会议室账单';
-                            }else if(obj.row.billType==='PRINT'){
-                                return '打印服务账单 ';
-                            }else if(obj.row.billType==='CONTRACT'){
-                                return '工位服务订单';
+                            if(obj.row.incomeType==='MEETING'){
+                                return '会议室';
+                            }else if(obj.row.incomeType==='PRINT'){
+                                return '打印服务 ';
+                            }else if(obj.row.incomeType==='CONTRACT'){
+                                return '工位服务';
                             }
                         }
                     },
@@ -162,55 +168,15 @@ import AddIncome from './addIncome';
             }
         },
         created:function(){
-            this.billList=[
-			{
-                orderId:'44',
-				billNo:'HYSZD201712010001',
-				billType:'MEETING',
-				billStartTime:1511404234000,
-				billEndTime:1511063377000,
-                payStatus:'WAIT',
-                customerName:'绝地反',
-                communityName:'创业大街社区',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'45',
-				billNo:'HYSZD201712010001',
-				billType:'PRINT',
-				billStartTime:1509372919000,
-				billEndTime:1509372919000,
-				payStatus:'PAID',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			},
-			{
-                orderId:'46',
-				billNo:'HYSZD201712010001',
-				billType:'CONTRACT',
-				billStartTime:1505704034000,
-				billEndTime:1505704034000,
-				payStatus:'PAYMENT',
-                customerName:'绝地反击和',
-                communityName:'创业大街',
-                amount:'￥200',
-                payAmount:'￥100'
-			}
-		]
-           
-           
-            
+            this.getTableData(this.tabParams);
         },
         methods:{
             showSearch (params) {
                 this.openSearch=true;
             },
             openView(params){
-                 //location.href=`./income/detail/${params.orderId}`;
-                 location.href='./income/detail/12';
+                 //location.href=`./income/detail/${params.billId}`;
+                 location.href='./income/detail/1';
             },
             onExport(){
                  console.log('导出')
@@ -220,7 +186,15 @@ import AddIncome from './addIncome';
             },
             showIncome(){
                this.openIncome=true;
-            }
+            },
+            getTableData(params){
+                axios.get('get-income-list', params, r => {
+                    this.billList=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                }, e => {
+                    console.log('error',e)
+                })
+            },
             
         }
 

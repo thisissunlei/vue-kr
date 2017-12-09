@@ -73,7 +73,13 @@
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" show-total show-elevator></Page>
+                <Page 
+                    :total="totalCount"
+                    :page-size="pageSize" 
+                    show-total 
+                    show-elevator
+                    @on-change="changePage"
+                ></Page>
             </div>
         </div>
     </div>
@@ -160,6 +166,7 @@ import Message from '~/components/Message';
                 billList:[],
                 billIds:[],
                 itemDetail:{},
+                pageSize:15,
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -465,6 +472,13 @@ import Message from '~/components/Message';
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
+            changePage(page){
+               let Params={
+                    page:page,
+                    pageSize:this.pageSize
+                }
+                this.getTableData(Params);
+            }
             
         }
 

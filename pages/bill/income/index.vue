@@ -44,7 +44,7 @@
          </div> 
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
+        <Table  border :columns="columns1" :data="billList" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -113,10 +113,10 @@ import Message from '~/components/Message';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                pageSize:4,
+                pageSize:1,
                 tabParams:{
                     page:1,
-                    pageSize:4
+                    pageSize:1
                 },
                 billList:[],
                 addData:{},
@@ -214,9 +214,6 @@ import Message from '~/components/Message';
             showIncome(){
                this.openIncome=true;
             },
-            onSelectList(){
-
-            },
             getTableData(params){
                 axios.get('get-income-list', params, r => {
                     this.billList=r.data.items;
@@ -259,7 +256,7 @@ import Message from '~/components/Message';
             changePage(page){
                let Params={
                     page:page,
-                    pageSize:4
+                    pageSize:this.pageSize
                 }
                 this.getTableData(Params);
             }

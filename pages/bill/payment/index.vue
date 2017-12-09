@@ -77,7 +77,13 @@
         <div style="margin: 10px 0 ;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" :pageSize="pageSize" @on-change="changePage" show-total show-elevator></Page>
+                <Page 
+                    :total="totalCount" 
+                    :page-size="pageSize"
+                    @on-change="changePage" 
+                    show-total 
+                    show-elevator
+                ></Page>
             </div>
         </div>
     </div>
@@ -147,8 +153,8 @@ export default {
                 totalCount:1,
                 pageSize:15,
                 params:{
-                    page:1,
-                    pageSize:15
+                    page:15,
+                    pageSize:1
                 },
                 formItem:{
                     customerId:'',
@@ -324,6 +330,13 @@ export default {
                 this.params.customerName=this.customerName;
                 this.getTableData(this.params);
             },
+            changePage(page){
+               let Params={
+                    page:page,
+                    pageSize:this.pageSize
+                }
+                this.getTableData(Params);
+            }
 
         }
 

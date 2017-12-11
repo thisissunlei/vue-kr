@@ -10,6 +10,7 @@
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
+							:default-file-list="defaultList"
 							:headers="this.headers" 
 							:type="this.type" 
 							:action="this.action"
@@ -42,7 +43,17 @@ export default{
 			listStyle:{
 				left:0,
 				top:0,
-			}
+			},
+			defaultList: [
+                    {
+                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
+                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+                    },
+                    {
+                        'name': 'bc7521e033abdd1e92222d733590f104',
+                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    }
+                ],
 		}
 		
 	},

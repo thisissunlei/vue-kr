@@ -32,15 +32,16 @@
                     ></i-input>
                 </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
-                    <Select 
+                   <Select 
                         v-model="formItem.communityName" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
+                        clearable
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.id" 
+                            :value="item.name" 
                             :key="item.id"
                         >
                             {{ item.name }}
@@ -133,20 +134,7 @@
                     }
                 ],
                 //合同类型
-                typeList:[
-                    {
-                        value:'IN',
-                        label:'入驻服务订单'
-                    },
-                    {
-                        value:'INCREASE',
-                        label:'增值服务订单'
-                    },
-                    {
-                        value:'CONTINUE',
-                        label:'续租服务订单'
-                    }
-                ],
+                typeList:[],
                 communityList:[]
             }
         },
@@ -157,10 +145,16 @@
                 }, e => {
                   _this.$Message.info(e);
             })
+            axios.get('get-center-prepare-data','',r => {
+                   console.log("------->>>>>>",r.data.items);
+                   _this.typeList = r.data.items;
+                }, e => {
+                  _this.$Message.info(e);
+            })
         },
         updated:function(){
-            if(this.formItem.cStartDate&&this.formItem.cEndDate){
-                if(this.formItem.cStartDate>this.formItem.cEndDate){
+            if(this.formItem.minCTime&&this.formItem.maxCTime){
+                if(this.formItem.minCTime>this.formItem.maxCTime){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 

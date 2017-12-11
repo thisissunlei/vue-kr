@@ -248,7 +248,13 @@
                 console.log('作废');
             },
             outSubmit (){
-                var url = `/api/krspace-op-web/order-seat-add/export`;
+                var where=[];
+                for(var item in this.params){
+                    if(this.params.hasOwnProperty(item)){
+                        where.push(`${item}=${this.params[item]}`);
+                    }
+                }
+                var url = `/api/krspace-op-web/order-seat-add/export?${where.join('&')}`;
 		        window.location.href = url;
             },
             getListData(params){

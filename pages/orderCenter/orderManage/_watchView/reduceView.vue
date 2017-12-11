@@ -35,9 +35,7 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="客户名称：">
-				<a href="">
-					{{basicInfo.customerName}}
-				</a>
+				{{basicInfo.customerName}}
 			</labelText>
 			<labelText label="社区名称：">
 				{{basicInfo.communityName}}

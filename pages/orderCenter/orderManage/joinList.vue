@@ -158,19 +158,15 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('Button', {
+                               h('nuxt-link', {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        size: 'small',
+                                        to:'/orderCenter/orderManage/12/joinView'
                                     },
                                     style: {
                                         color:'#2b85e4'
                                     },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params)
-                                        }
-                                    }
                                 }, '查看'), h('Button', {
                                     props: {
                                         type: 'text',
@@ -230,7 +226,6 @@
                 CommonFuc.clearForm(this.upperData);
             },
             openView(params){
-                location.href=location.href+`/12/joinView`;
                 /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
                     location.href=location.href+`/${params.row.id}/joinView`;
                 }

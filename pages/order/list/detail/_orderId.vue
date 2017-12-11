@@ -12,6 +12,9 @@
 		.u-txt{
 			color:#666;
 		}
+		.u-txt-orange{
+        	color: #F5A623;
+    	}
 	}
 </style>
 <template>
@@ -105,21 +108,21 @@ export default {
 				},
 				{
 				 title: '账单类型',
-                 key: 'billType',
+                 key: 'bizType',
 				 align:'center'	,
 				 render(h, obj){
-					if(obj.row.billType==='MEETING'){
+					if(obj.row.bizType==='MEETING'){
 						return '会议室账单';
-					}else if(obj.row.billType==='PRINT'){
+					}else if(obj.row.bizType==='PRINT'){
 						return '打印服务账单 ';
-					}else if(obj.row.billType==='CONTRACT'){
+					}else if(obj.row.bizType==='CONTRACT'){
 						return '工位服务订单';
 					}
 				 }
 				},
 				{
 				 title: '账单生成日期',
-                 key: 'billStartTime',
+                 key: 'billingDate',
 				 align:'center'	,
 				 render(h, obj){
 					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
@@ -128,7 +131,7 @@ export default {
 				},
 				{
 				 title: '付款截止日期',
-                 key: 'billEndTime',
+                 key: 'dueDate',
 				 align:'center'	,
 				 render(h, obj){
 					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
@@ -144,6 +147,8 @@ export default {
 							return <span class="u-txt-red">待付款</span>;
 						}else if(obj.row.payStatus==='PAID'){
 							return <span class="u-txt">已付款</span>;
+						}else if(obj.row.payStatus==='PAYMENT'){
+							return <span class="u-txt-orange">未付清</span>;
 						}
 				 	}
 				}
@@ -160,6 +165,7 @@ export default {
 				orderId:params.orderId
 			};
 			axios.get('order-detail', from, r => {
+				let billInfo=[];
 				let data=r.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
@@ -180,7 +186,9 @@ export default {
 					totalAmount:data.totalAmount
 					}
 				]
-				this.billInfo=data.billList;
+				
+				this.billInfo=billInfo.push(data.billInfo);
+				conosle.log('billInfo===',this.billInfo)
 					
            	}, e => {
                 console.log('error',e)

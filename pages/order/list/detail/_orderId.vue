@@ -36,7 +36,6 @@
 			</labelText>
 			<labelText label="预订开始时间：">
 				{{orderStartTime}}
-				
 			</labelText>
 			<labelText label="预订结束时间：">
 				{{orderEndTime}}
@@ -88,16 +87,24 @@ export default {
 			basicInfo:{},
 			coseInfo:[],
 			billInfo:[],
+			orderStartTime:'',
+			orderEndTime:'',
+			orderStatus:'',
+			createTime:'',
+			payStatus:"",
+			costInfo:[],
 			cost:[
 				{
 				 title: '订单总额',
                  key: 'totalAmount',
-                 align:'center'	
+				 align:'center'	,
+				 width:485
 				},
 				{
 				 title: '退款金额',
                  key: 'refundAmount',
-                 align:'center'	
+                 align:'center'	,
+				 width:485
 				}
 			],
 			bill:[
@@ -125,7 +132,7 @@ export default {
                  key: 'billingDate',
 				 align:'center'	,
 				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billingDate));
 					 return time;
 				 }
 				},
@@ -134,7 +141,7 @@ export default {
                  key: 'dueDate',
 				 align:'center'	,
 				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
+					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dueDate));
 					 return time;
 				 }
 				},
@@ -165,7 +172,7 @@ export default {
 				orderId:params.orderId
 			};
 			axios.get('order-detail', from, r => {
-				let billInfo=[];
+				
 				let data=r.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
@@ -179,16 +186,22 @@ export default {
 				}else if(data.orderStatus=='REFUND'){
 					this.orderStatus='已退订'
 				}
-				
 				this.costInfo=[
 					{
 					refundAmount:data.refundAmount,
 					totalAmount:data.totalAmount
 					}
 				]
-				
-				this.billInfo=billInfo.push(data.billInfo);
-				conosle.log('billInfo===',this.billInfo)
+				this.billInfo=[
+					{
+						billNo:data.billInfo.billNo,
+						bizType:data.billInfo.bizType,
+						billingDate:data.billInfo.billingDate,
+						dueDate:data.billInfo.dueDate,
+						payStatus:data.billInfo.payStatus
+
+					}
+				]
 					
            	}, e => {
                 console.log('error',e)

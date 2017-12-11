@@ -1,20 +1,26 @@
 <template>
     <div class='m-bill-list'>
-            <div style='text-align:right;margin-bottom:10px'>
-               <div style='display:inline-block;margin:10px 20px;'>
-                    <span style='padding-right:10px'>客户名称</span>
-                    <i-input 
-                        v-model="params.customerName" 
-                        placeholder="请输入客户名称"
-                        style="width: 252px"
-                        @on-change="lowerChange"
-                    ></i-input>
-                </div>
-                <div class='m-search' @click="lowerSubmit">搜索</div>
-                <div class="m-bill-search" @click="showSearch">
-                  <span></span>   
-                </div> 
-           </div>
+            <div style='width:100%;padding:0 0 0 10px;'>
+                    <div style='display:inline-block;width:20%;'>
+                        <Button type="primary" @click="showReduce">减租</Button>
+                    </div>
+
+                    <div style='margin-bottom:10px;display:inline-block;width:80%;text-align:right;'>
+                         <div style='display:inline-block;margin:10px 20px;'>
+                            <span style='padding-right:10px'>客户名称</span>
+                            <i-input 
+                                v-model="params.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 252px"
+                                @on-change="lowerChange"
+                            ></i-input>
+                        </div>
+                        <div class='m-search' @click="lowerSubmit">搜索</div>
+                        <div class="m-bill-search" @click="showSearch">
+                          <span></span>   
+                        </div> 
+                   </div>
+            </div>
 
 
             <Table :columns="joinOrder" :data="joinData"></Table>
@@ -126,8 +132,6 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small',
                                         to:'/orderCenter/orderManage/12/reduceView'
                                     },
                                     style: {
@@ -141,11 +145,6 @@
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='未生效'){
@@ -159,7 +158,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openCancel(params)
+                                            this.showNullify(params)
                                         }
                                     }
                                 }, '作废'),
@@ -173,7 +172,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openEdit(params)
+                                            this.showEdit(params)
                                         }
                                     }
                                 }, '编辑'))
@@ -192,14 +191,14 @@
                 this.openSearch=!this.openSearch;
                 CommonFuc.clearForm(this.upperData);
             },
-            openCancel(params){
+            showNullify(params){
                 this.openNullify=true;
             },
-            openEdit(params){
-
+            showReduce(){
+                console.log('减租新建');
             },
-            openApplication(params){
-                
+            showEdit(params){
+                console.log('编辑');
             },
             nullifySubmit (){
                 console.log('作废');

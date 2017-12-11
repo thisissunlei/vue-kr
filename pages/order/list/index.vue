@@ -79,6 +79,12 @@
              距离会议室预订开始时间还有X小时X分钟，此次作废订单需要承担x%手续费，确定要作废此订单吗？
         </div>
     </Modal>
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -88,7 +94,7 @@ import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
-
+import Message from '~/components/Message';
 
 export default {
         name: 'Meeting',
@@ -107,6 +113,10 @@ export default {
                     page:1,
                     pageSize:15
                 },
+                openMessage:false,
+                warn:'',
+                MessageType:'',
+                customerName:'',
                 columns: [
                     {
                         title: '订单编号',
@@ -221,8 +231,16 @@ export default {
                     orderId:itemDetail.orderId
                 }
                 axios.get('cancel-order', params, r => {
-                    console.log('r', r);
-                
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="作废成功"
+                    this.openMessage=true;
+                    this.getTableData(this.params);
                 }, e => {
                     console.log('error',e)
                 })
@@ -250,6 +268,9 @@ export default {
             },
              searchSubmit(){
                 this.getTableData(this.searchData)
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
             },
 
         }

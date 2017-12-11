@@ -95,6 +95,7 @@
             return {
                
                 spanRight: 24,
+                spanLeft:'',
 
             }
         },

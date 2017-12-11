@@ -23,7 +23,7 @@
 				{{basicInfo.orderNo}}
 			</labelText>
 			<labelText label="订单状态：">
-				{{basicInfo.orderStatus}}
+				{{orderStatus}}
 			</labelText>
 			<labelText label="预订会议室名称：">
 				{{basicInfo.roomName}}
@@ -160,13 +160,20 @@ export default {
 				orderId:params.orderId
 			};
 			axios.get('order-detail', from, r => {
-				console.log('r', r);
 				let data=r.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
 				this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
 				this.createTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.createTime));
 				this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
+				if(data.orderStatus=='VALID'){
+					this.orderStatus='已生效'
+				}else if(data.orderStatus=='CANCEL'){
+					this.orderStatus='已作废'
+				}else if(data.orderStatus=='REFUND'){
+					this.orderStatus='已退订'
+				}
+				
 				this.costInfo=[
 					{
 					refundAmount:data.refundAmount,

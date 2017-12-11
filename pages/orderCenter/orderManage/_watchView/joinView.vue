@@ -62,11 +62,11 @@
          <DetailStyle info="金额信息">
 			<Table :columns="service" :data="serviceData"></Table>
             <labelText label="服务费总计：" style='font-weight:bold;'>
-				{{basicInfo.rentAmount}}  {{capitalService}}
+				{{serviceAll}}  {{capitalService}}
 			</labelText>
             <Table :columns="treatment" :data="treatmentData"></Table>
             <labelText label="优惠总计：" style='font-weight:bold;'>
-				{{basicInfo.amount}}  {{capitalTreatment}}
+				{{treatAll}}  {{capitalTreatment}}
 			</labelText>
             <div>
                 <labelText label="服务费总额：" style='color:red;'>
@@ -101,6 +101,8 @@ export default {
 			basicInfo:{},
 			capitalService:'',
 			capitalTreatment:'',
+			serviceAll:0,
+			treatAll:0,
 			ctime:'',
 			startDate:'',
 			endDate:'',
@@ -203,18 +205,25 @@ export default {
 			id:params.watchView
 		};
 		var _this=this;
-	    axios.get('reduce-bill-detail', from, r => {
+	    axios.get('join-bill-detail', from, r => {
 				   _this.basicInfo=r.data;
 				   
-				   _this.capitalService=CommonFuc.smalltoBIG(r.data.rentAmount);
-				   _this.capitalTreatment=CommonFuc.smalltoBIG(r.data.amount);
-				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime));
-				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate));
-				   _this.endDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate));
-				   _this.payDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime));
-				   _this.serviceData=r.data.orderSeatDetailVo;
-				   _this.treatmentData=r.data.contractTactics;
-				   _this.contractData=r.data.orderContractInfo;
+				   
+				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime))||'';
+				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate))||'';
+				   _this.endDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate))||'';
+				   _this.payDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime))||'';
+				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
+					    _this.serviceAll=_this.serviceAll+item.amount;
+				   })
+				   r.data.contractTactics&&r.data.contractTactics.map((item,index)=>{
+					    _this.treatAll=_this.treatAll+item.amount;
+				   })
+				   _this.capitalTreatment=_this.treatAll?CommonFuc.smalltoBIG(_this.treatAll):0;
+				   _this.capitalService=_this.serviceAll?CommonFuc.smalltoBIG(_this.serviceAll):0;
+				   _this.serviceData=r.data.orderSeatDetailVo||[];
+				   _this.treatmentData=r.data.contractTactics||[];
+				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
                 _this.$Message.info(e);
         })

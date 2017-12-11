@@ -16,7 +16,7 @@
 <template>
     <div class="create-new-order">
        <sectionTitle label="新建减租服务订单管理"></sectionTitle>
-        <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
+        <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form" style="padding:30px 24px">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customer">
@@ -154,7 +154,7 @@
             </Row>
             
                 
-            <FormItem style="padding-left:24px;margin-top:40px">
+            <FormItem style="margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
@@ -191,6 +191,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
+
            return{
                 disabled:false,//提交按钮是否有效
                 index:0,//优惠的index
@@ -311,12 +312,17 @@ import '~/assets/styles/createOrder.less';
             stationList,
             planMap
         },
-        created(){
+        created:function(){
+            
         },
         methods: {
             handleSubmit:function(name){
                 let message = '=========';
                 let _this = this;
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -352,6 +358,10 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.saler = value;
             },
             showStation:function(){
+                 this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
                 if(!this.renewForm.community){
                     this.$Notice.error({
                         title:'请先选择社区'
@@ -380,6 +390,10 @@ import '~/assets/styles/createOrder.less';
                 this.payType  = value;
             },
             handleAdd:function(){
+                 this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
                 if(!this.renewForm.community){
                     this.$Notice.error({
                         title:'请先选择社区'

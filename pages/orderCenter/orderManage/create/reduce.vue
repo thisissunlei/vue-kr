@@ -15,9 +15,8 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="新建续租服务订单管理"></sectionTitle>
+       <sectionTitle label="新建减租服务订单管理"></sectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
-            <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customer">
@@ -41,8 +40,6 @@
                     </FormItem>
                 </Col>
             </Row>
-            </DetailStyle>
-            <DetailStyle info="金额信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
@@ -60,8 +57,6 @@
                     </div>
                 </Col>
                 </Row>
-            </DetailStyle>
-            <DetailStyle info="优惠信息">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
@@ -159,7 +154,6 @@
             </Row>
             
                 
-            </DetailStyle>
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
@@ -188,7 +182,6 @@ import selectCommunities from '~/components/selectCommunities.vue'
 import selectCustomers from '~/components/selectCustomers.vue'
 import selectSaler from '~/components/selectSaler.vue'
 import axios from '~/plugins/http.js';
-import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/planMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
@@ -313,7 +306,6 @@ import '~/assets/styles/createOrder.less';
         components: {
             sectionTitle,
             selectCommunities,
-            DetailStyle,
             selectCustomers,
             selectSaler,
             stationList,

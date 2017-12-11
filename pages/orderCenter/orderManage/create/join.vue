@@ -115,7 +115,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
@@ -365,26 +365,11 @@ import '~/assets/styles/createOrder.less';
         },
         methods: {
             handleSubmit:function(name) {
-                let discountError = true;
                 let message = '请填写完表单';
-                let typeList = this.formItem.items.map((item)=>{
-                    return item.type;
-                })
-                let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
-                if(qianmian + houmian>1){
-                    discountError = false;
-                    message = '只能有一个免租期。'
-                }
-                if(zhekou>1){
-                    discountError = false;
-                    message = '只能有一个折扣。'
-                }
                 let _this = this;
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
-                    if (valid && discountError) {
+                    if (valid) {
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -421,21 +406,49 @@ import '~/assets/styles/createOrder.less';
             },
             //优惠类型选择
             changeType:function(value){
+                if(!value){
+                    return;
+                }
+                let itemValue = value.split('-')[0];
+                let itemIndex = value.split('-')[1];
+                this.formItem.items[itemIndex].value = itemValue;
                 let items = [];
                 items = this.formItem.items.map((item)=>{
-                    if(item.type == 'qianmian'){
+                    if(item.value == 'qianmian'){
                         item.endDate = new Date()
                         item.zhekou = '';
-                    }else if(item.type == 'houmian'){
+                    }else if(item.value == 'houmian'){
                         item.endDate = new Date()
                         item.zhekou = '';
-                    }else if(item.type == 'zhekou'){
+                    }else if(item.value == 'zhekou'){
                         item.beginDate = new Date()
                         item.endDate = new Date()
                     }
                     return item;
                 })
+                let error=false;
+                let message = '';
                 this.formItem.items = items;
+                let typeList = items.map(item=>{
+                    return item.value;
+                })
+                let qianmian = typeList.join(",").split('qianmian').length-1;
+                let houmian = typeList.join(",").split('houmian').length-1;
+                let zhekou = typeList.join(",").split('zhekou').length-1;
+                if(qianmian + houmian>1){
+                    error = true;
+                    message = '只能有一个免租期。'
+                }
+                if(zhekou>1){
+                    error = true;
+                    message = '只能有一个折扣。'
+                }
+                if(error){
+                    this.$Notice.error({
+                        title:message
+                    });
+                    this.formItem.items.splice(itemIndex,1);
+                }
             },
             changeCommunity:function(value){
                 if(value){

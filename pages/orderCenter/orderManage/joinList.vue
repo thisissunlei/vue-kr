@@ -287,6 +287,8 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);
             }
         }

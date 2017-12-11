@@ -176,13 +176,13 @@
                                         to:`/orderCenter/orderManage/${params.row.id}/${viewName}`
                                     },
                                     style: {
-                                        color:'#2b85e4'
+                                        color:'#2b85e4',
+                                        paddingRight:'10px'
                                     }
                                 }, '查看'), 
-                                h('Button', {
+                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        to:`/contractCenter/${params.row.id}/viewCenter`
                                     },
                                     style: {
                                         color:'#2b85e4'

@@ -10,6 +10,7 @@ function toType (obj) {
 // 参数过滤函数
 function filterNull (o) {
   for (var key in o) {
+    console.log('===========',key,toType(o[key]))
     if (o[key] === null) {
       delete o[key]
     }
@@ -34,6 +35,7 @@ function filterNull (o) {
 */
 
 function apiAxios (method, name, params, success, failure) {
+  console.log('apiAxios',params)
   if (params) {
     params = filterNull(params)
   }
@@ -50,28 +52,33 @@ function apiAxios (method, name, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     withCredentials: false,
+    transformRequest:[function (data) {
+        data = Qs.stringify(data);
+        return data;
+    }],
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
   })
   //success
   .then(function (res) {
-    if (success) {
+    console.log('success',params);
+    if (res.status === 200) {
+      if (success) {
         success(res.data)
       }
-    // if (res.data.success === true) {
-    //   if (success) {
-    //     success(res.data)
-    //   }
-    // } else {
-    //   if (failure) {
-    //     failure(res.data)
-    //   } else {
-    //   // console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
+    } else {
+      if (failure) {
+        failure(res.data)
+      } else {
+      console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
         
-    //     // window.alert('error: ' + JSON.stringify(res.data))
-    //   }
-    // }
+        // window.alert('error: ' + JSON.stringify(res.data))
+      }
+    }
   })
   //failure
   .catch(function (err) {
+    console.log('success',params);
+    
     let res = err.response
     if (err) {
       console.log('api error, HTTP CODE: ' + res)

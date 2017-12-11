@@ -1,36 +1,5 @@
 <style lang="less"> 
-    .create-new-order{
-        // padding:30px 20px;
-        .creat-order-form{
-            max-width: 1140px;
-            padding:30px 0;
-            .col{
-                display: inline-block;
-                width: 50%;
-                max-width: 450px;
-                padding-right: 10px;
-            }
-            .total-money{
-                border:1px solid #e9eaec;
-                border-top:0;
-                height: 48px;
-                line-height: 48px;
-                text-align: right;
-                padding-right: 28px;
-                margin-bottom: 20px;
-                span+span{
-                    margin-left: 20px;
-                }
-                .money{
-                    color:#FF6868
-                }
-            }
-            .row-table{
-
-            }
-        }
-    }
-
+    
    
 </style>
 
@@ -53,25 +22,30 @@
                     <selectCommunities name="formItem.community" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="销售员" style="width:252px">
+                    <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
             <Row>  
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block"></DatePicker>
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                     
                 </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="Select date" v-model="formItem.endDate" style="display:block"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
                     <FormItem label="租赁时长" style="width:252px" prop="time">
-                        <Input v-model="formItem.time" placeholder="Enter your e-mail"></Input>
+                        <Input v-model="formItem.time" placeholder="租赁时长"></Input>
                     </FormItem>
                 </Col>
             </Row>
@@ -83,13 +57,19 @@
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
                 </Col>
+                
                 </Row>
-                    <Table border ref="selection" :columns="columns4" :data="data1" @on-selection-change="selectRow"></Table>
-                    <div class="total-money">
+                <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
+                    <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
                         <span class="money">12,000.00 </span>
                         <span class="money">壹万两仟元整</span>
                     </div>
+                </Col>
+                </Row>
+                    
                 
             </DetailStyle>
             <DetailStyle info="优惠信息">
@@ -100,25 +80,25 @@
                 </Col>
 
                 </Row>
-                <Row class="row-table">
-                    <Col span="1" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                <Row >
+                    <Col span="1" class="discount-table-head"  >
                         <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" class="discount-table-head" >
                        <span> 优惠类型</span>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>开始时间</span>
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>结束时间</span>
                         
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="4" class="discount-table-head" >
                         <span>折扣</span>
                         
                     </Col>
-                    <Col span="4" style="background: #F5F6FA;height:50px;line-height:50px;text-align:center">
+                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
                         <span>优惠金额</span>
                     </Col>
                     
@@ -126,36 +106,46 @@
                     <FormItem
                 v-for="(item, index) in formItem.items"
                 :key="index"
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row>
-                 <Col span="1" style="background: #fff;height:50px;line-height:50px;text-align:center">
+            <Row v-bind:class="{lastRow:index==formItem.items.length-1}">
+                 <Col span="1" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
-                    <Col span="4" style="background: #fff;padding:0 15px;height:50px;line-height:50px;text-align:center">
+                    <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" @on-change="changeType">
                             <Option v-for="types in youhui" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
-                       <DatePicker type="date" placeholder="开始时间" v-if="item.type !== 'qianmian'" v-model="item.beginDate" ></DatePicker>
+                    <Col span="4" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="4" class="discount-table-content">
                         <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
                         <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="4" class="discount-table-content">
                         <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
                         <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>
-                    <Col span="4" style="background: #fff;height:50px;line-height:50px;text-align:center;padding:0 15px">
+                    <Col span="5" class="discount-table-content" style="border-right:1px solid #e9eaec;">
                         <Input v-model="item.money" placeholder="金额" disabled></Input>
                     </Col>   
             </Row>
         </FormItem>
+                 <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <div class="total-money" v-if="formItem.items.length">
+                        <span>服务费总计</span>
+                        <span class="money">12,000.00 </span>
+                        <span class="money">壹万两仟元整</span>
+                    </div>
+                    </Col>
+                </Row>
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">
@@ -163,23 +153,49 @@
                     </FormItem>
                  </Col>
                  <Col class="col">
-                    <FormItem label="履约保证金总额" style="width:252px">
-                        <Input v-model="formItem.deposit" placeholder="履约保证金总额"></Input>
-                        <div>
-                            <span v-for="types in youhui" :key="types.value" class="button-list">{{ types.label }}</span>
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.endDate" disabled ></DatePicker >
+                    </FormItem> 
+                 </Col>
+            </Row>
+            <Row>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
                         </div>
-                    </FormItem>
+
+                 </Col>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                        </div>
                  </Col>
             </Row>
             
                 
             </DetailStyle>
-        <FormItem>
-            <Button type="primary" @click="handleSubmit('formItem')">Submit</Button>
-            <Button type="ghost" style="margin-left: 8px">Cancel</Button>
+        <FormItem style="padding-left:24px;margin-top:40px">
+            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
     </Form>
+    
+    <Modal
+        v-model="openStation"
+        title="选择工位"
+        ok-text="保存"
+        cancel-text="取消"
+        width="750"
+        @on-ok="submitStation"
+        @on-cancel="cancelStation"
+         class-name="vertical-center-modal"
+     >
+        <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+    </Modal>
 
+        
     </div>
 </template>
 
@@ -188,17 +204,20 @@
 import sectionTitle from '~/components/sectionTitle.vue'
 import selectCommunities from '~/components/selectCommunities.vue'
 import selectCustomers from '~/components/selectCustomers.vue'
+import selectSaler from '~/components/selectSaler.vue'
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
+import planMap from '~/components/planMap.vue';
+import dateUtils from 'vue-dateutils';
+import '~/assets/styles/createOrder.less';
+
+
 
 
 
     export default {
         data() {
             const validateFloor = (rule, value, callback) => {
-                console.log('validateFloor--rule',rule)
-                console.log('validateFloor ---value', value)
-                console.log('validateFloor---callback',callback)
                 if (!value) {
                     return callback(new Error('Age cannot be empty'));
                 }else{
@@ -206,10 +225,36 @@ import DetailStyle from '~/components/detailStyle';
                 }
             };
             return {
-                loading1:false,
+                openStation:false,
                 selectAll:false,
                 discountError:false,
                 index:1,
+                depositType:'',
+                disabled:false,
+                delStation:[],
+                payType:'',
+                stationData:{
+                    submitData:[],
+                    deleteData:[],
+                    clearAll:false
+                },
+                stationAll:{},
+                payList:[
+                    {value:'ONE',label:'月付'},
+                    {value:'TWO',label:'两月付'},
+                    {value:'THREE',label:'季付'},
+                    {value:'SIX',label:'半年付'},
+                    {value:'TWELVE',label:'年付'},
+                    {value:'ALL',label:'全款'},
+                ],
+                params:{},
+                depositList:[
+                    {label:'2个月',value:'2个月'},
+                    {label:'3个月',value:'3个月'},
+                    {label:'4个月',value:'4个月'},
+                    {label:'5个月',value:'5个月'},
+                    {label:'6个月',value:'6个月'},
+                ],
                 youhui:[
                     {
                         label:'折扣',
@@ -237,50 +282,21 @@ import DetailStyle from '~/components/detailStyle';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'age'
+                        key: 'price'
                     },
                     {
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            console.log('=====>',h,params)
-                            return h('strong', params.row.name+'至'+params.row.date)
+                            return h('strong', this.formItem.beginDate+'至'+this.formItem.endDate)
                         }
                     },
                     {
                         title: '小计',
-                        key: 'address'
+                        key: 'price'
                     }
                 ],
-                data1: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        id:1,
-                        address: 'New York No. 1 Lake Park',
-                        date: '2016-10-03'
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        id:2,
-                        address: 'London No. 1 Lake Park',
-                        date: '2016-10-01'
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        id:3,
-                        address: 'Sydney No. 1 Lake Park',
-                        date: '2016-10-02'
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        id:4,
-                        address: 'Ottawa No. 2 Lake Park',
-                        date: '2016-10-04'
-                    }
+                stationList: [
                 ],
                 floors:[{
                     value:'4',
@@ -340,7 +356,12 @@ import DetailStyle from '~/components/detailStyle';
             sectionTitle,
             selectCommunities,
             DetailStyle,
-            selectCustomers
+            selectCustomers,
+            selectSaler,
+            planMap
+        },
+        created(){
+            // this.openStation = false
         },
         methods: {
             handleSubmit:function(name) {
@@ -360,16 +381,21 @@ import DetailStyle from '~/components/detailStyle';
                     discountError = false;
                     message = '只能有一个折扣。'
                 }
+                let _this = this;
+                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid && discountError) {
                         this.$Message.success('Success!');
                     } else {
-                        this.$Message.error(message);
+                        _this.disabled = false;
+
+                        this.$Notice.error({
+                            title:message
+                        });
                     }
                 })
             },
             selectDiscount:function(value){
-                console.log('selectAll',value);
                 let items = this.formItem.items;
                 items = items.map((item)=>{
                     let obj = item;
@@ -391,7 +417,6 @@ import DetailStyle from '~/components/detailStyle';
                 return true;
                 });
                 this.formItem.items = items;
-                console.log('deleteDiscount',items);
 
             },
             //优惠类型选择
@@ -418,6 +443,15 @@ import DetailStyle from '~/components/detailStyle';
                 }else{
                     this.formItem.community = '';
                 }
+                this.clearStation()
+                
+            },
+            clearStation:function(){
+                this.stationData={
+                    submitData:[],
+                    deleteData:[],
+                };
+                this.stationList = [];
             },
             changeCustomer:function(value){
                 if(value){
@@ -425,13 +459,15 @@ import DetailStyle from '~/components/detailStyle';
                 }else{
                     this.formItem.customer = '';
                 }
-
+            },
+            changeSaler:function(value){
+                this.formItem.saler = value;
             },
             floorsChange:function(value){
                 console.log('-----',value)
             },
             deleteStation:function(){
-                let stationVos = this.data1;
+                let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
                 stationVos = stationVos.filter(function(item, index) {
                     if (selectedStation.indexOf(item.id) != -1) {
@@ -439,10 +475,38 @@ import DetailStyle from '~/components/detailStyle';
                     }
                 return true;
                 });
-                this.data1 = stationVos;
+                this.stationList = stationVos;
+                this.stationData.submitData = stationVos;
             },
             showStation:function(){
-
+                if(!this.formItem.community){
+                    this.$Notice.error({
+                            title:'请先选择社区'
+                        });
+                    return;
+                }
+                if(!this.formItem.beginDate){
+                    this.$Notice.error({
+                            title:'请先选择开始时间'
+                        });
+                    return;
+                }
+                if(!this.formItem.endDate){
+                    this.$Notice.error({
+                            title:'请先选择结束时间'
+                        });
+                    return;
+                }
+                let params = {
+                    floor:'3,4,2',
+                    communityId:this.formItem.community,
+                    mainBillId:3162,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    time:+new Date(),
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
+                }
+                this.openStation = true;
+                this.params = params;
             },
             selectRow:function(selection){
                 let selectionList = [];
@@ -459,7 +523,37 @@ import DetailStyle from '~/components/detailStyle';
                     status: 1
                 });
             },
+            selectDeposit:function(value){
 
+                this.depositType = value
+            },
+            selectPayType:function(value){
+                this.payType = value
+            },
+            submits:function(value){
+                console.log('submits')
+            },
+            submitStation:function(){
+                this.stationList = this.stationData.submitData;
+                this.delStation = this.stationData.deleteData;
+
+            },
+            onResultChange:function(val){
+                console.log('onResultChange',val)
+                this.stationData = val;
+                
+            },
+            cancelStation:function(){
+                this.stationData = {
+                    submitData:this.stationList,
+                    deleteData:[],
+                };
+
+            },
+            changeTime:function(){
+                console.log('=changeTime========')
+                this.clearStation()
+            },
                     
                
         }

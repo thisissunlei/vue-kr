@@ -70,15 +70,15 @@
                         <Menu active-name="1" theme="dark" width="auto">
                     <div class="layout-logo-left"></div>
                     <MenuItem name="1">
-                        <a href="/orderCenter/orderManage">
+                        <a href="/contractCenter/list">
                             <Icon type="ios-navigate" :size="iconSize"></Icon>
-                            <span class="layout-text">订单列表</span>
+                            <span class="layout-text">合同列表</span>
                         </a>
                     </MenuItem>
                     <MenuItem name="2">
-                        <a href="/contractCenter/list">
+                        <a href="/orderCenter/orderManage">
                             <Icon type="ios-keypad" :size="iconSize"></Icon>
-                            <a class="layout-text">合同列表</a>
+                            <span class="layout-text">订单列表</span>
                         </a>
                     </MenuItem>
                     <MenuItem name="3">

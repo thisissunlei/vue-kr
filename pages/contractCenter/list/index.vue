@@ -228,13 +228,13 @@
                 console.log('导出');
             },
             getListData(params){
-                var _this=this;
-                axios.get('get-list-contract', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.detail=r.data.items;
-                }, e => {
-                    _this.$Message.info(e);
-                })   
+                // var _this=this;
+                // axios.get('get-list-contract', params, r => {
+                //     _this.totalCount=r.data.totalCount;
+                //     _this.detail=r.data.items;
+                // }, e => {
+                //     _this.$Message.info(e);
+                // })   
             },
             //批量下载按钮点击
             batchBtnClick(){

@@ -34,7 +34,6 @@ function filterNull (o) {
 */
 
 function apiAxios (method, name, params, success, failure) {
-  console.log('apiAxios',params)
   if (params) {
     params = filterNull(params)
   }
@@ -54,7 +53,6 @@ function apiAxios (method, name, params, success, failure) {
   })
   //success
   .then(function (res) {
-    console.log('success',params);
     if (res.status === 200) {
       if (success) {
         success(res.data)
@@ -71,8 +69,7 @@ function apiAxios (method, name, params, success, failure) {
   })
   //failure
   .catch(function (err) {
-    console.log('success',params);
-    
+
     let res = err.response
     if (err) {
       console.log('api error, HTTP CODE: ' + res)

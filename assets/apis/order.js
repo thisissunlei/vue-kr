@@ -111,4 +111,9 @@ export default  {
     url: 'krspace-pay/bill/release',
     method: 'post'
   },
+  //本地联调测试接口
+  'get-order-detail': {
+    url: 'krspace-finance-web/checkinagreement/checkin-agreement/actions/show?',
+    method: 'get'
+  },
 }

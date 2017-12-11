@@ -1,5 +1,21 @@
 <style lang="less"> 
-    
+   .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
    
 </style>
 
@@ -10,7 +26,7 @@
         <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
-            <Row>  
+            <Row style="margin-bottom:30px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customer">
                     <selectCustomers name="formItem.customer" :onchange="changeCustomer"></selectCustomers>
@@ -23,14 +39,14 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px">
+                    <FormItem label="销售员" style="width:252px" prop="saler">
                     <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
-            <Row>  
+            <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
                         <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
@@ -158,12 +174,13 @@
                     </FormItem> 
                  </Col>
             </Row>
-            <Row>
+            <Row style="">
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
                         </div>
+                        <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
                  </Col>
                  <Col class="col">
@@ -176,7 +193,7 @@
             
                 
             </DetailStyle>
-        <FormItem style="padding-left:24px;margin-top:40px">
+        <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
@@ -228,7 +245,7 @@ import '~/assets/styles/createOrder.less';
                 openStation:false,
                 selectAll:false,
                 discountError:false,
-                index:1,
+                index:0,
                 depositType:'',
                 disabled:false,
                 delStation:[],
@@ -319,15 +336,16 @@ import '~/assets/styles/createOrder.less';
                     city:'',
                     items:[]
                 },
+                errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
                     beginDate: [
-                        { required: true,type: 'date', message: '此项不可为空', trigger: 'change' }
+                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
                     ],
                     endDate: [
-                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
                     time: [
-                        { required: true, message: '此项不可为空', trigger: 'blur' }
+                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
                     ],
                     // city:[
                     //     { required: true, message: '此项不可为空', trigger: 'change' }
@@ -336,10 +354,13 @@ import '~/assets/styles/createOrder.less';
                     //     { required: true, message: '此项不可为空', trigger: 'change' }
                     // ],
                     community:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
+                        { required: true, message: '请选择社区', trigger: 'change' }
                     ],
                     customer:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
+                        { required: true, message: '请选择客户', trigger: 'change' }
+                    ],
+                    saler:[
+                        { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
                     // floor: [
                     //     { validator: validateFloor, trigger: 'change' }
@@ -364,9 +385,22 @@ import '~/assets/styles/createOrder.less';
             // this.openStation = false
         },
         methods: {
+            config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+            },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
                 let _this = this;
+                if(!this.payType){
+                    this.errorPayType = true
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -409,6 +443,7 @@ import '~/assets/styles/createOrder.less';
                 if(!value){
                     return;
                 }
+                this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
                 this.formItem.items[itemIndex].value = itemValue;
@@ -492,6 +527,8 @@ import '~/assets/styles/createOrder.less';
                 this.stationData.submitData = stationVos;
             },
             showStation:function(){
+                this.config()
+
                 if(!this.formItem.community){
                     this.$Notice.error({
                             title:'请先选择社区'

@@ -13,18 +13,18 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customer">
-                    <selectCustomers name="formItem.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="formItem.customer" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="community">
-                    <selectCommunities name="formItem.community" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities name="formItem.community" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px">
-                    <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
+                    <selectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -33,14 +33,14 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.leaseBegindate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                     
                 </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.leaseEnddate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -217,6 +217,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
+            this.getDetailData();
             const validateFloor = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('Age cannot be empty'));
@@ -228,7 +229,7 @@ import '~/assets/styles/createOrder.less';
                 openStation:false,
                 selectAll:false,
                 discountError:false,
-                index:1,
+                index:0,
                 depositType:'',
                 disabled:false,
                 delStation:[],
@@ -319,6 +320,8 @@ import '~/assets/styles/createOrder.less';
                     city:'',
                     items:[]
                 },
+                customerName:'',
+                communityName:'',
                 ruleCustom:{
                     beginDate: [
                         { required: true,type: 'date', message: '此项不可为空', trigger: 'change' }
@@ -329,12 +332,7 @@ import '~/assets/styles/createOrder.less';
                     time: [
                         { required: true, message: '此项不可为空', trigger: 'blur' }
                     ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
+
                     community:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
@@ -361,9 +359,32 @@ import '~/assets/styles/createOrder.less';
             planMap
         },
         created(){
-            // this.openStation = false
+            // this.getDetailData();
+            console.log('created---edit')
         },
         methods: {
+            getDetailData:function(){
+                let _this = this;
+                let {params}=this.$route;
+                let from={
+                    id:params.orderEdit
+                };
+                axios.get('get-order-detail', from, r => {
+                    let data = r.data;
+                    console.log('get-order-detail===>',data.customerid)
+                    _this.formItem.customer = data.customerid;
+                    _this.customerName = data.customerName;
+                    _this.formItem.community = data.communityid;
+                    _this.communityName = data.communityName;
+                    _this.formItem.leaseEnddate = data.leaseEnddate;
+                    _this.formItem.leaseBegindate = data.leaseBegindate;
+                    _this.stationList = data.stationVos;
+                    _this.payType = 'TWO';
+                    _this.depositType = '2个月'
+                    }, e => {
+                        _this.$Message.info(e);
+                })
+            },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
                 let _this = this;
@@ -411,25 +432,30 @@ import '~/assets/styles/createOrder.less';
                 }
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
+
+
+
+
+
+
                 this.formItem.items[itemIndex].value = itemValue;
-                let items = [];
-                items = this.formItem.items.map((item)=>{
-                    if(item.value == 'qianmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'houmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'zhekou'){
-                        item.beginDate = new Date()
-                        item.endDate = new Date()
-                    }
-                    return item;
-                })
+                // let items = [];
+                // items = this.formItem.items.map((item)=>{
+                //     if(item.value == 'qianmian'){
+                //         item.endDate = new Date()
+                //         item.zhekou = '';
+                //     }else if(item.value == 'houmian'){
+                //         item.endDate = new Date()
+                //         item.zhekou = '';
+                //     }else if(item.value == 'zhekou'){
+                //         item.beginDate = new Date()
+                //         item.endDate = new Date()
+                //     }
+                //     return item;
+                // })
                 let error=false;
                 let message = '';
-                this.formItem.items = items;
-                let typeList = items.map(item=>{
+                let typeList = this.formItem.items.map(item=>{
                     return item.value;
                 })
                 let qianmian = typeList.join(",").split('qianmian').length-1;
@@ -447,8 +473,13 @@ import '~/assets/styles/createOrder.less';
                     this.$Notice.error({
                         title:message
                     });
-                    this.formItem.items.splice(itemIndex,1);
+                    console.log('itemIndex',itemIndex)
+                    this.formItem.items.remove(itemIndex);
+
                 }
+                console.log('======',this.formItem.items)
+                     // this.formItem.items = items;
+
             },
             changeCommunity:function(value){
                 if(value){

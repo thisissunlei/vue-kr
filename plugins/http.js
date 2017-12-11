@@ -52,11 +52,6 @@ function apiAxios (method, name, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     withCredentials: false,
-    transformRequest:[function (data) {
-        data = Qs.stringify(data);
-        return data;
-    }],
-    headers:{'Content-Type':'application/x-www-form-urlencoded'},
   })
   //success
   .then(function (res) {

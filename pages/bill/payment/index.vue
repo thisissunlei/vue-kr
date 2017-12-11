@@ -56,12 +56,23 @@
   margin:25px auto 0;      
    
 }
+.u-upload-title{
+    width:500px;
+    div{
+        width:97%;
+    }
+    .u-upload-content{
+        width:84px;
+        height:110px;
+        margin:25px auto 0;
+    }
+}
 </style>
 <template>
 <div class="g-order">
     <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
-        <Button type="primary">导入回款明细</Button>
+        <Button type="primary" @click="importDetail">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>  
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
@@ -87,8 +98,6 @@
             </div>
         </div>
     </div>
-    
-    
      <Modal
         v-model="openSearch"
         title="高级查询"
@@ -125,6 +134,28 @@
         :warn="warn"
         v-on:changeOpen="onChangeOpen"
     ></Message>
+    <Modal
+        v-model="openImport"
+        title="导入回款明细"
+        ok-text="确定"
+        cancel-text="取消"
+        width="500"
+        @on-ok="importSubmit"
+     >
+        <div class="u-upload-title">
+            <Upload
+                type="drag"
+                :before-upload="handleUpload"
+                action="/jsonplaceholder.typicode.com/posts/"
+            >
+                <div class="u-upload-content">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>请选择上传文件</p>
+                </div>
+            </Upload>
+        </div>
+    </Modal>
+    
 </div>
 </template>
 
@@ -149,6 +180,7 @@ export default {
             return {
                 openSearch:false,
                 openBind:false,
+                openImport:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -336,7 +368,19 @@ export default {
                     pageSize:this.pageSize
                 }
                 this.getTableData(Params);
-            }
+            },
+            importDetail(){
+               this.openImport=true;
+            },
+            handleUpload (file) {
+                this.file = file;
+                console.log('file====',file)
+                return false;
+            },
+            importSubmit(){
+
+            },
+
 
         }
 

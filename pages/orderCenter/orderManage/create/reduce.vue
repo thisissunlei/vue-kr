@@ -300,7 +300,7 @@ import '~/assets/styles/createOrder.less';
         },
         head() {
             return {
-                title: '新建续租服务订单管理'
+                title: '新建减租服务订单管理'
             }
         },
         components: {

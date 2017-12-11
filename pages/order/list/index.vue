@@ -43,7 +43,7 @@
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page :total="totalCount" page-size="15" @on-change="changePage" show-total show-elevator></Page>
             </div>
@@ -93,8 +93,8 @@ export default {
             return {
                 openSearch:false,
                 openCancel:false,
-                tableData:this.getTableData(),
                 totalCount:1,
+                tableData:[],
                 params:{
                     page:1,
                     pageSize:15
@@ -103,28 +103,32 @@ export default {
                     {
                         title: '订单编号',
                         key: 'orderNo',
-                        align:'center'
+                        align:'center',
+                        width:220,
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
+                        width:220,
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center'
+                        align:'center',
+                        width:120,
                     },
                     {
                         title: '订单总额',
                         key: 'totalAmount',
-                        align:'center'
+                        align:'center',
+                        width:70,
                     },
                     {
                         title: '订单生成时间',
                         key: 'createTime',
                         align:'center',
-                        width:160,
+                        width:140,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.createTime));
                             return time;
@@ -145,22 +149,10 @@ export default {
                         }
                     },
                     {
-                        title: '支付状态',
-                        key: 'payStatus',
-                        align:'center',
-                        render(h, obj){
-                                if(obj.row.payStatus==='WAIT'){
-                                    return <span class="u-txt-red">待付款</span>;
-                                }else if(obj.row.payStatus==='PAID'){
-                                    return <span class="u-txt">已付款</span>;
-                                }
-                            }
-                    },
-                    {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:120,
+                        width:110,
                         render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
@@ -201,6 +193,9 @@ export default {
                 
             }
         },
+        created:function(){
+            this.getTableData(this.params);
+        },
         methods:{
             showSearch (params) {
                 this.openSearch=true;
@@ -230,19 +225,14 @@ export default {
             onExport(){
                  console.log('导出')
             },
-            getTableData(index){
-                let data = [];
-                let params=this.params;
-                var _this=this;
+            getTableData(params){
                 axios.get('order-list', params, r => {
                     console.log('r', r);
-                    data=r.data;
-                    _this.totalCount=r.data.totalCount;
+                    this.tableData=r.data.items;
+                    this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)
                 })
-                  
-                return data;
             },
             changePage (index) {
                 this.tableData = this.getTableData(index);

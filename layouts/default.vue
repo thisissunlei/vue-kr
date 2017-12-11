@@ -70,12 +70,16 @@
                         <Menu active-name="1" theme="dark" width="auto">
                     <div class="layout-logo-left"></div>
                     <MenuItem name="1">
-                        <Icon type="ios-navigate" :size="iconSize"></Icon>
-                        <span class="layout-text">合同管理</span>
+                        <a href="/orderCenter/orderManage">
+                            <Icon type="ios-navigate" :size="iconSize"></Icon>
+                            <span class="layout-text">订单列表</span>
+                        </a>
                     </MenuItem>
                     <MenuItem name="2">
-                        <Icon type="ios-keypad" :size="iconSize"></Icon>
-                        <span class="layout-text">基础配置</span>
+                        <a href="/contractCenter/list">
+                            <Icon type="ios-keypad" :size="iconSize"></Icon>
+                            <a class="layout-text">合同列表</a>
+                        </a>
                     </MenuItem>
                     <MenuItem name="3">
                         <Icon type="ios-analytics" :size="iconSize"></Icon>

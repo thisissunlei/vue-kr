@@ -36,7 +36,7 @@
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
                 <i-input 
-                    v-model="params.customerName" 
+                    v-model="params.customName" 
                     placeholder="请输入客户名称"
                     style="width: 252px"
                     @on-change="changeCustomer"
@@ -84,7 +84,6 @@
                 params:{
                     page:1,
                     pageSize:15,
-                    customerName:"",
                 },
                 loadingStatus: false,
                 file: null,
@@ -156,8 +155,8 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                }, '下载'),
-                                 h(krUpload, {
+                                }, '下载')
+                                 /*h(krUpload, {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -170,7 +169,8 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                },'ppp')];
+                                },'ppp')*/
+                                ];
                           
                            return h('div',btnRender);  
                         }

@@ -6,8 +6,40 @@
 				margin-bottom:30px;
 			}
 		}
-
+.u-tab-list{
+	max-height: 282px;
+	overflow: hidden;
+	margin-bottom:10px;
+	table td {
+		height:48px;
 	}
+}
+.u-tab-show{
+	height:auto !important;
+}
+.u-show-tip{
+	text-align: center;
+	font-size:14px;
+	color: #499DF1;
+	margin:20px 0;
+	.u-bottom{
+		width:10px;
+		height:6px;
+		display: inline-block;
+		margin-left: 8px;
+		background:url('~assets/images/arrow_bottom.svg') no-repeat center center;
+	}
+	.u-top{
+		width:10px;
+		height:6px;
+		margin-left: 8px;
+		display: inline-block;
+		background:url('~assets/images/arrow_top.svg') no-repeat center center;
+	}
+}
+
+
+}
 </style>
 <template>
 <div class="g-bill-detail">
@@ -45,7 +77,14 @@
 			</labelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
-			<Table border :columns="cost" :data="costInfo"></Table>
+			<div v-bind:class="[ISshow?showClass:hideClass]" >
+				<Table border :columns="cost" :data="costInfo"></Table>
+			</div>
+
+			<div v-if="costInfo.length>5" class="u-show-tip">
+				<div v-if="!ISshow" @click="showTab">展开<span class="u-bottom"></span></div>
+				<div v-if="ISshow"@click="hideTab">收起<span class="u-top"></span></div>
+			</div>
 		</DetailStyle>	
 		<DetailStyle info="结算记录">
 			<Table border :columns="settle" :data="settleInfo"></Table>
@@ -68,6 +107,9 @@ export default {
 	},
 	data(){
 		return{
+			hideClass:'u-tab-list',
+			showClass:'u-tab-show',
+			ISshow:false,
 			basicInfo:{},
 			costInfo:[],
 			settleInfo:[],
@@ -163,6 +205,12 @@ export default {
                 console.log('error',e)
 			})
 			
+		},
+		showTab(){
+			this.ISshow=true;
+		},
+		hideTab(){
+			this.ISshow=false;
 		}
 	}
 

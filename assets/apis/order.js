@@ -73,19 +73,42 @@ export default  {
   },
   //回款列表
   'get-payment-list': {
-    url: 'krspace-pay/payment/list?',
+    url: '/krspace-pay/payment/list?',
+    method: 'get'
+  },
+  //回款详情
+  'get-payment-detail': {
+    url: '/krspace-pay/payment/detail?',
     method: 'get'
   },
   //绑定客户
   'payment-bind': {
-    url: 'krspace-pay/payment/bind?',
+    url: '/krspace-pay/payment/bind?',
     method: 'post'
   },
   //账单中心--获取客户 
   'getCompanyInfo':{
     url:'/krspace-finance-web/member/csr-list?',
     method:'get'
-},
-
-
+  },
+  //账单中心--收入管理--收入列表
+  'get-income-list':{
+    url:'/krspace-pay/income/list?',
+    method:'get'
+  },
+  //账单中心--收入管理--收入详情
+  'get-income-detail':{
+    url:'/krspace-pay/income/detail?',
+    method:'get'
+  },
+  //账单中心--收入管理--挂收入
+  'add-income':{
+    url:'/krspace-pay/income/add',
+    method:'post'
+  },
+  //账单结算--反结算
+  'bill-release': {
+    url: 'krspace-pay/bill/release',
+    method: 'post'
+  },
 }

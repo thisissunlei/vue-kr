@@ -8,9 +8,10 @@
                 width:22px;
                 height:22px;
                 background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
+                background-size: contain;
                 float:right;
-            
+                cursor:pointer;
+
             }
     }
     .ivu-checkbox-wrapper{
@@ -40,9 +41,14 @@
         margin-top: 34px;
         margin-bottom: 36px;
 }
-.ivu-modal-footer{
-    border:none;
+.m-search{
+    color:#2b85e4; 
+    display:inline-block;
+    margin-left:10px;
+    font-size:14px;
+    cursor:pointer;
 }
+
 
 </style>
 
@@ -51,14 +57,29 @@
     <sectionTitle label="已出账单管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onBillPay">批量结算</Button>
-        <span class="u-high-search" @click="showSearch"></span>   
+        <span class="u-high-search" @click="showSearch"></span> 
+        <div style='display:inline-block;float:right;padding-right:20px;'>
+            <Input 
+                v-model="customerName" 
+                placeholder="请输入客户名称"
+                style="width: 252px"
+            ></Input>
+            <div class='m-search' @click="lowerSubmit">搜索</div>
+         </div>
+          
     </div>
     <div class="u-table">
         <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" show-total show-elevator></Page>
+                <Page 
+                    :total="totalCount"
+                    :page-size="pageSize" 
+                    show-total 
+                    show-elevator
+                    @on-change="changePage"
+                ></Page>
             </div>
         </div>
     </div>
@@ -68,8 +89,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="searchSubmit"
      >
-        <HighSearch></HighSearch>
+        <HighSearch  v-on:formData="getSearchData"></HighSearch>
     </Modal>
     <Modal
         v-model="openSettle"
@@ -77,9 +99,12 @@
         ok-text="确定"
         cancel-text="取消"
         width="443"
+        @on-ok="settleSubmit"
      >
-       <settleAccounts :detail="itemDetail"> </settleAccounts>
-       <div slot="footer" style="border:none;"></div>
+       <settleAccounts 
+            :detail="itemDetail"
+             v-on:formData="getSettleData"
+        > </settleAccounts>
     </Modal>
     <Modal
         v-model="openAntiSettle"
@@ -87,11 +112,12 @@
         ok-text="确定"
         cancel-text="取消"
         width="443"
+        @on-ok="antiSettleSubmit"
      >
-       <antiSettlement :detail="itemDetail"> </antiSettlement>
-       <div slot="footer" style="border:none;">
-		
-	   </div>
+       <antiSettlement 
+            :detail="itemDetail"
+            v-on:formData="getAntiSettleData"
+        > </antiSettlement>
     </Modal>
     <Modal
         v-model="openClose"
@@ -102,6 +128,12 @@
      >
       <p class="u-tip">请先选择结算数据！</p>
     </Modal>
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -113,6 +145,7 @@ import settleAccounts from './settleAccounts';
 import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import sectionTitle from '~/components/sectionTitle';
+import Message from '~/components/Message';
 
     export default {
         name: 'Bill',
@@ -120,7 +153,8 @@ import sectionTitle from '~/components/sectionTitle';
             HighSearch,
             settleAccounts,
             antiSettlement,
-            sectionTitle
+            sectionTitle,
+            Message
         },
         data () {
             return {
@@ -132,10 +166,15 @@ import sectionTitle from '~/components/sectionTitle';
                 billList:[],
                 billIds:[],
                 itemDetail:{},
+                pageSize:15,
                 tabParams:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
                 },
+                openMessage:false,
+                warn:'',
+                MessageType:'',
+                customerName:'',
                 columns1: [
                     {
                         type: 'selection',
@@ -326,9 +365,7 @@ import sectionTitle from '~/components/sectionTitle';
             },
             showSettle (params) {
                 this.itemDetail=params;
-                console.log('params===',params)
                 this.openSettle=true;
-                
             },
             showAntiSettle(params){
                 this.itemDetail=params;
@@ -363,11 +400,88 @@ import sectionTitle from '~/components/sectionTitle';
                 axios.post('batch-pay',params , r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
+                axios.post('batch-pay',params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="结算成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
                 }, e => {
                     console.log('error',e)
                 })
 
             },
+            getSettleData(form){
+                this.settleData=form;
+            },
+            getAntiSettleData(form){
+                this.antiSettleData=form;
+            },
+            getSearchData(form){
+                this.searchData=form;
+            },
+            settleSubmit(){
+                let params={
+                    amount:this.settleData,
+                    billId:this.itemDetail.billId
+                }
+                axios.post('bill-pay',params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="结算成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
+                }, e => {
+                    
+                })
+            },
+            antiSettleSubmit(){
+                let params={
+                    amount:this.antiSettleData,
+                    billId:this.itemDetail.billId
+                }
+                axios.post('bill-release',params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="反结算成功"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
+                }, e => {
+                    
+                })
+            },
+            searchSubmit(){
+                this.getTableData(this.searchData)
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
+            lowerSubmit(){
+                this.tabParams.customerName=this.customerName;
+                this.getTableData(this.tabParams);
+            },
+            changePage(page){
+               let Params={
+                    page:page,
+                    pageSize:this.pageSize
+                }
+                this.getTableData(Params);
+            }
             
         }
 

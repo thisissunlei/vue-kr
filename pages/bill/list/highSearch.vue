@@ -56,11 +56,19 @@
             </FormItem>
             
             <FormItem label="社区名称" class="u-input">
-                <Input 
-                    v-model="formItem.communityIds" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               ></Input>
+                  <Select 
+                        v-model="formItem.communityIds" 
+                        style="width:250px"
+                        placeholder="请选择社区" 
+                    >
+                        <Option 
+                            v-for="item in communityList" 
+                            :value="item.id" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                    </Select>
             </FormItem>
              <FormItem label="账单类型" class="u-input">
                   <Select 
@@ -81,16 +89,18 @@
             <FormItem label="付款截止日期"  class="u-input u-date">
                 <DatePicker 
                     type="date" 
-                    v-model="formItem.billStartTime" 
+                    v-model="formItem.startTime" 
                     placeholder="请选择付款开始日期" 
                     style="width: 250px;"
+                    @on-change="startChange"
                ></DatePicker> 
                 <span class="u-date-txt">至</span>
                <DatePicker 
                     type="date" 
-                    v-model="formItem.billEndTime" 
+                     v-model="formItem.endTime" 
                     placeholder="请选择付款截止日期" 
                     style="width: 250px;"
+                    @on-change="endChange"
                ></DatePicker> 
             </FormItem>
              <FormItem label="账单状态" class="u-input">
@@ -112,12 +122,9 @@
 </div>
 </template>	
 <script>
-
+import axios from 'kr/axios';
 export default{
     name:'highSearch',
-    components:{
-       
-    },
     data (){
 		return{
 			formItem:{
@@ -125,10 +132,9 @@ export default{
                 customerName:'',
                 communityIds:'',
                 billType:'',
-                beginTime:'',
+                startTime:'',
                 endTime:'',
-                billStartTime:'',
-                billEndTime:'',
+                payStatus:'',
             },
             typeList:[
                 {
@@ -146,19 +152,39 @@ export default{
             ],
             statusList:[
                 {
-                    value:'待付款',
+                    value:'WAIT',
                     label:'待付款'
                 },
                 {
-                    value:'已付款',
-                    label:'已付款'
-                }
-            ]
+                    value:'PAID',
+                    label:'已付清'
+                },
+                 {
+                    value:'PAYMENT',
+                    label:'未付清'
+                },
+            ],
+            communityList:[]
 		}
     },
+    created:function(){
+        axios.get('join-bill-community','', r => {    
+                this.communityList=r.data.items 
+            }, e => {
+                this.$Message.info(e);
+        })
+    },
     methods:{
-        
-    }
+        startChange(date){
+            this.formItem.billStartTime=date;
+        },
+        endChange(date){
+            this.formItem.billEndTime=date;
+        }
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 	
 }
 </script>

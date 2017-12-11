@@ -34,21 +34,56 @@
     .u-txt-orange{
         color: #F5A623;
     }
+    .u-clearfix { zoom:1; }
+    .u-clearfix:after {
+        clear: both;
+        content: '.';
+        height: 0;
+        display: block;
+        visibility: hidden;
+    }
+    .m-search{
+        color:#2b85e4; 
+        display:inline-block;
+        margin-left:10px;
+        font-size:14px;
+        cursor:pointer;
+    }
+    
 }   
+.u-bind{
+  width:310px;
+  margin:25px auto 0;      
+   
+}
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="交易流水"></sectionTitle>
+    <sectionTitle label="回款管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary">导入回款明细</Button>
-        <span class="u-high-search" @click="showSearch"></span>   
+        <span class="u-high-search" @click="showSearch"></span>  
+        <div style='display:inline-block;float:right;padding-right:20px;'>
+            <Input 
+                v-model="customerName" 
+                placeholder="请输入客户名称"
+                style="width: 252px"
+            ></Input>
+            <div class='m-search' @click="lowerSubmit">搜索</div>
+         </div> 
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
-            <Button type="primary" @click="onExport">导出</Button>
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" :pageSize="pageSize" @on-change="changePage" show-total show-elevator></Page>
+                <Page 
+                    :total="totalCount" 
+                    :page-size="pageSize"
+                    @on-change="changePage" 
+                    show-total 
+                    show-elevator
+                ></Page>
             </div>
         </div>
     </div>
@@ -60,8 +95,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="searchSubmit"
      >
-        <HighSearch></HighSearch>
+        <HighSearch  v-on:formData="getSearchData"></HighSearch>
     </Modal>
     <Modal
         v-model="openBind"
@@ -69,12 +105,26 @@
         ok-text="确定"
         cancel-text="取消"
         width="490"
-        @on-ok="orderCancel"
+        @on-ok="bindSubmit"
      >
         <div class="u-cancel-title">
-            绑定客户
+            <Form  :model="formItem" label-position="left"  :label-width="60"  class="u-bind u-clearfix">
+                <FormItem label="客户名称">
+                    <searchCompany
+                        v-model="formItem.customerId" 
+                        style="width: 250px"
+                        :onchange="onchange"
+                    ></searchCompany>
+                </FormItem>
+            </Form>
         </div>
     </Modal>
+    <Message 
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        v-on:changeOpen="onChangeOpen"
+    ></Message>
 </div>
 </template>
 
@@ -84,41 +134,53 @@ import axios from 'kr/axios';
 import sectionTitle from '~/components/sectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
+import searchCompany from '~/components/searchCompany';
+import Message from '~/components/Message';
 
 export default {
         name: 'receive',
         components:{
             sectionTitle,
-            HighSearch
+            HighSearch,
+            searchCompany,
+            Message
         },
         data () {
             return {
                 openSearch:false,
                 openBind:false,
-                tableData:this.getTableData(),
+                tableData:[],
                 totalCount:1,
                 pageSize:15,
                 params:{
-                    page:1,
-                    pageSize:15
+                    page:15,
+                    pageSize:1
                 },
+                formItem:{
+                    customerId:'',
+                },
+                openMessage:false,
+                MessageType:'',
+                warn:'',
+                customerName:'',
                 columns: [
                     {
                         title: '交易流水号',
-                        key: 'thirdTradeNo',
+                        key: 'tradeNo',
                         align:'center',
-                        width:145
+                        width:130
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
+                         width:190,
                     },
                     {
                         title: '回款日期',
                         key: 'ctime',
                         align:'center',
-                        width:150,
+                        width:130,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
                             return time;
@@ -135,10 +197,16 @@ export default {
                         key: 'payWay',
                         align:'center',
                         render(h, obj){
-                            if(obj.row.payWay==='BANKTRANSFER'){
+                            if(obj.row.payWay==='ALIAPPPAY'){
+                                return <span class="u-txt">支付宝app</span>;
+                            }else if(obj.row.payWay==='ALIWEBPAY'){
+                                return <span class="u-txt">支付宝网银</span>;
+                            }else if(obj.row.payWay==='WXPAY'){
+                                return <span class="u-txt">微信</span>;
+                            }else if(obj.row.payWay==='BANKONLINE'){
+                                return <span class="u-txt">网银</span>;
+                            }else if(obj.row.payWay==='BANKTRANSFER'){
                                 return <span class="u-txt">银行转账</span>;
-                            }else if(obj.row.payWay==='ALIPAY'){
-                                return <span class="u-txt-orange">支付宝</span>;
                             }
                         }
                     },
@@ -146,14 +214,14 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center',
-                        width:145,
+                        width:120,
                         
                     },
                     {
                         title: '收款账户',
-                        key: 'receivceAccount',
+                        key: 'receiveAccount',
                         align:'center',
-                        width:145
+                        width:120
                     },
                     {
                         title: '操作',
@@ -198,18 +266,7 @@ export default {
             }
         },
         created:function(){
-            this.tableData=[
-                {
-                    thirdTradeNo:'0220171201100000001',
-                    customerName:'罗焘如',
-                    ctime:1505704034000,
-                    amount:'29000.00',
-                    payAccount:'0220171201100000001',
-                    receivceAccount:'0220171201100000001',
-                    payWay:'VALID'
-
-                }
-            ]
+            this.getTableData(this.params);
         },
         methods:{
             showSearch (params) {
@@ -217,44 +274,68 @@ export default {
             },
             openView(params){
                 
-                //location.href=`./receive/detail/${params.orderId}`;
-                location.href=`./receive/detail/12`
+                location.href=`./payment/detail/${params.id}`;
+               
             },
             bindPerson (params) {
+                this.itemDetail=params;
                 this.openBind=true;
-            },
-            orderCancel(){
-            let itemDetail=this.itemDetail;
-            let  params={
-                    orderId:itemDetail.orderId
-                }
-                axios.get('cancel-order', params, r => {
-                    console.log('r', r);
-                
-                }, e => {
-                    console.log('error',e)
-                })
-               
             },
             onExport(){
                  console.log('导出')
             },
-            getTableData(index){
-                let data = [];
-                let params=this.params;
-                var _this=this;
-                axios.get('order-list', params, r => {
-                    console.log('r', r);
-                    data=r.data;
-                    _this.totalCount=r.data.totalCount;
+            getTableData(params){
+                axios.get('get-payment-list', params, r => {
+                    this.tableData=r.data.items;
+                    this.totalCount=r.data.totalCount;
                 }, e => {
                     console.log('error',e)
                 })
-                  
-                return data;
             },
             changePage (index) {
-                this.tableData = this.getTableData(index);
+                this.params={
+                    page:index,
+                    pageSize:15
+                }
+                this.tableData = this.getTableData(this.params);
+            },
+             onchange(data){
+                this.formItem.customerId=data;
+            },
+            bindSubmit(){
+                this.formItem.paymentId=this.itemDetail.id;
+                axios.post('payment-bind', this.formItem, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.MessageType="success";
+                    this.warn="客户绑定成功！"
+                    this.openMessage=true;
+                    this.getTableData(this.params);
+                })
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
+            getSearchData(form){
+                this.searchData=form;
+            },
+             searchSubmit(){
+                this.getTableData(this.searchData)
+            },
+             lowerSubmit(){
+                this.params.customerName=this.customerName;
+                this.getTableData(this.params);
+            },
+            changePage(page){
+               let Params={
+                    page:page,
+                    pageSize:this.pageSize
+                }
+                this.getTableData(Params);
             }
 
         }

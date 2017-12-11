@@ -17,21 +17,21 @@
 </style>  
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="合同编号" prop="orderNum"  class='bill-search-class'>
+                <Form-item label="合同编号"  class='bill-search-class'>
                     <i-input 
-                        v-model="formItem.orderNum" 
+                        v-model="formItem.serialNumber" 
                         placeholder="请输入合同编号"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="客户名称" prop="customerName" class='bill-search-class'>
+                <Form-item label="客户名称" class='bill-search-class'>
                     <i-input 
                         v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     ></i-input>
                 </Form-item>
-                <Form-item label="社区名称" prop="communityName" class='bill-search-class'> 
+                <Form-item label="社区名称" class='bill-search-class'> 
                     <Select 
                         v-model="formItem.communityName" 
                         placeholder="请输入社区名称" 
@@ -47,10 +47,10 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="合同类型" prop="orderType" class='bill-search-class' v-show='type'>
+                <Form-item label="合同类型" class='bill-search-class' v-show='type'>
                     <Select 
-                        v-model="formItem.orderType" 
-                        placeholder="请输入订单类型" 
+                        v-model="formItem.contractType" 
+                        placeholder="请输入合同类型" 
                         style="width: 252px"
                     >
                         <Option 
@@ -62,9 +62,9 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="合同状态" prop="orderStatus" class='bill-search-class'>
+                <Form-item label="合同状态" class='bill-search-class'>
                     <Select 
-                        v-model="formItem.orderStatus" 
+                        v-model="formItem.contractStatus" 
                         placeholder="请输入合同状态" 
                         style="width: 252px"
                     >
@@ -79,14 +79,14 @@
                 </Form-item>
                 <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.cStartDate"
+                        v-model="formItem.minCTime"
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
                     ></DatePicker>
                    <span class="u-date-txt">至</span>
                     <DatePicker 
-                        v-model="formItem.cEndDate"
+                        v-model="formItem.maxCTime"
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
@@ -105,14 +105,12 @@
             return{
                 dateError:false,
                 formItem:{
-                   orderNum:'',
-                   customerName:'',
-                   payStatus:'',
-                   orderStatus:'',
-                   orderType:'',
                    communityName:'',
-                   cEndDate:'',
-                   cStartDate:''
+                   contractType:'',
+                   customName:'',
+                   maxCTime:'',
+                   minCTime:'',
+                   serialNumber:'',
                 },
                
                 type:this.mask=='join'?true:false,

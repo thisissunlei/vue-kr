@@ -346,7 +346,7 @@ import '~/assets/styles/createOrder.less';
                 // this.clearStation()
             },
             changeTime:function(value){
-                console.log('changeTime',value)
+                this.renewForm.endDate = value;
             },
             changeSaler:function(value){
                 this.renewForm.saler = value;
@@ -375,8 +375,8 @@ import '~/assets/styles/createOrder.less';
             selectDeposit:function(){
 
             },
-            selectPayType:function(){
-
+            selectPayType:function(value){
+                this.payType  = value;
             },
             handleAdd:function(){
                 if(!this.renewForm.community){

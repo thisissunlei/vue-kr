@@ -397,9 +397,6 @@ import Message from '~/components/Message';
                 let params={
                     billIds:JSON.stringify(this.billIds)
                 }
-                axios.post('batch-pay',params , r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
                 axios.post('batch-pay',params, r => {
                     if(r.code==-1){
                         this.MessageType="error";

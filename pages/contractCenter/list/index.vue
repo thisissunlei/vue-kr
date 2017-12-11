@@ -31,18 +31,8 @@
 
     <div>
         <sectionTitle label = "合同列表"></sectionTitle>
-        <h1  @click="h1Click">点击</h1>
-            <krUpload 
-                :onSuccess="handleSuccess"
-                :on-error="handleError"
-                :on-format-error="handleFormatError"
-                :format="['jpg','jpeg','png']" action="//jsonplaceholder.typicode.com/posts/" ></krUpload>
-        <div style='text-align:right;margin-bottom:10px'>
-            <Button 
-                type="primary" 
-                style="float: left;margin:10px 20px;"
-                @click="batchBtnClick"
-            >批量下载</Button>
+       <div style='text-align:right;margin-bottom:10px'>
+          
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
                 <i-input 
@@ -239,7 +229,7 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('join-bill-list', params, r => {
+                axios.get('get-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                 }, e => {

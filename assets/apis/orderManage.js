@@ -1,4 +1,4 @@
-//公共的api
+//订单管理-订单接口
 module.exports = {
   //入驻订单列表
   'join-bill-list': {

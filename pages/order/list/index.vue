@@ -63,8 +63,9 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        @on-ok="searchSubmit"
      >
-        <HighSearch></HighSearch>
+        <HighSearch v-on:formData="getSearchData"></HighSearch>
     </Modal>
     <Modal
         v-model="openCancel"
@@ -243,7 +244,13 @@ export default {
                     pageSize:this.pageSize
                 }
                 this.getTableData(Params);
-            }
+            },
+             getSearchData(form){
+                this.searchData=form;
+            },
+             searchSubmit(){
+                this.getTableData(this.searchData)
+            },
 
         }
 

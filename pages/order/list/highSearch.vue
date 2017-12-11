@@ -55,33 +55,42 @@
             </FormItem>
             
             <FormItem label="收入确认时间" class="u-input  u-date">
-                <DatePicker 
-                    v-model="formItem.beginTime"
+               <DatePicker 
                     type="date" 
-                    placeholder="请选择开始时间" 
-                    style="width: 250px"
-               ></DatePicker>
+                    v-model="formItem.startTime" 
+                    placeholder="请选择付款开始日期" 
+                    style="width: 250px;"
+                    @on-change="startChange"
+               ></DatePicker> 
                <span class="u-date-txt">至</span>
                <DatePicker 
-                    v-model="formItem.endTime"
                     type="date" 
-                    placeholder="请选择结束时间" 
-                    style="width: 250px"
+                     v-model="formItem.endTime" 
+                    placeholder="请选择付款截止日期" 
+                    style="width: 250px;"
+                    @on-change="endChange"
                ></DatePicker>   
             </FormItem>
             <FormItem label="社区名称" class="u-input">
-               <Select 
-                    v-model="formItem.communityIds" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               >
-                <Option value="beijing">New York</Option>
-               </Select> 
+                 <Select 
+                        v-model="formItem.communityIds" 
+                        style="width:250px"
+                        placeholder="请选择社区" 
+                    >
+                        <Option 
+                            v-for="item in communityList" 
+                            :value="item.id" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                    </Select>
             </FormItem>
         </Form>
 </div>
 </template>	
 <script>
+import axios from 'kr/axios';
 export default{
 	name:'highSearch',
 	data (){
@@ -92,9 +101,28 @@ export default{
                 communityIds:'',
                 beginTime:'',
                 endTime:''
-            }
+            },
+            communityList:[]
 		}
-	}
+    },
+    created:function(){
+        axios.get('join-bill-community','', r => {    
+                this.communityList=r.data.items 
+            }, e => {
+                this.$Message.info(e);
+        })
+    },
+    methods:{
+        startChange(date){
+            this.formItem.billStartTime=date;
+        },
+        endChange(date){
+            this.formItem.billEndTime=date;
+        }
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 }
 </script>
 

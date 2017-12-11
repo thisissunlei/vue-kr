@@ -30,13 +30,17 @@
 <template>
 
     <div>
+
         <sectionTitle label = "合同列表"></sectionTitle>
-        <h1  @click="h1Click">点击</h1>
+       
             <krUpload 
                 :onSuccess="handleSuccess"
                 :on-error="handleError"
                 :on-format-error="handleFormatError"
-                :format="['jpg','jpeg','png']" action="//jsonplaceholder.typicode.com/posts/" ></krUpload>
+                :format="['jpg','jpeg','png']" 
+                action="//jsonplaceholder.typicode.com/posts/" 
+            >
+            </krUpload>
         <div style='text-align:right;margin-bottom:10px'>
             <Button 
                 type="primary" 
@@ -169,8 +173,7 @@
                                 }, '下载'),
                                  h(krUpload, {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        action:"//jsonplaceholder.typicode.com/posts/" 
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -208,14 +211,7 @@
                this.file = file;
                 return false;
             },
-            h1Click(){
-                this.loadingStatus = true;
-                setTimeout(() => {
-                    this.file = null;
-                    this.loadingStatus = false;
-                    this.$Message.success('Success')
-                }, 1500)
-            },
+            
             showSearch (params) {
                 this.openSearch=true;
             },

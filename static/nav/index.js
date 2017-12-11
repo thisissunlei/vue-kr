@@ -542,7 +542,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware()];//getOrderCenter(),getBillCenter()
+        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware(),getOrderCenter()];//getOrderCenter(),getBillCenter()
         
         return arr;
     }

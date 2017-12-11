@@ -41,7 +41,7 @@
         <span @click="showSearch"></span>   
     </div>
     <div class="u-table">
-        <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
+        <Table border  :columns="columns" :data="tableData"  stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -231,7 +231,6 @@ export default {
             },
             getTableData(params){
                 axios.get('order-list', params, r => {
-                    console.log('r', r);
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
@@ -239,7 +238,6 @@ export default {
                 })
             },
             changePage(page){
-                console.log('page===',page)
                let Params={
                     page:page,
                     pageSize:this.pageSize

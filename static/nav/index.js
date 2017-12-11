@@ -542,7 +542,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware(),getOrderCenter()];
+        var arr = [getHomeNav(), getOfficeNav(), getOANav(), getOperationNav(), getAdministrationNav(), getFinanceNav(), getPermissionNav(), getSmartHardware()];//getOrderCenter(),getBillCenter()
         
         return arr;
     }
@@ -1318,6 +1318,30 @@
             menuItems: [
                 {
                     primaryText: "订单合同",
+                    router: './order/',
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    menuItems: [
+                        {
+                            primaryText: "会议室订单管理",
+                            router: './orderlist',
+                            type:'vue',
+                            menuCode: 'fina_verify_page'
+                        },
+                    ]
+                },
+               
+            ]
+        }
+    }
+    function getBillCenter() {
+        return {
+            primaryText: "账单中心",
+            router: 'page',
+            type:'vue',
+            menuItems: [
+                {
+                    primaryText: "订单合同",
                     router: 'manage',
                     iconName: 'icon-money',
                     iconColor: '#79859a',
@@ -1334,5 +1358,4 @@
             ]
         }
     }
-
 })(window);

@@ -137,6 +137,11 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
+                            let arr = params.row.file||[];
+                            let newArr = []
+                            for(let i=0;i<arr.length;i++){
+                                newArr.push({"name":arr[i].fileName,"url":''})
+                            }
                            var btnRender=[
                                h('Button', {
                                     props: {
@@ -168,7 +173,7 @@
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
-                                        file:params.row.file||[]
+                                        file: newArr
                                     },
                                     style: {
                                         color:'#2b85e4'

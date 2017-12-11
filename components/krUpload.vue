@@ -35,7 +35,7 @@
  import axios from 'kr/axios';
 export default{
 	name:'krUpload',
-	props:["type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onSuccess","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:["file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onSuccess","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
 	data(){
 		return {
 			
@@ -44,16 +44,7 @@ export default{
 				left:0,
 				top:0,
 			},
-			defaultList: [
-                    {
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }
-                ],
+			defaultList:!this.file.length?[]:this.file
 		}
 		
 	},
@@ -86,7 +77,7 @@ export default{
 		
 	},
 	mounted(){
-		
+		console.log(this.file,"LLLLLLL")
 	},
 }
 	

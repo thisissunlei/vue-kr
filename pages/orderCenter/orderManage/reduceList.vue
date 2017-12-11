@@ -124,20 +124,17 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('Button', {
+                               h('nuxt-link', {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        size: 'small',
+                                        to:'/orderCenter/orderManage/12/reduceView'
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params)
-                                        }
                                     }
-                                }, '查看'), h('Button', {
+                                }, '查看'), 
+                                h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -194,9 +191,6 @@
             showSearch () {
                 this.openSearch=!this.openSearch;
                 CommonFuc.clearForm(this.upperData);
-            },
-            openView(params){
-                location.href=location.href+`/${params.row.id}/reduceView`;
             },
             openCancel(params){
                 this.openNullify=true;

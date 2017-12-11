@@ -12,6 +12,9 @@
 		.u-txt{
 			color:#666;
 		}
+		.u-txt-orange{
+        	color: #F5A623;
+    	}
 	}
 </style>
 <template>
@@ -23,7 +26,7 @@
 				{{basicInfo.orderNo}}
 			</labelText>
 			<labelText label="订单状态：">
-				{{basicInfo.orderStatus}}
+				{{orderStatus}}
 			</labelText>
 			<labelText label="预订会议室名称：">
 				{{basicInfo.roomName}}
@@ -33,7 +36,6 @@
 			</labelText>
 			<labelText label="预订开始时间：">
 				{{orderStartTime}}
-				
 			</labelText>
 			<labelText label="预订结束时间：">
 				{{orderEndTime}}
@@ -52,7 +54,7 @@
 				</a>
 			</labelText>
 			<labelText label="订单创建时间：">
-				{{cTime}}
+				{{createTime}}
 			</labelText>
 			<labelText label="支付状态：">
 				{{payStatus}}
@@ -82,16 +84,27 @@ export default {
 	},
 	data(){
 		return{
+			basicInfo:{},
+			coseInfo:[],
+			billInfo:[],
+			orderStartTime:'',
+			orderEndTime:'',
+			orderStatus:'',
+			createTime:'',
+			payStatus:"",
+			costInfo:[],
 			cost:[
 				{
 				 title: '订单总额',
                  key: 'totalAmount',
-                 align:'center'	
+				 align:'center'	,
+				 width:485
 				},
 				{
 				 title: '退款金额',
                  key: 'refundAmount',
-                 align:'center'	
+                 align:'center'	,
+				 width:485
 				}
 			],
 			bill:[
@@ -102,33 +115,33 @@ export default {
 				},
 				{
 				 title: '账单类型',
-                 key: 'billType',
+                 key: 'bizType',
 				 align:'center'	,
 				 render(h, obj){
-					if(obj.row.billType==='MEETING'){
+					if(obj.row.bizType==='MEETING'){
 						return '会议室账单';
-					}else if(obj.row.billType==='PRINT'){
+					}else if(obj.row.bizType==='PRINT'){
 						return '打印服务账单 ';
-					}else if(obj.row.billType==='CONTRACT'){
+					}else if(obj.row.bizType==='CONTRACT'){
 						return '工位服务订单';
 					}
 				 }
 				},
 				{
 				 title: '账单生成日期',
-                 key: 'billStartTime',
+                 key: 'billingDate',
 				 align:'center'	,
 				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billStartTime));
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.billingDate));
 					 return time;
 				 }
 				},
 				{
 				 title: '付款截止日期',
-                 key: 'billEndTime',
+                 key: 'dueDate',
 				 align:'center'	,
 				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
+					 let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dueDate));
 					 return time;
 				 }
 				},
@@ -141,6 +154,8 @@ export default {
 							return <span class="u-txt-red">待付款</span>;
 						}else if(obj.row.payStatus==='PAID'){
 							return <span class="u-txt">已付款</span>;
+						}else if(obj.row.payStatus==='PAYMENT'){
+							return <span class="u-txt-orange">未付清</span>;
 						}
 				 	}
 				}
@@ -148,69 +163,45 @@ export default {
 		}
 	},
 	created:function(){
-		//假数据--开始
-		this.basicInfo={
-
-		};
-		this.costInfo=[{
-				refundAmount:'-￥250.00',
-				totalAmount:'￥300.00'
-		}]
-		this.billInfo=[
-			{
-				billNo:'HYSZD201712010001',
-				billType:'MEETING',
-				billStartTime:1511404234000,
-				billEndTime:1511063377000,
-				payStatus:'WAIT'
-			},
-			{
-				billNo:'HYSZD201712010001',
-				billType:'PRINT',
-				billStartTime:1509372919000,
-				billEndTime:1509372919000,
-				payStatus:'PAID'
-			},
-			{
-				billNo:'HYSZD201712010001',
-				billType:'CONTRACT',
-				billStartTime:1505704034000,
-				billEndTime:1505704034000,
-				payStatus:'WAIT'
-			}
-		]
-		let payStatus='PAID'
-		this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1511404234000));
-		this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1509372919000));
-		this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(1505704034000));
-		this.payStatus=payStatus=='WAIT'?'待付款':'已付款';
-		//假数据--结束
-
 		this.getInfo();
-		
 	},
 	methods:{
 		getInfo(){
-			var _this=this;
 			let {params}=this.$route
 			let from={
 				orderId:params.orderId
 			};
 			axios.get('order-detail', from, r => {
-				console.log('r', r);
+				
 				let data=r.data;
-				_this.basicInfo=data;
-				_this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
-				_this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
-				_this.cTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.cTime));
-				_this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
-				_this.coseInfo=[
+				this.basicInfo=data;
+				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
+				this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
+				this.createTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.createTime));
+				this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
+				if(data.orderStatus=='VALID'){
+					this.orderStatus='已生效'
+				}else if(data.orderStatus=='CANCEL'){
+					this.orderStatus='已作废'
+				}else if(data.orderStatus=='REFUND'){
+					this.orderStatus='已退订'
+				}
+				this.costInfo=[
 					{
 					refundAmount:data.refundAmount,
 					totalAmount:data.totalAmount
 					}
 				]
-				_this.billInfo=data.billList;
+				this.billInfo=[
+					{
+						billNo:data.billInfo.billNo,
+						bizType:data.billInfo.bizType,
+						billingDate:data.billInfo.billingDate,
+						dueDate:data.billInfo.dueDate,
+						payStatus:data.billInfo.payStatus
+
+					}
+				]
 					
            	}, e => {
                 console.log('error',e)

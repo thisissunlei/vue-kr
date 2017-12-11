@@ -53,35 +53,51 @@
                     style="width: 250px"
                ></Input>  
             </FormItem>
-            
-            <FormItem label="收入确认时间" class="u-input  u-date">
-                <DatePicker 
-                    v-model="formItem.beginTime"
-                    type="date" 
-                    placeholder="请选择开始时间" 
-                    style="width: 250px"
-               ></DatePicker>
-               <span class="u-date-txt">至</span>
-               <DatePicker 
-                    v-model="formItem.endTime"
-                    type="date" 
-                    placeholder="请选择结束时间" 
-                    style="width: 250px"
-               ></DatePicker>   
-            </FormItem>
             <FormItem label="社区名称" class="u-input">
-               <Select 
-                    v-model="formItem.communityIds" 
-                    placeholder="请输入社区名称" 
-                    style="width: 250px"
-               >
-                <Option value="beijing">New York</Option>
-               </Select> 
+                 <Select 
+                        v-model="formItem.communityIds" 
+                        style="width:250px"
+                        placeholder="请选择社区" 
+                    >
+                        <Option 
+                            v-for="item in communityList" 
+                            :value="item.id" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                    </Select>
             </FormItem>
+             <FormItem label="订单状态" class="u-input">
+                 <Select 
+                        v-model="formItem.communityIds" 
+                        style="width:250px"
+                        placeholder="请选择订单状态" 
+                    >
+                        <Option 
+                           v-for="item in statusList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{item.label}}
+                        </Option>
+                    </Select>
+            </FormItem>
+            <FormItem label="收入确认时间" class="u-input">
+               <DatePicker 
+                    type="date" 
+                    v-model="formItem.startTime" 
+                    placeholder="请选择付款开始日期" 
+                    style="width: 250px;"
+                    @on-change="startChange"
+               ></DatePicker> 
+            </FormItem>
+            
         </Form>
 </div>
 </template>	
 <script>
+import axios from 'kr/axios';
 export default{
 	name:'highSearch',
 	data (){
@@ -92,9 +108,39 @@ export default{
                 communityIds:'',
                 beginTime:'',
                 endTime:''
-            }
+            },
+            communityList:[],
+            statusList:[
+                {
+                    value:'VALID',
+                    label:'已生效'
+                },
+                {
+                    value:'CANCEL',
+                    label:'已作废'
+                },
+                 {
+                    value:'REFUND',
+                    label:'已退订'
+                },
+            ],
 		}
-	}
+    },
+    created:function(){
+        axios.get('join-bill-community','', r => {    
+                this.communityList=r.data.items 
+            }, e => {
+                this.$Message.info(e);
+        })
+    },
+    methods:{
+        startChange(date){
+            this.formItem.orderDate=date;
+        }
+    },
+    updated:function(){
+        this.$emit('formData', this.formItem);
+    },
 }
 </script>
 

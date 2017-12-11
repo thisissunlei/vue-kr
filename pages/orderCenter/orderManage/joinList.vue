@@ -166,8 +166,6 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small',
                                         to:`/orderCenter/orderManage/12/${viewName}`
                                     },
                                     style: {

@@ -29,7 +29,7 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <HeightSearch v-on:bindData="upperChange" mask='reduce'></HeightSearch>
                 <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -53,7 +53,6 @@
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
     import CommonFuc from '~/components/commonFuc';
-    
 
     export default {
         name:'join',
@@ -92,56 +91,23 @@
                         align:'center'
                     },
                     {
-                        title: '服务费总额',
+                        title: '减租开始日期',
+                        key: 'startDate',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
+                            return time;
+                        }
+                    },
+                    {
+                        title: '减租金额',
                         key: 'rentAmount',
                         align:'center'
                     },
                     {
-                        title: '履约保证金',
-                        key: 'depositAmount',
-                        align:'center'
-                    },
-                    {
-                        title: '订单类型',
-                        key: 'orderType',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.orderType==='IN'){
-                                return <span class="u-txt">入驻服务订单</span>;
-                            }else if(obj.row.orderType==='INCREASE'){
-                                return <span class="u-txt-orange">增租服务订单</span>;
-                            }else if(obj.row.orderType==='CONTINUE'){
-                                return <span class="u-txt-red">续租服务订单</span>;
-                            }
-                        }
-                    },
-                    {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
-                                return <span class="u-txt">未生效</span>;
-                            }else if(obj.row.orderStatus==='EFFECTIVE'){
-                                return <span class="u-txt-orange">已生效</span>;
-                            }else if(obj.row.orderStatus==='INVALID'){
-                                return <span class="u-txt-red">已作废</span>;
-                            }
-                        }
-                    },
-                    {
-                        title: '支付状态',
-                        key: 'payStatus',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.payStatus==='WAIT_PAY'){
-                                return <span class="u-txt">待支付</span>;
-                            }else if(obj.row.payStatus==='COMPLETE'){
-                                return <span class="u-txt-orange">已付清</span>;
-                            }else if(obj.row.payStatus==='UN_COMPLETE'){
-                                return <span class="u-txt-red">未付清</span>;
-                            }
-                        }
+                        align:'center'
                     },
                     {
                         title: '创建时间',
@@ -162,7 +128,7 @@
                                     props: {
                                         type: 'text',
                                         size: 'small',
-                                        to:'/orderCenter/orderManage/12/joinView'
+                                        to:'/orderCenter/orderManage/12/reduceView'
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -182,7 +148,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus!='未生效'){
+                           if(params.row.orderStatus=='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -226,14 +192,6 @@
                 this.openSearch=!this.openSearch;
                 CommonFuc.clearForm(this.upperData);
             },
-            openView(params){
-                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
-                    location.href=location.href+`/${params.row.id}/joinView`;
-                }
-                if(params.row.orderType=='CONTINUE'){
-                    location.href=location.href+`/${params.row.id}/renewView`;
-                }*/
-            },
             openCancel(params){
                 this.openNullify=true;
             },
@@ -251,7 +209,7 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('join-bill-list', params, r => {
+                axios.get('reduce-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;

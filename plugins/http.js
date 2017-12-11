@@ -10,7 +10,6 @@ function toType (obj) {
 // 参数过滤函数
 function filterNull (o) {
   for (var key in o) {
-    console.log('===========',key,toType(o[key]))
     if (o[key] === null) {
       delete o[key]
     }

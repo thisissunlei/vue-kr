@@ -30,8 +30,13 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="减租结束日期" style="width:252px" prop="endDate" >
+                    <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="date" placeholder="续租结束日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    </FormItem>
+                </Col>
+                <Col class="col">
+                    <FormItem label="销售员" style="width:252px" prop="saler">
+                    <selectSaler name="renewForm.saler" :onchange="changeSaler" ></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -52,6 +57,102 @@
                     </div>
                 </Col>
                 </Row>
+                <Row style="margin-bottom:10px">  
+                <Col class="col">
+                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
+                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                </Col>
+
+                </Row>
+                <Row >
+                    <Col span="1" class="discount-table-head"  >
+                        <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
+                    </Col>
+                    <Col span="6" class="discount-table-head" >
+                       <span> 优惠类型</span>
+                    </Col>
+                    <Col span="4" class="discount-table-head" >
+                        <span>开始时间</span>
+                    </Col>
+                    <Col span="4" class="discount-table-head" >
+                        <span>结束时间</span>
+                        
+                    </Col>
+                    <Col span="4" class="discount-table-head" >
+                        <span>折扣</span>
+                        
+                    </Col>
+                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
+                        <span>优惠金额</span>
+                    </Col>
+                    
+                </Row>
+                    <FormItem
+                v-for="(item, index) in renewForm.items"
+                :key="index"
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
+                :prop="'items.' + index + '.type'"
+                :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
+            <Row v-bind:class="{lastRow:index==renewForm.items.length-1}">
+                 <Col span="1" class="discount-table-content" style="padding:0">
+                        <Checkbox v-model="item.select"></Checkbox>
+                    </Col>
+                    <Col span="6" class="discount-table-content">
+                         <Select v-model="item.type" @on-change="changeType">
+                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                        </Select>
+                    </Col>
+                    <Col span="4" class="discount-table-content" ></DatePicker>
+                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                    </Col>
+                    <Col span="4" class="discount-table-content">
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
+                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                    </Col>
+                    <Col span="4" class="discount-table-content">
+                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
+                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
+
+                        
+                    </Col>
+                    <Col span="5" class="discount-table-content" style="border-right:1px solid #e9eaec;">
+                        <Input v-model="item.money" placeholder="金额" disabled></Input>
+                    </Col>   
+            </Row>
+        </FormItem>
+                 <Row style="margin-bottom:10px">
+                    <Col sapn="24">
+                    <div class="total-money" v-if="renewForm.items.length">
+                        <span>服务费总计</span>
+                        <span class="money">12,000.00 </span>
+                        <span class="money">壹万两仟元整</span>
+                    </div>
+                    </Col>
+                </Row>
+            <Row>
+                 <Col class="col">
+                    <FormItem label="服务费总额" style="width:252px">
+                        <Input v-model="renewForm.totalMoney" placeholder="服务费总额" disabled></Input>
+                    </FormItem>
+                 </Col>
+            </Row>
+            <Row>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
+                        </div>
+
+                 </Col>
+                 <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                        </div>
+                 </Col>
+            </Row>
+            
                 
             <FormItem style="margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>

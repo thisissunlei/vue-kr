@@ -6,6 +6,7 @@
         position: relative;
         border-radius: 4px;
         overflow: hidden;
+        padding-top: 65px;
     }
 
     .layout-breadcrumb{
@@ -65,11 +66,10 @@
 </style>
 <template>
     <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
-        
-                <div class="layout-header">
-
-                 
-                </div>
+        <Row type="flex">
+            
+            <Col :span="spanRight">
+               
                 <!-- <div class="layout-breadcrumb">
                     <Breadcrumb>
                         <BreadcrumbItem href="#">Index</BreadcrumbItem>
@@ -85,34 +85,35 @@
                 <div class="layout-copy">
                     &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
                 </div>
-           
+            </Col>
+        </Row>
     </div>
 </template>
 <script>
     export default {
         data () {
             return {
-                spanLeft: 5,
-                spanRight: 19,
+               
+                spanRight: 24,
 
             }
         },
         computed: {
-            iconSize () {
-                return this.spanLeft === 5 ? 14 : 24;
-            }
+            // iconSize () {
+            //     return this.spanLeft === 5 ? 14 : 24;
+            // }
         },
         methods: {
         
-            toggleClick () {
-                if (this.spanLeft === 5) {
-                    this.spanLeft = 2;
-                    this.spanRight = 22;
-                } else {
-                    this.spanLeft = 5;
-                    this.spanRight = 19;
-                }
-            }
+            // toggleClick () {
+            //     if (this.spanLeft === 5) {
+            //         this.spanLeft = 2;
+            //         this.spanRight = 22;
+            //     } else {
+            //         this.spanLeft = 5;
+            //         this.spanRight = 19;
+            //     }
+            // }
         }
     }
 </script>

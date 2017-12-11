@@ -25,10 +25,8 @@
                 str = location.hash.split("#/")[1]
                 href = every.router;
             } else {
-               
-                
+
                 href = "http://" + location.hostname + "/" + every.router;
-                console.log(href,str, "KKKKKKK")
             }
             
             if (href === str){
@@ -1315,7 +1313,7 @@
     function getOrderCenter() {
         return {
             primaryText: "订单中心",
-            router: 'finance',
+            router: 'page',
             type:'vue',
             menuItems: [
                 {

@@ -1,8 +1,8 @@
-//公共的api
+//订单管理-合同管理api
 module.exports = {
-    //获取平面图信息
+    //获取合同列表
     'get-list-contract': {
-        url: '/mockjs/66/api/krspace-erp-web/wf/request/contract/enter/search?',
+        url: '/api/krspace-erp-web/wf/request/contract/enter/search?',
         method: 'get'
     },
     

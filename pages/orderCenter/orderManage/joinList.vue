@@ -173,7 +173,7 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        to:`/orderCenter/orderManage/12/${viewName}`
+                                        to:`/orderCenter/orderManage/${params.row.id}/${viewName}`
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -188,7 +188,7 @@
                                         color:'#2b85e4'
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus!='未生效'){
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -248,7 +248,8 @@
                 console.log('作废');
             },
             outSubmit (){
-                console.log('导出');
+                var url = `/api/krspace-op-web/order-seat-add/export`;
+		        window.location.href = url;
             },
             getListData(params){
                 var _this=this;

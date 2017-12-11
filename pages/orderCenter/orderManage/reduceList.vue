@@ -113,7 +113,16 @@
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -132,7 +141,7 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        to:'/orderCenter/orderManage/12/reduceView'
+                                        to:`/orderCenter/orderManage/${params.row.id}/reduceView`
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -147,7 +156,7 @@
                                         color:'#2b85e4'
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='未生效'){
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',

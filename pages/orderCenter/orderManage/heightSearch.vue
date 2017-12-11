@@ -33,7 +33,7 @@
                 </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
                     <Select 
-                        v-model="formItem.communityName" 
+                        v-model="formItem.communityId" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
@@ -123,7 +123,7 @@
                    payStatus:'',
                    orderStatus:'',
                    orderType:'',
-                   communityName:'',
+                   communityId:'',
                    cEndDate:'',
                    cStartDate:''
                 },

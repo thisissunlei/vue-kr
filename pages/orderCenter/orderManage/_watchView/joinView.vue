@@ -113,7 +113,7 @@ export default {
 				},
 				{
 				 title: '标准单价(元/月)',
-                 key: 'seatName',
+                 key: 'originalPrice',
                  align:'center'	
                 },
                 {
@@ -143,44 +143,52 @@ export default {
 			treatment:[
 				{
 				 title: '优惠类型',
-                 key: 'number',
+                 key: 'tacticsName',
                  align:'center'	
 				},
 				{
 				 title: '开始日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'freeStart',
+				 align:'center',
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.freeStart));
+					 return time;
+				 }		
 				},
 				{
 				 title: '结束日期',
-                 key: 'number',
-                 align:'center'	
+                 key: 'freeEnd',
+				 align:'center',
+				 render(h, obj){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.freeEnd));
+					 return time;
+				 }		
 				},
 				{
 				 title: '折扣比例',
-                 key: 'number',
+                 key: 'discountNum',
                  align:'center'	
 				},
 				{
 				 title: '优惠金额',
-                 key: 'number',
+                 key: 'amount',
                  align:'center'	
 				}
             ],
             contract:[
                {
 				 title: '合同编号',
-                 key: 'number',
+                 key: 'contractNum',
                  align:'center'	
 				},
 				{
 				 title: '合同金额',
-                 key: 'number',
+                 key: 'rentAmount',
                  align:'center'	
 				},
 				{
 				 title: '状态',
-                 key: 'number',
+                 key: 'contractStateType',
                  align:'center'	
 				}  
 			],
@@ -205,7 +213,8 @@ export default {
 				   _this.endDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate));
 				   _this.payDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime));
 				   _this.serviceData=r.data.orderSeatDetailVo;
-
+				   _this.treatmentData=r.data.contractTactics;
+				   _this.contractData=r.data.orderContractInfo;
            	}, e => {
                 _this.$Message.info(e);
         })

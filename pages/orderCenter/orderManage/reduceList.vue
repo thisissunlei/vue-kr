@@ -113,7 +113,16 @@
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -132,22 +141,22 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        to:'/orderCenter/orderManage/12/reduceView'
+                                        to:`/orderCenter/orderManage/${params.row.id}/reduceView`
                                     },
                                     style: {
-                                        color:'#2b85e4'
+                                        color:'#2b85e4',
+                                        paddingRight:'10px'
                                     }
                                 }, '查看'), 
-                                h('Button', {
+                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        to:`/contractCenter/${params.row.id}/viewCenter`
                                     },
                                     style: {
                                         color:'#2b85e4'
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='未生效'){
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -204,7 +213,14 @@
                 console.log('作废');
             },
             outSubmit (){
-                console.log('导出');
+                var where=[];
+                for(var item in this.params){
+                    if(this.params.hasOwnProperty(item)){
+                        where.push(`${item}=${this.params[item]}`);
+                    }
+                }
+                var url = `/api/krspace-op-web/order-seat-reduce/export?${where.join('&')}`;
+		        window.location.href = url;
             },
             getListData(params){
                 var _this=this;
@@ -236,6 +252,8 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);
             }
         }

@@ -52,6 +52,7 @@
                         v-model="formItem.contractType" 
                         placeholder="请输入合同类型" 
                         style="width: 252px"
+                        clearable
                     >
                         <Option 
                             v-for="item in typeList" 
@@ -67,6 +68,7 @@
                         v-model="formItem.contractStatus" 
                         placeholder="请输入合同状态" 
                         style="width: 252px"
+                        clearable
                     >
                         <Option 
                             v-for="item in orderList" 
@@ -114,20 +116,23 @@
                 },
                
                 type:this.mask=='join'?true:false,
+                //合同状态
                 orderList:[
+                    
                     {
-                        value:'NOT_EFFECTIVE',
+                        value:'UNENFORCED',
                         label:'未生效'
                     },
                     {
-                        value:'EFFECTIVE',
+                        value:'EXECUTED',
                         label:'已生效'
                     },
                     {
-                        value:'INVALID',
+                        value:'CANCELLATION',
                         label:'已作废'
                     }
                 ],
+                //合同类型
                 typeList:[
                     {
                         value:'IN',

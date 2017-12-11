@@ -1,20 +1,26 @@
 <template>
     <div class='m-bill-list'>
-            <div style='text-align:right;margin-bottom:10px'>
-               <div style='display:inline-block;margin:10px 20px;'>
-                    <span style='padding-right:10px'>客户名称</span>
-                    <i-input 
-                        v-model="params.customerName" 
-                        placeholder="请输入客户名称"
-                        style="width: 252px"
-                        @on-change="lowerChange"
-                    ></i-input>
-                </div>
-                <div class='m-search' @click="lowerSubmit">搜索</div>
-                <div class="m-bill-search" @click="showSearch">
-                  <span></span>   
-                </div> 
-           </div>
+            <div style='width:100%;padding:0 0 0 10px;'>
+                    <div style='display:inline-block;width:20%;'>
+                        <Button type="primary" @click="showReduce">减租</Button>
+                    </div>
+
+                    <div style='margin-bottom:10px;display:inline-block;width:80%;text-align:right;'>
+                         <div style='display:inline-block;margin:10px 20px;'>
+                            <span style='padding-right:10px'>客户名称</span>
+                            <i-input 
+                                v-model="params.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 252px"
+                                @on-change="lowerChange"
+                            ></i-input>
+                        </div>
+                        <div class='m-search' @click="lowerSubmit">搜索</div>
+                        <div class="m-bill-search" @click="showSearch">
+                          <span></span>   
+                        </div> 
+                   </div>
+            </div>
 
 
             <Table :columns="joinOrder" :data="joinData"></Table>
@@ -107,7 +113,16 @@
                     {
                         title: '订单状态',
                         key: 'orderStatus',
-                        align:'center'
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
+                                return <span class="u-txt">未生效</span>;
+                            }else if(obj.row.orderStatus==='EFFECTIVE'){
+                                return <span class="u-txt-orange">已生效</span>;
+                            }else if(obj.row.orderStatus==='INVALID'){
+                                return <span class="u-txt-red">已作废</span>;
+                            }
+                        }
                     },
                     {
                         title: '创建时间',
@@ -126,29 +141,22 @@
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small',
-                                        to:'/orderCenter/orderManage/12/reduceView'
+                                        to:`/orderCenter/orderManage/${params.row.id}/reduceView`
                                     },
                                     style: {
-                                        color:'#2b85e4'
+                                        color:'#2b85e4',
+                                        paddingRight:'10px'
                                     }
                                 }, '查看'), 
-                                h('Button', {
+                                h('nuxt-link', {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        to:`/contractCenter/${params.row.id}/viewCenter`
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='未生效'){
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
@@ -159,7 +167,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openCancel(params)
+                                            this.showNullify(params)
                                         }
                                     }
                                 }, '作废'),
@@ -173,7 +181,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openEdit(params)
+                                            this.showEdit(params)
                                         }
                                     }
                                 }, '编辑'))
@@ -192,20 +200,27 @@
                 this.openSearch=!this.openSearch;
                 CommonFuc.clearForm(this.upperData);
             },
-            openCancel(params){
+            showNullify(params){
                 this.openNullify=true;
             },
-            openEdit(params){
-
+            showReduce(){
+                console.log('减租新建');
             },
-            openApplication(params){
-                
+            showEdit(params){
+                console.log('编辑');
             },
             nullifySubmit (){
                 console.log('作废');
             },
             outSubmit (){
-                console.log('导出');
+                var where=[];
+                for(var item in this.params){
+                    if(this.params.hasOwnProperty(item)){
+                        where.push(`${item}=${this.params[item]}`);
+                    }
+                }
+                var url = `/api/krspace-op-web/order-seat-add/export?${where.join('&')}`;
+		        window.location.href = url;
             },
             getListData(params){
                 var _this=this;
@@ -237,6 +252,8 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);
             }
         }

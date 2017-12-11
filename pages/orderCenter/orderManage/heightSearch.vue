@@ -33,10 +33,11 @@
                 </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
                     <Select 
-                        v-model="formItem.communityName" 
+                        v-model="formItem.communityId" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
+                        clearable
                     >
                         <Option 
                             v-for="item in communityList" 
@@ -52,6 +53,7 @@
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
+                        clearable
                     >
                         <Option 
                             v-for="item in typeList" 
@@ -67,6 +69,7 @@
                         v-model="formItem.orderStatus" 
                         placeholder="请输入订单状态" 
                         style="width: 252px"
+                        clearable
                     >
                         <Option 
                             v-for="item in orderList" 
@@ -82,6 +85,7 @@
                         v-model="formItem.payStatus" 
                         placeholder="请输入支付状态" 
                         style="width: 252px"
+                        clearable
                     >
                         <Option 
                             v-for="item in payList" 
@@ -123,7 +127,7 @@
                    payStatus:'',
                    orderStatus:'',
                    orderType:'',
-                   communityName:'',
+                   communityId:'',
                    cEndDate:'',
                    cStartDate:''
                 },

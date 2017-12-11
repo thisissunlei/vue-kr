@@ -36,7 +36,7 @@
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
                 <i-input 
-                    v-model="params.customerName" 
+                    v-model="params.customName" 
                     placeholder="请输入客户名称"
                     style="width: 252px"
                     @on-change="changeCustomer"
@@ -72,6 +72,7 @@
     import sectionTitle from '~/components/sectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
+    import dateUtils from 'vue-dateutils';
     
     export default {
         components: {
@@ -84,7 +85,6 @@
                 params:{
                     page:1,
                     pageSize:15,
-                    customerName:"",
                 },
                 loadingStatus: false,
                 file: null,
@@ -116,13 +116,17 @@
                     },
                     {
                         title: '合同状态',
-                        key: 'date',
-                        align:'center'
+                        key: 'contractStatusName',
+                        align:'center',
                     },
                     {
                         title: '合同创建时间',
-                        key: 'date',
-                        align:'center'
+                        key: 'cTime',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
+                            return time;
+                        }
                     },
                     {
                         title: '操作',
@@ -156,8 +160,8 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                }, '下载'),
-                                 h(krUpload, {
+                                }, '下载')
+                                 /*h(krUpload, {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -170,7 +174,8 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                },'ppp')];
+                                },'ppp')*/
+                                ];
                           
                            return h('div',btnRender);  
                         }

@@ -1,8 +1,9 @@
 var path = require('path')
 module.exports = {
-	plugins: [
-		{src: '~plugins/iview',ssr: false},
-	],
+	plugins: [{
+		src: '~plugins/iview',
+		ssr: false
+	}],
 	css: ['iview/dist/styles/iview.css'],
 	build: {
 		vendor: ['axios'],
@@ -20,5 +21,5 @@ module.exports = {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/proxy'
-	],
+	]
 }

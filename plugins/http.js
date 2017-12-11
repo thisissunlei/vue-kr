@@ -4,11 +4,11 @@ import Qs from 'qs';
 // 引用axios
 var axios = require('axios')
 // 自定义判断元素类型JS
-function toType (obj) {
+function toType(obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
 // 参数过滤函数
-function filterNull (o) {
+function filterNull(o) {
   for (var key in o) {
     if (o[key] === null) {
       delete o[key]
@@ -33,14 +33,15 @@ function filterNull (o) {
   另外，不同的项目的处理方法也是不一致的，这里出错就是简单的alert
 */
 
-function apiAxios (method, name, params, success, failure) {
+
+function apiAxios(method, name, params, success, failure) {
   if (params) {
     params = filterNull(params)
   }
   let root = '/api/';
   let url = APIS[name].url;
-  if(url.indexOf('mockjs') !==-1){
-       root='http://rap.krspace.cn';
+  if (url.indexOf('mockjs') !== -1) {
+    root = 'http://rap.krspace.cn';
   }
 
   axios({
@@ -60,10 +61,15 @@ function apiAxios (method, name, params, success, failure) {
     } else {
       if (failure) {
         failure(res.data)
+
       } else {
-      console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
-        
-        // window.alert('error: ' + JSON.stringify(res.data))
+        if (failure) {
+          failure(res.data)
+        } else {
+          console.log('api error, HTTP CODE: ' + res.data)
+
+          // window.alert('error: ' + JSON.stringify(res.data))
+        }
       }
     }
   })
@@ -79,13 +85,13 @@ function apiAxios (method, name, params, success, failure) {
 }
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use((config) => {
-  if(config.method  == 'post'){
+  if (config.method == 'post') {
     let data = Qs.stringify(config.data);
     config.data = data;
   }
   return config;
-},(error) =>{
-   _.toast("错误的传参");
+}, (error) => {
+  _.toast("错误的传参");
   return Promise.reject(error);
 });
 

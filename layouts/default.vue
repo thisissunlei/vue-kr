@@ -67,7 +67,27 @@
 <template>
     <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
         <Row type="flex">
-            
+            <Col :span="spanLeft" class="layout-menu-left">
+                        <Menu active-name="1" theme="dark" width="auto">
+                    <div class="layout-logo-left"></div>
+                    <MenuItem name="1">
+                        <a href="/contractCenter/list">
+                            <Icon type="ios-navigate" :size="iconSize"></Icon>
+                            <span class="layout-text">合同列表</span>
+                        </a>
+                    </MenuItem>
+                    <MenuItem name="2">
+                        <a href="/orderCenter/orderManage">
+                            <Icon type="ios-keypad" :size="iconSize"></Icon>
+                            <span class="layout-text">订单列表</span>
+                        </a>
+                    </MenuItem>
+                    <MenuItem name="3">
+                        <Icon type="ios-analytics" :size="iconSize"></Icon>
+                        <span class="layout-text">活动列表</span>
+                    </MenuItem>
+                </Menu>
+            </Col>
             <Col :span="spanRight">
                
                 <!-- <div class="layout-breadcrumb">

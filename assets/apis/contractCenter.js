@@ -2,7 +2,7 @@
 module.exports = {
     //获取合同列表
     'get-list-contract': {
-        url: '/api/krspace-erp-web/wf/request/contract/enter/search?',
+        url: '/krspace-erp-web/wf/station/contract/enter/search?',
         method: 'get'
     },
     

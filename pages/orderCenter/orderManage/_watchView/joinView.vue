@@ -31,9 +31,7 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<labelText label="客户名称：">
-				<a href="">
-					{{basicInfo.customerName}}
-				</a>
+			    {{basicInfo.customerName}}
 			</labelText>
 			<labelText label="社区名称：">
 				{{basicInfo.communityName}}
@@ -53,7 +51,7 @@
 				{{endDate}}
 			</labelText>
 			<labelText label="分期方式：">
-				{{basicInfo.installmentType}}
+				{{basicInfo.installmentTypeName}}
 			</labelText>
 			<labelText label="首付款日期：">
 				{{payDate}}

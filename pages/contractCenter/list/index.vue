@@ -72,6 +72,7 @@
     import sectionTitle from '~/components/sectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
+    import dateUtils from 'vue-dateutils';
     
     export default {
         components: {
@@ -115,13 +116,17 @@
                     },
                     {
                         title: '合同状态',
-                        key: 'date',
-                        align:'center'
+                        key: 'contractStatusName',
+                        align:'center',
                     },
                     {
                         title: '合同创建时间',
-                        key: 'date',
-                        align:'center'
+                        key: 'cTime',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
+                            return time;
+                        }
                     },
                     {
                         title: '操作',
@@ -228,13 +233,13 @@
                 console.log('导出');
             },
             getListData(params){
-                // var _this=this;
-                // axios.get('get-list-contract', params, r => {
-                //     _this.totalCount=r.data.totalCount;
-                //     _this.detail=r.data.items;
-                // }, e => {
-                //     _this.$Message.info(e);
-                // })   
+                var _this=this;
+                axios.get('get-list-contract', params, r => {
+                    _this.totalCount=r.data.totalCount;
+                    _this.detail=r.data.items;
+                }, e => {
+                    _this.$Message.info(e);
+                })   
             },
             //批量下载按钮点击
             batchBtnClick(){

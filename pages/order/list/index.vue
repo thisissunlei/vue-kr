@@ -45,7 +45,13 @@
         <div style="margin: 10px 0 ;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page :total="totalCount" page-size="15" @on-change="changePage" show-total show-elevator></Page>
+                <Page 
+                    :total="totalCount" 
+                    :page-size="pageSize" 
+                    @on-change="changePage" 
+                    show-total 
+                    show-elevator
+                ></Page>
             </div>
         </div>
     </div>
@@ -95,6 +101,7 @@ export default {
                 openCancel:false,
                 totalCount:1,
                 tableData:[],
+                pageSize:15,
                 params:{
                     page:1,
                     pageSize:15
@@ -201,9 +208,7 @@ export default {
                 this.openSearch=true;
             },
             openView(params){
-                
                 location.href=`./list/detail/${params.orderId}`;
-                //location.href=`./list/detail/12`
             },
             cancel (params) {
                 this.openCancel=true;
@@ -220,7 +225,6 @@ export default {
                 }, e => {
                     console.log('error',e)
                 })
-               
             },
             onExport(){
                  console.log('导出')
@@ -234,8 +238,13 @@ export default {
                     console.log('error',e)
                 })
             },
-            changePage (index) {
-                this.tableData = this.getTableData(index);
+            changePage(page){
+                console.log('page===',page)
+               let Params={
+                    page:page,
+                    pageSize:this.pageSize
+                }
+                this.getTableData(Params);
             }
 
         }

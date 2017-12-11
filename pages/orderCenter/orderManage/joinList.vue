@@ -157,12 +157,18 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
+                           var viewName='';
+                           if(params.row.orderType=='CONTINUE'){
+                              viewName='renewView';  
+                           }else{
+                              viewName='joinView';   
+                           }
                            var btnRender=[
                                h('nuxt-link', {
                                     props: {
                                         type: 'text',
                                         size: 'small',
-                                        to:'/orderCenter/orderManage/12/joinView'
+                                        to:`/orderCenter/orderManage/12/${viewName}`
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -175,11 +181,6 @@
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus!='未生效'){
@@ -226,22 +227,11 @@
                 this.openSearch=!this.openSearch;
                 CommonFuc.clearForm(this.upperData);
             },
-            openView(params){
-                /*if(params.row.orderType=='IN'||params.row.orderType=='INCREASE'){
-                    location.href=location.href+`/${params.row.id}/joinView`;
-                }
-                if(params.row.orderType=='CONTINUE'){
-                    location.href=location.href+`/${params.row.id}/renewView`;
-                }*/
-            },
             openCancel(params){
                 this.openNullify=true;
             },
             openEdit(params){
 
-            },
-            openApplication(params){
-                
             },
             nullifySubmit (){
                 console.log('作废');

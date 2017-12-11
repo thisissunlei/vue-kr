@@ -141,11 +141,6 @@
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='未生效'){
@@ -197,9 +192,6 @@
             },
             openEdit(params){
 
-            },
-            openApplication(params){
-                
             },
             nullifySubmit (){
                 console.log('作废');

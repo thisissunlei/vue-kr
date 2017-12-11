@@ -53,24 +53,6 @@
                     style="width: 250px"
                ></Input>  
             </FormItem>
-            
-            <FormItem label="收入确认时间" class="u-input  u-date">
-               <DatePicker 
-                    type="date" 
-                    v-model="formItem.startTime" 
-                    placeholder="请选择付款开始日期" 
-                    style="width: 250px;"
-                    @on-change="startChange"
-               ></DatePicker> 
-               <span class="u-date-txt">至</span>
-               <DatePicker 
-                    type="date" 
-                     v-model="formItem.endTime" 
-                    placeholder="请选择付款截止日期" 
-                    style="width: 250px;"
-                    @on-change="endChange"
-               ></DatePicker>   
-            </FormItem>
             <FormItem label="社区名称" class="u-input">
                  <Select 
                         v-model="formItem.communityIds" 
@@ -86,6 +68,31 @@
                         </Option>
                     </Select>
             </FormItem>
+             <FormItem label="订单状态" class="u-input">
+                 <Select 
+                        v-model="formItem.communityIds" 
+                        style="width:250px"
+                        placeholder="请选择订单状态" 
+                    >
+                        <Option 
+                           v-for="item in statusList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{item.label}}
+                        </Option>
+                    </Select>
+            </FormItem>
+            <FormItem label="收入确认时间" class="u-input">
+               <DatePicker 
+                    type="date" 
+                    v-model="formItem.startTime" 
+                    placeholder="请选择付款开始日期" 
+                    style="width: 250px;"
+                    @on-change="startChange"
+               ></DatePicker> 
+            </FormItem>
+            
         </Form>
 </div>
 </template>	
@@ -102,7 +109,21 @@ export default{
                 beginTime:'',
                 endTime:''
             },
-            communityList:[]
+            communityList:[],
+            statusList:[
+                {
+                    value:'VALID',
+                    label:'已生效'
+                },
+                {
+                    value:'CANCEL',
+                    label:'已作废'
+                },
+                 {
+                    value:'REFUND',
+                    label:'已退订'
+                },
+            ],
 		}
     },
     created:function(){
@@ -114,10 +135,7 @@ export default{
     },
     methods:{
         startChange(date){
-            this.formItem.billStartTime=date;
-        },
-        endChange(date){
-            this.formItem.billEndTime=date;
+            this.formItem.orderDate=date;
         }
     },
     updated:function(){

@@ -166,8 +166,9 @@
                                     },
                                     style: {
                                         color:'#2b85e4'
-                                    },
-                                }, '查看'), h('Button', {
+                                    }
+                                }, '查看'), 
+                                h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -181,7 +182,7 @@
                                         }
                                     }
                                 }, '申请合同')];
-                           if(params.row.orderStatus=='未生效'){
+                           if(params.row.orderStatus!='未生效'){
                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',

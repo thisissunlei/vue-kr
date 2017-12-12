@@ -455,7 +455,7 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {
-                    window.location = '/new/login.html';
+                    window.location = 'http://optest.krspace.cn/new/login.html';
                     return;
                 }
                 callback(xhr.response)

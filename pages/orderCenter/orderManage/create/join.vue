@@ -49,19 +49,20 @@
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
                 </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
                     <FormItem label="租赁时长" style="width:252px" prop="time">
-                        <Input v-model="formItem.time" placeholder="租赁时长"></Input>
+                        <Input v-model="formItem.timeRange" placeholder="租赁时长"></Input>
                     </FormItem>
                 </Col>
             </Row>
@@ -88,7 +89,7 @@
                     
                 
             </DetailStyle>
-            <DetailStyle info="优惠信息">
+            <DetailStyle info="优惠信息" v-show="youhui.length"  style="margin-top:40px">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
@@ -136,12 +137,12 @@
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.value !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                        <DatePicker type="date" v-if="item.value !== 'qianmian' && item.value !== 'zhekou'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
                     <Col span="4" class="discount-table-content">
                         <DatePicker type="date" v-if="item.value == 'houmian'|| item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                     
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'&& item.value !== 'zhekou'" v-model="item.endDate" ></DatePicker>
                     </Col>
                     <Col span="4" class="discount-table-content">
                         <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
@@ -154,6 +155,8 @@
                     </Col>   
             </Row>
         </FormItem>
+        </DetailStyle>
+        <div style="padding-left:24px">
                  <Row style="margin-bottom:10px">
                     <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length">
@@ -193,11 +196,12 @@
             </Row>
             
                 
-            </DetailStyle>
+         </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
+
     </Form>
     
     <Modal
@@ -210,7 +214,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <planMap :stationsubmit="submits" :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
     </Modal>
 
         
@@ -219,13 +223,13 @@
 
 
 <script>
-import sectionTitle from '~/components/sectionTitle.vue'
-import selectCommunities from '~/components/selectCommunities.vue'
-import selectCustomers from '~/components/selectCustomers.vue'
-import selectSaler from '~/components/selectSaler.vue'
+import sectionTitle from '~/components/SectionTitle.vue'
+import selectCommunities from '~/components/SelectCommunities.vue'
+import selectCustomers from '~/components/SelectCustomers.vue'
+import selectSaler from '~/components/SelectSaler.vue'
 import axios from '~/plugins/http.js';
-import DetailStyle from '~/components/detailStyle';
-import planMap from '~/components/planMap.vue';
+import DetailStyle from '~/components/DetailStyle';
+import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 
@@ -251,6 +255,7 @@ import '~/assets/styles/createOrder.less';
                 disabled:false,
                 delStation:[],
                 payType:'',
+                timeError:false,//租赁时间校验
                 stationData:{
                     submitData:[],
                     deleteData:[],
@@ -273,21 +278,7 @@ import '~/assets/styles/createOrder.less';
                     {label:'5个月',value:'5个月'},
                     {label:'6个月',value:'6个月'},
                 ],
-                youhui:[
-                    {
-                        label:'折扣',
-                        value:'zhekou'
-                    },
-                    {
-                        label:'前免',
-                        value:'qianmian'
-                    },
-                    {
-                        label:'后免',
-                        value:'houmian'
-                    }
-
-                ],
+                youhui:[],
                 columns4: [
                     {
                         type: 'selection',
@@ -306,7 +297,7 @@ import '~/assets/styles/createOrder.less';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', this.formItem.beginDate+'至'+this.formItem.endDate)
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.beginDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.endDate)))
                         }
                     },
                     {
@@ -330,9 +321,9 @@ import '~/assets/styles/createOrder.less';
                 formItem: {
                     customer: '',
                     community: '',
-                    beginDate: new Date(),
+                    beginDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
-                    time:'',
+                    timeRange:'',
                     floor:'',
                     city:'',
                     items:[]
@@ -402,6 +393,12 @@ import '~/assets/styles/createOrder.less';
                 if(!this.payType){
                     this.errorPayType = true
                 }
+                if(this.timeError){
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    });
+                    return
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -416,6 +413,7 @@ import '~/assets/styles/createOrder.less';
                 })
             },
             selectDiscount:function(value){
+                // checkbox的选中事件
                 let items = this.formItem.items;
                 items = items.map((item)=>{
                     let obj = item;
@@ -425,6 +423,7 @@ import '~/assets/styles/createOrder.less';
                 this.formItem.items = items;
             },
             deleteDiscount:function(){
+                // 删除选中的优惠信息
                 let items = this.formItem.items;
                 let select = []
                 select = items.map((item)=>{
@@ -439,8 +438,9 @@ import '~/assets/styles/createOrder.less';
                 this.formItem.items = items;
 
             },
-            //优惠类型选择
+            
             changeType:function(value){
+                //优惠类型选择
                 if(!value){
                     return;
                 }
@@ -492,8 +492,10 @@ import '~/assets/styles/createOrder.less';
                 this.formItem.items = items;
             },
             changeCommunity:function(value){
+                // 选择社区
                 if(value){
                     this.formItem.community = value;
+                    this.getSaleTactics({communityId:value})
                 }else{
                     this.formItem.community = '';
                 }
@@ -501,6 +503,7 @@ import '~/assets/styles/createOrder.less';
                 
             },
             clearStation:function(){
+                // 清除所选的工位
                 this.stationData={
                     submitData:[],
                     deleteData:[],
@@ -508,6 +511,7 @@ import '~/assets/styles/createOrder.less';
                 this.stationList = [];
             },
             changeCustomer:function(value){
+                // 客户
                 if(value){
                     this.formItem.customer = value;
                 }else{
@@ -515,12 +519,11 @@ import '~/assets/styles/createOrder.less';
                 }
             },
             changeSaler:function(value){
+                // 销售员
                 this.formItem.saler = value;
             },
-            floorsChange:function(value){
-                console.log('-----',value)
-            },
             deleteStation:function(){
+                // 工位表单的删除按钮
                 let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
                 stationVos = stationVos.filter(function(item, index) {
@@ -533,6 +536,7 @@ import '~/assets/styles/createOrder.less';
                 this.stationData.submitData = stationVos;
             },
             showStation:function(){
+                // 选择工位的按钮
                 this.config()
 
                 if(!this.formItem.community){
@@ -565,6 +569,7 @@ import '~/assets/styles/createOrder.less';
                 this.params = params;
             },
             selectRow:function(selection){
+                // 工位表单的全选
                 let selectionList = [];
                 selectionList = selection.map((item)=>{
                     return item.id
@@ -572,6 +577,7 @@ import '~/assets/styles/createOrder.less';
                 this.selectedStation = selectionList;
             },
             handleAdd () {
+                // 优惠信息的添加按钮
                 this.index++;
                 this.formItem.items.push({
                     value: '',
@@ -581,36 +587,117 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             selectDeposit:function(value){
-
+                // 选择保证金
                 this.depositType = value
             },
             selectPayType:function(value){
-                this.payType = value
+                // 选择付款方式
+                this.payType = value;
+                this.errorPayType = false;
             },
-            submits:function(value){
-                console.log('submits')
-            },
-            submitStation:function(){
+            submitStation:function(){//工位弹窗的提交
                 this.stationList = this.stationData.submitData;
                 this.delStation = this.stationData.deleteData;
 
             },
-            onResultChange:function(val){
-                console.log('onResultChange',val)
+            onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
                 
             },
-            cancelStation:function(){
+            cancelStation:function(){//工位弹窗的取消
                 this.stationData = {
                     submitData:this.stationList,
                     deleteData:[],
                 };
 
             },
-            changeTime:function(){
-                console.log('=changeTime========')
+            changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+                let error = false;
+                this.config();
+                val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
+                let params = {
+                    end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
+                    start:val
+                }
+                if(new Date(val)>new date(this.formItem.endDate)){
+                    error = true;
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    })
+                }else{
+                    this.contractDateRange(params)
+                }
+                this.timeError = error;
                 this.clearStation()
             },
+            changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                let error = false;
+                val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val));
+                let params = {
+                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    end:val
+                }
+                this.config();
+                if(new Date(this.formItem.beginDate)>new Date(val)){
+                    error = true;
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    })
+                }else{
+                    this.contractDateRange(params)
+                }
+                this.timeError = error;
+                this.clearStation();
+
+            },
+            contractDateRange:function(params){//获取租赁范围
+                let _this = this;
+                axios.get('contract-date-range', params, r => {
+                    console.log('contract-date-range',r.data)
+                    _this.formItem.timeRange = r.data;
+                }, e => {
+
+                    console.log('error',e)
+                })
+            },
+            getSaleTactics:function(params){//获取优惠信息
+                let list = [];
+                let _this = this;
+                axios.get('sale-tactics', params, r => {
+                    if(r.data.length){
+                        list = r.data.map(item=>{
+                            let obj = item;
+                            obj.label = item.tacticsName;
+                            switch(item.tacticsType){
+                                case 1:
+                                    obj.value = 'zhekou';
+                                    break;
+                                case 2:
+                                    obj.value = 'qianmian';
+                                    break;
+                                default:
+                                    obj.value = 'houmian';
+                                    break;
+                            }
+                            return obj;
+                        })
+                    }
+                    _this.youhui = list;
+
+                }, e => {
+
+                    console.log('error',e)
+                })
+            },
+            countSale(params){//计算优惠信息
+                axios.get('count-sale', params, r => {
+                    console.log('countSale',r.data)
+
+                }, e => {
+
+                    console.log('error',e)
+                })
+            }
                     
                
         }

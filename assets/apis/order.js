@@ -116,4 +116,19 @@ export default  {
     url: 'krspace-finance-web/checkinagreement/checkin-agreement/actions/show?',
     method: 'get'
   },
+   //计算合同租赁期限
+  'contract-date-range': {
+    url: 'krspace-op-web/finacontractdetail/contract-date-range?',
+    method: 'get'
+  },
+  //优惠选项communityId
+    'sale-tactics': {
+        url: 'krspace-finance-web/sale-tactics?',
+        method: 'get'
+    },
+    //计算优惠
+    'count-sale': {
+        url: 'krspace-finance-web/count-sale',
+        method: 'post'
+    },
 }

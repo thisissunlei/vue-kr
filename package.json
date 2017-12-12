@@ -1,7 +1,7 @@
 {
-  "name": "kr-demo",
+  "name": "kr-vue",
   "version": "1.0.0",
-  "description": "Nuxt.js project",
+  "description": "kr-vue",
   "author": "张屈 <joneyphair@qq.com>",
   "private": true,
   "scripts": {

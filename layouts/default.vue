@@ -120,9 +120,9 @@
             }
         },
         computed: {
-            // iconSize () {
-            //     return this.spanLeft === 5 ? 14 : 24;
-            // }
+            iconSize () {
+                return this.spanLeft === 5 ? 14 : 24;
+            }
         },
         methods: {
         

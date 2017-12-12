@@ -178,11 +178,11 @@
 
 <script>
 import sectionTitle from '~/components/sectionTitle.vue'
-import selectCommunities from '~/components/selectCommunities.vue'
-import selectCustomers from '~/components/selectCustomers.vue'
-import selectSaler from '~/components/selectSaler.vue'
+import selectCommunities from '~/components/SelectCommunities.vue'
+import selectCustomers from '~/components/SelectCustomers.vue'
+import selectSaler from '~/components/SelectSaler.vue'
 import axios from '~/plugins/http.js';
-import planMap from '~/components/planMap.vue';
+import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';

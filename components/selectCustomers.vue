@@ -16,7 +16,7 @@
             filterable
             remote
             :placeholder="value"
-            @on-query-change="remoteCustomer"
+            :remote-method="remoteCustomer"
             :loading="loading1"
             @on-change="changeContent"
             >
@@ -39,11 +39,6 @@ import axios from '~/plugins/http.js';
                 customerOptions:[],
             };
         },
-        watch:{
-            value:function(){
-                console.log('watch',this.value)
-            }
-        },
         methods: {
             changeContent:function(value){
                 this.onchange(value)
@@ -52,7 +47,6 @@ import axios from '~/plugins/http.js';
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
-                        this.loading1 = false;
                         this.getCusomerList(query)
                     }, 200);
                 } else {
@@ -74,8 +68,8 @@ import axios from '~/plugins/http.js';
                         obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
                     _this.customerOptions = list;
-                    // _this.customer = '10089'
                 }, e => {
                     console.log('error',e)
                 })

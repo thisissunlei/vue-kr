@@ -38,17 +38,13 @@ import axios from '~/plugins/http.js';
             };
         },
         created:function(){
-            console.log('com-select-community')
             this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
-                console.log('changeContent',value)
                 this.onchange(value)
-                console.log('onchange',value)
             },
             remoteMethod1 (query) {
-                console.log('remoteMethod1',query)
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {

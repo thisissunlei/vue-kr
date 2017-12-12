@@ -16,7 +16,7 @@
             filterable
             remote
             :placeholder="value"
-            @on-query-change="remoteSaler"
+            :remote-method="remoteSaler"
             :loading="loading1"
             @on-change="changeContent">
             <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
@@ -36,9 +36,6 @@ import axios from '~/plugins/http.js';
                 loading1:false,
                 salerOptions:[],
             };
-        },
-        created:function(){
-            // this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
@@ -64,7 +61,6 @@ import axios from '~/plugins/http.js';
                     list = r.data.slice(0,10);
                     list.map((item)=>{
                         let obj = item;
-                        console.log('======',item)
                         obj.label = item.lastname;
                         obj.value = item.id+'';
                         return obj;

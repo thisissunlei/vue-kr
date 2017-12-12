@@ -82,6 +82,11 @@ export default {
 		DetailStyle,
 		labelText
 	},
+	head() {
+        return {
+            title: '减租详情'
+        }
+    },
 	data(){
 		return{
 			basicInfo:{},

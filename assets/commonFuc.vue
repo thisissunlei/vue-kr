@@ -32,10 +32,30 @@
              originParams[item]='';
          }
     }
+
+    /*导出*/
+    function commonExport(values,params,url){
+        let ids = [];
+        if (values.length != 0) {
+            values.map((item, value) => {
+                ids.push(item.id)
+            });
+        }
+        var where=[];
+        for(var item in params){
+            if(params.hasOwnProperty(item)){
+                where.push(`${item}=${params[item]}`);
+            }
+        }
+        where.push(`ids=${ids}`);
+        var url = `${url}?${where.join('&')}`
+        window.location.href = url;
+    }
    
    export default{
       smalltoBIG,
-      clearForm
+      clearForm,
+      commonExport
    }
 
 </script>

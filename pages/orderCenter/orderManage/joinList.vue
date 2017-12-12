@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData"></Table>
+            <Table :columns="joinOrder" :data="joinData" border  @on-selection-change='checkboxChange'></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
@@ -59,7 +59,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from '~/components/commonFuc';
+    import CommonFuc from '~/assets/commonFuc';
     
 
     export default {
@@ -75,6 +75,7 @@
                 upperError:false,
                 totalCount:1,
                 id:'',
+                checkboxValues:[],
                 params:{
                     page:1,
                     pageSize:15,
@@ -84,6 +85,11 @@
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '订单编号',
                         key: 'orderNum',
@@ -165,28 +171,33 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
-                           var viewName='';
-                           if(params.row.orderType=='CONTINUE'){
-                              viewName='renewView';  
-                           }else{
-                              viewName='joinView';   
-                           }
                            var btnRender=[
-                               h('nuxt-link', {
-                                    props: {
-                                        to:`/orderCenter/orderManage/${params.row.id}/${viewName}`
-                                    },
-                                    style: {
-                                        color:'#2b85e4',
-                                        paddingRight:'10px'
-                                    }
-                                }, '查看'), 
-                                h('nuxt-link', {
-                                    props: {
-                                        to:`/contractCenter/${params.row.id}/viewCenter`
+                               h('Button', {
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
                                     },
                                     style: {
                                         color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showView(params)
+                                        }
+                                    }
+                                }, '查看'), 
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showApply(params)
+                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
@@ -239,6 +250,18 @@
             showRenew(){
                 window.open('/orderCenter/orderManage/create/renew','_blank')
             },
+            showApply(params){
+                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+            },
+            showView(params){
+                var viewName='';
+                if(params.row.orderType=='CONTINUE'){
+                    viewName='renewView';  
+                }else{
+                    viewName='joinView';   
+                }
+                window.open(`/orderCenter/orderManage/${params.row.id}/${viewName}`,'_blank');
+            },
             showNullify(params){
                 this.id=params.row.id;
                 this.openNullify=true;
@@ -273,14 +296,7 @@
                 })   
             },
             outSubmit (){
-                var where=[];
-                for(var item in this.params){
-                    if(this.params.hasOwnProperty(item)){
-                        where.push(`${item}=${this.params[item]}`);
-                    }
-                }
-                var url = `/api/krspace-op-web/order-seat-add/export?${where.join('&')}`;
-		        window.location.href = url;
+                CommonFuc.commonExport(this.checkboxValues,this.params,'/api/krspace-op-web/order-seat-add/export');
             },
             getListData(params){
                 var _this=this;
@@ -296,6 +312,9 @@
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
+            },
+            checkboxChange(params){
+                this.checkboxValues=params;
             },
             lowerChange(param){
                 this.params.customerName=param.target.value;

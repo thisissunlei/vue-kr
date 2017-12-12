@@ -177,7 +177,7 @@
 
 
 <script>
-import sectionTitle from '~/components/sectionTitle.vue'
+import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'

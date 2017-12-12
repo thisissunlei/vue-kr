@@ -73,7 +73,7 @@
 import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
-import sectionTitle from '~/components/sectionTitle.vue';
+import sectionTitle from '~/components/SectionTitle.vue';
 import dateUtils from 'vue-dateutils';
 
 export default {

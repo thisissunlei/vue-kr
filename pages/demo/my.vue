@@ -8,12 +8,6 @@
     warn="描述原因，作废失败"
     v-on:changeOpen="onChangeOpen"
 ></Message>
-<Dialog 
-:onClose="close">
-    
-<planMap :stationsubmit="submits"></planMap>
-
-</Dialog>
 
 <p @click="show">按钮</p>
 <selectCommunities></SelectCommunities>
@@ -29,15 +23,13 @@
 <script>
 import searchCompany from '~/components/searchCompany';
 import Message from '~/components/Message';
-import planMap from '~/components/planMap.vue';
-import Dialog from '~/components/Dialog.vue';
-import SelectCommunities from '~/components/selectCommunities';
+import planMap from '~/components/PlanMap.vue';
+import SelectCommunities from '~/components/SelectCommunities';
 
 export default {
   components:{
         Message,
         planMap,
-        Dialog,
         SelectCommunities,
         searchCompany
     },

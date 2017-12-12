@@ -73,7 +73,7 @@
 <script>
     import axios from 'kr/axios';
     import hoc from '~/components/hoc.js'
-    import sectionTitle from '~/components/sectionTitle.vue';
+    import sectionTitle from '~/components/SectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';

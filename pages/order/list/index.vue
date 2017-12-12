@@ -92,7 +92,7 @@
 <script>
 import axios from 'kr/axios';
 import HighSearch from './highSearch';
-import sectionTitle from '~/components/sectionTitle';
+import sectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
 

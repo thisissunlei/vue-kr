@@ -74,6 +74,7 @@
                 upperData:{},
                 upperError:false,
                 totalCount:1,
+                id:'',
                 params:{
                     page:1,
                     pageSize:15,
@@ -234,14 +235,12 @@
             },
             showJoin(){
                 window.open('/orderCenter/orderManage/create/join','_blank')
-                console.log('入驻新建');
             },
             showRenew(){
                 window.open('/orderCenter/orderManage/create/renew','_blank')
-                console.log('续租新建');
             },
             showNullify(params){
-
+                this.id=params.row.id;
                 this.openNullify=true;
             },
             showEdit(params){
@@ -263,7 +262,15 @@
                 window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
-                console.log('作废');
+                var _this=this;
+                let params={
+                    id:this.id
+                };
+                axios.post('join-nullify', params, r => {
+                    _this.getListData(_this.params);
+                }, e => {
+                    _this.$Message.info(e);
+                })   
             },
             outSubmit (){
                 var where=[];

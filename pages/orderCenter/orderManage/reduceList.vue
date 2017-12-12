@@ -72,6 +72,7 @@
                 upperData:{},
                 upperError:false,
                 totalCount:1,
+                id:'',
                 params:{
                     page:1,
                     pageSize:15,
@@ -201,18 +202,25 @@
                 CommonFuc.clearForm(this.upperData);
             },
             showNullify(params){
+                this.id=params.row.id;
                 this.openNullify=true;
             },
             showReduce(){
                 window.open('/orderCenter/orderManage/create/reduce','_blank')
-
-                console.log('减租新建');
             },
             showEdit(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
             },
             nullifySubmit (){
-                console.log('作废');
+                var _this=this;
+                let params={
+                    id:this.id
+                };
+                axios.post('join-nullify', params, r => {
+                    _this.getListData(_this.params);
+                }, e => {
+                    _this.$Message.info(e);
+                }) 
             },
             outSubmit (){
                 var where=[];

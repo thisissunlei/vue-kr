@@ -188,7 +188,7 @@ export default {
 				},
 				{
 				 title: '状态',
-                 key: 'contractStateType',
+                 key: 'orderStatusTypeName',
                  align:'center'	
 				}  
 			],

@@ -109,13 +109,13 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==formItem.items.length-1}">
+            <Row v-bind:class="{lastRow:index==formItem.items.length-1}" v-show="item.show">
                  <Col span="1" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value+'-'+index" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
@@ -124,7 +124,7 @@
                     </Col>
                     <Col span="4" class="discount-table-content">
                         
-                        <DatePicker type="结束时间" v-if="item.value == 'houmian'  || item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'houmian'  || item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                         <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
                     </Col>
                     <Col span="4" class="discount-table-content">
@@ -348,7 +348,7 @@ import '~/assets/styles/createOrder.less';
         },
         head() {
             return {
-                title: '新建订单'
+                title: '编辑入驻订单'
             }
         },
         components: {
@@ -428,7 +428,6 @@ import '~/assets/styles/createOrder.less';
             },
             //优惠类型选择
             changeType:function(value){
-                console.log('优惠类型选择',this.formItem.items)
                 if(!value){
                     return;
                 }
@@ -450,31 +449,33 @@ import '~/assets/styles/createOrder.less';
                     return item;
                 })
 
-                // let error=false;
-                // let message = '';
-                // let typeList = this.formItem.items.map(item=>{
-                //     return item.value;
-                // })
-                // let qianmian = typeList.join(",").split('qianmian').length-1;
-                // let houmian = typeList.join(",").split('houmian').length-1;
-                // let zhekou = typeList.join(",").split('zhekou').length-1;
-                // if(qianmian + houmian>1){
-                //     error = true;
-                //     message = '只能有一个免租期。'
-                // }
-                // if(zhekou>1){
-                //     error = true;
-                //     message = '只能有一个折扣。'
-                // }
-                // if(error){
-                //     this.$Notice.error({
-                //         title:message
-                //     });
-                //     console.log('itemIndex',itemIndex)
-                //     this.formItem.items.splice(itemIndex,1);
-
-                // }
-                // console.log('======',this.formItem.items)
+                let error=false;
+                let message = '';
+                let typeList = this.formItem.items.map(item=>{
+                    if(item.show){
+                        return item.value;
+                    }else{
+                        return;
+                    }
+                    
+                })
+                let qianmian = typeList.join(",").split('qianmian').length-1;
+                let houmian = typeList.join(",").split('houmian').length-1;
+                let zhekou = typeList.join(",").split('zhekou').length-1;
+                if(qianmian + houmian>1){
+                    error = true;
+                    message = '只能有一个免租期。'
+                }
+                if(zhekou>1){
+                    error = true;
+                    message = '只能有一个折扣。'
+                }
+                if(error){
+                    this.$Notice.error({
+                        title:message
+                    });
+                    items[itemIndex].show = false;
+                }
                      this.formItem.items = items;
 
             },
@@ -561,6 +562,7 @@ import '~/assets/styles/createOrder.less';
                 this.formItem.items.push({
                     value: '',
                     index: this.index,
+                    show:true,
                     status: 1
                 });
             },

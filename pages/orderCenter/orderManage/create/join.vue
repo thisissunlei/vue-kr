@@ -125,7 +125,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==formItem.items.length-1}">
+            <Row v-bind:class="{lastRow:index==formItem.items.length-1}" v-show="item.show">
                  <Col span="1" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -135,16 +135,17 @@
                         </Select>
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.value !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'houmian'|| item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                    
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
-                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
+                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
+                        <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>
@@ -463,9 +464,13 @@ import '~/assets/styles/createOrder.less';
                 })
                 let error=false;
                 let message = '';
-                this.formItem.items = items;
+                
                 let typeList = items.map(item=>{
-                    return item.value;
+                    if(item.show){
+                        return item.value;
+                    }else{
+                        return;
+                    }
                 })
                 let qianmian = typeList.join(",").split('qianmian').length-1;
                 let houmian = typeList.join(",").split('houmian').length-1;
@@ -482,8 +487,9 @@ import '~/assets/styles/createOrder.less';
                     this.$Notice.error({
                         title:message
                     });
-                    this.formItem.items.splice(itemIndex,1);
+                    items[itemIndex].show = false;
                 }
+                this.formItem.items = items;
             },
             changeCommunity:function(value){
                 if(value){
@@ -570,7 +576,8 @@ import '~/assets/styles/createOrder.less';
                 this.formItem.items.push({
                     value: '',
                     index: this.index,
-                    status: 1
+                    status: 1,
+                    show:true,
                 });
             },
             selectDeposit:function(value){

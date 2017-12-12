@@ -204,10 +204,12 @@
                 this.openNullify=true;
             },
             showReduce(){
+                window.open('/orderCenter/orderManage/create/reduce','_blank')
+
                 console.log('减租新建');
             },
             showEdit(params){
-                console.log('编辑');
+                window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
             },
             nullifySubmit (){
                 console.log('作废');

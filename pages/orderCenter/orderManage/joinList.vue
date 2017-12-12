@@ -233,16 +233,34 @@
                 CommonFuc.clearForm(this.upperData);
             },
             showJoin(){
+                window.open('/orderCenter/orderManage/create/join','_blank')
                 console.log('入驻新建');
             },
             showRenew(){
+                window.open('/orderCenter/orderManage/create/renew','_blank')
                 console.log('续租新建');
             },
             showNullify(params){
+
                 this.openNullify=true;
             },
             showEdit(params){
-                console.log('编辑');
+                let type = '';
+                switch (params.row.orderType){
+                    case 'IN':
+                        type = 'join';
+                        break;
+                    case 'INCREASE':
+                        type = 'join';
+                        break;
+                    case 'CONTINUE':
+                        type = 'renew';
+                        break;
+                    default:
+                        type = 'join';
+                        break;
+                }
+                window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
                 console.log('作废');

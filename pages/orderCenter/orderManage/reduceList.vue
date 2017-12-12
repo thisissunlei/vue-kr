@@ -140,21 +140,32 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('nuxt-link', {
-                                    props: {
-                                        to:`/orderCenter/orderManage/${params.row.id}/reduceView`
-                                    },
-                                    style: {
-                                        color:'#2b85e4',
-                                        paddingRight:'10px'
-                                    }
-                                }, '查看'), 
-                                h('nuxt-link', {
-                                    props: {
-                                        to:`/contractCenter/${params.row.id}/viewCenter`
+                               h('Button', {
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
                                     },
                                     style: {
                                         color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showView(params)
+                                        }
+                                    }
+                                }, '查看'), 
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showApply(params)
+                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
@@ -210,6 +221,12 @@
             },
             showEdit(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
+            },
+            showApply(params){
+                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+            },
+            showView(params){
+                window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
             },
             nullifySubmit (){
                 var _this=this;

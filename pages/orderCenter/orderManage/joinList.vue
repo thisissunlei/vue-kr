@@ -165,28 +165,33 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
-                           var viewName='';
-                           if(params.row.orderType=='CONTINUE'){
-                              viewName='renewView';  
-                           }else{
-                              viewName='joinView';   
-                           }
                            var btnRender=[
-                               h('nuxt-link', {
-                                    props: {
-                                        to:`/orderCenter/orderManage/${params.row.id}/${viewName}`
-                                    },
-                                    style: {
-                                        color:'#2b85e4',
-                                        paddingRight:'10px'
-                                    }
-                                }, '查看'), 
-                                h('nuxt-link', {
-                                    props: {
-                                        to:`/contractCenter/${params.row.id}/viewCenter`
+                               h('Button', {
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
                                     },
                                     style: {
                                         color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showView(params)
+                                        }
+                                    }
+                                }, '查看'), 
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showApply(params)
+                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
@@ -238,6 +243,18 @@
             },
             showRenew(){
                 window.open('/orderCenter/orderManage/create/renew','_blank')
+            },
+            showApply(params){
+                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+            },
+            showView(params){
+                var viewName='';
+                if(params.row.orderType=='CONTINUE'){
+                    viewName='renewView';  
+                }else{
+                    viewName='joinView';   
+                }
+                window.open(`/orderCenter/orderManage/${params.row.id}/${viewName}`,'_blank');
             },
             showNullify(params){
                 this.id=params.row.id;

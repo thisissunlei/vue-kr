@@ -94,6 +94,11 @@ export default {
 		DetailStyle,
 		labelText
 	},
+	head() {
+        return {
+            title: '续租详情'
+        }
+    },
 	data(){
 		return{
 			basicInfo:{},

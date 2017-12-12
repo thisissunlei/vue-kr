@@ -23,5 +23,10 @@ export default {
        JoinList,
        ReduceList
    },
+   head() {
+        return {
+            title: '订单管理'
+        }
+    },
  }
 </script>

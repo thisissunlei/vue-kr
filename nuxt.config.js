@@ -27,7 +27,7 @@ module.exports = {
   loading: { color: '#3B8070' },
   build: {
     vendor: ['iview'],
-    publicPath: '/v/',
+    //publicPath: '/v/',
     vendor: ['axios']
   },
 }

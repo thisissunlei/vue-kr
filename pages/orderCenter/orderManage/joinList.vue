@@ -59,7 +59,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from '~/assets/commonFuc';
+    import CommonFuc from 'kr/utils';
     
 
     export default {

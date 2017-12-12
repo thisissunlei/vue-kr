@@ -1,4 +1,4 @@
-<script>
+
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -50,5 +50,3 @@
       clearForm,
       commonExport
    }
-
-</script>

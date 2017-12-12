@@ -106,7 +106,7 @@
 <script>
 import axios from '~/plugins/http';
 import SearchCompany from '~/components/SearchCompany';
-import SelectCommunities from '~/components/selectCommunities';
+import SelectCommunities from '~/components/SelectCommunities';
 
 export default{
     name:'highSearch',

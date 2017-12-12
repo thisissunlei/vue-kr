@@ -58,7 +58,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from '~/components/commonFuc';
+    import CommonFuc from '~/assets/commonFuc';
 
     export default {
         name:'join',

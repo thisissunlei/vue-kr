@@ -7,7 +7,7 @@
 </style>
 <template>
 <div class="g-income-detail">
-	<sectionTitle label="收入详情"></sectionTitle>
+	<SectionTitle label="收入详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="收入编号：">
@@ -44,14 +44,14 @@
 import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
-import sectionTitle from '~/components/sectionTitle.vue';
+import SectionTitle from '~/components/SectionTitle.vue';
 import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
 		DetailStyle,
 		LabelText,
-		sectionTitle
+		SectionTitle
 	},
 	data(){
 		return{

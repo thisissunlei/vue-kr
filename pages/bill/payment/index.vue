@@ -61,7 +61,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="回款管理"></sectionTitle>
+    <SectionTitle label="回款管理"></SectionTitle>
     <div class="u-search" >
         <span class="u-high-search" @click="showSearch"></span>  
         <div style='display:inline-block;float:right;padding-right:20px;'>
@@ -143,7 +143,7 @@
 
 <script>
 import axios from '~/plugins/http';
-import sectionTitle from '~/components/sectionTitle';
+import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
@@ -153,7 +153,7 @@ import CommonFuc from '~/components/CommonFuc';
 export default {
         name: 'receive',
         components:{
-            sectionTitle,
+            SectionTitle,
             HighSearch,
             SearchCompany,
             Message

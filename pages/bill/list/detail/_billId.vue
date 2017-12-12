@@ -43,7 +43,7 @@
 </style>
 <template>
 <div class="g-bill-detail">
-	<sectionTitle label="账单详情"></sectionTitle>
+	<SectionTitle label="账单详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="账单编号：">
@@ -96,14 +96,14 @@
 import axios from '~/plugins/http';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
-import sectionTitle from '~/components/sectionTitle.vue';
+import SectionTitle from '~/components/SectionTitle.vue';
 import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
 		DetailStyle,
 		LabelText,
-		sectionTitle
+		SectionTitle
 	},
 	data(){
 		return{

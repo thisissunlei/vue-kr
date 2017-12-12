@@ -30,7 +30,7 @@
 
 <template>
 <div class="g-bill">
-    <sectionTitle label="收入管理"></sectionTitle>
+    <SectionTitle label="收入管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="showIncome">挂收入</Button>
         <span class="u-high-search" @click="showSearch"></span>  
@@ -98,7 +98,7 @@
 import axios from '~/plugins/http';
 import HighSearch from './highSearch';
 import dateUtils from 'vue-dateutils';
-import sectionTitle from '~/components/sectionTitle';
+import SectionTitle from '~/components/SectionTitle';
 import AddIncome from './addIncome';
 import Message from '~/components/Message';
 import CommonFuc from '~/components/CommonFuc';
@@ -106,7 +106,7 @@ import CommonFuc from '~/components/CommonFuc';
         name: 'income',
         components:{
             HighSearch,
-            sectionTitle,
+            SectionTitle,
             AddIncome,
             Message
         },

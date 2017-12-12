@@ -6,14 +6,11 @@ async function start () {
   const host = process.env.HOST || '127.0.0.1'
   const port = process.env.PORT || 3045
 
-  // Import and Set Nuxt.js options
   let config = require('../nuxt.config.js')
   config.dev = !(app.env === 'production')
 
-  // Instantiate nuxt.js
   const nuxt = new Nuxt(config)
 
-  // Build in development
   if (config.dev) {
     const builder = new Builder(nuxt)
     await new Builder(nuxt).build()
@@ -21,7 +18,7 @@ async function start () {
 
   app.use(async (ctx, next) => {
     await next()
-    ctx.status = 200 // koa defaults to 404 when it sees that status is unset
+    ctx.status = 200 
     return new Promise((resolve, reject) => {
       ctx.res.on('close', resolve)
       ctx.res.on('finish', resolve)

@@ -65,7 +65,7 @@
 </style>
 <template>
 <div class="g-order">
-    <sectionTitle label="交易流水"></sectionTitle>
+    <SectionTitle label="交易流水"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="importDetail">导入回款明细</Button>
         <div style='display:inline-block;float:right;padding-right:20px;'>
@@ -130,13 +130,13 @@
 
 <script>
 import axios from '~/plugins/http';
-import sectionTitle from '~/components/sectionTitle';
+import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
 
 export default {
         components:{
-            sectionTitle,
+            SectionTitle,
             Message
         },
         data () {

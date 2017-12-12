@@ -43,7 +43,7 @@
 
 <template>
 <div class="g-bill">
-    <sectionTitle label="已出账单管理"></sectionTitle>
+    <SectionTitle label="已出账单管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onBillPay">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span> 
@@ -143,7 +143,7 @@ import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 //import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
-import sectionTitle from '~/components/sectionTitle';
+import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
 import CommonFuc from '~/components/CommonFuc';
 
@@ -153,7 +153,7 @@ import CommonFuc from '~/components/CommonFuc';
             HighSearch,
             settleAccounts,
             //antiSettlement,
-            sectionTitle,
+            SectionTitle,
             Message
         },
         data () {

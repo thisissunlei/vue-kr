@@ -17,6 +17,7 @@
     "source-map-support": "^0.4.15"
   },
   "devDependencies": {
+    "axios": "^0.17.1",
     "babel-eslint": "^7.1.1",
     "backpack-core": "^0.3.0",
     "eslint": "^3.13.1",
@@ -27,8 +28,11 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "iview": "^2.7.4",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
     "nodemon": "^1.11.0",
     "nuxt": "^1.0.0-rc11",
-    "scmp": "^2.0.0"
+    "scmp": "^2.0.0",
+    "vue-dateutils": "^1.0.8"
   }
 }

@@ -1,52 +1,120 @@
-<template>
-  <div>
-    <nuxt/>
-    <my-footer/>
-  </div>
-</template>
+<style lang="less">
 
-<script>
-import MyFooter from '~/components/Footer.vue'
+    .layout{
+        border: 1px solid #d7dde4;
+        background: #f5f7f9;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+        padding-top: 65px;
+    }
 
-export default {
-  components: {
-    MyFooter
-  }
-}
-</script>
+    .layout-breadcrumb{
+        padding: 10px 15px 0;
+    }
 
-<style>
-.container
-{
-  margin: 0;
-  width: 100%;
-  padding: 100px 0;
-  text-align: center;
-}
+    .layout-content{
+        min-height: 200px;
+        margin: 15px;
+        overflow: hidden;
+        background: #fff;
+        border-radius: 4px;
+    }
+    .layout-content-main{
+        // padding: 10px;
+    }
+    .layout-copy{
+        text-align: center;
+        padding: 10px 0 20px;
+        color: #9ea7b4;
+    }
+    .layout-menu-left{
+        background: #464c5b;
+        height:990px;
+    }
+    .layout-header{
+        height: 60px;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0,0,0,.1);
 
-.button, .button:visited
-{
-  display: inline-block;
-  color: #3B8070;
-  letter-spacing: 1px;
-  background-color: #fff;
-  border: 2px solid #3B8070;
-  text-decoration: none;
-  text-transform: uppercase;
-  padding: 15px 45px;
-}
+        .open-sidebar{
+              float:left;
+        }
 
-.button:hover, .button:focus
-{
-  color: #fff;
-  background-color: #3B8070;
-}
+        .user {
+            float:right;
+        }
+       
+    }
+    .layout-logo-left{
+        width: 90%;
+        height: 30px;
+        background: #5b6270;
+        border-radius: 3px;
+        margin: 15px auto;
+    }
+    .layout-ceiling-main a{
+        color: #9ba7b5;
+    }
+    .layout-hide-text .layout-text{
+        display: none;
+    }
 
-.title
-{
-  color: #505153;
-  font-weight: 300;
-  font-size: 2.5em;
-  margin: 0;
-}
+    .ivu-col{
+        transition: width .2s ease-in-out;
+    }
 </style>
+<template>
+    <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
+        <Row type="flex">
+            
+            <Col :span="spanRight">
+               
+                <!-- <div class="layout-breadcrumb">
+                    <Breadcrumb>
+                        <BreadcrumbItem href="#">Index</BreadcrumbItem>
+                        <BreadcrumbItem href="#">Apps</BreadcrumbItem>
+                        <BreadcrumbItem>App</BreadcrumbItem>
+                    </Breadcrumb>
+                </div> -->
+                <div class="layout-content">
+                    <div class="layout-content-main">
+                        <nuxt/>
+                    </div>
+                </div>
+                <div class="layout-copy">
+                    &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
+                </div>
+            </Col>
+        </Row>
+    </div>
+</template>
+<script>
+    export default {
+        data () {
+            return {
+               
+                spanRight: 24,
+                spanLeft:'',
+
+            }
+        },
+        computed: {
+            // iconSize () {
+            //     return this.spanLeft === 5 ? 14 : 24;
+            // }
+        },
+        methods: {
+        
+            // toggleClick () {
+            //     if (this.spanLeft === 5) {
+            //         this.spanLeft = 2;
+            //         this.spanRight = 22;
+            //     } else {
+            //         this.spanLeft = 5;
+            //         this.spanRight = 19;
+            //     }
+            // }
+        }
+    }
+</script>

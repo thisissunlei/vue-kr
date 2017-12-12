@@ -72,6 +72,8 @@ module.exports =
 /* 0 */
 /***/ function(module, exports) {
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 module.exports = {
   /*
   ** Headers of the page
@@ -91,9 +93,9 @@ module.exports = {
   ** Customize the progress-bar color
   */
   loading: { color: '#3B8070' },
-  build: {
+  build: _defineProperty({
     vendor: ['iview']
-  }
+  }, 'vendor', ['axios'])
 };
 
 /***/ },

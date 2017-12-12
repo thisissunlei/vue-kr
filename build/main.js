@@ -95,7 +95,7 @@ module.exports = {
   loading: { color: '#3B8070' },
   build: _defineProperty({
     vendor: ['iview'],
-    publicPath: '/v/'
+    publicPath: '/v/cdn/'
   }, 'vendor', ['axios'])
 };
 

@@ -47,7 +47,7 @@
                 <span></span>   
             </div> 
         </div>
-        <Table :columns="columns" :data="detail" ></Table>
+        <Table border :columns="columns" :data="detail" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">

@@ -108,16 +108,17 @@
                         </Select>
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.value !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'houmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
+                        
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
-                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
+                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
+                        <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>
@@ -200,7 +201,7 @@ import '~/assets/styles/createOrder.less';
         data() {
            return{
                 disabled:false,//提交按钮是否有效
-                index:0,//优惠的index
+                index:1,//优惠的index
                 openStation:false,//弹窗开关
                renewForm:{
                     community:'',
@@ -322,8 +323,15 @@ import '~/assets/styles/createOrder.less';
         created(){
         },
         methods: {
+            config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+            },
             handleSubmit:function(name){
                 let message = '=========';
+                this.config()
                 let _this = this;
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
@@ -360,6 +368,8 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.saler = value;
             },
             showStation:function(){
+                this.config()
+
                 if(!this.renewForm.community){
                     this.$Notice.error({
                         title:'请先选择社区'
@@ -388,6 +398,8 @@ import '~/assets/styles/createOrder.less';
                 this.payType  = value;
             },
             handleAdd:function(){
+                this.config()
+
                 if(!this.renewForm.community){
                     this.$Notice.error({
                         title:'请先选择社区'
@@ -417,10 +429,12 @@ import '~/assets/styles/createOrder.less';
                     });
                     return
                 }
+                console.log('handleAdd')
                 this.index++;
                 this.renewForm.items.push({
                     value: '',
                     index: this.index,
+                    show:true,
                     status: 1,
                     type:''
                 });
@@ -465,6 +479,8 @@ import '~/assets/styles/createOrder.less';
             },
             //优惠类型选择
             changeType:function(value){
+                this.config()
+
                 if(!value){
                     return;
                 }

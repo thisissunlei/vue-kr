@@ -1,21 +1,5 @@
 <style lang="less"> 
-   .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
+    
    
 </style>
 
@@ -26,37 +10,37 @@
         <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
-            <Row style="margin-bottom:30px">  
+            <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customer">
-                    <selectCustomers name="formItem.customer" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="formItem.customer" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="community">
-                    <selectCommunities name="formItem.community" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities name="formItem.community" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="saler">
-                    <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
+                    <FormItem label="销售员" style="width:252px">
+                    <selectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
-            <Row  style="margin-bottom:30px">   
+            <Row>  
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeTime"></DatePicker>
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.leaseBegindate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                     
                 </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.leaseEnddate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -135,16 +119,17 @@
                         </Select>
                     </Col>
                     <Col span="4" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.value !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        
+                        <DatePicker type="结束时间" v-if="item.value == 'houmian'  || item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
                     </Col>
                     <Col span="4" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
-                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
+                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
+                        <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>
@@ -174,13 +159,12 @@
                     </FormItem> 
                  </Col>
             </Row>
-            <Row style="">
+            <Row>
                  <Col class="col">
-                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
                         </div>
-                        <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
                  </Col>
                  <Col class="col">
@@ -193,7 +177,7 @@
             
                 
             </DetailStyle>
-        <FormItem style="padding-left:24px;margin-top:40px" >
+        <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
         </FormItem>
@@ -234,6 +218,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
+            this.getDetailData();
             const validateFloor = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('Age cannot be empty'));
@@ -336,31 +321,24 @@ import '~/assets/styles/createOrder.less';
                     city:'',
                     items:[]
                 },
-                errorPayType:false,//付款方式的必填错误信息
+                customerName:'',
+                communityName:'',
                 ruleCustom:{
                     beginDate: [
-                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                        { required: true,type: 'date', message: '此项不可为空', trigger: 'change' }
                     ],
                     endDate: [
-                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                     time: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
+                        { required: true, message: '此项不可为空', trigger: 'blur' }
                     ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
+
                     community:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
+                        { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     customer:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    saler:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
+                        { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     // floor: [
                     //     { validator: validateFloor, trigger: 'change' }
@@ -382,25 +360,35 @@ import '~/assets/styles/createOrder.less';
             planMap
         },
         created(){
-            // this.openStation = false
+            // this.getDetailData();
+            console.log('created---edit')
         },
         methods: {
-            config:function(){
-                this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
+            getDetailData:function(){
+                let _this = this;
+                let {params}=this.$route;
+                let from={
+                    id:params.orderEdit
+                };
+                axios.get('get-order-detail', from, r => {
+                    let data = r.data;
+                    console.log('get-order-detail===>',data.customerid)
+                    _this.formItem.customer = data.customerid;
+                    _this.customerName = data.customerName;
+                    _this.formItem.community = data.communityid;
+                    _this.communityName = data.communityName;
+                    _this.formItem.leaseEnddate = data.leaseEnddate;
+                    _this.formItem.leaseBegindate = data.leaseBegindate;
+                    _this.stationList = data.stationVos;
+                    _this.payType = 'TWO';
+                    _this.depositType = '2个月'
+                    }, e => {
+                        _this.$Message.info(e);
+                })
             },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
-                this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
                 let _this = this;
-                if(!this.payType){
-                    this.errorPayType = true
-                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -440,50 +428,55 @@ import '~/assets/styles/createOrder.less';
             },
             //优惠类型选择
             changeType:function(value){
+                console.log('优惠类型选择',this.formItem.items)
                 if(!value){
                     return;
                 }
-                this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
                 this.formItem.items[itemIndex].value = itemValue;
                 let items = [];
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
+                        item.endDate = '';
+                        item.beginDate = new Date();
                     }else if(item.value == 'houmian'){
                         item.endDate = new Date()
-                        item.zhekou = '';
+                        item.beginDate = '';
                     }else if(item.value == 'zhekou'){
                         item.beginDate = new Date()
                         item.endDate = new Date()
                     }
                     return item;
                 })
-                let error=false;
-                let message = '';
-                this.formItem.items = items;
-                let typeList = items.map(item=>{
-                    return item.value;
-                })
-                let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
-                if(qianmian + houmian>1){
-                    error = true;
-                    message = '只能有一个免租期。'
-                }
-                if(zhekou>1){
-                    error = true;
-                    message = '只能有一个折扣。'
-                }
-                if(error){
-                    this.$Notice.error({
-                        title:message
-                    });
-                    this.formItem.items.splice(itemIndex,1);
-                }
+
+                // let error=false;
+                // let message = '';
+                // let typeList = this.formItem.items.map(item=>{
+                //     return item.value;
+                // })
+                // let qianmian = typeList.join(",").split('qianmian').length-1;
+                // let houmian = typeList.join(",").split('houmian').length-1;
+                // let zhekou = typeList.join(",").split('zhekou').length-1;
+                // if(qianmian + houmian>1){
+                //     error = true;
+                //     message = '只能有一个免租期。'
+                // }
+                // if(zhekou>1){
+                //     error = true;
+                //     message = '只能有一个折扣。'
+                // }
+                // if(error){
+                //     this.$Notice.error({
+                //         title:message
+                //     });
+                //     console.log('itemIndex',itemIndex)
+                //     this.formItem.items.splice(itemIndex,1);
+
+                // }
+                // console.log('======',this.formItem.items)
+                     this.formItem.items = items;
+
             },
             changeCommunity:function(value){
                 if(value){
@@ -527,8 +520,6 @@ import '~/assets/styles/createOrder.less';
                 this.stationData.submitData = stationVos;
             },
             showStation:function(){
-                this.config()
-
                 if(!this.formItem.community){
                     this.$Notice.error({
                             title:'请先选择社区'

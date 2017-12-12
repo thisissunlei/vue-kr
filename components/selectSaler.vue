@@ -1,5 +1,10 @@
 <style lang="less"> 
-   
+   .com-select-saler{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+   }
 </style>
 
 
@@ -7,9 +12,10 @@
 <template>
     <div class="com-select-saler">
          <Select
-            :v-model="name"
+            :v-model="saler"
             filterable
             remote
+            :placeholder="value"
             @on-query-change="remoteSaler"
             :loading="loading1"
             @on-change="changeContent">
@@ -23,9 +29,10 @@
 import axios from '~/plugins/http.js';
 
     export default {
-        props:['name','onchange'],
+        props:['value','onchange'],
         data () {
             return {
+                saler:'',
                 loading1:false,
                 salerOptions:[],
             };

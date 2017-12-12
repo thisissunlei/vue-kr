@@ -74,6 +74,7 @@
                 upperData:{},
                 upperError:false,
                 totalCount:1,
+                id:'',
                 params:{
                     page:1,
                     pageSize:15,
@@ -233,19 +234,43 @@
                 CommonFuc.clearForm(this.upperData);
             },
             showJoin(){
-                console.log('入驻新建');
+                window.open('/orderCenter/orderManage/create/join','_blank')
             },
             showRenew(){
-                console.log('续租新建');
+                window.open('/orderCenter/orderManage/create/renew','_blank')
             },
             showNullify(params){
+                this.id=params.row.id;
                 this.openNullify=true;
             },
             showEdit(params){
-                console.log('编辑');
+                let type = '';
+                switch (params.row.orderType){
+                    case 'IN':
+                        type = 'join';
+                        break;
+                    case 'INCREASE':
+                        type = 'join';
+                        break;
+                    case 'CONTINUE':
+                        type = 'renew';
+                        break;
+                    default:
+                        type = 'join';
+                        break;
+                }
+                window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
-                console.log('作废');
+                var _this=this;
+                let params={
+                    id:this.id
+                };
+                axios.post('join-nullify', params, r => {
+                    _this.getListData(_this.params);
+                }, e => {
+                    _this.$Message.info(e);
+                })   
             },
             outSubmit (){
                 var where=[];

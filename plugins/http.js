@@ -33,8 +33,8 @@ function filterNull(o) {
   另外，不同的项目的处理方法也是不一致的，这里出错就是简单的alert
 */
 
+
 function apiAxios(method, name, params, success, failure) {
-  console.log('apiAxios', params)
   if (params) {
     params = filterNull(params)
   }
@@ -52,12 +52,16 @@ function apiAxios(method, name, params, success, failure) {
     baseURL: root,
     withCredentials: false,
   })
-    //success
-    .then(function (res) {
-      if (res.status === 200) {
-        if (success) {
-          success(res.data)
-        }
+  //success
+  .then(function (res) {
+    if (res.status === 200) {
+      if (success) {
+        success(res.data)
+      }
+    } else {
+      if (failure) {
+        failure(res.data)
+
       } else {
         if (failure) {
           failure(res.data)
@@ -67,17 +71,17 @@ function apiAxios(method, name, params, success, failure) {
           // window.alert('error: ' + JSON.stringify(res.data))
         }
       }
-    })
-    //failure
-    .catch(function (err) {
-      console.log('success', params);
+    }
+  })
+  //failure
+  .catch(function (err) {
 
-      let res = err.response
-      if (err) {
-        console.log('api error, HTTP CODE: ' + res)
-        // window.alert('api error, HTTP CODE: ' + res.status)
-      }
-    })
+    let res = err.response
+    if (err) {
+      console.log('api error, HTTP CODE: ' + res)
+      // window.alert('api error, HTTP CODE: ' + res.status)
+    }
+  })
 }
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use((config) => {

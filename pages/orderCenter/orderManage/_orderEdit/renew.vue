@@ -15,7 +15,7 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="新建续租服务订单管理"></sectionTitle>
+       <sectionTitle label="编辑续租服务订单管理"></sectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
@@ -307,7 +307,7 @@ import '~/assets/styles/createOrder.less';
         },
         head() {
             return {
-                title: '新建续租服务订单管理'
+                title: '编辑续租服务订单管理'
             }
         },
         components: {

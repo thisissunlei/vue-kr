@@ -24,5 +24,10 @@ module.exports = {
   'reduce-bill-detail': {
     url: '/krspace-op-web/order-seat-reduce/show',
     method: 'get'
+  },
+  //入驻减租订单列表－作废
+  'join-nullify': {
+    url: '/krspace-op-web/order-seat-add/orderStatus',
+    method: 'post'
   }
 } 

@@ -23,7 +23,7 @@
             </div>
 
 
-            <Table :columns="joinOrder" :data="joinData"></Table>
+            <Table :columns="joinOrder" :data="joinData" border  @on-selection-change='checkboxChange'></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
@@ -73,6 +73,7 @@
                 upperError:false,
                 totalCount:1,
                 id:'',
+                checkboxValues:[],
                 params:{
                     page:1,
                     pageSize:15,
@@ -82,6 +83,11 @@
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '订单编号',
                         key: 'orderNum',
@@ -228,6 +234,9 @@
             showView(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
             },
+            checkboxChange(params){
+                this.checkboxValues=params;
+            },
             nullifySubmit (){
                 var _this=this;
                 let params={
@@ -240,14 +249,7 @@
                 }) 
             },
             outSubmit (){
-                var where=[];
-                for(var item in this.params){
-                    if(this.params.hasOwnProperty(item)){
-                        where.push(`${item}=${this.params[item]}`);
-                    }
-                }
-                var url = `/api/krspace-op-web/order-seat-reduce/export?${where.join('&')}`;
-		        window.location.href = url;
+                CommonFuc.commonExport(this.checkboxValues,this.params,'/api/krspace-op-web/order-seat-reduce/export');
             },
             getListData(params){
                 var _this=this;

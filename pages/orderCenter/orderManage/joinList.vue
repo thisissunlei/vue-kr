@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData"></Table>
+            <Table :columns="joinOrder" :data="joinData" border  @on-selection-change='checkboxChange'></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
@@ -75,6 +75,7 @@
                 upperError:false,
                 totalCount:1,
                 id:'',
+                checkboxValues:[],
                 params:{
                     page:1,
                     pageSize:15,
@@ -84,6 +85,11 @@
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '订单编号',
                         key: 'orderNum',
@@ -290,14 +296,7 @@
                 })   
             },
             outSubmit (){
-                var where=[];
-                for(var item in this.params){
-                    if(this.params.hasOwnProperty(item)){
-                        where.push(`${item}=${this.params[item]}`);
-                    }
-                }
-                var url = `/api/krspace-op-web/order-seat-add/export?${where.join('&')}`;
-		        window.location.href = url;
+                CommonFuc.commonExport(this.checkboxValues,this.params,'/api/krspace-op-web/order-seat-add/export');
             },
             getListData(params){
                 var _this=this;
@@ -313,6 +312,9 @@
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
+            },
+            checkboxChange(params){
+                this.checkboxValues=params;
             },
             lowerChange(param){
                 this.params.customerName=param.target.value;

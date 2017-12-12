@@ -10,6 +10,7 @@
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
+							:default-file-list="defaultList"
 							:headers="this.headers" 
 							:type="this.type" 
 							:action="this.action"
@@ -34,7 +35,7 @@
  import axios from 'kr/axios';
 export default{
 	name:'krUpload',
-	props:["type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onSuccess","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:["file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onSuccess","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
 	data(){
 		return {
 			
@@ -42,7 +43,8 @@ export default{
 			listStyle:{
 				left:0,
 				top:0,
-			}
+			},
+			defaultList:!this.file.length?[]:this.file
 		}
 		
 	},
@@ -75,7 +77,7 @@ export default{
 		
 	},
 	mounted(){
-		
+		console.log(this.file,"LLLLLLL")
 	},
 }
 	

@@ -21,5 +21,10 @@ module.exports = {
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/proxy'
-	]
+	],
+	loading: {
+		color: 'blue',
+		height: '5px'
+	},
+	transition: 'test'
 }

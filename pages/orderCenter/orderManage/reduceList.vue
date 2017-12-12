@@ -219,7 +219,7 @@
                         where.push(`${item}=${this.params[item]}`);
                     }
                 }
-                var url = `/api/krspace-op-web/order-seat-add/export?${where.join('&')}`;
+                var url = `/api/krspace-op-web/order-seat-reduce/export?${where.join('&')}`;
 		        window.location.href = url;
             },
             getListData(params){

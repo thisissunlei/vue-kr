@@ -61,6 +61,10 @@
             @on-ok='upperSubmit'
         >
             <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+            <div slot="footer">
+                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+            </div>
         </Modal>
         
     </div>
@@ -133,6 +137,11 @@
                         key: 'action',
                         align:'center',
                         render:(h,params)=>{
+                            let arr = params.row.file||[];
+                            let newArr = []
+                            for(let i=0;i<arr.length;i++){
+                                newArr.push({"name":arr[i].fileName,"url":''})
+                            }
                            var btnRender=[
                                h('Button', {
                                     props: {
@@ -160,11 +169,11 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                }, '下载')
-                                 /*h(krUpload, {
+                                }, '下载'),
+                                h(krUpload, {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        action:'//jsonplaceholder.typicode.com/posts/',
+                                        file: newArr
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -174,7 +183,7 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                },'ppp')*/
+                                },'ppp')
                                 ];
                           
                            return h('div',btnRender);  
@@ -212,7 +221,7 @@
                 }, 1500)
             },
             showSearch (params) {
-                this.openSearch=true;
+                this.openSearch=!this.openSearch;
             },
             openView(params){
                 location.href=`./12/joinView`;
@@ -234,9 +243,10 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('get-list-contract', params, r => {
+                axios.get('get-center-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
+                    _this.openSearch=false;
                 }, e => {
                     _this.$Message.info(e);
                 })   
@@ -266,8 +276,12 @@
             },
              //高级查询确定
             upperSubmit(){
+                if(this.upperError){
+                    return ;
+                }
                 this.params=Object.assign({},this.params,this.upperData);
                 this.getListData(this.params);
+
             }
         },
         

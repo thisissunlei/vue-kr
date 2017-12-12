@@ -166,10 +166,10 @@ var Map = function (elementId, configs) {
                 backgroundColor: '#eee',
             },
             '3':{
-                status: 'checked',
-                mark: '已选中',
-                textColor: '#fff',
-                backgroundColor: '#28c288',
+                status: 'default',
+                mark: '默认',
+                textColor: '#499df1',
+                backgroundColor: '#ffffff',
             },
             '4':{
                 status: 'notChecked',
@@ -178,11 +178,12 @@ var Map = function (elementId, configs) {
                 backgroundColor: '#ffffff',
             },
             '5':{
-                status: 'default',
-                mark: '默认',
-                textColor: '#499df1',
-                backgroundColor: '#ffffff',
-            }
+                status: 'checked',
+                mark: '已选中',
+                textColor: '#fff',
+                backgroundColor: '#28c288',
+            },
+            
    };
 
     //工位信息
@@ -490,7 +491,7 @@ var Map = function (elementId, configs) {
             checked: false,
             removed: false,
             key: stationNumber,
-            status: 5,
+            status: 3,
 			//开关，面向有对立事件的判断控制
 			switchHoverIn:false,
         }
@@ -636,7 +637,7 @@ var Map = function (elementId, configs) {
             var style = DC.stationStatus[status];
 
             if (checked) {
-                style = DC.stationStatus[3];
+                style = DC.stationStatus[5];
             }
 
             const widthOrHeight = MapFactory.transformWidthOrHeightToView(props.width, props.height);

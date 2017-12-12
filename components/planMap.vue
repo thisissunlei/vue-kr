@@ -197,13 +197,12 @@ import axios from '~/plugins/http.js';
 								if (selectedObjs[j].belongType == 2) {
 									belongType = "SPACE";
 								}
-								// console.log('渲染',selectedObjs[j].belongType,belongType,selectedObjs[j])
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
 									obj.checked = true;
 
 								}
 							}
-							if (cellName >= start && cellName <= end && !item.status) {
+							if (cellName >= start && cellName <= end && item.status!=1) {
 								obj.checked = true;
 								let select = {};
 								select.name = item.cellName;

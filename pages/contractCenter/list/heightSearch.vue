@@ -86,6 +86,7 @@
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
+                        @on-change = "timeAll"
                     ></DatePicker>
                    <span class="u-date-txt">至</span>
                     <DatePicker 
@@ -163,7 +164,7 @@
                 this.dateError=false; 
             }
             this.$emit('bindData', this.formItem,this.dateError);
-        },
+        }
     }
 </script>
 

@@ -47,7 +47,13 @@
                 <span></span>   
             </div> 
         </div>
-        <Table border :columns="columns" :data="detail" ></Table>
+        <Table 
+            border 
+            ref="selection" 
+            :columns="columns" 
+            :data="detail" 
+            @on-selection-change = "selectCheck"
+        ></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
@@ -90,6 +96,7 @@
                     page:1,
                     pageSize:15,
                 },
+                selectAllData:[],
                 loadingStatus: false,
                 file: null,
                 upperData:{},
@@ -98,6 +105,11 @@
                 detail:[],
                 totalCount:1,
                 columns: [
+                     {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '合同编号',
                         key: 'serialNumber',
@@ -239,7 +251,15 @@
                 console.log('作废');
             },
             outSubmit (){
-                console.log('导出');
+                var _this=this;
+                var params = Object.assign({},this.params);
+                params.ids = [].concat(this.selectAllData);
+                console.log(params,"OOOOOOO")
+                axios.get('get-center-export', params, r => {
+                   
+                }, e => {
+                    _this.$Message.info(e);
+                })   
             },
             getListData(params){
                 var _this=this;
@@ -282,7 +302,15 @@
                 this.params=Object.assign({},this.params,this.upperData);
                 this.getListData(this.params);
 
-            }
+            },
+            //多选按钮被点击
+            selectCheck(selection){
+                var ids=[];
+                selection.map((item,index)=>{
+                    ids.push(item.id);
+                })
+                this.selectAllData = ids;
+            },
         },
         
     }

@@ -94,7 +94,8 @@ module.exports = {
   */
   loading: { color: '#3B8070' },
   build: _defineProperty({
-    vendor: ['iview']
+    vendor: ['iview'],
+    publicPath: '/v/'
   }, 'vendor', ['axios'])
 };
 
@@ -148,18 +149,12 @@ var start = function () {
           case 0:
             app = new __WEBPACK_IMPORTED_MODULE_1_koa___default.a();
             host = process.env.HOST || '127.0.0.1';
-            port = process.env.PORT || 3000;
-
-            // Import and Set Nuxt.js options
-
+            port = process.env.PORT || 3045;
             config = __webpack_require__(0);
 
             config.dev = !(app.env === 'production');
 
-            // Instantiate nuxt.js
             nuxt = new __WEBPACK_IMPORTED_MODULE_2_nuxt__["Nuxt"](config);
-
-            // Build in development
 
             if (!config.dev) {
               _context2.next = 10;
@@ -182,7 +177,7 @@ var start = function () {
                         return next();
 
                       case 2:
-                        ctx.status = 200; // koa defaults to 404 when it sees that status is unset
+                        ctx.status = 200;
                         return _context.abrupt('return', new Promise(function (resolve, reject) {
                           ctx.res.on('close', resolve);
                           ctx.res.on('finish', resolve);

@@ -439,6 +439,7 @@ import '~/assets/styles/createOrder.less';
                 return true;
                 });
                 this.renewForm.items = items;
+                this.selectDiscount(false)
 
             },
             deleteStation:function(){
@@ -462,7 +463,14 @@ import '~/assets/styles/createOrder.less';
                 this.selectedDel = selectionList;
             },
             selectDiscount:function(){
-
+                let items = this.renewForm.items;
+                items = items.map((item)=>{
+                    let obj = item;
+                    obj.select = value;
+                    return obj;
+                })
+                this.selectAll = value;
+                this.renewForm.items = items;
             },
             //优惠类型选择
             changeType:function(value){

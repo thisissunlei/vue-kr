@@ -61,7 +61,7 @@
                 </Col>
                 </Row>
             </DetailStyle>
-            <DetailStyle info="优惠信息">
+            <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
@@ -136,6 +136,8 @@
                     </div>
                     </Col>
                 </Row>
+              </DetailStyle>
+              <div style="padding-left:24px">
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">
@@ -158,9 +160,10 @@
                         </div>
                  </Col>
             </Row>
+            </div>
             
                 
-            </DetailStyle>
+          
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
             <Button type="ghost" style="margin-left: 8px">重置</Button>
@@ -287,21 +290,7 @@ import '~/assets/styles/createOrder.less';
                     {label:'6个月',value:'6个月'},
                 ],
                 selectAll:false,//工位全选
-                youhui:[
-                    {
-                        label:'折扣',
-                        value:'zhekou'
-                    },
-                    {
-                        label:'前免',
-                        value:'qianmian'
-                    },
-                    {
-                        label:'后免',
-                        value:'houmian'
-                    }
-
-                ],
+                youhui:[],
 
 
            }
@@ -356,6 +345,7 @@ import '~/assets/styles/createOrder.less';
             changeCommunity:function(value){
                 if(value){
                     this.renewForm.community = value;
+                    this.getSaleTactics({communityId:value})
                 }else{
                     this.renewForm.community = '';
                 }
@@ -452,6 +442,9 @@ import '~/assets/styles/createOrder.less';
                 return true;
                 });
                 this.renewForm.items = items;
+                this.selectDiscount(false)
+
+                // this.setCheckFalse(items)
 
             },
             deleteStation:function(){
@@ -474,8 +467,15 @@ import '~/assets/styles/createOrder.less';
                 })
                 this.selectedDel = selectionList;
             },
-            selectDiscount:function(){
-
+            selectDiscount:function(value){
+                let items = this.renewForm.items;
+                items = items.map((item)=>{
+                    let obj = item;
+                    obj.select = value;
+                    return obj;
+                })
+                this.selectAll = value;
+                this.renewForm.items = items;
             },
             //优惠类型选择
             changeType:function(value){
@@ -553,6 +553,40 @@ import '~/assets/styles/createOrder.less';
             onStationChange:function(val){
                 this.selecedArr = val;
                 console.log('onStationChange',val)
+            },
+            getSaleTactics:function(params){//获取优惠信息
+                let list = [];
+                let _this = this;
+                axios.get('sale-tactics', params, r => {
+                    if(r.data.length){
+                        list = r.data.map(item=>{
+                            let obj = item;
+                            obj.label = item.tacticsName;
+                            switch(item.tacticsType){
+                                case 1:
+                                    obj.value = 'zhekou';
+                                    break;
+                                case 2:
+                                    obj.value = 'qianmian';
+                                    break;
+                                default:
+                                    obj.value = 'houmian';
+                                    break;
+                            }
+                            return obj;
+                        })
+                    }
+                    _this.youhui = list;
+
+                }, e => {
+
+                    console.log('error',e)
+                })
+            },
+            setCheckFalse(item){
+                //删除后优惠checkbox全部设为false
+                this.selectDiscount(false)
+
             }
 
                     

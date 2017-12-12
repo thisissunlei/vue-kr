@@ -409,6 +409,7 @@ import '~/assets/styles/createOrder.less';
                     obj.select = value;
                     return obj;
                 })
+                this.selectAll = value;
                 this.formItem.items = items;
             },
             deleteDiscount:function(){
@@ -424,6 +425,7 @@ import '~/assets/styles/createOrder.less';
                 return true;
                 });
                 this.formItem.items = items;
+                this.selectDiscount(false);
 
             },
             //优惠类型选择

@@ -413,13 +413,14 @@ import '~/assets/styles/createOrder.less';
                 })
             },
             selectDiscount:function(value){
-                // checkbox的选中事件
+                // checkbox的全选事件
                 let items = this.formItem.items;
                 items = items.map((item)=>{
                     let obj = item;
                     obj.select = value;
                     return obj;
                 })
+                this.selectAll = value;
                 this.formItem.items = items;
             },
             deleteDiscount:function(){
@@ -436,6 +437,7 @@ import '~/assets/styles/createOrder.less';
                 return true;
                 });
                 this.formItem.items = items;
+                this.selectDiscount(false);
 
             },
             

@@ -98,26 +98,26 @@
 
                 </Row>
                 <Row >
-                    <Col span="1" class="discount-table-head"  >
+                    <Col span="3" class="discount-table-head"  >
                         <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-head" >
                        <span> 优惠类型</span>
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>开始时间</span>
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>结束时间</span>
                         
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>折扣</span>
                         
                     </Col>
-                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
+                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
                         <span>优惠金额</span>
-                    </Col>
+                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -127,7 +127,7 @@
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
             <Row v-bind:class="{lastRow:index==formItem.items.length-1}" v-show="item.show">
-                 <Col span="1" class="discount-table-content" style="padding:0">
+                 <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
@@ -135,24 +135,21 @@
                             <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="4" class="discount-table-content" ></DatePicker>
+                    <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
                         <DatePicker type="date" v-if="item.value !== 'qianmian' && item.value !== 'zhekou'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
                     </Col>
-                    <Col span="4" class="discount-table-content">
+                    <Col span="5" class="discount-table-content">
                         <DatePicker type="date" v-if="item.value == 'houmian'|| item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
                     
                         <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'&& item.value !== 'zhekou'" v-model="item.endDate" ></DatePicker>
                     </Col>
-                    <Col span="4" class="discount-table-content">
+                    <Col span="5" class="discount-table-content">
                         <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
                         <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
-                    </Col>
-                    <Col span="5" class="discount-table-content" style="border-right:1px solid #e9eaec;">
-                        <Input v-model="item.money" placeholder="金额" disabled></Input>
-                    </Col>   
+                    </Col>  
             </Row>
         </FormItem>
         </DetailStyle>
@@ -174,7 +171,7 @@
                  </Col>
                  <Col class="col">
                     <FormItem label="首付款日期" style="width:252px">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" disabled ></DatePicker >
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" ></DatePicker >
                     </FormItem> 
                  </Col>
             </Row>
@@ -199,7 +196,7 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
 
     </Form>
@@ -513,6 +510,7 @@ import '~/assets/styles/createOrder.less';
                     deleteData:[],
                 };
                 this.stationList = [];
+                this.formItem.items = []
             },
             changeCustomer:function(value){
                 // 客户

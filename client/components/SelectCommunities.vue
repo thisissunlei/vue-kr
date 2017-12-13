@@ -20,8 +20,6 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
-
     export default {
         props:['name','onchange','test'],
         data () {
@@ -30,7 +28,7 @@ import axios from '~/plugins/http.js';
                 options1:[],
             };
         },
-        created:function(){
+        beforeMount:function(){
             console.log('com-select-community')
             this.getCusomerList(' ')
         },
@@ -59,7 +57,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-mainbill-community', params, r => {
+                this.$http.get('get-mainbill-community', params, r => {
                     console.log('r', r);
                     list = r.data;
                     list.map((item)=>{

@@ -63,6 +63,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		GLOBALSIDESWITCH("false")
 	},
 	methods:{
 		getInfo(){
@@ -89,9 +90,7 @@ export default {
             })
 		},
 	},
-	mounted(){
-		GLOBALSIDESWITCH("false")
-	},
+	
 
 
 

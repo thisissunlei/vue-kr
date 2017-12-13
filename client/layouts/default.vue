@@ -2,28 +2,34 @@
 
     body{
         padding-left:180px;
+        min-height:100%;
+        #__nuxt{
+            height:100%;
+        }
     }
     
     .layout{
+        height:100%;
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
         overflow: hidden;
-        padding-top: 65px;
+       
     }
-
     .layout-breadcrumb{
         padding: 10px 15px 0;
     }
 
     .layout-content{
-        min-height: 700px;
+        min-height: 500px;
         margin: 15px;
         overflow: hidden;
         border-radius: 4px;
         padding-bottom: 50px;
+        padding-top: 65px;
     }
     .layout-content-main{
+         min-height: 500px;
          background: #fff;
          padding-bottom: 10px;
     }
@@ -94,11 +100,12 @@
                         <nuxt/>
                     </div>
                 </div>
-                <div class="layout-copy">
-                    &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
-                </div>
+                
             </Col>
         </Row>
+        <div class="layout-copy">
+                    &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
+         </div>
     </div>
 </template>
 <script>

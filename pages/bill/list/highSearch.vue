@@ -167,7 +167,7 @@ export default{
             communityList:[]
 		}
     },
-    created:function(){
+    mounted:function(){
         axios.get('join-bill-community','', r => {    
                 this.communityList=r.data.items 
             }, e => {

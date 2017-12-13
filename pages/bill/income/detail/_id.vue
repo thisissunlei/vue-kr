@@ -61,7 +61,7 @@ export default {
 			ctime:'',
 		}
 	},
-	created:function(){
+	mounted:function(){
 		this.getInfo();
 	},
 	methods:{

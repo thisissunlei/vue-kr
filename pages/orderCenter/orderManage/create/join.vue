@@ -178,7 +178,7 @@
                  <Col class="col">
                     <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositAmount==types.label}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
                  </Col>
             </Row>
@@ -260,11 +260,11 @@ import '~/assets/styles/createOrder.less';
                 ],
                 params:{},
                 depositList:[
-                    {label:'2个月',value:'2个月'},
-                    {label:'3个月',value:'3个月'},
-                    {label:'4个月',value:'4个月'},
-                    {label:'5个月',value:'5个月'},
-                    {label:'6个月',value:'6个月'},
+                    {label:'2个月',value:'2'},
+                    {label:'3个月',value:'3'},
+                    {label:'4个月',value:'4'},
+                    {label:'5个月',value:'5'},
+                    {label:'6个月',value:'6'},
                 ],
                 youhui:[],
                 columns4: [
@@ -290,7 +290,7 @@ import '~/assets/styles/createOrder.less';
                     },
                     {
                         title: '小计',
-                        key: 'price'
+                        key: 'amount'
                     }
                 ],
                 stationList: [
@@ -372,7 +372,7 @@ import '~/assets/styles/createOrder.less';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id;
-                    // obj.name = item.name+'------';
+                    obj.floor = item.whereFloor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
                     return obj;
@@ -383,9 +383,12 @@ import '~/assets/styles/createOrder.less';
                     communityId:this.formItem.communityId,
                     seats:JSON.stringify(station)
                 }
+                let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
                         console.log('get-station-amount=====',r.data)
+                        val = r.data.seats;
+                        _this.formItem.rentAmount = r.data.totalrent;
 
                     }, e => {
 
@@ -393,7 +396,7 @@ import '~/assets/styles/createOrder.less';
                     })
                 }
                 
-                return station;
+                return val;
             }
         },
         methods: {
@@ -402,6 +405,34 @@ import '~/assets/styles/createOrder.less';
                     top: 80,
                     duration: 3
                 });
+            },
+            joinFormSubmit(){
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
+                let formItem = {} 
+                // formItem = this.formItem;
+                formItem.installmentType = this.installmentType;
+                formItem.depositAmount = this.depositAmount;
+                formItem.saleList =JSON.stringify(this.stationList) ;
+                formItem.seats=this.formItem.items;
+                formItem.customerId=this.formItem.customerId;
+                formItem.communityId=this.formItem.communityId;
+                formItem.salerId=this.formItem.salerId;
+                formItem.timeRange=this.formItem.timeRange;
+                formItem.rentAmount=this.formItem.rentAmount;
+                formItem.startDate = start;
+                formItem.endDate =end;
+                formItem.corporationId = 11;//临时加的-无用但包错
+                console.log('handleSubmit',formItem,start,end)
+                let _this = this;
+                axios.post('save-join', formItem, r => {
+                    console.log('save-join=====',r.data)
+                    _this.$Message.success('Success!');
+                }, e => {
+
+                        console.log('error',e)
+                })
+                
             },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
@@ -422,13 +453,7 @@ import '~/assets/styles/createOrder.less';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.formItem.installmentType = this.installmentType;
-
-                        this.formItem.depositAmount = this.depositAmount;
-                        this.formItem.saleList = this.stationList;
-                        this.formItem.seats=this.formItem.items;
-                        console.log('handleSubmit',this.formItem)
-                        this.$Message.success('Success!');
+                        this.joinFormSubmit()
                     } else {
                         _this.disabled = false;
 

@@ -21,8 +21,8 @@
 }
 
 </style>
-<template>
-    <Modal v-model="openMessage" class="ui-message" width="443"  >
+<template v-show="openMessage">
+    <Modal  v-model="openMessage" class="ui-message" width="443"  >
         <div v-if="type=='success'">
             <img src="~assets/images/success.png" />
             <p class="ui-reminder">{{warn}}</p>

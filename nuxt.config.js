@@ -5,6 +5,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   srcDir: 'client/',
   cache:true,
+  transition: {
+    name: 'page',
+    mode: 'out-in',
+    beforeEnter (el) {
+      console.log('Before enter...');
+    }
+  },
   router: {
     base: '/'
   },
@@ -27,7 +34,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: ['~assets/css/main.css','iview/dist/styles/iview.css'],
+  css: ['~assets/css/main.css'],
   /*
   ** Customize the progress-bar color
   */
@@ -37,16 +44,12 @@ module.exports = {
     publicPath: '/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-
-      if(!webpackConfig.resolve.plugins){
-         webpackConfig.resolve.plugins = [];
-      }
-
-      if(isClient){
-           webpackConfig.resolve.plugins.push(new ExtractTextPlugin({ filename: 'styles/app.css', disable: false, allChunks: true }));
-      } 
-      
     	webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
-    }
+    },
+    plugins: [
+            new ExtractTextPlugin({
+                filename: 'styles.css'
+            })
+     ]
   }
 }

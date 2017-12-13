@@ -1,5 +1,9 @@
 <style lang="less">
 
+    body{
+        padding-left:180px;
+    }
+    
     .layout{
         border: 1px solid #d7dde4;
         background: #f5f7f9;

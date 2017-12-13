@@ -34,7 +34,7 @@ module.exports = {
   loading: { color: '#000000' },
   build: {
     vendor: ['iview'],
-    publicPath: '/v/cdn/',
+    publicPath: '/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
 

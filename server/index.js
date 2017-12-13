@@ -19,8 +19,7 @@ if (config.dev) {
     console.error(error)
     process.exit(1)
   })
-}
-else {
+}else {
   listen()
 }
 

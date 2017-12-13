@@ -308,7 +308,7 @@ export default {
                 location.href=`./payment/detail/${params.id}`;
             },
             bindPerson (params) {
-                //this.$refs[this.form].resetFields();
+                this.$refs[this.form].resetFields();
                 this.itemDetail=params;
                 CommonFuc.clearForm(this.formItem);
                 this.openBind=!this.openBind;

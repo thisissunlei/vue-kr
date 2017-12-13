@@ -32,7 +32,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
-                        <DatePicker type="date" placeholder="续租结束日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                        <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -351,7 +351,21 @@ import '~/assets/styles/createOrder.less';
                 }
                 // this.clearStation()
             },
+            dealEndDate(val){
+                let str = val.split('-');
+                console.log('dealEndDate',str)
+                let year = str[0];
+                let month = parseInt(str[1], 10);  
+                var d= new Date(year, month, 0);  
+                let day = d.getDate();
+                val = year+'-'+month+'-'+day;
+                return val ;
+
+            },
             changeTime:function(value){
+                value = this.dealEndDate(value);
+                this.renewForm.endDate = value
+
                 // this.renewForm.endDate = value;
             },
             changeSaler:function(value){

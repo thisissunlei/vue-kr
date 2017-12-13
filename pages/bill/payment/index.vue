@@ -183,13 +183,11 @@ export default {
                         title: '交易流水号',
                         key: 'tradeNo',
                         align:'center',
-                        width:130
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                         width:190,
                     },
                     {
                         title: '回款日期',
@@ -204,13 +202,15 @@ export default {
                     {
                         title: '回款金额（元）',
                         key: 'amount',
-                        align:'center'
+                        align:'center',
+                        width:100,
                     },
                     
                     {
                         title: '回款方式',
                         key: 'payWay',
                         align:'center',
+                        width:100,
                         render(h, obj){
                             if(obj.row.payWay==='ALIAPPPAY'){
                                 return '支付宝app';

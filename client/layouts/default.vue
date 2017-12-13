@@ -1,7 +1,6 @@
 <style lang="less">
 
     .layout{
-        border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
@@ -14,15 +13,15 @@
     }
 
     .layout-content{
-        min-height: 800px;
+        min-height: 700px;
         margin: 15px;
         overflow: hidden;
-        background: #fff;
         border-radius: 4px;
-        padding-bottom:40px;
+        padding-bottom: 50px;
     }
     .layout-content-main{
-        // padding: 10px;
+         background: #fff;
+         padding-bottom: 10px;
     }
     .layout-copy{
         text-align: center;

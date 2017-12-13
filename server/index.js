@@ -12,7 +12,7 @@ const nuxt = new Nuxt(config)
 
 
 app.get('/', function(req, res) {
-  res.redirect('/new/');
+    res.redirect('/new/');
 });
 
 
@@ -23,7 +23,6 @@ if (config.dev) {
   new Builder(nuxt).build()
   .then(listen)
   .catch((error) => {
-    console.error(error)
     process.exit(1)
   });
 }else {

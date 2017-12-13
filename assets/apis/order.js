@@ -128,7 +128,17 @@ export default  {
     },
     //计算优惠
     'count-sale': {
-        url: 'krspace-finance-web/count-sale',
+        url: 'krspace-finance-web/count-order-sale',
         method: 'post'
+    },
+    //获取可选择的续租工位
+     'get-renew-station': {
+        url: 'krspace-finance-web/order-seat-detail/continue?',
+        method: 'get'
+    },
+    //获取可选择的减租工位
+     'get-reduce-station': {
+        url: 'krspace-finance-web/order-seat-detail/reduce?',
+        method: 'get'
     },
 }

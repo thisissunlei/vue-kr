@@ -8,6 +8,24 @@
             top: 0;
         }
     }
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   
    
 </style>
 
@@ -20,14 +38,14 @@
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px"  prop="customer">
-                    <selectCustomers name="renewForm.customer" :onchange="changeCustomer"></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px"  prop="customerId">
+                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px" prop="community" >
-                    <selectCommunities name="renewForm.community" :onchange="changeCommunity"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px" prop="communityId" >
+                    <selectCommunities name="renewForm.communityId" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -146,17 +164,25 @@
                  </Col>
             </Row>
             <Row>
-                 <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                <Col class="col">
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                         </div>
+                        <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
                  </Col>
+                <!--  <Col class="col">
+                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
+                        <div style="display:block;min-width:252px">
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:firstPayTime==types.value}">{{ types.label }}</span>
+                        </div>
+
+                 </Col> -->
                  <Col class="col">
                     <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositAmount==types.label}">{{ types.label }}</span>
                         </div>
                  </Col>
             </Row>
@@ -207,8 +233,8 @@ import '~/assets/styles/createOrder.less';
                 index:1,//优惠的index
                 openStation:false,//弹窗开关
                renewForm:{
-                    community:'',
-                    customer:'',
+                    communityId:'',
+                    customerId:'',
                     endDate:'',
                     saler:'',
                     items:[]
@@ -220,10 +246,10 @@ import '~/assets/styles/createOrder.less';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    community:[
+                    communityId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
-                    customer:[
+                    customerId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     saler:[
@@ -246,8 +272,8 @@ import '~/assets/styles/createOrder.less';
                ],
                selecedStation:[],
                selecedArr:[],
-               depositType:'',
-               payType:'',
+               depositAmount:'',
+               installmentType:'',
                columns: [
                     {
                         type: 'selection',
@@ -291,7 +317,8 @@ import '~/assets/styles/createOrder.less';
                 ],
                 selectAll:false,//工位全选
                 youhui:[],
-
+                errorPayType:false,
+                getStationFn:''
 
            }
         },
@@ -311,6 +338,18 @@ import '~/assets/styles/createOrder.less';
         },
         created(){
         },
+        watch:{
+            getStationFn:function(){
+                console.log('===========')
+                if(this.renewForm.customerId && this.renewForm.communityId){
+                    this.getRenewStation()
+                    // console.log('==========',this.renewForm.communityId,this.renewForm.customerId)
+                }
+                if(this.renewForm.communityId){
+                    this.getSaleTactics({communityId:this.renewForm.communityId})
+                }
+            },
+        },
         methods: {
             config:function(){
                 this.$Notice.config({
@@ -323,6 +362,9 @@ import '~/assets/styles/createOrder.less';
                 this.config()
                 let _this = this;
                 this.disabled = true;
+                if(!this.installmentType){
+                    this.errorPayType = true
+                }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$Message.success('Success!');
@@ -335,19 +377,33 @@ import '~/assets/styles/createOrder.less';
                     }
                 })
             },
+            getRenewStation(){
+                let params = {
+                    customerId:this.renewForm.customerId,
+                    communityId:this.renewForm.communityId
+                };
+                axios.get('get-renew-station', params, r => {
+                    console.log('==========',r.data)
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
             changeCustomer:function(value){
                 if(value){
-                    this.renewForm.customer = value;
+                    this.renewForm.customerId = value;
+                    this.getStationFn = +new Date()
                 }else{
-                    this.renewForm.customer = '';
+                    this.renewForm.customerId = '';
                 }
             },
             changeCommunity:function(value){
                 if(value){
-                    this.renewForm.community = value;
-                    this.getSaleTactics({communityId:value})
+                    this.renewForm.communityId = value;
+                    this.getStationFn = +new Date()
                 }else{
-                    this.renewForm.community = '';
+                    this.renewForm.communityId = '';
                 }
                 // this.clearStation()
             },
@@ -374,13 +430,13 @@ import '~/assets/styles/createOrder.less';
             showStation:function(){
                 this.config()
 
-                if(!this.renewForm.community){
+                if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
                     });
                     return
                 }
-                if(!this.renewForm.customer){
+                if(!this.renewForm.customerId){
                     this.$Notice.error({
                         title:'请先选择客户'
                     });
@@ -395,22 +451,23 @@ import '~/assets/styles/createOrder.less';
                 this.openStation =true;
             },
             selectDeposit:function(value){
-                this.depositType = value;
+                this.depositAmount = value;
 
             },
             selectPayType:function(value){
-                this.payType  = value;
+                this.installmentType  = value;
+                this.errorPayType = false;
             },
             handleAdd:function(){
                 this.config()
 
-                if(!this.renewForm.community){
+                if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
                     });
                     return
                 }
-                if(!this.renewForm.customer){
+                if(!this.renewForm.customerId){
                     this.$Notice.error({
                         title:'请先选择客户'
                     });

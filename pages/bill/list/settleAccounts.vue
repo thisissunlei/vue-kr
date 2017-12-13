@@ -23,18 +23,12 @@
 <template>
 	<div class="u-wrap">
 		<div class="u-text">
-			账户余额：<span class="u-txt-red">￥{{amount}}</span>	
+			应结账金额为<span class="u-txt-red"> ￥{{amount}}	</span>，您确定要结账吗？
 		</div>
-		 <Input 
-		 	v-model="value" 
-		 	placeholder="请输入结账金额" 
-		 	size="large"
-		 	style="width: 252px;margin-bottom:30px;"
-		 ></Input>
 	</div>
 </template>
 <script>
-import axios from '~/plugins/http';
+import axios from 'kr/axios';
 
 	export default {
 		name:'settleAccounts',
@@ -65,9 +59,7 @@ import axios from '~/plugins/http';
 				}
 			}
 		},
-		updated:function(){
-        	this.$emit('formData', this.value);
-    	},
+		
 		
 	}
 </script>

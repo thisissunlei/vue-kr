@@ -43,7 +43,7 @@
 
 <template>
 <div class="g-bill">
-    <SectionTitle label="已出账单管理"></SectionTitle>
+    <sectionTitle label="已出账单管理"></sectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onBillPay">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span> 
@@ -94,7 +94,6 @@
      >
        <settleAccounts 
             :detail="itemDetail"
-             v-on:formData="getSettleData"
         > </settleAccounts>
         <div slot="footer">
             <Button type="primary" @click="settleSubmit">确定</Button>
@@ -138,12 +137,12 @@
 
 <script>
 
-import axios from '~/plugins/http';
+import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 //import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
-import SectionTitle from '~/components/SectionTitle';
+import sectionTitle from '~/components/sectionTitle';
 import Message from '~/components/Message';
 import CommonFuc from '~/components/CommonFuc';
 
@@ -153,7 +152,7 @@ import CommonFuc from '~/components/CommonFuc';
             HighSearch,
             settleAccounts,
             //antiSettlement,
-            SectionTitle,
+            sectionTitle,
             Message
         },
         data () {
@@ -430,9 +429,7 @@ import CommonFuc from '~/components/CommonFuc';
                 })
 
             },
-            getSettleData(form){
-                this.settleData=form;
-            },
+            
             getAntiSettleData(form){
                 this.antiSettleData=form;
             },
@@ -441,7 +438,6 @@ import CommonFuc from '~/components/CommonFuc';
             },
             settleSubmit(){
                 let params={
-                    amount:this.settleData,
                     billId:this.itemDetail.billId
                 }
                 axios.post('bill-pay',params, r => {

@@ -30,9 +30,6 @@ module.exports = {
   build: {
     vendor: ['iview'],
     publicPath: '/v/cdn/',
-    vendor: ['axios'],
-    extend(webpackConfig, { isDev, isClient, isServer }) {
-			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
-		}
+    vendor: ['axios']
   },
 }

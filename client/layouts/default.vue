@@ -29,7 +29,7 @@
         padding-top: 65px;
     }
     .layout-content-main{
-         min-height: 500px;
+         min-height: 300px;
          background: #fff;
          padding-bottom: 10px;
     }

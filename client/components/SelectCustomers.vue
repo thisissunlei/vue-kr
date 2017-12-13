@@ -20,8 +20,6 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
-
     export default {
         props:['name','onchange'],
         data () {
@@ -30,7 +28,7 @@ import axios from '~/plugins/http.js';
                 customerOptions:[],
             };
         },
-        created:function(){
+        mounted:function(){
             this.getCusomerList(' ')
         },
         methods: {
@@ -58,7 +56,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-customer', params, r => {
+                this.$http.get('get-customer', params, r => {
                     console.log('r---->', r);
                     list = r.data.customerList;
                     list.map((item)=>{

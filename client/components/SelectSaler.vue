@@ -20,8 +20,6 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
-
     export default {
         props:['name','onchange'],
         data () {
@@ -30,7 +28,7 @@ import axios from '~/plugins/http.js';
                 salerOptions:[],
             };
         },
-        created:function(){
+        mounted:function(){
             // this.getCusomerList(' ')
         },
         methods: {
@@ -53,7 +51,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-saler', params, r => {
+                this.$http.get('get-saler', params, r => {
                     list = r.data.slice(0,10);
                     list.map((item)=>{
                         let obj = item;

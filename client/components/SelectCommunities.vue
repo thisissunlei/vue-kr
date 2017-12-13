@@ -28,7 +28,7 @@
                 options1:[],
             };
         },
-        beforeMount:function(){
+        mounted:function(){
             console.log('com-select-community')
             this.getCusomerList(' ')
         },

@@ -95,7 +95,7 @@
             </FormItem>
             <FormItem label="收款账户" class="u-input u-right-none">
                 <Input 
-                    v-model="formItem.communityIds" 
+                    v-model="formItem.receiveAccount" 
                     placeholder="请输入收款账户" 
                     style="width: 250px"
                ></Input>
@@ -114,6 +114,7 @@ export default{
                 endTime:'',
                 payWay:'',
                 customerName:'',
+                receiveAccount:''
             },
             payWay:[
                 {

@@ -141,4 +141,23 @@ export default  {
         url: 'krspace-finance-web/order-seat-detail/reduce?',
         method: 'get'
     },
+    //入驻新建提交
+     'save-join': {
+        url: 'krspace-finance-web/order-seat-add',
+        method: 'post'
+    },
+    //续驻新建提交
+     'save-renew': {
+        url: 'krspace-finance-web/order-seat-continue',
+        method: 'post'
+    },
+    'save-reduce': {
+        url: 'krspace-finance-web/order-seat-reduce',
+        method: 'post'
+    },
+    //计算工位服务费小计
+    'get-station-amount': {
+        url: 'krspace-finance-web/order-seat-detail/amount',
+        method: 'post'
+    },
 }

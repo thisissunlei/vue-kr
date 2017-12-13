@@ -349,6 +349,9 @@ import '~/assets/styles/createOrder.less';
                     this.getSaleTactics({communityId:this.renewForm.communityId})
                 }
             },
+            selecedStation(val){
+                console.log('selecedStation======>',val)
+            }
         },
         methods: {
             config:function(){
@@ -623,7 +626,6 @@ import '~/assets/styles/createOrder.less';
             },
             onStationChange:function(val){
                 this.selecedArr = val;
-                console.log('onStationChange',val)
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];

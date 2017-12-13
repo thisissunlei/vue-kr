@@ -48,8 +48,8 @@
             <DetailStyle info="租赁信息">
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
-                    <FormItem label="租赁开始日期" style="width:252px" prop="beginDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.beginDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                    <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
+                        <DatePicker type="date" placeholder="Select date" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
@@ -136,8 +136,8 @@
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.value !== 'qianmian' && item.value !== 'zhekou'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.startDate" disabled></DatePicker >
+                        <DatePicker type="date" v-if="item.value !== 'qianmian' && item.value !== 'zhekou'" placeholder="开始时间" v-model="item.startDate" ></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" v-if="item.value == 'houmian'|| item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
@@ -154,15 +154,6 @@
         </FormItem>
         </DetailStyle>
         <div style="padding-left:24px">
-                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length">
-                        <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
-                    </div>
-                    </Col>
-                </Row>
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">
@@ -294,7 +285,7 @@ import '~/assets/styles/createOrder.less';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.beginDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(this.formItem.endDate)))
                         }
                     },
                     {
@@ -318,7 +309,7 @@ import '~/assets/styles/createOrder.less';
                 formItem: {
                     customerId: '',
                     communityId: '',
-                    beginDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
+                    startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
@@ -329,7 +320,7 @@ import '~/assets/styles/createOrder.less';
                 },
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
-                    beginDate: [
+                    startDate: [
                         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
                     ],
                     endDate: [
@@ -375,6 +366,36 @@ import '~/assets/styles/createOrder.less';
         created(){
             // this.openStation = false
         },
+        watch:{
+            stationList(val){
+                let station = val.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.price;
+                    obj.seatId = item.id;
+                    // obj.name = item.name+'------';
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
+                    return obj;
+                })
+                let params = {
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
+                    communityId:this.formItem.communityId,
+                    seats:JSON.stringify(station)
+                }
+                if(val.length){
+                    axios.post('get-station-amount', params, r => {
+                        console.log('get-station-amount=====',r.data)
+
+                    }, e => {
+
+                        console.log('error',e)
+                    })
+                }
+                
+                return station;
+            }
+        },
         methods: {
             config:function(){
                 this.$Notice.config({
@@ -401,6 +422,12 @@ import '~/assets/styles/createOrder.less';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        this.formItem.installmentType = this.installmentType;
+
+                        this.formItem.depositAmount = this.depositAmount;
+                        this.formItem.saleList = this.stationList;
+                        this.formItem.seats=this.formItem.items;
+                        console.log('handleSubmit',this.formItem)
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -458,7 +485,7 @@ import '~/assets/styles/createOrder.less';
                         item.endDate = new Date()
                         item.zhekou = '';
                     }else if(item.value == 'zhekou'){
-                        item.beginDate = new Date()
+                        item.startDate= new Date()
                         item.endDate = new Date()
                     }
                     return item;
@@ -505,12 +532,15 @@ import '~/assets/styles/createOrder.less';
             },
             clearStation:function(){
                 // 清除所选的工位
-                this.stationData={
-                    submitData:[],
-                    deleteData:[],
-                };
-                this.stationList = [];
-                this.formItem.items = []
+                if(this.stationList.length){
+
+                    this.stationData={
+                        submitData:[],
+                        deleteData:[],
+                    };
+                    this.stationList = [];
+                    this.formItem.items = []
+                }
             },
             changeCustomer:function(value){
                 // 客户
@@ -547,7 +577,7 @@ import '~/assets/styles/createOrder.less';
                         });
                     return;
                 }
-                if(!this.formItem.beginDate){
+                if(!this.formItem.startDate){
                     this.$Notice.error({
                             title:'请先选择开始时间'
                         });
@@ -563,7 +593,7 @@ import '~/assets/styles/createOrder.less';
                     floor:'3,4,2',
                     communityId:this.formItem.communityId,
                     mainBillId:3162,
-                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
                 }
@@ -651,11 +681,11 @@ import '~/assets/styles/createOrder.less';
                 let error = false;
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
                 let params = {
-                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
+                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
                 }
                 this.config();
-                if(new Date(this.formItem.beginDate)>new Date(val)){
+                if(new Date(this.formItem.startDate)>new Date(val)){
                     error = true;
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'

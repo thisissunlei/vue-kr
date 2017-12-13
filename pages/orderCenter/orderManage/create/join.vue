@@ -28,19 +28,19 @@
             <DetailStyle info="基本信息">
             <Row style="margin-bottom:30px">  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customer">
-                    <selectCustomers name="formItem.customer" :onchange="changeCustomer"></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="community">
-                    <selectCommunities name="formItem.community" :onchange="changeCommunity"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                    <selectCommunities name="formItem.communityId" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="saler">
-                    <selectSaler name="formItem.saler" :onchange="changeSaler"></selectSaler>
+                    <FormItem label="销售员" style="width:252px" prop="salerId">
+                    <selectSaler name="formItem.salerId" :onchange="changeSaler"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -57,11 +57,11 @@
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="date" placeholder="租赁结束日期" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
-                    <FormItem label="租赁时长" style="width:252px" prop="time">
+                    <FormItem label="租赁时长" style="width:252px" prop="timeRange">
                         <Input v-model="formItem.timeRange" placeholder="租赁时长"></Input>
                     </FormItem>
                 </Col>
@@ -169,12 +169,12 @@
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="formItem.totalMoney" placeholder="服务费总额" disabled></Input>
+                        <Input v-model="formItem.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
                     <FormItem label="首付款日期" style="width:252px">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" disabled ></DatePicker >
                     </FormItem> 
                  </Col>
             </Row>
@@ -182,7 +182,7 @@
                  <Col class="col">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
+                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                         </div>
                         <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
@@ -190,7 +190,7 @@
                  <Col class="col">
                     <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositAmount==types.label}">{{ types.label }}</span>
                         </div>
                  </Col>
             </Row>
@@ -251,10 +251,10 @@ import '~/assets/styles/createOrder.less';
                 selectAll:false,
                 discountError:false,
                 index:0,
-                depositType:'',
+                depositAmount:'',
                 disabled:false,
                 delStation:[],
-                payType:'',
+                installmentType:'',
                 timeError:false,//租赁时间校验
                 stationData:{
                     submitData:[],
@@ -319,13 +319,15 @@ import '~/assets/styles/createOrder.less';
                 }],
                 selectedStation:[],
                 formItem: {
-                    customer: '',
-                    community: '',
+                    customerId: '',
+                    communityId: '',
                     beginDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
                     city:'',
+                    firstPayTime:'',
+                    rentAmount:'',
                     items:[]
                 },
                 errorPayType:false,//付款方式的必填错误信息
@@ -336,7 +338,7 @@ import '~/assets/styles/createOrder.less';
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
-                    time: [
+                    timeRange: [
                         { required: true, message: '请填写在租赁时长', trigger: 'blur' }
                     ],
                     // city:[
@@ -345,13 +347,13 @@ import '~/assets/styles/createOrder.less';
                     // floor:[
                     //     { required: true, message: '此项不可为空', trigger: 'change' }
                     // ],
-                    community:[
+                    communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
-                    customer:[
+                    customerId:[
                         { required: true, message: '请选择客户', trigger: 'change' }
                     ],
-                    saler:[
+                    salerId:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
                     // floor: [
@@ -390,7 +392,7 @@ import '~/assets/styles/createOrder.less';
                     duration: 3
                 });
                 let _this = this;
-                if(!this.payType){
+                if(!this.installmentType){
                     this.errorPayType = true
                 }
                 if(this.timeError){
@@ -496,10 +498,10 @@ import '~/assets/styles/createOrder.less';
             changeCommunity:function(value){
                 // 选择社区
                 if(value){
-                    this.formItem.community = value;
+                    this.formItem.communityId = value;
                     this.getSaleTactics({communityId:value})
                 }else{
-                    this.formItem.community = '';
+                    this.formItem.communityId = '';
                 }
                 this.clearStation()
                 
@@ -515,14 +517,14 @@ import '~/assets/styles/createOrder.less';
             changeCustomer:function(value){
                 // 客户
                 if(value){
-                    this.formItem.customer = value;
+                    this.formItem.customerId = value;
                 }else{
-                    this.formItem.customer = '';
+                    this.formItem.customerId = '';
                 }
             },
             changeSaler:function(value){
                 // 销售员
-                this.formItem.saler = value;
+                this.formItem.salerId = value;
             },
             deleteStation:function(){
                 // 工位表单的删除按钮
@@ -541,7 +543,7 @@ import '~/assets/styles/createOrder.less';
                 // 选择工位的按钮
                 this.config()
 
-                if(!this.formItem.community){
+                if(!this.formItem.communityId){
                     this.$Notice.error({
                             title:'请先选择社区'
                         });
@@ -561,7 +563,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 let params = {
                     floor:'3,4,2',
-                    communityId:this.formItem.community,
+                    communityId:this.formItem.communityId,
                     mainBillId:3162,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
                     time:+new Date(),
@@ -590,11 +592,11 @@ import '~/assets/styles/createOrder.less';
             },
             selectDeposit:function(value){
                 // 选择保证金
-                this.depositType = value
+                this.depositAmount = value
             },
             selectPayType:function(value){
                 // 选择付款方式
-                this.payType = value;
+                this.installmentType = value;
                 this.errorPayType = false;
             },
             submitStation:function(){//工位弹窗的提交
@@ -613,6 +615,7 @@ import '~/assets/styles/createOrder.less';
                 };
 
             },
+            
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
                 this.config();
@@ -632,9 +635,23 @@ import '~/assets/styles/createOrder.less';
                 this.timeError = error;
                 this.clearStation()
             },
+            dealEndDate(val){
+                let str = val.split('-');
+                console.log('dealEndDate',str)
+                let year = str[0];
+                let month = parseInt(str[1], 10);  
+                var d= new Date(year, month, 0);  
+                let day = d.getDate();
+                val = year+'-'+month+'-'+day;
+                return val ;
+
+            },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+
+                val = this.dealEndDate(val);
+                console.log('changeEndTime',val)
                 let error = false;
-                val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val));
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginDate)),
                     end:val
@@ -649,6 +666,7 @@ import '~/assets/styles/createOrder.less';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
+                this.formItem.endDate = val;
                 this.clearStation();
 
             },

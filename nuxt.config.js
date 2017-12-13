@@ -1,3 +1,4 @@
+var path = require('path')
 module.exports = {
   /*
   ** Headers of the page
@@ -28,6 +29,9 @@ module.exports = {
   build: {
     vendor: ['iview'],
     publicPath: '/v/cdn/',
-    vendor: ['axios']
+    vendor: ['axios'],
+    extend(webpackConfig, { isDev, isClient, isServer }) {
+			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+		}
   },
 }

@@ -3,11 +3,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
+  srcDir: 'client/',
+  cache:true,
+  router: {
+    base: '/'
+  },
   head: {
-    title: 'starter',
+    title: '氪空间管理后台',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

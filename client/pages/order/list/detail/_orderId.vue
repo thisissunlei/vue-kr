@@ -163,18 +163,15 @@ export default {
 		this.getInfo();
 	},
 	methods:{
+
 		getInfo(){
+
 			let {params}=this.$route
 			let from={
 				orderId:params.orderId
 			};
-<<<<<<< HEAD
 
-			
-			axios.get('order-detail', from, r => {
-=======
 			this.$http.get('order-detail', from, r => {
->>>>>>> eb08284b580d5e18b1ab6347fab9d2dd62b0b1ee
 				
 				let data=r.data;
 				this.basicInfo=data;

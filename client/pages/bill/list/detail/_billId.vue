@@ -173,6 +173,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		GLOBALSIDESWITCH("false");
 	},
 	methods:{
 		getInfo(){
@@ -212,9 +213,7 @@ export default {
 			this.ISshow=false;
 		}
 	},
-	mounted(){
-		GLOBALSIDESWITCH("false");
-	},
+	
 
 
 

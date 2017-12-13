@@ -161,6 +161,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		GLOBALSIDESWITCH("false")
 	},
 	methods:{
 
@@ -208,11 +209,7 @@ export default {
             })
 		},
 	},
-	mounted(){
-		
-		GLOBALSIDESWITCH("false")
-		
-	},
+	
 
 }
 </script>

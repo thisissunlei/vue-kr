@@ -113,7 +113,7 @@ export default {
 			contractData:[]
 		}
 	},
-	created:function(){
+	mounted:function(){
 		let {params}=this.$route;
 		let from={
 			id:params.watchView

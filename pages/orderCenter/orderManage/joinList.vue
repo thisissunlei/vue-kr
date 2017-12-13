@@ -236,7 +236,7 @@
                 ]
             }
         },
-        created:function(){
+        mounted:function(){
             this.getListData(this.params);
         },
         methods:{

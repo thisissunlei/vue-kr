@@ -228,7 +228,7 @@
             if (item.type && item.type == "vue") {
                 href = "http://" + location.hostname + "/" + href;
             } else {
-                href = "#/" + href;
+                href = "http://" + location.hostname +"/new/#/" + href;
             }
             
             html += '<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';

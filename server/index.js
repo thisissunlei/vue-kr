@@ -10,7 +10,14 @@ config.dev = !isProd
 const nuxt = new Nuxt(config)
 
 
-app.use(nuxt.render)
+
+app.get('/', function(req, res) {
+  res.redirect('/new/');
+});
+
+
+app.use(nuxt.render);
+
 
 if (config.dev) {
   new Builder(nuxt).build()
@@ -18,12 +25,13 @@ if (config.dev) {
   .catch((error) => {
     console.error(error)
     process.exit(1)
-  })
+  });
 }else {
   listen()
 }
 
 function listen() {
+
   app.listen(port, '0.0.0.0')
   console.log('Server listening on `localhost:' + port + '`.')
 }

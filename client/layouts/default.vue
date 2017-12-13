@@ -2,15 +2,18 @@
 
     body{
         padding-left:180px;
+        min-height:100%;
+        #__nuxt{
+            height:100%;
+        }
     }
     
     .layout{
-        height:100%;
+        min-height:100%;
+        overflow-x: hidden;
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
-        overflow: hidden;
-       
     }
     .layout-breadcrumb{
         padding: 10px 15px 0;
@@ -101,7 +104,7 @@
         </Row>
         <div class="layout-copy">
                     &copy;  2011~2016 36氪 | 京ICP备12031756号 | 京公网安备11010802012285号
-         </div>
+        </div>
     </div>
 </template>
 <script>

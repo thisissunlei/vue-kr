@@ -34,8 +34,6 @@
 	</div>
 </template>
 <script>
-import axios from '~/plugins/http';
-
 	export default {
 		name:'antiSettlement',
 		props:['detail'],

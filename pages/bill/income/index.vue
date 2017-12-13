@@ -95,7 +95,6 @@
 
 
 <script>
-import axios from '~/plugins/http';
 import HighSearch from './highSearch';
 import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
@@ -229,7 +228,7 @@ import CommonFuc from '~/components/CommonFuc';
                this.cancelCallback && this.cancelCallback();
             },
             getTableData(params){
-                axios.get('get-income-list', params, r => {
+                this.$http.get('get-income-list', params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
@@ -251,7 +250,7 @@ import CommonFuc from '~/components/CommonFuc';
             },
             add(){
                 let params=this.addData;
-                axios.post('add-income', params, r => {
+                this.$http.post('add-income', params, r => {
                     this.openIncome=false;
                     if(r.code==-1){
                         this.MessageType="error";

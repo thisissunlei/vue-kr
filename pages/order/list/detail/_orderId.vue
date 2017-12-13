@@ -70,7 +70,6 @@
 </div>	
 </template>
 <script>
-import axios from '~/plugins/http';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle.vue';
@@ -169,7 +168,7 @@ export default {
 			let from={
 				orderId:params.orderId
 			};
-			axios.get('order-detail', from, r => {
+			this.$http.get('order-detail', from, r => {
 				
 				let data=r.data;
 				this.basicInfo=data;

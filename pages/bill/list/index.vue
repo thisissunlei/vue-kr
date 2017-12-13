@@ -136,8 +136,6 @@
 
 
 <script>
-
-import axios from 'kr/axios';
 import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
 //import antiSettlement from './antiSettlement';
@@ -398,7 +396,7 @@ import CommonFuc from '~/components/CommonFuc';
                 this.billIds=billIds;
             },
             getTableData(params){
-                axios.get('get-bill-list', params, r => {
+                this.$http.get('get-bill-list', params, r => {
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
@@ -414,7 +412,7 @@ import CommonFuc from '~/components/CommonFuc';
                 let params={
                     billIds:JSON.stringify(this.billIds)
                 }
-                axios.post('batch-pay',params, r => {
+                this.$http.post('batch-pay',params, r => {
                     if(r.code==-1){
                         this.MessageType="error";
                         this.warn=r.message;
@@ -441,7 +439,7 @@ import CommonFuc from '~/components/CommonFuc';
                 let params={
                     billId:this.itemDetail.billId
                 }
-                axios.post('bill-pay',params, r => {
+                this.$http.post('bill-pay',params, r => {
                     if(r.code==-1){
                         this.MessageType="error";
                         this.warn=r.message;
@@ -462,7 +460,7 @@ import CommonFuc from '~/components/CommonFuc';
             //         amount:this.antiSettleData,
             //         billId:this.itemDetail.billId
             //     }
-            //     axios.post('bill-release',params, r => {
+            //     this.$http.post('bill-release',params, r => {
             //         if(r.code==-1){
             //             this.MessageType="error";
             //             this.warn=r.message;

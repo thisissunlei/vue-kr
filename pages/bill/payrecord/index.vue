@@ -129,7 +129,7 @@
 
 
 <script>
-import axios from '~/plugins/http';
+
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
@@ -223,7 +223,7 @@ export default {
                  console.log('导出')
             },
             getTableData(params){
-                axios.get('get-payrecord-list', params, r => {
+                this.$http.get('get-payrecord-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
@@ -252,7 +252,7 @@ export default {
             importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
-                axios.put('import-bank-flow', data, r => {
+                this.$http.put('import-bank-flow', data, r => {
                     this.openImport=false;
                     this.MessageType="success";
                     this.warn=`已成功导入交易流水${r.data.successNum}条`

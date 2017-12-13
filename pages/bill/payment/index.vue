@@ -142,7 +142,6 @@
 
 
 <script>
-import axios from '~/plugins/http';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
@@ -309,7 +308,7 @@ export default {
                  console.log('导出')
             },
             getTableData(params){
-                axios.get('get-payment-list', params, r => {
+                this.$http.get('get-payment-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
@@ -324,7 +323,7 @@ export default {
                 this.$refs[this.form].validate((valid)=>{
                     if(valid){
                         this.formItem.paymentId=this.itemDetail.id;
-                        axios.post('payment-bind', this.formItem, r => {
+                        this.$http.post('payment-bind', this.formItem, r => {
                             if(r.code==-1){
                                 this.MessageType="error";
                                 this.warn=r.message;

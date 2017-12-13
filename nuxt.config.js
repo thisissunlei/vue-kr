@@ -39,11 +39,12 @@ module.exports = {
       if(!webpackConfig.resolve.plugins){
          webpackConfig.resolve.plugins = [];
       }
+
       if(isClient){
            webpackConfig.resolve.plugins.push(new ExtractTextPlugin({ filename: 'styles/app.css', disable: false, allChunks: true }));
       } 
       
-			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
-		}
-  },
+    	webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+    }
+  }
 }

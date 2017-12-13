@@ -50,7 +50,7 @@
 </div>	
 </template>
 <script>
-import axios from '~/plugins/http';
+
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle.vue';
@@ -96,6 +96,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		GLOBALSIDESWITCH("false");
 	},
 	methods:{
 		getInfo(){
@@ -104,7 +105,7 @@ export default {
 			let from={
 				paymentId:params.paymentId
 			};
-			axios.get('get-payment-detail', from, r => {
+			this.$http.get('get-payment-detail', from, r => {
 				let data=r.data;
 				this.basicInfo=data;
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
@@ -126,9 +127,7 @@ export default {
             })
 		},
 	},
-	mounted(){
-		GLOBALSIDESWITCH("false");
-	},
+	
 
 }
 </script>

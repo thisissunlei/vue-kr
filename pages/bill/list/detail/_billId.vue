@@ -93,7 +93,6 @@
 </div>
 </template>
 <script>
-import axios from '~/plugins/http';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import SectionTitle from '~/components/SectionTitle.vue';
@@ -182,7 +181,7 @@ export default {
 			let from={
 				billId:params.billId
 			};
-			axios.get('get-bill-detail', from, r => {
+			this.$http.get('get-bill-detail', from, r => {
 				let data=r.data;
 				if(data.bizType=='MEETING'){
 					data.billType='会议室账单';

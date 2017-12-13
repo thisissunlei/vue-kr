@@ -28,7 +28,6 @@
 	</div>
 </template>
 <script>
-import axios from 'kr/axios';
 
 	export default {
 		name:'settleAccounts',
@@ -43,7 +42,7 @@ import axios from 'kr/axios';
 				let params={
 					customerId:customerId
 				};
-				axios.get('get-balance', params, r => {
+				this.$http.get('get-balance', params, r => {
                     this.amount=r.data.balance;
                 }, e => {
                     console.log('error',e)

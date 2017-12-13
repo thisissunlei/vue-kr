@@ -1,4 +1,7 @@
-var path = require('path')
+var path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+
 module.exports = {
   /*
   ** Headers of the page
@@ -26,12 +29,20 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#3B8070' },
+  loading: { color: '#000000' },
   build: {
     vendor: ['iview'],
     publicPath: '/v/cdn/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
+
+      if(!webpackConfig.resolve.plugins){
+         webpackConfig.resolve.plugins = [];
+      }
+      if(isClient){
+           webpackConfig.resolve.plugins.push(new ExtractTextPlugin({ filename: 'styles/app.css', disable: false, allChunks: true }));
+      } 
+      
 			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
 		}
   },

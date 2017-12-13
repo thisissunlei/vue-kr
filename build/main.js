@@ -65,7 +65,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,7 +76,9 @@ var _build;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var path = __webpack_require__(4);
+var path = __webpack_require__(5);
+var ExtractTextPlugin = __webpack_require__(4);
+
 module.exports = {
   /*
   ** Headers of the page
@@ -96,7 +98,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#3B8070' },
+  loading: { color: '#000000' },
   build: (_build = {
     vendor: ['iview'],
     publicPath: '/v/cdn/'
@@ -104,6 +106,14 @@ module.exports = {
     var isDev = _ref.isDev,
         isClient = _ref.isClient,
         isServer = _ref.isServer;
+
+
+    if (!webpackConfig.resolve.plugins) {
+      webpackConfig.resolve.plugins = [];
+    }
+    if (isClient) {
+      webpackConfig.resolve.plugins.push(new ExtractTextPlugin({ filename: 'styles/app.css', disable: false, allChunks: true }));
+    }
 
     webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
   }), _build)
@@ -113,7 +123,7 @@ module.exports = {
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(5);
+module.exports = __webpack_require__(6);
 
 
 /***/ },
@@ -132,16 +142,22 @@ module.exports = require("nuxt");
 /* 4 */
 /***/ function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("extract-text-webpack-plugin");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
-module.exports = require("regenerator-runtime");
+module.exports = require("path");
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+module.exports = require("regenerator-runtime");
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,7 +214,6 @@ var start = function () {
                           ctx.res.on('close', resolve);
                           ctx.res.on('finish', resolve);
                           nuxt.render(ctx.req, ctx.res, function (promise) {
-                            // nuxt.render passes a rejected promise into callback on error.
                             promise.then(resolve).catch(reject);
                           });
                         }));

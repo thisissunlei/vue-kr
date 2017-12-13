@@ -183,14 +183,12 @@ import CommonFuc from '~/components/CommonFuc';
                     {
                         title: '账单编号',
                         key: 'billNo',
-                        align:'center',
-                        width:115
+                        align:'center'
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center',
-                        width:190
+                        align:'center'
                     },
                     {
                         title: '社区名称',
@@ -216,12 +214,14 @@ import CommonFuc from '~/components/CommonFuc';
                     {
                         title: '账单金额',
                         key: 'amount',
-                        align:'center'
+                        align:'center',
+                        width:80,
                     },
                     {
                         title: '结账金额',
                         key: 'paidAmount',
-                        align:'center'
+                        align:'center',
+                        width:80,
                     },
                     {
                         title: '付款截止日期',
@@ -237,6 +237,7 @@ import CommonFuc from '~/components/CommonFuc';
                         title: '账单状态',
                         key: 'payStatus',
                         align:'center',
+                        width:90,
                         render(h, obj){
                                 if(obj.row.payStatus==='WAIT'){
                                     return h('span', { 
@@ -266,7 +267,7 @@ import CommonFuc from '~/components/CommonFuc';
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:135,
+                        width:90,
                         render:(h,params)=>{
                             if(params.row.payStatus==='PAYMENT'){
                                  return h('div', [

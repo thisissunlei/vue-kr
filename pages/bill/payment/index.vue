@@ -285,7 +285,7 @@ export default {
                 
             }
         },
-        created:function(){
+        mounted:function(){
             this.getTableData(this.params);
         },
         methods:{

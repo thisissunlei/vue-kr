@@ -208,7 +208,7 @@ import CommonFuc from '~/components/CommonFuc';
             }
         },
        
-        created:function(){
+        mounted:function(){
             this.getTableData(this.tabParams);
         },
         methods:{

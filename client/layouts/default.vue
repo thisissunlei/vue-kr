@@ -14,11 +14,12 @@
     }
 
     .layout-content{
-        min-height: 200px;
+        min-height: 800px;
         margin: 15px;
         overflow: hidden;
         background: #fff;
         border-radius: 4px;
+        padding-bottom:40px;
     }
     .layout-content-main{
         // padding: 10px;
@@ -27,6 +28,14 @@
         text-align: center;
         padding: 10px 0 20px;
         color: #9ea7b4;
+        width:100%;
+        height: 40px;
+        position: absolute;
+        left:0;
+        bottom:0;
+        border-top: solid 1px #e8e9e9;
+        background:#fff;
+        
     }
     .layout-menu-left{
         background: #464c5b;

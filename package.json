@@ -5,11 +5,10 @@
   "author": "张屈 <joneyphair@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "backpack dev",
-    "build": "nuxt build && backpack build",
-    "start": "cross-env NODE_ENV=production node build/main.js",
-    "precommit": "npm run lint",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
+    "dev": "cross-env NODE_ENV=development nodemon  server/index.js",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+     "template": "node task/loadTemplate.js"
   },
   "dependencies": {
     "cross-env": "^5.0.1",
@@ -27,10 +26,11 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "extract-text-webpack-plugin": "^3.0.2",
     "iview": "^2.7.4",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
-    "nodemon": "^1.11.0",
+    "nodemon": "^1.12.5",
     "nuxt": "^1.0.0-rc11",
     "scmp": "^2.0.0",
     "vue-dateutils": "^1.0.8"

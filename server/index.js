@@ -12,7 +12,7 @@ const nuxt = new Nuxt(config)
 
 
 app.get('/', function(req, res) {
-  res.redirect('/new/');
+    res.redirect('/new/');
 });
 
 

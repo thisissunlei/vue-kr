@@ -117,6 +117,13 @@
                 class="u-bind u-clearfix"
                 :rules="ruleValidate" 
             >
+                 <FormItem label="所在社区" prop="communityId">
+                    <SelectCommunities
+                        :test="formItem" 
+                        style="width: 250px"
+                        :onchange="onCommunityChange"
+                    ></SelectCommunities>
+                </FormItem>
                 <FormItem label="客户名称" prop="customerId">
                     <SearchCompany
                         :test="formItem" 
@@ -148,6 +155,7 @@ import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import CommonFuc from '~/components/CommonFuc';
+import SelectCommunities from '~/components/SelectCommunities';
 
 export default {
         name: 'receive',
@@ -155,7 +163,8 @@ export default {
             SectionTitle,
             HighSearch,
             SearchCompany,
-            Message
+            Message,
+            SelectCommunities
         },
         data () {
             return {
@@ -172,6 +181,7 @@ export default {
                 },
                 formItem:{
                     customerId:'',
+                    communityId:''
                 },
                 openMessage:false,
                 MessageType:'',
@@ -209,7 +219,7 @@ export default {
                         title: '回款方式',
                         key: 'payWay',
                         align:'center',
-                        width:100,
+                        width:110,
                         render(h, obj){
                             if(obj.row.payWay==='ALIAPPPAY'){
                                 return '支付宝app';
@@ -228,7 +238,6 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center',
-                        width:120,
                         
                     },
                     {
@@ -280,6 +289,9 @@ export default {
                     customerId: [
                         { required: true, message: '请选择客户名称'}
                     ],
+                    communityId: [
+                        { required: true, message: '请选择所在社区'}
+                    ],
                 }
                 
             }
@@ -293,12 +305,10 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                
                 location.href=`./payment/detail/${params.id}`;
-               
             },
             bindPerson (params) {
-                this.$refs[this.form].resetFields();
+                //this.$refs[this.form].resetFields();
                 this.itemDetail=params;
                 CommonFuc.clearForm(this.formItem);
                 this.openBind=!this.openBind;
@@ -318,6 +328,9 @@ export default {
             },
              onchange(data){
                 this.formItem.customerId=data;
+            },
+            onCommunityChange(data){
+                this.formItem.communityId=data;
             },
             bindSubmit(){
                 this.$refs[this.form].validate((valid)=>{

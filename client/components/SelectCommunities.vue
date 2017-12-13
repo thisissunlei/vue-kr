@@ -7,7 +7,7 @@
 <template>
     <div class="com-select-community">
          <Select
-            :v-model="name"
+            :v-model="test.communityId"
             filterable
             remote
             :remote-method="remoteMethod1"
@@ -23,7 +23,7 @@
 import axios from '~/plugins/http.js';
 
     export default {
-        props:['name','onchange'],
+        props:['name','onchange','test'],
         data () {
             return {
                 loading1:false,

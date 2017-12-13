@@ -31,11 +31,14 @@ function filterNull (o) {
 
 
 function apiAxios (method, name, params, success, failure) {
+
   if (params) {
     params = filterNull(params)
   }
+
   let root = '';
   let url = APIS[name].url;
+
   if(url.indexOf('mockjs') !==-1){
        root='http://rap.krspace.cn';
   }
@@ -47,9 +50,7 @@ function apiAxios (method, name, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     withCredentials: false,
-  })
-  //success
-  .then(function (res) {
+  }).then(function (res) {
     if (res.status === 200) {
       if (success) {
         success(res.data)
@@ -58,37 +59,35 @@ function apiAxios (method, name, params, success, failure) {
       if (failure) {
         failure(res.data)
       } else {
-      console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
-        
-        // window.alert('error: ' + JSON.stringify(res.data))
+        console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
       }
     }
-  })
-  //failure
-  .catch(function (err) {
+  }).catch(function (err) {
     
     let res = err.response
     if (err) {
       console.log('api error, HTTP CODE: ' + res)
-      // window.alert('api error, HTTP CODE: ' + res.status)
     }
   })
 }
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use((config) => {
+
   if(config.method  == 'post'){
     let data = Qs.stringify(config.data);
     config.data = data;
   }
+
   return config;
+
 },(error) =>{
-   _.toast("错误的传参");
   return Promise.reject(error);
 });
+
 axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
 
-// 返回在vue模板中的调用接口
 export default {
+  
   get: function (url, params, success, failure) {
     return apiAxios('GET', url, params, success, failure)
   },

@@ -7,7 +7,7 @@ module.exports = {
   },
   //入驻减租订单列表-获取社区
   'join-bill-community': {
-    url: '/krspace-op-web/cmt/community/select/use/type/list',
+    url: '/api/krspace-op-web/cmt/community/select/use/type/list',
     method: 'get'
    },
    //减租订单列表

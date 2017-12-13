@@ -18,6 +18,7 @@ module.exports = {
   plugins: [
     {src: '~plugins/iview',ssr: true},
   ],
+  
   /*
   ** Global CSS
   */

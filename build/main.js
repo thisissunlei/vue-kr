@@ -65,25 +65,18 @@ module.exports =
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(4);
-
-
-/***/ },
-/* 1 */
-/***/ function(module, exports, __webpack_require__) {
-
 var _build;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var path = __webpack_require__(6);
+var path = __webpack_require__(4);
 module.exports = {
   /*
   ** Headers of the page
@@ -116,6 +109,13 @@ module.exports = {
 };
 
 /***/ },
+/* 1 */
+/***/ function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(5);
+
+
+/***/ },
 /* 2 */
 /***/ function(module, exports) {
 
@@ -131,16 +131,22 @@ module.exports = require("nuxt");
 /* 4 */
 /***/ function(module, exports) {
 
-module.exports = require("regenerator-runtime");
+module.exports = require("path");
 
 /***/ },
 /* 5 */
+/***/ function(module, exports) {
+
+module.exports = require("regenerator-runtime");
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_koa___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_koa__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_nuxt__ = __webpack_require__(3);
@@ -148,18 +154,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 var start = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator___default.a.mark(function _callee2() {
+  var _ref = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator___default.a.mark(function _callee2() {
     var _this = this;
 
     var app, host, port, config, nuxt, builder;
-    return __WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+    return __WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
             app = new __WEBPACK_IMPORTED_MODULE_1_koa___default.a();
             host = process.env.HOST || '127.0.0.1';
             port = process.env.PORT || 3045;
-            config = __webpack_require__(1);
+            config = __webpack_require__(0);
 
             config.dev = !(app.env === 'production');
 
@@ -177,8 +183,8 @@ var start = function () {
           case 10:
 
             app.use(function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator___default.a.mark(function _callee(ctx, next) {
-                return __WEBPACK_IMPORTED_MODULE_0__Users_dongfanai_kr_dev_Code_kr_vue_node_modules_6_26_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator___default.a.mark(function _callee(ctx, next) {
+                return __WEBPACK_IMPORTED_MODULE_0__Users_joneyphair_kr_dev_Code_kr_demo_node_modules_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
                   while (1) {
                     switch (_context.prev = _context.next) {
                       case 0:
@@ -231,12 +237,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 start();
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-module.exports = require("path");
 
 /***/ }
 /******/ ]);

@@ -65,7 +65,7 @@
 </div>
 </template>	
 <script>
-import axios from '~/plugins/http';
+
 
 export default{
     name:'highSearch',
@@ -79,7 +79,7 @@ export default{
 		}
     },
     mounted:function(){
-        axios.get('join-bill-community','', r => {    
+        this.$http.get('join-bill-community','', r => {    
                 this.communityList=r.data.items 
             }, e => {
                 this.$Message.info(e);

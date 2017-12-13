@@ -102,7 +102,7 @@
 
 
 <script>
-import axios from '~/plugins/http';
+
 import HighSearch from './highSearch';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
@@ -269,7 +269,8 @@ export default {
                 location.href=`./list/detail/${params.orderId}`;
             },
             cancel (params) {
-                axios.get('get-cancel-msg', {orderId:params.orderId}, r => {
+
+                this.$http.get('get-cancel-msg', {orderId:params.orderId}, r => {
                     this.msg=r.data.msg;
                     if(r.code=='2'){
                         this.ifCancel=false
@@ -290,7 +291,7 @@ export default {
             let  params={
                     orderId:itemDetail.orderId
                 }
-                axios.post('cancel-order', params, r => {
+                this.$http.post('cancel-order', params, r => {
                     if(r.code==-1){
                         this.MessageType="error";
                         this.warn=r.message;
@@ -310,7 +311,8 @@ export default {
                  console.log('导出')
             },
             getTableData(params){
-                axios.get('order-list', params, r => {
+
+                this.$http.get('order-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;

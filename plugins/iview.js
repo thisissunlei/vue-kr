@@ -4,7 +4,11 @@ import iView from 'iview';
 
 import 'iview/dist/styles/iview.css'
 // import axios from './api.js';
-// Vue.prototype.$api = axios
+
+import http from '~/plugins/http';
+
+Vue.prototype.$http = http;
+
 Vue.use(iView);
 
 

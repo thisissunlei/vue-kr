@@ -2,10 +2,6 @@
 
     body{
         padding-left:180px;
-        min-height:100%;
-        #__nuxt{
-            height:100%;
-        }
     }
     
     .layout{
@@ -29,7 +25,7 @@
         padding-top: 65px;
     }
     .layout-content-main{
-         min-height: 300px;
+         min-height: 200px;
          background: #fff;
          padding-bottom: 10px;
     }

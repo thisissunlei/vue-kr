@@ -200,11 +200,11 @@ export default {
                     },
                     {
                         title: '回款日期',
-                        key: 'ctime',
+                        key: 'occurDate',
                         align:'center',
                         width:130,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
                             return time;
                         }
                     },

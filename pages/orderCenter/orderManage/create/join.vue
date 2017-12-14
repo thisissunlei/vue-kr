@@ -367,37 +367,7 @@ import '~/assets/styles/createOrder.less';
             // this.openStation = false
         },
         watch:{
-            stationList(val){
-                let station = val.map(item=>{
-                    let obj = item;
-                    obj.originalPrice = item.price;
-                    obj.seatId = item.id;
-                    obj.floor = item.whereFloor;
-                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
-                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
-                    return obj;
-                })
-                let params = {
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
-                    communityId:this.formItem.communityId,
-                    seats:JSON.stringify(station)
-                }
-                let _this = this;
-                if(val.length){
-                    axios.post('get-station-amount', params, r => {
-                        console.log('get-station-amount=====',r.data)
-                        val = r.data.seats;
-                        _this.formItem.rentAmount = r.data.totalrent;
-
-                    }, e => {
-
-                        console.log('error',e)
-                    })
-                }
-                
-                return val;
-            }
+           
         },
         methods: {
             config:function(){
@@ -590,13 +560,15 @@ import '~/assets/styles/createOrder.less';
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
+                console.log('deleteStation',selectedStation)
                 stationVos = stationVos.filter(function(item, index) {
-                    if (selectedStation.indexOf(item.id) != -1) {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
                         return false;
                     }
                 return true;
                 });
                 this.stationList = stationVos;
+                this.getStationAmount()
                 this.stationData.submitData = stationVos;
             },
             showStation:function(){
@@ -636,7 +608,7 @@ import '~/assets/styles/createOrder.less';
                 // 工位表单的全选
                 let selectionList = [];
                 selectionList = selection.map((item)=>{
-                    return item.id
+                    return item.seatId
                 })
                 this.selectedStation = selectionList;
             },
@@ -669,6 +641,7 @@ import '~/assets/styles/createOrder.less';
             submitStation:function(){//工位弹窗的提交
                 this.stationList = this.stationData.submitData;
                 this.delStation = this.stationData.deleteData;
+                this.getStationAmount()
 
             },
             onResultChange:function(val){//组件互通数据的触发事件
@@ -784,6 +757,36 @@ import '~/assets/styles/createOrder.less';
 
                     console.log('error',e)
                 })
+            },
+             getStationAmount(){
+                let val = this.stationList;
+                let station = val.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.price;
+                    obj.seatId = item.id || item.seatId;
+                    obj.floor = item.whereFloor;
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
+                    return obj;
+                })
+                let params = {
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
+                    communityId:this.formItem.communityId,
+                    seats:JSON.stringify(station)
+                }
+                let _this = this;
+                if(val.length){
+                    axios.post('get-station-amount', params, r => {
+                        console.log('get-station-amount=====',r.data)
+                        _this.stationList = r.data.seats;
+                        _this.formItem.rentAmount = r.data.totalrent;
+
+                    }, e => {
+
+                        console.log('error',e)
+                    })
+                }
             }
                     
                

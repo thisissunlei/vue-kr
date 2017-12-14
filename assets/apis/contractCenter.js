@@ -8,7 +8,11 @@ module.exports = {
     'get-center-prepare-data':{
         url: '/krspace-erp-web/wf/station/contract/AllContractType/search',
         method: 'get'
-    }
+    },
+    'get-center-export': {
+        url: '/krspace-erp-web/wf/station/contract/enter/export',
+        method: 'get'
+    },
     
    
 

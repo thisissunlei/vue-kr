@@ -86,7 +86,7 @@
 import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
-import CommonFuc from '~/components/commonFuc';
+import CommonFuc from 'kr/utils';
 import dateUtils from 'vue-dateutils';
 
 export default {
@@ -94,6 +94,11 @@ export default {
 		DetailStyle,
 		labelText
 	},
+	head() {
+        return {
+            title: '入驻详情'
+        }
+    },
 	data(){
 		return{
 			basicInfo:{},
@@ -188,7 +193,7 @@ export default {
 				},
 				{
 				 title: '状态',
-                 key: 'contractStateType',
+                 key: 'orderStatusTypeName',
                  align:'center'	
 				}  
 			],
@@ -197,7 +202,7 @@ export default {
 			contractData:[]
 		}
 	},
-	created:function(){
+	mounted:function(){
 		let {params}=this.$route;
 		let from={
 			id:params.watchView
@@ -217,8 +222,8 @@ export default {
 				   r.data.contractTactics&&r.data.contractTactics.map((item,index)=>{
 					    _this.treatAll=_this.treatAll+item.amount;
 				   })
-				   _this.capitalTreatment=_this.treatAll?CommonFuc.smalltoBIG(_this.treatAll):0;
-				   _this.capitalService=_this.serviceAll?CommonFuc.smalltoBIG(_this.serviceAll):0;
+				   _this.capitalTreatment=_this.treatAll?CommonFuc.smalltoBIG(_this.treatAll):'';
+				   _this.capitalService=_this.serviceAll?CommonFuc.smalltoBIG(_this.serviceAll):'';
 				   _this.serviceData=r.data.orderSeatDetailVo||[];
 				   _this.treatmentData=r.data.contractTactics||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];

@@ -1,6 +1,6 @@
 <style lang="less">
-.ui-message{
-    height:236px;
+.ui-message-content{
+    height:184px;
     img{
         width:100px;
         height: 100px;
@@ -13,23 +13,26 @@
         line-height: 18px;
         color: #333333;
     }
-    
-
-    .ivu-modal-footer{
-        border:none;
-    }
+}
+.ui-message{
+.ivu-modal-footer{
+     border:none;
+     padding:0;
+}
 }
 
 </style>
 <template>
-    <Modal v-model="openMessage" class="ui-message" width="443"  >
-        <div v-if="type=='success'">
-            <img src="~assets/images/success.png" />
-            <p class="ui-reminder">{{warn}}</p>
-        </div>
-        <div v-else-if="type=='error'">
-             <img src="~assets/images/error.png" />
-            <p class="ui-reminder">{{warn}}</p>
+    <Modal class="ui-message"  v-model="openMessage"  width="443"  >
+        <div class="ui-message-content">
+            <div v-if="type=='success'">
+                <img src="~assets/images/success.png" />
+                <p class="ui-reminder">{{warn}}</p>
+            </div>
+            <div v-else-if="type=='error'">
+                <img src="~assets/images/error.png" />
+                <p class="ui-reminder">{{warn}}</p>
+            </div>
         </div>
         <div slot="footer">
         </div>

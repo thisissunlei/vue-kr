@@ -23,11 +23,11 @@
             </div>
 
 
-            <Table :columns="joinOrder" :data="joinData"></Table>
+            <Table :columns="joinOrder" :data="joinData" border  @on-selection-change='checkboxChange'></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
-                        <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
+                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
                     </div>
             </div>
             <Modal
@@ -49,6 +49,13 @@
             >
                 <Nullify></Nullify>
             </Modal>
+
+            <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+            ></Message>
     </div>
 </template>
 
@@ -58,20 +65,27 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from '~/components/commonFuc';
+    import CommonFuc from 'kr/utils';
+    import Message from '~/components/Message';
 
     export default {
         name:'join',
         components:{
             HeightSearch,
-            Nullify
+            Nullify,
+            Message
         },
         data () {
             
             return {
+                openMessage:false,
+                warn:'',
+                MessageType:'',
                 upperData:{},
                 upperError:false,
                 totalCount:1,
+                id:'',
+                props:{},
                 params:{
                     page:1,
                     pageSize:15,
@@ -81,6 +95,11 @@
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '订单编号',
                         key: 'orderNum',
@@ -139,21 +158,32 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('nuxt-link', {
-                                    props: {
-                                        to:`/orderCenter/orderManage/${params.row.id}/reduceView`
-                                    },
-                                    style: {
-                                        color:'#2b85e4',
-                                        paddingRight:'10px'
-                                    }
-                                }, '查看'), 
-                                h('nuxt-link', {
-                                    props: {
-                                        to:`/contractCenter/${params.row.id}/viewCenter`
+                               h('Button', {
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
                                     },
                                     style: {
                                         color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showView(params)
+                                        }
+                                    }
+                                }, '查看'), 
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showApply(params)
+                                        }
                                     }
                                 }, '申请合同')];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
@@ -192,7 +222,7 @@
                 ]
             }
         },
-        created:function(){
+        mounted:function(){
             this.getListData(this.params);
         },
         methods:{
@@ -201,28 +231,47 @@
                 CommonFuc.clearForm(this.upperData);
             },
             showNullify(params){
+                this.id=params.row.id;
                 this.openNullify=true;
             },
             showReduce(){
                 window.open('/orderCenter/orderManage/create/reduce','_blank')
-
-                console.log('减租新建');
             },
             showEdit(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
             },
+            showApply(params){
+                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+            },
+            showView(params){
+                window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
+            },
+            checkboxChange(params){
+                var ids=[];
+                params&&params.map((item,index)=>{
+                    ids.push(item.id);
+                })
+                this.props.ids=ids;
+            },
             nullifySubmit (){
-                console.log('作废');
+                var _this=this;
+                let params={
+                    id:this.id
+                };
+                axios.post('join-nullify', params, r => {
+                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.warn=r.message;
+                    this.openMessage=true;
+                    this.getListData(this.params);
+                }, e => {
+                    this.MessageType="error";
+                    this.warn=e.message;
+                    this.openMessage=true;
+                })   
             },
             outSubmit (){
-                var where=[];
-                for(var item in this.params){
-                    if(this.params.hasOwnProperty(item)){
-                        where.push(`${item}=${this.params[item]}`);
-                    }
-                }
-                var url = `/api/krspace-op-web/order-seat-reduce/export?${where.join('&')}`;
-		        window.location.href = url;
+                this.props=Object.assign({},this.props,this.params);
+                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
             },
             getListData(params){
                 var _this=this;
@@ -257,7 +306,10 @@
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
         }
     }
 </script>

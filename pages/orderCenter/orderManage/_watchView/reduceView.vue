@@ -82,6 +82,11 @@ export default {
 		DetailStyle,
 		labelText
 	},
+	head() {
+        return {
+            title: '减租详情'
+        }
+    },
 	data(){
 		return{
 			basicInfo:{},
@@ -101,14 +106,14 @@ export default {
 				},
 				{
 				 title: '状态',
-                 key: 'contractStateType',
+                 key: 'orderStatusTypeName',
                  align:'center'	
 				}  
 			],
 			contractData:[]
 		}
 	},
-	created:function(){
+	mounted:function(){
 		let {params}=this.$route;
 		let from={
 			id:params.watchView

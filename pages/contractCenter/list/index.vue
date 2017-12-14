@@ -47,7 +47,13 @@
                 <span></span>   
             </div> 
         </div>
-        <Table :columns="columns" :data="detail" ></Table>
+        <Table 
+            border 
+            ref="selection" 
+            :columns="columns" 
+            :data="detail" 
+            @on-selection-change = "selectCheck"
+        ></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
@@ -77,7 +83,7 @@
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    
+    import CommonFuc from 'kr/utils';
     export default {
         components: {
             sectionTitle,
@@ -90,6 +96,7 @@
                     page:1,
                     pageSize:15,
                 },
+                selectAllData:[],
                 loadingStatus: false,
                 file: null,
                 upperData:{},
@@ -98,6 +105,11 @@
                 detail:[],
                 totalCount:1,
                 columns: [
+                     {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '合同编号',
                         key: 'serialNumber',
@@ -140,7 +152,7 @@
                             let arr = params.row.file||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
-                                newArr.push({"name":arr[i].fileName,"url":''})
+                                newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
                            var btnRender=[
                                h('Button', {
@@ -173,7 +185,8 @@
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr
+                                        file: newArr,
+                                        columnDetail:params.row||{}
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -239,7 +252,10 @@
                 console.log('作废');
             },
             outSubmit (){
-                console.log('导出');
+                var _this=this;
+                var params = Object.assign({},this.params);
+                params.ids = [].concat(this.selectAllData);
+                CommonFuc.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){
                 var _this=this;
@@ -257,9 +273,9 @@
             },
             //分页事件
             changePage (index) {
-                // let params=this.params;
-                // params.page=index;
-                // this.getListData(params);
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
             },
             //搜索change事件
             changeCustomer(param){
@@ -280,9 +296,19 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
+                this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
                 this.getListData(this.params);
 
-            }
+            },
+            //多选按钮被点击
+            selectCheck(selection){
+                var ids=[];
+                selection.map((item,index)=>{
+                    ids.push(item.id);
+                })
+                this.selectAllData = ids;
+            },
         },
         
     }

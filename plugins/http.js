@@ -61,24 +61,18 @@ function apiAxios(method, name, params, success, failure) {
     } else {
       if (failure) {
         failure(res.data)
-
       } else {
-        if (failure) {
-          failure(res.data)
-        } else {
-          console.log('api error, HTTP CODE: ' + res.data)
-
-          // window.alert('error: ' + JSON.stringify(res.data))
-        }
+        console.log('api error, HTTP CODE: ' + res.data)
+        // window.alert('error: ' + JSON.stringify(res.data))
       }
     }
   })
   //failure
   .catch(function (err) {
-
     let res = err.response
     if (err) {
-      console.log('api error, HTTP CODE: ' + res)
+      failure(res.data);
+      //console.log('api error, HTTP CODE: ' + res)
       // window.alert('api error, HTTP CODE: ' + res.status)
     }
   })

@@ -145,7 +145,7 @@
                         <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'&& item.value !== 'zhekou'" v-model="item.endDate" ></DatePicker>
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
+                        <InputNumber v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'" :max="10" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
                         <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
 
                         
@@ -434,6 +434,13 @@ import '~/assets/styles/createOrder.less';
                 })
                 
             },
+            dealSaleInfo(){
+                console.log('dealSaleInfo',this.formItem.items)
+            },
+            changezhekou(val){
+                console.log('changezhekou',val);
+                this.dealSaleInfo()
+            },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
                 this.$Notice.config({
@@ -504,14 +511,14 @@ import '~/assets/styles/createOrder.less';
                 let items = [];
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
-                        item.endDate = new Date()
+                        item.startDate = this.formItem.startDate
                         item.zhekou = '';
                     }else if(item.value == 'houmian'){
-                        item.endDate = new Date()
+                        item.endDate = this.formItem.endDate
                         item.zhekou = '';
                     }else if(item.value == 'zhekou'){
-                        item.startDate= new Date()
-                        item.endDate = new Date()
+                        item.startDate=this.formItem.startDate
+                        item.endDate = this.formItem.endDate
                     }
                     return item;
                 })
@@ -635,6 +642,13 @@ import '~/assets/styles/createOrder.less';
             },
             handleAdd () {
                 // 优惠信息的添加按钮
+                this.config()
+                if(!this.stationList.length){
+                    this.$Notice.error({
+                        title:'请先选择工位'
+                    });
+                    return;
+                }
                 this.index++;
                 this.formItem.items.push({
                     value: '',

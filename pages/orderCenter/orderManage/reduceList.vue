@@ -49,6 +49,13 @@
             >
                 <Nullify></Nullify>
             </Modal>
+
+            <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+            ></Message>
     </div>
 </template>
 
@@ -65,7 +72,8 @@
         name:'join',
         components:{
             HeightSearch,
-            Nullify
+            Nullify,
+            Message
         },
         data () {
             

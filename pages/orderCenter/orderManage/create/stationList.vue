@@ -24,22 +24,15 @@
 <template>
     <div class="station-list">
        <div class="station-type">{{label}}</div>
-       <div class="select-station-list">
-           <div style="margin-bottom:6px;">
-                <Checkbox
-                    :indeterminate="indeterminate"
-                    :value="checkAll"
-                    @click.prevent.native="handleCheckAll">全选</Checkbox>
-            </div>
-            <CheckboxGroup v-model="selecedStations" @on-change="checkAllGroupChange">
-                <Checkbox  v-for="item in stationList" :label="item.name" :key="item.id"></Checkbox>
-            </CheckboxGroup>
+       <div>
+            <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table>
        </div>
     </div>
 </template>
 
 
 <script>
+import dateUtils from 'vue-dateutils';
 
 
     export default {
@@ -54,7 +47,29 @@
            return{
             indeterminate: false,
             checkAll: false,
-            selecedStations: selecedStation
+            selecedStations: selecedStation,
+            columns: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        title: '工位房间编号',
+                        key: 'seatId'
+                    },
+                    {
+                        title: '标准单价（元/月）',
+                        key: 'price'
+                    },
+                    {
+                        title: '租赁期限',
+                        key: 'address',
+                        render: (h, params) => {
+                            return h('strong',  dateUtils.dateToStr("YYYY-MM-DD",params.originStart)+'至'+ dateUtils.dateToStr("YYYY-MM-DD",params.originEnd))
+                        }
+                    }
+                ],
            }
         },
         components: {
@@ -67,18 +82,6 @@
                 this.$emit("on-station-change", val);
             },
             selecedStation:function(val){
-                let selecedStation = []
-                if(val.length){
-                    selecedStation = val.map(item=>{
-                        return item.name
-                    })
-                }
-                if(selecedStation.length == this.stationList.length){
-                    this.checkAll = true
-                }else{
-                    this.checkAll = false
-                }
-                this.selecedStations = selecedStation;
             }
          },
         created(){
@@ -113,7 +116,10 @@
                     this.indeterminate = false;
                     this.checkAll = false;
                 }
-            }     
+            } ,
+            selectRow(val){
+                this.selecedStations = val;
+            }    
                
         }
     }

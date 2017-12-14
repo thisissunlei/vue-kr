@@ -79,7 +79,7 @@
                 </Col>
                 </Row>
             </DetailStyle>
-            <DetailStyle info="优惠信息" v-show="youhui.length" style="margin-top:40px">
+              <DetailStyle info="优惠信息" v-show="youhui.length"  style="margin-top:40px">
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
@@ -88,26 +88,26 @@
 
                 </Row>
                 <Row >
-                    <Col span="1" class="discount-table-head"  >
+                    <Col span="3" class="discount-table-head"  >
                         <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-head" >
                        <span> 优惠类型</span>
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>开始时间</span>
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>结束时间</span>
                         
                     </Col>
-                    <Col span="4" class="discount-table-head" >
+                    <Col span="5" class="discount-table-head" >
                         <span>折扣</span>
                         
                     </Col>
-                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
+                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
                         <span>优惠金额</span>
-                    </Col>
+                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -117,7 +117,7 @@
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
             <Row v-bind:class="{lastRow:index==renewForm.items.length-1}" v-show="item.show">
-                 <Col span="1" class="discount-table-content" style="padding:0">
+                 <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
@@ -125,36 +125,24 @@
                             <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
-                    <Col span="4" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.value !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
+                    <Col span="5" class="discount-table-content" ></DatePicker>
+                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
-                    <Col span="4" class="discount-table-content">
-                        <DatePicker type="date" v-if="item.value == 'houmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'" v-model="item.endDate" ></DatePicker>
-                        
+                    <Col span="5" class="discount-table-content">
+                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
+                    
+                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
-                    <Col span="4" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'"></Input>
-                        <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
+                    <Col span="5" class="discount-table-content">
+                        <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
+                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
                         
-                    </Col>
-                    <Col span="5" class="discount-table-content" style="border-right:1px solid #e9eaec;">
-                        <Input v-model="item.money" placeholder="金额" disabled></Input>
-                    </Col>   
+                    </Col>  
             </Row>
         </FormItem>
-                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <div class="total-money" v-if="renewForm.items.length">
-                        <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
-                    </div>
-                    </Col>
-                </Row>
-              </DetailStyle>
+        </DetailStyle>
               <div style="padding-left:24px">
             <Row>
                  <Col class="col">
@@ -206,7 +194,7 @@
          class-name="vertical-center-modal"
      >
         <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange"></stationList>
+        @on-station-change="onStationChange" v-if="openStation"></stationList>
     </Modal>
     </div>
 </template>
@@ -262,18 +250,12 @@ import '~/assets/styles/createOrder.less';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[
-                    {name:'301',id:'301',price:'1800'},
-                    {name:'302',id:'302',price:'1800'},
-                    {name:'303',id:'303',price:'1800'},
-                    {name:'304',id:'304',price:'1800'},
-                    {name:'305',id:'305',price:'1800'},
-                    {name:'306',id:'306',price:'1800'},
-               ],
+               stationList:[],
                selecedStation:[],
                selecedArr:[],
                depositAmount:'',
                installmentType:'',
+               maxDiscount:'',
                columns: [
                     {
                         type: 'selection',
@@ -292,12 +274,12 @@ import '~/assets/styles/createOrder.less';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', new Date()+'至'+this.renewForm.endDate)
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",params.startDate)+'至'+dateUtils.dateToStr("YYYY-MM-dd",params.endDate))
                         }
                     },
                     {
                         title: '小计',
-                        key: 'price'
+                        key: 'amount'
                     }
                 ],
                 payList:[
@@ -343,15 +325,11 @@ import '~/assets/styles/createOrder.less';
                 console.log('===========')
                 if(this.renewForm.customerId && this.renewForm.communityId){
                     this.getRenewStation()
-                    // console.log('==========',this.renewForm.communityId,this.renewForm.customerId)
                 }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
                 }
             },
-            selecedStation(val){
-                console.log('selecedStation======>',val)
-            }
         },
         methods: {
             config:function(){
@@ -381,12 +359,25 @@ import '~/assets/styles/createOrder.less';
                 })
             },
             getRenewStation(){
+                // let params = {
+                //     customerId:this.renewForm.customerId,
+                //     communityId:this.renewForm.communityId
+                // };
                 let params = {
-                    customerId:this.renewForm.customerId,
-                    communityId:this.renewForm.communityId
+                    //假数据
+                    customerId:1,
+                    communityId:4
                 };
+                let _this = this;
                 axios.get('get-renew-station', params, r => {
                     console.log('==========',r.data)
+                    r.data = r.data.map(item=>{
+                        let obj = item;
+                        obj.originStart = item.startDate;
+                        obj.originEnd = item.endDate;
+                        return obj;
+                    })
+                    _this.stationList = r.data
                 }, e => {
 
                     console.log('error',e)
@@ -431,8 +422,7 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.saler = value;
             },
             showStation:function(){
-                this.config()
-
+                this.config();
                 if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
@@ -476,11 +466,6 @@ import '~/assets/styles/createOrder.less';
                     });
                     return
                 }
-                // if(!this.renewForm.saler){
-                //     this.$Notice.error({
-                //         title:'请先选择销售员'
-                //     });
-                // }
                 if(!this.renewForm.endDate){
                     this.$Notice.error({
                         title:'请先选择续租结束时间'
@@ -493,7 +478,6 @@ import '~/assets/styles/createOrder.less';
                     });
                     return
                 }
-                console.log('handleAdd')
                 this.index++;
                 this.renewForm.items.push({
                     value: '',
@@ -553,37 +537,37 @@ import '~/assets/styles/createOrder.less';
             },
             //优惠类型选择
             changeType:function(value){
-                this.config()
-
+                //优惠类型选择
                 if(!value){
                     return;
                 }
+                this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
-                this.renewForm.items[itemIndex].value = itemValue;
+                this.renewForm.items[itemIndex].tacticsType = itemValue;
                 let items = [];
                 items = this.renewForm.items.map((item)=>{
                     if(item.value == 'qianmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'houmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'zhekou'){
-                        item.beginDate = new Date()
-                        item.endDate = new Date()
+                        item.validStart = this.renewForm.startDate;
+                        item.discount = '';
+                    }else if(item.tacticsType == 3){
+                        item.validEnd = this.renewForm.endDate
+                        item.discount = '';
+                    }else if(item.tacticsType == 1){
+                        item.validStart=this.renewForm.startDate
+                        item.validEnd = this.renewForm.endDate
                     }
                     return item;
                 })
                 let error=false;
                 let message = '';
+                
                 let typeList = items.map(item=>{
                     if(item.show){
                         return item.value;
                     }else{
                         return;
                     }
-                    
                 })
                 let qianmian = typeList.join(",").split('qianmian').length-1;
                 let houmian = typeList.join(",").split('houmian').length-1;
@@ -605,17 +589,60 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.items = items;
             },
             submitStation:function(){
-                let stationList = this.stationList;
-                let selecedArr = this.selecedArr;
-                let selecedList = [];
+                // let stationList = this.stationList;
+                // let selecedArr = this.selecedArr;
+                // let selecedList = [];
 
-                selecedList = stationList.filter(function(item, index) {
-                    if (selecedArr.indexOf(item.name) == -1) {
-                        return false;
-                    }
-                return true;
-                });
-                this.selecedStation = selecedList;
+                // selecedList = stationList.filter(function(item, index) {
+                //     if (selecedArr.indexOf(item.name) == -1) {
+                //         return false;
+                //     }
+                // return true;
+                // });
+                // this.selecedStation = this.selecedArr;
+                this.getStationAmount()
+            },
+            getStationAmount(){
+                // this.selecedStation = this.selecedArr;
+
+                let val = this.selecedArr;
+                let day = 1000 * 60* 60*24;
+                let station = val.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.price;
+                    obj.seatId = item.id || item.seatId;
+                    obj.floor = item.whereFloor;
+                    // let end = item.originEnd;
+                    let end = item.originEnd + day;
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
+                    return obj;
+                })
+                this.renewForm.startDate = station[0].startDate;
+                let params = {
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
+                    leaseBegindate:this.renewForm.startDate,
+                    // communityId:this.renewForm.communityId,
+                    communityId:4,
+                    seats:JSON.stringify(station)
+                }
+                console.log('get-station-amount',params)
+                let _this = this;
+                if(val.length){
+                    axios.post('get-station-amount', params, r => {
+                        _this.selecedStation = r.data.seats;
+                        console.log('get-station-amount',r.data.seats)
+                        r.data.seats.map((item,index)=>{
+                            console.log(index+'--->',new Date(item.startDate),new Date(item.endDate))
+                        })
+
+                        _this.renewForm.rentAmount = r.data.totalrent;
+
+                    }, e => {
+
+                        console.log('error',e)
+                    })
+                }
             },
             cancelStation:function(){
                 this.selecedStation = this.selecedStation.map(item=>{
@@ -625,31 +652,27 @@ import '~/assets/styles/createOrder.less';
                 })
             },
             onStationChange:function(val){
+                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
+                let maxDiscount = '';
                 let _this = this;
                 axios.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
                             obj.label = item.tacticsName;
-                            switch(item.tacticsType){
-                                case 1:
-                                    obj.value = 'zhekou';
-                                    break;
-                                case 2:
-                                    obj.value = 'qianmian';
-                                    break;
-                                default:
-                                    obj.value = 'houmian';
-                                    break;
+                            obj.value = item.tacticsType+'';
+                            if(item.tacticsType == 1){
+                                maxDiscount = obj.discount;
                             }
                             return obj;
                         })
                     }
                     _this.youhui = list;
+                    _this.maxDiscount = maxDiscount;
 
                 }, e => {
 
@@ -660,7 +683,69 @@ import '~/assets/styles/createOrder.less';
                 //删除后优惠checkbox全部设为false
                 this.selectDiscount(false)
 
-            }
+            },
+            changeSaleTime(val){
+                this.dealSaleInfo()
+            },
+            changezhekou(val){
+                this.dealSaleInfo()
+            },
+            dealSaleInfo(){
+                this.config()
+                //处理已删除的数据
+                let saleList = this.renewForm.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
+                //检查手否有未填写完整的折扣项
+                let complete = true;
+                saleList.map(item=>{
+                    if(!item.tacticsType){
+                        complete = false
+                    }
+                    if(item.tacticsType!='zhekou' && !(item.validStart || item.validEnd)){
+                        complete = false
+
+                    }
+                    if(item.tacticsType == 'zhekou' && !item.discount){
+                        complete = false
+
+                    }
+                });
+                console.log('saleList',saleList)
+                if(!complete){
+                    this.$Notice.error({
+                        title:'请填写完整优惠信息'
+                    });
+                    return;
+                }
+                saleList = saleList.map(item=>{
+                    let obj =Object.assign({},item);
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
+                    return obj;
+                })
+                console.log('===============',saleList)
+                this.getSaleAmount(saleList)
+            },
+             getSaleAmount(list){
+                let params = {
+                    communityId:this.renewForm.communityId,
+                    leaseBegindate:this.renewForm.startDate,
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.endDate),
+                    seats:JSON.stringify(this.stationList),
+                    saleList:JSON.stringify(list)
+                };
+                axios.post('count-sale', params, r => {
+                    console.log('save-join=====',r.data)
+                }, e => {
+
+                        console.log('error',e)
+                })
+
+            },
 
                     
                

@@ -10,6 +10,7 @@ module.exports = {
 		extend(webpackConfig, { isDev, isClient, isServer }) {
 			// webpackConfig.resolve.alias['axios'] = path.resolve(__dirname, 'plugins/http');
 			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+			webpackConfig.resolve.alias['kr/utils'] = path.join(process.cwd(), 'Utils/CommonFuc');
 			// path.join(process.cwd(), '/src/Page/App/index.js')
 		}
 	},

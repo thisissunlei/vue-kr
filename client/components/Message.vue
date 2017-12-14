@@ -1,5 +1,5 @@
 <style lang="less">
-.ui-message{
+.ui-message-content{
     height:236px;
     img{
         width:100px;
@@ -13,17 +13,17 @@
         line-height: 18px;
         color: #333333;
     }
-    
-
-    .ivu-modal-footer{
-        border:none;
-    }
+}
+.ui-message{
+.ivu-modal-footer{
+     border:none;
+}
 }
 
 </style>
 <template>
-    <Modal  v-model="openMessage"  width="443"  >
-        <div class="ui-message">
+    <Modal class="ui-message"  v-model="openMessage"  width="443"  >
+        <div class="ui-message-content">
             <div v-if="type=='success'">
                 <img src="~assets/images/success.png" />
                 <p class="ui-reminder">{{warn}}</p>

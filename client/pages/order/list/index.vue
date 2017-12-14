@@ -1,7 +1,7 @@
 <style lang="less"> 
 .g-order{
   .u-search{
-        height:22px;
+        height:32px;
         margin:16px 20px;
         span{
             width:22px;

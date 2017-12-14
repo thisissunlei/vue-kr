@@ -157,7 +157,7 @@
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
          var html = '';
-         var router = location.href.split("#/")[1];
+         var router = location.href;
          if (!sidebarNavs) {
              return html;
          }   
@@ -181,7 +181,7 @@
                     } else {
                         href = "#/" + child.router;
                     }
-                     html += '<li class=' + (child.router == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
+                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                  })
  
                  html += '</ul>';

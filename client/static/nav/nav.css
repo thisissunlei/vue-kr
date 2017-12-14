@@ -68,6 +68,7 @@
   line-height: 48px;
   display: inline-block;
   color: #fff;
+  background: #283243;
   font-size: 14px;
 }
 .app-header .header-nav ul li.active a {

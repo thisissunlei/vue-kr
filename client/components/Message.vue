@@ -1,6 +1,6 @@
 <style lang="less">
 .ui-message-content{
-    height:236px;
+    height:184px;
     img{
         width:100px;
         height: 100px;
@@ -17,6 +17,7 @@
 .ui-message{
 .ivu-modal-footer{
      border:none;
+     padding:0;
 }
 }
 

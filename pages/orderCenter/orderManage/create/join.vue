@@ -296,16 +296,7 @@ import '~/assets/styles/createOrder.less';
                 ],
                 stationList: [
                 ],
-                floors:[{
-                    value:'4',
-                    label:'4'
-                },{
-                    value:'3',
-                    label:'3'
-                },{
-                    value:'2',
-                    label:'2'
-                }],
+                floors:[],
                 selectedStation:[],
                 formItem: {
                     customerId: '',
@@ -371,13 +362,15 @@ import '~/assets/styles/createOrder.less';
         },
         watch:{
            getFloor(){
+            let _this = this;
             if(this.formItem.communityId && this.formItem.customerId){
                 let params = {
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
                 axios.get('get-community-floor', params, r => {
-                    console.log('save-join=====',r.data)
+                    _this.floors = r.data.floor;
+
                 }, e => {
 
                         console.log('error',e)
@@ -406,6 +399,8 @@ import '~/assets/styles/createOrder.less';
                 formItem.salerId=this.formItem.salerId;
                 formItem.timeRange=this.formItem.timeRange;
                 formItem.rentAmount=this.formItem.rentAmount;
+                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
+
                 formItem.startDate = start;
                 formItem.endDate =end;
                 formItem.corporationId = 11;//临时加的-无用但包错
@@ -668,8 +663,11 @@ import '~/assets/styles/createOrder.less';
                         });
                     return;
                 }
+                let floor = this.floors.map(item=>{
+                    return item.value
+                })
                 let params = {
-                    floor:'3,4,2',
+                    floor:floor.join(','),
                     communityId:this.formItem.communityId,
                     mainBillId:3162,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),

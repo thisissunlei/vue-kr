@@ -163,7 +163,7 @@
                 this.dateError=false; 
             }
             this.$emit('bindData', this.formItem,this.dateError);
-        },
+        }
     }
 </script>
 

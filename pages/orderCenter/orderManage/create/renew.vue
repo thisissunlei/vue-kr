@@ -54,8 +54,8 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="saler">
-                    <selectSaler name="renewForm.saler" :onchange="changeSaler" ></selectSaler>
+                    <FormItem label="销售员" style="width:252px" prop="salerId">
+                    <selectSaler name="renewForm.salerId" :onchange="changeSaler" ></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -147,7 +147,7 @@
             <Row>
                  <Col class="col">
                     <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="renewForm.totalMoney" placeholder="服务费总额" disabled></Input>
+                        <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
             </Row>
@@ -160,17 +160,10 @@
                         <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
                  </Col>
-                <!--  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
-                        <div style="display:block;min-width:252px">
-                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:firstPayTime==types.value}">{{ types.label }}</span>
-                        </div>
-
-                 </Col> -->
                  <Col class="col">
                     <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositAmount==types.label}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
                  </Col>
             </Row>
@@ -180,7 +173,7 @@
           
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
         </Form>
         <Modal
@@ -240,7 +233,7 @@ import '~/assets/styles/createOrder.less';
                     customerId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
-                    saler:[
+                    salerId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     time: [
@@ -274,7 +267,7 @@ import '~/assets/styles/createOrder.less';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",params.startDate)+'至'+dateUtils.dateToStr("YYYY-MM-dd",params.endDate))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                     {
@@ -291,11 +284,11 @@ import '~/assets/styles/createOrder.less';
                     {value:'ALL',label:'全款'},
                 ],
                 depositList:[
-                    {label:'2个月',value:'2个月'},
-                    {label:'3个月',value:'3个月'},
-                    {label:'4个月',value:'4个月'},
-                    {label:'5个月',value:'5个月'},
-                    {label:'6个月',value:'6个月'},
+                    {label:'2个月',value:'2'},
+                    {label:'3个月',value:'3'},
+                    {label:'4个月',value:'4'},
+                    {label:'5个月',value:'5'},
+                    {label:'6个月',value:'6'},
                 ],
                 selectAll:false,//工位全选
                 youhui:[],
@@ -322,7 +315,6 @@ import '~/assets/styles/createOrder.less';
         },
         watch:{
             getStationFn:function(){
-                console.log('===========')
                 if(this.renewForm.customerId && this.renewForm.communityId){
                     this.getRenewStation()
                 }
@@ -338,6 +330,35 @@ import '~/assets/styles/createOrder.less';
                     duration: 3
                 });
             },
+            renewFormSubmit(){
+                console.log('renewFormSubmit')
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let renewForm = {} 
+                // formItem = this.formItem;
+                renewForm.installmentType = this.installmentType;
+                renewForm.depositAmount = this.depositAmount;
+                renewForm.saleList=JSON.stringify(this.renewForm.items);
+                renewForm.seats=JSON.stringify(this.selecedStation);
+                renewForm.customerId=this.renewForm.customerId;
+                renewForm.communityId=this.renewForm.communityId;
+                renewForm.salerId=this.renewForm.salerId;
+                renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
+
+                renewForm.startDate = start;
+                renewForm.endDate =end;
+                renewForm.corporationId = 11;//临时加的-无用但包错
+                let _this = this;
+                axios.post('save-renew', renewForm, r => {
+                    console.log('save-join=====',r.data)
+                    _this.$Message.success('Success!');
+                }, e => {
+
+                        console.log('error',e)
+                })
+                
+            },
             handleSubmit:function(name){
                 let message = '=========';
                 this.config()
@@ -348,6 +369,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        this.renewFormSubmit()
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -370,7 +392,6 @@ import '~/assets/styles/createOrder.less';
                 };
                 let _this = this;
                 axios.get('get-renew-station', params, r => {
-                    console.log('==========',r.data)
                     r.data = r.data.map(item=>{
                         let obj = item;
                         obj.originStart = item.startDate;
@@ -403,7 +424,6 @@ import '~/assets/styles/createOrder.less';
             },
             dealEndDate(val){
                 let str = val.split('-');
-                console.log('dealEndDate',str)
                 let year = str[0];
                 let month = parseInt(str[1], 10);  
                 var d= new Date(year, month, 0);  
@@ -419,7 +439,7 @@ import '~/assets/styles/createOrder.less';
                 // this.renewForm.endDate = value;
             },
             changeSaler:function(value){
-                this.renewForm.saler = value;
+                this.renewForm.salerId = value;
             },
             showStation:function(){
                 this.config();
@@ -509,19 +529,21 @@ import '~/assets/styles/createOrder.less';
                 let stationVos = this.selecedStation;
                 let delArr = this.selectedDel;
                 stationVos = stationVos.filter(function(item, index) {
-                    if (delArr.indexOf(item.id) != -1) {
+                    if (delArr.indexOf(item.seatId) != -1) {
                         return false;
                     }
                 return true;
                 });
-                this.selecedStation = stationVos;
+                console.log('deleteStation==============',stationVos)
+                // this.selecedStation = stationVos;
+                this.selecedArr = stationVos;
+                this.getStationAmount()
 
             },
             selectRow:function(val){
-                console.log('selectRow',val)
                 let selectionList = [];
                 selectionList = val.map((item)=>{
-                    return item.id
+                    return item.seatId
                 })
                 this.selectedDel = selectionList;
             },
@@ -589,36 +611,25 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.items = items;
             },
             submitStation:function(){
-                // let stationList = this.stationList;
-                // let selecedArr = this.selecedArr;
-                // let selecedList = [];
-
-                // selecedList = stationList.filter(function(item, index) {
-                //     if (selecedArr.indexOf(item.name) == -1) {
-                //         return false;
-                //     }
-                // return true;
-                // });
-                // this.selecedStation = this.selecedArr;
+                let val = this.selecedArr;
+                 let day = 1000 * 60* 60*24;
+                let start =  val[0].originStart + day;
+                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
             },
             getStationAmount(){
-                // this.selecedStation = this.selecedArr;
 
                 let val = this.selecedArr;
-                let day = 1000 * 60* 60*24;
+               
                 let station = val.map(item=>{
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor;
-                    // let end = item.originEnd;
-                    let end = item.originEnd + day;
-                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                    obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
-                this.renewForm.startDate = station[0].startDate;
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
@@ -626,16 +637,10 @@ import '~/assets/styles/createOrder.less';
                     communityId:4,
                     seats:JSON.stringify(station)
                 }
-                console.log('get-station-amount',params)
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
                         _this.selecedStation = r.data.seats;
-                        console.log('get-station-amount',r.data.seats)
-                        r.data.seats.map((item,index)=>{
-                            console.log(index+'--->',new Date(item.startDate),new Date(item.endDate))
-                        })
-
                         _this.renewForm.rentAmount = r.data.totalrent;
 
                     }, e => {
@@ -652,7 +657,6 @@ import '~/assets/styles/createOrder.less';
                 })
             },
             onStationChange:function(val){
-                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
@@ -714,7 +718,6 @@ import '~/assets/styles/createOrder.less';
 
                     }
                 });
-                console.log('saleList',saleList)
                 if(!complete){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -727,7 +730,6 @@ import '~/assets/styles/createOrder.less';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
                     return obj;
                 })
-                console.log('===============',saleList)
                 this.getSaleAmount(saleList)
             },
              getSaleAmount(list){
@@ -735,7 +737,7 @@ import '~/assets/styles/createOrder.less';
                     communityId:this.renewForm.communityId,
                     leaseBegindate:this.renewForm.startDate,
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.endDate),
-                    seats:JSON.stringify(this.stationList),
+                    seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
                 axios.post('count-sale', params, r => {

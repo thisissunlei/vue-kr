@@ -66,7 +66,7 @@ import dateUtils from 'vue-dateutils';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong',  dateUtils.dateToStr("YYYY-MM-DD",params.originStart)+'至'+ dateUtils.dateToStr("YYYY-MM-DD",params.originEnd))
+                            return h('strong',  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originStart))+'至'+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originEnd)))
                         }
                     }
                 ],

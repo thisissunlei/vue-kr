@@ -56,9 +56,6 @@
 			<LabelText label="订单创建时间：">
 				{{createTime}}
 			</LabelText>
-			<LabelText label="支付状态：">
-				{{payStatus}}
-			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<Table border :columns="cost" :data="costInfo"></Table>
@@ -90,7 +87,6 @@ export default {
 			orderEndTime:'',
 			orderStatus:'',
 			createTime:'',
-			payStatus:"",
 			costInfo:[],
 			cost:[
 				{
@@ -148,11 +144,11 @@ export default {
 				 align:'center'	,
 				 render(h, obj){
 						if(obj.row.payStatus==='WAIT'){
-							return '<span class="u-txt-red">待付款</span>';
+							return <span class="u-txt-red">待付款</span>;
 						}else if(obj.row.payStatus==='PAID'){
-							return '<span class="u-txt">已付款</span>';
+							return <span class="u-txt">已付款</span>;
 						}else if(obj.row.payStatus==='PAYMENT'){
-							return '<span class="u-txt-orange">未付清</span>';
+							return <span class="u-txt-orange">未付清</span>;
 						}
 				 	}
 				}

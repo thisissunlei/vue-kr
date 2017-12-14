@@ -172,8 +172,9 @@ export default {
 		}
 	},
 	mounted:function(){
-		this.getInfo();
 		GLOBALSIDESWITCH("false");
+		this.getInfo();
+		
 	},
 	methods:{
 		getInfo(){

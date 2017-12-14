@@ -57,7 +57,8 @@
          
      }
      GlobalRouter.prototype.pushCloseRoutrs = function(){
-         var router = location.href.split("#/")[1];
+         var router = location.href;
+        
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
          }
@@ -67,7 +68,7 @@
      };
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-         
+          
              var router = location.href;
              // console.log(getClickNav([].concat(NavItems), router),"------")
              var activeData = getClickNav([].concat(NavItems), router);

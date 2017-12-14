@@ -292,6 +292,7 @@
                 axios.post('join-nullify', params, r => {
                     _this.getListData(_this.params);
                 }, e => {
+                    console.log('---',e);
                     _this.$Message.info(e);
                 })   
             },

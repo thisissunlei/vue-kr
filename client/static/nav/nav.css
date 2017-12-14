@@ -6,7 +6,7 @@
   top: 0;
   right: 0;
   height: 60px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   background: #fff;
 }
 .app-header .c-header .header-nav {
@@ -185,4 +185,46 @@
   color: #333;
   text-align: center;
   text-decoration: none;
+}
+
+
+/*更多*/
+.app-header .c-header .header-nav .more-nav-ul{
+  position:relative;
+}
+.app-header .c-header .header-nav .more-nav-ul .more-name-li:hover{
+  color:#394457;
+  font-weight:600;
+}
+.app-header .c-header .header-nav .more-nav-ul .more-nav{
+  width:auto;
+  display:inline-block;
+  position: absolute;
+  right:44px;
+  top:60px;
+  transform: translateX(50%);
+  border:solid 1px #ccc;
+  background:#fff;
+  border-radius:4px;
+  box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
+  display:none;
+}
+.app-header .c-header .header-nav .more-nav-ul .more-nav p{
+  width: 16px;
+  height: 16px;
+  border: solid 1px #ccc;
+  border-right: none;
+  border-bottom: none;
+  background: #fff;
+  transform: rotate(45deg);
+  position: absolute;
+  left: 50%;
+  margin-left: -8px;
+  top: -9px;
+}
+.app-header .c-header .header-nav .more-nav-ul .more-nav li{
+  display:block;
+  height:50px;
+  line-height:50px;
+  font-weight:normal;
 }

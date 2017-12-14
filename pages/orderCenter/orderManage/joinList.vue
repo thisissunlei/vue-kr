@@ -75,7 +75,7 @@
                 upperError:false,
                 totalCount:1,
                 id:'',
-                checkboxValues:[],
+                props:{},
                 params:{
                     page:1,
                     pageSize:15,
@@ -296,7 +296,8 @@
                 })   
             },
             outSubmit (){
-                CommonFuc.commonExport(this.checkboxValues,this.params,'/api/krspace-op-web/order-seat-add/export');
+                this.props=Object.assign({},this.props,this.params);
+                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
             getListData(params){
                 var _this=this;
@@ -314,7 +315,11 @@
                 this.getListData(params);
             },
             checkboxChange(params){
-                this.checkboxValues=params;
+                var ids=[];
+                params&&params.map((item,index)=>{
+                    ids.push(item.id);
+                })
+                this.props.ids=ids;
             },
             lowerChange(param){
                 this.params.customerName=param.target.value;

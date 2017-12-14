@@ -34,20 +34,13 @@
     }
 
     /*导出*/
-    function commonExport(values,params,url){
-        let ids = [];
-        if (values.length != 0) {
-            values.map((item, value) => {
-                ids.push(item.id)
-            });
-        }
+    function commonExport(props,url){
         var where=[];
-        for(var item in params){
-            if(params.hasOwnProperty(item)){
-                where.push(`${item}=${params[item]}`);
+        for(var item in props){
+            if(props.hasOwnProperty(item)){
+                where.push(`${item}=${props[item]}`);
             }
         }
-        where.push(`ids=${ids}`);
         var url = `${url}?${where.join('&')}`
         window.location.href = url;
     }

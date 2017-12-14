@@ -73,7 +73,7 @@
                 upperError:false,
                 totalCount:1,
                 id:'',
-                checkboxValues:[],
+                props:{},
                 params:{
                     page:1,
                     pageSize:15,
@@ -235,7 +235,11 @@
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
             },
             checkboxChange(params){
-                this.checkboxValues=params;
+                var ids=[];
+                params&&params.map((item,index)=>{
+                    ids.push(item.id);
+                })
+                this.props.ids=ids;
             },
             nullifySubmit (){
                 var _this=this;
@@ -249,7 +253,8 @@
                 }) 
             },
             outSubmit (){
-                CommonFuc.commonExport(this.checkboxValues,this.params,'/api/krspace-op-web/order-seat-reduce/export');
+                this.props=Object.assign({},this.props,this.params);
+                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
             },
             getListData(params){
                 var _this=this;

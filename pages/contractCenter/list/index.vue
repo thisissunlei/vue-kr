@@ -83,7 +83,7 @@
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    
+    import CommonFuc from '~/assets/commonFuc';
     export default {
         components: {
             sectionTitle,
@@ -152,7 +152,7 @@
                             let arr = params.row.file||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
-                                newArr.push({"name":arr[i].fileName,"url":''})
+                                newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
                            var btnRender=[
                                h('Button', {
@@ -185,7 +185,8 @@
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr
+                                        file: newArr,
+                                        columnDetail:params.row||{}
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -254,12 +255,7 @@
                 var _this=this;
                 var params = Object.assign({},this.params);
                 params.ids = [].concat(this.selectAllData);
-                console.log(params,"OOOOOOO")
-                axios.get('get-center-export', params, r => {
-                   
-                }, e => {
-                    _this.$Message.info(e);
-                })   
+                CommonFuc.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){
                 var _this=this;
@@ -277,9 +273,9 @@
             },
             //分页事件
             changePage (index) {
-                // let params=this.params;
-                // params.page=index;
-                // this.getListData(params);
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
             },
             //搜索change事件
             changeCustomer(param){
@@ -300,6 +296,8 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
+                this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
                 this.getListData(this.params);
 
             },

@@ -70,7 +70,7 @@
 				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
-				{{basicInfo.paidAmount}}
+				￥{{basicInfo.paidAmount}}
 			</LabelText>
 			<LabelText label="账单生成时间：">
 				{{basicInfo.createTime}}

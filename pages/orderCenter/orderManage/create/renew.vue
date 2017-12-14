@@ -409,9 +409,11 @@ import '~/assets/styles/createOrder.less';
                 if(value){
                     this.renewForm.customerId = value;
                     this.getStationFn = +new Date()
+                    this.clearStation()
                 }else{
                     this.renewForm.customerId = '';
                 }
+
             },
             changeCommunity:function(value){
                 if(value){
@@ -420,7 +422,18 @@ import '~/assets/styles/createOrder.less';
                 }else{
                     this.renewForm.communityId = '';
                 }
-                // this.clearStation()
+                this.clearStation()
+            },
+            clearStation(){
+                // 清除所选的工位
+                if(this.selecedStation.length){
+                    this.selecedStation = [];
+                    this.selecedArr = [];
+                }
+                if(this.renewForm.items.length){
+                    this.renewForm.items = []
+                }
+
             },
             dealEndDate(val){
                 let str = val.split('-');
@@ -434,9 +447,8 @@ import '~/assets/styles/createOrder.less';
             },
             changeTime:function(value){
                 value = this.dealEndDate(value);
-                this.renewForm.endDate = value
-
-                // this.renewForm.endDate = value;
+                this.renewForm.endDate = value;
+                this.clearStation()
             },
             changeSaler:function(value){
                 this.renewForm.salerId = value;
@@ -557,6 +569,17 @@ import '~/assets/styles/createOrder.less';
                 this.selectAll = value;
                 this.renewForm.items = items;
             },
+            getTacticsId(type){
+                let typeId = '';
+                typeId = this.youhui.filter((item)=>{
+                    if(item.tacticsType != type ){
+                        return false;
+                    }
+                    return true;
+                })
+                return typeId[0].tacticsId
+
+            },
             //优惠类型选择
             changeType:function(value){
                 //优惠类型选择
@@ -564,19 +587,25 @@ import '~/assets/styles/createOrder.less';
                     return;
                 }
                 this.config()
+                let _this = this;
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
                 this.renewForm.items[itemIndex].tacticsType = itemValue;
+
                 let items = [];
                 items = this.renewForm.items.map((item)=>{
-                    if(item.value == 'qianmian'){
+                    if(item.tacticsType == 'qianmian'){
                         item.validStart = this.renewForm.startDate;
                         item.discount = '';
+                        item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
                         item.validEnd = this.renewForm.endDate
+                        item.tacticsId = this.getTacticsId('3')
+
                         item.discount = '';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.renewForm.startDate
+                        item.tacticsId = this.getTacticsId('1')
                         item.validEnd = this.renewForm.endDate
                     }
                     return item;
@@ -669,6 +698,7 @@ import '~/assets/styles/createOrder.less';
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
+                            obj.tacticsId = item.tacticsId;
                             if(item.tacticsType == 1){
                                 maxDiscount = obj.discount;
                             }

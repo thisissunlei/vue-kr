@@ -386,13 +386,22 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             joinFormSubmit(){
+                let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
+                console.log('joinFormSubmit',this.formItem.items)
                 // formItem = this.formItem;
+                saleList = saleList.map(item=>{
+                    let obj =Object.assign({},item);
+                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    return obj;
+                })
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
-                formItem.saleList=JSON.stringify(this.formItem.items);
+                formItem.saleList=JSON.stringify(saleList);
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
@@ -446,13 +455,16 @@ import '~/assets/styles/createOrder.less';
                     });
                     return;
                 }
+
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
+                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                console.log('===============',saleList)
+                this.formItem.items = saleList;
+
                 this.getSaleAmount(saleList)
             },
             getSaleAmount(list){
@@ -463,8 +475,14 @@ import '~/assets/styles/createOrder.less';
                     seats:JSON.stringify(this.stationList),
                     saleList:JSON.stringify(list)
                 };
+                let _this = this;
                 axios.post('count-sale', params, r => {
-                    console.log('save-join=====',r.data)
+                    // _this.formItem.items = r.data.saleList.map(item=>{
+                    //     let obj = item;
+                    //     obj.validEnd = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
+                    //     obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
+                    //     return obj;
+                    // })
                     _this.$Message.success('Success!');
                 }, e => {
 
@@ -535,6 +553,17 @@ import '~/assets/styles/createOrder.less';
                 this.selectDiscount(false);
 
             },
+            getTacticsId(type){
+                let typeId = '';
+                typeId = this.youhui.filter((item)=>{
+                    if(item.tacticsType != type ){
+                        return false;
+                    }
+                    return true;
+                })
+                return typeId[0].tacticsId
+
+            },
             
             changeType:function(value){
                 //优惠类型选择
@@ -552,9 +581,13 @@ import '~/assets/styles/createOrder.less';
                         item.discount = '';
                     }else if(item.tacticsType == 3){
                         item.validEnd = this.formItem.endDate
+                        item.tacticsId = this.getTacticsId('3')
+
                         item.discount = '';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
+                        item.tacticsId = this.getTacticsId('1')
+
                         item.validEnd = this.formItem.endDate
                     }
                     return item;
@@ -847,7 +880,13 @@ import '~/assets/styles/createOrder.less';
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
                         console.log('get-station-amount=====',r.data)
-                        _this.stationList = r.data.seats;
+
+                        _this.stationList = r.data.seats.map(item=>{
+                            let obj = item;
+                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            return obj;
+                        });
                         _this.formItem.rentAmount = r.data.totalrent;
 
                     }, e => {

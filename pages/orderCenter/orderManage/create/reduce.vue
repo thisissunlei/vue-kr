@@ -19,19 +19,19 @@
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form" style="padding:30px 24px">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px"  prop="customer">
-                    <selectCustomers name="renewForm.customer" :onchange="changeCustomer"></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px"  prop="customerId">
+                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px" prop="community" >
-                    <selectCommunities name="renewForm.community" :onchange="changeCommunity"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px" prop="communityId" >
+                    <selectCommunities name="renewForm.communityId" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="减租结束日期" style="width:252px" prop="endDate" >
-                        <DatePicker type="date" placeholder="续租结束日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    <FormItem label="减租开始日期" style="width:252px" prop="endDate" >
+                        <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -95,9 +95,10 @@ import '~/assets/styles/createOrder.less';
                 disabled:false,//提交按钮是否有效
                 index:0,//优惠的index
                 openStation:false,//弹窗开关
+                getStationFn:+new Date(),//监听获取工位数据
                renewForm:{
-                    community:'',
-                    customer:'',
+                    communityId:'',
+                    customerId:'',
                     endDate:'',
                     saler:'',
                     items:[]
@@ -109,10 +110,10 @@ import '~/assets/styles/createOrder.less';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    community:[
+                    communityId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
-                    customer:[
+                    customerId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     saler:[
@@ -152,15 +153,15 @@ import '~/assets/styles/createOrder.less';
                         key: 'price'
                     },
                     {
-                        title: '租赁期限',
+                        title: '减租后租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', new Date()+'至'+this.renewForm.endDate)
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                     {
                         title: '小计',
-                        key: 'price'
+                        key: 'amount'
                     }
                 ],
                 payList:[
@@ -213,7 +214,35 @@ import '~/assets/styles/createOrder.less';
         created:function(){
             
         },
+        watch:{
+            getStationFn:function(){
+                if(this.renewForm.customerId && this.renewForm.communityId){
+                    this.getRenewStation()
+                }
+            },
+        },
         methods: {
+            reduceFormSubmit(){
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let renewForm = {} 
+                renewForm.seats=JSON.stringify(this.selecedStation);
+                renewForm.customerId=this.renewForm.customerId;
+                renewForm.communityId=this.renewForm.communityId;
+                renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.startDate = start;
+                renewForm.endDate =end;
+                renewForm.corporationId = 11;//临时加的-无用但包错
+                let _this = this;
+                axios.post('save-reduce', renewForm, r => {
+                    console.log('save-join=====',r.data)
+                    _this.$Message.success('Success!');
+                }, e => {
+
+                        console.log('error',e)
+                })
+                
+            },
             handleSubmit:function(name){
                 let message = '=========';
                 let _this = this;
@@ -224,6 +253,7 @@ import '~/assets/styles/createOrder.less';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        this.reduceFormSubmit()
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -236,37 +266,53 @@ import '~/assets/styles/createOrder.less';
             },
             changeCustomer:function(value){
                 if(value){
-                    this.renewForm.customer = value;
+                    this.renewForm.customerId = value;
+                    this.getStationFn = +new Date()
+                    this.clearStation()
                 }else{
-                    this.renewForm.customer = '';
+                    this.renewForm.customerId = '';
                 }
             },
             changeCommunity:function(value){
                 if(value){
-                    this.renewForm.community = value;
+                    this.renewForm.communityId = value;
+                    this.getStationFn = +new Date()
                 }else{
-                    this.renewForm.community = '';
+                    this.renewForm.communityId = '';
                 }
-                // this.clearStation()
+                this.clearStation()
             },
             changeTime:function(value){
+                this.clearStation()
                 // this.renewForm.endDate = value;
             },
             changeSaler:function(value){
                 this.renewForm.saler = value;
+            },
+            clearStation(){
+                // 清除所选的工位
+                if(this.selecedStation.length){
+                    this.selecedStation = [];
+                    this.selecedArr = [];
+                }
+                if(this.renewForm.items.length){
+                    this.renewForm.items = []
+                }
+
+
             },
             showStation:function(){
                  this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
-                if(!this.renewForm.community){
+                if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
                     });
                     return
                 }
-                if(!this.renewForm.customer){
+                if(!this.renewForm.customerId){
                     this.$Notice.error({
                         title:'请先选择客户'
                     });
@@ -274,7 +320,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 if(!this.renewForm.endDate){
                     this.$Notice.error({
-                        title:'请先选择续租结束时间'
+                        title:'请先选择减租开始时间'
                     });
                     return
                 }
@@ -292,13 +338,13 @@ import '~/assets/styles/createOrder.less';
                     top: 80,
                     duration: 3
                 });
-                if(!this.renewForm.community){
+                if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
                     });
                     return
                 }
-                if(!this.renewForm.customer){
+                if(!this.renewForm.customerId){
                     this.$Notice.error({
                         title:'请先选择客户'
                     });
@@ -345,86 +391,67 @@ import '~/assets/styles/createOrder.less';
 
             },
             deleteStation:function(){
-                let stationVos = this.selecedStation;
+                  let stationVos = this.selecedStation;
                 let delArr = this.selectedDel;
                 stationVos = stationVos.filter(function(item, index) {
-                    if (delArr.indexOf(item.id) != -1) {
+                    if (delArr.indexOf(item.seatId) != -1) {
                         return false;
                     }
                 return true;
                 });
-                this.selecedStation = stationVos;
+                // this.selecedStation = stationVos;
+                this.selecedArr = stationVos;
+                this.getStationAmount()
+
 
             },
             selectRow:function(val){
-                console.log('selectRow',val)
                 let selectionList = [];
                 selectionList = val.map((item)=>{
-                    return item.id
+                    return item.seatId
                 })
                 this.selectedDel = selectionList;
             },
             selectDiscount:function(){
 
             },
-            //优惠类型选择
-            changeType:function(value){
-                if(!value){
-                    return;
-                }
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
-                this.renewForm.items[itemIndex].value = itemValue;
-                let items = [];
-                items = this.renewForm.items.map((item)=>{
-                    if(item.value == 'qianmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'houmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'zhekou'){
-                        item.beginDate = new Date()
-                        item.endDate = new Date()
-                    }
-                    return item;
-                })
-                let error=false;
-                let message = '';
-                this.renewForm.items = items;
-                let typeList = items.map(item=>{
-                    return item.value;
-                })
-                let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
-                if(qianmian + houmian>1){
-                    error = true;
-                    message = '只能有一个免租期。'
-                }
-                if(zhekou>1){
-                    error = true;
-                    message = '只能有一个折扣。'
-                }
-                if(error){
-                    this.$Notice.error({
-                        title:message
-                    });
-                    this.renewForm.items.splice(itemIndex,1);
-                }
-            },
             submitStation:function(){
-                let stationList = this.stationList;
-                let selecedArr = this.selecedArr;
-                let selecedList = [];
 
-                selecedList = stationList.filter(function(item, index) {
-                    if (selecedArr.indexOf(item.name) == -1) {
-                        return false;
-                    }
-                return true;
-                });
-                this.selecedStation = selecedList;
+                 let end = this.selecedArr[0].startDate;
+                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                this.getStationAmount()
+            },
+            getStationAmount(){
+
+                let val = this.selecedArr;
+               
+                let station = val.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.price;
+                    obj.seatId = item.id || item.seatId;
+                    obj.floor = item.whereFloor;
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
+                    obj.endDate =this.renewForm.endDate;
+                    return obj;
+                })
+                let params = {
+                    leaseEnddate:this.renewForm.startDate,
+                    leaseBegindate:this.renewForm.endDate,
+                    // communityId:this.renewForm.communityId,
+                    communityId:4,
+                    seats:JSON.stringify(station)
+                }
+                let _this = this;
+                if(val.length){
+                    axios.post('get-station-amount', params, r => {
+                        _this.selecedStation = r.data.seats;
+                        _this.renewForm.rentAmount = r.data.totalrent;
+
+                    }, e => {
+
+                        console.log('error',e)
+                    })
+                }
             },
             cancelStation:function(){
                 this.selecedStation = this.selecedStation.map(item=>{
@@ -435,8 +462,32 @@ import '~/assets/styles/createOrder.less';
             },
             onStationChange:function(val){
                 this.selecedArr = val;
-                console.log('onStationChange',val)
-            }
+            },
+             getRenewStation(){
+                // let params = {
+                //     customerId:this.renewForm.customerId,
+                //     communityId:this.renewForm.communityId
+                // };
+                let params = {
+                    //假数据
+                    customerId:1,
+                    communityId:4
+                };
+                let _this = this;
+                axios.get('get-reduce-station', params, r => {
+                    r.data = r.data.map(item=>{
+                        let obj = item;
+                        obj.originStart = item.startDate;
+                        obj.originEnd = item.endDate;
+                        return obj;
+                    })
+                    _this.stationList = r.data
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
 
                     
                

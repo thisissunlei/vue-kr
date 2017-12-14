@@ -160,4 +160,9 @@ export default  {
         url: 'krspace-finance-web/order-seat-detail/amount',
         method: 'post'
     },
+    // 获取社区-楼层接口
+    'get-community-floor': {
+        url: 'krspace-finance-web/order-seat/community-floor?',
+        method: 'get'
+    },
 }

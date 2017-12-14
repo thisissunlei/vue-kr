@@ -136,17 +136,17 @@
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.value == 'qianmian' || item.value == 'zhekou'" placeholder="开始时间" v-model="item.startDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.value !== 'qianmian' && item.value !== 'zhekou'" placeholder="开始时间" v-model="item.startDate" ></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <DatePicker type="date" v-if="item.value == 'houmian'|| item.value == 'zhekou'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
+                        <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.value !== 'houmian'&& item.value !== 'zhekou'" v-model="item.endDate" ></DatePicker>
+                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <InputNumber v-model="item.zhekou" placeholder="折扣" v-if="item.value == 'zhekou'" :max="10" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
-                        <Input v-model="item.zhekou" v-if="item.value !== 'zhekou'" placeholder="折扣" disabled></Input>
+                        <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
+                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
                         
                     </Col>  
@@ -243,6 +243,7 @@ import '~/assets/styles/createOrder.less';
                 disabled:false,
                 delStation:[],
                 installmentType:'',
+                maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
                 stationData:{
                     submitData:[],
@@ -347,7 +348,9 @@ import '~/assets/styles/createOrder.less';
                     // floor: [
                     //     { validator: validateFloor, trigger: 'change' }
                     // ],
-                }
+                },
+                getFloor:+new Date(),
+
             }
         },
         head() {
@@ -367,7 +370,20 @@ import '~/assets/styles/createOrder.less';
             // this.openStation = false
         },
         watch:{
-           
+           getFloor(){
+            if(this.formItem.communityId && this.formItem.customerId){
+                let params = {
+                    communityId:this.formItem.communityId,
+                    customerId:this.formItem.customerId
+                }
+                axios.get('get-community-floor', params, r => {
+                    console.log('save-join=====',r.data)
+                }, e => {
+
+                        console.log('error',e)
+                })
+            }
+           }
         },
         methods: {
             config:function(){
@@ -384,7 +400,7 @@ import '~/assets/styles/createOrder.less';
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
                 formItem.saleList =JSON.stringify(this.stationList) ;
-                formItem.seats=this.formItem.items;
+                formItem.seats=JSON.stringify(this.formItem.items);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
@@ -405,10 +421,66 @@ import '~/assets/styles/createOrder.less';
                 
             },
             dealSaleInfo(){
-                console.log('dealSaleInfo',this.formItem.items)
+                this.config()
+                //处理已删除的数据
+                let saleList = this.formItem.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
+                //检查手否有未填写完整的折扣项
+                let complete = true;
+                saleList.map(item=>{
+                    if(!item.tacticsType){
+                        complete = false
+                    }
+                    if(item.tacticsType!='zhekou' && !(item.validStart || item.validEnd)){
+                        complete = false
+
+                    }
+                    if(item.tacticsType == 'zhekou' && !item.discount){
+                        complete = false
+
+                    }
+                });
+                console.log('saleList',saleList)
+                if(!complete){
+                    this.$Notice.error({
+                        title:'请填写完整优惠信息'
+                    });
+                    return;
+                }
+                saleList = saleList.map(item=>{
+                    let obj =Object.assign({},item);
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
+                    return obj;
+                })
+                console.log('===============',saleList)
+                this.getSaleAmount(saleList)
+            },
+            getSaleAmount(list){
+                let params = {
+                    communityId:this.formItem.communityId,
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.startDate),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.endDate),
+                    seats:JSON.stringify(this.stationList),
+                    saleList:JSON.stringify(list)
+                };
+                axios.post('count-sale', params, r => {
+                    console.log('save-join=====',r.data)
+                    _this.$Message.success('Success!');
+                }, e => {
+
+                        console.log('error',e)
+                })
+
             },
             changezhekou(val){
-                console.log('changezhekou',val);
+                this.dealSaleInfo()
+            },
+            changeSaleTime(){
                 this.dealSaleInfo()
             },
             handleSubmit:function(name) {
@@ -477,18 +549,18 @@ import '~/assets/styles/createOrder.less';
                 this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
-                this.formItem.items[itemIndex].value = itemValue;
+                this.formItem.items[itemIndex].tacticsType = itemValue;
                 let items = [];
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
-                        item.startDate = this.formItem.startDate
-                        item.zhekou = '';
-                    }else if(item.value == 'houmian'){
-                        item.endDate = this.formItem.endDate
-                        item.zhekou = '';
-                    }else if(item.value == 'zhekou'){
-                        item.startDate=this.formItem.startDate
-                        item.endDate = this.formItem.endDate
+                        item.validStart = this.formItem.startDate;
+                        item.discount = '';
+                    }else if(item.tacticsType == 3){
+                        item.validEnd = this.formItem.endDate
+                        item.discount = '';
+                    }else if(item.tacticsType == 1){
+                        item.validStart=this.formItem.startDate
+                        item.validEnd = this.formItem.endDate
                     }
                     return item;
                 })
@@ -530,6 +602,7 @@ import '~/assets/styles/createOrder.less';
                     this.formItem.communityId = '';
                 }
                 this.clearStation()
+                this.getFloor = +new Date()
                 
             },
             clearStation:function(){
@@ -551,6 +624,8 @@ import '~/assets/styles/createOrder.less';
                 }else{
                     this.formItem.customerId = '';
                 }
+                this.getFloor = +new Date()
+
             },
             changeSaler:function(value){
                 // 销售员
@@ -722,27 +797,22 @@ import '~/assets/styles/createOrder.less';
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
+                let maxDiscount = '';
                 let _this = this;
                 axios.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
                             obj.label = item.tacticsName;
-                            switch(item.tacticsType){
-                                case 1:
-                                    obj.value = 'zhekou';
-                                    break;
-                                case 2:
-                                    obj.value = 'qianmian';
-                                    break;
-                                default:
-                                    obj.value = 'houmian';
-                                    break;
+                            obj.value = item.tacticsType+'';
+                            if(item.tacticsType == 1){
+                                maxDiscount = obj.discount;
                             }
                             return obj;
                         })
                     }
                     _this.youhui = list;
+                    _this.maxDiscount = maxDiscount;
 
                 }, e => {
 

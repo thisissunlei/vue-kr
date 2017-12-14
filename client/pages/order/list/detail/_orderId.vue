@@ -32,7 +32,7 @@
 				{{basicInfo.roomName}}
 			</LabelText>
 			<LabelText label="订单总额：">
-				{{basicInfo.totalAmount}}
+				￥{{basicInfo.totalAmount}}
 			</LabelText>
 			<LabelText label="预订开始时间：">
 				{{orderStartTime}}

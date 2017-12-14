@@ -67,7 +67,7 @@
 				{{basicInfo.billStatus}}
 			</LabelText>
 			<LabelText label="账单总金额：">
-				{{basicInfo.amount}}
+				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
 				{{basicInfo.paidAmount}}

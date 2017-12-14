@@ -25,7 +25,7 @@
 				</a>
 			</LabelText>
 			<LabelText label="含税收入：">
-				{{basicInfo.amount}}
+				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="收入确认时间：">
 				{{dealDate}}

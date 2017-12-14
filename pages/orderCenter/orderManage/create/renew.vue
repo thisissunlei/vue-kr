@@ -335,10 +335,17 @@ import '~/assets/styles/createOrder.less';
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
-                // formItem = this.formItem;
+                let saleList = this.renewForm.items;
+                 saleList = saleList.map(item=>{
+                    let obj =Object.assign({},item);
+                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    return obj;
+                })
                 renewForm.installmentType = this.installmentType;
                 renewForm.depositAmount = this.depositAmount;
-                renewForm.saleList=JSON.stringify(this.renewForm.items);
+                renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
@@ -669,8 +676,14 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
-                        _this.selecedStation = r.data.seats;
+                        // _this.selecedStation = r.data.seats;
                         _this.renewForm.rentAmount = r.data.totalrent;
+                         _this.selecedStation = r.data.seats.map(item=>{
+                            let obj = item;
+                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            return obj;
+                        });
 
                     }, e => {
 

@@ -444,8 +444,14 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
-                        _this.selecedStation = r.data.seats;
+                        // _this.selecedStation = r.data.seats;
                         _this.renewForm.rentAmount = r.data.totalrent;
+                         _this.selecedStation = r.data.seats.map(item=>{
+                            let obj = item;
+                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            return obj;
+                        });
 
                     }, e => {
 

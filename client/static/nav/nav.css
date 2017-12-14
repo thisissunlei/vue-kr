@@ -40,7 +40,7 @@
   left: 0;
   top: 60px;
   bottom: 0;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   background: #394457;
   z-index: 900;
   overflow: auto;

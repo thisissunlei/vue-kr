@@ -165,16 +165,22 @@
          }
          sidebarNavs.menuItems.map(function (item) {
              let iconName = item.iconName ? item.iconName : '';
- 
+            
              html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span>' + item.primaryText + '</div>';
- 
+           
  
              if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
  
                  html += '<ul>';
  
                  item.menuItems.map(function (child) {
-                     html += '<li class=' + (child.router == router ? 'active' : 'default') + '><a href="#/' + child.router + '">' + child.primaryText + '</a></li>';
+                    var href = ""
+                    if (item.type && item.type == "vue") {
+                        href = "http://" + location.hostname + "/" + child.router;
+                    } else {
+                        href = "#/" + child.router;
+                    }
+                     html += '<li class=' + (child.router == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                  })
  
                  html += '</ul>';

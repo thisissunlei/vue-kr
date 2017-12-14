@@ -83,7 +83,7 @@
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from '~/assets/commonFuc';
+    import CommonFuc from 'kr/utils';
     export default {
         components: {
             sectionTitle,

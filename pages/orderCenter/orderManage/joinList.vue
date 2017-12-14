@@ -28,7 +28,7 @@
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
-                        <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
+                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
                     </div>
             </div>
             <Modal
@@ -50,6 +50,13 @@
             >
                 <Nullify></Nullify>
             </Modal>
+
+            <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+            ></Message>
     </div>
 </template>
 
@@ -60,17 +67,22 @@
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
     import CommonFuc from 'kr/utils';
+    import Message from '~/components/Message';
     
 
     export default {
         name:'join',
         components:{
             HeightSearch,
-            Nullify
+            Nullify,
+            Message
         },
         data () {
             
             return {
+                openMessage:false,
+                warn:'',
+                MessageType:'',
                 upperData:{},
                 upperError:false,
                 totalCount:1,
@@ -285,15 +297,18 @@
                 window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
-                var _this=this;
                 let params={
                     id:this.id
                 };
                 axios.post('join-nullify', params, r => {
-                    _this.getListData(_this.params);
+                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.warn=r.message;
+                    this.openMessage=true;
+                    this.getListData(this.params);
                 }, e => {
-                    console.log('---',e);
-                    _this.$Message.info(e);
+                    this.MessageType="error";
+                    this.warn=e.message;
+                    this.openMessage=true;
                 })   
             },
             outSubmit (){
@@ -340,7 +355,10 @@
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
         }
     }
 </script>

@@ -53,9 +53,12 @@
         width:97%;
     }
     .u-upload-content{
-        width:84px;
+        width:94px;
         height:110px;
         margin:25px auto 0;
+        i{
+            text-indent: 19px;
+        }
     }
 }
 </style>
@@ -63,6 +66,7 @@
 <div class="g-order">
     <SectionTitle label="回款管理"></SectionTitle>
     <div class="u-search" >
+         <Button type="primary" @click="importDetail">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>  
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
@@ -144,6 +148,31 @@
         :warn="warn"
         v-on:changeOpen="onChangeOpen"
     ></Message>
+    <Modal
+        v-model="openImport"
+        title="导入回款明细"
+        ok-text="确定"
+        cancel-text="取消"
+        width="500"
+     >
+        <div class="u-upload-title">
+            <Upload
+                :before-upload="handleUpload"
+                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
+                :with-credentials="IsCookie"
+            >
+                <div class="u-upload-content">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>请选择上传文件</p>
+                     <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
+                </div>
+            </Upload>
+        </div>
+         <div slot="footer">
+            <Button type="primary" @click="importSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 
@@ -187,6 +216,8 @@ export default {
                 MessageType:'',
                 warn:'',
                 customerName:'',
+                file: null,
+                IsCookie:true,
                 columns: [
                     {
                         title: '交易流水号',
@@ -252,7 +283,8 @@ export default {
                         align:'center',
                         width:110,
                         render:(h,params)=>{
-                           return h('div', [
+                          if(!params.row.customerId){
+                              return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -281,7 +313,28 @@ export default {
                                         }
                                     }
                                 }, '绑定客户')
+                            ]);
+                          }else {
+                              return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openView(params.row);
+                                        }
+                                    }
+                                }, '查看')
                             ]);  
+                              
+                             
+                          } 
+                             
                         }
                     }
                 ],
@@ -373,10 +426,26 @@ export default {
                 }
                 this.getTableData(Params);
             },
-            handleUpload (file) {
+             handleUpload (file) {
                 this.file = file;
-                console.log('file====',file)
                 return false;
+            },
+            importDetail(){
+               this.openImport=!this.openImport;
+            },
+             importSubmit(){
+                var data=new FormData();
+                data.append('file',this.file);
+                this.$http.put('import-bank-flow', data, r => {
+                    this.openImport=false;
+                    this.MessageType="success";
+                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`
+                    this.openMessage=true;
+                   this.getTableData(this.params);
+                }, e => {
+                    console.log('error',e)
+                })
+               
             },
         }
 

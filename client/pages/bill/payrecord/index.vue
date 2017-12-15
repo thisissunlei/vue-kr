@@ -67,7 +67,6 @@
 <div class="g-order">
     <SectionTitle label="交易流水"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="importDetail">导入回款明细</Button>
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
                 v-model="tradeNo" 
@@ -98,32 +97,6 @@
         :warn="warn"
         v-on:changeOpen="onChangeOpen"
     ></Message>
-    <Modal
-        v-model="openImport"
-        title="导入回款明细"
-        ok-text="确定"
-        cancel-text="取消"
-        width="500"
-     >
-        <div class="u-upload-title">
-            <Upload
-                :before-upload="handleUpload"
-                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
-                :with-credentials="IsCookie"
-            >
-                <div class="u-upload-content">
-                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                    <p>请选择上传文件</p>
-                     <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
-                </div>
-            </Upload>
-        </div>
-         <div slot="footer">
-            <Button type="primary" @click="importSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
-        </div>
-    </Modal>
-    
 </div>
 </template>
 
@@ -142,7 +115,6 @@ export default {
         data () {
             return {
                 openSearch:false,
-                openImport:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -154,8 +126,6 @@ export default {
                 MessageType:'',
                 warn:'',
                 tradeNo:'',
-                file: null,
-                IsCookie:true,
                 columns: [
                     {
                         title: '交易流水号',
@@ -206,8 +176,33 @@ export default {
                         title: '收款账户',
                         key: 'receiveAccount',
                         align:'center'
-                    }
-                    
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatus',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT'){
+                                return '待支付';
+                            }else if(obj.row.payStatus==='SUCCESS'){
+                                return '支付成功';
+                            }else if(obj.row.payStatus==='FAILED'){
+                                return '支付失败';
+                            }
+                        }
+                    },
+                    {
+                        title: '处理结果',
+                        key: 'dealed',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.dealed===true){
+                                return '已处理';
+                            }else if(obj.row.dealed===false){
+                                return '待处理';
+                            }
+                        }
+                    },
                 ]
                 
             }
@@ -241,27 +236,6 @@ export default {
                     pageSize:this.pageSize
                 }
                 this.getTableData(Params);
-            },
-            importDetail(){
-               this.openImport=!this.openImport;
-            },
-            handleUpload (file) {
-                this.file = file;
-                return false;
-            },
-            importSubmit(){
-                var data=new FormData();
-                data.append('file',this.file);
-                this.$http.put('import-bank-flow', data, r => {
-                    this.openImport=false;
-                    this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条`
-                    this.openMessage=true;
-                   this.getTableData(this.params);
-                }, e => {
-                    console.log('error',e)
-                })
-               
             },
              onChangeOpen(data){
                 this.openMessage=data;

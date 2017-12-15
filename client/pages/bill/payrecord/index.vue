@@ -1,9 +1,16 @@
 <style lang="less"> 
 .g-order{
    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding-left: 20px;
+        height:32px;
+        margin:16px 0;
+        padding-left: 20px;
+        .m-search{
+            color:#2b85e4; 
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
     }
     .ivu-table-cell{
         padding:0;
@@ -11,57 +18,11 @@
     .u-table{
         padding:0 20px;
     }
-    .u-cancel-title{
-        width:85%;
-        margin:10px auto;
-        font-size:14px;
-        text-indent: 28px;
-    }
     .u-txt-red{
 	    color:#FF6868;
 	}
-    .u-txt{
-        color:#666;
-    }
-    .u-txt-orange{
-        color: #F5A623;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-        clear: both;
-        content: '.';
-        height: 0;
-        display: block;
-        visibility: hidden;
-    }
-    .m-search{
-        color:#2b85e4; 
-        display:inline-block;
-        margin-left:10px;
-        font-size:14px;
-        cursor:pointer;
-    }
-    
 }   
-.u-bind{
-  width:310px;
-  margin:25px auto 0;      
-   
-}
-.u-upload-title{
-    width:500px;
-    div{
-        width:97%;
-    }
-    .u-upload-content{
-        width:84px;
-        height:110px;
-        margin:25px auto 0;
-    }
-    .u-upload-file-name{
-        margin-top:10px;
-    }
-}
+
 </style>
 <template>
 <div class="g-order">
@@ -187,7 +148,7 @@ export default {
                             }else if(obj.row.payStatus==='SUCCESS'){
                                 return '支付成功';
                             }else if(obj.row.payStatus==='FAILED'){
-                                return '支付失败';
+                                return <span class="u-txt-red">支付失败</span>;
                             }
                         }
                     },

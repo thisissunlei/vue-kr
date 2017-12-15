@@ -310,8 +310,10 @@ import axios from '~/plugins/http.js';
 					if (item.belongType == "SPACE") {
 						belongType = 2;
 					}
+					console.log('datachange',item)
 					obj1.id = item.belongId;
 					obj1.type = belongType;
+					obj1.seatType = item.type == 'STATION'?'OPEN':item.type;
 					obj1.belongType = belongType;
 					obj1.whereFloor = item.whereFloor;
 					obj1.name = item.name;

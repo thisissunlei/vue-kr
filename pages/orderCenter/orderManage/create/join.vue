@@ -230,13 +230,6 @@ import CommonFuc from 'kr/utils';
 
     export default {
         data() {
-            const validateFloor = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('Age cannot be empty'));
-                }else{
-                    callback();
-                }
-            };
             return {
                 openStation:false,
                 selectAll:false,

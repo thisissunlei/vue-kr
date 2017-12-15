@@ -81,8 +81,8 @@
                     <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
+                        <span class="money">{{formItem.stationAmount}} </span>
+                        <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
                 </Row>
@@ -137,6 +137,7 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
@@ -161,7 +162,7 @@
                     </FormItem>
                  </Col>
                  <Col class="col">
-                    <FormItem label="首付款日期" style="width:252px">
+                    <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
                         <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" ></DatePicker >
                     </FormItem> 
                  </Col>
@@ -220,6 +221,8 @@ import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import CommonFuc from 'kr/utils';
+
 
 
 
@@ -242,6 +245,7 @@ import '~/assets/styles/createOrder.less';
                 depositAmount:'',
                 disabled:false,
                 delStation:[],
+                stationAmount:'',
                 installmentType:'',
                 maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
@@ -308,12 +312,17 @@ import '~/assets/styles/createOrder.less';
                     city:'',
                     firstPayTime:'',
                     rentAmount:'',
-                    items:[]
+                    items:[],
+                    stationAmount:0,
                 },
+
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
                     startDate: [
                         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                    ],
+                    firstPayTime: [
+                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
                     ],
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
@@ -341,6 +350,7 @@ import '~/assets/styles/createOrder.less';
                     // ],
                 },
                 getFloor:+new Date(),
+                changeSale:+new Date()
 
             }
         },
@@ -361,6 +371,9 @@ import '~/assets/styles/createOrder.less';
             // this.openStation = false
         },
         watch:{
+            formItem(){
+                console.log('=========')
+            },
            getFloor(){
             let _this = this;
             if(this.formItem.communityId && this.formItem.customerId){
@@ -376,6 +389,9 @@ import '~/assets/styles/createOrder.less';
                         console.log('error',e)
                 })
             }
+           },
+           changeSale(){
+            // this.dealSaleInfo()
            }
         },
         methods: {
@@ -386,6 +402,7 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             joinFormSubmit(){
+                this.config()
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
@@ -416,9 +433,11 @@ import '~/assets/styles/createOrder.less';
                 console.log('handleSubmit',formItem,start,end)
                 let _this = this;
                 axios.post('save-join', formItem, r => {
-                    console.log('save-join=====',r.data)
-                    _this.$Message.success('Success!');
+
                 }, e => {
+                     _this.$Notice.error({
+                        title:e.message
+                    })
 
                         console.log('error',e)
                 })
@@ -427,6 +446,7 @@ import '~/assets/styles/createOrder.less';
             dealSaleInfo(){
                 this.config()
                 //处理已删除的数据
+                console.log('dealSaleInfo---->',this.formItem.items)
                 let saleList = this.formItem.items.filter(item=>{
                     if(!item.show){
                         return false;
@@ -439,16 +459,18 @@ import '~/assets/styles/createOrder.less';
                     if(!item.tacticsType){
                         complete = false
                     }
-                    if(item.tacticsType!='zhekou' && !(item.validStart || item.validEnd)){
-                        complete = false
+                    if(item.tacticsType!='1' && (!item.validStart || !item.validEnd)){
+                        complete = false;
+                        console.log('检查---->非折扣',item)
 
                     }
-                    if(item.tacticsType == 'zhekou' && !item.discount){
-                        complete = false
+                    if(item.tacticsType == '1' && !item.discount){
+                        complete = false;
+                        console.log('检查---->折扣',item)
+
 
                     }
                 });
-                console.log('saleList',saleList)
                 if(!complete){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -458,7 +480,6 @@ import '~/assets/styles/createOrder.less';
 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
@@ -468,6 +489,7 @@ import '~/assets/styles/createOrder.less';
                 this.getSaleAmount(saleList)
             },
             getSaleAmount(list){
+                this.config()
                 let params = {
                     communityId:this.formItem.communityId,
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.startDate),
@@ -477,14 +499,11 @@ import '~/assets/styles/createOrder.less';
                 };
                 let _this = this;
                 axios.post('count-sale', params, r => {
-                    // _this.formItem.items = r.data.saleList.map(item=>{
-                    //     let obj = item;
-                    //     obj.validEnd = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
-                    //     obj.validStart = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
-                    //     return obj;
-                    // })
-                    _this.$Message.success('Success!');
+                    _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
+                     _this.$Notice.error({
+                        title:e.message
+                    })
 
                         console.log('error',e)
                 })
@@ -493,8 +512,12 @@ import '~/assets/styles/createOrder.less';
             changezhekou(val){
                 this.dealSaleInfo()
             },
-            changeSaleTime(){
-                this.dealSaleInfo()
+            changeSaleTime(val){
+                let _this = this;
+                setTimeout(function(){
+                    _this.dealSaleInfo()
+                    console.log('changeSaleTime======>',_this.formItem.items)
+                },200)
             },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
@@ -551,6 +574,7 @@ import '~/assets/styles/createOrder.less';
                 });
                 this.formItem.items = items;
                 this.selectDiscount(false);
+                this.dealSaleInfo()
 
             },
             getTacticsId(type){
@@ -597,14 +621,15 @@ import '~/assets/styles/createOrder.less';
                 
                 let typeList = items.map(item=>{
                     if(item.show){
-                        return item.value;
+                        return item.tacticsType;
                     }else{
                         return;
                     }
                 })
+                console.log('chamgetype',typeList)
                 let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
+                let houmian = typeList.join(",").split('3').length-1;
+                let zhekou = typeList.join(",").split('1').length-1;
                 if(qianmian + houmian>1){
                     error = true;
                     message = '只能有一个免租期。'
@@ -745,8 +770,8 @@ import '~/assets/styles/createOrder.less';
                 this.errorPayType = false;
             },
             submitStation:function(){//工位弹窗的提交
-                this.stationList = this.stationData.submitData;
-                this.delStation = this.stationData.deleteData;
+                this.stationList = this.stationData.submitData || [];
+                this.delStation = this.stationData.deleteData|| [];
                 this.getStationAmount()
 
             },
@@ -850,16 +875,8 @@ import '~/assets/styles/createOrder.less';
                     console.log('error',e)
                 })
             },
-            countSale(params){//计算优惠信息
-                axios.get('count-sale', params, r => {
-                    console.log('countSale',r.data)
-
-                }, e => {
-
-                    console.log('error',e)
-                })
-            },
              getStationAmount(){
+                this.config()
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
@@ -879,17 +896,22 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
-                        console.log('get-station-amount=====',r.data)
-
+                        let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
+                            money += item.amount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.formItem.rentAmount = r.data.totalrent;
+                        _this.formItem.rentAmount = money;
+                        _this.formItem.stationAmount = money;
+                        _this.stationAmount = CommonFuc.smalltoBIG(money)
 
                     }, e => {
+                        _this.$Notice.error({
+                            title:e.message
+                        })
 
                         console.log('error',e)
                     })

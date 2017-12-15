@@ -17,6 +17,10 @@
 
     }
    }
+   .station-list{
+    max-height: 400px;
+    overflow: auto;
+   }
 </style>
 
 

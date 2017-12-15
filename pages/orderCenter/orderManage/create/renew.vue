@@ -182,6 +182,7 @@
         ok-text="保存"
         cancel-text="取消"
         width="450"
+
         @on-ok="submitStation"
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
@@ -676,14 +677,16 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
-                        // _this.selecedStation = r.data.seats;
-                        _this.renewForm.rentAmount = r.data.totalrent;
+                        let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
+                            money+=item.amount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
+                        _this.renewForm.rentAmount = money;
+
 
                     }, e => {
 

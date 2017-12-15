@@ -1,12 +1,12 @@
 <template>
 	<div class = "plan-map-content">
-		<div class="num-type">
-			<Select v-model="newfloor" style="width:100px" @on-change="floorsChange" placeholder="floor">
+		<div class="num-type" style="margin-bottom:15px">
+			<Select v-model="newfloor" style="width:100px;margin-right:15px;" @on-change="floorsChange" placeholder="floor">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
 		    </Select>
-		    <Input v-model="inputStart" placeholder="inputStart" style="width: 50px"></Input>至
-		    <Input v-model="inputEnd" placeholder="inputEnd" style="width: 50px"></Input>
-			<Button @click="submitStation">确定</Button>
+		    <Input v-model="inputStart" placeholder="开始工位" style="width: 80px;margin-right:5px"></Input>至
+		    <Input v-model="inputEnd" placeholder="结束工位" style="width: 80px;margin-right:5px"></Input>
+			<Button type="primary" @click="submitStation" style="margin-right:15px">确定</Button>
 
 			<span class="til">当前比例：</span>
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>

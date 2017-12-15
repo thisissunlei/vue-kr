@@ -55,8 +55,11 @@ function apiAxios(method, name, params, success, failure) {
   //success
   .then(function (res) {
     if (res.status === 200) {
-      if (success) {
+      if (success&& res.data.code ==1) {
         success(res.data)
+      }
+      if(success&& res.data.code ==-1){
+        failure(res.data)
       }
     } else {
       if (failure) {

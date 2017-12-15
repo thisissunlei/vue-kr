@@ -441,6 +441,12 @@ export default {
                 var data=new FormData();
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
                     this.openImport=false;
                     this.MessageType="success";
                     this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`

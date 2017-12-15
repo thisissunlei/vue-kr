@@ -24,8 +24,12 @@
 	}
 </style>
 <script>
+
+
 import Map from '~/plugins/Map.js';
-import axios from '~/plugins/http.js';
+import http from '~/plugins/http.js';
+
+
     export default {
         props:['stationsubmit','params','floors','stationData'],
 
@@ -94,7 +98,7 @@ import axios from '~/plugins/http.js';
 			getData:function(){
 				let params = this.params;
 				let selectedObjs = []
-				axios.get('getplanmap', params, r => {
+				http.get('getplanmap', params, r => {
 					let response = r.data;
 					let floors = [];
 					let name = "";

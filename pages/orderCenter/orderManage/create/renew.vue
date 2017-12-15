@@ -204,7 +204,7 @@ import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-import utils from 'kr/utils';
+import utils from 'utils';
 
 
 

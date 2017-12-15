@@ -8,8 +8,8 @@ module.exports = {
 	build: {
 		vendor: ['axios'],
 		extend(webpackConfig, { isDev, isClient, isServer }) {
-			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
-			webpackConfig.resolve.alias['kr/utils'] = path.join(process.cwd(), 'utils/index');
+			webpackConfig.resolve.alias['utils/http'] = path.join(process.cwd(), 'plugins/http');
+			webpackConfig.resolve.alias['utils'] = path.join(process.cwd(), 'utils/index');
 		}
 	},
 	modules: [

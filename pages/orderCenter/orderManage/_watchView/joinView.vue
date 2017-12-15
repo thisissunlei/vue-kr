@@ -85,7 +85,7 @@
 
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
-import utils from 'kr/utils';
+import utils from 'utils';
 import dateUtils from 'vue-dateutils';
 
 export default {

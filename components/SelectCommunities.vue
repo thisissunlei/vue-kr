@@ -26,7 +26,7 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
+import http from '~/plugins/http.js';
 
     export default {
         props:['value','onchange'],
@@ -62,7 +62,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-mainbill-community', params, r => {
+                http.get('get-mainbill-community', params, r => {
                     console.log('r', r);
                     list = r.data;
                     list.map((item)=>{

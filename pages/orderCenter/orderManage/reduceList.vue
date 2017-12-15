@@ -64,7 +64,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import utils from 'kr/utils';
+    import utils from 'utils';
     import Message from '~/components/Message';
 
     export default {

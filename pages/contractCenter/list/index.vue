@@ -72,18 +72,7 @@
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
             </div>
         </Modal>
-         <Modal
-            v-model="openSearch"
-            title="打印"
-            width="660"
-            @on-ok='upperSubmit'
-        >
-           
-            <div slot="footer">
-                    <Button type="primary" @click="upperSubmit">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
-            </div>
-        </Modal>
+        
     </div>
   
 </template>

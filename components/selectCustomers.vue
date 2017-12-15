@@ -27,7 +27,7 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
+import http from '~/plugins/http.js';
 
     export default {
         props:['onchange','value'],
@@ -60,7 +60,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-customer', params, r => {
+                http.get('get-customer', params, r => {
                     list = r.data.customerList;
                     list.map((item)=>{
                         let obj = item;

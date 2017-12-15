@@ -34,7 +34,10 @@
 	</div>
 </template>
 <script>
- import axios from 'kr/axios';
+
+
+ import http from '~/plugins/http.js';
+ 
 export default{
 	name:'krUpload',
 	props:["columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
@@ -73,7 +76,7 @@ export default{
 			var _this = this;
 			console.log({fileList:_this.params,requestId:_this.columnDetail.requestId},">>>>>>>")
 			
-			axios.post("post-list-upload-url", {
+			http.post("post-list-upload-url", {
 				fileList:JSON.stringify(_this.defaultList),
 				requestId:_this.columnDetail.requestId,
 			}, (response) => {
@@ -86,7 +89,7 @@ export default{
 		getUpUrl(){
 			var that=this;
 			var category="op/upload";
-			axios.get('get-vue-upload-url', {
+			http.get('get-vue-upload-url', {
 				isPublic:true,
 				category,
 			}, (response) => {

@@ -200,13 +200,10 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-
-
 
 
 
@@ -896,7 +893,7 @@ import '~/assets/styles/createOrder.less';
                         });
                         _this.formItem.rentAmount =  Math.round(money*100)/100;
                         _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
                     }, e => {
                         _this.$Notice.error({

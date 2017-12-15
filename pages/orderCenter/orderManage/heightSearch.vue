@@ -115,7 +115,8 @@
          </Form>
 </template>
 <script>
-    import axios from 'kr/axios';
+
+
     export default{
         props:['mask'],
         data (){

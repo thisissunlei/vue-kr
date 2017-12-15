@@ -14,7 +14,9 @@
         }
     }
 
-</style>  
+</style> 
+
+ 
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="合同编号"  class='bill-search-class'>
@@ -100,7 +102,7 @@
          </Form>
 </template>
 <script>
-    import axios from 'kr/axios';
+
     export default{
         props:['mask'],
         data (){

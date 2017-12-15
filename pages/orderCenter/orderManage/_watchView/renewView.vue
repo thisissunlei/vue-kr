@@ -30,49 +30,49 @@
 	</div>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
-			<labelText label="客户名称：">
+			<LabelText label="客户名称：">
 				{{basicInfo.customerName}}
-			</labelText>
-			<labelText label="社区名称：">
+			</LabelText>
+			<LabelText label="社区名称：">
 				{{basicInfo.communityName}}
-			</labelText>
-			<labelText label="销售人员：">
+			</LabelText>
+			<LabelText label="销售人员：">
 				{{basicInfo.salerName}}
-			</labelText>
-			<labelText label="创建时间：">
+			</LabelText>
+			<LabelText label="创建时间：">
 				{{ctime}}
-			</labelText>
+			</LabelText>
          </DetailStyle>
          <DetailStyle info="续租信息">
-			<labelText label="续租开始日期：">
+			<LabelText label="续租开始日期：">
 				{{startDate}}
-			</labelText>
-			<labelText label="续租结束日期：">
+			</LabelText>
+			<LabelText label="续租结束日期：">
 				{{endDate}}
-			</labelText>
-			<labelText label="分期方式：">
+			</LabelText>
+			<LabelText label="分期方式：">
 				{{basicInfo.installmentTypeName}}
-			</labelText>
-			<labelText label="首付款日期：">
+			</LabelText>
+			<LabelText label="首付款日期：">
 				{{payDate}}
-			</labelText>
+			</LabelText>
          </DetailStyle>
          <DetailStyle info="金额信息">
 			<Table :columns="service" :data="serviceData"></Table>
-            <labelText label="服务费总计：" style='font-weight:bold;'>
+            <LabelText label="服务费总计：" style='font-weight:bold;'>
 				{{serviceAll}}  {{capitalService}}
-			</labelText>
+			</LabelText>
             <Table :columns="treatment" :data="treatmentData"></Table>
-            <labelText label="优惠总计：" style='font-weight:bold;'>
+            <LabelText label="优惠总计：" style='font-weight:bold;'>
 				{{treatAll}}  {{capitalTreatment}}
-			</labelText>
+			</LabelText>
             <div>
-                <labelText label="服务费总额：" style='color:red;'>
+                <LabelText label="服务费总额：" style='color:red;'>
                     {{basicInfo.rentAmount}}
-                </labelText>
-                <labelText label="履约保证金总额：" style='color:red;'>
+                </LabelText>
+                <LabelText label="履约保证金总额：" style='color:red;'>
                     {{basicInfo.depositAmount}}
-                </labelText>
+                </LabelText>
             </div>
 		</DetailStyle>
 		<DetailStyle info="相关合同">
@@ -83,16 +83,16 @@
 </template>
 <script>
 
-import axios from 'kr/axios';
+
 import DetailStyle from '~/components/detailStyle';
-import labelText from '~/components/labelText';
-import CommonFuc from 'kr/utils';
+import LabelText from '~/components/LabelText';
+import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
 		DetailStyle,
-		labelText
+		LabelText
 	},
 	head() {
         return {
@@ -222,8 +222,8 @@ export default {
 				   r.data.contractTactics&&r.data.contractTactics.map((item,index)=>{
 					    _this.treatAll=_this.treatAll+item.amount;
 				   })
-				   _this.capitalTreatment=_this.treatAll?CommonFuc.smalltoBIG(_this.treatAll):'';
-				   _this.capitalService=_this.serviceAll?CommonFuc.smalltoBIG(_this.serviceAll):'';
+				   _this.capitalTreatment=_this.treatAll?utils.smalltoBIG(_this.treatAll):'';
+				   _this.capitalService=_this.serviceAll?utils.smalltoBIG(_this.serviceAll):'';
 				   _this.serviceData=r.data.orderSeatDetailVo||[];
 				   _this.treatmentData=r.data.contractTactics||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];

@@ -61,11 +61,10 @@
 
 
 <script>
-    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from 'kr/utils';
+    import utils from '~/plugins/utils';
     import Message from '~/components/Message';
 
     export default {
@@ -228,7 +227,7 @@
         methods:{
             showSearch () {
                 this.openSearch=!this.openSearch;
-                CommonFuc.clearForm(this.upperData);
+                utils.clearForm(this.upperData);
             },
             showNullify(params){
                 this.id=params.row.id;
@@ -271,7 +270,7 @@
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
-                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
             },
             getListData(params){
                 var _this=this;

@@ -84,7 +84,7 @@
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from 'kr/utils';
+    import utils from 'kr/utils';
     export default {
         components: {
             sectionTitle,
@@ -256,7 +256,7 @@
                 var _this=this;
                 var params = Object.assign({},this.params);
                 params.ids = [].concat(this.selectAllData);
-                CommonFuc.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
+                utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){
                 var _this=this;

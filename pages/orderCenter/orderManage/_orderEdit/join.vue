@@ -886,7 +886,7 @@ import '~/assets/styles/createOrder.less';
                         });
                         _this.formItem.rentAmount =  Math.round(money*100)/100;
                         _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
                     }, e => {
                         _this.$Notice.error({

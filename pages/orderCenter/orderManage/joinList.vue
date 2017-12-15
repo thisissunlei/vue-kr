@@ -65,7 +65,7 @@
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from 'kr/utils';
+    import utils from 'kr/utils';
     import Message from '~/components/Message';
     
 
@@ -253,7 +253,7 @@
         methods:{
             showSearch () {
                 this.openSearch=!this.openSearch;
-                CommonFuc.clearForm(this.upperData);
+                utils.clearForm(this.upperData);
             },
             showJoin(){
                 window.open('/orderCenter/orderManage/create/join','_blank')
@@ -312,7 +312,7 @@
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
-                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
             getListData(params){
                 var _this=this;

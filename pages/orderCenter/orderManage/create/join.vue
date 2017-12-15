@@ -446,7 +446,6 @@ import CommonFuc from 'kr/utils';
             dealSaleInfo(){
                 this.config()
                 //处理已删除的数据
-                console.log('dealSaleInfo---->',this.formItem.items)
                 let saleList = this.formItem.items.filter(item=>{
                     if(!item.show){
                         return false;
@@ -688,7 +687,6 @@ import CommonFuc from 'kr/utils';
                 // 工位表单的删除按钮
                 let stationVos = this.stationList;
                 let selectedStation = this.selectedStation;
-                console.log('deleteStation',selectedStation)
                 stationVos = stationVos.filter(function(item, index) {
                     if (selectedStation.indexOf(item.seatId) != -1) {
                         return false;
@@ -696,7 +694,8 @@ import CommonFuc from 'kr/utils';
                 return true;
                 });
                 this.stationList = stationVos;
-                this.getStationAmount()
+                this.getStationAmount();
+                this.formItem.items = []
                 this.stationData.submitData = stationVos;
             },
             showStation:function(){
@@ -904,9 +903,9 @@ import CommonFuc from 'kr/utils';
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.formItem.rentAmount = money;
-                        _this.formItem.stationAmount = money;
-                        _this.stationAmount = CommonFuc.smalltoBIG(money)
+                        _this.formItem.rentAmount =  Math.round(money*100)/100;
+                        _this.formItem.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
 
                     }, e => {
                         _this.$Notice.error({

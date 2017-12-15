@@ -216,7 +216,7 @@ import '~/assets/styles/createOrder.less';
         },
         watch:{
             getStationFn:function(){
-                if(this.renewForm.customerId && this.renewForm.communityId){
+                if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
                 }
             },
@@ -284,6 +284,11 @@ import '~/assets/styles/createOrder.less';
             },
             changeTime:function(value){
                 this.clearStation()
+                let _this = this;
+                setTimeout(function(){
+                    _this.getStationFn = +new Date()
+                },200)
+
                 // this.renewForm.endDate = value;
             },
             changeSaler:function(value){
@@ -333,63 +338,6 @@ import '~/assets/styles/createOrder.less';
             selectPayType:function(value){
                 this.payType  = value;
             },
-            handleAdd:function(){
-                 this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
-                if(!this.renewForm.communityId){
-                    this.$Notice.error({
-                        title:'请先选择社区'
-                    });
-                    return
-                }
-                if(!this.renewForm.customerId){
-                    this.$Notice.error({
-                        title:'请先选择客户'
-                    });
-                    return
-                }
-                // if(!this.renewForm.saler){
-                //     this.$Notice.error({
-                //         title:'请先选择销售员'
-                //     });
-                // }
-                if(!this.renewForm.endDate){
-                    this.$Notice.error({
-                        title:'请先选择续租结束时间'
-                    });
-                    return
-                }
-                if(!this.selecedStation.length){
-                    this.$Notice.error({
-                        title:'请先选择续租工位'
-                    });
-                    return
-                }
-                this.index++;
-                this.renewForm.items.push({
-                    value: '',
-                    index: this.index,
-                    status: 1,
-                    type:''
-                });
-            },
-            deleteDiscount:function(){
-                let items = this.renewForm.items;
-                let select = []
-                select = items.map((item)=>{
-                    return item.selelct;
-                })
-                items = items.filter(function(item, index) {
-                    if (item.select) {
-                        return false;
-                    }
-                return true;
-                });
-                this.renewForm.items = items;
-
-            },
             deleteStation:function(){
                   let stationVos = this.selecedStation;
                 let delArr = this.selectedDel;
@@ -411,9 +359,6 @@ import '~/assets/styles/createOrder.less';
                     return item.seatId
                 })
                 this.selectedDel = selectionList;
-            },
-            selectDiscount:function(){
-
             },
             submitStation:function(){
 
@@ -480,7 +425,9 @@ import '~/assets/styles/createOrder.less';
                 let params = {
                     //假数据
                     customerId:1,
-                    communityId:4
+                    communityId:4,
+                    reduceDate:this.renewForm.endDate
+
                 };
                 let _this = this;
                 axios.get('get-reduce-station', params, r => {

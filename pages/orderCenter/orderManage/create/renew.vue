@@ -73,8 +73,8 @@
                     <Table border ref="selection" :columns="columns" :data="selecedStation" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="selecedStation.length">
                         <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
+                        <span class="money">{{renewForm.stationAmount}}</span>
+                        <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
                 </Row>
@@ -205,6 +205,8 @@ import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import CommonFuc from 'kr/utils';
+
 
 
 
@@ -214,6 +216,7 @@ import '~/assets/styles/createOrder.less';
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
                 openStation:false,//弹窗开关
+                stationAmount:'',
                renewForm:{
                     communityId:'',
                     customerId:'',
@@ -316,13 +319,16 @@ import '~/assets/styles/createOrder.less';
         },
         watch:{
             getStationFn:function(){
-                if(this.renewForm.customerId && this.renewForm.communityId){
+                if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
                 }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
                 }
             },
+            selecedStation(){
+                this.renewForm.items = []
+            }
         },
         methods: {
             config:function(){
@@ -332,7 +338,7 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             renewFormSubmit(){
-                console.log('renewFormSubmit')
+                this.config()
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -359,9 +365,17 @@ import '~/assets/styles/createOrder.less';
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                 axios.post('save-renew', renewForm, r => {
-                    console.log('save-join=====',r.data)
-                    _this.$Message.success('Success!');
+
+
+
+
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
+                    setTimeout(function(){
+                        _this.disabled = false;
+                    },1000)
 
                         console.log('error',e)
                 })
@@ -396,7 +410,8 @@ import '~/assets/styles/createOrder.less';
                 let params = {
                     //假数据
                     customerId:1,
-                    communityId:4
+                    communityId:4,
+                    continueDate:this.renewForm.endDate
                 };
                 let _this = this;
                 axios.get('get-renew-station', params, r => {
@@ -457,6 +472,11 @@ import '~/assets/styles/createOrder.less';
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
                 this.clearStation()
+                let _this = this;
+                setTimeout(function(){
+                 _this.getStationFn = +new Date()
+
+                },200)
             },
             changeSaler:function(value){
                 this.renewForm.salerId = value;
@@ -541,6 +561,7 @@ import '~/assets/styles/createOrder.less';
                 });
                 this.renewForm.items = items;
                 this.selectDiscount(false)
+                this.dealSaleInfo()
 
                 // this.setCheckFalse(items)
 
@@ -623,14 +644,14 @@ import '~/assets/styles/createOrder.less';
                 
                 let typeList = items.map(item=>{
                     if(item.show){
-                        return item.value;
+                        return item.tacticsType;
                     }else{
                         return;
                     }
                 })
                 let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
+                let houmian = typeList.join(",").split('3').length-1;
+                let zhekou = typeList.join(",").split('1').length-1;
                 if(qianmian + houmian>1){
                     error = true;
                     message = '只能有一个免租期。'
@@ -648,8 +669,12 @@ import '~/assets/styles/createOrder.less';
                 this.renewForm.items = items;
             },
             submitStation:function(){
-                let val = this.selecedArr;
-                 let day = 1000 * 60* 60*24;
+                let val = this.selecedArr || [];
+                if(!val.length){
+                    return;
+                }
+
+                let day = 1000 * 60* 60*24;
                 let start =  val[0].originStart + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
@@ -657,6 +682,8 @@ import '~/assets/styles/createOrder.less';
             getStationAmount(){
 
                 let val = this.selecedArr;
+                let _this = this;
+                this.config()
                
                 let station = val.map(item=>{
                     let obj = item;
@@ -674,7 +701,6 @@ import '~/assets/styles/createOrder.less';
                     communityId:4,
                     seats:JSON.stringify(station)
                 }
-                let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
                         let money = 0;
@@ -686,9 +712,15 @@ import '~/assets/styles/createOrder.less';
                             return obj;
                         });
                         _this.renewForm.rentAmount = money;
+                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
 
 
                     }, e => {
+                        _this.$Notice.error({
+                            title:e.message
+                        });
 
                         console.log('error',e)
                     })
@@ -735,7 +767,10 @@ import '~/assets/styles/createOrder.less';
 
             },
             changeSaleTime(val){
-                this.dealSaleInfo()
+                let _this = this;
+                setTimeout(function(){
+                    _this.dealSaleInfo()
+                },200)
             },
             changezhekou(val){
                 this.dealSaleInfo()
@@ -755,11 +790,11 @@ import '~/assets/styles/createOrder.less';
                     if(!item.tacticsType){
                         complete = false
                     }
-                    if(item.tacticsType!='zhekou' && !(item.validStart || item.validEnd)){
+                    if(item.tacticsType!='1' && (!item.validStart || !item.validEnd)){
                         complete = false
 
                     }
-                    if(item.tacticsType == 'zhekou' && !item.discount){
+                    if(item.tacticsType == '1' && !item.discount){
                         complete = false
 
                     }
@@ -772,13 +807,15 @@ import '~/assets/styles/createOrder.less';
                 }
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd)
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validStart)
+                   obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
+                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
                 this.getSaleAmount(saleList)
             },
              getSaleAmount(list){
+                this.config()
+                let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
                     leaseBegindate:this.renewForm.startDate,
@@ -789,6 +826,9 @@ import '~/assets/styles/createOrder.less';
                 axios.post('count-sale', params, r => {
                     console.log('save-join=====',r.data)
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                         console.log('error',e)
                 })

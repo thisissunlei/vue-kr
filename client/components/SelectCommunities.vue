@@ -7,7 +7,7 @@
 <template>
     <div class="com-select-community">
          <Select
-            :v-model="name"
+            v-model="test.customerId"
             filterable
             remote
             :remote-method="remoteMethod1"
@@ -20,17 +20,15 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
-
     export default {
-        props:['name','onchange'],
+        props:['name','onchange','test'],
         data () {
             return {
                 loading1:false,
                 options1:[],
             };
         },
-        created:function(){
+        mounted:function(){
             console.log('com-select-community')
             this.getCusomerList(' ')
         },
@@ -59,7 +57,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('get-mainbill-community', params, r => {
+                this.$http.get('get-mainbill-community', params, r => {
                     console.log('r', r);
                     list = r.data;
                     list.map((item)=>{

@@ -34,7 +34,7 @@
 				{{basicInfo.payAccount}}
 			</LabelText>
 			<LabelText label="回款金额：">
-				{{basicInfo.amount}}
+				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="回款时间：">
 				{{ctime}}

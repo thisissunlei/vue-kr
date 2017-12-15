@@ -64,7 +64,7 @@
             <FormItem label="回款日期"  class="u-input u-date">
                 <DatePicker 
                     type="date" 
-                    v-model="formItem.startTime" 
+                    v-model="formItem.starttime" 
                     placeholder="请选择开始日期" 
                     style="width: 250px;"
                      @on-change="startChange"
@@ -72,7 +72,7 @@
                 <span class="u-date-txt">至</span>
                <DatePicker 
                     type="date" 
-                    v-model="formItem.endTime" 
+                    v-model="formItem.endtime" 
                     placeholder="请选择结束日期" 
                     style="width: 250px;"
                     @on-change="endChange"
@@ -95,7 +95,7 @@
             </FormItem>
             <FormItem label="收款账户" class="u-input u-right-none">
                 <Input 
-                    v-model="formItem.communityIds" 
+                    v-model="formItem.receiveAccount" 
                     placeholder="请输入收款账户" 
                     style="width: 250px"
                ></Input>
@@ -110,10 +110,13 @@ export default{
 		return{
 			formItem:{
                 tradeNo:'',
+                starttime:"",
+                endtime:'',
                 startTime:'',
                 endTime:'',
                 payWay:'',
                 customerName:'',
+                receiveAccount:''
             },
             payWay:[
                 {

@@ -23,7 +23,6 @@ if (config.dev) {
   new Builder(nuxt).build()
   .then(listen)
   .catch((error) => {
-    console.error(error)
     process.exit(1)
   });
 }else {

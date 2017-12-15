@@ -67,10 +67,10 @@
 				{{basicInfo.billStatus}}
 			</LabelText>
 			<LabelText label="账单总金额：">
-				{{basicInfo.amount}}
+				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
-				{{basicInfo.paidAmount}}
+				￥{{basicInfo.paidAmount}}
 			</LabelText>
 			<LabelText label="账单生成时间：">
 				{{basicInfo.createTime}}
@@ -172,7 +172,9 @@ export default {
 		}
 	},
 	mounted:function(){
+		GLOBALSIDESWITCH("false");
 		this.getInfo();
+		
 	},
 	methods:{
 		getInfo(){
@@ -212,9 +214,7 @@ export default {
 			this.ISshow=false;
 		}
 	},
-	mounted(){
-		GLOBALSIDESWITCH("false");
-	},
+	
 
 
 

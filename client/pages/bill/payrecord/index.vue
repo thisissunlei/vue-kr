@@ -1,9 +1,16 @@
 <style lang="less"> 
 .g-order{
    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding-left: 20px;
+        height:32px;
+        margin:16px 0;
+        padding-left: 20px;
+        .m-search{
+            color:#2b85e4; 
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
     }
     .ivu-table-cell{
         padding:0;
@@ -11,63 +18,16 @@
     .u-table{
         padding:0 20px;
     }
-    .u-cancel-title{
-        width:85%;
-        margin:10px auto;
-        font-size:14px;
-        text-indent: 28px;
-    }
     .u-txt-red{
 	    color:#FF6868;
 	}
-    .u-txt{
-        color:#666;
-    }
-    .u-txt-orange{
-        color: #F5A623;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-        clear: both;
-        content: '.';
-        height: 0;
-        display: block;
-        visibility: hidden;
-    }
-    .m-search{
-        color:#2b85e4; 
-        display:inline-block;
-        margin-left:10px;
-        font-size:14px;
-        cursor:pointer;
-    }
-    
 }   
-.u-bind{
-  width:310px;
-  margin:25px auto 0;      
-   
-}
-.u-upload-title{
-    width:500px;
-    div{
-        width:97%;
-    }
-    .u-upload-content{
-        width:84px;
-        height:110px;
-        margin:25px auto 0;
-    }
-    .u-upload-file-name{
-        margin-top:10px;
-    }
-}
+
 </style>
 <template>
 <div class="g-order">
     <SectionTitle label="交易流水"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="importDetail">导入回款明细</Button>
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
                 v-model="tradeNo" 
@@ -92,57 +52,19 @@
             </div>
         </div>
     </div>
-    <Message 
-        :type="MessageType" 
-        :openMessage="openMessage"
-        :warn="warn"
-        v-on:changeOpen="onChangeOpen"
-    ></Message>
-    <Modal
-        v-model="openImport"
-        title="导入回款明细"
-        ok-text="确定"
-        cancel-text="取消"
-        width="500"
-     >
-        <div class="u-upload-title">
-            <Upload
-                :before-upload="handleUpload"
-                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
-                :with-credentials="IsCookie"
-            >
-                <div class="u-upload-content">
-                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                    <p>请选择上传文件</p>
-                     <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
-                </div>
-            </Upload>
-        </div>
-         <div slot="footer">
-            <Button type="primary" @click="importSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
-        </div>
-    </Modal>
-    
 </div>
 </template>
 
-
 <script>
-
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
-import Message from '~/components/Message';
 
 export default {
         components:{
             SectionTitle,
-            Message
         },
         data () {
             return {
-                openSearch:false,
-                openImport:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -150,12 +72,7 @@ export default {
                     page:1,
                     pageSize:15
                 },
-                openMessage:false,
-                MessageType:'',
-                warn:'',
                 tradeNo:'',
-                file: null,
-                IsCookie:true,
                 columns: [
                     {
                         title: '交易流水号',
@@ -206,8 +123,33 @@ export default {
                         title: '收款账户',
                         key: 'receiveAccount',
                         align:'center'
-                    }
-                    
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatus',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.payStatus==='WAIT'){
+                                return '待支付';
+                            }else if(obj.row.payStatus==='SUCCESS'){
+                                return '支付成功';
+                            }else if(obj.row.payStatus==='FAILED'){
+                                return <span class="u-txt-red">支付失败</span>;
+                            }
+                        }
+                    },
+                    {
+                        title: '处理结果',
+                        key: 'dealed',
+                        align:'center',
+                        render(h, obj){
+                            if(obj.row.dealed===true){
+                                return '已处理';
+                            }else if(obj.row.dealed===false){
+                                return '待处理';
+                            }
+                        }
+                    },
                 ]
                 
             }
@@ -216,9 +158,6 @@ export default {
             this.getTableData(this.params);
         },
         methods:{
-            showSearch (params) {
-                this.openSearch=true;
-            },
             onExport(){
                  console.log('导出')
             },
@@ -230,7 +169,6 @@ export default {
                     console.log('error',e)
                 })
             },
-           
             lowerSubmit(){
                 this.params.tradeNo=this.tradeNo;
                 this.getTableData(this.params);
@@ -242,30 +180,7 @@ export default {
                 }
                 this.getTableData(Params);
             },
-            importDetail(){
-               this.openImport=!this.openImport;
-            },
-            handleUpload (file) {
-                this.file = file;
-                return false;
-            },
-            importSubmit(){
-                var data=new FormData();
-                data.append('file',this.file);
-                this.$http.put('import-bank-flow', data, r => {
-                    this.openImport=false;
-                    this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条`
-                    this.openMessage=true;
-                   this.getTableData(this.params);
-                }, e => {
-                    console.log('error',e)
-                })
-               
-            },
-             onChangeOpen(data){
-                this.openMessage=data;
-            },
+            
 
 
         }

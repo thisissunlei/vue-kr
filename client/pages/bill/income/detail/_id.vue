@@ -25,7 +25,7 @@
 				</a>
 			</LabelText>
 			<LabelText label="含税收入：">
-				{{basicInfo.amount}}
+				￥{{basicInfo.amount}}
 			</LabelText>
 			<LabelText label="收入确认时间：">
 				{{dealDate}}
@@ -63,6 +63,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		GLOBALSIDESWITCH("false")
 	},
 	methods:{
 		getInfo(){
@@ -89,9 +90,7 @@ export default {
             })
 		},
 	},
-	mounted(){
-		GLOBALSIDESWITCH("false")
-	},
+	
 
 
 

@@ -1,17 +1,24 @@
 <style lang="less"> 
 .g-order{
    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
-                float:right;
-            
-            }
+        height:32px;
+        margin:16px 0;
+        padding:0 20px;
+        .u-high-search{
+            width:22px;
+            height:22px;
+            background:url('~/assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;  
+            float:right;
+        
+        }
+        .m-search{
+            color:#2b85e4; 
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
     }
     .ivu-table-cell{
         padding:0;
@@ -33,19 +40,11 @@
         display: block;
         visibility: hidden;
     }
-    .m-search{
-        color:#2b85e4; 
-        display:inline-block;
-        margin-left:10px;
-        font-size:14px;
-        cursor:pointer;
-    }
     
 }   
 .u-bind{
   width:330px;
-  margin:25px auto 0;      
-   
+  margin:25px auto 0;
 }
 .u-upload-title{
     width:500px;
@@ -53,9 +52,12 @@
         width:97%;
     }
     .u-upload-content{
-        width:84px;
+        width:94px;
         height:110px;
         margin:25px auto 0;
+        i{
+            text-indent: 19px;
+        }
     }
 }
 </style>
@@ -63,6 +65,7 @@
 <div class="g-order">
     <SectionTitle label="回款管理"></SectionTitle>
     <div class="u-search" >
+         <Button type="primary" @click="importDetail">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>  
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
@@ -117,6 +120,13 @@
                 class="u-bind u-clearfix"
                 :rules="ruleValidate" 
             >
+                 <FormItem label="所在社区" prop="communityId">
+                    <SelectCommunities
+                        :test="formItem" 
+                        style="width: 250px"
+                        :onchange="onCommunityChange"
+                    ></SelectCommunities>
+                </FormItem>
                 <FormItem label="客户名称" prop="customerId">
                     <SearchCompany
                         :test="formItem" 
@@ -137,6 +147,33 @@
         :warn="warn"
         v-on:changeOpen="onChangeOpen"
     ></Message>
+    <Modal
+        v-model="openImport"
+        title="导入回款明细"
+        ok-text="确定"
+        cancel-text="取消"
+        width="500"
+     >
+        <div class="u-upload-title">
+            <Upload
+                ref="upload"
+                name="file"
+                :before-upload="handleUpload"
+                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
+                :with-credentials="IsCookie"
+            >
+                <div class="u-upload-content">
+                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                    <p>请选择上传文件</p>
+                    <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
+                </div>
+            </Upload>
+        </div>
+         <div slot="footer">
+            <Button type="primary" @click="importSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 
@@ -148,6 +185,7 @@ import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import CommonFuc from '~/components/CommonFuc';
+import SelectCommunities from '~/components/SelectCommunities';
 
 export default {
         name: 'receive',
@@ -155,7 +193,8 @@ export default {
             SectionTitle,
             HighSearch,
             SearchCompany,
-            Message
+            Message,
+            SelectCommunities
         },
         data () {
             return {
@@ -172,11 +211,14 @@ export default {
                 },
                 formItem:{
                     customerId:'',
+                    communityId:''
                 },
                 openMessage:false,
                 MessageType:'',
                 warn:'',
                 customerName:'',
+                file: null,
+                IsCookie:true,
                 columns: [
                     {
                         title: '交易流水号',
@@ -190,11 +232,11 @@ export default {
                     },
                     {
                         title: '回款日期',
-                        key: 'ctime',
+                        key: 'occurDate',
                         align:'center',
                         width:130,
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
                             return time;
                         }
                     },
@@ -209,7 +251,7 @@ export default {
                         title: '回款方式',
                         key: 'payWay',
                         align:'center',
-                        width:100,
+                        width:110,
                         render(h, obj){
                             if(obj.row.payWay==='ALIAPPPAY'){
                                 return '支付宝app';
@@ -228,7 +270,6 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center',
-                        width:120,
                         
                     },
                     {
@@ -243,7 +284,8 @@ export default {
                         align:'center',
                         width:110,
                         render:(h,params)=>{
-                           return h('div', [
+                          if(!params.row.customerId){
+                              return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -272,13 +314,37 @@ export default {
                                         }
                                     }
                                 }, '绑定客户')
+                            ]);
+                          }else {
+                              return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openView(params.row);
+                                        }
+                                    }
+                                }, '查看')
                             ]);  
+                              
+                             
+                          } 
+                             
                         }
                     }
                 ],
                 ruleValidate:{
                     customerId: [
                         { required: true, message: '请选择客户名称'}
+                    ],
+                    communityId: [
+                        { required: true, message: '请选择所在社区'}
                     ],
                 }
                 
@@ -293,16 +359,13 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                
                 location.href=`./payment/detail/${params.id}`;
-               
             },
             bindPerson (params) {
                 this.$refs[this.form].resetFields();
                 this.itemDetail=params;
                 CommonFuc.clearForm(this.formItem);
                 this.openBind=!this.openBind;
-
             },
             onExport(){
                  console.log('导出')
@@ -316,8 +379,11 @@ export default {
                     console.log('error',e)
                 })
             },
-             onchange(data){
+            onchange(data){
                 this.formItem.customerId=data;
+            },
+            onCommunityChange(data){
+                this.formItem.communityId=data;
             },
             bindSubmit(){
                 this.$refs[this.form].validate((valid)=>{
@@ -346,10 +412,10 @@ export default {
             getSearchData(form){
                 this.searchData=form;
             },
-             searchSubmit(){
+            searchSubmit(){
                 this.getTableData(this.searchData)
             },
-             lowerSubmit(){
+            lowerSubmit(){
                 this.params.customerName=this.customerName;
                 this.getTableData(this.params);
             },
@@ -362,8 +428,32 @@ export default {
             },
             handleUpload (file) {
                 this.file = file;
-                console.log('file====',file)
                 return false;
+            },
+            importDetail(){
+                this.$refs.upload.clearFiles();
+                this.file =null;
+                this.openImport=!this.openImport;
+            },
+             importSubmit(){
+                var data=new FormData();
+                data.append('file',this.file);
+                this.$http.put('import-bank-flow', data, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.openImport=false;
+                    this.MessageType="success";
+                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`
+                    this.openMessage=true;
+                   this.getTableData(this.params);
+                }, e => {
+                    console.log('error',e)
+                })
+               
             },
         }
 

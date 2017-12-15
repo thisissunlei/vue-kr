@@ -52,30 +52,19 @@
             </div>
         </div>
     </div>
-    <Message 
-        :type="MessageType" 
-        :openMessage="openMessage"
-        :warn="warn"
-        v-on:changeOpen="onChangeOpen"
-    ></Message>
 </div>
 </template>
 
-
 <script>
-
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
-import Message from '~/components/Message';
 
 export default {
         components:{
             SectionTitle,
-            Message
         },
         data () {
             return {
-                openSearch:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -83,9 +72,6 @@ export default {
                     page:1,
                     pageSize:15
                 },
-                openMessage:false,
-                MessageType:'',
-                warn:'',
                 tradeNo:'',
                 columns: [
                     {
@@ -172,9 +158,6 @@ export default {
             this.getTableData(this.params);
         },
         methods:{
-            showSearch (params) {
-                this.openSearch=true;
-            },
             onExport(){
                  console.log('导出')
             },
@@ -198,9 +181,7 @@ export default {
                 }
                 this.getTableData(Params);
             },
-             onChangeOpen(data){
-                this.openMessage=data;
-            },
+            
 
 
         }

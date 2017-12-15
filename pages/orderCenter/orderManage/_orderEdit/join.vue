@@ -372,7 +372,7 @@ import '~/assets/styles/createOrder.less';
                     id:4095
                     // id:params.orderEdit
                 };
-                axios.get('get-order-detail', from, r => {
+                 this.$http.get('get-order-detail', from, r => {
                     let data = r.data;
                     console.log('get-order-detail===>',data.customerid)
                     _this.formItem.customer = data.customerid;
@@ -485,7 +485,7 @@ import '~/assets/styles/createOrder.less';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                axios.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params, r => {
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
 
@@ -827,7 +827,7 @@ import '~/assets/styles/createOrder.less';
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
-                axios.get('contract-date-range', params, r => {
+                 this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
                 }, e => {
 
@@ -838,7 +838,7 @@ import '~/assets/styles/createOrder.less';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                axios.get('sale-tactics', params, r => {
+                 this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
@@ -878,7 +878,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 let _this = this;
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;

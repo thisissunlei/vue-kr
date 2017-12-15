@@ -364,7 +364,7 @@ import CommonFuc from 'kr/utils';
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                axios.post('save-renew', renewForm, r => {
+                 this.$http.post('save-renew', renewForm, r => {
 
 
 
@@ -414,7 +414,7 @@ import CommonFuc from 'kr/utils';
                     continueDate:this.renewForm.endDate
                 };
                 let _this = this;
-                axios.get('get-renew-station', params, r => {
+                 this.$http.get('get-renew-station', params, r => {
                     r.data = r.data.map(item=>{
                         let obj = item;
                         obj.originStart = item.startDate;
@@ -702,7 +702,7 @@ import CommonFuc from 'kr/utils';
                     seats:JSON.stringify(station)
                 }
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
@@ -739,7 +739,7 @@ import CommonFuc from 'kr/utils';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                axios.get('sale-tactics', params, r => {
+                 this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
@@ -822,7 +822,7 @@ import CommonFuc from 'kr/utils';
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
-                axios.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params, r => {
                     console.log('save-join=====',r.data)
                 }, e => {
                     _this.$Notice.error({

@@ -258,7 +258,7 @@
                 let params={
                     id:this.id
                 };
-                axios.post('join-nullify', params, r => {
+                 this.$http.post('join-nullify', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.openMessage=true;
@@ -275,7 +275,7 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('reduce-bill-list', params, r => {
+                 this.$http.get('reduce-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;

@@ -68,8 +68,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange"></stationList>
+        <div v-if="openStation && !stationList.length">无可续租工位</div>
+        <stationList label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        @on-station-change="onStationChange" v-if="openStation && stationList.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -239,8 +240,8 @@ import CommonFuc from 'kr/utils';
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                 axios.post('save-reduce', renewForm, r => {
-                    console.log('save-join=====',r.data)
                     _this.$Message.success('Success!');
+                    window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({
                         title:e.message

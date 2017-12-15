@@ -395,6 +395,28 @@ import CommonFuc from 'kr/utils';
            }
         },
         methods: {
+            //  getDetailData:function(){
+            //     let _this = this;
+            //     let {params}=this.$route;
+            //     let from={
+            //         id:params.orderEdit
+            //     };
+            //     axios.get('get-order-detail', from, r => {
+            //         let data = r.data;
+            //         console.log('get-order-detail===>',data.customerid)
+            //         _this.formItem.customer = data.customerid;
+            //         _this.customerName = data.customerName;
+            //         _this.formItem.community = data.communityid;
+            //         _this.communityName = data.communityName;
+            //         _this.formItem.leaseEnddate = data.leaseEnddate;
+            //         _this.formItem.leaseBegindate = data.leaseBegindate;
+            //         _this.stationList = data.stationVos;
+            //         _this.payType = 'TWO';
+            //         _this.depositType = '2个月'
+            //         }, e => {
+            //             _this.$Message.info(e);
+            //     })
+            // },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -433,7 +455,7 @@ import CommonFuc from 'kr/utils';
                 console.log('handleSubmit',formItem,start,end)
                 let _this = this;
                 axios.post('save-join', formItem, r => {
-
+                    window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({
                         title:e.message
@@ -460,14 +482,9 @@ import CommonFuc from 'kr/utils';
                     }
                     if(item.tacticsType!='1' && (!item.validStart || !item.validEnd)){
                         complete = false;
-                        console.log('检查---->非折扣',item)
-
                     }
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
-                        console.log('检查---->折扣',item)
-
-
                     }
                 });
                 if(!complete){
@@ -500,6 +517,7 @@ import CommonFuc from 'kr/utils';
                 axios.post('count-sale', params, r => {
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
+
                      _this.$Notice.error({
                         title:e.message
                     })
@@ -515,7 +533,6 @@ import CommonFuc from 'kr/utils';
                 let _this = this;
                 setTimeout(function(){
                     _this.dealSaleInfo()
-                    console.log('changeSaleTime======>',_this.formItem.items)
                 },200)
             },
             handleSubmit:function(name) {
@@ -625,7 +642,6 @@ import CommonFuc from 'kr/utils';
                         return;
                     }
                 })
-                console.log('chamgetype',typeList)
                 let qianmian = typeList.join(",").split('qianmian').length-1;
                 let houmian = typeList.join(",").split('3').length-1;
                 let zhekou = typeList.join(",").split('1').length-1;
@@ -807,7 +823,6 @@ import CommonFuc from 'kr/utils';
             },
             dealEndDate(val){
                 let str = val.split('-');
-                console.log('dealEndDate',str)
                 let year = str[0];
                 let month = parseInt(str[1], 10);  
                 var d= new Date(year, month, 0);  
@@ -819,7 +834,6 @@ import CommonFuc from 'kr/utils';
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
 
                 val = this.dealEndDate(val);
-                console.log('changeEndTime',val)
                 let error = false;
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
                 let params = {
@@ -843,7 +857,6 @@ import CommonFuc from 'kr/utils';
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
                 axios.get('contract-date-range', params, r => {
-                    console.log('contract-date-range',r.data)
                     _this.formItem.timeRange = r.data;
                 }, e => {
 

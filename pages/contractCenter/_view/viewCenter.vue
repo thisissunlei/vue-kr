@@ -6,7 +6,8 @@
 <template>
 
     <div>
-       <center><embed src="/pdf/git.pdf" width="850" height="890"></center>
+       <center><embed src="/pdf/git.pdf" width="850" height="890" name="打印"></center>
+       
     </div>
   
 </template>

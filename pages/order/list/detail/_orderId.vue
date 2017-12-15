@@ -171,7 +171,7 @@ export default {
 			let from={
 				orderId:params.orderId
 			};
-			axios.get('order-detail', from, r => {
+			 this.$http.get('order-detail', from, r => {
 				
 				let data=r.data;
 				this.basicInfo=data;

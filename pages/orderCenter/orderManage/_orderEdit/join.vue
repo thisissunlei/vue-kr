@@ -354,7 +354,7 @@ import '~/assets/styles/createOrder.less';
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
-                axios.get('get-community-floor', params, r => {
+                 this.$http.get('get-community-floor', params, r => {
                     _this.floors = r.data.floor;
 
                 }, e => {
@@ -425,7 +425,7 @@ import '~/assets/styles/createOrder.less';
                 formItem.corporationId = 11;//临时加的-无用但包错
                 console.log('handleSubmit',formItem,start,end)
                 let _this = this;
-                axios.post('save-join', formItem, r => {
+                 this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({

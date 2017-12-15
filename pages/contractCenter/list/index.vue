@@ -259,7 +259,7 @@
             },
             getListData(params){
                 var _this=this;
-                axios.get('get-center-list-contract', params, r => {
+                 this.$http.get('get-center-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;

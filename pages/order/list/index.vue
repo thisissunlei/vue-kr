@@ -230,7 +230,7 @@ export default {
             let  params={
                     orderId:itemDetail.orderId
                 }
-                axios.get('cancel-order', params, r => {
+                 this.$http.get('cancel-order', params, r => {
                     if(r.code==-1){
                         this.MessageType="error";
                         this.warn=r.message;

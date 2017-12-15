@@ -737,6 +737,7 @@ import CommonFuc from 'kr/utils';
                 })
             },
             onStationChange:function(val){
+                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息

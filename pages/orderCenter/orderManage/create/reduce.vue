@@ -129,14 +129,7 @@ import CommonFuc from 'kr/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[
-                    {name:'301',id:'301',price:'1800'},
-                    {name:'302',id:'302',price:'1800'},
-                    {name:'303',id:'303',price:'1800'},
-                    {name:'304',id:'304',price:'1800'},
-                    {name:'305',id:'305',price:'1800'},
-                    {name:'306',id:'306',price:'1800'},
-               ],
+               stationList:[],
                selecedStation:[],
                selecedArr:[],
                depositType:'',
@@ -447,9 +440,9 @@ import CommonFuc from 'kr/utils';
                 // };
                 let params = {
                     //假数据
-                    customerId:1,
+                    customerId:10089,
                     communityId:4,
-                    reduceDate:this.renewForm.endDate
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate))
 
                 };
                 let _this = this;

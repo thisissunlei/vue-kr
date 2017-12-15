@@ -1,17 +1,24 @@
 <style lang="less"> 
 .g-order{
    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
-                float:right;
-            
-            }
+        height:32px;
+        margin:16px 0;
+        padding:0 20px;
+        .u-high-search{
+            width:22px;
+            height:22px;
+            background:url('~/assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;  
+            float:right;
+        
+        }
+        .m-search{
+            color:#2b85e4; 
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
     }
     .ivu-table-cell{
         padding:0;
@@ -33,19 +40,11 @@
         display: block;
         visibility: hidden;
     }
-    .m-search{
-        color:#2b85e4; 
-        display:inline-block;
-        margin-left:10px;
-        font-size:14px;
-        cursor:pointer;
-    }
     
 }   
 .u-bind{
   width:330px;
-  margin:25px auto 0;      
-   
+  margin:25px auto 0;
 }
 .u-upload-title{
     width:500px;
@@ -367,7 +366,6 @@ export default {
                 this.itemDetail=params;
                 CommonFuc.clearForm(this.formItem);
                 this.openBind=!this.openBind;
-
             },
             onExport(){
                  console.log('导出')
@@ -381,7 +379,7 @@ export default {
                     console.log('error',e)
                 })
             },
-             onchange(data){
+            onchange(data){
                 this.formItem.customerId=data;
             },
             onCommunityChange(data){
@@ -414,10 +412,10 @@ export default {
             getSearchData(form){
                 this.searchData=form;
             },
-             searchSubmit(){
+            searchSubmit(){
                 this.getTableData(this.searchData)
             },
-             lowerSubmit(){
+            lowerSubmit(){
                 this.params.customerName=this.customerName;
                 this.getTableData(this.params);
             },
@@ -428,7 +426,7 @@ export default {
                 }
                 this.getTableData(Params);
             },
-             handleUpload (file) {
+            handleUpload (file) {
                 this.file = file;
                 return false;
             },

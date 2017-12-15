@@ -169,7 +169,6 @@ export default {
                     console.log('error',e)
                 })
             },
-           
             lowerSubmit(){
                 this.params.tradeNo=this.tradeNo;
                 this.getTableData(this.params);

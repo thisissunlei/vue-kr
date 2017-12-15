@@ -72,7 +72,6 @@
 </template>
 <script>
 
-import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import dateUtils from 'vue-dateutils';

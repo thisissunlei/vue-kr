@@ -62,7 +62,6 @@
 
 
 <script>
-    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';

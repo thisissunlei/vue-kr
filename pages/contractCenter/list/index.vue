@@ -77,7 +77,8 @@
   
 </template>
 <script>
-    import axios from 'kr/axios';
+
+
     import hoc from '~/components/hoc.js'
     import sectionTitle from '~/components/SectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';

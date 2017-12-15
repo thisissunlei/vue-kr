@@ -199,7 +199,6 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';

@@ -83,7 +83,6 @@
 </template>
 <script>
 
-import axios from 'kr/axios';
 import DetailStyle from '~/components/detailStyle';
 import labelText from '~/components/labelText';
 import CommonFuc from 'kr/utils';

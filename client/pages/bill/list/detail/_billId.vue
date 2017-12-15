@@ -63,11 +63,11 @@
 			<LabelText label="付款截止日期：">
 				{{basicInfo.billEndTime}}
 			</LabelText>
-			<LabelText label="账单状态：">
+			<LabelText label="支付状态：">
 				{{basicInfo.billStatus}}
 			</LabelText>
-			<LabelText label="账单总金额：">
-				￥{{basicInfo.amount}}
+			<LabelText label="账单总额：">
+				￥{{basicInfo.totalAmount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
 				￥{{basicInfo.paidAmount}}

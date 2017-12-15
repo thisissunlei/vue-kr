@@ -30,7 +30,7 @@
 
 <template>
 <div class="g-bill">
-    <SectionTitle label="收入管理"></SectionTitle>
+    <SectionTitle label="应收管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="showIncome">挂收入</Button>
         <span class="u-high-search" @click="showSearch"></span>  

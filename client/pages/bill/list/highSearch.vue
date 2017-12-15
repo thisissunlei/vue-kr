@@ -86,11 +86,11 @@
                 </Select>
             </FormItem>
             </FormItem>
-            <FormItem label="付款截止日期"  class="u-input u-date">
+            <FormItem label="账单日"  class="u-input u-date">
                 <DatePicker 
                     type="date" 
                     v-model="formItem.startTime" 
-                    placeholder="请选择付款开始日期" 
+                    placeholder="请选择开始日期" 
                     style="width: 250px;"
                     @on-change="startChange"
                ></DatePicker> 
@@ -98,16 +98,16 @@
                <DatePicker 
                     type="date" 
                      v-model="formItem.endTime" 
-                    placeholder="请选择付款截止日期" 
+                    placeholder="请选择截止日期" 
                     style="width: 250px;"
                     @on-change="endChange"
                ></DatePicker> 
             </FormItem>
-             <FormItem label="账单状态" class="u-input">
+             <FormItem label="支付状态" class="u-input">
                   <Select 
                     v-model="formItem.payStatus" 
                     style="width:250px"
-                    placeholder="请输入账单状态" 
+                    placeholder="请输入支付状态" 
                 >
                     <Option 
                         v-for="item in statusList" 

@@ -29,7 +29,18 @@
     <div class="station-list">
        <div class="station-type">{{label}}</div>
        <div>
-            <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table>
+        <div v-for="(item, index) in stationList">
+            <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
+                <Checkbox
+                    :indeterminate="indeterminate"
+                    :value="checkAll.box+index"
+                    @click.prevent.native="handleCheckAll">{{item.name}}</Checkbox>
+            </div>
+            <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
+                <Checkbox  v-for="(value, i) in item.value" :label="value.seatId" key="value+i"></Checkbox>
+            </CheckboxGroup>
+        </div>
+            <!-- <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table> -->
        </div>
     </div>
 </template>
@@ -48,9 +59,15 @@ import dateUtils from 'vue-dateutils';
                     return item.name
                 })
             }
+            let checkAll = {};
+            this.stationList.map((item,index)=>{
+                checkAll['box'+index] = false
+            })
+            console.log('=====',checkAll)
            return{
             indeterminate: false,
-            checkAll: false,
+            checkAll: checkAll,
+            checkAllGroup:false,
             selecedStations: selecedStation,
             columns: [
                     {
@@ -92,21 +109,21 @@ import dateUtils from 'vue-dateutils';
         },
         methods: {
            handleCheckAll () {
-                let all = this.stationList.map(item=>{
-                    return item.name
-                })
-                if (this.indeterminate) {
-                    this.checkAll = false;
-                } else {
-                    this.checkAll = !this.checkAll;
-                }
-                this.indeterminate = false;
+                // let all = this.stationList.map(item=>{
+                //     return item.name
+                // })
+                // if (this.indeterminate) {
+                //     this.checkAll = false;
+                // } else {
+                //     this.checkAll = !this.checkAll;
+                // }
+                // this.indeterminate = false;
 
-                if (this.checkAll) {
-                    this.selecedStations = all;
-                } else {
-                    this.selecedStations = [];
-                }
+                // if (this.checkAll) {
+                //     this.selecedStations = all;
+                // } else {
+                //     this.selecedStations = [];
+                // }
             },
             checkAllGroupChange (data) {
                 let stationLength = this.stationList.length;

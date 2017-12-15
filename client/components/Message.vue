@@ -44,12 +44,17 @@
 export default {
   name:'Message',
   props:['type','openMessage','warn'],
+  data(){
+      return{
+          flag:this.openMessage
+      }
+  },
   updated: function () {
         var _this=this;
         if(this.type=='success' && this.openMessage){
             setTimeout(function(){
-                _this.openMessage=false;
-                _this.$emit('changeOpen',_this.openMessage)
+                _this.flag=false;
+                _this.$emit('changeOpen',_this.flag)
             },1500)
           return;
         }

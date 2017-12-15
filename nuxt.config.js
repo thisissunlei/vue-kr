@@ -8,17 +8,9 @@ module.exports = {
 	build: {
 		vendor: ['axios'],
 		extend(webpackConfig, { isDev, isClient, isServer }) {
-			// webpackConfig.resolve.alias['axios'] = path.resolve(__dirname, 'plugins/http');
-			webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
-			webpackConfig.resolve.alias['kr/utils'] = path.join(process.cwd(), 'Utils/CommonFuc');
-			// path.join(process.cwd(), '/src/Page/App/index.js')
+			//webpackConfig.resolve.alias['utils'] = path.join(process.cwd(), 'utils/index');
 		}
 	},
-	proxy: [
-		['/api', {
-			target: 'http://optest.krspace.cn'
-		}]
-	],
 	modules: [
 		'@nuxtjs/axios',
 		'@nuxtjs/proxy'

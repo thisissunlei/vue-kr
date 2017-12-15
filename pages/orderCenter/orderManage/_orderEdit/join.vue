@@ -12,19 +12,19 @@
             <DetailStyle info="基本信息">
             <Row>  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customer">
-                    <selectCustomers name="formItem.customer" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="community">
-                    <selectCommunities name="formItem.community" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                    <selectCommunities name="formItem.communityId" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px">
-                    <selectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></selectSaler>
+                    <FormItem label="销售员" style="width:252px" prop="salerId">
+                    <selectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></selectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -200,13 +200,10 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-
-
 
 
 
@@ -219,6 +216,7 @@ import '~/assets/styles/createOrder.less';
                 selectAll:false,
                 discountError:false,
                 index:0,
+                salerName:'',
                 depositAmount:'',
                 disabled:false,
                 delStation:[],
@@ -354,7 +352,7 @@ import '~/assets/styles/createOrder.less';
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
-                axios.get('get-community-floor', params, r => {
+                 this.$http.get('get-community-floor', params, r => {
                     _this.floors = r.data.floor;
 
                 }, e => {
@@ -369,21 +367,27 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 let {params}=this.$route;
                 let from={
-                    id:4095
-                    // id:params.orderEdit
+                    // id:4095
+                    id:params.orderEdit
                 };
-                axios.get('get-order-detail', from, r => {
+                 this.$http.get('get-order-detail', from, r => {
                     let data = r.data;
                     console.log('get-order-detail===>',data.customerid)
-                    _this.formItem.customer = data.customerid;
+                    _this.formItem.customerId = data.customerId;
                     _this.customerName = data.customerName;
-                    _this.formItem.community = data.communityid;
+                    _this.formItem.communityId = data.communityId;
+                     _this.salerName = data.salerName;
+                    _this.formItem.salerId = data.salerId;
                     _this.communityName = data.communityName;
-                    _this.formItem.leaseEnddate = data.leaseEnddate;
-                    _this.formItem.leaseBegindate = data.leaseBegindate;
-                    _this.stationList = data.stationVos;
-                    _this.payType = 'TWO';
-                    _this.depositType = '2个月'
+                    _this.formItem.endDate = data.endDate;
+                    _this.formItem.startDate = data.startDate;
+                    _this.stationList = data.orderSeatDetailVo;
+                    _this.formItem.firstPayTime = data.firstPayTime;
+                    _this.formItem.rentAmount = data.rentAmount;
+                    _this.installmentType = 'THREE';
+                    _this.depositAmount = '3';
+                    _this.getFloor = +new Date()
+                    _this.getSaleTactics({communityId:data.customerId})
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -425,7 +429,7 @@ import '~/assets/styles/createOrder.less';
                 formItem.corporationId = 11;//临时加的-无用但包错
                 console.log('handleSubmit',formItem,start,end)
                 let _this = this;
-                axios.post('save-join', formItem, r => {
+                 this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({
@@ -485,7 +489,7 @@ import '~/assets/styles/createOrder.less';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                axios.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params, r => {
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
 
@@ -827,7 +831,7 @@ import '~/assets/styles/createOrder.less';
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
-                axios.get('contract-date-range', params, r => {
+                 this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
                 }, e => {
 
@@ -838,7 +842,7 @@ import '~/assets/styles/createOrder.less';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                axios.get('sale-tactics', params, r => {
+                 this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
@@ -878,7 +882,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 let _this = this;
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
@@ -889,7 +893,7 @@ import '~/assets/styles/createOrder.less';
                         });
                         _this.formItem.rentAmount =  Math.round(money*100)/100;
                         _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
                     }, e => {
                         _this.$Notice.error({

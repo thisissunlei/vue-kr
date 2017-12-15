@@ -62,11 +62,10 @@
 
 
 <script>
-    import axios from 'kr/axios';
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from 'kr/utils';
+    import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     
 
@@ -254,7 +253,7 @@
         methods:{
             showSearch () {
                 this.openSearch=!this.openSearch;
-                CommonFuc.clearForm(this.upperData);
+                utils.clearForm(this.upperData);
             },
             showJoin(){
                 window.open('/orderCenter/orderManage/create/join','_blank')
@@ -300,7 +299,7 @@
                 let params={
                     id:this.id
                 };
-                axios.post('join-nullify', params, r => {
+                 this.$http.post('join-nullify', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.openMessage=true;
@@ -313,11 +312,11 @@
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
-                CommonFuc.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
             getListData(params){
                 var _this=this;
-                axios.get('join-bill-list', params, r => {
+                 this.$http.get('join-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;

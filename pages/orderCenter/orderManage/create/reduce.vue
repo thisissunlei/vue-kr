@@ -81,12 +81,11 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-import CommonFuc from 'kr/utils';
+import utils from '~/plugins/utils';
 
 
 
@@ -129,14 +128,7 @@ import CommonFuc from 'kr/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[
-                    {name:'301',id:'301',price:'1800'},
-                    {name:'302',id:'302',price:'1800'},
-                    {name:'303',id:'303',price:'1800'},
-                    {name:'304',id:'304',price:'1800'},
-                    {name:'305',id:'305',price:'1800'},
-                    {name:'306',id:'306',price:'1800'},
-               ],
+               stationList:[],
                selecedStation:[],
                selecedArr:[],
                depositType:'',
@@ -239,7 +231,7 @@ import CommonFuc from 'kr/utils';
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                axios.post('save-reduce', renewForm, r => {
+                 this.$http.post('save-reduce', renewForm, r => {
                     _this.$Message.success('Success!');
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
@@ -406,7 +398,7 @@ import CommonFuc from 'kr/utils';
                 }
                 let _this = this;
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
@@ -418,7 +410,7 @@ import CommonFuc from 'kr/utils';
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
                          
 
                     }, e => {
@@ -447,13 +439,13 @@ import CommonFuc from 'kr/utils';
                 // };
                 let params = {
                     //假数据
-                    customerId:1,
+                    customerId:10089,
                     communityId:4,
-                    reduceDate:this.renewForm.endDate
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate))
 
                 };
                 let _this = this;
-                axios.get('get-reduce-station', params, r => {
+                 this.$http.get('get-reduce-station', params, r => {
                     r.data = r.data.map(item=>{
                         let obj = item;
                         obj.originStart = item.startDate;

@@ -181,13 +181,13 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="450"
+        width="600"
 
         @on-ok="submitStation"
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation"></stationList>
     </Modal>
     </div>
@@ -199,13 +199,12 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-import CommonFuc from 'kr/utils';
+import utils from '~/plugins/utils';
 
 
 
@@ -247,7 +246,7 @@ import CommonFuc from 'kr/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[],
+               stationListData:[],
                selecedStation:[],
                selecedArr:[],
                depositAmount:'',
@@ -261,7 +260,7 @@ import CommonFuc from 'kr/utils';
                     },
                     {
                         title: '工位房间编号',
-                        key: 'name'
+                        key: 'seatId'
                     },
                     {
                         title: '标准单价（元/月）',
@@ -364,7 +363,7 @@ import CommonFuc from 'kr/utils';
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                axios.post('save-renew', renewForm, r => {
+                 this.$http.post('save-renew', renewForm, r => {
 
 
 
@@ -409,19 +408,23 @@ import CommonFuc from 'kr/utils';
                 // };
                 let params = {
                     //假数据
-                    customerId:1,
+                    customerId:10089,
                     communityId:4,
-                    continueDate:this.renewForm.endDate
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
                 };
                 let _this = this;
-                axios.get('get-renew-station', params, r => {
-                    r.data = r.data.map(item=>{
-                        let obj = item;
-                        obj.originStart = item.startDate;
-                        obj.originEnd = item.endDate;
-                        return obj;
-                    })
-                    _this.stationList = r.data
+               this.$http.get('get-renew-station', params, r => {
+                    console.log('get-renew-station',r.data)
+                    let station = []
+                    for(let i in r.data){
+                        let obj = {};
+                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
+
+                        obj.value =  r.data[i];
+                        station.push(obj)
+                    }
+                    _this.stationListData = station;
+                 
                 }, e => {
 
                     console.log('error',e)
@@ -675,7 +678,7 @@ import CommonFuc from 'kr/utils';
                 }
 
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].originStart + day;
+                let start =  val[0].startDate + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
             },
@@ -702,7 +705,7 @@ import CommonFuc from 'kr/utils';
                     seats:JSON.stringify(station)
                 }
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
@@ -713,7 +716,7 @@ import CommonFuc from 'kr/utils';
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
 
                     }, e => {
@@ -733,13 +736,14 @@ import CommonFuc from 'kr/utils';
                 })
             },
             onStationChange:function(val){
+                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                axios.get('sale-tactics', params, r => {
+                 this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
@@ -822,7 +826,7 @@ import CommonFuc from 'kr/utils';
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
-                axios.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params, r => {
                     console.log('save-join=====',r.data)
                 }, e => {
                     _this.$Notice.error({

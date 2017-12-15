@@ -77,13 +77,15 @@
   
 </template>
 <script>
-    import axios from 'kr/axios';
+
+
     import hoc from '~/components/hoc.js'
     import sectionTitle from '~/components/SectionTitle.vue';
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    import CommonFuc from 'kr/utils';
+    import utils from '~/plugins/utils';
+    
     export default {
         components: {
             sectionTitle,
@@ -262,12 +264,12 @@
                 var _this=this;
                 var params = Object.assign({},this.params);
                 params.ids = [].concat(this.selectAllData);
-                CommonFuc.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
+                utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){
                 var _this=this;
                  this.config()
-                axios.get('get-center-list-contract', params, r => {
+                 http.get('get-center-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;

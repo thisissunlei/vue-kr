@@ -24,8 +24,12 @@
 	}
 </style>
 <script>
+
+
 import Map from '~/plugins/Map.js';
-import axios from '~/plugins/http.js';
+import http from '~/plugins/http.js';
+
+
     export default {
         props:['stationsubmit','params','floors','stationData'],
 
@@ -94,7 +98,7 @@ import axios from '~/plugins/http.js';
 			getData:function(){
 				let params = this.params;
 				let selectedObjs = []
-				axios.get('getplanmap', params, r => {
+				http.get('getplanmap', params, r => {
 					let response = r.data;
 					let floors = [];
 					let name = "";
@@ -310,8 +314,10 @@ import axios from '~/plugins/http.js';
 					if (item.belongType == "SPACE") {
 						belongType = 2;
 					}
+					console.log('datachange',item)
 					obj1.id = item.belongId;
 					obj1.type = belongType;
+					obj1.seatType = item.type == 'STATION'?'OPEN':item.type;
 					obj1.belongType = belongType;
 					obj1.whereFloor = item.whereFloor;
 					obj1.name = item.name;

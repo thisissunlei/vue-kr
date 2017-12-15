@@ -212,16 +212,18 @@
 
 
 <script>
+
+
 import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import selectSaler from '~/components/SelectSaler.vue'
-import axios from '~/plugins/http.js';
+
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-import CommonFuc from 'kr/utils';
+import utils from '~/plugins/utils';
 
 
 
@@ -230,13 +232,6 @@ import CommonFuc from 'kr/utils';
 
     export default {
         data() {
-            const validateFloor = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('Age cannot be empty'));
-                }else{
-                    callback();
-                }
-            };
             return {
                 openStation:false,
                 selectAll:false,
@@ -381,7 +376,7 @@ import CommonFuc from 'kr/utils';
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
-                axios.get('get-community-floor', params, r => {
+                 this.$http.get('get-community-floor', params, r => {
                     _this.floors = r.data.floor;
 
                 }, e => {
@@ -401,7 +396,7 @@ import CommonFuc from 'kr/utils';
             //     let from={
             //         id:params.orderEdit
             //     };
-            //     axios.get('get-order-detail', from, r => {
+            //      this.$http.get('get-order-detail', from, r => {
             //         let data = r.data;
             //         console.log('get-order-detail===>',data.customerid)
             //         _this.formItem.customer = data.customerid;
@@ -454,7 +449,7 @@ import CommonFuc from 'kr/utils';
                 formItem.corporationId = 11;//临时加的-无用但包错
                 console.log('handleSubmit',formItem,start,end)
                 let _this = this;
-                axios.post('save-join', formItem, r => {
+                 this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({
@@ -514,7 +509,7 @@ import CommonFuc from 'kr/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                axios.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params, r => {
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
 
@@ -856,7 +851,7 @@ import CommonFuc from 'kr/utils';
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
-                axios.get('contract-date-range', params, r => {
+                 this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
                 }, e => {
 
@@ -867,7 +862,7 @@ import CommonFuc from 'kr/utils';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                axios.get('sale-tactics', params, r => {
+                 this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
                         list = r.data.map(item=>{
                             let obj = item;
@@ -907,7 +902,7 @@ import CommonFuc from 'kr/utils';
                 }
                 let _this = this;
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
@@ -918,7 +913,7 @@ import CommonFuc from 'kr/utils';
                         });
                         _this.formItem.rentAmount =  Math.round(money*100)/100;
                         _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
                     }, e => {
                         _this.$Notice.error({

@@ -216,6 +216,12 @@ import CommonFuc from '~/components/CommonFuc';
                         width:80,
                     },
                     {
+                        title: '减免金额',
+                        key: 'freeAmount',
+                        align:'center',
+                        width:80,
+                    },
+                    {
                         title: '应付金额',
                         key: 'payableAmount',
                         align:'center',
@@ -262,7 +268,7 @@ import CommonFuc from '~/components/CommonFuc';
 										style: {
 											color:'#666666'
 										}       
-                                    }, '已付款');
+                                    }, '已付清');
                                     
                                 }else if(obj.row.payStatus==='PAYMENT'){
                                     return h('span', { 

@@ -34,26 +34,26 @@
 	</div>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
-			<labelText label="客户名称：">
+			<LabelText label="客户名称：">
 				{{basicInfo.customerName}}
-			</labelText>
-			<labelText label="社区名称：">
+			</LabelText>
+			<LabelText label="社区名称：">
 				{{basicInfo.communityName}}
-			</labelText>
-			<labelText label="操作人员：">
+			</LabelText>
+			<LabelText label="操作人员：">
 				{{basicInfo.operationName}}
-			</labelText>
-			<labelText label="操作时间：">
+			</LabelText>
+			<LabelText label="操作时间：">
 				{{ctime}}
-			</labelText>
+			</LabelText>
          </DetailStyle>
          <DetailStyle info="减租信息">
-			<labelText label="减租开始时间：">
+			<LabelText label="减租开始时间：">
 				{{startDate}}
-			</labelText>
-            <labelText label="减租服务费：">
+			</LabelText>
+            <LabelText label="减租服务费：">
 				{{basicInfo.rentAmount}}
-			</labelText>
+			</LabelText>
             <div class="m-reduce-room">
 				<div>减租工位/房间：</div>
 				<div style='width:50%;'>
@@ -73,13 +73,13 @@
 <script>
 
 import DetailStyle from '~/components/detailStyle';
-import labelText from '~/components/labelText';
+import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
 		DetailStyle,
-		labelText
+		LabelText
 	},
 	head() {
         return {

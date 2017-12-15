@@ -711,7 +711,6 @@ import CommonFuc from 'kr/utils';
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.renewForm.rentAmount = money;
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)

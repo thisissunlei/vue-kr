@@ -47,15 +47,15 @@
                     <Table border ref="selection" :columns="columns" :data="selecedStation" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="selecedStation.length">
                         <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
+                        <span class="money">{{renewForm.stationAmount}} </span>
+                        <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
                 </Row>
                 
             <FormItem style="margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
         </Form>
         <Modal
@@ -85,6 +85,8 @@ import DetailStyle from '~/components/detailStyle';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import CommonFuc from 'kr/utils';
+
 
 
 
@@ -164,6 +166,7 @@ import '~/assets/styles/createOrder.less';
                         key: 'amount'
                     }
                 ],
+                stationAmount:'',
                 payList:[
                     {value:'ONE',label:'月付'},
                     {value:'TWO',label:'两月付'},
@@ -223,6 +226,7 @@ import '~/assets/styles/createOrder.less';
         },
         methods: {
             reduceFormSubmit(){
+                this.config()
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -238,10 +242,22 @@ import '~/assets/styles/createOrder.less';
                     console.log('save-join=====',r.data)
                     _this.$Message.success('Success!');
                 }, e => {
+                     _this.$Notice.error({
+                        title:e.message
+                    })
+                    setTimeout(function(){
+                        _this.disabled = false;
+                    },2000)
 
                         console.log('error',e)
                 })
                 
+            },
+            config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
             },
             handleSubmit:function(name){
                 let message = '=========';
@@ -367,6 +383,7 @@ import '~/assets/styles/createOrder.less';
                 this.getStationAmount()
             },
             getStationAmount(){
+                this.config()
 
                 let val = this.selecedArr;
                
@@ -389,19 +406,24 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 if(val.length){
                     axios.post('get-station-amount', params, r => {
-                        // _this.selecedStation = r.data.seats;
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
                             money+= item.amount;
+
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.renewForm.rentAmount = money;
+                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = CommonFuc.smalltoBIG(Math.round(money*100)/100)
                          
 
                     }, e => {
+                        _this.$Notice.error({
+                        title:e.message
+                    })
 
                         console.log('error',e)
                     })

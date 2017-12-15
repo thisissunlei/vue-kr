@@ -446,13 +446,16 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.get('get-reduce-station', params, r => {
-                    r.data = r.data.map(item=>{
-                        let obj = item;
-                        obj.originStart = item.startDate;
-                        obj.originEnd = item.endDate;
-                        return obj;
-                    })
-                    _this.stationList = r.data
+                    console.log('get-renew-station',r.data)
+                    let station = []
+                    for(let i in r.data){
+                        let obj = {};
+                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
+
+                        obj.value =  r.data[i];
+                        station.push(obj)
+                    }
+                    _this.stationList = station;
                 }, e => {
 
                     console.log('error',e)

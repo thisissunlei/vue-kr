@@ -14,7 +14,9 @@
         }
     }
 
-</style>  
+</style> 
+
+ 
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="合同编号"  class='bill-search-class'>

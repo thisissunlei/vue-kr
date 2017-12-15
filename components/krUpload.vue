@@ -34,7 +34,10 @@
 	</div>
 </template>
 <script>
+
+
  import axios from 'kr/axios';
+ 
 export default{
 	name:'krUpload',
 	props:["columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],

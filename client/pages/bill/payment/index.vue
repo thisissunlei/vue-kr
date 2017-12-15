@@ -157,6 +157,8 @@
      >
         <div class="u-upload-title">
             <Upload
+                ref="upload"
+                name="file"
                 :before-upload="handleUpload"
                 action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
                 :with-credentials="IsCookie"
@@ -164,7 +166,7 @@
                 <div class="u-upload-content">
                     <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                     <p>请选择上传文件</p>
-                     <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
+                    <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
                 </div>
             </Upload>
         </div>
@@ -431,7 +433,9 @@ export default {
                 return false;
             },
             importDetail(){
-               this.openImport=!this.openImport;
+                this.$refs.upload.clearFiles();
+                this.file =null;
+                this.openImport=!this.openImport;
             },
              importSubmit(){
                 var data=new FormData();

@@ -1,6 +1,8 @@
 <style lang="less">
 .ui-message-content{
     height:184px;
+    
+    
     img{
         width:100px;
         height: 100px;
@@ -15,6 +17,8 @@
     }
 }
 .ui-message{
+    position: relative;
+    z-index:1200;
 .ivu-modal-footer{
      border:none;
      padding:0;
@@ -23,7 +27,7 @@
 
 </style>
 <template>
-    <Modal class="ui-message"  v-model="openMessage"  width="443"  >
+    <Modal class="ui-message"  v-model="flag"  width="443"  >
         <div class="ui-message-content">
             <div v-if="type=='success'">
                 <img src="~assets/images/success.png" />
@@ -44,16 +48,29 @@
 export default {
   name:'Message',
   props:['type','openMessage','warn'],
+  data(){
+      return{
+          flag:this.openMessage
+      }
+  },
+  watch: {
+        $props: {
+            deep: true,
+            handler(nextProps) {
+                this.flag=nextProps.openMessage;
+            }
+        }
+    },
   updated: function () {
         var _this=this;
-        if(this.type=='success' && this.openMessage){
+        if(this.type=='success' && this.flag){
             setTimeout(function(){
-                _this.openMessage=false;
-                _this.$emit('changeOpen',_this.openMessage)
+                _this.flag=false;
+                _this.$emit('changeOpen',_this.flag)
             },1500)
           return;
         }
-    this.$emit('changeOpen',this.openMessage)
+    this.$emit('changeOpen',this.flag)
   }
 }
 </script>

@@ -248,7 +248,7 @@ export default {
                     },
                     
                     {
-                        title: '回款方式',
+                        title: '支付方式',
                         key: 'payWay',
                         align:'center',
                         width:110,

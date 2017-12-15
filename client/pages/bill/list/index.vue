@@ -210,16 +210,29 @@ import CommonFuc from '~/components/CommonFuc';
                         }
                     },
                     {
-                        title: '账单金额',
-                        key: 'amount',
+                        title: '账单总额',
+                        key: 'totalAmount',
                         align:'center',
                         width:80,
                     },
                     {
-                        title: '结账金额',
-                        key: 'paidAmount',
+                        title: '应付金额',
+                        key: 'payableAmount',
                         align:'center',
                         width:80,
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        align:'center',
+                        width:90,
+                        render(h, obj){
+                            if(!obj.row.billingDate){
+                                return '-'
+                            }
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                            return time;
+                        }
                     },
                     {
                         title: '付款截止日期',
@@ -232,7 +245,7 @@ import CommonFuc from '~/components/CommonFuc';
                         }
                     },
                     {
-                        title: '账单状态',
+                        title: '支付状态',
                         key: 'payStatus',
                         align:'center',
                         width:90,

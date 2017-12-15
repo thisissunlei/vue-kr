@@ -1403,7 +1403,7 @@
                             // menuCode: 'iot_door_open_log',
                         },
                         {
-                            primaryText: "收入管理",
+                            primaryText: "应收管理",
                             router: 'bill/income',
                             type:'vue',
                             menuCode: 'pay_income_page'

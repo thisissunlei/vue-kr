@@ -80,13 +80,15 @@ export default {
                         align:'center',
                     },
                     {
-                        title: '回款日期',
-                        key: 'ctime',
-                        align:'center',
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
-                            return time;
-                        }
+                        title: '付款账户',
+                        key: 'payAccount',
+                        align:'center'
+                        
+                    },
+                    {
+                        title: '收款账户',
+                        key: 'receiveAccount',
+                        align:'center'
                     },
                     {
                         title: '回款金额（元）',
@@ -114,17 +116,6 @@ export default {
                         }
                     },
                     {
-                        title: '付款账户',
-                        key: 'payAccount',
-                        align:'center'
-                        
-                    },
-                    {
-                        title: '收款账户',
-                        key: 'receiveAccount',
-                        align:'center'
-                    },
-                    {
                         title: '支付状态',
                         key: 'payStatus',
                         align:'center',
@@ -148,6 +139,15 @@ export default {
                             }else if(obj.row.dealed===false){
                                 return '待处理';
                             }
+                        }
+                    },
+                    {
+                        title: '创建时间',
+                        key: 'ctime',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            return time;
                         }
                     },
                 ]

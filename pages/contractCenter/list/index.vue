@@ -84,7 +84,8 @@
     import krUpload from '~/components/krUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
-    import utils from 'utils';
+    import utils from '~/plugins/utils';
+    
     export default {
         components: {
             sectionTitle,

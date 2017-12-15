@@ -223,7 +223,7 @@ import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
-import utils from 'utils';
+import utils from '~/plugins/utils';
 
 
 

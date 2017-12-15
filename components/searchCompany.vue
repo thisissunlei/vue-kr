@@ -20,7 +20,7 @@
 
 
 <script>
-import axios from '~/plugins/http.js';
+import http from '~/plugins/http.js';
 
     export default {
         props:['name','onchange'],
@@ -55,7 +55,7 @@ import axios from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                axios.get('getCompanyInfo', params, r => {
+                http.get('getCompanyInfo', params, r => {
                     list = r.data;
                     list.map((item)=>{
                         let obj = item;

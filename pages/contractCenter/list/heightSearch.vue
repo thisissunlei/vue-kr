@@ -140,12 +140,12 @@
         },
         created:function(){
             var _this=this;
-            axios.get('join-bill-community','', r => {    
+             this.$http.get('join-bill-community','', r => {    
                    _this.communityList=r.data.items 
                 }, e => {
                   _this.$Message.info(e);
             })
-            axios.get('get-center-prepare-data','',r => {
+            this.$http.get('get-center-prepare-data','',r => {
                    console.log("------->>>>>>",r.data.items);
                    _this.typeList = r.data.items;
                 }, e => {

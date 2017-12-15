@@ -1,8 +1,8 @@
 import Vue from 'vue';
-
 import iView from 'iview';
+import http from '~/plugins/http';
 
 
-// import axios from './api.js';
-// Vue.prototype.$api = axios
+Vue.prototype.$http = http;
+
 Vue.use(iView);

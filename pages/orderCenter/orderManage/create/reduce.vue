@@ -239,7 +239,7 @@ import CommonFuc from 'kr/utils';
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                axios.post('save-reduce', renewForm, r => {
+                 this.$http.post('save-reduce', renewForm, r => {
                     _this.$Message.success('Success!');
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
@@ -406,7 +406,7 @@ import CommonFuc from 'kr/utils';
                 }
                 let _this = this;
                 if(val.length){
-                    axios.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
@@ -453,7 +453,7 @@ import CommonFuc from 'kr/utils';
 
                 };
                 let _this = this;
-                axios.get('get-reduce-station', params, r => {
+                 this.$http.get('get-reduce-station', params, r => {
                     r.data = r.data.map(item=>{
                         let obj = item;
                         obj.originStart = item.startDate;

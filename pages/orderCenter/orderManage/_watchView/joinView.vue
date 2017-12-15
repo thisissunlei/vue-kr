@@ -208,7 +208,7 @@ export default {
 			id:params.watchView
 		};
 		var _this=this;
-	    axios.get('join-bill-detail', from, r => {
+	     this.$http.get('join-bill-detail', from, r => {
 				   _this.basicInfo=r.data;
 				   
 				   

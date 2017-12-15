@@ -29,14 +29,14 @@
     <div class="station-list">
        <div class="station-type">{{label}}</div>
        <div>
-        <div v-for="(item, index) in stationList">
+        <div v-for="(item, index) in stationList" style="margin-bottom:20px">
             <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
                 <Checkbox
-                    :indeterminate="indeterminate"
-                    :value="checkAll.box+index"
-                    @click.prevent.native="handleCheckAll">{{item.name}}</Checkbox>
+                    :indeterminate="indeterminate.index"
+                    :value="checkAll[index]"
+                    @click.prevent.native="handleCheckAll(index)">全选  =={{checkAll[index]}}   租赁结束日期：{{item.name}}</Checkbox>
             </div>
-            <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
+            <CheckboxGroup :v-model="checkAllGroup[index]" @on-change="checkAllGroupChange">
                 <Checkbox  v-for="(value, i) in item.value" :label="value.seatId" key="value+i"></Checkbox>
             </CheckboxGroup>
         </div>
@@ -60,37 +60,18 @@ import dateUtils from 'vue-dateutils';
                 })
             }
             let checkAll = {};
+            let checkAllGroup = {};
+            let indeterminate = {};
             this.stationList.map((item,index)=>{
-                checkAll['box'+index] = false
+                checkAll[index] = false;
+                checkAllGroup[index] = false;
+                indeterminate[index] = false;
             })
-            console.log('=====',checkAll)
            return{
-            indeterminate: false,
+            indeterminate: indeterminate,
             checkAll: checkAll,
-            checkAllGroup:false,
+            checkAllGroup:checkAllGroup,
             selecedStations: selecedStation,
-            columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '工位房间编号',
-                        key: 'seatId'
-                    },
-                    {
-                        title: '标准单价（元/月）',
-                        key: 'price'
-                    },
-                    {
-                        title: '租赁期限',
-                        key: 'address',
-                        render: (h, params) => {
-                            return h('strong',  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originStart))+'至'+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originEnd)))
-                        }
-                    }
-                ],
            }
         },
         components: {
@@ -100,7 +81,16 @@ import dateUtils from 'vue-dateutils';
         },
          watch:{
             selecedStations:function(val){
-                this.$emit("on-station-change", val);
+                let stationVos  =[];
+                stationVos = this.stationList.filter(function(item, index) {
+                    if (val.indexOf(item.seatId) != -1) {
+                        return true;
+                    }
+                return true;
+                });
+
+
+                this.$emit("on-station-change", stationVos);
             },
             selecedStation:function(val){
             }
@@ -108,35 +98,37 @@ import dateUtils from 'vue-dateutils';
         created(){
         },
         methods: {
-           handleCheckAll () {
-                // let all = this.stationList.map(item=>{
-                //     return item.name
-                // })
-                // if (this.indeterminate) {
-                //     this.checkAll = false;
-                // } else {
-                //     this.checkAll = !this.checkAll;
-                // }
-                // this.indeterminate = false;
+           handleCheckAll (index) {
+                if(this.indeterminate[index]){
+                    this.checkAll[index] = false
+                }else{
+                    this.checkAll[index] = true
+                }
+                let seleced = this.stationList[index].value.map(item=>{
+                    return item.seatId+'';
+                })
 
-                // if (this.checkAll) {
-                //     this.selecedStations = all;
-                // } else {
-                //     this.selecedStations = [];
-                // }
+                if (this.checkAll[index]) {
+                    this.checkAllGroup[index] = seleced;
+                    this.selecedStations = seleced;
+                    console.log(this.checkAllGroup[index])
+                } else {
+                    this.selecedStations = [];
+                }
             },
             checkAllGroupChange (data) {
-                let stationLength = this.stationList.length;
-                if (data.length === stationLength) {
-                    this.indeterminate = false;
-                    this.checkAll = true;
-                } else if (data.length > 0) {
-                    this.indeterminate = true;
-                    this.checkAll = false;
-                } else {
-                    this.indeterminate = false;
-                    this.checkAll = false;
-                }
+                console.log('========',data)
+                // let stationLength = this.stationList.length;
+                // if (data.length === stationLength) {
+                //     this.indeterminate = false;
+                //     this.checkAll = true;
+                // } else if (data.length > 0) {
+                //     this.indeterminate = true;
+                //     this.checkAll = false;
+                // } else {
+                //     this.indeterminate = false;
+                //     this.checkAll = false;
+                // }
             } ,
             selectRow(val){
                 this.selecedStations = val;

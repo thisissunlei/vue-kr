@@ -179,7 +179,7 @@
         },
         created:function(){
             var _this=this;
-            axios.get('join-bill-community','', r => {    
+             this.$http.get('join-bill-community','', r => {    
                    _this.communityList=r.data.items 
                 }, e => {
                   _this.$Message.info(e);

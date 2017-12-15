@@ -223,7 +223,7 @@
              if (item.type && item.type == "vue") {
                  href = "http://" + location.hostname + "/" + href;
              } else {
-                 href = "#/" + href;
+                 href ="http://"+ location.hostname + "/new/#/" + href;
              }
  
  

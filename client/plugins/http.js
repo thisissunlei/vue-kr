@@ -1,14 +1,17 @@
 //引入apis
 import APIS from '../assets/apis/index';
+
 import Qs from 'qs';
+
 // 引用axios
 var axios = require('axios')
-// 自定义判断元素类型JS
-function toType(obj) {
+
+function toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
+
 // 参数过滤函数
-function filterNull(o) {
+function filterNull (o) {
   for (var key in o) {
     if (o[key] === null) {
       delete o[key]
@@ -23,25 +26,19 @@ function filterNull(o) {
   }
   return o
 }
-/*
-  接口处理函数
-  这个函数每个项目都是不一样的，我现在调整的是适用于
-  https://cnodejs.org/api/v1 的接口，如果是其他接口
-  需要根据接口的参数进行调整。参考说明文档地址：
-  https://cnodejs.org/topic/5378720ed6e2d16149fa16bd
-  主要是，不同的接口的成功标识和失败提示是不一致的。
-  另外，不同的项目的处理方法也是不一致的，这里出错就是简单的alert
-*/
 
 
-function apiAxios(method, name, params, success, failure) {
+function apiAxios (method, name, params, success, failure) {
+
   if (params) {
     params = filterNull(params)
   }
-  let root = '/api/';
+
+  let root = '';
   let url = APIS[name].url;
-  if (url.indexOf('mockjs') !== -1) {
-    root = 'http://rap.krspace.cn';
+
+  if(url.indexOf('mockjs') !==-1){
+       root='http://rap.krspace.cn';
   }
 
   axios({
@@ -51,49 +48,45 @@ function apiAxios(method, name, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     withCredentials: false,
-  })
-  //success
-  .then(function (res) {
+  }).then(function (res) {
     if (res.status === 200) {
-      if (success&& res.data.code ==1) {
+      if (success) {
         success(res.data)
-      }
-      if(success&& res.data.code ==-1){
-        failure(res.data)
       }
     } else {
       if (failure) {
         failure(res.data)
       } else {
-        console.log('api error, HTTP CODE: ' + res.data)
-        // window.alert('error: ' + JSON.stringify(res.data))
+        console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
       }
     }
-  })
-  //failure
-  .catch(function (err) {
+  }).catch(function (err) {
+    
     let res = err.response
     if (err) {
-      res&&failure(res.data);
-      //console.log('api error, HTTP CODE: ' + res)
-      // window.alert('api error, HTTP CODE: ' + res.status)
+      console.log('api error, HTTP CODE: ' + res)
     }
   })
 }
+
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.interceptors.request.use((config) => {
-  if (config.method == 'post') {
+
+  if(config.method  == 'post'){
     let data = Qs.stringify(config.data);
     config.data = data;
   }
+
   return config;
-}, (error) => {
-  _.toast("错误的传参");
+
+},(error) =>{
   return Promise.reject(error);
 });
 
-// 返回在vue模板中的调用接口
+axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
+
 export default {
+  
   get: function (url, params, success, failure) {
     return apiAxios('GET', url, params, success, failure)
   },

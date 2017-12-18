@@ -1,11 +1,12 @@
 //公共的api
 module.exports = {
-    'get-vue-upload-url': {
-        url: '/krspace-op-web/sys/upload-policy',
-        method: 'get'
-    }, 
     'post-list-upload-url': {
         url: '/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
     }, 
+    //入驻订单列表
+    'get-vue-upload-url': {
+        url: '/api/krspace-op-web/sys/upload-policy',
+        method: 'get'
+    },
 }

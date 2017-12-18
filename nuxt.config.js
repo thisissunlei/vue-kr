@@ -30,14 +30,21 @@ module.exports = {
   plugins: [
     {src: '~plugins/iview',ssr: true},
   ],
+  
+  /*
+  ** Global CSS
+  */
   css: ['~assets/css/main.css'],
+  /*
+  ** Customize the progress-bar color
+  */
   loading: { color: '#000000' },
   build: {
     vendor: ['iview'],
     publicPath: '/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-    	webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+      webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
             new ExtractTextPlugin({

@@ -7,70 +7,74 @@
 <template>
     <div class="com-select-customers">
          <Select
-            :v-model="name"
+            v-model="test.customerId"
             filterable
             remote
-            @on-query-change="remoteCustomer"
             :loading="loading1"
-            @on-change="changeContent">
-            <Option v-for="(option, index) in companyOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            @on-change="changeContent"
+            :remote-method="remoteCustomer"
+            >
+            <Option 
+                v-for="(option, index) in companyOptions" 
+                :value="option.value" 
+                :key="index"
+            >{{option.label}}</Option>
         </Select>
     </div>
 </template>
 
 
 <script>
-import http from '~/plugins/http.js';
+
 
     export default {
-        props:['name','onchange'],
+        props:['name','onchange','test'],
         data () {
             return {
                 loading1:false,
-                companyOptions:[],
+                companyOptions:'',
             };
         },
-        created:function(){
-            this.getCusomerList(' ')
+        mounted:function(){
+            this.getCusomerList('')
         },
         methods: {
             changeContent:function(value){
                 this.onchange(value)
             },
             remoteCustomer (query) {
-                if (query !== '') {
+                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
                         this.loading1 = false;
                         this.getCusomerList(query)
                     }, 200);
                 } else {
-                    this.getCusomerList(' ')
-
+                   this.getCusomerList('');
                 }
             },
-            getCusomerList:function(name){
-                let params = {
+            getCusomerList:function(name,type){
+                 let params = {
                     companyName:name
                 }
                 let list = [];
                 let _this = this;
-                http.get('getCompanyInfo', params, r => {
+                this.$http.get('getCompanyInfo', params, r => {
                     list = r.data;
                     list.map((item)=>{
                         let obj = item;
-                        obj.value  = item.csrId;
-					    obj.label = item.companyName;
+                        obj.label = item.companyName;
+                        obj.value = item.csrId;
                         return obj;
                     });
                     _this.companyOptions = list;
                 }, e => {
                     console.log('error',e)
                 })
-
+                return list;
             }
                     
                
-        }
+        },
     }
 </script>

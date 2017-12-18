@@ -2,18 +2,21 @@
 module.exports = {
     //获取合同列表
     'get-center-list-contract': {
-        url: '/krspace-erp-web/wf/station/contract/enter/search?',
+        url: '/api/krspace-erp-web/wf/station/contract/enter/search?',
         method: 'get'
     },
     'get-center-prepare-data':{
-        url: '/krspace-erp-web/wf/station/contract/AllContractType/search',
+        url: '/api/krspace-erp-web/wf/station/contract/AllContractType/search',
+        method: 'get'
+    },
+
+    //获取平面图信息
+    'get-list-contract': {
+        url: '/mockjs/66/api/krspace-erp-web/wf/request/contract/enter/search?',
         method: 'get'
     },
     'get-center-export': {
-        url: '/krspace-erp-web/wf/station/contract/enter/export',
+        url: '/api/krspace-erp-web/wf/station/contract/enter/export',
         method: 'get'
     },
-    
-   
-
 }

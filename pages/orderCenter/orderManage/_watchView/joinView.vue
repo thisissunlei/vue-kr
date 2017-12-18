@@ -172,11 +172,6 @@ export default {
 				 title: '折扣比例',
                  key: 'discountNum',
                  align:'center'	
-				},
-				{
-				 title: '优惠金额',
-                 key: 'amount',
-                 align:'center'	
 				}
             ],
             contract:[

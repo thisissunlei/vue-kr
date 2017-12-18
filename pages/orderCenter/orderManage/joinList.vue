@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border  @on-selection-change='checkboxChange'></Table>
+            <Table :columns="joinOrder" :data="joinData" border></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Button type="primary" @click="outSubmit">导出</Button>
                     <div style="float: right;">
@@ -96,11 +96,6 @@
                 openSearch:false,
                 openNullify:false,
                 joinOrder: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
                     {
                         title: '订单编号',
                         key: 'orderNum',
@@ -328,13 +323,6 @@
                 params.page=index;
                 this.getListData(params);
             },
-            checkboxChange(params){
-                var ids=[];
-                params&&params.map((item,index)=>{
-                    ids.push(item.id);
-                })
-                this.props.ids=ids;
-            },
             lowerChange(param){
                 this.params.customerName=param.target.value;
             },
@@ -350,6 +338,7 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.page=1;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.getListData(this.params);

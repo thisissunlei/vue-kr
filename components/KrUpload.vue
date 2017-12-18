@@ -9,7 +9,6 @@
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
-							
 							:headers="this.headers" 
 							:type="this.type" 
 							action="//jsonplaceholder/"
@@ -90,12 +89,14 @@ export default{
 			// this.getUpUrl();
 		},
 		submitUpload(detail){
+
 			var that = this;
 			this.config();
 
 			var _this = this;
 			http.post("post-list-upload-url", {
 				fileList:JSON.stringify(detail),
+
 				requestId:_this.columnDetail.requestId,
 			}, (response) => {
 				
@@ -246,7 +247,7 @@ export default{
 			this.defaultList = [].concat(fileList);
 		
 		},
-	},
+	}
 }
 	
 </script>

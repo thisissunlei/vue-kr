@@ -299,15 +299,14 @@
                 let params={
                     id:this.id
                 };
+                 this.openMessage=true;
                  this.$http.post('join-nullify', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
-                    this.openMessage=true;
                     this.getListData(this.params);
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                    this.openMessage=true;
                 })   
             },
             outSubmit (){
@@ -321,7 +320,9 @@
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
                 }, e => {
-                    _this.$Message.info(e);
+                    _this.openMessage=true;
+                    _this.MessageType="error";
+                    _this.warn=e.message;
                 })   
             },
             changePage (index) {

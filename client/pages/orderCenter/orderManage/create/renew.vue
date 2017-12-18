@@ -221,6 +221,7 @@ import utils from '~/plugins/utils';
                     customerId:'',
                     endDate:'',
                     saler:'',
+                    rentAmount:'',
                     items:[]
                },
                disabled:false,//提交按钮是否禁止
@@ -827,7 +828,8 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
-                    _this.formItem.rentAmount = r.data.totalrent;
+                    _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
+                    console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

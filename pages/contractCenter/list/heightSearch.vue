@@ -148,7 +148,7 @@
                   _this.$Message.info(e);
             })
             this.$http.get('get-center-prepare-data','',r => {
-                   console.log("------->>>>>>",r.data.items);
+                
                    _this.typeList = r.data.items;
                 }, e => {
                   _this.$Message.info(e);

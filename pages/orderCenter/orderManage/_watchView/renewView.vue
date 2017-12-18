@@ -84,7 +84,7 @@
 <script>
 
 
-import DetailStyle from '~/components/detailStyle';
+import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';

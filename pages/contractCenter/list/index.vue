@@ -79,9 +79,9 @@
 <script>
 
 
-    import hoc from '~/components/hoc.js'
+   
     import sectionTitle from '~/components/SectionTitle.vue';
-    import krUpload from '~/components/krUpload.vue';
+    import krUpload from '~/components/KrUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
@@ -269,7 +269,7 @@
             getListData(params){
                 var _this=this;
                  this.config()
-                 http.get('get-center-list-contract', params, r => {
+                 this.$http.get('get-center-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;

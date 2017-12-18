@@ -180,11 +180,11 @@
         },
         created:function(){
             var _this=this;
-             this.$http.get('join-bill-community','', r => {    
-                   _this.communityList=r.data.items 
-                }, e => {
-                  _this.$Message.info(e);
-            })
+            //  this.$http.get('join-bill-community','', r => {    
+            //        _this.communityList=r.data.items 
+            //     }, e => {
+            //       _this.$Message.info(e);
+            // })
         },
         updated:function(){
             if(this.formItem.cStartDate&&this.formItem.cEndDate){

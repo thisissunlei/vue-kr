@@ -12,19 +12,19 @@
             <DetailStyle info="基本信息">
             <Row>  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customer">
-                    <selectCustomers name="formItem.customer" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="community">
-                    <selectCommunities name="formItem.community" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                    <selectCommunities name="formItem.communityId" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px">
-                    <SelectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></SelectSaler>
+                    <FormItem label="销售员" style="width:252px" prop="salerId">
+                        <SelectSaler name="formItem.saler" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -216,6 +216,7 @@ import '~/assets/styles/createOrder.less';
                 selectAll:false,
                 discountError:false,
                 index:0,
+                salerName:'',
                 depositAmount:'',
                 disabled:false,
                 delStation:[],
@@ -366,21 +367,27 @@ import '~/assets/styles/createOrder.less';
                 let _this = this;
                 let {params}=this.$route;
                 let from={
-                    id:4095
-                    // id:params.orderEdit
+                    // id:4095
+                    id:params.orderEdit
                 };
                  this.$http.get('get-order-detail', from, r => {
                     let data = r.data;
                     console.log('get-order-detail===>',data.customerid)
-                    _this.formItem.customer = data.customerid;
+                    _this.formItem.customerId = data.customerId;
                     _this.customerName = data.customerName;
-                    _this.formItem.community = data.communityid;
+                    _this.formItem.communityId = data.communityId;
+                     _this.salerName = data.salerName;
+                    _this.formItem.salerId = data.salerId;
                     _this.communityName = data.communityName;
-                    _this.formItem.leaseEnddate = data.leaseEnddate;
-                    _this.formItem.leaseBegindate = data.leaseBegindate;
-                    _this.stationList = data.stationVos;
-                    _this.payType = 'TWO';
-                    _this.depositType = '2个月'
+                    _this.formItem.endDate = data.endDate;
+                    _this.formItem.startDate = data.startDate;
+                    _this.stationList = data.orderSeatDetailVo;
+                    _this.formItem.firstPayTime = data.firstPayTime;
+                    _this.formItem.rentAmount = data.rentAmount;
+                    _this.installmentType = 'THREE';
+                    _this.depositAmount = '3';
+                    _this.getFloor = +new Date()
+                    _this.getSaleTactics({communityId:data.customerId})
                     }, e => {
                         _this.$Message.info(e);
                 })

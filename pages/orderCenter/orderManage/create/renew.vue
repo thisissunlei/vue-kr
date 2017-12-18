@@ -181,13 +181,13 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="450"
+        width="600"
 
         @on-ok="submitStation"
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation"></stationList>
     </Modal>
     </div>
@@ -246,7 +246,7 @@ import utils from '~/plugins/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[],
+               stationListData:[],
                selecedStation:[],
                selecedArr:[],
                depositAmount:'',
@@ -260,7 +260,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '工位房间编号',
-                        key: 'name'
+                        key: 'seatId'
                     },
                     {
                         title: '标准单价（元/月）',
@@ -408,19 +408,23 @@ import utils from '~/plugins/utils';
                 // };
                 let params = {
                     //假数据
-                    customerId:1,
+                    customerId:10089,
                     communityId:4,
-                    continueDate:this.renewForm.endDate
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
                 };
                 let _this = this;
-                 this.$http.get('get-renew-station', params, r => {
-                    r.data = r.data.map(item=>{
-                        let obj = item;
-                        obj.originStart = item.startDate;
-                        obj.originEnd = item.endDate;
-                        return obj;
-                    })
-                    _this.stationList = r.data
+               this.$http.get('get-renew-station', params, r => {
+                    console.log('get-renew-station',r.data)
+                    let station = []
+                    for(let i in r.data){
+                        let obj = {};
+                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
+
+                        obj.value =  r.data[i];
+                        station.push(obj)
+                    }
+                    _this.stationListData = station;
+                 
                 }, e => {
 
                     console.log('error',e)
@@ -674,7 +678,7 @@ import utils from '~/plugins/utils';
                 }
 
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].originStart + day;
+                let start =  val[0].startDate + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
             },
@@ -732,6 +736,7 @@ import utils from '~/plugins/utils';
                 })
             },
             onStationChange:function(val){
+                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息

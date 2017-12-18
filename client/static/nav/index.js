@@ -1356,7 +1356,7 @@
             type:'vue',
             menuItems: [
                 {
-                    primaryText: "订单合同",
+                    primaryText: "订单管理",
                     router: '',
                     iconName: 'icon-money',
                     iconColor: '#79859a',
@@ -1364,14 +1364,13 @@
                     menuItems: [
                         {
                             primaryText: "会议室订单管理",
-                            router: 'order/list',
+                            router: 'orderCenter/orderManage',
                             type:'vue',
-                            // menuCode: 'iot_door_open_log',
-                            menuCode: 'fina_meeting_order_page'
+                            menuCode: 'iot_door_open_log',
+                            //menuCode: 'fina_meeting_order_page'
                         },
                     ]
                 },
-               
             ]
         }
     }
@@ -1403,7 +1402,7 @@
                             // menuCode: 'iot_door_open_log',
                         },
                         {
-                            primaryText: "收入管理",
+                            primaryText: "应收管理",
                             router: 'bill/income',
                             type:'vue',
                             menuCode: 'pay_income_page'

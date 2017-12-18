@@ -460,6 +460,7 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.items.length){
                     this.renewForm.items = []
                 }
+                this.renewForm.rentAmount = '0'
 
             },
             dealEndDate(val){
@@ -756,6 +757,8 @@ import utils from '~/plugins/utils';
                             }
                             return obj;
                         })
+                    }else{
+                        list = []
                     }
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;

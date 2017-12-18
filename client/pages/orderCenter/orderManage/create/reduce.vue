@@ -144,10 +144,6 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
-                        title: '标准单价（元/月）',
-                        key: 'price'
-                    },
-                    {
                         title: '减租后租赁期限',
                         key: 'address',
                         render: (h, params) => {
@@ -386,12 +382,12 @@ import utils from '~/plugins/utils';
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor;
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
-                    obj.endDate =this.renewForm.endDate;
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
                 let params = {
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     // communityId:this.renewForm.communityId,
                     communityId:4,
                     customerId:10089,

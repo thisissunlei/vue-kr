@@ -77,18 +77,21 @@ import dateUtils from 'vue-dateutils';
         },
         components: {
         },
-        update:function(){
-            console.log('update')
-        },
          watch:{
-            selecedStations:function(val){
-                let stationVos  =[];
-                let _this = this;
-               this.stationList.map(function(item, index) {
-                    if(_this.checkAll[index]){
+            selectionIndex(){
+                let list = [];
+                let stationVos = []
+                let Sindex = '';
+                for(let i in this.selectSeat){
+                    if(this.selectSeat[i]){
+                        list.push(i.slice(5))
+                        Sindex = i.slice(4,5)
+                    }
+                }
+                this.stationList.map(function(item, index) {
+                    if(Sindex == index){
                         stationVos = item.value.filter((value,i)=>{
-                           
-                            if (val.indexOf(value.seatId) == -1) {
+                            if (list.indexOf(value.name) == -1) {
                                 return false;
                             }
                              return true;
@@ -97,9 +100,8 @@ import dateUtils from 'vue-dateutils';
                     }
                      
                 });
-               this.$emit("on-station-change", stationVos);      
-            },
-            selecedStation:function(val){
+                this.$emit("on-station-change", stationVos); 
+
             }
          },
         created(){
@@ -159,6 +161,11 @@ import dateUtils from 'vue-dateutils';
                         }
                     } 
                     this.selectionIndex = selectionIndex;
+                    if(!selectionIndex.length){
+                        this.clearAllCheck();
+                    }else{
+                        let diff = this.getDiffStation();
+                    }
                 }
 
 
@@ -175,15 +182,14 @@ import dateUtils from 'vue-dateutils';
                     this.clearAllCheck()
                     return false;
                 }
-                if(num == list.length){
+                if(num == list.length && this.stationList[demo].value.length == list.length){
                     this.checkAll['seat'+demo] = true;
+                }else{
+                    this.checkAll['seat'+demo] = false;
                 }
                 return true
 
-            },
-            selectRow(val){
-                this.selecedStations = val;
-            }    
+            },   
                
         }
     }

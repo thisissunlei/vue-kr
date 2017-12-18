@@ -5,13 +5,12 @@ import { createRouter } from './router.js'
 import NoSSR from './components/no-ssr.js'
 import NuxtChild from './components/nuxt-child.js'
 import NuxtLink from './components/nuxt-link.js'
-import NuxtError from './components/nuxt-error.vue'
+import NuxtError from '../client/layouts/error.vue'
 import Nuxt from './components/nuxt.vue'
 import App from './App.vue'
 import { getContext, getLocation } from './utils'
 
 import plugin0 from 'plugin0'
-import plugin1 from 'plugin1'
 
 
 // Component: <no-ssr>
@@ -34,7 +33,9 @@ Vue.use(Meta, {
   tagIDKeyName: 'hid' // the property name that vue-meta uses to determine whether to overwrite or append a tag
 })
 
-const defaultTransition = {"name":"test","mode":"out-in","appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
+const defaultTransition = {"name":"page","mode":"out-in","beforeEnter":function(el) {
+      console.log('Before enter...');
+    },"appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
 async function createApp (ssrContext) {
   const router = createRouter()
@@ -130,9 +131,6 @@ async function createApp (ssrContext) {
   
   if (typeof plugin0 === 'function') await plugin0(ctx, inject)
   
-  if (process.browser) { 
-    if (typeof plugin1 === 'function') await plugin1(ctx, inject)
-  }
 
   if (process.server && ssrContext && ssrContext.url) {
     await new Promise((resolve, reject) => {

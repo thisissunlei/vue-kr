@@ -36,7 +36,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="saler">
-                    <selectSaler name="renewForm.saler" :onchange="changeSaler" ></selectSaler>
+                    <SelectSaler name="renewForm.saler" :onchange="changeSaler" ></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -180,7 +180,7 @@
 import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import selectSaler from '~/components/SelectSaler.vue'
+import SelectSaler from '~/components/SelectSaler.vue'
 import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
@@ -307,7 +307,7 @@ import '~/assets/styles/createOrder.less';
             sectionTitle,
             selectCommunities,
             selectCustomers,
-            selectSaler,
+            SelectSaler,
             stationList,
             planMap
         },

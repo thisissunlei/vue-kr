@@ -1,10 +1,13 @@
 <style lang="less"> 
+
    .com-select-community{
     ::-webkit-input-placeholder { color:#666; }
     ::-moz-placeholder { color:#666; } /* firefox 19+ */
     :-ms-input-placeholder { color:#666; } /* ie */
     input:-moz-placeholder { color:#666; }
    }
+
+
 </style>
 
 
@@ -12,10 +15,11 @@
 <template>
     <div class="com-select-community">
          <Select
-            v-model="community"
+            v-model="test.customerId"
             filterable
             remote
-            :placeholder="value"
+             :placeholder="value"
+
             :remote-method="remoteMethod1"
             :loading="loading1"
             @on-change="changeContent">
@@ -26,10 +30,12 @@
 
 
 <script>
+
+
 import http from '~/plugins/http.js';
 
     export default {
-        props:['value','onchange'],
+        props:['value','onchange','test'],
         data () {
             return {
                 community:'',
@@ -37,14 +43,19 @@ import http from '~/plugins/http.js';
                 options1:[],
             };
         },
-        created:function(){
+
+        mounted:function(){
+
             this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
+
                 this.onchange(value)
             },
+
             remoteMethod1 (query) {
+
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -62,7 +73,9 @@ import http from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
+                
                 http.get('get-mainbill-community', params, r => {
+
                     console.log('r', r);
                     list = r.data;
                     list.map((item)=>{

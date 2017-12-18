@@ -677,7 +677,8 @@ import utils from '~/plugins/utils';
                         deleteData:[],
                     };
                     this.stationList = [];
-                    this.formItem.items = []
+                    this.formItem.items = [];
+                    this.formItem.rentAmount = '0'
                 }
             },
             changeCustomer:function(value){
@@ -873,6 +874,8 @@ import utils from '~/plugins/utils';
                             }
                             return obj;
                         })
+                    }else{
+                        list = []
                     }
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;

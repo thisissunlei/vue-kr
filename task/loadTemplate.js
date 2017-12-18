@@ -7,7 +7,7 @@ var baseUrl = 'http://optest02.krspace.cn'
 
 
 function loadTemplate(){
-    var file = path.resolve(process.cwd(), 'app.html');
+    var file = path.resolve(process.cwd(), 'client/app.html');
     request(baseUrl+'/common-nav/index.html', function (error, response, body) {
 
         if (!error && response.statusCode == 200) {

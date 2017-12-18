@@ -221,6 +221,7 @@ import utils from '~/plugins/utils';
                     customerId:'',
                     endDate:'',
                     saler:'',
+                    rentAmount:'',
                     items:[]
                },
                disabled:false,//提交按钮是否禁止
@@ -260,7 +261,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '工位房间编号',
-                        key: 'seatId'
+                        key: 'name'
                     },
                     {
                         title: '标准单价（元/月）',
@@ -459,6 +460,7 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.items.length){
                     this.renewForm.items = []
                 }
+                this.renewForm.rentAmount = '0'
 
             },
             dealEndDate(val){
@@ -755,6 +757,8 @@ import utils from '~/plugins/utils';
                             }
                             return obj;
                         })
+                    }else{
+                        list = []
                     }
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
@@ -827,7 +831,8 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
-                    console.log('save-join=====',r.data)
+                    _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
+                    console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

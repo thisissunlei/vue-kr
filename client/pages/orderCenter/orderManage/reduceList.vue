@@ -266,7 +266,9 @@
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
                 }, e => {
-                    console.log('e');
+                    _this.openMessage=true;
+                    _this.MessageType="error";
+                    _this.warn=e.message;
                 })   
             },
             changePage (index) {

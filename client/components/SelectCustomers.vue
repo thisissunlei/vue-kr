@@ -69,6 +69,7 @@ import http from '~/plugins/http.js';
                         return obj;
                     });
                     _this.loading1 = false;
+
                     _this.customerOptions = list;
                 }, e => {
                     console.log('error',e)

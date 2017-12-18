@@ -44,7 +44,7 @@ module.exports = {
     publicPath: '/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-    	webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+      webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
             new ExtractTextPlugin({

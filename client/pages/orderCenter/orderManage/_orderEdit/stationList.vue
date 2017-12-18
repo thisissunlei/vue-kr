@@ -29,7 +29,18 @@
     <div class="station-list">
        <div class="station-type">{{label}}</div>
        <div>
-            <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table>
+        <div v-for="(item, index) in stationList" style="margin-bottom:20px">
+            <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
+                <Checkbox
+                    :value="checkAll['seat'+index]"
+                    :key="item.name"
+                    @on-change="selectDiscount"
+                    @click.prevent.native="handleCheckAll(index)">全选    租赁结束日期：{{item.name}}</Checkbox>
+            </div>
+            <div class="checkbox-list">
+                <Checkbox v-for="(value, i) in item.value"  :value="selectSeat['seat'+index+value.name]" @click.prevent.native="selectDiscount(index,value.name)" :key="value.name">{{value.name}}</Checkbox>
+            </div>
+        </div>
        </div>
     </div>
 </template>
@@ -48,82 +59,137 @@ import dateUtils from 'vue-dateutils';
                     return item.name
                 })
             }
+            let checkAll = {};
+            let selectSeat = {};
+            this.stationList.map((item,index)=>{
+                checkAll['seat'+index] = false;
+                item.value.map(value=>{
+                    selectSeat['seat'+index+value.name] = false;
+                })
+                
+            })
            return{
-            indeterminate: false,
-            checkAll: false,
+            checkAll: checkAll,
+            selectSeat:selectSeat,
             selecedStations: selecedStation,
-            columns: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '工位房间编号',
-                        key: 'seatId'
-                    },
-                    {
-                        title: '标准单价（元/月）',
-                        key: 'price'
-                    },
-                    {
-                        title: '租赁期限',
-                        key: 'address',
-                        render: (h, params) => {
-                            return h('strong',  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originStart))+'至'+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.originEnd)))
-                        }
-                    }
-                ],
+            selectionIndex:[]
            }
         },
         components: {
         },
-        update:function(){
-            console.log('update')
-        },
          watch:{
-            selecedStations:function(val){
-                this.$emit("on-station-change", val);
-            },
-            selecedStation:function(val){
+            selectionIndex(){
+                let list = [];
+                let stationVos = []
+                let Sindex = '';
+                for(let i in this.selectSeat){
+                    if(this.selectSeat[i]){
+                        list.push(i.slice(5))
+                        Sindex = i.slice(4,5)
+                    }
+                }
+                this.stationList.map(function(item, index) {
+                    if(Sindex == index){
+                        stationVos = item.value.filter((value,i)=>{
+                            if (list.indexOf(value.name) == -1) {
+                                return false;
+                            }
+                             return true;
+                         })
+                         console.log('filter',stationVos)
+                    }
+                     
+                });
+                this.$emit("on-station-change", stationVos); 
+
             }
          },
         created(){
+
         },
         methods: {
-           handleCheckAll () {
-                let all = this.stationList.map(item=>{
-                    return item.name
-                })
-                if (this.indeterminate) {
-                    this.checkAll = false;
-                } else {
-                    this.checkAll = !this.checkAll;
+              handleCheckAll (index) {
+                if(!this.checkAll['seat'+index]){
+                    this.clearAllCheck();
+                    this.checkAll['seat'+index] = true;
+                }else{
+                    this.checkAll['seat'+index] = false;
+                    this.clearAllCheck();
                 }
-                this.indeterminate = false;
 
-                if (this.checkAll) {
-                    this.selecedStations = all;
-                } else {
-                    this.selecedStations = [];
+                if(!this.checkAll['seat'+index]){
+                    return
                 }
+
+                let seleced = this.stationList[index].value.map(item=>{
+                    this.selectionIndex.push(index)
+                    return item.name;
+                })
+                seleced.map((item)=>{
+                    this.selectSeat['seat'+index+item] = true;
+                }) 
+
             },
-            checkAllGroupChange (data) {
-                let stationLength = this.stationList.length;
-                if (data.length === stationLength) {
-                    this.indeterminate = false;
-                    this.checkAll = true;
-                } else if (data.length > 0) {
-                    this.indeterminate = true;
-                    this.checkAll = false;
-                } else {
-                    this.indeterminate = false;
-                    this.checkAll = false;
+            clearAllCheck(){
+                let checkAll = {};
+                let selectSeat = {};
+                this.stationList.map((item,index)=>{
+                    checkAll['seat'+index] = false;
+                    item.value.map(value=>{
+                        selectSeat['seat'+index+value.name] = false;
+                    })
+                    
+                })
+                this.checkAll = checkAll;
+                this.selectSeat = selectSeat;
+                this.selectionIndex = []
+            },
+            selectDiscount (index,name) {
+                if(!this.selectSeat['seat'+index+name]){
+                   this.selectionIndex.push(index);
+                    let diff = this.getDiffStation();
+                    if(!diff){
+                        return;
+                    }
+                    this.selectSeat['seat'+index+name] = true; 
+                }else{
+                    this.selectSeat['seat'+index+name] = false;
+                    let selectionIndex = []
+                    for(let i in this.selectSeat){
+                        if(this.selectSeat[i]){
+                           selectionIndex.push(i.slice(4,5))
+                        }
+                    } 
+                    this.selectionIndex = selectionIndex;
+                    if(!selectionIndex.length){
+                        this.clearAllCheck();
+                    }else{
+                        let diff = this.getDiffStation();
+                    }
                 }
-            } ,
-            selectRow(val){
-                this.selecedStations = val;
-            }    
+
+
+                
+            },
+            getDiffStation(){
+                let demo = this.selectionIndex[0];
+                let list = this.selectionIndex;
+                let num = list.join(",").split(demo).length-1;
+                if(num != list.length){
+                    this.$Notice.error({
+                        title:'不同选择不同时间段的工位'
+                    });
+                    this.clearAllCheck()
+                    return false;
+                }
+                if(num == list.length && this.stationList[demo].value.length == list.length){
+                    this.checkAll['seat'+demo] = true;
+                }else{
+                    this.checkAll['seat'+demo] = false;
+                }
+                return true
+
+            },   
                
         }
     }

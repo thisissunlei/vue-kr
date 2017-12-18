@@ -77,7 +77,6 @@ export default{
 			}else{
 				document.body.style.overflow = "auto";
 			}
-			
 			this.listStyle = {
 				left:detail.left+Math.ceil(detail.width/2)+"px",
 				top:detail.top+detail.height+5+"px",
@@ -230,10 +229,8 @@ export default{
 		},
 		//上传成功
 		onSuccess(params){
-
 			var detail = Object.assign({},params);
 			this.defaultList.push(detail)
-			console.log("====",detail)
 			this.submitUpload([detail]);
 			
 		},
@@ -241,7 +238,6 @@ export default{
 
 		},
 		downFille(){
-			console.log("----------")
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);

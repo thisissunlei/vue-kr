@@ -32,15 +32,26 @@
         <div v-for="(item, index) in stationList" style="margin-bottom:20px">
             <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
                 <Checkbox
-                    :indeterminate="indeterminate.index"
-                    :value="checkAll[index]"
+                    :indeterminate="indeterminate['seat'+index]"
+                    :value="checkAll['seat'+index]"
                     @click.prevent.native="handleCheckAll(index)">全选    租赁结束日期：{{item.name}}</Checkbox>
             </div>
-            <CheckboxGroup :v-model="checkAllGroup[index]" @on-change="checkAllGroupChange">
-                <Checkbox  v-for="(value, i) in item.value" :label="value.seatId" key="value+i"></Checkbox>
+            <CheckboxGroup :v-model="checkAllGroup['seat'+index]" @on-change="checkAllGroupChange">
+                <Checkbox  v-for="(value, i) in item.value" :label="value.seatId"></Checkbox>
             </CheckboxGroup>
         </div>
-            <!-- <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table> -->
+
+        <!-- <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;">
+            <Checkbox
+                :indeterminate="indeterminate"
+                :value="checkAll"
+                @click.prevent.native="handleCheckAll">全选</Checkbox>
+        </div>
+        <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
+            <Checkbox label="香蕉"></Checkbox>
+            <Checkbox label="苹果"></Checkbox>
+            <Checkbox label="西瓜"></Checkbox>
+        </CheckboxGroup> -->
        </div>
     </div>
 </template>
@@ -63,15 +74,20 @@ import dateUtils from 'vue-dateutils';
             let checkAllGroup = {};
             let indeterminate = {};
             this.stationList.map((item,index)=>{
-                checkAll[index] = false;
-                checkAllGroup[index] = false;
-                indeterminate[index] = false;
+                checkAll['seat'+index] = false;
+                checkAllGroup['seat'+index] = [];
+                indeterminate['seat'+index] = false;
             })
+            console.log('data===========>',checkAllGroup)
            return{
             indeterminate: indeterminate,
             checkAll: checkAll,
             checkAllGroup:checkAllGroup,
             selecedStations: selecedStation,
+            // indeterminate: true,
+            // checkAll: false,
+            // checkAllGroup: ['香蕉', '西瓜']
+
            }
         },
         components: {
@@ -86,12 +102,13 @@ import dateUtils from 'vue-dateutils';
                this.stationList.map(function(item, index) {
                     if(_this.checkAll[index]){
                         stationVos = item.value.filter((value,i)=>{
-                            console.log('filter',value.seatId,val,val.indexOf(value.seatId+''),stationVos)
-                            if (val.indexOf(value.seatId+'') == -1) {
+                           
+                            if (val.indexOf(value.seatId) == -1) {
                                 return false;
                             }
                              return true;
                          })
+                         console.log('filter',stationVos)
                     }
                      
                 });
@@ -107,28 +124,43 @@ import dateUtils from 'vue-dateutils';
         created(){
         },
         methods: {
-           handleCheckAll (index) {
-                if(this.indeterminate[index]){
-                    this.checkAll[index] = false
+              handleCheckAll (index) {
+                // if (this.indeterminate) {
+                //     this.checkAll = false;
+                // } else {
+                //     this.checkAll = !this.checkAll;
+                // }
+                // this.indeterminate = false;
+
+                // if (this.checkAll) {
+                //     this.checkAllGroup = ['香蕉', '苹果', '西瓜'];
+                //     console.log('---------', this.checkAllGroup)
+                // } else {
+                //     this.checkAllGroup = [];
+                // }
+
+
+                if(this.indeterminate['seat'+index]){
+                    this.checkAll['seat'+index] = false
                 }else{
-                    this.checkAll[index] = true
+                    console.log('=========')
+                    this.checkAll['seat'+index] = true
                 }
+                this.indeterminate['seat'+index] = false;
                 let seleced = this.stationList[index].value.map(item=>{
                     return item.seatId+'';
                 })
 
-                if (this.checkAll[index]) {
-                    this.checkAllGroup[index] = seleced;
+                if (this.checkAll['seat'+index]) {
+                    this.checkAllGroup['seat'+index] = seleced;
                     this.selecedStations = seleced;
-                    console.log(this.checkAllGroup[index])
+                    console.log('=========================',this.checkAllGroup)
                 } else {
                     this.selecedStations = [];
                 }
             },
             checkAllGroupChange (data) {
-                console.log('========',data)
-                // let stationLength = this.stationList.length;
-                // if (data.length === stationLength) {
+                // if (data.length === 3) {
                 //     this.indeterminate = false;
                 //     this.checkAll = true;
                 // } else if (data.length > 0) {
@@ -138,7 +170,7 @@ import dateUtils from 'vue-dateutils';
                 //     this.indeterminate = false;
                 //     this.checkAll = false;
                 // }
-            } ,
+            },
             selectRow(val){
                 this.selecedStations = val;
             }    

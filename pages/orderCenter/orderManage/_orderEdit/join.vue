@@ -209,6 +209,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
+            this.getDetailData()
             return {
                 openStation:false,
                 customerName:'',
@@ -342,7 +343,7 @@ import '~/assets/styles/createOrder.less';
             planMap
         },
         created(){
-            this.getDetailData();
+            
         },
         watch:{
            getFloor(){
@@ -363,34 +364,37 @@ import '~/assets/styles/createOrder.less';
            },
         },
         methods: {
-             getDetailData:function(){
+             getDetailData(){
                 let _this = this;
                 let {params}=this.$route;
                 let from={
                     // id:4095
                     id:params.orderEdit
                 };
-                 this.$http.get('get-order-detail', from, r => {
-                    let data = r.data;
-                    console.log('get-order-detail===>',data.customerid)
-                    _this.formItem.customerId = data.customerId;
-                    _this.customerName = data.customerName;
-                    _this.formItem.communityId = data.communityId;
-                     _this.salerName = data.salerName;
-                    _this.formItem.salerId = data.salerId;
-                    _this.communityName = data.communityName;
-                    _this.formItem.endDate = data.endDate;
-                    _this.formItem.startDate = data.startDate;
-                    _this.stationList = data.orderSeatDetailVo;
-                    _this.formItem.firstPayTime = data.firstPayTime;
-                    _this.formItem.rentAmount = data.rentAmount;
-                    _this.installmentType = 'THREE';
-                    _this.depositAmount = '3';
-                    _this.getFloor = +new Date()
-                    _this.getSaleTactics({communityId:data.customerId})
-                    }, e => {
-                        _this.$Message.info(e);
-                })
+
+
+
+                // this.$http.get('get-order-detail', from, r => {
+                //     let data = r.data;
+                //     console.log('get-order-detail===>',data.customerid)
+                //     _this.formItem.customerId = data.customerId;
+                //     _this.customerName = data.customerName;
+                //     _this.formItem.communityId = data.communityId;
+                //      _this.salerName = data.salerName;
+                //     _this.formItem.salerId = data.salerId;
+                //     _this.communityName = data.communityName;
+                //     _this.formItem.endDate = data.endDate;
+                //     _this.formItem.startDate = data.startDate;
+                //     _this.stationList = data.orderSeatDetailVo;
+                //     _this.formItem.firstPayTime = data.firstPayTime;
+                //     _this.formItem.rentAmount = data.rentAmount;
+                //     _this.installmentType = 'THREE';
+                //     _this.depositAmount = '3';
+                //     _this.getFloor = +new Date()
+                //     _this.getSaleTactics({communityId:data.customerId})
+                //     }, e => {
+                //         _this.$Message.info(e);
+                // })
             },
             config:function(){
                 this.$Notice.config({

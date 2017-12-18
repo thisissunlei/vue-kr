@@ -165,4 +165,10 @@ export default  {
         url: 'krspace-finance-web/order-seat/community-floor?',
         method: 'get'
     },
+    // 获取社区-楼层接口
+    'get-reduce-station-amount': {
+        url: 'krspace-finance-web/seat-reduce-amount?',
+        method: 'get'
+    },
+     // 
 }

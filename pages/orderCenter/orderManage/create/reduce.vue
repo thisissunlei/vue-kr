@@ -68,7 +68,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <div v-if="openStation && !stationList.length">无可续租工位</div>
+        <div v-if="openStation && !stationList.length">无可减租工位</div>
         <stationList label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation && stationList.length"></stationList>
     </Modal>
@@ -390,15 +390,16 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 let params = {
-                    leaseEnddate:this.renewForm.startDate,
-                    leaseBegindate:this.renewForm.endDate,
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     // communityId:this.renewForm.communityId,
                     communityId:4,
+                    customerId:10089,
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
                 if(val.length){
-                     this.$http.post('get-station-amount', params, r => {
+                     this.$http.post('get-reduce-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;

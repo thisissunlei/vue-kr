@@ -34,10 +34,11 @@
                 <Checkbox
                     :indeterminate="indeterminate['seat'+index]"
                     :value="checkAll['seat'+index]"
+                    :key="item.name"
                     @click.prevent.native="handleCheckAll(index)">全选    租赁结束日期：{{item.name}}</Checkbox>
             </div>
             <CheckboxGroup :v-model="checkAllGroup['seat'+index]" @on-change="checkAllGroupChange">
-                <Checkbox  v-for="(value, i) in item.value" :label="value.seatId"></Checkbox>
+                <Checkbox  v-for="(value, i) in item.value" :label="value.name" :key="value.name"></Checkbox>
             </CheckboxGroup>
         </div>
 
@@ -125,30 +126,14 @@ import dateUtils from 'vue-dateutils';
         },
         methods: {
               handleCheckAll (index) {
-                // if (this.indeterminate) {
-                //     this.checkAll = false;
-                // } else {
-                //     this.checkAll = !this.checkAll;
-                // }
-                // this.indeterminate = false;
-
-                // if (this.checkAll) {
-                //     this.checkAllGroup = ['香蕉', '苹果', '西瓜'];
-                //     console.log('---------', this.checkAllGroup)
-                // } else {
-                //     this.checkAllGroup = [];
-                // }
-
-
                 if(this.indeterminate['seat'+index]){
                     this.checkAll['seat'+index] = false
                 }else{
-                    console.log('=========')
                     this.checkAll['seat'+index] = true
                 }
                 this.indeterminate['seat'+index] = false;
                 let seleced = this.stationList[index].value.map(item=>{
-                    return item.seatId+'';
+                    return item.name;
                 })
 
                 if (this.checkAll['seat'+index]) {

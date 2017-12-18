@@ -20,6 +20,7 @@
             }
         },
         mounted(){
+          GLOBALSIDESWITCH("false"); 
         //    this.getListData(this.params);
         },
         methods:{

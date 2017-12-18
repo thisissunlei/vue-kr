@@ -52,7 +52,6 @@
             ref="selection" 
             :columns="columns" 
             :data="detail" 
-            @on-selection-change = "selectCheck"
         ></Table>
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
@@ -107,11 +106,7 @@
                 detail:[],
                 totalCount:1,
                 columns: [
-                     {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
+                    
                     {
                         title: '合同编号',
                         key: 'serialNumber',
@@ -314,14 +309,7 @@
                 this.getListData(this.params);
 
             },
-            //多选按钮被点击
-            selectCheck(selection){
-                var ids=[];
-                selection.map((item,index)=>{
-                    ids.push(item.id);
-                })
-                this.selectAllData = ids;
-            },
+           
         },
         
     }

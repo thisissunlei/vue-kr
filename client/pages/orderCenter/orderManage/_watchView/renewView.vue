@@ -198,6 +198,7 @@ export default {
 		}
 	},
 	mounted:function(){
+		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
 		let from={
 			id:params.watchView

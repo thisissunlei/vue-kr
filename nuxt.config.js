@@ -30,14 +30,7 @@ module.exports = {
   plugins: [
     {src: '~plugins/iview',ssr: true},
   ],
-  
-  /*
-  ** Global CSS
-  */
   css: ['~assets/css/main.css'],
-  /*
-  ** Customize the progress-bar color
-  */
   loading: { color: '#000000' },
   build: {
     vendor: ['iview'],

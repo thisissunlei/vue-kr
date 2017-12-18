@@ -133,58 +133,35 @@
                    cStartDate:''
                 },
                 type:this.mask=='join'?true:false,
-                orderList:[
-                    {
-                        value:'NOT_EFFECTIVE',
-                        label:'未生效'
-                    },
-                    {
-                        value:'EFFECTIVE',
-                        label:'已生效'
-                    },
-                    {
-                        value:'INVALID',
-                        label:'已作废'
-                    }
-                ],
-                payList:[
-                   {
-                        value:'WAIT_PAY',
-                        label:'待支付'
-                    },
-                    {
-                        value:'COMPLETE',
-                        label:'已付清'
-                    },
-                    {
-                        value:'UN_COMPLETE',
-                        label:'未付清'
-                    } 
-                ],
-                typeList:[
-                    {
-                        value:'IN',
-                        label:'入驻服务订单'
-                    },
-                    {
-                        value:'INCREASE',
-                        label:'增值服务订单'
-                    },
-                    {
-                        value:'CONTINUE',
-                        label:'续租服务订单'
-                    }
-                ],
+                orderList:[],
+                payList:[],
+                typeList:[],
                 communityList:[]
             }
         },
         mounted:function(){
-            var _this=this;
-             this.$http.get('join-bill-community','', r => {    
-                   _this.communityList=r.data.items 
+            this.getCommunity();
+            this.getOrderList();
+        },
+        methods:{
+             getCommunity(){
+                var _this=this;
+                this.$http.get('join-bill-community','', r => {    
+                    _this.communityList=r.data.items 
+                    }, e => {
+                    _this.$Message.info(e);
+                })
+            },
+            getOrderList(){
+                var _this=this;
+                this.$http.get('order-pay-list','',r => {
+                    _this.orderList=r.data.orderTypeVos;
+                    _this.payList=r.data.payStatusVos;
+                    _this.typeList=r.data.seatOrderTypeVos;
                 }, e => {
-                  _this.$Message.info(e);
-            })
+                    _this.$Message.info(e);
+                })   
+            }
         },
         updated:function(){
             if(this.formItem.cStartDate&&this.formItem.cEndDate){

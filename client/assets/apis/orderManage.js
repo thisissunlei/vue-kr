@@ -30,9 +30,9 @@ export default {
     url: '/api/krspace-op-web/order-seat-add/orderStatus',
     method: 'post'
   },
-  //入驻订单列表－详情
-  'reduce-bill-detail': {
-    url: '/mockjs/66/api/krspace-op-web/order-seat-add/show',
+  //入驻减租高级查询－下拉
+  'order-pay-list': {
+    url: '/krspace-op-web/order-seat/data',
     method: 'get'
-  },
+  }
 } 

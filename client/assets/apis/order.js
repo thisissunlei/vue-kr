@@ -161,7 +161,6 @@ export default  {
         url: 'krspace-finance-web/order-seat/community-floor?',
         method: 'get'
     },
-
   //获取售货员List组件
   'get-customer': {
       url: '/api/krspace-finance-web/customer/my-customers?',
@@ -169,6 +168,11 @@ export default  {
   },
     'get-cancel-msg': {
         url: '/api/krspace-op-web/order/metting-room/cancel/msg?',
+        method: 'get'
+    },
+    // 获取社区-楼层接口
+    'get-reduce-station-amount': {
+        url: '/api/krspace-finance-web/seat-reduce-amount?',
         method: 'get'
     },
 }

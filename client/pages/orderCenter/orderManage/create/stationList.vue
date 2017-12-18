@@ -32,15 +32,15 @@
         <div v-for="(item, index) in stationList" style="margin-bottom:20px">
             <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
                 <Checkbox
-                    :indeterminate="indeterminate.index"
-                    :value="checkAll[index]"
+                    :value="checkAll['seat'+index]"
+                    :key="item.name"
+                    @on-change="selectDiscount"
                     @click.prevent.native="handleCheckAll(index)">全选    租赁结束日期：{{item.name}}</Checkbox>
             </div>
-            <CheckboxGroup :v-model="checkAllGroup[index]" @on-change="checkAllGroupChange">
-                <Checkbox  v-for="(value, i) in item.value" :label="value.seatId" key="value+i"></Checkbox>
-            </CheckboxGroup>
+            <div class="checkbox-list">
+                <Checkbox v-for="(value, i) in item.value"  :value="selectSeat['seat'+index+value.name]" @click.prevent.native="selectDiscount(index,value.name)" :key="value.name">{{value.name}}</Checkbox>
+            </div>
         </div>
-            <!-- <Table border ref="selection" :columns="columns" :data="stationList" @on-selection-change="selectRow"></Table> -->
        </div>
     </div>
 </template>
@@ -60,88 +60,136 @@ import dateUtils from 'vue-dateutils';
                 })
             }
             let checkAll = {};
-            let checkAllGroup = {};
-            let indeterminate = {};
+            let selectSeat = {};
             this.stationList.map((item,index)=>{
-                checkAll[index] = false;
-                checkAllGroup[index] = false;
-                indeterminate[index] = false;
+                checkAll['seat'+index] = false;
+                item.value.map(value=>{
+                    selectSeat['seat'+index+value.name] = false;
+                })
+                
             })
            return{
-            indeterminate: indeterminate,
             checkAll: checkAll,
-            checkAllGroup:checkAllGroup,
+            selectSeat:selectSeat,
             selecedStations: selecedStation,
+            selectionIndex:[]
            }
         },
         components: {
         },
-        update:function(){
-            console.log('update')
-        },
          watch:{
-            selecedStations:function(val){
-                let stationVos  =[];
-                let _this = this;
-               this.stationList.map(function(item, index) {
-                    if(_this.checkAll[index]){
+            selectionIndex(){
+                let list = [];
+                let stationVos = []
+                let Sindex = '';
+                for(let i in this.selectSeat){
+                    if(this.selectSeat[i]){
+                        list.push(i.slice(5))
+                        Sindex = i.slice(4,5)
+                    }
+                }
+                this.stationList.map(function(item, index) {
+                    if(Sindex == index){
                         stationVos = item.value.filter((value,i)=>{
-                            console.log('filter',value.seatId,val,val.indexOf(value.seatId+''),stationVos)
-                            if (val.indexOf(value.seatId+'') == -1) {
+                            if (list.indexOf(value.name) == -1) {
                                 return false;
                             }
                              return true;
                          })
+                         console.log('filter',stationVos)
                     }
                      
                 });
-               this.$emit("on-station-change", stationVos);
-              
+                this.$emit("on-station-change", stationVos); 
+
+            }
+         },
+        created(){
+
+        },
+        methods: {
+              handleCheckAll (index) {
+                if(!this.checkAll['seat'+index]){
+                    this.clearAllCheck();
+                    this.checkAll['seat'+index] = true;
+                }else{
+                    this.checkAll['seat'+index] = false;
+                    this.clearAllCheck();
+                }
+
+                if(!this.checkAll['seat'+index]){
+                    return
+                }
+
+                let seleced = this.stationList[index].value.map(item=>{
+                    this.selectionIndex.push(index)
+                    return item.name;
+                })
+                seleced.map((item)=>{
+                    this.selectSeat['seat'+index+item] = true;
+                }) 
+
+            },
+            clearAllCheck(){
+                let checkAll = {};
+                let selectSeat = {};
+                this.stationList.map((item,index)=>{
+                    checkAll['seat'+index] = false;
+                    item.value.map(value=>{
+                        selectSeat['seat'+index+value.name] = false;
+                    })
+                    
+                })
+                this.checkAll = checkAll;
+                this.selectSeat = selectSeat;
+                this.selectionIndex = []
+            },
+            selectDiscount (index,name) {
+                if(!this.selectSeat['seat'+index+name]){
+                   this.selectionIndex.push(index);
+                    let diff = this.getDiffStation();
+                    if(!diff){
+                        return;
+                    }
+                    this.selectSeat['seat'+index+name] = true; 
+                }else{
+                    this.selectSeat['seat'+index+name] = false;
+                    let selectionIndex = []
+                    for(let i in this.selectSeat){
+                        if(this.selectSeat[i]){
+                           selectionIndex.push(i.slice(4,5))
+                        }
+                    } 
+                    this.selectionIndex = selectionIndex;
+                    if(!selectionIndex.length){
+                        this.clearAllCheck();
+                    }else{
+                        let diff = this.getDiffStation();
+                    }
+                }
 
 
                 
             },
-            selecedStation:function(val){
-            }
-         },
-        created(){
-        },
-        methods: {
-           handleCheckAll (index) {
-                if(this.indeterminate[index]){
-                    this.checkAll[index] = false
+            getDiffStation(){
+                let demo = this.selectionIndex[0];
+                let list = this.selectionIndex;
+                let num = list.join(",").split(demo).length-1;
+                if(num != list.length){
+                    this.$Notice.error({
+                        title:'不同选择不同时间段的工位'
+                    });
+                    this.clearAllCheck()
+                    return false;
+                }
+                if(num == list.length && this.stationList[demo].value.length == list.length){
+                    this.checkAll['seat'+demo] = true;
                 }else{
-                    this.checkAll[index] = true
+                    this.checkAll['seat'+demo] = false;
                 }
-                let seleced = this.stationList[index].value.map(item=>{
-                    return item.seatId+'';
-                })
+                return true
 
-                if (this.checkAll[index]) {
-                    this.checkAllGroup[index] = seleced;
-                    this.selecedStations = seleced;
-                    console.log(this.checkAllGroup[index])
-                } else {
-                    this.selecedStations = [];
-                }
-            },
-            checkAllGroupChange (data) {
-                console.log('========',data)
-                // let stationLength = this.stationList.length;
-                // if (data.length === stationLength) {
-                //     this.indeterminate = false;
-                //     this.checkAll = true;
-                // } else if (data.length > 0) {
-                //     this.indeterminate = true;
-                //     this.checkAll = false;
-                // } else {
-                //     this.indeterminate = false;
-                //     this.checkAll = false;
-                // }
-            } ,
-            selectRow(val){
-                this.selecedStations = val;
-            }    
+            },   
                
         }
     }

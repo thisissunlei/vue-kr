@@ -28,7 +28,7 @@
                 </Form-item>
                 <Form-item label="客户名称" class='bill-search-class'>
                     <i-input 
-                        v-model="formItem.customerName" 
+                        v-model="formItem.customName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     ></i-input>
@@ -102,7 +102,7 @@
          </Form>
 </template>
 <script>
-
+    import Vue from 'vue';
     export default{
         props:['mask'],
         data (){
@@ -140,18 +140,17 @@
                 communityList:[]
             }
         },
-        created:function(){
-            var _this=this;
-             this.$http.get('join-bill-community','', r => {    
-                   _this.communityList=r.data.items 
-                }, e => {
-                  _this.$Message.info(e);
+        mounted:function(){
+            var _this = this;
+            this.$http.get('join-bill-community','', r => {    
+                _this.communityList=r.data.items 
+            }, e => {
+                _this.$Message.info(e);
             })
             this.$http.get('get-center-prepare-data','',r => {
-                
-                   _this.typeList = r.data.items;
-                }, e => {
-                  _this.$Message.info(e);
+                _this.typeList = r.data.items;
+            }, e => {
+                _this.$Message.info(e);
             })
         },
         updated:function(){

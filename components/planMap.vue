@@ -6,7 +6,7 @@
 		    </Select>
 		    <Input v-model="inputStart" placeholder="开始工位" style="width: 80px;margin-right:5px"></Input>至
 		    <Input v-model="inputEnd" placeholder="结束工位" style="width: 80px;margin-right:5px"></Input>
-			<Button type="primary" @click="submitStation" style="margin-right:15px">确定</Button>
+			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>

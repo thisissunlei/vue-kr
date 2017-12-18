@@ -32,27 +32,15 @@
         <div v-for="(item, index) in stationList" style="margin-bottom:20px">
             <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;" :key="index">
                 <Checkbox
-                    :indeterminate="indeterminate['seat'+index]"
                     :value="checkAll['seat'+index]"
                     :key="item.name"
+                    @on-change="selectDiscount"
                     @click.prevent.native="handleCheckAll(index)">全选    租赁结束日期：{{item.name}}</Checkbox>
             </div>
-            <CheckboxGroup :v-model="checkAllGroup['seat'+index]" @on-change="checkAllGroupChange">
-                <Checkbox  v-for="(value, i) in item.value" :label="value.name" :key="value.name"></Checkbox>
-            </CheckboxGroup>
+            <div class="checkbox-list">
+                <Checkbox v-for="(value, i) in item.value"  :value="selectSeat['seat'+index+value.name]" @click.prevent.native="selectDiscount(index,value.name)" :key="value.name">{{value.name}}</Checkbox>
+            </div>
         </div>
-
-        <!-- <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;">
-            <Checkbox
-                :indeterminate="indeterminate"
-                :value="checkAll"
-                @click.prevent.native="handleCheckAll">全选</Checkbox>
-        </div>
-        <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-            <Checkbox label="香蕉"></Checkbox>
-            <Checkbox label="苹果"></Checkbox>
-            <Checkbox label="西瓜"></Checkbox>
-        </CheckboxGroup> -->
        </div>
     </div>
 </template>
@@ -72,23 +60,19 @@ import dateUtils from 'vue-dateutils';
                 })
             }
             let checkAll = {};
-            let checkAllGroup = {};
-            let indeterminate = {};
+            let selectSeat = {};
             this.stationList.map((item,index)=>{
                 checkAll['seat'+index] = false;
-                checkAllGroup['seat'+index] = [];
-                indeterminate['seat'+index] = false;
+                item.value.map(value=>{
+                    selectSeat['seat'+index+value.name] = false;
+                })
+                
             })
-            console.log('data===========>',checkAllGroup)
            return{
-            indeterminate: indeterminate,
             checkAll: checkAll,
-            checkAllGroup:checkAllGroup,
+            selectSeat:selectSeat,
             selecedStations: selecedStation,
-            // indeterminate: true,
-            // checkAll: false,
-            // checkAllGroup: ['香蕉', '西瓜']
-
+            selectionIndex:[]
            }
         },
         components: {
@@ -113,48 +97,89 @@ import dateUtils from 'vue-dateutils';
                     }
                      
                 });
-               this.$emit("on-station-change", stationVos);
-              
-
-
-                
+               this.$emit("on-station-change", stationVos);      
             },
             selecedStation:function(val){
             }
          },
         created(){
+
         },
         methods: {
               handleCheckAll (index) {
-                if(this.indeterminate['seat'+index]){
-                    this.checkAll['seat'+index] = false
+                if(!this.checkAll['seat'+index]){
+                    this.clearAllCheck();
+                    this.checkAll['seat'+index] = true;
                 }else{
-                    this.checkAll['seat'+index] = true
+                    this.checkAll['seat'+index] = false;
+                    this.clearAllCheck();
                 }
-                this.indeterminate['seat'+index] = false;
+
+                if(!this.checkAll['seat'+index]){
+                    return
+                }
+
                 let seleced = this.stationList[index].value.map(item=>{
+                    this.selectionIndex.push(index)
                     return item.name;
                 })
+                seleced.map((item)=>{
+                    this.selectSeat['seat'+index+item] = true;
+                }) 
 
-                if (this.checkAll['seat'+index]) {
-                    this.checkAllGroup['seat'+index] = seleced;
-                    this.selecedStations = seleced;
-                    console.log('=========================',this.checkAllGroup)
-                } else {
-                    this.selecedStations = [];
-                }
             },
-            checkAllGroupChange (data) {
-                // if (data.length === 3) {
-                //     this.indeterminate = false;
-                //     this.checkAll = true;
-                // } else if (data.length > 0) {
-                //     this.indeterminate = true;
-                //     this.checkAll = false;
-                // } else {
-                //     this.indeterminate = false;
-                //     this.checkAll = false;
-                // }
+            clearAllCheck(){
+                let checkAll = {};
+                let selectSeat = {};
+                this.stationList.map((item,index)=>{
+                    checkAll['seat'+index] = false;
+                    item.value.map(value=>{
+                        selectSeat['seat'+index+value.name] = false;
+                    })
+                    
+                })
+                this.checkAll = checkAll;
+                this.selectSeat = selectSeat;
+                this.selectionIndex = []
+            },
+            selectDiscount (index,name) {
+                if(!this.selectSeat['seat'+index+name]){
+                   this.selectionIndex.push(index);
+                    let diff = this.getDiffStation();
+                    if(!diff){
+                        return;
+                    }
+                    this.selectSeat['seat'+index+name] = true; 
+                }else{
+                    this.selectSeat['seat'+index+name] = false;
+                    let selectionIndex = []
+                    for(let i in this.selectSeat){
+                        if(this.selectSeat[i]){
+                           selectionIndex.push(i.slice(4,5))
+                        }
+                    } 
+                    this.selectionIndex = selectionIndex;
+                }
+
+
+                
+            },
+            getDiffStation(){
+                let demo = this.selectionIndex[0];
+                let list = this.selectionIndex;
+                let num = list.join(",").split(demo).length-1;
+                if(num != list.length){
+                    this.$Notice.error({
+                        title:'不同选择不同时间段的工位'
+                    });
+                    this.clearAllCheck()
+                    return false;
+                }
+                if(num == list.length){
+                    this.checkAll['seat'+demo] = true;
+                }
+                return true
+
             },
             selectRow(val){
                 this.selecedStations = val;

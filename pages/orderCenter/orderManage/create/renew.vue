@@ -260,7 +260,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '工位房间编号',
-                        key: 'seatId'
+                        key: 'name'
                     },
                     {
                         title: '标准单价（元/月）',
@@ -827,7 +827,7 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
-                    console.log('save-join=====',r.data)
+                    _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

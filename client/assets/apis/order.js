@@ -109,7 +109,7 @@ export default  {
   },
   //本地联调测试接口
   'get-order-detail': {
-    url: 'krspace-finance-web/checkinagreement/checkin-agreement/actions/show?',
+    url: '/api/krspace-op-web/order-seat-add/show?',
     method: 'get'
   },
    //计算合同租赁期限

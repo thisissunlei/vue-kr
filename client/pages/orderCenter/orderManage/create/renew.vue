@@ -365,24 +365,21 @@ import utils from '~/plugins/utils';
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-
-
-
-
+                    window.location.href='/orderCenter/orderManage';
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
                     });
                     setTimeout(function(){
                         _this.disabled = false;
-                    },1000)
+                    },500)
 
                         console.log('error',e)
                 })
                 
             },
             handleSubmit:function(name){
-                let message = '=========';
+                let message = '请填写完整表单';
                 this.config()
                 let _this = this;
                 this.disabled = true;
@@ -403,19 +400,14 @@ import utils from '~/plugins/utils';
                 })
             },
             getRenewStation(){
-                // let params = {
-                //     customerId:this.renewForm.customerId,
-                //     communityId:this.renewForm.communityId
-                // };
                 let params = {
                     //假数据
-                    customerId:10089,
-                    communityId:4,
+                    customerId:this.renewForm.customerId,
+                    communityId:this.renewForm.communityId,
                     continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
                 };
                 let _this = this;
                this.$http.get('get-renew-station', params, r => {
-                    console.log('get-renew-station',r.data)
                     let station = []
                     for(let i in r.data){
                         let obj = {};

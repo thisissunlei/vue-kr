@@ -388,9 +388,8 @@ import utils from '~/plugins/utils';
                 let params = {
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
-                    // communityId:this.renewForm.communityId,
-                    communityId:4,
-                    customerId:10089,
+                    communityId:this.renewForm.communityId,
+                    customerId:this.renewForm.customerId,
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
@@ -430,14 +429,10 @@ import utils from '~/plugins/utils';
                 this.selecedArr = val;
             },
              getRenewStation(){
-                // let params = {
-                //     customerId:this.renewForm.customerId,
-                //     communityId:this.renewForm.communityId
-                // };
                 let params = {
                     //假数据
-                    customerId:10089,
-                    communityId:4,
+                    customerId:this.renewForm.customerId,
+                    communityId:this.renewForm.communityId,
                     reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate))
 
                 };

@@ -516,6 +516,7 @@ import utils from '~/plugins/utils';
                      _this.$Notice.error({
                         title:e.message
                     })
+                    // _this.formItem.items=[]
 
                         console.log('error',e)
                 })

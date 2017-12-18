@@ -45,7 +45,7 @@
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <SelectCommunities name="renewForm.communityId" :onchange="changeCommunity"></SelectCommunities>
+                    <SelectCommunities test="renewForm" :onchange="changeCommunity"></SelectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">

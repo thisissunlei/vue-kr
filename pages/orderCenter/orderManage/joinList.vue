@@ -320,9 +320,7 @@
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
                 }, e => {
-                    _this.openMessage=true;
-                    _this.MessageType="error";
-                    _this.warn=e.message;
+                    console.log('e');
                 })   
             },
             changePage (index) {

@@ -24,7 +24,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px">
-                    <selectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></selectSaler>
+                    <SelectSaler name="formItem.saler" :onchange="changeSaler" :value="formItem.saler"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -199,7 +199,7 @@
 import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import selectSaler from '~/components/SelectSaler.vue'
+import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/detailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
@@ -337,7 +337,7 @@ import '~/assets/styles/createOrder.less';
             selectCommunities,
             DetailStyle,
             selectCustomers,
-            selectSaler,
+            SelectSaler,
             planMap
         },
         created(){

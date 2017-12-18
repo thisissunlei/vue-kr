@@ -114,51 +114,51 @@ export default  {
   },
    //计算合同租赁期限
   'contract-date-range': {
-    url: 'krspace-op-web/finacontractdetail/contract-date-range?',
+    url: '/api/krspace-op-web/finacontractdetail/contract-date-range?',
     method: 'get'
   },
   //优惠选项communityId
     'sale-tactics': {
-        url: 'krspace-finance-web/sale-tactics?',
+        url: '/api/krspace-finance-web/sale-tactics?',
         method: 'get'
     },
     //计算优惠
     'count-sale': {
-        url: 'krspace-finance-web/count-order-sale',
+        url: '/api/krspace-finance-web/count-order-sale',
         method: 'post'
     },
     //获取可选择的续租工位
      'get-renew-station': {
-        url: 'krspace-finance-web/order-seat-detail/continue?',
+        url: '/api/krspace-finance-web/order-seat-detail/continue?',
         method: 'get'
     },
     //获取可选择的减租工位
      'get-reduce-station': {
-        url: 'krspace-finance-web/order-seat-detail/reduce?',
+        url: '/api/krspace-finance-web/order-seat-detail/reduce?',
         method: 'get'
     },
     //入驻新建提交
      'save-join': {
-        url: 'krspace-finance-web/order-seat-add',
+        url: '/api/krspace-finance-web/order-seat-add',
         method: 'post'
     },
     //续驻新建提交
      'save-renew': {
-        url: 'krspace-finance-web/order-seat-continue',
+        url: '/api/krspace-finance-web/order-seat-continue',
         method: 'post'
     },
     'save-reduce': {
-        url: 'krspace-finance-web/order-seat-reduce',
+        url: '/api/krspace-finance-web/order-seat-reduce',
         method: 'post'
     },
     //计算工位服务费小计
     'get-station-amount': {
-        url: 'krspace-finance-web/order-seat-detail/amount',
+        url: '/api/krspace-finance-web/order-seat-detail/amount',
         method: 'post'
     },
     // 获取社区-楼层接口
     'get-community-floor': {
-        url: 'krspace-finance-web/order-seat/community-floor?',
+        url: '/api/krspace-finance-web/order-seat/community-floor?',
         method: 'get'
     },
   //获取售货员List组件

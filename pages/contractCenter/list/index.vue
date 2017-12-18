@@ -79,9 +79,9 @@
 <script>
 
 
-    import hoc from '~/components/hoc.js'
+   
     import sectionTitle from '~/components/SectionTitle.vue';
-    import krUpload from '~/components/krUpload.vue';
+    import krUpload from '~/components/KrUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
@@ -212,6 +212,12 @@
            this.getListData(this.params);
         },
         methods:{
+            config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+            },
             handleFormatError(){
                 console.log("格式不正确=======")
             },
@@ -239,7 +245,8 @@
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                location.href=`./12/joinView`;
+
+                location.href=`./${params.row.id}/viewCenter`;
             },
             openCancel(params){
                 this.openNullify=true;
@@ -261,12 +268,16 @@
             },
             getListData(params){
                 var _this=this;
+                 this.config()
                  this.$http.get('get-center-list-contract', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;
+                   
                 }, e => {
-                    _this.$Message.info(e);
+                    _this.$Notice.error({
+                        title:e.message
+                    });
                 })   
             },
             //批量下载按钮点击

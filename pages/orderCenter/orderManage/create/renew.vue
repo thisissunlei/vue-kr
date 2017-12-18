@@ -33,19 +33,19 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="新建续租服务订单管理"></sectionTitle>
+       <SectionTitle label="新建续租服务订单管理"></SectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customerId">
-                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
+                    <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer"></SelectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <selectCommunities name="renewForm.communityId" :onchange="changeCommunity"></selectCommunities>
+                    <SelectCommunities name="renewForm.communityId" :onchange="changeCommunity"></SelectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -195,11 +195,11 @@
 
 
 <script>
-import sectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import SectionTitle from '~/components/SectionTitle.vue'
+import SelectCommunities from '~/components/SelectCommunities.vue'
+import SelectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
-import DetailStyle from '~/components/detailStyle';
+import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
@@ -306,10 +306,10 @@ import utils from '~/plugins/utils';
             }
         },
         components: {
-            sectionTitle,
-            selectCommunities,
+            SectionTitle,
+            SelectCommunities,
             DetailStyle,
-            selectCustomers,
+            SelectCustomers,
             SelectSaler,
             stationList,
             planMap

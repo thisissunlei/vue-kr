@@ -1,4 +1,3 @@
-
 <template>
 	<div>
 		<div>
@@ -58,10 +57,23 @@ export default{
 		
 	},
 	methods:{
+		//错误提示
+		config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+        },
 		//上传列表的开关
 		switchList:function(event){
 			var detail = event.target.getBoundingClientRect();
 			this.isOpenList = !this.isOpenList;
+			if(this.isOpenList){
+				document.body.style.overflow = "hidden";
+			}else{
+				document.body.style.overflow = "auto";
+			}
+			
 			this.listStyle = {
 				left:detail.left+Math.ceil(detail.width/2)+"px",
 				top:detail.top+detail.height+5+"px",
@@ -73,6 +85,9 @@ export default{
 			this.getUpUrl();
 		},
 		submitUpload(){
+			var that = this;
+			this.config();
+
 			var _this = this;
 			console.log({fileList:_this.params,requestId:_this.columnDetail.requestId},">>>>>>>")
 			
@@ -82,25 +97,30 @@ export default{
 			}, (response) => {
 				
 			}, (error) => {
-				_this.$Message.info(error);
+				that.$Notice.error({
+                    title:error.message
+                });
 			})   
 		},
 		//获取上传图片
 		getUpUrl(){
 			var that=this;
 			var category="op/upload";
+			this.config();
 			http.get('get-vue-upload-url', {
 				isPublic:true,
 				category,
 			}, (response) => {
 				this.serverUrl = response.data.serverUrl;
 			}, (error) => {
-				_this.$Message.info(error);
+				that.$Notice.error({
+                        title:error.message
+                });
 			})   
 		},
 		onChange(event){
-			// console.log(event,">>>>>>>>>>")
-			let _this = this;
+			
+			let that = this;
 			let file = event;
 			var fileName= event.name;
 			if (!file) {
@@ -111,10 +131,10 @@ export default{
 				this.isShowProgress = "block";
 				this.progress = 0;
 				var timer = window.setInterval(function() {
-						if (_this.progress >= 100) {
+						if (that.progress >= 100) {
 								window.clearInterval(timer);
 						}
-						_this.progress += 10;
+						that.progress += 10;
 					
 				}, 300);
 			}
@@ -133,7 +153,7 @@ export default{
 						form.append('x:original_name', file.name);
 						form.append('file', file);
 
-						_this.onTokenSuccess({
+						that.onTokenSuccess({
 							sourceservicetoken: response.token,
 							docTypeCode: response.docTypeCode,
 							operater: response.operater
@@ -145,35 +165,44 @@ export default{
 								var fileResponse = xhrfile.response;
 								if (xhrfile.status === 200) {
 									if (fileResponse && fileResponse.code > 0) {
-										//  _this.onSuccess(fileResponse.data,file);
+										//  that.onSuccess(fileResponse.data,file);
 										var params = {};
-										_this.isShowProgress = "none";
-										_this.progress = 100;
+										that.isShowProgress = "none";
+										that.progress = 100;
 										params.name = fileName;
 										params.url = fileResponse.data.url;
 										params.fileId = ""+fileResponse.data.id;
 										params.fileName = fileName;
 										params.fileUrl = fileResponse.data.url;
 										params.type = "ATTACHMENT"
-										_this.onSuccess(params)
+										that.onSuccess(params)
 
 									} else {
 										//报错
-										_this.isShowProgress = "none";
-										_this.progress = 100;
+										that.isShowProgress = "none";
+										that.progress = 100;
 										console.log(fileResponse.msg)
-										// _this.onError(fileResponse.msg);
+										that.$Notice.error({
+												title:fileResponse.msg
+										});
+										// that.onError(fileResponse.msg);
 									}
 								} else if (xhrfile.status == 413) {
-									_this.isShowProgress = "none";
-										_this.progress = 100;
-									console.log('您上传的文件过大！')
-									// _this.onError('您上传的文件过大！');
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:"您上传的文件过大！"
+									});
+									// that.onError('您上传的文件过大！');
 								} else {
-									_this.isShowProgress = "none";
-									_this.progress = 100;
-									console.log('后台报错请联系管理员！')
-									// _this.onError('后台报错请联系管理员！');
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:'后台报错请联系管理员！'
+									});
+								
 								}
 							}
 						};
@@ -181,7 +210,7 @@ export default{
 						xhrfile.responseType = 'json';
 						xhrfile.send(form);
 					} else {
-						_this.onTokenError();
+						that.onTokenError();
 					}
 				}
 				

@@ -91,6 +91,12 @@
             krUpload,
             HeightSearch
         },
+        head () {
+            return {
+                title: "合同列表"
+            }
+           
+        },
         data () {
             return {
                 params:{

@@ -15,28 +15,23 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="新建减租服务订单管理"></sectionTitle>
+       <sectionTitle label="编辑减租服务订单管理"></sectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form" style="padding:30px 24px">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px"  prop="customer">
-                    <selectCustomers name="renewForm.customer" :onchange="changeCustomer"></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px"  prop="customerId">
+                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px" prop="community" >
-                    <selectCommunities name="renewForm.community" :onchange="changeCommunity"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px" prop="communityId" >
+                    <selectCommunities test="renewForm" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
-                        <DatePicker type="date" placeholder="续租结束日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
-                    </FormItem>
-                </Col>
-                <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="saler">
-                    <SelectSaler name="renewForm.saler" :onchange="changeSaler" ></SelectSaler>
+                    <FormItem label="减租开始日期" style="width:252px" prop="endDate" >
+                        <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -52,111 +47,15 @@
                     <Table border ref="selection" :columns="columns" :data="selecedStation" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="selecedStation.length">
                         <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
+                        <span class="money">{{renewForm.stationAmount}} </span>
+                        <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
                 </Row>
-                <Row style="margin-bottom:10px">  
-                <Col class="col">
-                    <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
-                </Col>
-
-                </Row>
-                <Row >
-                    <Col span="1" class="discount-table-head"  >
-                        <Checkbox v-model="selectAll" @on-change="selectDiscount"></Checkbox>
-                    </Col>
-                    <Col span="6" class="discount-table-head" >
-                       <span> 优惠类型</span>
-                    </Col>
-                    <Col span="4" class="discount-table-head" >
-                        <span>开始时间</span>
-                    </Col>
-                    <Col span="4" class="discount-table-head" >
-                        <span>结束时间</span>
-                        
-                    </Col>
-                    <Col span="4" class="discount-table-head" >
-                        <span>折扣</span>
-                        
-                    </Col>
-                    <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col>
-                    
-                </Row>
-                    <FormItem
-                v-for="(item, index) in renewForm.items"
-                :key="index"
-                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
-                :prop="'items.' + index + '.type'"
-                :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==renewForm.items.length-1}">
-                 <Col span="1" class="discount-table-content" style="padding:0">
-                        <Checkbox v-model="item.select"></Checkbox>
-                    </Col>
-                    <Col span="6" class="discount-table-content">
-                         <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
-                        </Select>
-                    </Col>
-                    <Col span="4" class="discount-table-content" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'qianmian'" placeholder="开始时间" v-model="item.beginDate" disabled></DatePicker >
-                        <DatePicker type="date" v-if="item.type !== 'qianmian'" placeholder="开始时间" v-model="item.beginDate" ></DatePicker >
-                    </Col>
-                    <Col span="4" class="discount-table-content">
-                        <DatePicker type="date" placeholder="结束时间" v-if="item.type !== 'houmian'" v-model="item.endDate" ></DatePicker>
-                        <DatePicker type="date" v-if="item.type == 'houmian'" placeholder="开始时间" v-model="item.endDate" disabled ></DatePicker >
-                    </Col>
-                    <Col span="4" class="discount-table-content">
-                        <Input v-model="item.zhekou" placeholder="折扣" v-if="item.type == 'zhekou'"></Input>
-                        <Input v-model="item.zhekou" v-if="item.type !== 'zhekou'" placeholder="折扣" disabled></Input>
-
-                        
-                    </Col>
-                    <Col span="5" class="discount-table-content" style="border-right:1px solid #e9eaec;">
-                        <Input v-model="item.money" placeholder="金额" disabled></Input>
-                    </Col>   
-            </Row>
-        </FormItem>
-                 <Row style="margin-bottom:10px">
-                    <Col sapn="24">
-                    <div class="total-money" v-if="renewForm.items.length">
-                        <span>服务费总计</span>
-                        <span class="money">12,000.00 </span>
-                        <span class="money">壹万两仟元整</span>
-                    </div>
-                    </Col>
-                </Row>
-            <Row>
-                 <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="renewForm.totalMoney" placeholder="服务费总额" disabled></Input>
-                    </FormItem>
-                 </Col>
-            </Row>
-            <Row>
-                 <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
-                        <div style="display:block;min-width:252px">
-                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:payType==types.value}">{{ types.label }}</span>
-                        </div>
-
-                 </Col>
-                 <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
-                        <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.label)" v-bind:class="{active:depositType==types.label}">{{ types.label }}</span>
-                        </div>
-                 </Col>
-            </Row>
-            
                 
             <FormItem style="margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px">重置</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
         </Form>
         <Modal
@@ -169,8 +68,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange"></stationList>
+        <div v-if="openStation && !stationList.length">无可减租工位</div>
+        <stationList label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        @on-station-change="onStationChange" v-if="openStation && stationList.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -181,10 +81,12 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
-import planMap from '~/components/PlanMap.vue';
+import DetailStyle from '~/components/DetailStyle';
 import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import utils from '~/plugins/utils';
+
 
 
 
@@ -195,9 +97,10 @@ import '~/assets/styles/createOrder.less';
                 disabled:false,//提交按钮是否有效
                 index:0,//优惠的index
                 openStation:false,//弹窗开关
+                getStationFn:+new Date(),//监听获取工位数据
                renewForm:{
-                    community:'',
-                    customer:'',
+                    communityId:'',
+                    customerId:'',
                     endDate:'',
                     saler:'',
                     items:[]
@@ -209,10 +112,10 @@ import '~/assets/styles/createOrder.less';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    community:[
+                    communityId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
-                    customer:[
+                    customerId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
                     saler:[
@@ -225,14 +128,7 @@ import '~/assets/styles/createOrder.less';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[
-                    {name:'301',id:'301',price:'1800'},
-                    {name:'302',id:'302',price:'1800'},
-                    {name:'303',id:'303',price:'1800'},
-                    {name:'304',id:'304',price:'1800'},
-                    {name:'305',id:'305',price:'1800'},
-                    {name:'306',id:'306',price:'1800'},
-               ],
+               stationList:[],
                selecedStation:[],
                selecedArr:[],
                depositType:'',
@@ -248,21 +144,18 @@ import '~/assets/styles/createOrder.less';
                         key: 'name'
                     },
                     {
-                        title: '标准单价（元/月）',
-                        key: 'price'
-                    },
-                    {
-                        title: '租赁期限',
+                        title: '减租后租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', new Date()+'至'+this.renewForm.endDate)
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                     {
                         title: '小计',
-                        key: 'price'
+                        key: 'amount'
                     }
                 ],
+                stationAmount:'',
                 payList:[
                     {value:'ONE',label:'月付'},
                     {value:'TWO',label:'两月付'},
@@ -300,7 +193,7 @@ import '~/assets/styles/createOrder.less';
         },
         head() {
             return {
-                title: '新建减租服务订单管理'
+                title: '编辑减租服务订单管理'
             }
         },
         components: {
@@ -309,12 +202,52 @@ import '~/assets/styles/createOrder.less';
             selectCustomers,
             SelectSaler,
             stationList,
-            planMap
         },
         created:function(){
             
         },
+        watch:{
+            getStationFn:function(){
+                if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
+                    this.getRenewStation()
+                }
+            },
+        },
         methods: {
+            reduceFormSubmit(){
+                this.config()
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let renewForm = {} 
+                renewForm.seats=JSON.stringify(this.selecedStation);
+                renewForm.customerId=this.renewForm.customerId;
+                renewForm.communityId=this.renewForm.communityId;
+                renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.startDate = start;
+                renewForm.endDate =end;
+                renewForm.corporationId = 11;//临时加的-无用但包错
+                let _this = this;
+                 this.$http.post('save-reduce', renewForm, r => {
+                    _this.$Message.success('Success!');
+                    window.location.href='/orderCenter/orderManage';
+                }, e => {
+                     _this.$Notice.error({
+                        title:e.message
+                    })
+                    setTimeout(function(){
+                        _this.disabled = false;
+                    },2000)
+
+                        console.log('error',e)
+                })
+                
+            },
+            config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+            },
             handleSubmit:function(name){
                 let message = '=========';
                 let _this = this;
@@ -325,6 +258,7 @@ import '~/assets/styles/createOrder.less';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        this.reduceFormSubmit()
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -337,37 +271,58 @@ import '~/assets/styles/createOrder.less';
             },
             changeCustomer:function(value){
                 if(value){
-                    this.renewForm.customer = value;
+                    this.renewForm.customerId = value;
+                    this.getStationFn = +new Date()
+                    this.clearStation()
                 }else{
-                    this.renewForm.customer = '';
+                    this.renewForm.customerId = '';
                 }
             },
             changeCommunity:function(value){
                 if(value){
-                    this.renewForm.community = value;
+                    this.renewForm.communityId = value;
+                    this.getStationFn = +new Date()
                 }else{
-                    this.renewForm.community = '';
+                    this.renewForm.communityId = '';
                 }
-                // this.clearStation()
+                this.clearStation()
             },
             changeTime:function(value){
+                this.clearStation()
+                let _this = this;
+                setTimeout(function(){
+                    _this.getStationFn = +new Date()
+                },200)
+
                 // this.renewForm.endDate = value;
             },
             changeSaler:function(value){
                 this.renewForm.saler = value;
+            },
+            clearStation(){
+                // 清除所选的工位
+                if(this.selecedStation.length){
+                    this.selecedStation = [];
+                    this.selecedArr = [];
+                }
+                if(this.renewForm.items.length){
+                    this.renewForm.items = []
+                }
+
+
             },
             showStation:function(){
                  this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
-                if(!this.renewForm.community){
+                if(!this.renewForm.communityId){
                     this.$Notice.error({
                         title:'请先选择社区'
                     });
                     return
                 }
-                if(!this.renewForm.customer){
+                if(!this.renewForm.customerId){
                     this.$Notice.error({
                         title:'请先选择客户'
                     });
@@ -375,7 +330,7 @@ import '~/assets/styles/createOrder.less';
                 }
                 if(!this.renewForm.endDate){
                     this.$Notice.error({
-                        title:'请先选择续租结束时间'
+                        title:'请先选择减租开始时间'
                     });
                     return
                 }
@@ -388,144 +343,80 @@ import '~/assets/styles/createOrder.less';
             selectPayType:function(value){
                 this.payType  = value;
             },
-            handleAdd:function(){
-                 this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
-                if(!this.renewForm.community){
-                    this.$Notice.error({
-                        title:'请先选择社区'
-                    });
-                    return
-                }
-                if(!this.renewForm.customer){
-                    this.$Notice.error({
-                        title:'请先选择客户'
-                    });
-                    return
-                }
-                // if(!this.renewForm.saler){
-                //     this.$Notice.error({
-                //         title:'请先选择销售员'
-                //     });
-                // }
-                if(!this.renewForm.endDate){
-                    this.$Notice.error({
-                        title:'请先选择续租结束时间'
-                    });
-                    return
-                }
-                if(!this.selecedStation.length){
-                    this.$Notice.error({
-                        title:'请先选择续租工位'
-                    });
-                    return
-                }
-                this.index++;
-                this.renewForm.items.push({
-                    value: '',
-                    index: this.index,
-                    status: 1,
-                    type:''
-                });
-            },
-            deleteDiscount:function(){
-                let items = this.renewForm.items;
-                let select = []
-                select = items.map((item)=>{
-                    return item.selelct;
-                })
-                items = items.filter(function(item, index) {
-                    if (item.select) {
-                        return false;
-                    }
-                return true;
-                });
-                this.renewForm.items = items;
-
-            },
             deleteStation:function(){
-                let stationVos = this.selecedStation;
+                  let stationVos = this.selecedStation;
                 let delArr = this.selectedDel;
                 stationVos = stationVos.filter(function(item, index) {
-                    if (delArr.indexOf(item.id) != -1) {
+                    if (delArr.indexOf(item.seatId) != -1) {
                         return false;
                     }
                 return true;
                 });
-                this.selecedStation = stationVos;
+                // this.selecedStation = stationVos;
+                this.selecedArr = stationVos;
+                this.getStationAmount()
+
 
             },
             selectRow:function(val){
-                console.log('selectRow',val)
                 let selectionList = [];
                 selectionList = val.map((item)=>{
-                    return item.id
+                    return item.seatId
                 })
                 this.selectedDel = selectionList;
             },
-            selectDiscount:function(){
-
-            },
-            //优惠类型选择
-            changeType:function(value){
-                if(!value){
-                    return;
-                }
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
-                this.renewForm.items[itemIndex].value = itemValue;
-                let items = [];
-                items = this.renewForm.items.map((item)=>{
-                    if(item.value == 'qianmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'houmian'){
-                        item.endDate = new Date()
-                        item.zhekou = '';
-                    }else if(item.value == 'zhekou'){
-                        item.beginDate = new Date()
-                        item.endDate = new Date()
-                    }
-                    return item;
-                })
-                let error=false;
-                let message = '';
-                this.renewForm.items = items;
-                let typeList = items.map(item=>{
-                    return item.value;
-                })
-                let qianmian = typeList.join(",").split('qianmian').length-1;
-                let houmian = typeList.join(",").split('houmian').length-1;
-                let zhekou = typeList.join(",").split('zhekou').length-1;
-                if(qianmian + houmian>1){
-                    error = true;
-                    message = '只能有一个免租期。'
-                }
-                if(zhekou>1){
-                    error = true;
-                    message = '只能有一个折扣。'
-                }
-                if(error){
-                    this.$Notice.error({
-                        title:message
-                    });
-                    this.renewForm.items.splice(itemIndex,1);
-                }
-            },
             submitStation:function(){
-                let stationList = this.stationList;
-                let selecedArr = this.selecedArr;
-                let selecedList = [];
 
-                selecedList = stationList.filter(function(item, index) {
-                    if (selecedArr.indexOf(item.name) == -1) {
-                        return false;
-                    }
-                return true;
-                });
-                this.selecedStation = selecedList;
+                 let end = this.selecedArr[0].startDate;
+                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                this.getStationAmount()
+            },
+            getStationAmount(){
+                this.config()
+
+                let val = this.selecedArr;
+               
+                let station = val.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.price;
+                    obj.seatId = item.id || item.seatId;
+                    obj.floor = item.whereFloor;
+                    obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
+                    return obj;
+                })
+                let params = {
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    communityId:this.renewForm.communityId,
+                    customerId:this.renewForm.customerId,
+                    seats:JSON.stringify(station)
+                }
+                let _this = this;
+                if(val.length){
+                     this.$http.post('get-reduce-station-amount', params, r => {
+                        let money = 0;
+                         _this.selecedStation = r.data.seats.map(item=>{
+                            let obj = item;
+                            money+= item.amount;
+
+                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            return obj;
+                        });
+                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                         
+
+                    }, e => {
+                        _this.$Notice.error({
+                        title:e.message
+                    })
+
+                        console.log('error',e)
+                    })
+                }
             },
             cancelStation:function(){
                 this.selecedStation = this.selecedStation.map(item=>{
@@ -536,8 +427,33 @@ import '~/assets/styles/createOrder.less';
             },
             onStationChange:function(val){
                 this.selecedArr = val;
-                console.log('onStationChange',val)
-            }
+            },
+             getRenewStation(){
+                let params = {
+                    //假数据
+                    customerId:this.renewForm.customerId,
+                    communityId:this.renewForm.communityId,
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate))
+
+                };
+                let _this = this;
+                 this.$http.get('get-reduce-station', params, r => {
+                    console.log('get-renew-station',r.data)
+                    let station = []
+                    for(let i in r.data){
+                        let obj = {};
+                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
+
+                        obj.value =  r.data[i];
+                        station.push(obj)
+                    }
+                    _this.stationList = station;
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
 
                     
                

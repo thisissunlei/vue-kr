@@ -7,7 +7,7 @@
 
 <template>
     <div class="create-new-order">
-        <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
+        <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
             <Row>  

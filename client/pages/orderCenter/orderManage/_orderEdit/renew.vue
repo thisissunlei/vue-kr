@@ -33,19 +33,19 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="新建续租服务订单管理"></sectionTitle>
+       <SectionTitle label="编辑续租服务订单管理"></SectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customerId">
-                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
+                    <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer"></SelectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <selectCommunities name="renewForm.communityId" :onchange="changeCommunity"></selectCommunities>
+                    <SelectCommunities test="renewForm" :onchange="changeCommunity"></SelectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -181,13 +181,13 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="450"
+        width="600"
 
         @on-ok="submitStation"
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <stationList label="可续租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation"></stationList>
     </Modal>
     </div>
@@ -195,9 +195,9 @@
 
 
 <script>
-import sectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
+import SectionTitle from '~/components/SectionTitle.vue'
+import SelectCommunities from '~/components/SelectCommunities.vue'
+import SelectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
@@ -221,6 +221,7 @@ import utils from '~/plugins/utils';
                     customerId:'',
                     endDate:'',
                     saler:'',
+                    rentAmount:'',
                     items:[]
                },
                disabled:false,//提交按钮是否禁止
@@ -246,7 +247,7 @@ import utils from '~/plugins/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[],
+               stationListData:[],
                selecedStation:[],
                selecedArr:[],
                depositAmount:'',
@@ -302,14 +303,14 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '新建续租服务订单管理'
+                title: '编辑续租服务订单管理'
             }
         },
         components: {
-            sectionTitle,
-            selectCommunities,
+            SectionTitle,
+            SelectCommunities,
             DetailStyle,
-            selectCustomers,
+            SelectCustomers,
             SelectSaler,
             stationList,
             planMap
@@ -364,24 +365,21 @@ import utils from '~/plugins/utils';
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-
-
-
-
+                    window.location.href='/orderCenter/orderManage';
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
                     });
                     setTimeout(function(){
                         _this.disabled = false;
-                    },1000)
+                    },500)
 
                         console.log('error',e)
                 })
                 
             },
             handleSubmit:function(name){
-                let message = '=========';
+                let message = '请填写完整表单';
                 this.config()
                 let _this = this;
                 this.disabled = true;
@@ -402,25 +400,24 @@ import utils from '~/plugins/utils';
                 })
             },
             getRenewStation(){
-                // let params = {
-                //     customerId:this.renewForm.customerId,
-                //     communityId:this.renewForm.communityId
-                // };
                 let params = {
                     //假数据
-                    customerId:1,
-                    communityId:4,
-                    continueDate:this.renewForm.endDate
+                    customerId:this.renewForm.customerId,
+                    communityId:this.renewForm.communityId,
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
                 };
                 let _this = this;
-                 this.$http.get('get-renew-station', params, r => {
-                    r.data = r.data.map(item=>{
-                        let obj = item;
-                        obj.originStart = item.startDate;
-                        obj.originEnd = item.endDate;
-                        return obj;
-                    })
-                    _this.stationList = r.data
+               this.$http.get('get-renew-station', params, r => {
+                    let station = []
+                    for(let i in r.data){
+                        let obj = {};
+                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
+
+                        obj.value =  r.data[i];
+                        station.push(obj)
+                    }
+                    _this.stationListData = station;
+                 
                 }, e => {
 
                     console.log('error',e)
@@ -455,6 +452,7 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.items.length){
                     this.renewForm.items = []
                 }
+                this.renewForm.rentAmount = '0'
 
             },
             dealEndDate(val){
@@ -674,7 +672,7 @@ import utils from '~/plugins/utils';
                 }
 
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].originStart + day;
+                let start =  val[0].startDate + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
             },
@@ -732,6 +730,7 @@ import utils from '~/plugins/utils';
                 })
             },
             onStationChange:function(val){
+                console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
@@ -750,6 +749,8 @@ import utils from '~/plugins/utils';
                             }
                             return obj;
                         })
+                    }else{
+                        list = []
                     }
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
@@ -822,7 +823,8 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
-                    console.log('save-join=====',r.data)
+                    _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
+                    console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

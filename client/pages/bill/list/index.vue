@@ -428,11 +428,9 @@ import CommonFuc from '~/components/CommonFuc';
                      this.openClose=true; 
                      return;  
                 }
-
                 let params={
                     billIds:this.billIds.join(',')
                 }
-                console.log('params====',params)
                 this.$http.post('batch-pay',params, r => {
                     if(r.code==-1){
                         this.MessageType="error";

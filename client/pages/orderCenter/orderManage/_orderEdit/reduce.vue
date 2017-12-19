@@ -20,13 +20,13 @@
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customerId">
-                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
+                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <selectCommunities test="renewForm" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -112,25 +112,27 @@ import utils from '~/plugins/utils';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    communityId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    saler:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ],
-                    time: [
-                        { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
-                    ],
-                    endDate: [
-                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    ],
+                    // communityId:[
+                    //     { required: true, message: '此项不可为空', trigger: 'change' }
+                    // ],
+                    // customerId:[
+                    //     { required: true, message: '此项不可为空', trigger: 'change' }
+                    // ],
+                    // saler:[
+                    //     { required: true, message: '此项不可为空', trigger: 'change' }
+                    // ],
+                    // time: [
+                    //     { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
+                    // ],
+                    // endDate: [
+                    //     { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    // ],
                },
                stationList:[],
                selecedStation:[],
                selecedArr:[],
+               customerName:'',
+               communityName:'',
                depositType:'',
                payType:'',
                columns: [
@@ -203,8 +205,8 @@ import utils from '~/plugins/utils';
             SelectSaler,
             stationList,
         },
-        created:function(){
-            
+        mounted(){
+            this.getDetailData()
         },
         watch:{
             getStationFn:function(){
@@ -214,6 +216,37 @@ import utils from '~/plugins/utils';
             },
         },
         methods: {
+            getDetailData(){
+                let _this = this;
+                let {params}=this.$route;
+                let from={
+                    // id:4095
+                    id:params.orderEdit
+                };
+                this.$http.get('join-bill-detail', from, r => {
+                    let data = r.data;
+                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
+                        let obj = item;
+                        obj.name = item.seatName;
+                        return obj;
+                    })
+                    _this.renewForm.customerId = data.customerId;
+                    _this.customerName = data.customerName;
+                    _this.renewForm.communityId = data.communityId;
+                    _this.communityName = data.communityName;
+                    _this.renewForm.endDate = data.endDate;
+                    _this.renewForm.startDate = data.startDate;
+                    _this.selecedStation = data.orderSeatDetailVo;
+                    _this.renewForm.rentAmount = data.rentAmount || 0;
+                    _this.installmentType = 'THREE';
+                    _this.depositAmount = '3';
+                    _this.getStationFn = +new Date()
+                    _this.renewForm.stationAmount = data.rentAmount || 0;
+                    _this.stationAmount = utils.smalltoBIG(_this.renewForm.stationAmount)
+                    }, e => {
+                        _this.$Message.info(e);
+                })
+            },
             reduceFormSubmit(){
                 this.config()
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
@@ -354,6 +387,7 @@ import utils from '~/plugins/utils';
                 });
                 // this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
+                this.selecedStation = stationVos;
                 this.getStationAmount()
 
 

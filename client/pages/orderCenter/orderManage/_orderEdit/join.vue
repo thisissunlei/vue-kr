@@ -211,7 +211,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
-            this.getDetailData();
+            
             return {
                 openStation:false,
                 customerName:'',
@@ -315,7 +315,7 @@ import '~/assets/styles/createOrder.less';
             planMap
         },
         mounted(){
-
+            this.getDetailData();
         },
         watch:{
            getFloor(){
@@ -336,6 +336,7 @@ import '~/assets/styles/createOrder.less';
            },
         },
         methods: {
+
              getDetailData(){
                 let _this = this;
                 let {params}=this.$route;
@@ -343,12 +344,13 @@ import '~/assets/styles/createOrder.less';
                     // id:4095
                     id:params.orderEdit
                 };
-
-
-
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
-                    console.log('get-order-detail===>',data.customerid)
+                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
+                        let obj = item;
+                        obj.name = item.seatName;
+                        return obj;
+                    })
                     _this.formItem.customerId = data.customerId;
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = data.communityId;

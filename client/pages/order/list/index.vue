@@ -284,7 +284,9 @@ export default {
                 this.itemDetail=params;
             },
             orderCancel(){
+               
                 if(!this.ifCancel){
+                     this.openCancel=false;
                     return;
                 }
             let itemDetail=this.itemDetail;

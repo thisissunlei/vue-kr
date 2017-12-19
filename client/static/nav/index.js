@@ -176,14 +176,16 @@
                  html += '<ul>';
  
                  item.menuItems.map(function (child) {
-                    var href = ""
-                    if (item.type && item.type == "vue") {
+                    var href = "";
+                    if (child.type && child.type == "vue") {
                         href = "http://" + location.hostname + "/" + child.router;
                     } else {
                         href = "#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
+                    
                  })
+                 
  
                  html += '</ul>';
              }
@@ -868,6 +870,13 @@
                                  router: 'member/membermanage/cardmanage',
                                  menuCode: 'mbr_card_base',
                              },
+                             {
+                                primaryText: "企业管理员设置",
+                                router: 'member/settingManager',
+                                type:'vue',
+                                menuCode: 'fina_manager_setting_page'
+                               
+                            },
                          ]
                      },
                      {

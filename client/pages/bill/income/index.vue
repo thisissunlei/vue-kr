@@ -224,6 +224,7 @@ import CommonFuc from '~/components/CommonFuc';
             },
             showIncome(){
                CommonFuc.clearForm(this.addData);
+                this.addData.startTime=new Date();
                this.openIncome=!this.openIncome;
                this.cancelCallback && this.cancelCallback();
             },

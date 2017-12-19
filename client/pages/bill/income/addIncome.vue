@@ -106,7 +106,6 @@
 <script>
 import SearchCompany from '~/components/SearchCompany';
 import SelectCommunities from '~/components/SelectCommunities';
-
 export default{
     name:'highSearch',
     components:{
@@ -121,7 +120,7 @@ export default{
                 customerId:'',
                 dealDate:'',
                 incomeType:'',
-                startTime:''
+                startTime:new Date()
             },
             formValidate:'formValidate',
             incomeType:[

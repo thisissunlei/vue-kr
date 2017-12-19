@@ -150,10 +150,10 @@ import utils from '~/plugins/utils';
                             return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
-                    {
-                        title: '小计',
-                        key: 'amount'
-                    }
+                    // {
+                    //     title: '小计',
+                    //     key: 'amount'
+                    // }
                 ],
                 stationAmount:'',
                 payList:[
@@ -249,7 +249,7 @@ import utils from '~/plugins/utils';
                 });
             },
             handleSubmit:function(name){
-                let message = '=========';
+                let message = '请完整的填写表单'
                 let _this = this;
                 this.$Notice.config({
                     top: 80,
@@ -368,6 +368,8 @@ import utils from '~/plugins/utils';
             submitStation:function(){
 
                  let end = this.selecedArr[0].startDate;
+                 this.selecedStation =  this.selecedArr;
+
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
                 this.getStationAmount()
             },
@@ -404,9 +406,9 @@ import utils from '~/plugins/utils';
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
-                        _this.renewForm.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        // _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        // _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        // _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
                          
 
                     }, e => {
@@ -427,6 +429,7 @@ import utils from '~/plugins/utils';
             },
             onStationChange:function(val){
                 this.selecedArr = val;
+
             },
              getRenewStation(){
                 let params = {

@@ -192,7 +192,7 @@
                                             this.showView(params)
                                         }
                                     }
-                                }, '查看'), 
+                                }), 
                                 h('Button', {
                                     props: {
                                         type: 'text',

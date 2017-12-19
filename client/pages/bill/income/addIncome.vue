@@ -120,7 +120,7 @@ export default{
                 customerId:'',
                 dealDate:'',
                 incomeType:'',
-                startTime:new Date()
+                startTime:''
             },
             formValidate:'formValidate',
             incomeType:[

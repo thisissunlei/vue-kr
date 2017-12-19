@@ -390,28 +390,6 @@ import utils from '~/plugins/utils';
            }
         },
         methods: {
-            //  getDetailData:function(){
-            //     let _this = this;
-            //     let {params}=this.$route;
-            //     let from={
-            //         id:params.orderEdit
-            //     };
-            //      this.$http.get('get-order-detail', from, r => {
-            //         let data = r.data;
-            //         console.log('get-order-detail===>',data.customerid)
-            //         _this.formItem.customer = data.customerid;
-            //         _this.customerName = data.customerName;
-            //         _this.formItem.community = data.communityid;
-            //         _this.communityName = data.communityName;
-            //         _this.formItem.leaseEnddate = data.leaseEnddate;
-            //         _this.formItem.leaseBegindate = data.leaseBegindate;
-            //         _this.stationList = data.stationVos;
-            //         _this.payType = 'TWO';
-            //         _this.depositType = '2个月'
-            //         }, e => {
-            //             _this.$Message.info(e);
-            //     })
-            // },
             config:function(){
                 this.$Notice.config({
                     top: 80,

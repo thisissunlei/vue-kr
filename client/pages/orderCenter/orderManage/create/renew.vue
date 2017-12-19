@@ -686,7 +686,7 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    obj.floor = item.whereFloor;
+                    // obj.floor = item.whereFloor;
                     obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;

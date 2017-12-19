@@ -49,7 +49,7 @@
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <DatePicker type="date" placeholder="租赁开始时间" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
@@ -778,6 +778,10 @@ import utils from '~/plugins/utils';
             },
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+                console.log('changeBeginTime',val);
+                if(!val || !this.formItem.endDate){
+                    return;
+                }
                 let error = false;
                 this.config();
                 val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
@@ -785,7 +789,7 @@ import utils from '~/plugins/utils';
                     end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     start:val
                 }
-                if(new Date(val)>new date(this.formItem.endDate)){
+                if(new Date(val)>new Date(this.formItem.endDate)){
                     error = true;
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
@@ -807,10 +811,19 @@ import utils from '~/plugins/utils';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                if(!val){
+                    return;
+                }
 
                 val = this.dealEndDate(val);
                 let error = false;
+
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
@@ -825,7 +838,6 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.formItem.endDate = val;
                 this.clearStation();
 
             },

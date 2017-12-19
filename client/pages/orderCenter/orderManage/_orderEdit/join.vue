@@ -12,19 +12,19 @@
             <DetailStyle info="基本信息">
             <Row>  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <FormItem label="客户名称" style="width:252px" >
                     <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                    <FormItem label="所属社区" style="width:252px">
                     <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="salerId">
-                        <SelectSaler name="formItem.saler" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    <FormItem label="销售员" style="width:252px">
+                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -211,7 +211,7 @@ import '~/assets/styles/createOrder.less';
 
     export default {
         data() {
-            this.getDetailData()
+            this.getDetailData();
             return {
                 openStation:false,
                 customerName:'',
@@ -296,36 +296,6 @@ import '~/assets/styles/createOrder.less';
 
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
-                    startDate: [
-                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
-                    ],
-                    firstPayTime: [
-                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
-                    ],
-                    endDate: [
-                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                    ],
-                    timeRange: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
-                    ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    communityId:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    salerId:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
-                    ],
-                    // floor: [
-                    //     { validator: validateFloor, trigger: 'change' }
-                    // ],
                 },
                 getFloor:+new Date(),
                 changeSale:+new Date()
@@ -385,8 +355,10 @@ import '~/assets/styles/createOrder.less';
                      _this.salerName = data.salerName;
                     _this.formItem.salerId = data.salerId;
                     _this.communityName = data.communityName;
-                    _this.formItem.endDate = data.endDate;
+                    // _this.formItem.endDate = data.endDate;
+                    _this.changeEndTime(data.endDate)
                     _this.formItem.startDate = data.startDate;
+                    _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = data.firstPayTime;
                     _this.formItem.rentAmount = data.rentAmount;
@@ -785,13 +757,17 @@ import '~/assets/styles/createOrder.less';
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
+                console.log('changeBeginTime------1')
+                 if(!val || !this.formItem.endDate){
+                    return;
+                }
                 this.config();
                 val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
                 let params = {
                     end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     start:val
                 }
-                if(new Date(val)>new date(this.formItem.endDate)){
+                if(new Date(val)>new Date(this.formItem.endDate)){
                     error = true;
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
@@ -813,15 +789,32 @@ import '~/assets/styles/createOrder.less';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                if(!val){
+                    return;
+                }
+
+                console.log('changeEndTime------1',val)
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+
 
                 val = this.dealEndDate(val);
                 let error = false;
+
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
+                console.log('changeEndTime------2')
+
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
                 }
                 this.config();
+                console.log('changeEndTime------3',params)
+
                 if(new Date(this.formItem.startDate)>new Date(val)){
                     error = true;
                     this.$Notice.error({
@@ -831,7 +824,6 @@ import '~/assets/styles/createOrder.less';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.formItem.endDate = val;
                 this.clearStation();
 
             },

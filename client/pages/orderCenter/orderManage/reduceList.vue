@@ -66,13 +66,15 @@
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
+    import Buttons from '~/components/Buttons';
 
     export default {
         name:'join',
         components:{
             HeightSearch,
             Nullify,
-            Message
+            Message,
+            Buttons
         },
         data () {
             
@@ -155,9 +157,9 @@
                                h(Buttons, {
                                    props: {
                                         type: 'text',
-                                        size: 'small',
                                         checkAction:'order_seat_show',
-                                        label:'查看'
+                                        label:'查看',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     on: {
                                         click: () => {

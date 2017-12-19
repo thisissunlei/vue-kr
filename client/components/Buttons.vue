@@ -1,19 +1,6 @@
 <template>
 	<div class='v-button' v-if="data.indexOf(checkAction)>-1" style='display:inline-block;'>
-
-        <div v-if="type=='primary'">
-            <Button  type='primary' @click="buttonClick">{{label}}</Button>
-        </div>
-        <div v-else-if="type=='ghost'">
-            <Button  type='ghost' @click="buttonClick">{{label}}</Button>
-        </div>
-        <div v-else-if="type=='text'">
-            <Button  type='text' @click="buttonClick" style='color:rgb(43, 133, 228);padding: 2px 7px;'>{{label}}</Button>
-        </div>
-        <div v-else>
-            <Button @click="buttonClick">{{label}}</Button>
-        </div>
-
+        <Button  :type='type' @click="buttonClick"  :style='styles'>{{label}}</Button>
     </div>
 </template>
 
@@ -22,7 +9,8 @@
         props:[
             'label',
             'type',
-            'checkAction'
+            'checkAction',
+            'styles'
         ],
         data() {
         	return{

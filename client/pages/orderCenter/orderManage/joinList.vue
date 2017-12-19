@@ -183,9 +183,9 @@
                                h(Buttons, {
                                    props: {
                                         type: 'text',
-                                        size: 'small',
                                         checkAction:'order_seat_show',
-                                        label:'查看'
+                                        label:'查看',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     on: {
                                         click: () => {

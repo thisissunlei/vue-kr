@@ -8,7 +8,13 @@
 
 <template>
 
-  <Buttons label='新建'  type='primary' v-on:click='buttonClick' checkAction='order_seat_export'/>
+  <Buttons 
+   label='新建'  
+   type='primary' 
+   v-on:click='buttonClick' 
+   checkAction='order_seat_export'
+   styles="color:#499df1;"
+ />
   
 </template>
 

@@ -8,15 +8,27 @@
 
 <template>
 
-<div> <h1 style="text-align:center;padding-top:100px;">Hello world!</h1> </div>
+  <Buttons 
+   label='新建'  
+   type='primary' 
+   v-on:click='buttonClick' 
+   checkAction='order_seat_export'
+   styles="color:#499df1;"
+ />
   
 </template>
 
 
 <script>
+    import Buttons from '~/components/Buttons';
+
     export default {
-        data () {
-            return {
+         components:{
+            Buttons
+         },
+         methods:{
+            buttonClick(){
+                //console.log('--pp',window.resourcesCode);
             }
         }
     }

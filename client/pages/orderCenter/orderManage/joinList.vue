@@ -26,7 +26,7 @@
 
             <Table :columns="joinOrder" :data="joinData" border></Table>
             <div style="margin: 10px;overflow: hidden">
-                    <Button type="primary" @click="outSubmit">导出</Button>
+                    <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
                     </div>
@@ -67,6 +67,7 @@
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
+    import Buttons from '~/components/Buttons';
     
 
     export default {
@@ -74,7 +75,8 @@
         components:{
             HeightSearch,
             Nullify,
-            Message
+            Message,
+            Buttons
         },
         data () {
             

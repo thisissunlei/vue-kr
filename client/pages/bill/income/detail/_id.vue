@@ -31,7 +31,7 @@
 				{{dealDate}}
 			</LabelText>
 			<LabelText label="操作人员：">
-				{{basicInfo.creater}}
+				{{basicInfo.createrName}}
 			</LabelText>
 			<LabelText label="操作时间：">
 				{{ctime}}

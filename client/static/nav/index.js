@@ -1366,8 +1366,7 @@
                             primaryText: "订单列表",
                             router: 'orderCenter/orderManage',
                             type:'vue',
-                            menuCode: 'iot_door_open_log',
-                            //menuCode: 'fina_meeting_order_page'
+                            menuCode: 'order_seat_list',
                         },
                     ]
                 },

@@ -25,7 +25,7 @@
 
             <Table :columns="joinOrder" :data="joinData" border></Table>
             <div style="margin: 10px;overflow: hidden">
-                    <Button type="primary" @click="outSubmit">导出</Button>
+                    <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
                     </div>
@@ -152,20 +152,19 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('Button', {
+                               h(Buttons, {
                                    props: {
                                         type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
+                                        size: 'small',
+                                        checkAction:'order_seat_show',
+                                        label:'查看'
                                     },
                                     on: {
                                         click: () => {
                                             this.showView(params)
                                         }
                                     }
-                                }, '查看'), 
+                                }),  
                                 h('Button', {
                                     props: {
                                         type: 'text',

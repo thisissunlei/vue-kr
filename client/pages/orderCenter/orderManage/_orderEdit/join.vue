@@ -19,7 +19,7 @@
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                    <selectCommunities name="formItem.communityId" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                    <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -198,6 +198,7 @@
 <script>
 import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
+import selectCustomers from '~/components/SelectCustomers.vue'
 
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
@@ -343,8 +344,8 @@ import '~/assets/styles/createOrder.less';
             SelectSaler,
             planMap
         },
-        created(){
-            
+        mounted(){
+
         },
         watch:{
            getFloor(){
@@ -375,27 +376,27 @@ import '~/assets/styles/createOrder.less';
 
 
 
-                // this.$http.get('get-order-detail', from, r => {
-                //     let data = r.data;
-                //     console.log('get-order-detail===>',data.customerid)
-                //     _this.formItem.customerId = data.customerId;
-                //     _this.customerName = data.customerName;
-                //     _this.formItem.communityId = data.communityId;
-                //      _this.salerName = data.salerName;
-                //     _this.formItem.salerId = data.salerId;
-                //     _this.communityName = data.communityName;
-                //     _this.formItem.endDate = data.endDate;
-                //     _this.formItem.startDate = data.startDate;
-                //     _this.stationList = data.orderSeatDetailVo;
-                //     _this.formItem.firstPayTime = data.firstPayTime;
-                //     _this.formItem.rentAmount = data.rentAmount;
-                //     _this.installmentType = 'THREE';
-                //     _this.depositAmount = '3';
-                //     _this.getFloor = +new Date()
-                //     _this.getSaleTactics({communityId:data.customerId})
-                //     }, e => {
-                //         _this.$Message.info(e);
-                // })
+                this.$http.get('join-bill-detail', from, r => {
+                    let data = r.data;
+                    console.log('get-order-detail===>',data.customerid)
+                    _this.formItem.customerId = data.customerId;
+                    _this.customerName = data.customerName;
+                    _this.formItem.communityId = data.communityId;
+                     _this.salerName = data.salerName;
+                    _this.formItem.salerId = data.salerId;
+                    _this.communityName = data.communityName;
+                    _this.formItem.endDate = data.endDate;
+                    _this.formItem.startDate = data.startDate;
+                    _this.stationList = data.orderSeatDetailVo;
+                    _this.formItem.firstPayTime = data.firstPayTime;
+                    _this.formItem.rentAmount = data.rentAmount;
+                    _this.installmentType = 'THREE';
+                    _this.depositAmount = '3';
+                    _this.getFloor = +new Date()
+                    _this.getSaleTactics({communityId:data.customerId})
+                    }, e => {
+                        _this.$Message.info(e);
+                })
             },
             config:function(){
                 this.$Notice.config({

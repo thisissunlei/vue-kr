@@ -35,7 +35,7 @@
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                    <selectCommunities name="formItem.communityId" :onchange="changeCommunity"></selectCommunities>
+                    <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -516,6 +516,7 @@ import utils from '~/plugins/utils';
                      _this.$Notice.error({
                         title:e.message
                     })
+                    // _this.formItem.items=[]
 
                         console.log('error',e)
                 })
@@ -881,7 +882,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
-
+                     _this.youhui = [];
                     console.log('error',e)
                 })
             },

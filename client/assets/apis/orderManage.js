@@ -32,7 +32,7 @@ export default {
   },
   //入驻减租高级查询－下拉
   'order-pay-list': {
-    url: '/krspace-op-web/order-seat/data',
+    url: '/api/krspace-op-web/order-seat/data',
     method: 'get'
   }
 } 

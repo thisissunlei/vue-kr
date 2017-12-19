@@ -69,7 +69,7 @@
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
           
-             var router = location.href;
+             var router = location.href.split("?")[0];
              // console.log(getClickNav([].concat(NavItems), router),"------")
              var activeData = getClickNav([].concat(NavItems), router);
             

@@ -447,7 +447,7 @@ export default {
                     }
                     this.openImport=false;
                     this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`
+                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
                    this.getTableData(this.params);
                 }, e => {

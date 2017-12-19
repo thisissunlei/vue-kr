@@ -439,7 +439,7 @@ import CommonFuc from '~/components/CommonFuc';
                         return;
                     }
                     this.MessageType="success";
-                    this.warn="结算成功！"
+                    this.warn=`已成功结算${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
                 }, e => {

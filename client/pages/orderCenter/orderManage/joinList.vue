@@ -180,13 +180,12 @@
                         align:'center',
                         render:(h,params)=>{
                            var btnRender=[
-                               h('Button', {
+                               h(Buttons, {
                                    props: {
                                         type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
+                                        size: 'small',
+                                        checkAction:'order_seat_show',
+                                        label:'查看'
                                     },
                                     on: {
                                         click: () => {

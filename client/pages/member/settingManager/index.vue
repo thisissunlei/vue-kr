@@ -72,11 +72,13 @@ export default {
                     title: '已设置管理员数量',
                     key: 'managerNum',
                     align:'center',
+                    width:120
                 },
                 {
                     title: '操作',
                     key: 'operation',
                     align:'center',
+                    width:120,
                     render:(h,params)=>{
                            return h('div', [
                                 h('Button', {
@@ -114,11 +116,21 @@ export default {
         }
     },
     mounted:function(){
+        this.tableData=[
+            {
+                csrName:'卓莹（上海）网络科技有限公司',
+                cmtName:'徐家汇社区',
+                registerTime:'2017-12-18',
+                csrStatus:'正常',
+                managerNum:2
+                
+            }
+        ]
         //this.getTableData(this.Params);
     },
     methods:{
         getTableData(params){
-                this.$http.get('get-payrecord-list', params, r => {
+                this.$http.get('customer-manager-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                 }, e => {
@@ -140,6 +152,14 @@ export default {
                 //CommonFuc.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
         },
+        openView(params){
+            //location.href=`./settingManager/detail/${params.csrId}`;
+            location.href=`./settingManager/detail/1`;
+        },
+        openSetting(){
+             //location.href=`./settingManager/setting/${params.csrId}`;
+            location.href=`./settingManager/setting/1`;
+        }
     }
 }
 </script>

@@ -37,6 +37,20 @@
 		background:url('~assets/images/arrow_top.svg') no-repeat center center;
 	}
 }
+.u-amount-list{
+	text-align: right;
+	height: 90px;
+	margin-top:-20px;
+	margin-bottom:24px;
+}
+.u-amount{
+	height:28px;
+	line-height:28px;
+	font-weight: bold;
+}
+.u-txt-red{
+	color:#FF6868;
+}
 
 
 }
@@ -66,7 +80,7 @@
 			<LabelText label="支付状态：">
 				{{basicInfo.billStatus}}
 			</LabelText>
-			<LabelText label="应付金额：">
+			<LabelText label="账单金额：">
 				￥{{basicInfo.payableAmount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
@@ -80,10 +94,20 @@
 			<div v-bind:class="[ISshow?showClass:hideClass]" >
 				<Table border :columns="cost" :data="costInfo"></Table>
 			</div>
-
 			<div v-if="costInfo.length>5" class="u-show-tip">
 				<div v-if="!ISshow" @click="showTab">展开<span class="u-bottom"></span></div>
 				<div v-if="ISshow"@click="hideTab">收起<span class="u-top"></span></div>
+			</div>
+			<div class="u-amount-list">
+				<div class="u-amount">
+					费用合计：￥{{basicInfo.totalAmount}}
+				</div>
+				<div class="u-amount">
+					减免金额：<span class="u-txt-red">￥-{{basicInfo.freeAmount}}</span>
+				</div>
+				<div class="u-amount">
+					账单金额：<span class="u-txt-red">￥{{basicInfo.payableAmount}}</span>
+				</div>
 			</div>
 		</DetailStyle>	
 		<DetailStyle info="结算记录">

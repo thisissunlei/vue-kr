@@ -125,7 +125,7 @@ export default {
 
 				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime));
 				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate));
-				   r.data.seatReduceDetailVo&&r.data.seatReduceDetailVo.map((item,index)=>{
+				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
 					    var stationType='';
 					    if(item.seatType=='OPEN'){
 							stationType='工位';
@@ -134,7 +134,7 @@ export default {
 						}
 						item.type=stationType;
 				   })
-				   _this.reduceStation=r.data.seatReduceDetailVo||[];
+				   _this.reduceStation=r.data.orderSeatDetailVo||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
                 _this.$Message.info(e);

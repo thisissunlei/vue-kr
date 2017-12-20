@@ -5,7 +5,7 @@
             <span class="u-high-search" @click="showSearch"></span>  
             <div style='display:inline-block;float:right;padding-right:20px;'>
                 <Input 
-                    v-model="customerName" 
+                    v-model="csrName" 
                     placeholder="请输入公司名称"
                     style="width: 252px"
                 ></Input>
@@ -26,19 +26,47 @@
                     ></Page>
                 </div>
             </div>
+        </div>
+<Modal
+    v-model="openSearch"
+    title="高级查询"
+    ok-text="确定"
+    cancel-text="取消"
+    width="660"
+    >
+    <HighSearch  v-on:formData="getSearchData"></HighSearch>
+    <div slot="footer">
+        <Button type="primary" @click="searchSubmit">确定</Button>
+        <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
     </div>
+</Modal>
+<Drawer 
+    title="设置企业管理员"
+    :openDrawer="openDrawer"
+    v-on:changeOpen="onChangeOpen"
+>
+    <Setting></Setting>
+</Drawer>
 </div> 	
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import CommonFuc from '~/components/CommonFuc';
+import HighSearch from './highSearch';
+import Drawer from '~/components/Drawer';
+import Setting from './setting';
 
 export default {
     components:{
-        SectionTitle
+        SectionTitle,
+        HighSearch,
+        Drawer,
+        Setting
     },
     data(){
         return{
+            openDrawer:false,
+            openSearch:false,
             totalCount:0,
             pageSize:0,
             tableData:[],
@@ -46,7 +74,8 @@ export default {
                 page:1,
                 pageSize:15
             },
-            customerName:'',
+            csrName:'',
+            searchData:{},
             tableHeader:[
                 {
                     title: '企业名称',
@@ -81,20 +110,6 @@ export default {
                     width:120,
                     render:(h,params)=>{
                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                        }
-                                    }
-                                }, '详情'),
                                  h('Button', {
                                     props: {
                                         type: 'text',
@@ -108,7 +123,7 @@ export default {
                                             this.openSetting(params.row)
                                         }
                                     }
-                                }, '设置')
+                                }, '设置管理员')
                             ]);  
                     }
                 },
@@ -138,28 +153,31 @@ export default {
                 })
         },
         changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
+                this.Params.page=page;
                 this.getTableData(Params);
         },
         lowerSubmit(){
-                this.Params.customerName=this.customerName;
+                this.Params.csrName=this.csrName;
                 this.getTableData(this.Params);
         },
         showSearch (params) {
                 //CommonFuc.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
         },
-        openView(params){
-            //location.href=`./settingManager/detail/${params.csrId}`;
-            location.href=`./settingManager/detail/1`;
+        getSearchData(form){
+                this.searchData=form;
         },
-        openSetting(){
-             //location.href=`./settingManager/setting/${params.csrId}`;
-            location.href=`./settingManager/setting/1`;
-        }
+        searchSubmit(){
+                this.Params=this.searchData;
+                this.getTableData(this.Params)
+        },
+        openSetting(params){
+                this.itemDetail=params;
+                this.openDrawer=!this.openDrawer;
+        },
+        onChangeOpen(data){
+                this.openDrawer=data;
+        },
     }
 }
 </script>

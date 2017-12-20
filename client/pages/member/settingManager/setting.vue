@@ -1,21 +1,23 @@
 <template>
 <div class="g-setting-detail">
-	<SectionTitle label="企业管理员详情"></SectionTitle>
+	
 	<div class="m-detail-content">
-		<DetailStyle info="基本信息">
-			<LabelText label="企业名称：">
+		<div class="u-detail-info">
+			<LabelText label="企业名称：" style="width:100%;">
 				{{basicInfo.id}}
 			</LabelText>	
-			<LabelText label="已入驻社区：">
+			<LabelText label="已入驻社区：" style="width:100%;">
 				{{incomeType}}
 			</LabelText>
-			<LabelText label="入驻状态：">
+			<LabelText label="入驻状态：" style="width:100%;">
 				{{basicInfo.communityName}}
 			</LabelText>
-		</DetailStyle>
-        <DetailStyle info="员工列表">
-            <Table border :columns="list" :data="listInfo"></Table>
-        </DetailStyle>
+		</div>
+		<div class="u-detail-table">
+			<div class="u-table-label">员工列表：</div>
+			<Table border :columns="list" :data="listInfo"></Table>
+
+		</div>
 	</div>
 </div>
 </template>
@@ -23,14 +25,13 @@
 
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
-import SectionTitle from '~/components/SectionTitle.vue';
 import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
 		DetailStyle,
 		LabelText,
-		SectionTitle
+	
 	},
 	data(){
 		return{
@@ -38,7 +39,8 @@ export default {
 			incomeType:null,
 			dealDate:"",
             ctime:'',
-            listInfo:[],
+			listInfo:[],
+			num:0,
 			list:[
 				{
 				 title: '姓名',
@@ -55,18 +57,17 @@ export default {
                  key: 'orderNo',
 				 align:'center',
                 },
-                {
-				 title: `管理员(${this.num})`,
-                 key: 'orderNo',
-				 align:'center',
-				},
 			]
 		}
 	},
 	mounted:function(){
-        this.getInfo();
-        this.num=0;
-		GLOBALSIDESWITCH("false")
+		this.getInfo();
+		let obj={
+				 title: `管理员(${this.num})`,
+                 key: 'orderNo',
+				 align:'center',
+				};
+		this.list.push(obj)
 	},
 	methods:{
 		getInfo(){
@@ -103,8 +104,16 @@ export default {
 </script>
 <style lang="less">
 .g-setting-detail{
-	.m-detail-content{
-		padding:30px 24px;
+	height: 100%;
+	overflow-y: auto;
+	.u-detail-info{
+		margin-top:20px;
+	}
+	.u-detail-table{
+		margin-left:15px;
+		.u-table-label{
+			margin-bottom:10px;
+		}
 	}
 }
 </style>

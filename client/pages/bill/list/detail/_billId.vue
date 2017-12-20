@@ -46,8 +46,16 @@
 .u-amount{
 	height:28px;
 	line-height:28px;
+	span{
+		display:inline-block;
+		width:100px;
+		text-align: right;
+	}
+}
+.txt-bold{
 	font-weight: bold;
 }
+
 .u-txt-red{
 	color:#FF6868;
 }
@@ -100,12 +108,12 @@
 			</div>
 			<div class="u-amount-list">
 				<div class="u-amount">
-					费用合计：￥{{basicInfo.totalAmount}}
+					费用合计：<span>￥{{basicInfo.totalAmount}}</span>
 				</div>
 				<div class="u-amount">
-					减免金额：<span class="u-txt-red">￥-{{basicInfo.freeAmount}}</span>
+					减免金额：<span>￥-{{basicInfo.freeAmount}}</span>
 				</div>
-				<div class="u-amount">
+				<div class="u-amount txt-bold">
 					账单金额：<span class="u-txt-red">￥{{basicInfo.payableAmount}}</span>
 				</div>
 			</div>

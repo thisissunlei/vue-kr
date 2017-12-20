@@ -272,14 +272,14 @@ import CommonFuc from '~/components/CommonFuc';
                 this.searchData=form;
             },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.tabParams=this.searchData;
+                this.getTableData(this.tabParams)
             },
             lowerSubmit(){
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
             changePage(page){
-                this.tabParams=this.searchData;
                 this.tabParams.page=page;
                 this.getTableData(this.tabParams);
             }

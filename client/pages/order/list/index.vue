@@ -323,7 +323,6 @@ export default {
                 })
             },
             changePage(page){
-                this.params=this.searchData;
                 this.params.page=page;
                 this.getTableData(this.params);
             },
@@ -331,7 +330,8 @@ export default {
                 this.searchData=form;
             },
              searchSubmit(){
-                this.getTableData(this.searchData)
+                this.params=this.searchData;
+                this.getTableData(this.params)
             },
             onChangeOpen(data){
                 this.openMessage=data;

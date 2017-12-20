@@ -50,27 +50,27 @@ export default {
             tableHeader:[
                 {
                     title: '企业名称',
-                    key: 'id',
+                    key: 'csrName',
                     align:'center',
                 },
                 {
                     title: '已入驻社区',
-                    key: 'id',
+                    key: 'cmtName',
                     align:'center',
                 },
                 {
                     title: '注册时间',
-                    key: 'id',
+                    key: 'registerTime',
                     align:'center',
                 },
                 {
                     title: '状态',
-                    key: 'id',
+                    key: 'csrStatus',
                     align:'center',
                 },
                 {
                     title: '已设置管理员数量',
-                    key: 'id',
+                    key: 'managerNum',
                     align:'center',
                 },
                 {
@@ -103,7 +103,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params.row)
+                                            this.openSetting(params.row)
                                         }
                                     }
                                 }, '设置')

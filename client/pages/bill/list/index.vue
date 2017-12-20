@@ -496,7 +496,8 @@ import CommonFuc from '~/components/CommonFuc';
             //     })
             // },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.tabParams=this.searchData;
+                this.getTableData(this.tabParams)
             },
             onChangeOpen(data){
                 this.openMessage=data;
@@ -506,7 +507,6 @@ import CommonFuc from '~/components/CommonFuc';
                 this.getTableData(this.tabParams);
             },
             changePage(page){
-                this.tabParams=this.searchData;
                 this.tabParams.page=page;
                 this.getTableData(this.tabParams);
             }

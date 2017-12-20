@@ -397,18 +397,18 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 if(val.length){
                      this.$http.post('get-reduce-station-amount', params, r => {
-                        let money = 0;
+                        let money = r.data.reduceAmount;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+= item.amount;
+                            // money+= item.amount;
 
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        // _this.renewForm.rentAmount =  Math.round(money*100)/100;
-                        // _this.renewForm.stationAmount = Math.round(money*100)/100;
-                        // _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        _this.renewForm.rentAmount =  Math.round(money*100)/100;
+                        _this.renewForm.stationAmount = Math.round(money*100)/100;
+                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
                          
 
                     }, e => {

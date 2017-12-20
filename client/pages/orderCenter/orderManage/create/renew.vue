@@ -686,7 +686,7 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    // obj.floor = item.whereFloor;
+                    obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
@@ -694,8 +694,8 @@ import utils from '~/plugins/utils';
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
-                    // communityId:this.renewForm.communityId,
-                    communityId:4,
+                    communityId:this.renewForm.communityId,
+                    // communityId:4,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){

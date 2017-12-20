@@ -206,6 +206,7 @@ import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import utils from '~/plugins/utils';
 
 
 
@@ -364,8 +365,12 @@ import '~/assets/styles/createOrder.less';
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = data.firstPayTime;
                     _this.formItem.rentAmount = data.rentAmount;
-                    _this.installmentType = 'THREE';
-                    _this.depositAmount = '3';
+                    _this.formItem.stationAmount = data.rentAmount;
+                    _this.stationAmount = utils.smalltoBIG(data.rentAmount);
+                    // _this.installmentType = data.installmentType;
+                    _this.selectDeposit('3')
+                    _this.selectPayType(data.installmentType)
+                    // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
                     _this.getSaleTactics({communityId:data.customerId})
                     }, e => {
@@ -379,16 +384,15 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             joinFormSubmit(){
-                this.config()
+                this.config();
+                console.log('joinFormSubmit',this.installmentType,'depositAmount',this.depositAmount)
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                console.log('joinFormSubmit',this.formItem.items)
                 // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
@@ -402,12 +406,12 @@ import '~/assets/styles/createOrder.less';
                 formItem.salerId=this.formItem.salerId;
                 formItem.timeRange=this.formItem.timeRange;
                 formItem.rentAmount=this.formItem.rentAmount;
-                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
+                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.firstPayTime));
 
                 formItem.startDate = start;
                 formItem.endDate =end;
                 formItem.corporationId = 11;//临时加的-无用但包错
-                console.log('handleSubmit',formItem,start,end)
+                console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
@@ -463,8 +467,8 @@ import '~/assets/styles/createOrder.less';
                 this.config()
                 let params = {
                     communityId:this.formItem.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.startDate),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.endDate),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate)),
                     seats:JSON.stringify(this.stationList),
                     saleList:JSON.stringify(list)
                 };

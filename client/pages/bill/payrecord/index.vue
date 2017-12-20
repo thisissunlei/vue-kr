@@ -174,11 +174,8 @@ export default {
                 this.getTableData(this.params);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+               this.params.page=page;
+                this.getTableData(this.params);
             },
             
 

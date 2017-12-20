@@ -231,7 +231,6 @@ import utils from '~/plugins/utils';
                 stationData:{
                     submitData:[],
                     deleteData:[],
-                    clearAll:false
                 },
                 stationAll:{},
                 payList:[
@@ -349,9 +348,16 @@ import utils from '~/plugins/utils';
                     let data = r.data;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        // obj.floor = '5';
+                        obj.belongType = item.seatType;
+                        obj.id = item.seatId;
                         obj.name = item.seatName;
                         return obj;
                     })
+                    _this.stationData = {
+                        submitData:data.orderSeatDetailVo,
+                        deleteData:[]
+                    };
                     _this.formItem.customerId = data.customerId;
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = data.communityId;
@@ -742,13 +748,16 @@ import utils from '~/plugins/utils';
                 this.errorPayType = false;
             },
             submitStation:function(){//工位弹窗的提交
+
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
+                 console.log('submitStation',this.stationData)
                 this.getStationAmount()
 
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
+
                 
             },
             cancelStation:function(){//工位弹窗的取消

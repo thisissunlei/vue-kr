@@ -323,6 +323,7 @@ export default {
                 })
             },
             changePage(page){
+                this.params=this.searchData;
                 this.params.page=page;
                 this.getTableData(this.params);
             },

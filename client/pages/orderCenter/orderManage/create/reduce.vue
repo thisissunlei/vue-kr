@@ -255,17 +255,18 @@ import utils from '~/plugins/utils';
                     top: 80,
                     duration: 3
                 });
-                if(!this.selecedStation.length){
-                    this.$Notice.error({
-                        title:'请选择减租工位'
-                    });
-                    return;
-                }
+                
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择减租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
                         this.reduceFormSubmit()
-                        this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
 

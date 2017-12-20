@@ -61,8 +61,8 @@
                     </FormItem>
                 </Col>
                  <Col class="col">
-                    <FormItem label="租赁时长" style="width:252px" prop="timeRange">
-                        <Input v-model="formItem.timeRange" placeholder="租赁时长"></Input>
+                    <FormItem label="租赁时长" style="width:252px" >
+                        <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
             </Row>
@@ -177,10 +177,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
+                        <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
             </Row>
             
@@ -519,21 +520,33 @@ import utils from '~/plugins/utils';
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.depositAmount){
+                    this.errorAmount = true;
+                }
                 if(this.timeError){
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
                     });
                     return
                 }
-                if(!this.stationList.length){
-                    this.$Notice.error({
-                        title:'请选择入驻工位'
-                    });
-                    return
-                }
+                
+
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(this.errorPayType || this.errorAmount){
+                            this.$Notice.error({
+                                title:'请填写完表单'
+                            });
+                            return;
+                        }
+                        if(!_this.stationList.length){
+                            _this.$Notice.error({
+                                title:'请选择入驻工位'
+                            });
+                            _this.disabled = false;
+                            return
+                        }
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;
@@ -759,6 +772,7 @@ import utils from '~/plugins/utils';
             selectDeposit:function(value){
                 // 选择保证金
                 this.depositAmount = value
+                this.errorAmount = false;
             },
             selectPayType:function(value){
                 // 选择付款方式
@@ -784,7 +798,7 @@ import utils from '~/plugins/utils';
             },
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
-                console.log('changeBeginTime',val);
+                this.clearStation()
                 if(!val || !this.formItem.endDate){
                     return;
                 }
@@ -804,7 +818,7 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.clearStation()
+                
             },
             dealEndDate(val){
                 let str = val.split('-');
@@ -817,6 +831,7 @@ import utils from '~/plugins/utils';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                this.clearStation()
                 if(!val){
                     return;
                 }

@@ -151,7 +151,7 @@
                     </FormItem>
                  </Col>
                  <Col class="col">
-                    <FormItem label="首付款日期" style="width:252px">
+                    <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
                         <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
                     </FormItem> 
                  </Col>
@@ -166,10 +166,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
+                         <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
             </Row>
             </div>
@@ -248,6 +249,9 @@ import utils from '~/plugins/utils';
                     time: [
                         { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
                     ],
+                    firstPayTime: [
+                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                    ],
                     endDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
@@ -258,6 +262,7 @@ import utils from '~/plugins/utils';
                depositAmount:'',
                installmentType:'',
                maxDiscount:'',
+               errorAmount:false,
                columns: [
                     {
                         type: 'selection',
@@ -391,15 +396,28 @@ import utils from '~/plugins/utils';
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
-                if(!this.selecedStation.length){
-                    this.$Notice.error({
-                        title:'请选择续租工位'
-                    });
-                    return;
+                if(!this.depositAmount){
+                    this.errorAmount = true
                 }
+                
+                
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择续租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
+                        if(this.errorAmount || this.errorPayType){
+                            this.$Notice.error({
+                                title:'请填写完整表单'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
                         this.renewFormSubmit()
                         this.$Message.success('Success!');
                     } else {
@@ -478,9 +496,15 @@ import utils from '~/plugins/utils';
 
             },
             changeTime:function(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+
+                }
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
-                this.clearStation()
+                
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
@@ -514,6 +538,7 @@ import utils from '~/plugins/utils';
             },
             selectDeposit:function(value){
                 this.depositAmount = value;
+                this.errorAmount = false;
 
             },
             selectPayType:function(value){
@@ -767,6 +792,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })

@@ -525,6 +525,12 @@ import utils from '~/plugins/utils';
                     });
                     return
                 }
+                if(!this.stationList.length){
+                    this.$Notice.error({
+                        title:'请选择入驻工位'
+                    });
+                    return
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {

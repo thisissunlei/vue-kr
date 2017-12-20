@@ -150,6 +150,11 @@
                         <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
+                 <Col class="col">
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
+                    </FormItem> 
+                 </Col>
             </Row>
             <Row>
                 <Col class="col">
@@ -341,7 +346,6 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let {params}=this.$route;
                 let from={
-                    // id:4095
                     id:params.orderEdit
                 };
                 this.$http.get('join-bill-detail', from, r => {
@@ -349,6 +353,8 @@ import utils from '~/plugins/utils';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
                         obj.name = item.seatName;
+                        obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
                     _this.renewForm.customerId = data.customerId;
@@ -363,6 +369,7 @@ import utils from '~/plugins/utils';
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
                     _this.depositAmount = '3';
+                    _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
                     _this.renewForm.stationAmount = data.rentAmount;
                     _this.stationAmount = utils.smalltoBIG(data.rentAmount)
@@ -400,6 +407,7 @@ import utils from '~/plugins/utils';
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.startDate = start;
+                renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;

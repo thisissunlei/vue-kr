@@ -150,6 +150,11 @@
                         <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
+                 <Col class="col">
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
+                    </FormItem> 
+                 </Col>
             </Row>
             <Row>
                 <Col class="col">

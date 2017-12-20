@@ -279,7 +279,8 @@ import CommonFuc from '~/components/CommonFuc';
                 this.getTableData(this.tabParams);
             },
             changePage(page){
-               this.tabParams.page=page;
+                this.tabParams=this.searchData;
+                this.tabParams.page=page;
                 this.getTableData(this.tabParams);
             }
 

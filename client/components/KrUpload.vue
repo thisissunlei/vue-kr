@@ -238,6 +238,8 @@ export default{
 
 		},
 		downFille(){
+			var url = `/api/krspace-op-web/sys/downFile?fileId=100092`
+        	window.location.href = url;
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);

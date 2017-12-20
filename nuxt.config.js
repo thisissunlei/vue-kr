@@ -28,7 +28,8 @@ module.exports = {
   },
 
   plugins: [
-    {src: '~plugins/iview',ssr: true},
+    { src: '~plugins/iview', ssr: true },
+    { src: '~plugins/pdf', ssr: false }
   ],
   
   /*
@@ -40,16 +41,12 @@ module.exports = {
   */
   loading: { color: '#000000' },
   build: {
-    vendor: ['iview'],
+    vendor: ['iview','pdf'],
     publicPath: '/',
     vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
-            new ExtractTextPlugin({
-                filename: 'styles.css'
-            })
      ]
   }
 }

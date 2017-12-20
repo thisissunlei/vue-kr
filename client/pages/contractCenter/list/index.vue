@@ -71,6 +71,18 @@
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
             </div>
         </Modal>
+
+         <Modal
+            v-model="openTakeEffect"
+            title="合同生效"
+            width="660"
+        >
+            <div>合同是否生效?</div>
+            <div slot="footer">
+                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="takeEffectCancel">取消</Button>
+            </div>
+        </Modal>
         
     </div>
   
@@ -103,6 +115,7 @@
                     page:1,
                     pageSize:15,
                 },
+                openTakeEffect:false,
                 selectAllData:[],
                 loadingStatus: false,
                 file: null,
@@ -116,12 +129,14 @@
                     {
                         title: '合同编号',
                         key: 'serialNumber',
-                        align:'center'
+                        align:'center',
+                        fixed: 'left'
                     },
                     {
                         title: '客户名称',
                         key: 'customName',
-                        align:'center'
+                        align:'center',
+                        fixed: 'left'
                     },
                     {
                         title: '社区名称',
@@ -139,12 +154,36 @@
                         align:'center',
                     },
                     {
-                        title: '合同创建时间',
-                        key: 'cTime',
+                        title: '创建人',
+                        key: 'creatorName',
+                        align:'center',
+                    },
+                    {
+                        title: '服务费',
+                        key: 'serviceCharges',
+                        align:'center',
+                    },
+                    {
+                        title: '起始时间',
+                        key: 'startAndEnd',
                         align:'center',
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
                             return time;
+                        }
+                    },
+                    {
+                        title: '合同创建时间',
+                        key: 'cTime',
+                        align:'center',
+                        render(h, obj){
+                            if(!obj.row.endDate || !obj.row.startDate){
+                                return "-";
+                            }
+                            console.log(obj.row.endDate,"++++++++",obj.row.startDate)
+                            let end=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.endDate));
+                            let start = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            return start+"至"+end;
                         }
                     },
                     {
@@ -184,6 +223,19 @@
                                             this.openApplication(params)
                                         }
                                     }
+                                }, '下载'), h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openApplication(params)
+                                        }
+                                    }
                                 }, '下载'),
                                 h(krUpload, {
                                     props: {
@@ -199,7 +251,7 @@
                                             this.openApplication(params)
                                         }
                                     }
-                                },'ppp')
+                                },'附件上传')
                                 ];
                           
                            return h('div',btnRender);  
@@ -218,6 +270,18 @@
                     top: 80,
                     duration: 3
                 });
+            },
+            //合同生效开关
+            takeEffectSwitch(){
+                this.openTakeEffect = !this.openTakeEffect;
+            },
+            //生效确定
+            takeEffectSubmit(){
+
+            },
+            //生效页面取消
+            takeEffectCancel(){
+                this.takeEffectSwitch();
             },
             handleFormatError(){
                 console.log("格式不正确=======")

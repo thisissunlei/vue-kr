@@ -338,7 +338,7 @@ import utils from '~/plugins/utils';
                 });
             },
             renewFormSubmit(){
-                this.config()
+                this.config();
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -382,10 +382,17 @@ import utils from '~/plugins/utils';
                 let message = '请填写完整表单';
                 this.config()
                 let _this = this;
-                this.disabled = true;
+                
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.selecedStation.length){
+                    this.$Notice.error({
+                        title:'请选择续租工位'
+                    });
+                    return;
+                }
+                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.renewFormSubmit()

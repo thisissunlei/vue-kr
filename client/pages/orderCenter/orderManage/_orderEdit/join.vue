@@ -423,6 +423,7 @@ import utils from '~/plugins/utils';
                      _this.$Notice.error({
                         title:e.message
                     })
+                     _this.disabled = false
 
                         console.log('error',e)
                 })

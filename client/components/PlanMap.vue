@@ -170,6 +170,7 @@ import http from '~/plugins/http.js';
 				let data = this.data;
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
+				console.log('处理数据进行渲染',this.selectedObjs)
 				let startToEnd = []
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
@@ -198,7 +199,7 @@ import http from '~/plugins/http.js';
 							// obj.checked = true;
 							for (let j = 0; j < selectedObjs.length; j++) {
 								let belongType = "STATION";
-								if (selectedObjs[j].belongType == 2) {
+								if (selectedObjs[j].belongType == 2 || selectedObjs[j].belongType == 'SPACE') {
 									belongType = "SPACE";
 								}
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {

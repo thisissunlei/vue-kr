@@ -150,10 +150,10 @@ import utils from '~/plugins/utils';
                             return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
-                    {
-                        title: '小计',
-                        key: 'amount'
-                    }
+                    // {
+                    //     title: '小计',
+                    //     key: 'amount'
+                    // }
                 ],
                 stationAmount:'',
                 payList:[
@@ -249,12 +249,18 @@ import utils from '~/plugins/utils';
                 });
             },
             handleSubmit:function(name){
-                let message = '=========';
+                let message = '请完整的填写表单'
                 let _this = this;
                 this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
+                if(!this.selecedStation.length){
+                    this.$Notice.error({
+                        title:'请选择减租工位'
+                    });
+                    return;
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
@@ -368,6 +374,8 @@ import utils from '~/plugins/utils';
             submitStation:function(){
 
                  let end = this.selecedArr[0].startDate;
+                 this.selecedStation =  this.selecedArr;
+
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
                 this.getStationAmount()
             },
@@ -380,7 +388,7 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    obj.floor = item.whereFloor;
+                    // obj.floor = item.whereFloor;
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
@@ -395,10 +403,10 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 if(val.length){
                      this.$http.post('get-reduce-station-amount', params, r => {
-                        let money = 0;
+                        let money = r.data.reduceAmount;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+= item.amount;
+                            // money+= item.amount;
 
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
@@ -427,6 +435,7 @@ import utils from '~/plugins/utils';
             },
             onStationChange:function(val){
                 this.selecedArr = val;
+
             },
              getRenewStation(){
                 let params = {

@@ -12,19 +12,19 @@
             <DetailStyle info="基本信息">
             <Row>  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customerId">
+                    <FormItem label="客户名称" style="width:252px" >
                     <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
+                    <FormItem label="所属社区" style="width:252px">
                     <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="salerId">
-                        <SelectSaler name="formItem.saler" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    <FormItem label="销售员" style="width:252px">
+                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -206,12 +206,13 @@ import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
+import utils from '~/plugins/utils';
 
 
 
     export default {
         data() {
-            this.getDetailData()
+            
             return {
                 openStation:false,
                 customerName:'',
@@ -230,7 +231,6 @@ import '~/assets/styles/createOrder.less';
                 stationData:{
                     submitData:[],
                     deleteData:[],
-                    clearAll:false
                 },
                 stationAll:{},
                 payList:[
@@ -296,36 +296,6 @@ import '~/assets/styles/createOrder.less';
 
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
-                    startDate: [
-                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
-                    ],
-                    firstPayTime: [
-                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
-                    ],
-                    endDate: [
-                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                    ],
-                    timeRange: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
-                    ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    communityId:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    salerId:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
-                    ],
-                    // floor: [
-                    //     { validator: validateFloor, trigger: 'change' }
-                    // ],
                 },
                 getFloor:+new Date(),
                 changeSale:+new Date()
@@ -345,7 +315,7 @@ import '~/assets/styles/createOrder.less';
             planMap
         },
         mounted(){
-
+            this.getDetailData();
         },
         watch:{
            getFloor(){
@@ -366,6 +336,7 @@ import '~/assets/styles/createOrder.less';
            },
         },
         methods: {
+
              getDetailData(){
                 let _this = this;
                 let {params}=this.$route;
@@ -373,25 +344,39 @@ import '~/assets/styles/createOrder.less';
                     // id:4095
                     id:params.orderEdit
                 };
-
-
-
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
-                    console.log('get-order-detail===>',data.customerid)
+                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
+                        let obj = item;
+                        // obj.floor = '5';
+                        obj.belongType = item.seatType;
+                        obj.id = item.seatId;
+                        obj.name = item.seatName;
+                        return obj;
+                    })
+                    _this.stationData = {
+                        submitData:data.orderSeatDetailVo,
+                        deleteData:[]
+                    };
                     _this.formItem.customerId = data.customerId;
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = data.communityId;
                      _this.salerName = data.salerName;
                     _this.formItem.salerId = data.salerId;
                     _this.communityName = data.communityName;
-                    _this.formItem.endDate = data.endDate;
+                    // _this.formItem.endDate = data.endDate;
+                    _this.changeEndTime(data.endDate)
                     _this.formItem.startDate = data.startDate;
+                    _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = data.firstPayTime;
                     _this.formItem.rentAmount = data.rentAmount;
-                    _this.installmentType = 'THREE';
-                    _this.depositAmount = '3';
+                    _this.formItem.stationAmount = data.rentAmount;
+                    _this.stationAmount = utils.smalltoBIG(data.rentAmount);
+                    // _this.installmentType = data.installmentType;
+                    _this.selectDeposit('3')
+                    _this.selectPayType(data.installmentType)
+                    // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
                     _this.getSaleTactics({communityId:data.customerId})
                     }, e => {
@@ -405,20 +390,19 @@ import '~/assets/styles/createOrder.less';
                 });
             },
             joinFormSubmit(){
-                this.config()
+                this.config();
+                 let {params}=this.$route;
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                console.log('joinFormSubmit',this.formItem.items)
-                // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
+                formItem.orderSeatId = params.orderEdit;
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
@@ -428,12 +412,12 @@ import '~/assets/styles/createOrder.less';
                 formItem.salerId=this.formItem.salerId;
                 formItem.timeRange=this.formItem.timeRange;
                 formItem.rentAmount=this.formItem.rentAmount;
-                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
+                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.firstPayTime));
 
                 formItem.startDate = start;
                 formItem.endDate =end;
                 formItem.corporationId = 11;//临时加的-无用但包错
-                console.log('handleSubmit',formItem,start,end)
+                console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
@@ -441,6 +425,7 @@ import '~/assets/styles/createOrder.less';
                      _this.$Notice.error({
                         title:e.message
                     })
+                     _this.disabled = false
 
                         console.log('error',e)
                 })
@@ -489,8 +474,8 @@ import '~/assets/styles/createOrder.less';
                 this.config()
                 let params = {
                     communityId:this.formItem.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.startDate),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.endDate),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate)),
                     seats:JSON.stringify(this.stationList),
                     saleList:JSON.stringify(list)
                 };
@@ -766,13 +751,16 @@ import '~/assets/styles/createOrder.less';
                 this.errorPayType = false;
             },
             submitStation:function(){//工位弹窗的提交
+
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
+                 console.log('submitStation',this.stationData)
                 this.getStationAmount()
 
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
+
                 
             },
             cancelStation:function(){//工位弹窗的取消
@@ -785,13 +773,17 @@ import '~/assets/styles/createOrder.less';
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
+                console.log('changeBeginTime------1')
+                 if(!val || !this.formItem.endDate){
+                    return;
+                }
                 this.config();
                 val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
                 let params = {
                     end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     start:val
                 }
-                if(new Date(val)>new date(this.formItem.endDate)){
+                if(new Date(val)>new Date(this.formItem.endDate)){
                     error = true;
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
@@ -813,15 +805,32 @@ import '~/assets/styles/createOrder.less';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                if(!val){
+                    return;
+                }
+
+                console.log('changeEndTime------1',val)
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+
 
                 val = this.dealEndDate(val);
                 let error = false;
+
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
+                console.log('changeEndTime------2')
+
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
                 }
                 this.config();
+                console.log('changeEndTime------3',params)
+
                 if(new Date(this.formItem.startDate)>new Date(val)){
                     error = true;
                     this.$Notice.error({
@@ -831,7 +840,6 @@ import '~/assets/styles/createOrder.less';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.formItem.endDate = val;
                 this.clearStation();
 
             },

@@ -105,9 +105,6 @@
                         <span>折扣</span>
                         
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -132,7 +129,6 @@
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -239,21 +235,21 @@ import utils from '~/plugins/utils';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    // communityId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // customerId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // salerId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // time: [
-                    //     { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
-                    // ],
-                    // endDate: [
-                    //     { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    // ],
+                    communityId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    salerId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    time: [
+                        { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
+                    ],
+                    endDate: [
+                        { required: true,message: '此项不可为空'}
+                    ],
                },
                stationListData:[],
                selecedStation:[],
@@ -357,13 +353,13 @@ import utils from '~/plugins/utils';
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
-                    _this.renewForm.customerId = data.customerId;
+                    _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
-                    _this.renewForm.communityId = data.communityId;
+                    _this.renewForm.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
-                    _this.renewForm.salerId = data.salerId;
+                    _this.renewForm.salerId = JSON.stringify(data.salerId);
                     _this.communityName = data.communityName;
-                    _this.renewForm.endDate = data.endDate;
+                    _this.renewForm.endDate = new Date(data.endDate);
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;
@@ -411,7 +407,6 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                console.log('======================')
                  this.$http.post('save-renew', renewForm, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
@@ -436,7 +431,15 @@ import utils from '~/plugins/utils';
                 }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        this.renewFormSubmit()
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择续租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
+                        console.log('handleSubmit',valid)
+                        // this.renewFormSubmit()
                         this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
@@ -514,9 +517,15 @@ import utils from '~/plugins/utils';
 
             },
             changeTime:function(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+                }
+                
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
-                this.clearStation()
+                
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
@@ -803,6 +812,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })

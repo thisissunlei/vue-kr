@@ -115,9 +115,6 @@
                         <span>折扣</span>
                         
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -137,13 +134,11 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -224,6 +219,7 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+
 
 
 
@@ -376,22 +372,20 @@ import utils from '~/plugins/utils';
                         submitData:data.orderSeatDetailVo,
                         deleteData:[]
                     };
-                    _this.formItem.customerId = data.customerId;
+                    _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
-                    _this.formItem.communityId = data.communityId;
+                    _this.formItem.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
-                    _this.formItem.salerId = data.salerId;
+                    _this.formItem.salerId = JSON.stringify(data.salerId);
                     _this.communityName = data.communityName;
-                    // _this.formItem.endDate = data.endDate;
-                    _this.changeEndTime(data.endDate)
-                    _this.formItem.startDate = data.startDate;
+                    _this.formItem.startDate = new Date(data.startDate);
+                    _this.formItem.endDate = new Date(data.endDate);
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
-                    _this.formItem.firstPayTime = data.firstPayTime;
+                    _this.formItem.firstPayTime = new Date(data.firstPayTime);
                     _this.formItem.rentAmount = data.rentAmount;
                     _this.formItem.stationAmount = data.rentAmount;
                     _this.stationAmount = utils.smalltoBIG(data.rentAmount);
-                    // _this.installmentType = data.installmentType;
                     _this.selectDeposit('3')
                     _this.selectPayType(data.installmentType)
                     // _this.depositAmount = '3';
@@ -904,6 +898,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })

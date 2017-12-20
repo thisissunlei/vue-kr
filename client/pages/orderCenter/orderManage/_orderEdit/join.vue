@@ -1,5 +1,21 @@
 <style lang="less"> 
-    
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
    
 </style>
 
@@ -33,7 +49,7 @@
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <DatePicker type="date" placeholder="租赁开始日期" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
@@ -45,8 +61,8 @@
                     </FormItem>
                 </Col>
                  <Col class="col">
-                    <FormItem label="租赁时长" style="width:252px" prop="timeRange">
-                        <Input v-model="formItem.timeRange" placeholder="租赁时长"></Input>
+                    <FormItem label="租赁时长" style="width:252px">
+                        <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
             </Row>
@@ -161,10 +177,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
+                        <div class="pay-error" v-if="errorAmount">请选择付款方式</div>
                  </Col>
             </Row>
             
@@ -222,6 +239,7 @@ import utils from '~/plugins/utils';
                 index:0,
                 salerName:'',
                 depositAmount:'',
+                errorAmount:false,
                 disabled:false,
                 delStation:[],
                 stationAmount:'',
@@ -511,15 +529,31 @@ import utils from '~/plugins/utils';
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.depositAmount){
+                    this.errorAmount = true;
+                }
                 if(this.timeError){
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
                     });
                     return
                 }
+                
+                if(this.errorPayType || this.errorAmount){
+                    this.$Notice.error({
+                        title:'请填写完表单'
+                    });
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!_this.stationList.length){
+                            _this.$Notice.error({
+                                title:'请选择入驻工位'
+                            });
+                            _this.disabled = false;
+                            return
+                        }
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;
@@ -642,7 +676,6 @@ import utils from '~/plugins/utils';
             clearStation:function(){
                 // 清除所选的工位
                 if(this.stationList.length){
-
                     this.stationData={
                         submitData:[],
                         deleteData:[],
@@ -744,6 +777,7 @@ import utils from '~/plugins/utils';
             selectDeposit:function(value){
                 // 选择保证金
                 this.depositAmount = value
+                this.errorAmount = false;
             },
             selectPayType:function(value){
                 // 选择付款方式
@@ -773,7 +807,7 @@ import utils from '~/plugins/utils';
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
                 let error = false;
-                console.log('changeBeginTime------1')
+                this.clearStation()
                  if(!val || !this.formItem.endDate){
                     return;
                 }
@@ -792,7 +826,7 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.clearStation()
+                
             },
             dealEndDate(val){
                 let str = val.split('-');
@@ -805,11 +839,11 @@ import utils from '~/plugins/utils';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                  this.clearStation();
                 if(!val){
                     return;
                 }
 
-                console.log('changeEndTime------1',val)
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
 
 
@@ -822,14 +856,12 @@ import utils from '~/plugins/utils';
                 if(!this.formItem.startDate){
                     return;
                 }
-                console.log('changeEndTime------2')
 
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
                 }
                 this.config();
-                console.log('changeEndTime------3',params)
 
                 if(new Date(this.formItem.startDate)>new Date(val)){
                     error = true;
@@ -840,7 +872,7 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.clearStation();
+              
 
             },
             contractDateRange:function(params){//获取租赁范围

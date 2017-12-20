@@ -112,21 +112,21 @@ import utils from '~/plugins/utils';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    // communityId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // customerId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // saler:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // time: [
-                    //     { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
-                    // ],
-                    // endDate: [
-                    //     { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    // ],
+                    communityId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    saler:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    time: [
+                        { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
+                    ],
+                    endDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    ],
                },
                stationList:[],
                selecedStation:[],
@@ -223,19 +223,20 @@ import utils from '~/plugins/utils';
                     // id:4095
                     id:params.orderEdit
                 };
-                this.$http.get('join-bill-detail', from, r => {
+                this.$http.get('reduce-bill-detail', from, r => {
                     let data = r.data;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        _this.renewForm.endDate = new Date(item.endDate);
+
                         obj.name = item.seatName;
                         return obj;
                     })
-                    _this.renewForm.customerId = data.customerId;
+                    _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
-                    _this.renewForm.communityId = data.communityId;
+                    _this.renewForm.communityId = JSON.stringify(data.communityId);
                     _this.communityName = data.communityName;
-                    _this.renewForm.endDate = data.endDate;
-                    _this.renewForm.startDate = data.startDate;
+                    _this.renewForm.startDate = new Date(data.startDate);
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount || 0;
                     _this.installmentType = 'THREE';
@@ -282,7 +283,7 @@ import utils from '~/plugins/utils';
                 });
             },
             handleSubmit:function(name){
-                let message = '=========';
+                let message = "请完整的填写表单"
                 let _this = this;
                 this.$Notice.config({
                     top: 80,
@@ -291,8 +292,14 @@ import utils from '~/plugins/utils';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择减租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
                         this.reduceFormSubmit()
-                        this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
 
@@ -327,7 +334,6 @@ import utils from '~/plugins/utils';
                     _this.getStationFn = +new Date()
                 },200)
 
-                // this.renewForm.endDate = value;
             },
             changeSaler:function(value){
                 this.renewForm.saler = value;

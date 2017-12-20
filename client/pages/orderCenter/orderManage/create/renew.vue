@@ -496,9 +496,15 @@ import utils from '~/plugins/utils';
 
             },
             changeTime:function(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+
+                }
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
-                this.clearStation()
+                
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
@@ -786,6 +792,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })

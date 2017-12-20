@@ -385,12 +385,10 @@ import utils from '~/plugins/utils';
             },
             joinFormSubmit(){
                 this.config();
-                console.log('joinFormSubmit',this.installmentType,'depositAmount',this.depositAmount)
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))

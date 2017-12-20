@@ -695,7 +695,6 @@ import utils from '~/plugins/utils';
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
                     communityId:this.renewForm.communityId,
-                    // communityId:4,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){

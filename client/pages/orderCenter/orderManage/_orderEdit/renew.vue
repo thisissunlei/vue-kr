@@ -302,6 +302,7 @@ import utils from '~/plugins/utils';
                 errorPayType:false,
                 getStationFn:'',
                 stationAmount:'',
+                orderSeatId:''
 
            }
         },
@@ -360,7 +361,7 @@ import utils from '~/plugins/utils';
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;
-                    _this.installmentType = 'THREE';
+                    _this.installmentType = data.installmentType;
                     _this.depositAmount = '3';
                     _this.getStationFn = +new Date();
                     _this.renewForm.stationAmount = data.rentAmount;
@@ -377,18 +378,19 @@ import utils from '~/plugins/utils';
                 });
             },
             renewFormSubmit(){
-                this.config()
+                this.config();
+                let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
                  saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
+                 renewForm.orderSeatId = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
                 renewForm.depositAmount = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
@@ -397,12 +399,11 @@ import utils from '~/plugins/utils';
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
-                // renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
-
                 renewForm.startDate = start;
                 renewForm.endDate =end;
                 renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
+                console.log('======================')
                  this.$http.post('save-renew', renewForm, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
@@ -733,8 +734,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
-                    // communityId:this.renewForm.communityId,
-                    communityId:4,
+                    communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){
@@ -856,8 +856,8 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:this.renewForm.startDate,
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.endDate),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };

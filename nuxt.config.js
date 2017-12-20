@@ -29,22 +29,15 @@ module.exports = {
 
   plugins: [
     {src: '~plugins/iview',ssr: true},
+    {src: '~plugins/vue-pdf',ssr: false},
   ],
-  
-  /*
-  ** Global CSS
-  */
   css: ['~assets/css/main.css'],
-  /*
-  ** Customize the progress-bar color
-  */
   loading: { color: '#000000' },
   build: {
-    vendor: ['iview'],
+    vendor: ['iview','vue-pdf'],
     publicPath: '/',
-    vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+      //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
             new ExtractTextPlugin({

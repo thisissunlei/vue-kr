@@ -57,7 +57,7 @@
          
      }
      GlobalRouter.prototype.pushCloseRoutrs = function(){
-         var router = location.href;
+         var router = location.href.split('?')[0];
         
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
@@ -68,8 +68,7 @@
      };
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-          
-             var router = location.href.split("?")[0];
+             var router = location.href.split('?')[0];
              // console.log(getClickNav([].concat(NavItems), router),"------")
              var activeData = getClickNav([].concat(NavItems), router);
             
@@ -1366,8 +1365,7 @@
                             primaryText: "订单列表",
                             router: 'orderCenter/orderManage',
                             type:'vue',
-                            menuCode: 'iot_door_open_log',
-                            //menuCode: 'fina_meeting_order_page'
+                            menuCode: 'order_seat_list',
                         },
                     ]
                 },

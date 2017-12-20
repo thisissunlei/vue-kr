@@ -30,7 +30,9 @@
     "nodemon": "^1.12.5",
     "nuxt": "^1.0.0-rc11",
     "scmp": "^2.0.0",
-    "vue-dateutils": "^1.0.8",
+    "vue-dateutils": "^1.0.8"
+  },
+  "dependencies": {
     "vue-pdf": "^2.0.4"
   }
 }

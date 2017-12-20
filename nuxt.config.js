@@ -4,11 +4,11 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   srcDir: 'client/',
-  cache:true,
+  cache: true,
   transition: {
     name: 'page',
     mode: 'out-in',
-    beforeEnter (el) {
+    beforeEnter(el) {
       console.log('Before enter...');
     }
   },
@@ -29,24 +29,20 @@ module.exports = {
 
   plugins: [
     { src: '~plugins/iview', ssr: true },
-    { src: '~plugins/pdf', ssr: false }
+    { src: '~plugins/vue-pdf', ssr: false },
   ],
-  
-  /*
-  ** Global CSS
-  */
   css: ['~assets/css/main.css'],
-  /*
-  ** Customize the progress-bar color
-  */
   loading: { color: '#000000' },
   build: {
-    vendor: ['iview','pdf'],
+    vendor: ['iview', 'vue-pdf'],
     publicPath: '/',
-    vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
+      //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
-     ]
+      new ExtractTextPlugin({
+        filename: 'styles.css'
+      })
+    ]
   }
 }

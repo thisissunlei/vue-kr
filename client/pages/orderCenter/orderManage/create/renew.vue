@@ -150,6 +150,11 @@
                         <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
+                 <Col class="col">
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
+                    </FormItem> 
+                 </Col>
             </Row>
             <Row>
                 <Col class="col">
@@ -338,7 +343,7 @@ import utils from '~/plugins/utils';
                 });
             },
             renewFormSubmit(){
-                this.config()
+                this.config();
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -382,10 +387,17 @@ import utils from '~/plugins/utils';
                 let message = '请填写完整表单';
                 this.config()
                 let _this = this;
-                this.disabled = true;
+                
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.selecedStation.length){
+                    this.$Notice.error({
+                        title:'请选择续租工位'
+                    });
+                    return;
+                }
+                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.renewFormSubmit()
@@ -686,7 +698,7 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    obj.floor = item.whereFloor;
+                    obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
@@ -694,8 +706,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
-                    // communityId:this.renewForm.communityId,
-                    communityId:4,
+                    communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){

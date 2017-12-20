@@ -49,7 +49,7 @@
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
-                        <DatePicker type="date" placeholder="Select date" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <DatePicker type="date" placeholder="租赁开始时间" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
@@ -390,28 +390,6 @@ import utils from '~/plugins/utils';
            }
         },
         methods: {
-            //  getDetailData:function(){
-            //     let _this = this;
-            //     let {params}=this.$route;
-            //     let from={
-            //         id:params.orderEdit
-            //     };
-            //      this.$http.get('get-order-detail', from, r => {
-            //         let data = r.data;
-            //         console.log('get-order-detail===>',data.customerid)
-            //         _this.formItem.customer = data.customerid;
-            //         _this.customerName = data.customerName;
-            //         _this.formItem.community = data.communityid;
-            //         _this.communityName = data.communityName;
-            //         _this.formItem.leaseEnddate = data.leaseEnddate;
-            //         _this.formItem.leaseBegindate = data.leaseBegindate;
-            //         _this.stationList = data.stationVos;
-            //         _this.payType = 'TWO';
-            //         _this.depositType = '2个月'
-            //         }, e => {
-            //             _this.$Message.info(e);
-            //     })
-            // },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -544,6 +522,12 @@ import utils from '~/plugins/utils';
                 if(this.timeError){
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
+                    });
+                    return
+                }
+                if(!this.stationList.length){
+                    this.$Notice.error({
+                        title:'请选择入驻工位'
                     });
                     return
                 }
@@ -800,6 +784,10 @@ import utils from '~/plugins/utils';
             },
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+                console.log('changeBeginTime',val);
+                if(!val || !this.formItem.endDate){
+                    return;
+                }
                 let error = false;
                 this.config();
                 val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
@@ -807,7 +795,7 @@ import utils from '~/plugins/utils';
                     end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     start:val
                 }
-                if(new Date(val)>new date(this.formItem.endDate)){
+                if(new Date(val)>new Date(this.formItem.endDate)){
                     error = true;
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
@@ -829,10 +817,19 @@ import utils from '~/plugins/utils';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                if(!val){
+                    return;
+                }
 
                 val = this.dealEndDate(val);
                 let error = false;
+
                 val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
@@ -847,7 +844,6 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.formItem.endDate = val;
                 this.clearStation();
 
             },
@@ -893,7 +889,7 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    obj.floor = item.whereFloor;
+                    obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
                     return obj;

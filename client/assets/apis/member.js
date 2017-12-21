@@ -15,4 +15,9 @@ export default {
         url: '/api/krspace-op-web/customer/manager/edit',
         method: 'post'
     },
+    //获取管理员数量
+    'get-manager-count': {
+        url: '/api/krspace-op-web/customer/manager/manager-count',
+        method: 'get'
+    },
 } 

@@ -11,6 +11,16 @@
 		</div>
 		<div class="u-detail-table">
 			<div class="u-table-label">员工列表：</div>
+			<div class="u-search-box">
+				<div style='float:right;'>
+					<Input 
+						v-model="mbrName" 
+						placeholder="请输入员工姓名"
+						style="width: 240px"
+					></Input>
+					<div class='m-search' @click="lowerSubmit">搜索</div>
+				</div> 
+       		</div>
 			<Table border :columns="list" :data="listInfo"></Table>
 			 <div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
                 <!-- <Button type="primary" @click="onExport">导出</Button> -->
@@ -82,6 +92,8 @@ export default {
 			warn:'',
 			MessageType:'',
 			itemDetail:{},
+			managerCount:0,
+			mbrName:'',
 			list:[
 				{
 				 title: '姓名',
@@ -103,6 +115,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
+		this.getCount();
 		var _this=this;
 		let obj={
 				 title: `管理员(${this.num})`,
@@ -159,7 +172,18 @@ export default {
 				this.totalCount=r.data.totalCount;
            	}, e => {
                 console.log('error',e)
-            })
+			})
+		},
+		getCount(){
+			let Params={
+				csrId:this.detail.csrId
+			}
+			this.$http.get('get-manager-count', Params, r => {
+				this.managerCount=r.data.managerCount;
+				
+           	}, e => {
+                console.log('error',e)
+			})
 		},
 		changePage(page){
                 this.Params.page=page;
@@ -203,6 +227,10 @@ export default {
 		},
 		onChangeOpen(data){
                 this.openMessage=data;
+		},
+		  lowerSubmit(){
+                this.Params.mbrName=this.mbrName;
+                this.getInfo();
         },
 
 	},
@@ -229,6 +257,11 @@ export default {
 			margin-bottom:10px;
 		}
 	}
+	.u-search-box{
+		height:32px;
+		margin:16px 0;
+		
+    }
 
 }
 .u-tip{

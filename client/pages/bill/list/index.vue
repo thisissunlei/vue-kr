@@ -58,7 +58,7 @@
           
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
+        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -424,10 +424,12 @@ import CommonFuc from '~/components/CommonFuc';
                 })
             },
             onBillPay(){
+                
                 if(this.billIds.length<=0){
                      this.openClose=true; 
                      return;  
                 }
+                let billIds=this.billIds.join(',');
                 let params={
                     billIds:this.billIds.join(',')
                 }
@@ -441,6 +443,7 @@ import CommonFuc from '~/components/CommonFuc';
                     this.MessageType="success";
                     this.warn=`已成功结算${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
+                    this.billIds=""
                     this.getTableData(this.tabParams);
                 }, e => {
                     console.log('error',e)

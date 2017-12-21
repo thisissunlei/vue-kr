@@ -42,13 +42,12 @@
 <style lang="less">
 .ui-drawer{
     position: fixed;
-    z-index: 100000;
+    z-index: 550;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     width: 100%;
-    overflow: hidden;
     background-color: transparent; 
     font-size: 14px;
     .drawer-modal{
@@ -58,7 +57,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 100000;
+        z-index: 550;
     }
     .drawer-body{
         width:750px;

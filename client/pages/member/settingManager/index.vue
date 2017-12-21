@@ -45,7 +45,7 @@
     :openDrawer="openDrawer"
     v-on:changeOpen="onChangeOpen"
 >
-    <Setting></Setting>
+    <Setting :detail="itemDetail"></Setting>
 </Drawer>
 </div> 	
 </template>
@@ -55,7 +55,7 @@ import CommonFuc from '~/components/CommonFuc';
 import HighSearch from './highSearch';
 import Drawer from '~/components/Drawer';
 import Setting from './setting';
-
+import dateUtils from 'vue-dateutils';
 export default {
     components:{
         SectionTitle,
@@ -68,12 +68,13 @@ export default {
             openDrawer:false,
             openSearch:false,
             totalCount:0,
-            pageSize:0,
+            pageSize:15,
             tableData:[],
             Params:{
                 page:1,
                 pageSize:15
             },
+            itemDetail:{},
             csrName:'',
             searchData:{},
             tableHeader:[
@@ -91,11 +92,10 @@ export default {
                     title: '注册时间',
                     key: 'registerTime',
                     align:'center',
-                },
-                {
-                    title: '状态',
-                    key: 'csrStatus',
-                    align:'center',
+                    render(h, obj){
+                        let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.registerTime));
+                        return time;
+                    }
                 },
                 {
                     title: '已设置管理员数量',
@@ -131,17 +131,7 @@ export default {
         }
     },
     mounted:function(){
-        this.tableData=[
-            {
-                csrName:'卓莹（上海）网络科技有限公司',
-                cmtName:'徐家汇社区',
-                registerTime:'2017-12-18',
-                csrStatus:'正常',
-                managerNum:2
-                
-            }
-        ]
-        //this.getTableData(this.Params);
+        this.getTableData(this.Params);
     },
     methods:{
         getTableData(params){
@@ -154,7 +144,7 @@ export default {
         },
         changePage(page){
                 this.Params.page=page;
-                this.getTableData(Params);
+                this.getTableData(this.Params);
         },
         lowerSubmit(){
                 this.Params.csrName=this.csrName;

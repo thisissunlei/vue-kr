@@ -58,6 +58,11 @@
                     <SelectSaler name="renewForm.salerId" :onchange="changeSaler" ></SelectSaler>
                     </FormItem>
                 </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -255,6 +260,9 @@ import utils from '~/plugins/utils';
                     endDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
+                    signDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    ],
                },
                stationListData:[],
                selecedStation:[],
@@ -351,6 +359,7 @@ import utils from '~/plugins/utils';
                 this.config();
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
                  saleList = saleList.map(item=>{
@@ -368,6 +377,7 @@ import utils from '~/plugins/utils';
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.signDate = signDate;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
 
                 renewForm.startDate = start;

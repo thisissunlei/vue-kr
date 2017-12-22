@@ -117,13 +117,8 @@
                         
                     </Col>
                     <Col span="5" class="discount-table-head" >
-                        <span>折扣</span>
-                        
+                        <span>折扣</span>  
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
-                    
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
@@ -142,13 +137,10 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
-                    
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -194,7 +186,6 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
 
     </Form>

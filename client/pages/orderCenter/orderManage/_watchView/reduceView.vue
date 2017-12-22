@@ -123,8 +123,8 @@ export default {
 				   _this.basicInfo=r.data;
 
 
-				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime));
-				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate));
+				   _this.ctime=r.data.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime)):'';
+				   _this.startDate=r.data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate)):'';
 				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
 					    var stationType='';
 					    if(item.seatType=='OPEN'){

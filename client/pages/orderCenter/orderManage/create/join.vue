@@ -43,6 +43,11 @@
                     <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="出租方" style="width:252px" prop="corporationId">
+                    <SelectCorporation name="formItem.corporationId" :onchange="changeCorporation"></SelectCorporation>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -215,6 +220,7 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
+import SelectCorporation from '~/components/SelectCorporation.vue'
 
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
@@ -323,6 +329,9 @@ import utils from '~/plugins/utils';
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
+                    corporationId:[
+                        { required: true, message: '请选择出租方', trigger: 'change' }
+                    ],
                     customerId:[
                         { required: true, message: '请选择客户', trigger: 'change' }
                     ],
@@ -353,7 +362,8 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap
+            planMap,
+            SelectCorporation
         },
         created(){
             // this.openStation = false
@@ -420,7 +430,9 @@ import utils from '~/plugins/utils';
                 formItem.salerId=this.formItem.salerId;
                 formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
+
                 formItem.rentAmount=this.formItem.rentAmount;
+                formItem.corporationId=this.formItem.corporationId;
                 formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
 
                 formItem.startDate = start;
@@ -942,6 +954,13 @@ import utils from '~/plugins/utils';
 
                         console.log('error',e)
                     })
+                }
+            },
+            changeCorporation(val){
+                if(val){
+                    this.formItem.corporationId = val;
+                }else{
+                    return
                 }
             }
                     

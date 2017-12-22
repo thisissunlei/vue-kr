@@ -63,6 +63,13 @@
                     <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="出租方" style="width:252px" prop="corporationId" >
+                    <SelectCorporation name="renewForm.corporationId" :onchange="changeCorporation"></SelectCorporation>
+                    </FormItem>
+                </Col>
+
+                
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -216,6 +223,8 @@ import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import SelectCorporation from '~/components/SelectCorporation.vue'
+
 
 
 
@@ -263,6 +272,9 @@ import utils from '~/plugins/utils';
                     signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
+                    corporationId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ]
                },
                stationListData:[],
                selecedStation:[],
@@ -331,6 +343,7 @@ import utils from '~/plugins/utils';
             SelectCustomers,
             SelectSaler,
             stationList,
+            SelectCorporation,
             planMap
         },
         created(){
@@ -375,6 +388,7 @@ import utils from '~/plugins/utils';
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
+                renewForm.corporationId=this.renewForm.corporationId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.signDate = signDate;
@@ -618,8 +632,7 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                console.log('deleteStation==============',stationVos)
-                // this.selecedStation = stationVos;
+                this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
 
@@ -880,6 +893,13 @@ import utils from '~/plugins/utils';
                 })
 
             },
+            changeCorporation(value){
+                if(value){
+                    this.renewForm.corporationId = value;
+                }else{
+                    this.renewForm.corporationId = '';
+                }
+            }
 
                     
                

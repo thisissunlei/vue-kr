@@ -30,6 +30,12 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
+                    <FormItem label="出租方" style="width:252px" prop="corporationId" >
+                    <SelectCorporation name="corporationId" :onchange="changeCorporation"></SelectCorporation>
+                    </FormItem>
+                </Col>
+                
+                <Col class="col">
                     <FormItem label="减租开始日期" style="width:252px" prop="startDate" >
                         <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.startDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
@@ -86,6 +92,8 @@ import reduceStation from './reduceStation.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import SelectCorporation from '~/components/SelectCorporation.vue'
+
 
 
 
@@ -127,6 +135,9 @@ import utils from '~/plugins/utils';
                     startDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
+                    corporationId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ]
                },
                stationList:[
                ],
@@ -198,6 +209,7 @@ import utils from '~/plugins/utils';
             selectCommunities,
             selectCustomers,
             SelectSaler,
+            SelectCorporation,
             reduceStation,
         },
         created:function(){
@@ -220,6 +232,7 @@ import utils from '~/plugins/utils';
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.startDate = start;
+                renewForm.corporationId = this.renewForm.corporationId;
                 renewForm.endDate =start;
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
@@ -278,6 +291,13 @@ import utils from '~/plugins/utils';
                     this.clearStation()
                 }else{
                     this.renewForm.customerId = '';
+                }
+            },
+            changeCorporation:function(value){
+                if(value){
+                    this.renewForm.corporationId = value;
+                }else{
+                    this.renewForm.corporationId = '';
                 }
             },
             changeCommunity:function(value){

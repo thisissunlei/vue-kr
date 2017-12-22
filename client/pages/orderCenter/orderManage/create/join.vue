@@ -350,7 +350,7 @@ import utils from '~/plugins/utils';
                 salerName:'请选择',
                 ssoId:'',
                 errorAmount:false,
-                ssoName:''
+                ssoName:'',
 
             }
         },

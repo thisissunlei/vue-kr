@@ -346,13 +346,16 @@ import utils from '~/plugins/utils';
                 };
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
+                    let money = 0;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        money += item.amount;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
+                    _this.getSaleTactics({communityId:data.customerId})
                     _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.renewForm.communityId = JSON.stringify(data.communityId);
@@ -367,9 +370,24 @@ import utils from '~/plugins/utils';
                     _this.depositAmount = '3';
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
-                    _this.renewForm.stationAmount = data.rentAmount;
-                    _this.stationAmount = utils.smalltoBIG(data.rentAmount)
-                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.renewForm.stationAmount = money;
+                    _this.stationAmount = utils.smalltoBIG(money)
+                    
+                    setTimeout(function(){
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+                        _this.renewForm.items = data.contractTactics;
+                    },200)
                     }, e => {
                         _this.$Message.info(e);
                 })

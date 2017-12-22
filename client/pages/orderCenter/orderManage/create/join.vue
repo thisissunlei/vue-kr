@@ -40,7 +40,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler"></SelectSaler>
+                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -204,7 +204,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
     </Modal>
 
         
@@ -346,7 +346,11 @@ import utils from '~/plugins/utils';
                     // ],
                 },
                 getFloor:+new Date(),
-                changeSale:+new Date()
+                changeSale:+new Date(),
+                salerName:'请选择',
+                ssoId:'',
+                errorAmount:false,
+                ssoName:'',
 
             }
         },
@@ -367,11 +371,9 @@ import utils from '~/plugins/utils';
             // this.openStation = false
         },
         watch:{
-            formItem(){
-                console.log('=========')
-            },
            getFloor(){
             let _this = this;
+            this.config()
             if(this.formItem.communityId && this.formItem.customerId){
                 let params = {
                     communityId:this.formItem.communityId,
@@ -379,8 +381,18 @@ import utils from '~/plugins/utils';
                 }
                  this.$http.get('get-community-floor', params, r => {
                     _this.floors = r.data.floor;
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
+                    if(!_this.formItem.salerId){
+                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
+
+                    }
 
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                         console.log('error',e)
                 })
@@ -425,8 +437,8 @@ import utils from '~/plugins/utils';
 
                 formItem.startDate = start;
                 formItem.endDate =end;
-                formItem.corporationId = 11;//临时加的-无用但包错
-                console.log('handleSubmit',formItem,start,end)
+                formItem.ssoId = this.ssoId;
+                formItem.ssoName = this.ssoName;
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
@@ -742,6 +754,7 @@ import utils from '~/plugins/utils';
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
                 }
                 this.openStation = true;
+                console.log('showStation',params)
                 this.params = params;
             },
             selectRow:function(selection){
@@ -864,9 +877,13 @@ import utils from '~/plugins/utils';
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
+                this.config();
                  this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                     console.log('error',e)
                 })

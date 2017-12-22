@@ -312,6 +312,8 @@ import utils from '~/plugins/utils';
                 ruleCustom:{
                 },
                 getFloor:+new Date(),
+                ssoId:'',
+                ssoName:'',
                 changeSale:+new Date()
             }
         },
@@ -390,7 +392,7 @@ import utils from '~/plugins/utils';
                     _this.selectPayType(data.installmentType)
                     // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
-                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.getSaleTactics({communityId:data.communityId})
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -428,7 +430,6 @@ import utils from '~/plugins/utils';
 
                 formItem.startDate = start;
                 formItem.endDate =end;
-                formItem.corporationId = 11;//临时加的-无用但包错
                 console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {

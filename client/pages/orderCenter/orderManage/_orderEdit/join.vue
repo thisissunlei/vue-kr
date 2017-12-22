@@ -43,6 +43,12 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="出租方" style="width:252px">
+                        <SelectCorporation name="formItem.corporationId" :onchange="changeCorporation" :value="corporationName"></SelectCorporation>
+                    </FormItem>
+                </Col>
+                
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -223,6 +229,8 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import SelectCorporation from '~/components/SelectCorporation.vue'
+
 
 
 
@@ -246,6 +254,7 @@ import utils from '~/plugins/utils';
                 installmentType:'',
                 maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
+                corporationName:'',
                 stationData:{
                     submitData:[],
                     deleteData:[],
@@ -354,6 +363,7 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
+            SelectCorporation,
             planMap
         },
         mounted(){
@@ -404,6 +414,8 @@ import utils from '~/plugins/utils';
                     _this.getSaleTactics({communityId:data.communityId})
                     _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
+                    _this.corporationName = data.corporationName || '出租方';
+                    _this.formItem.corporationId = JSON.stringify(data.corporationId) || '2'; 
                     _this.formItem.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
                     _this.formItem.salerId = JSON.stringify(data.salerId);
@@ -467,6 +479,7 @@ import utils from '~/plugins/utils';
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
+                form.corporationId = this.formItem.corporationId;
                 formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
@@ -737,6 +750,15 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
 
             },
+            changeCorporation:function(value){
+                if(value){
+                    this.formItem.corporationId = value;
+                }else{
+                    this.formItem.corporationId = '';
+                }
+
+            },
+            
             changeSaler:function(value){
                 // 销售员
                 this.formItem.salerId = value;

@@ -34,6 +34,11 @@
                         <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.startDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="出租方" style="width:252px"  prop="corporationId">
+                    <SelectCorporation name="renewForm.corporationId" :onchange="changeCorporation" :value="corporationName"></SelectCorporation>
+                    </FormItem>
+                </Col>
             </Row>
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
@@ -86,6 +91,7 @@ import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import SelectCorporation from '~/components/SelectCorporation.vue'
 
 
 
@@ -105,6 +111,7 @@ import utils from '~/plugins/utils';
                     saler:'',
                     items:[]
                },
+               corporationName:'',
                disabled:false,//提交按钮是否禁止
                discountError:{
                 error:false,
@@ -112,6 +119,9 @@ import utils from '~/plugins/utils';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
+                    corporationId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
                     communityId:[
                         { required: true, message: '此项不可为空', trigger: 'change' }
                     ],
@@ -185,6 +195,7 @@ import utils from '~/plugins/utils';
             selectCustomers,
             SelectSaler,
             stationList,
+            SelectCorporation
         },
         mounted(){
             this.getDetailData()
@@ -222,6 +233,8 @@ import utils from '~/plugins/utils';
                     _this.installmentType = 'THREE';
                     _this.depositAmount = '3';
                     _this.getStationFn = +new Date()
+                    _this.renewForm.corporationId = JSON.stringify(data.corporationId) || '2';
+                    _this.corporationName = data.corporationName || '出租方'
                     _this.renewForm.stationAmount = data.rentAmount || 0;
                     _this.stationAmount = utils.smalltoBIG(_this.renewForm.stationAmount)
                     }, e => {
@@ -236,6 +249,7 @@ import utils from '~/plugins/utils';
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.corporationId = this.renewForm.corporationId;
                 renewForm.startDate = start;
                 renewForm.endDate =start;
                 let _this = this;
@@ -295,6 +309,13 @@ import utils from '~/plugins/utils';
                     this.clearStation()
                 }else{
                     this.renewForm.customerId = '';
+                }
+            },
+            changeCorporation(){
+                if(value){
+                    this.renewForm.corporationId = value;
+                }else{
+                    this.renewForm.corporationId = '';
                 }
             },
             changeCommunity:function(value){

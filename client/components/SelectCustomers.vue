@@ -43,7 +43,6 @@ import http from '~/plugins/http.js';
             };
         },
          mounted:function(){
-
             this.getCusomerList(' ');
         },
         methods: {

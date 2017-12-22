@@ -65,6 +65,11 @@
                         <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
                 
             </DetailStyle>
@@ -115,9 +120,6 @@
                         <span>折扣</span>
                         
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -310,11 +312,33 @@ import utils from '~/plugins/utils';
                     firstPayTime:'',
                     rentAmount:'',
                     items:[],
+                    signDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     stationAmount:0,
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
+                    startDate: [
+                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                    ],
+                    firstPayTime: [
+                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                    ],
+                    endDate: [
+                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
+                    ],
+                    communityId:[
+                        { required: true, message: '请选择社区', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '请选择客户', trigger: 'change' }
+                    ],
+                    salerId:[
+                        { required: true, message: '请选择销售员', trigger: 'change' }
+                    ],
+                    signDate:[
+                        { required: true, message: '请先选择签署时间', trigger: 'change' }
+                    ]
                 },
                 getFloor:+new Date(),
                 ssoId:'',
@@ -389,6 +413,7 @@ import utils from '~/plugins/utils';
                     _this.communityName = data.communityName;
                     _this.formItem.startDate = new Date(data.startDate);
                     _this.formItem.endDate = new Date(data.endDate);
+                    _this.formItem.signDate = new Date(data.signDate);
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
@@ -432,6 +457,7 @@ import utils from '~/plugins/utils';
                  let {params}=this.$route;
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
                 saleList = saleList.map(item=>{
@@ -444,6 +470,7 @@ import utils from '~/plugins/utils';
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
+                formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;

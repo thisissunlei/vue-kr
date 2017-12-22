@@ -65,6 +65,11 @@
                         <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
                 
             </DetailStyle>
@@ -302,6 +307,7 @@ import utils from '~/plugins/utils';
                     customerId: '',
                     communityId: '',
                     startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
+                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
@@ -323,15 +329,6 @@ import utils from '~/plugins/utils';
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
-                    timeRange: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
-                    ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
@@ -341,9 +338,9 @@ import utils from '~/plugins/utils';
                     salerId:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    // floor: [
-                    //     { validator: validateFloor, trigger: 'change' }
-                    // ],
+                    signDate:[
+                        { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                    ]
                 },
                 getFloor:+new Date(),
                 changeSale:+new Date(),
@@ -413,10 +410,9 @@ import utils from '~/plugins/utils';
                 this.config()
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                console.log('joinFormSubmit',this.formItem.items)
-                // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
@@ -431,6 +427,7 @@ import utils from '~/plugins/utils';
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
+                formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
                 formItem.rentAmount=this.formItem.rentAmount;
                 formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);

@@ -14,7 +14,7 @@
 
 <script>
     export default {
-       props:['title','openDrawer'],
+       props:['title','openDrawer','close'],
        data(){
            return{
                isOpen:this.openDrawer
@@ -31,6 +31,7 @@
         methods:{
             onClose(){
                 this.isOpen=!this.isOpen;
+                this.close && this.close();
             }
         },
         updated: function () {

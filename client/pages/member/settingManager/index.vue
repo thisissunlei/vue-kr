@@ -44,8 +44,9 @@
     title="设置企业管理员"
     :openDrawer="openDrawer"
     v-on:changeOpen="onChangeOpen"
+    :close="onClose"
 >
-    <Setting :detail="itemDetail"></Setting>
+    <Setting :detail="itemDetail" v-on:changeOpen="onIsRefresh"></Setting>
 </Drawer>
 </div> 	
 </template>
@@ -77,6 +78,7 @@ export default {
             itemDetail:{},
             csrName:'',
             searchData:{},
+            isRefresh:false,
             tableHeader:[
                 {
                     title: '企业名称',
@@ -166,11 +168,20 @@ export default {
         },
         openSetting(params){
                 this.itemDetail=params;
+                this.isRefresh=false;
                 this.openDrawer=!this.openDrawer;
         },
         onChangeOpen(data){
                 this.openDrawer=data;
         },
+        onClose(){
+            if(this.isRefresh){
+                this.getTableData(this.Params)
+            }
+        },
+        onIsRefresh(data){
+            this.isRefresh=data;
+        }
     }
 }
 </script>

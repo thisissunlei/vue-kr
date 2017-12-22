@@ -93,6 +93,7 @@ export default {
 			itemDetail:{},
 			managerCount:0,
 			mbrName:'',
+			isRefresh:false,
 			list:[
 				{
 				 title: '姓名',
@@ -114,7 +115,7 @@ export default {
 	},
 	mounted:function(){
 		this.getInfo();
-		this.getCount();
+		
 	},
 	methods:{
 		renderList(){
@@ -164,7 +165,13 @@ export default {
                         
                 }
 				};
-			this.list.push(obj);
+				if(this.list.length<4){
+					this.list.push(obj);
+				}else{
+					this.list.pop();
+					this.list.push(obj);
+				}
+			
 			
 		},
 		getInfo(){
@@ -175,6 +182,7 @@ export default {
            	}, e => {
                 console.log('error',e)
 			})
+			this.getCount();
 		},
 		getCount(){
 			let Params={
@@ -195,13 +203,13 @@ export default {
 			this.TipTxt="取消";
 			this.isManager=0;
 			this.itemDetail=params;
-			this.openTip=!this.openTip;
+			this.hideTip();
 		},
 		setManager(params){
 			this.TipTxt="设置";
 			this.isManager=1;
 			this.itemDetail=params;
-			this.openTip=!this.openTip;
+			this.hideTip();
 		},
 		hideTip(){
 			this.openTip=!this.openTip;
@@ -211,6 +219,8 @@ export default {
 				mbrId:this.itemDetail.mbrId,
 				isManager:this.isManager
 			}
+			this.isRefresh=true;
+			this.$emit('changeOpen',this.isRefresh);
 			this.$http.post('edit-customer-manager', Params, r => {
 				 if(r.code==-1){
 					this.MessageType="error";
@@ -230,11 +240,11 @@ export default {
 		onChangeOpen(data){
                 this.openMessage=data;
 		},
-		  lowerSubmit(){
+		lowerSubmit(){
 			  	this.Params.page=1;
                 this.Params.mbrName=this.mbrName;
                 this.getInfo();
-        },
+		},
 
 	},
 	

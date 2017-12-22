@@ -104,19 +104,19 @@
 <script>
     import Vue from 'vue';
     export default{
-        props:['mask'],
+        props:['mask','params'],
         data (){
             
             return{
                 dateError:false,
-                formItem:{
+                formItem:Object.assign({
                    communityName:'',
                    contractType:'',
                    customName:'',
                    maxCTime:'',
                    minCTime:'',
                    serialNumber:'',
-                },
+                },this.params),
                
                 type:this.mask=='join'?true:false,
                 //合同状态
@@ -141,6 +141,7 @@
             }
         },
         mounted:function(){
+            console.log(this.params,">>>>>>")
             var _this = this;
             this.$http.get('join-bill-community','', r => {    
                 _this.communityList=r.data.items 

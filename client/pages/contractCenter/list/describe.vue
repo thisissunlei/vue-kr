@@ -27,11 +27,13 @@
 <script>
     import Vue from 'vue';
     export default{
+        name:'describe',
+        props:["detailData"],
         data (){
             return{
                 dateError:false,
                 formItem:{
-                   otherAgreed:'',
+                   otherAgreed:this.detailData.otherAgreed||'',
                 }
             }
         },

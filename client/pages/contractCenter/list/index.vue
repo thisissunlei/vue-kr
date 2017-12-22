@@ -64,7 +64,7 @@
                     v-model="params.customName" 
                     placeholder="请输入客户名称"
                     style="width: 252px"
-                    @on-change="changeCustomer"
+                   
                 ></i-input>
             </div>
             <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -81,7 +81,7 @@
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
-                <Page :total="totalCount" @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" pageSize="15" @on-change="changePage" show-total show-elevator></Page>
             </div>
         </div>
         <Modal
@@ -90,7 +90,7 @@
             width="660"
             @on-ok='upperSubmit'
         >
-            <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" v-on:bindData="upperChange" mask='join'></HeightSearch>
             <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -114,7 +114,7 @@
             title="添加描述"
             width="660"
         >
-            <Describe v-on:bindData="describeDataChange"></Describe>
+            <Describe v-on:bindData="describeDataChange" detailData="describeData"></Describe>
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
@@ -202,52 +202,67 @@
                         title: '合同编号',
                         key: 'serialNumber',
                         align:'center',
-                        fixed: 'left'
+                        fixed: 'left',
+                        width: 150,
                     },
                     {
                         title: '客户名称',
                         key: 'customName',
                         align:'center',
-                        fixed: 'left'
+                        fixed: 'left',
+                        width: 150,
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
-                        align:'center'
+                        align:'center',
+                        width: 100,
                     },
                     {
                         title: '合同类型',
                         key: 'contractType',
-                        align:'center'
+                        align:'center',
+                        width: 80,
                     },
                     {
                         title: '合同状态',
                         key: 'contractStatusName',
                         align:'center',
+                        width: 80,
                     },
                     {
                         title: '创建人',
                         key: 'creatorName',
                         align:'center',
+                        width: 80,
                     },
                     {
                         title: '服务费',
                         key: 'serviceCharges',
                         align:'center',
+                        width: 150,
                     }, {
                         title: '销售员',
                         key: 'salerName',
                         align:'center',
+                        width: 80,
+                    },{
+                        title: '录入人',
+                        key: 'inputor',
+                        align:'center',
+                        width: 80,
                     },{
                         title: '工位数/独立空间',
                         key: ' stationAndBoard',
                         align:'center',
+                        width: 80,
                     },
                    
                     {
                         title: '合同创建时间',
                         key: 'startAndEnd',
                         align:'center',
+                        width: 150,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
                             return time;
@@ -257,6 +272,7 @@
                         title: '起始时间',
                         key: 'cTime',
                         align:'center',
+                        width: 170,
                         render(h, obj){
                             if(!obj.row.endDate || !obj.row.startDate){
                                 return "-";
@@ -270,6 +286,8 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
+                        width: 150,
+                        fixed: 'right',
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []
@@ -303,7 +321,7 @@
                                             this.downLoadClick(params)
                                         }
                                     }
-                                }, '下载'), h('Button', {
+                                }, '下载'),h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -379,14 +397,15 @@
                     });
                 })   
             },
-            //描述页面开关
+            //其他约定页面开关
             describeSwitch(){
                 this.openDescribe = !this.openDescribe;
             },
-            //合同生效按钮点击
+            //其他约定按钮点击
             clickDescribe(detail){
                 this.columnDetail = detail.row;
                 this.describeSwitch();
+                this.getOtherConvention({requestId:detail.row.requestId});
             },
             //描述确定
             describeSubmit(){
@@ -399,7 +418,7 @@
                     requestId:colDetail.requestId,
                     otherAgreed:describeData.otherAgreed||''
                 }, (response) => {
-                    that.takeEffectSwitch();
+                    that.describeSwitch();
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -475,10 +494,20 @@
                 params.page=index;
                 this.getListData(params);
             },
-            //搜索change事件
-            changeCustomer(param){
-                // this.params.customerName=param.target.value;
+            //获取其他约定的信息
+            getOtherConvention(params){
+               
+                var _this=this;
+                this.config()
+                this.$http.get('get-contract-other-convention-data', params, r => {
+                    _this.describeData.otherAgreed=r.data.otherAgreed;
+                }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
+                })   
             },
+      
             //搜索框
             lowerSubmit(){
                 this.getListData(this.params);

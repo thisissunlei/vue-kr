@@ -437,9 +437,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return;
                         }
-                        console.log('handleSubmit',valid)
-                        // this.renewFormSubmit()
-                        this.$Message.success('Success!');
+                        this.renewFormSubmit()
                     } else {
                         _this.disabled = false;
 

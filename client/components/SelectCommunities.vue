@@ -75,8 +75,6 @@ import http from '~/plugins/http.js';
                 let _this = this;
                 
                 http.get('get-mainbill-community', params, r => {
-
-                    console.log('r', r);
                     list = r.data;
                     list.map((item)=>{
                         let obj = item;
@@ -84,6 +82,7 @@ import http from '~/plugins/http.js';
                         obj.value = item.id+'';
                         return obj;
                     });
+                     _this.loading1 = false;
                     _this.options1 = list;
                 }, e => {
                     console.log('error',e)

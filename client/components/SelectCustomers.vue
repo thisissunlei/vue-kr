@@ -19,6 +19,9 @@
             :remote-method="remoteCustomer"
             :loading="loading1"
             @on-change="changeContent"
+
+
+
             >
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
@@ -32,12 +35,16 @@ import http from '~/plugins/http.js';
     export default {
         props:['onchange','value'],
         data () {
-            this.getCusomerList(' ');
+            
             return {
                 customer:'',
                 loading1:false,
                 customerOptions:[],
             };
+        },
+         mounted:function(){
+
+            this.getCusomerList(' ');
         },
         methods: {
             changeContent:function(value){
@@ -74,6 +81,7 @@ import http from '~/plugins/http.js';
                 }, e => {
                     console.log('error',e)
                 })
+                 return list;
 
             }
                     

@@ -161,6 +161,7 @@ export default {
         },
         searchSubmit(){
                 this.Params=this.searchData;
+                this.Params.csrName=this.csrName;
                 this.getTableData(this.Params)
         },
         openSetting(params){

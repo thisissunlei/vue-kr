@@ -475,9 +475,9 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                formItem.orderSeatId = params.orderEdit;
+                formItem.id = params.orderEdit;
                 formItem.installmentType = this.installmentType;
-                formItem.depositAmount = this.depositAmount;
+                formItem.deposite = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
                 formItem.corporationId = this.formItem.corporationId;
                 formItem.signDate = signDate;

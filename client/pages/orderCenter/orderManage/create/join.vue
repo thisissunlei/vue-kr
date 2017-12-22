@@ -422,7 +422,7 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 formItem.installmentType = this.installmentType;
-                formItem.depositAmount = this.depositAmount;
+                formItem.deposite = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;

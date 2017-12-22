@@ -245,7 +245,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                  let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let renewForm = {} 
-                 renewForm.orderSeatId = params.orderEdit;
+                 renewForm.id = params.orderEdit;
 
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;

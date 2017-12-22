@@ -383,7 +383,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     return obj;
                 })
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposite = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;

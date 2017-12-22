@@ -437,9 +437,9 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                 renewForm.orderSeatId = params.orderEdit;
+                 renewForm.id = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposite = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;

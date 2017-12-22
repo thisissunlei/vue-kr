@@ -17,7 +17,7 @@ module.exports = {
     },
     //合同生成其他约定方法
     'post-contract-other-convention': {
-        url: '/wf/station/contract/other-agreed',
+        url: '/api/krspace-erp-web/wf/station/contract/other-agreed/type/edit',
         method: 'post'
     },
     //获取工位合同PDF
@@ -25,5 +25,14 @@ module.exports = {
         url: '/api/krspace-erp-web/wf/station/contract/pdf',
         method: 'get'
     },
-   
+   //获取pdf地址
+    'get-station-contract-pdf-url': {
+        url: '/api/krspace-op-web/sys/down-file',
+        method: 'get'
+    },
+    //获取其他约定的数据
+    'get-contract-other-convention-data': {
+        url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
+        method: 'get'
+    },
 }

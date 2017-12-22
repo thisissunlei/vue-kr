@@ -43,12 +43,23 @@ export default {
     return {
       isCachet:false,
       openDown:false,
-      fileId:'',
-      src:'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf'
+      fileId:'100100',
+      src:''
     }
   },
   mounted:function(){
     GLOBALSIDESWITCH("false");
+     var that = this;
+      this.config();
+      var parameter = utils.getRequest()
+      parameter.contractType = "NOSEAL"
+      this.$http.get('get-station-contract-pdf-id',parameter, r => {    
+         console.log(r.data.fileId)
+          that.fileId = r.data.fileId || '';
+          that.getPdfUrl(r.data.fileId||'');
+      }, e => {
+          that.$Message.info(e);
+      })
   },
   methods:{
     selectCachet(select){
@@ -60,6 +71,15 @@ export default {
             top: 80,
             duration: 3
         });
+    },
+    getPdfUrl(id){
+      var that = this;
+      var parameter = {id:id};
+      this.$http.post('get-station-contract-pdf-url',parameter, r => {    
+          that.src = r.data;
+      }, e => {
+          that.$Message.info(e);
+      })
     },
     downLoad(){
       var that = this;

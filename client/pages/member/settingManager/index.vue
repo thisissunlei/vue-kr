@@ -148,6 +148,7 @@ export default {
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
+                this.Params.page=1;
                 this.Params.csrName=this.csrName;
                 this.getTableData(this.Params);
         },

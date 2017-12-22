@@ -267,7 +267,8 @@
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                }) 
+                 this.openNullify=false;  
             },
             applySubmit(){
                 let params={
@@ -281,7 +282,8 @@
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                })
+                 this.openApply=false;     
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);

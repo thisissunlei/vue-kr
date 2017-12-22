@@ -164,20 +164,6 @@
                         }
                     },
                     {
-                        title: '支付状态',
-                        key: 'payStatus',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.payStatus==='WAIT_PAY'){
-                                return <span class="u-txt">待支付</span>;
-                            }else if(obj.row.payStatus==='COMPLETE'){
-                                return <span class="u-txt-orange">已付清</span>;
-                            }else if(obj.row.payStatus==='UN_COMPLETE'){
-                                return <span class="u-txt-red">未付清</span>;
-                            }
-                        }
-                    },
-                    {
                         title: '创建时间',
                         key: 'ctime',
                         align:'center',
@@ -308,15 +294,16 @@
                 let params={
                     id:this.id
                 };
-                 this.openNullify=true;
+                 this.openMessage=true;
                  this.$http.post('join-nullify', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
-                    this.warn=r.message;
+                    this.warn='作废成功';
                     this.getListData(this.params);
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                })
+                 this.openNullify=false;
             },
             applySubmit(){
                 let params={
@@ -325,12 +312,13 @@
                  this.openMessage=true;
                  this.$http.post('apply-contract', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
-                    this.warn=r.message;
+                    this.warn='申请成功';
                     this.getListData(this.params);
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                }) 
+                this.openApply=false;     
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);

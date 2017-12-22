@@ -24,6 +24,31 @@
             display:inline-block;
             cursor:pointer;
      }
+     .cachet-box{
+        width:50%;
+        position:relative;
+        float:left;
+        text-align:center;
+        cursor: pointer;
+        .select{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -31px;
+            margin-top: -31px;
+
+        }
+        .cachet{
+            border: 2px solid #7ED321;
+            background: #7ED321 url('~/assets/images/check.svg') no-repeat;
+            background-size: 60%;
+            background-position:center;
+        }
+     }
 </style>
 
 
@@ -71,6 +96,56 @@
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
             </div>
         </Modal>
+
+         <Modal
+            v-model="openTakeEffect"
+            title="合同生效"
+            width="660"
+        >
+            <div>合同是否生效?</div>
+            <div slot="footer">
+                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="takeEffectSwitch">取消</Button>
+            </div>
+        </Modal>
+        
+         <Modal
+            v-model="openDescribe"
+            title="添加描述"
+            width="660"
+        >
+            <Describe v-on:bindData="describeDataChange"></Describe>
+            <div slot="footer">
+                <Button type="primary" @click="describeSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+            v-model="openDown"
+            title="下载pdf"
+            width="660"
+        >
+                <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>
+                
+                <div style="height:300px;">
+                <div class="cachet-box" @click="selectCachet(false)">
+                    <img src="./images/noCachet.png" />
+                    <div>示例一：未加盖公章的合同</div>
+                    <div :class="!this.isCachet?'select cachet':'select'" ></div>
+                </div>
+            
+                <div class="cachet-box" @click="selectCachet(true)">
+                    <img src="./images/cachet.png" />
+                    <div>示例二：加盖公章的合同</div>
+                    <div :class="this.isCachet?'select cachet':'select'"></div>
+                </div>
+                </div>
+                <div slot="footer">
+                    <Button type="primary" @click="downLoad">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
+                </div>
+        </Modal>
         
     </div>
   
@@ -84,12 +159,20 @@
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
+    import Describe from './describe';
     
     export default {
         components: {
             sectionTitle,
             krUpload,
-            HeightSearch
+            HeightSearch,
+            Describe
+        },
+        head () {
+            return {
+                title: "合同列表"
+            }
+           
         },
         data () {
             return {
@@ -97,25 +180,35 @@
                     page:1,
                     pageSize:15,
                 },
+                openDown:false,
+                isCachet:false,
+                openTakeEffect:false,
+                openDescribe:false,
                 selectAllData:[],
                 loadingStatus: false,
                 file: null,
-                upperData:{},
+                parameter:{},//获取pdf-id的参数
+                upperData:{},//高级查询的数据
                 upperError:false,
                 openSearch:false,
+                describeError:false,
                 detail:[],
+                describeData:{},//其他约定的数据
+                columnDetail:{},//每一行的数据
                 totalCount:1,
                 columns: [
                     
                     {
                         title: '合同编号',
                         key: 'serialNumber',
-                        align:'center'
+                        align:'center',
+                        fixed: 'left'
                     },
                     {
                         title: '客户名称',
                         key: 'customName',
-                        align:'center'
+                        align:'center',
+                        fixed: 'left'
                     },
                     {
                         title: '社区名称',
@@ -133,12 +226,44 @@
                         align:'center',
                     },
                     {
+                        title: '创建人',
+                        key: 'creatorName',
+                        align:'center',
+                    },
+                    {
+                        title: '服务费',
+                        key: 'serviceCharges',
+                        align:'center',
+                    }, {
+                        title: '销售员',
+                        key: 'salerName',
+                        align:'center',
+                    },{
+                        title: '工位数/独立空间',
+                        key: ' stationAndBoard',
+                        align:'center',
+                    },
+                   
+                    {
                         title: '合同创建时间',
-                        key: 'cTime',
+                        key: 'startAndEnd',
                         align:'center',
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
                             return time;
+                        }
+                    },
+                    {
+                        title: '起始时间',
+                        key: 'cTime',
+                        align:'center',
+                        render(h, obj){
+                            if(!obj.row.endDate || !obj.row.startDate){
+                                return "-";
+                            }
+                            let end=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.endDate));
+                            let start = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            return start+"至"+end;
                         }
                     },
                     {
@@ -175,10 +300,36 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openApplication(params)
+                                            this.downLoadClick(params)
                                         }
                                     }
-                                }, '下载'),
+                                }, '下载'), h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.contractFor(params)
+                                        }
+                                    }
+                                }, '合同生效'), h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.clickDescribe(params)
+                                        }
+                                    }
+                                }, '合同描述'),
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -188,12 +339,7 @@
                                     style: {
                                         color:'#2b85e4'
                                     },
-                                    on: {
-                                        click: () => {
-                                            this.openApplication(params)
-                                        }
-                                    }
-                                },'ppp')
+                                },'44')
                                 ];
                           
                            return h('div',btnRender);  
@@ -213,47 +359,95 @@
                     duration: 3
                 });
             },
-            handleFormatError(){
-                console.log("格式不正确=======")
+            //合同生效开关
+            takeEffectSwitch(){
+                this.openTakeEffect = !this.openTakeEffect;
             },
-            //上传失败
-            handleError(){
-                console.log("上传失败---------");
+            //生效确定
+            takeEffectSubmit(){
+                var that = this;
+                this.config();
+                var detail = Object.assign({},this.columnDetail);
+               
+                this.$http.post("post-contract-take-effect", {
+                    requestId:detail.requestId
+                }, (response) => {
+                    that.takeEffectSwitch();
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
             },
-            //上传成功
-            handleSuccess(){
-
+            //描述页面开关
+            describeSwitch(){
+                this.openDescribe = !this.openDescribe;
             },
-            handleUpload(file){
-               this.file = file;
-                return false;
+            //合同生效按钮点击
+            clickDescribe(detail){
+                this.columnDetail = detail.row;
+                this.describeSwitch();
             },
-            h1Click(){
-                this.loadingStatus = true;
-                setTimeout(() => {
-                    this.file = null;
-                    this.loadingStatus = false;
-                    this.$Message.success('Success')
-                }, 1500)
+            //描述确定
+            describeSubmit(){
+                var that = this;
+                this.config();
+                var colDetail = Object.assign({},this.columnDetail);
+                var describeData = Object.assign({},this.describeData);
+               
+                this.$http.post("post-contract-other-convention", {
+                    requestId:colDetail.requestId,
+                    otherAgreed:describeData.otherAgreed||''
+                }, (response) => {
+                    that.takeEffectSwitch();
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
+            },
+            //合同生效
+            contractFor(detail){
+                this.columnDetail = detail.row;
+                this.takeEffectSwitch()
             },
             showSearch (params) {
                 this.openSearch=!this.openSearch;
             },
             openView(params){
 
-                location.href=`./${params.row.id}/viewCenter`;
+                location.href=`./${params.row.id}/viewCenter?contractType=&requestId=${params.row.requestId}`;
             },
-            openCancel(params){
-                this.openNullify=true;
+            //下载
+            downLoad(params){
+                var that = this;
+                this.config()
+                var parameter = Object.assign({},this.parameter)
+                if(this.isCachet){
+                    parameter.contractType = "HAVESEAL"
+                }else{
+                    parameter.contractType = "NOSEAL"
+                }
+                this.$http.get('get-station-contract-pdf-id',parameter, r => {    
+                    // _this.communityList=r.data.items 
+                    if(!r.data.fileId){
+                        that.$Notice.error({
+                                title:"fileId不能为空！"
+                        });
+                        return;
+                    }
+                    
+                    var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
+                    window.location.href = url;
+                    that.downSwitch();
+                }, e => {
+                    that.$Message.info(e);
+                })
             },
-            openEdit(params){
+            describeDataChange(params,error){
 
-            },
-            openApplication(params){
-                
-            },
-            nullifySubmit (){
-                console.log('作废');
+                this.describeError=error;
+                this.describeData=params;
             },
             outSubmit (){
                 var _this=this;
@@ -274,10 +468,6 @@
                         title:e.message
                     });
                 })   
-            },
-            //批量下载按钮点击
-            batchBtnClick(){
-
             },
             //分页事件
             changePage (index) {
@@ -309,7 +499,19 @@
                 this.getListData(this.params);
 
             },
-           
+            selectCachet(select){
+             this.isCachet = select;
+            
+            },
+            downSwitch(){
+                this.openDown = !this.openDown;
+            },
+            downLoadClick(params){
+                var parameter = {requestId:params.row.requestId}
+                this.parameter = parameter;
+               this.downSwitch(); 
+            }
+            
         },
         
     }

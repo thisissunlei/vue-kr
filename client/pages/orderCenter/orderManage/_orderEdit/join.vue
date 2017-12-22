@@ -115,6 +115,9 @@
                         <span>折扣</span>
                         
                     </Col>
+                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
+                        <span>优惠金额</span>
+                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -134,11 +137,13 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
+                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
+                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -199,7 +204,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
     </Modal>
 
         
@@ -364,16 +369,18 @@ import utils from '~/plugins/utils';
                     let data = r.data;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
-                        // obj.floor = '5';
                         obj.belongType = item.seatType;
                         obj.id = item.seatId;
                         obj.name = item.seatName;
+                        obj.startDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
                     _this.stationData = {
                         submitData:data.orderSeatDetailVo,
                         deleteData:[]
                     };
+                    _this.getSaleTactics({communityId:data.communityId})
                     _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = JSON.stringify(data.communityId);
@@ -387,12 +394,29 @@ import utils from '~/plugins/utils';
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
                     _this.formItem.rentAmount = data.rentAmount;
                     _this.formItem.stationAmount = data.rentAmount;
+                    
                     _this.stationAmount = utils.smalltoBIG(data.rentAmount);
                     _this.selectDeposit('3')
-                    _this.selectPayType(data.installmentType)
+                    _this.selectPayType(data.installmentType);
+                    setTimeout(function(){
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+                        _this.formItem.items = data.contractTactics;
+                    },200)
                     // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
-                    _this.getSaleTactics({communityId:data.communityId})
+                    console.log('contractTactics',_this.formItem)
+                    
                     }, e => {
                         _this.$Message.info(e);
                 })

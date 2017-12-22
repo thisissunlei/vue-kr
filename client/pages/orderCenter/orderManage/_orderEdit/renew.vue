@@ -384,6 +384,8 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.renewForm.salerId = JSON.stringify(data.salerId);
                     _this.communityName = data.communityName;
                     _this.renewForm.endDate = new Date(data.endDate);
+                    _this.renewForm.signDate = new Date(data.signDate);
+
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;

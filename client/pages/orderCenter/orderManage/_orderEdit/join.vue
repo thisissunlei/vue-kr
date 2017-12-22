@@ -343,7 +343,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
                     signDate:[
-                        { required: true, message: '请先选择签署时间', trigger: 'change' }
+                        { required: true,type: 'date',  message: '请先选择签署时间', trigger: 'change' }
                     ]
                 },
                 getFloor:+new Date(),
@@ -479,7 +479,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 formItem.installmentType = this.installmentType;
                 formItem.depositAmount = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
-                form.corporationId = this.formItem.corporationId;
+                formItem.corporationId = this.formItem.corporationId;
                 formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
@@ -603,6 +603,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        console.log('========>',_this.stationList.length)
                         if(!_this.stationList.length){
                             _this.$Notice.error({
                                 title:'请选择入驻工位'

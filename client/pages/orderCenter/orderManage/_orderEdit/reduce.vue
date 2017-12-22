@@ -30,7 +30,7 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="减租开始日期" style="width:252px" prop="endDate" >
+                    <FormItem label="减租开始日期" style="width:252px" prop="startDate" >
                         <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.startDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
@@ -74,8 +74,8 @@
          class-name="vertical-center-modal"
      >
         <div v-if="openStation && !stationList.length">无可减租工位</div>
-        <stationList label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation && stationList.length"></stationList>
+        <reduceStation label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        @on-station-change="onStationChange" v-if="openStation && stationList.length"></reduceStation>
     </Modal>
     </div>
 </template>
@@ -87,7 +87,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import stationList from './stationList.vue';
+import reduceStation from './reduceStation.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
@@ -134,7 +134,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     time: [
                         { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
                     ],
-                    endDate: [
+                    startDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
@@ -194,7 +194,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             selectCommunities,
             selectCustomers,
             SelectSaler,
-            stationList,
+            reduceStation,
             SelectCorporation
         },
         mounted(){
@@ -236,6 +236,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.renewForm.corporationId = JSON.stringify(data.corporationId) || '2';
                     _this.corporationName = data.corporationName || '出租方'
                     _this.renewForm.stationAmount = data.rentAmount || 0;
+                    _this.getStationFn = +new Date()
                     _this.stationAmount = utils.smalltoBIG(_this.renewForm.stationAmount)
                     }, e => {
                         _this.$Message.info(e);

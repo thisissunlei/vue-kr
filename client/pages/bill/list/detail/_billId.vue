@@ -40,7 +40,6 @@
 .u-amount-list{
 	text-align: right;
 	height: 90px;
-	margin-top:-20px;
 	margin-bottom:24px;
 }
 .u-amount{

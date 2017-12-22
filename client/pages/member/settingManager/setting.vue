@@ -80,7 +80,6 @@ export default {
             ctime:'',
 			listInfo:[],
 			totalCount:0,
-			num:0,
 			pageSize:15,
 			TipTxt:'',
 			Params:{
@@ -116,9 +115,12 @@ export default {
 	mounted:function(){
 		this.getInfo();
 		this.getCount();
-		var _this=this;
-		let obj={
-				 title: `管理员(${this.num})`,
+	},
+	methods:{
+		renderList(){
+			var _this=this;
+			let obj={
+				 title: `管理员(${this.managerCount})`,
                  key: 'isManager',
 				 align:'center',
 				 render(h, obj){
@@ -162,9 +164,9 @@ export default {
                         
                 }
 				};
-		this.list.push(obj)
-	},
-	methods:{
+			this.list.push(obj);
+			
+		},
 		getInfo(){
 			this.Params.csrId=this.detail.csrId;
 			this.$http.get('customer-manager-detail', this.Params, r => {
@@ -180,7 +182,7 @@ export default {
 			}
 			this.$http.get('get-manager-count', Params, r => {
 				this.managerCount=r.data.managerCount;
-				
+				this.renderList();
            	}, e => {
                 console.log('error',e)
 			})

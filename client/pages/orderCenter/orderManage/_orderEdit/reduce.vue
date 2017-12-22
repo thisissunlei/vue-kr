@@ -230,8 +230,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.renewForm.startDate = new Date(data.startDate);
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount || 0;
-                    _this.installmentType = 'THREE';
-                    _this.depositAmount = '3';
                     _this.getStationFn = +new Date()
                     _this.renewForm.corporationId = JSON.stringify(data.corporationId) || '2';
                     _this.corporationName = data.corporationName || '出租方'
@@ -255,7 +253,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 renewForm.endDate =start;
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
-                    _this.$Message.success('Success!');
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({

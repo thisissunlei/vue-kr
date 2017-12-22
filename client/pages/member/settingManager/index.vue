@@ -138,6 +138,7 @@ export default {
                 this.$http.get('customer-manager-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
+                    this.openSearch=false;
                 }, e => {
                     console.log('error',e)
                 })

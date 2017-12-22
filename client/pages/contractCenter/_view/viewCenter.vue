@@ -44,7 +44,7 @@ export default {
       isCachet:false,
       openDown:false,
       fileId:'100100',
-      src:'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf'
+      src:''
     }
   },
   mounted:function(){
@@ -55,8 +55,8 @@ export default {
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
          console.log(r.data.fileId)
-          that.fileId = r.data.fileId || 100100;
-          that.getPdfUrl(  100100);
+          that.fileId = r.data.fileId || '';
+          that.getPdfUrl(r.data.fileId||'');
       }, e => {
           that.$Message.info(e);
       })

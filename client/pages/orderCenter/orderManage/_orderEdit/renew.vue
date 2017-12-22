@@ -405,7 +405,6 @@ import utils from '~/plugins/utils';
                 renewForm.startDate = start;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
-                renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
                     window.location.href='/orderCenter/orderManage';

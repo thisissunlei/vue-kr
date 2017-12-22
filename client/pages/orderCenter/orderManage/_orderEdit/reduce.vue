@@ -259,7 +259,6 @@ import utils from '~/plugins/utils';
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.startDate = start;
                 renewForm.endDate =end;
-                renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
                     _this.$Message.success('Success!');

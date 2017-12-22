@@ -34,5 +34,10 @@ export default {
   'order-pay-list': {
     url: '/api/krspace-op-web/order-seat/data',
     method: 'get'
+  },
+  //申请合同
+  'apply-contract': {
+    url: '/api/krspace-op-web/order-seat/contractApply',
+    method: 'get'
   }
 } 

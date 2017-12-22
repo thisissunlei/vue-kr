@@ -56,12 +56,22 @@
                 :warn="warn"
                 v-on:changeOpen="onChangeOpen"
             ></Message>
+
+            <Modal
+                v-model="openApply"
+                title="提示信息"
+                @on-ok="applySubmit"
+                width="500"
+            >
+                <ApplyContract></ApplyContract>
+            </Modal>
     </div>
 </template>
 
 
 <script>
     import HeightSearch from './heightSearch';
+    import ApplyContract from './applyContract';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
@@ -74,7 +84,8 @@
             HeightSearch,
             Nullify,
             Message,
-            Buttons
+            Buttons,
+            ApplyContract
         },
         data () {
             
@@ -95,6 +106,7 @@
                 joinData:[],
                 openSearch:false,
                 openNullify:false,
+                openApply:false,
                 joinOrder: [
                     {
                         title: '订单编号',
@@ -236,7 +248,8 @@
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
             },
             showApply(params){
-                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+                this.id=params.row.id;
+                this.openApply=true;
             },
             showView(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
@@ -248,6 +261,20 @@
                 };
                  this.openMessage=true;
                  this.$http.post('join-nullify', params, r => {
+                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.warn=r.message;
+                    this.getListData(this.params);
+                }, e => {
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })   
+            },
+            applySubmit(){
+                let params={
+                    id:this.id
+                };
+                 this.openMessage=true;
+                 this.$http.post('apply-contract', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.getListData(this.params);

@@ -64,7 +64,7 @@
                 @on-ok="applySubmit"
                 width="500"
             >
-                <applyContract></applyContract>
+                <ApplyContract></ApplyContract>
             </Modal>
     </div>
 </template>
@@ -73,7 +73,7 @@
 <script>
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
-    import applyContract from './applyContract';
+    import ApplyContract from './applyContract';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
@@ -87,7 +87,7 @@
             Nullify,
             Message,
             Buttons,
-            applyContract
+            ApplyContract
         },
         data () {
             
@@ -323,7 +323,7 @@
                     id:this.id
                 };
                  this.openMessage=true;
-                 this.$http.post('join-nullify', params, r => {
+                 this.$http.post('apply-contract', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.getListData(this.params);

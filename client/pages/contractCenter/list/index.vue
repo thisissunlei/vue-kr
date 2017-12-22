@@ -81,7 +81,7 @@
         <div style="margin: 10px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
-                <Page :total="totalCount" pageSize="15" @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
             </div>
         </div>
         <Modal
@@ -321,20 +321,7 @@
                                             this.downLoadClick(params)
                                         }
                                     }
-                                }, '下载'),h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.contractFor(params)
-                                        }
-                                    }
-                                }, '合同生效'), h('Button', {
+                                }, '下载'), h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -359,6 +346,23 @@
                                     },
                                 },'44')
                                 ];
+                                
+                                if(!params.row.isEffect){
+                                    btnRender.push(h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.contractFor(params)
+                                            }
+                                        }
+                                    }, '合同生效'))
+                                }
                           
                            return h('div',btnRender);  
                         }
@@ -391,6 +395,7 @@
                     requestId:detail.requestId
                 }, (response) => {
                     that.takeEffectSwitch();
+                    that.getListData(that.params);
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -431,7 +436,9 @@
                 this.takeEffectSwitch()
             },
             showSearch (params) {
+
                 this.openSearch=!this.openSearch;
+                utils.clearForm(this.upperData);
             },
             openView(params){
 

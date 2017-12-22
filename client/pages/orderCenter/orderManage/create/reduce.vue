@@ -30,8 +30,8 @@
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="减租开始日期" style="width:252px" prop="endDate" >
-                        <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    <FormItem label="减租开始日期" style="width:252px" prop="startDate" >
+                        <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.startDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -69,8 +69,8 @@
          class-name="vertical-center-modal"
      >
         <div v-if="openStation && !stationList.length">无可减租工位</div>
-        <stationList label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation && stationList.length"></stationList>
+        <reduceStation label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
+        @on-station-change="onStationChange" v-if="openStation && stationList.length"></reduceStation>
     </Modal>
     </div>
 </template>
@@ -82,7 +82,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import stationList from './stationList.vue';
+import reduceStation from './reduceStation.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
@@ -124,11 +124,25 @@ import utils from '~/plugins/utils';
                     time: [
                         { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
                     ],
-                    endDate: [
+                    startDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[],
+               stationList:[
+               // {
+               //  name:'1',
+               //  id:'1'
+               // },{
+               //  name:'2',
+               //  id:'2'
+               // },{
+               //  name:'3',
+               //  id:'3'
+               // },{
+               //  name:'5',
+               //  id:'5'
+               // }
+               ],
                selecedStation:[],
                selecedArr:[],
                depositType:'',
@@ -144,10 +158,10 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
-                        title: '减租后租赁期限',
+                        title: '减租期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(this.renewForm.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                     // {
@@ -201,14 +215,14 @@ import utils from '~/plugins/utils';
             selectCommunities,
             selectCustomers,
             SelectSaler,
-            stationList,
+            reduceStation,
         },
         created:function(){
             
         },
         watch:{
             getStationFn:function(){
-                if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
+                if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.startDate){
                     this.getRenewStation()
                 }
             },
@@ -217,14 +231,13 @@ import utils from '~/plugins/utils';
             reduceFormSubmit(){
                 this.config()
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
-                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.startDate = start;
-                renewForm.endDate =end;
+                renewForm.endDate =start;
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
                     _this.$Message.success('Success!');
@@ -334,7 +347,7 @@ import utils from '~/plugins/utils';
                     });
                     return
                 }
-                if(!this.renewForm.endDate){
+                if(!this.renewForm.startDate){
                     this.$Notice.error({
                         title:'请先选择减租开始时间'
                     });
@@ -373,10 +386,10 @@ import utils from '~/plugins/utils';
             },
             submitStation:function(){
 
-                 let end = this.selecedArr[0].startDate;
+                 // let end = this.selecedArr[0].startDate;
                  this.selecedStation =  this.selecedArr;
 
-                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                // this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
                 this.getStationAmount()
             },
             getStationAmount(){
@@ -388,14 +401,13 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.id || item.seatId;
-                    // obj.floor = item.whereFloor;
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
-                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
+                    obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate));
                     return obj;
                 })
                 let params = {
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
                     communityId:this.renewForm.communityId,
                     customerId:this.renewForm.customerId,
                     seats:JSON.stringify(station)
@@ -442,21 +454,12 @@ import utils from '~/plugins/utils';
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate))
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate))
 
                 };
                 let _this = this;
                  this.$http.get('get-reduce-station', params, r => {
-                    console.log('get-renew-station',r.data)
-                    let station = []
-                    for(let i in r.data){
-                        let obj = {};
-                        obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
-
-                        obj.value =  r.data[i];
-                        station.push(obj)
-                    }
-                    _this.stationList = station;
+                    _this.stationList = r.data;
                 }, e => {
 
                     console.log('error',e)

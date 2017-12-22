@@ -27,7 +27,7 @@ export default {
   },
   //入驻减租订单列表－作废
   'join-nullify': {
-    url: '/api/krspace-op-web/order-seat-add/orderStatus',
+    url: '/api/krspace-op-web/order-seat/orderStatus',
     method: 'post'
   },
   //入驻减租高级查询－下拉

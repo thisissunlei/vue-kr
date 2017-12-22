@@ -229,6 +229,7 @@ export default {
                 this.openMessage=data;
 		},
 		  lowerSubmit(){
+			  	this.Params.page=1;
                 this.Params.mbrName=this.mbrName;
                 this.getInfo();
         },

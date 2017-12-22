@@ -153,7 +153,7 @@ export default {
                 this.getTableData(this.Params);
         },
         showSearch (params) {
-                //CommonFuc.clearForm(this.searchData);
+                CommonFuc.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
         },
         getSearchData(form){

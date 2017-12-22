@@ -65,6 +65,8 @@
             >
                 <ApplyContract></ApplyContract>
             </Modal>
+
+            <Loading :loading='loadingStatus'/>
     </div>
 </template>
 
@@ -77,6 +79,7 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
+    import Loading from '~/components/Loading';
 
     export default {
         name:'join',
@@ -85,11 +88,13 @@
             Nullify,
             Message,
             Buttons,
-            ApplyContract
+            ApplyContract,
+            Loading
         },
         data () {
             
             return {
+                loadingStatus:true,
                 openMessage:false,
                 warn:'',
                 MessageType:'',
@@ -267,7 +272,8 @@
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                }) 
+                 this.openNullify=false;  
             },
             applySubmit(){
                 let params={
@@ -281,7 +287,8 @@
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                })
+                 this.openApply=false;     
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
@@ -293,6 +300,7 @@
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
+                    _this.loadingStatus=false;
                 }, e => {
                     _this.openMessage=true;
                     _this.MessageType="error";

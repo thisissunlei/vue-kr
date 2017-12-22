@@ -208,10 +208,10 @@ export default {
 				   _this.basicInfo=r.data;
 				   
 				   
-				   _this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime))||'';
-				   _this.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate))||'';
-				   _this.endDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate))||'';
-				   _this.payDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime))||'';
+				   _this.ctime=r.data.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime)):'';
+				   _this.startDate=r.data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate)):'';
+				   _this.endDate=r.data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate)):'';
+				   _this.payDate=r.data.firstPayTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime)):'';
 				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
 					    _this.serviceAll=_this.serviceAll+item.amount;
 				   })

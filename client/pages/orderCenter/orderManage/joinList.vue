@@ -66,6 +66,8 @@
             >
                 <ApplyContract></ApplyContract>
             </Modal>
+
+            <Loading :loading='loadingStatus'/>
     </div>
 </template>
 
@@ -78,6 +80,7 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
+    import Loading from '~/components/Loading';
     
 
     export default {
@@ -87,11 +90,13 @@
             Nullify,
             Message,
             Buttons,
-            ApplyContract
+            ApplyContract,
+            Loading
         },
         data () {
             
             return {
+                loadingStatus:true,
                 openMessage:false,
                 warn:'',
                 MessageType:'',
@@ -160,20 +165,6 @@
                                 return <span class="u-txt-orange">已生效</span>;
                             }else if(obj.row.orderStatus==='INVALID'){
                                 return <span class="u-txt-red">已作废</span>;
-                            }
-                        }
-                    },
-                    {
-                        title: '支付状态',
-                        key: 'payStatus',
-                        align:'center',
-                        render(h, obj){
-                            if(obj.row.payStatus==='WAIT_PAY'){
-                                return <span class="u-txt">待支付</span>;
-                            }else if(obj.row.payStatus==='COMPLETE'){
-                                return <span class="u-txt-orange">已付清</span>;
-                            }else if(obj.row.payStatus==='UN_COMPLETE'){
-                                return <span class="u-txt-red">未付清</span>;
                             }
                         }
                     },
@@ -308,15 +299,16 @@
                 let params={
                     id:this.id
                 };
-                 this.openNullify=true;
+                 this.openMessage=true;
                  this.$http.post('join-nullify', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
-                    this.warn=r.message;
+                    this.warn='作废成功';
                     this.getListData(this.params);
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                })
+                 this.openNullify=false;
             },
             applySubmit(){
                 let params={
@@ -325,12 +317,13 @@
                  this.openMessage=true;
                  this.$http.post('apply-contract', params, r => {
                     this.MessageType=r.message=='ok'?"success":"error";
-                    this.warn=r.message;
+                    this.warn='申请成功';
                     this.getListData(this.params);
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                }) 
+                this.openApply=false;     
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
@@ -342,6 +335,7 @@
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
+                    _this.loadingStatus=false;
                 }, e => {
                     _this.openMessage=true;
                     _this.MessageType="error";

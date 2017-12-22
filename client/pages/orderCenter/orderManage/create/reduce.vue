@@ -129,19 +129,6 @@ import utils from '~/plugins/utils';
                     ],
                },
                stationList:[
-               // {
-               //  name:'1',
-               //  id:'1'
-               // },{
-               //  name:'2',
-               //  id:'2'
-               // },{
-               //  name:'3',
-               //  id:'3'
-               // },{
-               //  name:'5',
-               //  id:'5'
-               // }
                ],
                selecedStation:[],
                selecedArr:[],
@@ -164,10 +151,6 @@ import utils from '~/plugins/utils';
                             return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(this.renewForm.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
-                    // {
-                    //     title: '小计',
-                    //     key: 'amount'
-                    // }
                 ],
                 stationAmount:'',
                 payList:[
@@ -371,7 +354,7 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                // this.selecedStation = stationVos;
+                this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
 
@@ -385,11 +368,7 @@ import utils from '~/plugins/utils';
                 this.selectedDel = selectionList;
             },
             submitStation:function(){
-
-                 // let end = this.selecedArr[0].startDate;
-                 this.selecedStation =  this.selecedArr;
-
-                // this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(end));
+                this.selecedStation =  this.selecedArr;
                 this.getStationAmount()
             },
             getStationAmount(){

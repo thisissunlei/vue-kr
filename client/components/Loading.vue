@@ -2,7 +2,7 @@
   <div v-if="loading">
     <Spin fix>
         <Icon type="load-c" size=40 class="demo-spin-icon-load"></Icon>
-        <div>Loading</div>
+        <div>加载中...</div>
     </Spin>
   </div>
 </template>

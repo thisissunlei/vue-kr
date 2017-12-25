@@ -405,21 +405,10 @@
      //获取后台权限数据
      GlobalNav.prototype.getNavData = function () {
          var that = this;
-         
-        //  if(localStorage.navData){
-        //      var response = JSON.parse(localStorage.navData)
-        //      menuCode = response.data.menusCode;
-        //      var user = response.data.userInfo;
-        //      var navs = [].concat(firstMenus(NavItems));
-        //      that.setState({ navs, user });
-        //      return ;
-        //  }
-       
          this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
              menuCode = response.data.menusCode;
              var user = response.data.userInfo;
              var navs = [].concat(firstMenus(NavItems));
-            //  localStorage.navData = JSON.stringify(response);
              that.setState({ navs, user });
          })
      }
@@ -441,7 +430,7 @@
          };
          xhr.send();
      }
-    console.log("ppppppppp")
+
      
      /**
       * ===================数据部分=======================

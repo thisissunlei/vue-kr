@@ -41,6 +41,7 @@
                 where.push(`${item}=${props[item]}`);
             }
         }
+       
         var url = `${url}?${where.join('&')}`
         window.location.href = url;
     }

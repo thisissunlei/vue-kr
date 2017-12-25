@@ -257,10 +257,20 @@
                         align:'center',
                         width: 80,
                     },{
-                        title: '工位数/独立空间',
-                        key: ' stationAndBoard',
+                        title: '其他约定',
+                        key: 'otherAgreed',
                         align:'center',
-                        // width: 80,
+                        width: 100,
+                    },{
+                        title: '附件',
+                        key: 'haveAttachment',
+                        align:'center',
+                        width: 80,
+                    },{//其他约定	
+                        title: '工位数/独立空间',
+                        key: 'stationAndBoard',
+                        align:'center',
+                        
                     },
                    
                     {
@@ -282,8 +292,8 @@
                             if(!obj.row.endDate || !obj.row.startDate){
                                 return "-";
                             }
-                            let end=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.endDate));
-                            let start = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            let end=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
+                            let start = dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
                             return start+"至"+end;
                         }
                     },
@@ -494,7 +504,7 @@
             outSubmit (){
                 var _this=this;
                 var params = Object.assign({},this.params);
-                params.ids = [].concat(this.selectAllData);
+                
                 utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){

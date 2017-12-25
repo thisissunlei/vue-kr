@@ -126,7 +126,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==formItem.items.length-1}" v-show="item.show">
+            <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -150,6 +150,15 @@
                     </Col>  
             </Row>
         </FormItem>
+            <Row style="margin-bottom:10px">
+                <Col sapn="24">
+                    <div class="total-money" v-if="formItem.items.length">
+                        <span>优惠金额总计</span>
+                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmounts}}</span>
+                    </div>
+                </Col>
+                </Row>
         </DetailStyle>
         <div style="padding-left:24px">
             <Row>
@@ -160,7 +169,7 @@
                  </Col>
                  <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" ></DatePicker >
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker >
                     </FormItem> 
                  </Col>
             </Row>
@@ -228,6 +237,15 @@ import utils from '~/plugins/utils';
 
     export default {
         data() {
+            const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(new Date(this.formItem.startDate)<new Date(value)){
+                    callback(new Error('首付款日期不得晚于起始日期'));
+                }else{
+                     callback();
+                }
+            };
             return {
                 openStation:false,
                 selectAll:false,
@@ -262,6 +280,8 @@ import utils from '~/plugins/utils';
                     {label:'5个月',value:'5'},
                     {label:'6个月',value:'6'},
                 ],
+                saleAmount:0,
+                saleAmounts:utils.smalltoBIG(0),
                 youhui:[],
                 columns4: [
                     {
@@ -314,7 +334,7 @@ import utils from '~/plugins/utils';
                         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
                     ],
                     firstPayTime: [
-                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
@@ -489,6 +509,9 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.post('count-sale', params, r => {
+                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
 
@@ -529,11 +552,13 @@ import utils from '~/plugins/utils';
                     });
                     return
                 }
+
                 
 
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        console.log('handleSubmit',valid)
                         if(this.errorPayType || this.errorAmount){
                             this.$Notice.error({
                                 title:'请填写完表单'
@@ -742,7 +767,6 @@ import utils from '~/plugins/utils';
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
                 }
                 this.openStation = true;
-                console.log('showStation',params)
                 this.params = params;
             },
             selectRow:function(selection){

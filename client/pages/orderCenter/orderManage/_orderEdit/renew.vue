@@ -302,7 +302,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -313,7 +313,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 payList:[
@@ -401,15 +401,16 @@ import utils from '~/plugins/utils';
 
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
-                    _this.renewForm.rentAmount = data.rentAmount;
+                    // _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
                     _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
-                    _this.renewForm.stationAmount = money;
-                    _this.stationAmount = utils.smalltoBIG(money)
+                    // _this.renewForm.stationAmount = money;
+                    // _this.stationAmount = utils.smalltoBIG(money)
                     
                     setTimeout(function(){
+                        _this.getStationAmount()
                         data.contractTactics = data.contractTactics.map((item,index)=>{
                             let obj = {};
                             obj.status = 1;

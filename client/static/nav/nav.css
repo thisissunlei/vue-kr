@@ -247,6 +247,16 @@
   margin-left: -110px;
   margin-top: -90px;
   /* background: blueviolet; */
+  font-size: 18px;
+  text-align: center
+  
+  
+}
+.app-header .nav-loading .item-loader-container>span{
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  left: 0;
 }
 .app-header .nav-loading .item-loader-container .la-2x{
   width: 64px;
@@ -327,5 +337,13 @@
     -moz-transform: scale(1.25, 1);
     -o-transform: scale(1.25, 1);
     transform: scale(1.25, 1);
+  }
+}
+@keyframes loading-fade-in {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 100%;
   }
 }

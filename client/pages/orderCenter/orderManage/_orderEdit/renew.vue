@@ -145,7 +145,7 @@
         </FormItem>
         <Row style="margin-bottom:10px">
                 <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length">
+                    <div class="total-money" v-if="renewForm.items.length">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount}} </span>
                         <span class="money">{{saleAmounts}}</span>
@@ -202,8 +202,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
+        <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation"></stationList>
+        @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -230,7 +231,7 @@ import utils from '~/plugins/utils';
             const validateFirst = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.formItem.startDate)<new Date(value)){
+                } else if(new Date(this.renewForm.startDate)<new Date(value)){
                     callback(new Error('首付款日期不得晚于起始日期'));
                 }else{
                     callback()

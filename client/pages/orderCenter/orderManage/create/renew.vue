@@ -202,14 +202,15 @@
         ok-text="保存"
         cancel-text="取消"
         width="600"
-
-        @on-ok="submitStation"
-        @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
      <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
+        <div slot="footer">
+            <Button type="primary" @click="submitStation">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
     </Modal>
     </div>
 </template>
@@ -304,7 +305,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -315,7 +316,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 payList:[
@@ -761,6 +762,7 @@ import utils from '~/plugins/utils';
             },
             submitStation:function(){
                 let val = this.selecedArr || [];
+                this.openStation = false
                 if(!val.length){
                     return;
                 }
@@ -769,6 +771,7 @@ import utils from '~/plugins/utils';
                 let start =  val[0].startDate + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
+                
             },
             getStationAmount(){
 
@@ -821,6 +824,7 @@ import utils from '~/plugins/utils';
                     obj.time = +new Date()
                     return obj;
                 })
+                this.openStation = false;
             },
             onStationChange:function(val){
                 console.log('onStationChange',val)

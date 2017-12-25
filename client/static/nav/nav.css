@@ -1,23 +1,18 @@
 
-
- body{
+body{
         padding-left:180px;
         min-height:100%;
-        #__nuxt{
-            height:100%;
-        }
+        
     }
-    
+    #__nuxt{
+        height:100%;
+    }  
     .layout{
         min-height:100%;
         overflow-x: hidden;
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
-    }
-
-    .layout-breadcrumb{
-        padding: 10px 15px 0;
     }
 
     .layout-content{
@@ -48,51 +43,9 @@
         background:#fff;
         
     }
-    .layout-menu-left{
-        background: #464c5b;
-        height:990px;
-    }
-    .layout-header{
-        height: 60px;
-        background: #fff;
-        box-shadow: 0 1px 1px rgba(0,0,0,.1);
-
-        .open-sidebar{
-              float:left;
-        }
-
-        .user {
-            float:right;
-        }
-       
-    }
-    .layout-logo-left{
-        width: 90%;
-        height: 30px;
-        background: #5b6270;
-        border-radius: 3px;
-        margin: 15px auto;
-    }
-    .layout-ceiling-main a{
-        color: #9ba7b5;
-    }
     .layout-hide-text .layout-text{
         display: none;
     }
-
-    .ivu-col{
-        transition: width .2s ease-in-out;
-    }
-
-
-
-
-
-
-
-
-
-
 
 
 

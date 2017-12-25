@@ -14,6 +14,7 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
+                                @keyup.enter.native="showKey($event)"
                             ></i-input>
                         </div>
                         <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -245,10 +246,12 @@
             }
         },
         mounted:function(){
-
             this.getListData(this.params);
         },
         methods:{
+            showKey: function (ev) {
+                this.lowerSubmit();
+            },
             showSearch () {
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);

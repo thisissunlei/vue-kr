@@ -58,6 +58,11 @@
                     <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -210,6 +215,7 @@ import utils from '~/plugins/utils';
 
 
 
+
     export default {
         data() {
            return{
@@ -249,6 +255,9 @@ import utils from '~/plugins/utils';
                     ],
                     endDate: [
                         { required: true,message: '此项不可为空'}
+                    ],
+                    signDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
                stationListData:[],
@@ -303,7 +312,8 @@ import utils from '~/plugins/utils';
                 errorPayType:false,
                 getStationFn:'',
                 stationAmount:'',
-                orderSeatId:''
+                orderSeatId:'',
+                corporationName:'',
 
            }
         },
@@ -346,13 +356,16 @@ import utils from '~/plugins/utils';
                 };
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
+                    let money = 0;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        money += item.amount;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
+                    _this.getSaleTactics({communityId:data.customerId})
                     _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.renewForm.communityId = JSON.stringify(data.communityId);
@@ -360,16 +373,33 @@ import utils from '~/plugins/utils';
                     _this.renewForm.salerId = JSON.stringify(data.salerId);
                     _this.communityName = data.communityName;
                     _this.renewForm.endDate = new Date(data.endDate);
+                    _this.renewForm.signDate = new Date(data.signDate);
+
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
-                    _this.depositAmount = '3';
+                    _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
-                    _this.renewForm.stationAmount = data.rentAmount;
-                    _this.stationAmount = utils.smalltoBIG(data.rentAmount)
-                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.renewForm.stationAmount = money;
+                    _this.stationAmount = utils.smalltoBIG(money)
+                    
+                    setTimeout(function(){
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+                        _this.renewForm.items = data.contractTactics;
+                    },200)
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -384,6 +414,7 @@ import utils from '~/plugins/utils';
                 this.config();
                 let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
@@ -393,15 +424,16 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                 renewForm.orderSeatId = params.orderEdit;
+                 renewForm.id = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.signDate = signDate;
                 renewForm.startDate = start;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
@@ -437,9 +469,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return;
                         }
-                        console.log('handleSubmit',valid)
-                        // this.renewFormSubmit()
-                        this.$Message.success('Success!');
+                        this.renewFormSubmit()
                     } else {
                         _this.disabled = false;
 

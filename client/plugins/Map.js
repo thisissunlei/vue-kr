@@ -515,9 +515,6 @@ var Map = function (elementId, configs) {
             props.clientX = position.x+bbox.left;
             props.clientY = position.y+bbox.top;
 
-            console.log('x,y',props.clientX,props.clientY)
-
-
             this.setProps({
                 switchHoverIn:true,
             });
@@ -559,10 +556,12 @@ var Map = function (elementId, configs) {
 
             const { minWidth, minHeight } = DC.station;
 
+
             //设置到对象属性
             var props = Object.assign({}, this.props);
 
             props = Object.assign({}, this.props, nextProps);
+
 
             if (props.width <= minWidth) {
                 props.width = minWidth;

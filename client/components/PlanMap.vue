@@ -184,6 +184,7 @@ import http from '~/plugins/http.js';
 							obj.belongId = Number(item.belongId);
 							obj.id = Number(item.id);
 							obj.canFigureId = item.canFigureId;
+							obj.capacity = item.capacity;
 							obj.type = obj.belongType;
 							obj.price = item.price;
 							obj.checked = false;
@@ -210,6 +211,8 @@ import http from '~/plugins/http.js';
 								select.id = Number(item.belongId);
 								select.canFigureId = item.canFigureId;
 								select.type = obj.belongType;
+								select.capacity = item.capacity;
+
 								select.price = item.price;
 
 								startToEnd.push(select)
@@ -313,6 +316,7 @@ import http from '~/plugins/http.js';
 					obj1.whereFloor = item.whereFloor;
 					obj1.name = item.name;
 					obj1.price = item.price;
+					obj1.capacity = item.capacity;
 					return obj1
 
 				})

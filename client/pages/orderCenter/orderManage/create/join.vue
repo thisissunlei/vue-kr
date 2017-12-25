@@ -65,6 +65,11 @@
                         <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
                 
             </DetailStyle>
@@ -112,13 +117,8 @@
                         
                     </Col>
                     <Col span="5" class="discount-table-head" >
-                        <span>折扣</span>
-                        
+                        <span>折扣</span>  
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
-                    
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
@@ -137,13 +137,10 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
-                    
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -189,7 +186,6 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
 
     </Form>
@@ -219,7 +215,6 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
-
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
@@ -302,6 +297,7 @@ import utils from '~/plugins/utils';
                     customerId: '',
                     communityId: '',
                     startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
+                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
@@ -323,15 +319,6 @@ import utils from '~/plugins/utils';
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
-                    timeRange: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
-                    ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
@@ -341,9 +328,9 @@ import utils from '~/plugins/utils';
                     salerId:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    // floor: [
-                    //     { validator: validateFloor, trigger: 'change' }
-                    // ],
+                    signDate:[
+                        { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                    ]
                 },
                 getFloor:+new Date(),
                 changeSale:+new Date(),
@@ -365,7 +352,7 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap
+            planMap,
         },
         created(){
             // this.openStation = false
@@ -413,10 +400,9 @@ import utils from '~/plugins/utils';
                 this.config()
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                console.log('joinFormSubmit',this.formItem.items)
-                // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
@@ -425,13 +411,15 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 formItem.installmentType = this.installmentType;
-                formItem.depositAmount = this.depositAmount;
+                formItem.deposit = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
+                formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
+
                 formItem.rentAmount=this.formItem.rentAmount;
                 formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
 
@@ -955,7 +943,7 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                     })
                 }
-            }
+            },
                     
                
         }

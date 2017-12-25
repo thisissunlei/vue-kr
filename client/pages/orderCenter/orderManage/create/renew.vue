@@ -55,7 +55,12 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" ></SelectSaler>
+                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    </FormItem>
+                </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -215,6 +220,7 @@ import utils from '~/plugins/utils';
 
 
 
+
     export default {
         data() {
            return{
@@ -228,7 +234,8 @@ import utils from '~/plugins/utils';
                     endDate:'',
                     saler:'',
                     rentAmount:'',
-                    items:[]
+                    items:[],
+                    signDate:new Date()
                },
                disabled:false,//提交按钮是否禁止
                discountError:{
@@ -253,6 +260,9 @@ import utils from '~/plugins/utils';
                         { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
                     ],
                     endDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    ],
+                    signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
@@ -307,7 +317,10 @@ import utils from '~/plugins/utils';
                 selectAll:false,//工位全选
                 youhui:[],
                 errorPayType:false,
-                getStationFn:''
+                getStationFn:'',
+                ssoId:'',
+                ssoName:'',
+                salerName:'请选择',
 
            }
         },
@@ -332,6 +345,9 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
                 }
+                if(this.renewForm.customerId && this.renewForm.communityId){
+                    this.getSignUser()
+                }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
                 }
@@ -341,6 +357,26 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
+            getSignUser(){
+                let params = {
+                    communityId:this.renewForm.communityId,
+                    customerId:this.renewForm.customerId
+                }
+                let _this = this;
+                 this.$http.get('get-community-floor', params, r => {
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
+                    if(!_this.renewForm.salerId){
+                        _this.renewForm.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
+
+                    }
+
+                }, e => {
+
+                        console.log('error',e)
+                })
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -351,6 +387,7 @@ import utils from '~/plugins/utils';
                 this.config();
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
                  saleList = saleList.map(item=>{
@@ -361,13 +398,14 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.signDate = signDate;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
 
                 renewForm.startDate = start;
@@ -608,8 +646,7 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                console.log('deleteStation==============',stationVos)
-                // this.selecedStation = stationVos;
+                this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
 
@@ -869,10 +906,7 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                 })
 
-            },
-
-                    
-               
+            },       
         }
     }
 </script>

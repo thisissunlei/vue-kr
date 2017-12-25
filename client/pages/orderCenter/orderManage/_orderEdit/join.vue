@@ -43,6 +43,7 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -63,6 +64,11 @@
                  <Col class="col">
                     <FormItem label="租赁时长" style="width:252px">
                         <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
+                    </FormItem>
+                </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -138,7 +144,6 @@
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
-                    
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -199,7 +204,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
     </Modal>
 
         
@@ -223,6 +228,7 @@ import utils from '~/plugins/utils';
 
 
 
+
     export default {
         data() {
             
@@ -242,6 +248,7 @@ import utils from '~/plugins/utils';
                 installmentType:'',
                 maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
+                corporationName:'',
                 stationData:{
                     submitData:[],
                     deleteData:[],
@@ -305,11 +312,33 @@ import utils from '~/plugins/utils';
                     firstPayTime:'',
                     rentAmount:'',
                     items:[],
+                    signDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     stationAmount:0,
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
                 ruleCustom:{
+                    startDate: [
+                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
+                    ],
+                    firstPayTime: [
+                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                    ],
+                    endDate: [
+                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
+                    ],
+                    communityId:[
+                        { required: true, message: '请选择社区', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '请选择客户', trigger: 'change' }
+                    ],
+                    salerId:[
+                        { required: true, message: '请选择销售员', trigger: 'change' }
+                    ],
+                    signDate:[
+                        { required: true,type: 'date',  message: '请先选择签署时间', trigger: 'change' }
+                    ]
                 },
                 getFloor:+new Date(),
                 ssoId:'',
@@ -364,16 +393,18 @@ import utils from '~/plugins/utils';
                     let data = r.data;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
-                        // obj.floor = '5';
                         obj.belongType = item.seatType;
                         obj.id = item.seatId;
                         obj.name = item.seatName;
+                        obj.startDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
                     _this.stationData = {
                         submitData:data.orderSeatDetailVo,
                         deleteData:[]
                     };
+                    _this.getSaleTactics({communityId:data.communityId})
                     _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = JSON.stringify(data.communityId);
@@ -382,17 +413,35 @@ import utils from '~/plugins/utils';
                     _this.communityName = data.communityName;
                     _this.formItem.startDate = new Date(data.startDate);
                     _this.formItem.endDate = new Date(data.endDate);
+                    _this.formItem.signDate = new Date(data.signDate);
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
                     _this.formItem.rentAmount = data.rentAmount;
                     _this.formItem.stationAmount = data.rentAmount;
+                    
                     _this.stationAmount = utils.smalltoBIG(data.rentAmount);
-                    _this.selectDeposit('3')
-                    _this.selectPayType(data.installmentType)
+                    _this.selectDeposit(data.deposit)
+                    _this.selectPayType(data.installmentType);
+                    setTimeout(function(){
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+                        _this.formItem.items = data.contractTactics;
+                    },200)
                     // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
-                    _this.getSaleTactics({communityId:data.communityId})
+                    console.log('contractTactics',_this.formItem)
+                    
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -408,6 +457,7 @@ import utils from '~/plugins/utils';
                  let {params}=this.$route;
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
                 saleList = saleList.map(item=>{
@@ -416,10 +466,11 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                formItem.orderSeatId = params.orderEdit;
+                formItem.id = params.orderEdit;
                 formItem.installmentType = this.installmentType;
-                formItem.depositAmount = this.depositAmount;
+                formItem.deposit = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
+                formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
@@ -542,6 +593,7 @@ import utils from '~/plugins/utils';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        console.log('========>',_this.stationList.length)
                         if(!_this.stationList.length){
                             _this.$Notice.error({
                                 title:'请选择入驻工位'

@@ -16,10 +16,6 @@
         border-radius: 4px;
     }
 
-    .layout-breadcrumb{
-        padding: 10px 15px 0;
-    }
-
     .layout-content{
         min-height: 500px;
         margin: 15px;
@@ -66,22 +62,8 @@
         }
        
     }
-    .layout-logo-left{
-        width: 90%;
-        height: 30px;
-        background: #5b6270;
-        border-radius: 3px;
-        margin: 15px auto;
-    }
-    .layout-ceiling-main a{
-        color: #9ba7b5;
-    }
     .layout-hide-text .layout-text{
         display: none;
-    }
-
-    .ivu-col{
-        transition: width .2s ease-in-out;
     }
 </style>
 <template>

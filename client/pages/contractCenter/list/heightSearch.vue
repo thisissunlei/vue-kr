@@ -141,7 +141,6 @@
             }
         },
         mounted:function(){
-            console.log(this.params,">>>>>>")
             var _this = this;
             this.$http.get('join-bill-community','', r => {    
                 _this.communityList=r.data.items 

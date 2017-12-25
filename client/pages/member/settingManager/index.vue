@@ -17,7 +17,7 @@
             <div style="margin: 10px;overflow: hidden">
                 <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
-                    <Page   
+                    <Page  
                         :total="totalCount" 
                         :page-size="pageSize"
                         show-total 
@@ -141,6 +141,7 @@ export default {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
+                    CommonFuc.clearForm(this.searchData);
                 }, e => {
                     console.log('error',e)
                 })
@@ -162,6 +163,7 @@ export default {
                 this.searchData=form;
         },
         searchSubmit(){
+                this.Params.page=1;
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
                 this.getTableData(this.Params)

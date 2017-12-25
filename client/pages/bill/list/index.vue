@@ -416,6 +416,7 @@ import CommonFuc from '~/components/CommonFuc';
             },
             getTableData(params){
                 this.$http.get('get-bill-list', params, r => {
+                    CommonFuc.clearForm(this.tabParams);
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;

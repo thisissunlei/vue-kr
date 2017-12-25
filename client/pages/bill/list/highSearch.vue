@@ -57,7 +57,7 @@
             
             <FormItem label="社区名称" class="u-input">
                   <Select 
-                        v-model="formItem.communityIds" 
+                        v-model="formItem.communityId" 
                         style="width:250px"
                         placeholder="请选择社区" 
                     >
@@ -129,7 +129,7 @@ export default{
 			formItem:{
                 billNo:'',
                 customerName:'',
-                communityIds:'',
+                communityId:'',
                 billType:'',
                 startTime:'',
                 endTime:'',

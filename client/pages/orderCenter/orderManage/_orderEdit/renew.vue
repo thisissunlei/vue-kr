@@ -834,6 +834,7 @@ import utils from '~/plugins/utils';
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
+                console.log(this.renewForm.startDate,"iiiiii")
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
@@ -867,7 +868,7 @@ import utils from '~/plugins/utils';
                 this.openStation = false
             },
             onStationChange:function(val){
-                console.log('onStationChange',val)
+                // console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息

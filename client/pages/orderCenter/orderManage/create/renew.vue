@@ -761,20 +761,30 @@ import utils from '~/plugins/utils';
                 this.renewForm.items = items;
             },
             submitStation:function(){
+               
                 let val = this.selecedArr || [];
                 this.openStation = false
                 if(!val.length){
                     return;
                 }
-
+                /**
+                 * 第一次和第二次进来时的val[0].startDate不一样第一次是毫秒值第二次是日期
+                */
+                var date = val[0].startDate;
+                if(isNaN(val[0].startDate)){
+                    date = new Date(val[0].startDate.replace(/-/g, '/'));
+                    date = date.getTime();
+                }
+               
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].startDate + day;
+                let start = date + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+               
                 this.getStationAmount()
                 
             },
             getStationAmount(){
-
+               
                 let val = this.selecedArr;
                 let _this = this;
                 this.config()
@@ -788,12 +798,15 @@ import utils from '~/plugins/utils';
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
+                 console.log("9999999",this.renewForm.startDate)
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
+
                 }
+               
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
@@ -827,7 +840,7 @@ import utils from '~/plugins/utils';
                 this.openStation = false;
             },
             onStationChange:function(val){
-                console.log('onStationChange',val)
+                console.log(val,"mmmmm")
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息

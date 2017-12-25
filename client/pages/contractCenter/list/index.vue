@@ -160,7 +160,7 @@
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Describe from './describe';
-    
+    var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
@@ -196,6 +196,7 @@
                 describeData:{},//其他约定的数据
                 columnDetail:{},//每一行的数据
                 totalCount:1,
+                maxWidth:170,
                 columns: [
                     
                     {
@@ -255,7 +256,7 @@
                         title: '工位数/独立空间',
                         key: ' stationAndBoard',
                         align:'center',
-                        width: 80,
+                        // width: 80,
                     },
                    
                     {
@@ -272,7 +273,7 @@
                         title: '起始时间',
                         key: 'cTime',
                         align:'center',
-                        width: 170,
+                        width: 200,
                         render(h, obj){
                             if(!obj.row.endDate || !obj.row.startDate){
                                 return "-";
@@ -287,7 +288,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
-                        fixed: 'right',
+                      
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []
@@ -363,7 +364,7 @@
                                         }
                                     }, '合同生效'))
                                 }
-                          
+                        //   console.log("=======",this.maxWidth);
                            return h('div',btnRender);  
                         }
                     }
@@ -373,6 +374,7 @@
         },
         mounted(){
            this.getListData(this.params);
+           this.onWindowSize();
         },
         methods:{
             config:function(){
@@ -380,6 +382,17 @@
                     top: 80,
                     duration: 3
                 });
+            },
+            onWindowSize:function(){
+                window.onresize = function () {
+                    var width = document.body.clientWidth;
+                    if(width>1870){
+                        this.maxWidth = width - 1700;
+                    }else {
+                        console.log("9999999")
+                        this.maxWidth = 170;
+                    }
+                }
             },
             //合同生效开关
             takeEffectSwitch(){

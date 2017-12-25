@@ -63,6 +63,7 @@
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
+                    :current="page"
                     :total="totalCount"
                     :page-size="pageSize" 
                     show-total 
@@ -164,6 +165,7 @@ import CommonFuc from '~/components/CommonFuc';
                 billIds:[],
                 itemDetail:{},
                 pageSize:15,
+                page:1,
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -500,6 +502,8 @@ import CommonFuc from '~/components/CommonFuc';
             //     })
             // },
             searchSubmit(){
+                this.page=1;
+                this.tabParams.page=1;
                 this.tabParams=this.searchData;
                 this.getTableData(this.tabParams)
             },
@@ -507,11 +511,14 @@ import CommonFuc from '~/components/CommonFuc';
                 this.openMessage=data;
             },
             lowerSubmit(){
+                this.page=1;
+                this.tabParams.page=1;
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;
+                this.page=page;
                 this.getTableData(this.tabParams);
             }
             

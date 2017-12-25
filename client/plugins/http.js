@@ -49,6 +49,7 @@ function apiAxios (method, name, params, success, failure) {
     baseURL: root,
     withCredentials: false,
   }).then(function (res) {
+    
     if (res.status === 200) {
 
       if (success && res.data.code == 1) {

@@ -153,6 +153,7 @@ export default {
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
+                CommonFuc.clearForm(this.searchData);
                 this.Params.page=1;
                 this.page=1;
                 this.Params.csrName=this.csrName;

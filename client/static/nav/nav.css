@@ -247,6 +247,7 @@
   margin-left: -110px;
   margin-top: -90px;
   /* background: blueviolet; */
+  font-size: 20px;
 }
 .app-header .nav-loading .item-loader-container .la-2x{
   width: 64px;
@@ -328,4 +329,7 @@
     -o-transform: scale(1.25, 1);
     transform: scale(1.25, 1);
   }
+}
+@keyframes loading-fade-in {
+  
 }

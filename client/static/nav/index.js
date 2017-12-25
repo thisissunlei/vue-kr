@@ -71,6 +71,9 @@
              var router = location.href.split('?')[0];
             var loading = document.getElementById('j_nav-loading');
             loading.style.opacity = 0;
+            setTimeout(function (params) {
+                loading.style.display = "none";
+            }, 600);
              // console.log(getClickNav([].concat(NavItems), router),"------")
              var activeData = getClickNav([].concat(NavItems), router);
             
@@ -145,10 +148,11 @@
                                 '<div id="j_nav-loading" class="nav-loading">'+
 
                                     '<div class="item-loader-container">'+
-                                        '<div class="la-2x" >'+
-                                            '<div></div>'+
-                                            '<div></div>'+
-                                        '</div >'+
+                                        "加载中..." +
+                                        // '<div class="la-2x" >'+
+                                        //     '<div></div>'+
+                                        //     '<div></div>'+
+                                        // '</div >'+
                                     '</div >'+
                                 '</div>' +
                             '</div>'+

@@ -138,7 +138,7 @@ export default {
                 },
                 {
 				 title: '小计',
-                 key: 'amount',
+                 key: 'originalAmount',
                  align:'center'	
 				}
 			],

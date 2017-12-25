@@ -55,7 +55,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" ></SelectSaler>
+                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
                  <Col  class="col">
@@ -63,13 +63,6 @@
                     <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
-                <Col class="col">
-                    <FormItem label="出租方" style="width:252px" prop="corporationId" >
-                    <SelectCorporation name="renewForm.corporationId" :onchange="changeCorporation"></SelectCorporation>
-                    </FormItem>
-                </Col>
-
-                
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -223,7 +216,6 @@ import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-import SelectCorporation from '~/components/SelectCorporation.vue'
 
 
 
@@ -242,7 +234,8 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     endDate:'',
                     saler:'',
                     rentAmount:'',
-                    items:[]
+                    items:[],
+                    signDate:new Date()
                },
                disabled:false,//提交按钮是否禁止
                discountError:{
@@ -272,9 +265,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
-                    corporationId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ]
                },
                stationListData:[],
                selecedStation:[],
@@ -327,7 +317,10 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 selectAll:false,//工位全选
                 youhui:[],
                 errorPayType:false,
-                getStationFn:''
+                getStationFn:'',
+                ssoId:'',
+                ssoName:'',
+                salerName:'请选择',
 
            }
         },
@@ -343,7 +336,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             SelectCustomers,
             SelectSaler,
             stationList,
-            SelectCorporation,
             planMap
         },
         created(){
@@ -352,6 +344,9 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             getStationFn:function(){
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
+                }
+                if(this.renewForm.customerId && this.renewForm.communityId){
+                    this.getSignUser()
                 }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
@@ -362,6 +357,26 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             }
         },
         methods: {
+            getSignUser(){
+                let params = {
+                    communityId:this.renewForm.communityId,
+                    customerId:this.renewForm.customerId
+                }
+                let _this = this;
+                 this.$http.get('get-community-floor', params, r => {
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
+                    if(!_this.renewForm.salerId){
+                        _this.renewForm.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
+
+                    }
+
+                }, e => {
+
+                        console.log('error',e)
+                })
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -383,12 +398,11 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     return obj;
                 })
                 renewForm.installmentType = this.installmentType;
-                renewForm.deposite = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
-                renewForm.corporationId=this.renewForm.corporationId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.signDate = signDate;
@@ -892,17 +906,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                         console.log('error',e)
                 })
 
-            },
-            changeCorporation(value){
-                if(value){
-                    this.renewForm.corporationId = value;
-                }else{
-                    this.renewForm.corporationId = '';
-                }
-            }
-
-                    
-               
+            },       
         }
     }
 </script>

@@ -393,7 +393,6 @@
                     if(width>1870){
                         this.maxWidth = width - 1700;
                     }else {
-                        console.log("9999999")
                         this.maxWidth = 170;
                     }
                 }
@@ -546,6 +545,7 @@
                 if(this.upperError){
                     return ;
                 }
+                console.log("-----",this.upperData)
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
                 this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';

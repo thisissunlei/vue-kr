@@ -436,11 +436,6 @@ import utils from '~/plugins/utils';
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
-
-                    // _this.formItem.rentAmount = data.rentAmount;
-                    // _this.formItem.stationAmount = data.rentAmount;
-                    
-                    // _this.stationAmount = utils.smalltoBIG(data.rentAmount);
                     _this.selectDeposit(data.deposit)
                     _this.selectPayType(data.installmentType);
                     setTimeout(function(){
@@ -568,10 +563,11 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.post('count-sale', params, r => {
+                    _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
-                    _this.formItem.rentAmount = r.data.totalrent;
+                    
                 }, e => {
 
                      _this.$Notice.error({

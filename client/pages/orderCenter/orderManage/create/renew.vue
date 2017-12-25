@@ -342,7 +342,7 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 salerName:'请选择',
                 saleAmount:0,
-                saleAmounts:0,
+                saleAmounts:utils.smalltoBIG(0),
 
            }
         },

@@ -390,7 +390,7 @@ import utils from '~/plugins/utils';
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
-                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.getSaleTactics({communityId:data.communityId})
                     _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.renewForm.communityId = JSON.stringify(data.communityId);
@@ -402,16 +402,16 @@ import utils from '~/plugins/utils';
 
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
+                    _this.selecedArr = data.orderSeatDetailVo;
                     // _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
                     _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
-                    _this.getStationFn = +new Date();
-                    // _this.renewForm.stationAmount = money;
-                    // _this.stationAmount = utils.smalltoBIG(money)
+                    _this.getStationAmount()
                     
-                    setTimeout(function(){
-                        _this.getStationAmount()
+
+                     setTimeout(function(){
+                        
                         data.contractTactics = data.contractTactics.map((item,index)=>{
                             let obj = {};
                             obj.status = 1;
@@ -424,8 +424,31 @@ import utils from '~/plugins/utils';
                             obj.tacticsType = JSON.stringify(item.tacticsType);
                             return obj;
                         })
+
                         _this.renewForm.items = data.contractTactics;
+                        _this.dealSaleInfo()
                     },200)
+                     _this.getStationFn = +new Date();
+                    
+                    // setTimeout(function(){
+                    //     _this.getStationAmount()
+                    //     data.contractTactics = data.contractTactics.map((item,index)=>{
+                    //         console.log('========',item)
+                    //         let obj = {};
+                    //         obj.status = 1;
+                    //         obj.show = true;
+                    //         obj.validStart = item.freeStart;
+                    //         obj.validEnd = item.freeEnd;
+                    //         obj.type = item.tacticsType+'-'+index;
+                    //         obj.tacticsId = item.tacticsId ;
+                    //         obj.discount = item.discountNum;
+                    //         obj.tacticsType = JSON.stringify(item.tacticsType);
+                    //         return obj;
+                    //     })
+
+                    //     _this.renewForm.items = data.contractTactics;
+                    //     _this.dealSaleInfo()
+                    // },200)
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -816,7 +839,7 @@ import utils from '~/plugins/utils';
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+=item.amount;
+                            money+=item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
@@ -939,7 +962,9 @@ import utils from '~/plugins/utils';
                 };
                  this.$http.post('count-sale', params, r => {
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
-                    console.log('rentAmount',_this.renewForm.rentAmount)
+                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

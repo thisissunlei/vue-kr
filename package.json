@@ -33,6 +33,7 @@
     "vue-dateutils": "^1.0.8"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^4.5.0",
     "nuxt": "^1.0.0-rc11",
     "vue-pdf": "^2.0.4"
   }

@@ -1,4 +1,55 @@
 
+body{
+        padding-left:180px;
+        min-height:100%;
+        
+    }
+    #__nuxt{
+        height:100%;
+    }  
+    .layout{
+        min-height:100%;
+        overflow-x: hidden;
+        background: #f5f7f9;
+        position: relative;
+        border-radius: 4px;
+    }
+
+    .layout-content{
+        min-height: 500px;
+        margin: 15px;
+        overflow: hidden;
+        border-radius: 4px;
+        padding-bottom: 50px;
+        padding-top: 65px;
+    }
+
+    .layout-content-main{
+         min-height: 200px;
+         background: #fff;
+         padding-bottom: 10px;
+    }
+
+    .layout-copy{
+        text-align: center;
+        padding: 10px 0 20px;
+        color: #9ea7b4;
+        width:100%;
+        height: 40px;
+        position: absolute;
+        left:0;
+        bottom:0;
+        border-top: solid 1px #e8e9e9;
+        background:#fff;
+        
+    }
+    .layout-hide-text .layout-text{
+        display: none;
+    }
+
+
+
+
 .app-header .c-header {
   position: fixed;
   z-index: 999;

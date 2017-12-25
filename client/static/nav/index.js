@@ -13,12 +13,9 @@
          },
          navNum:8
      }
- 
      /**
       * 查找被点击的数据
       */
- 
- 
      function getClickNav(arr,str) {
          
          for(var i=0;i<arr.length;i++){
@@ -58,47 +55,37 @@
      }
      GlobalRouter.prototype.pushCloseRoutrs = function(){
          var router = location.href.split('?')[0];
-        
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
          }
+         globalNav.allSwitch()
      }
      GlobalRouter.prototype.route = function (path, callback) {
          this.routes[path] = callback || function () { };
      };
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-             var router = location.href.split('?')[0];
-            var loading = document.getElementById('j_nav-loading');
-            
-            setTimeout(function (params) {
-                // loading.style.opacity = 0;
-                loading.style.display = "none";
-            }, 1000);
-             // console.log(getClickNav([].concat(NavItems), router),"------")
-             var activeData = getClickNav([].concat(NavItems), router);
-            
-             navUtils.activeData = Object.assign({},activeData);
-             var j_sidebar = document.getElementById('j_sidebar');
-             var j_header = document.getElementById('j_header');
-             var j_menu_btn = document.getElementById('j_menu_btn');
-             var docBody = document.body;
-             if (navUtils.closeRoutrs.indexOf(router)!=-1){
-                 navUtils.isHome = true;
-                 globalNav.allSwitch("false")
-             }else{
-                 navUtils.isHome = false;
-                 globalNav.allSwitch( "true")   
-             }
-             j_sidebar.innerHTML = globalNav.getCreateSidebarHtmlStr();
-             j_header.innerHTML = globalNav.getCreateHeaderHtmlStr();
-            
-            
-     
+        var router = location.href.split('?')[0];
+       /* var loading = document.getElementById('j_nav-loading');
+        setTimeout(function (params) {
+            // loading.style.opacity = 0;
+            loading.style.display = "none";
+        }, 500);*/
+        var activeData = getClickNav([].concat(NavItems), router);
+         if (activeData){
+            navUtils.activeData = Object.assign({}, activeData);
+        }
+        
+        var j_sidebar = document.getElementById('j_sidebar');
+        var j_header = document.getElementById('j_header');
+         globalNav.allSwitch();
+        j_sidebar.innerHTML = globalNav.getCreateSidebarHtmlStr();
+        j_header.innerHTML = globalNav.getCreateHeaderHtmlStr();
      };
      GlobalRouter.prototype.init = function () {
-         window.addEventListener('load', this.refresh.bind(this), false);
-        //  window.addEventListener('hashchange', this.refresh.bind(this), false);
+         
+        //  window.addEventListener('load', this.refresh.bind(this), false);
+        this.refresh();
      }
      /**
       * =======================导航渲染部分=========================
@@ -128,10 +115,7 @@
  
                                  '<div class = "j_header_other">' +
                                      '<div id = "j_msg_btn"></div>' +
-                                     '<div id = "j_account_btn">' +
-                             // '<span></span>'+
-                                     '</div>' +
- 
+                                     '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
  
@@ -145,8 +129,8 @@
                                  '</div>' +
                              '</div> ' +
  
-                                '<div id="j_sidebar" class="sidebar" style = "display:block;"> ${sidebar} </div> ' +
-                                '<div id="j_nav-loading" class="nav-loading">'+
+                                '<div id="j_sidebar" class="sidebar" style = "display:none;"> ${sidebar} </div> ' +
+                                '<div id="j_nav-loading" class="nav-loading" style="display:none;">'+
 
                                     '<div class="item-loader-container">'+
                                        
@@ -214,8 +198,6 @@
      
      //用户名
      GlobalNav.prototype.getUserHtmlStr = function () {
-        //  var loading = document.getElementById('j_nav-loading');
-        //  loading.style.display='none';
          return this.state.user.nickname;
      }
      //生成头部导航
@@ -271,22 +253,19 @@
  
     
      GlobalNav.prototype.allSwitch = function (isOpen) {
+        
          var j_sidebar = document.getElementById('j_sidebar');
          var j_header = document.getElementById('j_header');
          var j_menu_btn = document.getElementById('j_menu_btn');
+         var router = location.href.split('?')[0];    
          var docBody = document.body;
-         if ((isOpen && isOpen == "false")){
+         if (navUtils.closeRoutrs.indexOf(router) != -1) {
              j_sidebar.style.display = 'none';
              docBody.style.paddingLeft = '0px';
              j_menu_btn.setAttribute('class', 'menu-btn menu-btn-close')
-             return ;
+             return;
          }
-         if ((isOpen && isOpen == "true")){
-             j_menu_btn.setAttribute('class', 'menu-btn menu-btn-open')
-             j_sidebar.style.display = 'block';
-             docBody.style.paddingLeft = '180px';
-             return ;
-         }
+         console.log("ppppppppp000000------")
          if (j_sidebar.style.display === 'block') {
              j_sidebar.style.display = 'none';
              docBody.style.paddingLeft = '0px';
@@ -426,10 +405,21 @@
      //获取后台权限数据
      GlobalNav.prototype.getNavData = function () {
          var that = this;
+         
+        //  if(localStorage.navData){
+        //      var response = JSON.parse(localStorage.navData)
+        //      menuCode = response.data.menusCode;
+        //      var user = response.data.userInfo;
+        //      var navs = [].concat(firstMenus(NavItems));
+        //      that.setState({ navs, user });
+        //      return ;
+        //  }
+       
          this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
              menuCode = response.data.menusCode;
              var user = response.data.userInfo;
              var navs = [].concat(firstMenus(NavItems));
+            //  localStorage.navData = JSON.stringify(response);
              that.setState({ navs, user });
          })
      }
@@ -451,16 +441,17 @@
          };
          xhr.send();
      }
- 
-     var Router = new GlobalRouter();
-     Router.init();
+    console.log("ppppppppp")
+     
      /**
       * ===================数据部分=======================
       */
-     var globalNav = new GlobalNav();
-     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    var globalNav = new GlobalNav();
      // console.log("GLOBALSIDESWITCH",GLOBALSIDESWITCH)
- 
+    var Router = new GlobalRouter();
+    global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    
+    Router.init();
      //第一级菜单
      function firstMenus(firstData) {
  

@@ -227,13 +227,13 @@
                         title: '合同类型',
                         key: 'contractType',
                         align:'center',
-                        width: 80,
+                        width: 150,
                     },
                     {
                         title: '合同状态',
                         key: 'contractStatusName',
                         align:'center',
-                        width: 80,
+                        width: 150,
                     },
                     {
                         title: '创建人',
@@ -270,7 +270,7 @@
                         title: '工位数/独立空间',
                         key: 'stationAndBoard',
                         align:'center',
-                        
+                        width: 150,
                     },
                    
                     {

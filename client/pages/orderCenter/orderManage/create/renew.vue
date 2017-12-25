@@ -304,7 +304,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -315,7 +315,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 payList:[

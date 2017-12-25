@@ -302,7 +302,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -313,7 +313,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 stationList: [
@@ -436,13 +436,15 @@ import utils from '~/plugins/utils';
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
-                    _this.formItem.rentAmount = data.rentAmount;
-                    _this.formItem.stationAmount = data.rentAmount;
+
+                    // _this.formItem.rentAmount = data.rentAmount;
+                    // _this.formItem.stationAmount = data.rentAmount;
                     
-                    _this.stationAmount = utils.smalltoBIG(data.rentAmount);
+                    // _this.stationAmount = utils.smalltoBIG(data.rentAmount);
                     _this.selectDeposit(data.deposit)
                     _this.selectPayType(data.installmentType);
                     setTimeout(function(){
+                        _this.getStationAmount()
                         data.contractTactics = data.contractTactics.map((item,index)=>{
                             let obj = {};
                             obj.status = 1;
@@ -1004,7 +1006,7 @@ import utils from '~/plugins/utils';
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            money += item.amount;
+                            money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;

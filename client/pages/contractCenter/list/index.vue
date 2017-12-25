@@ -146,6 +146,8 @@
                     <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
                 </div>
         </Modal>
+
+        <Loading :loading='loadingStatus'/>
         
     </div>
   
@@ -155,6 +157,7 @@
 
    
     import sectionTitle from '~/components/SectionTitle.vue';
+    import Loading from '~/components/Loading';
     import krUpload from '~/components/KrUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
@@ -166,7 +169,8 @@
             sectionTitle,
             krUpload,
             HeightSearch,
-            Describe
+            Describe,
+            Loading
         },
         head () {
             return {
@@ -185,7 +189,7 @@
                 openTakeEffect:false,
                 openDescribe:false,
                 selectAllData:[],
-                loadingStatus: false,
+                loadingStatus: true,
                 file: null,
                 parameter:{},//获取pdf-id的参数
                 upperData:{},//高级查询的数据
@@ -501,7 +505,7 @@
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;
-                   
+                   _this.loadingStatus=false;
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

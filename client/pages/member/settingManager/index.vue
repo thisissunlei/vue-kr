@@ -143,7 +143,6 @@ export default {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
-                    CommonFuc.clearForm(this.searchData);
                 }, e => {
                     console.log('error',e)
                 })

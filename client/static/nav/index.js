@@ -69,6 +69,12 @@
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
              var router = location.href.split('?')[0];
+            var loading = document.getElementById('j_nav-loading');
+            
+            setTimeout(function (params) {
+                // loading.style.opacity = 0;
+                loading.style.display = "none";
+            }, 1000);
              // console.log(getClickNav([].concat(NavItems), router),"------")
              var activeData = getClickNav([].concat(NavItems), router);
             
@@ -139,13 +145,25 @@
                                  '</div>' +
                              '</div> ' +
  
-                             '<div id="j_sidebar" class="sidebar" style = "display:block;"> ${sidebar} </div> ' +
-                         '</div>'+
+                                '<div id="j_sidebar" class="sidebar" style = "display:block;"> ${sidebar} </div> ' +
+                                '<div id="j_nav-loading" class="nav-loading">'+
+
+                                    '<div class="item-loader-container">'+
+                                       
+                                        '<div class="la-2x" >'+
+                                            '<div></div>'+
+                                            '<div></div>'+
+                                            
+                                        '</div >'+
+                                        '<span>加载中...<span>'+
+                                    '</div >'+
+                                '</div>' +
+                            '</div>'+
+                        
                      '</div>';
  
  
          this.getNavData();
-         // this.changeRouter();
         
          this.render();
           
@@ -196,6 +214,8 @@
      
      //用户名
      GlobalNav.prototype.getUserHtmlStr = function () {
+        //  var loading = document.getElementById('j_nav-loading');
+        //  loading.style.display='none';
          return this.state.user.nickname;
      }
      //生成头部导航
@@ -248,71 +268,8 @@
          return html;
      }
      
-     
-     //生成侧边栏
-     // GlobalNav.prototype.getCreateHeaderHtmlStr = function () {
  
-     // }
- 
-     //路径发生修改
-     GlobalNav.prototype.changeRouter = function () {
- 
-         document.querySelector('body').style.backgroundColor = 'blue';
-         return;
-         var that = this;
-         var navs = this.state.navs;
-         var params = {};
-         params.pathname = window.location.pathname;
-         params.hash = window.location.hash;
- 
-         navs.forEach(function (father) {
- 
-             if (father.router === params.pathname || father.router === params.pathname + params.hash) {
-                 father.active = true;
-             } else {
-                 father.active = false;
-             }
- 
-             if (father.hasOwnProperty('menuItems') && father.menuItems.length) {
- 
-                 father.menuItems.forEach(function (fastChild) {
- 
-                     if (fastChild.router === params.pathname || fastChild.router === params.pathname + params.hash) {
-                         fastChild.active = true;
-                         father.active = true;
-                     } else {
-                         fastChild.active = false;
-                     }
- 
- 
-                     if (fastChild.hasOwnProperty('menuItems') && fastChild.menuItems.length) {
- 
-                         fastChild.menuItems.forEach(function (lastChild) {
- 
-                             if (lastChild.router === params.pathname || lastChild.router === params.pathname + params.hash) {
-                                 lastChild.active = true;
-                                 fastChild.active = true;
-                                 father.active = true;
- 
- 
-                             } else {
-                                 lastChild.active = false;
-                             }
- 
-                         });
- 
- 
-                     }
-                 });
- 
- 
-             }
- 
-         });
- 
-         this.setState({ navs });
- 
-     }
+    
      GlobalNav.prototype.allSwitch = function (isOpen) {
          var j_sidebar = document.getElementById('j_sidebar');
          var j_header = document.getElementById('j_header');
@@ -347,10 +304,6 @@
  
  
          var that = this;
- 
-         // window.addEventListener('hashchange', function () {
-         //     that.changeRouter();
-         // });
  
          window.addEventListener('load', function () {
  

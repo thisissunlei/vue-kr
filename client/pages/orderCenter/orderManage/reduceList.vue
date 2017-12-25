@@ -12,7 +12,7 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
-                                @on-change="lowerChange"
+                                @keyup.enter.native="showKey($event)"
                             ></i-input>
                         </div>
                         <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -183,7 +183,9 @@
                                             this.showView(params)
                                         }
                                     }
-                                }),  
+                                })];
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
+                               btnRender.push( 
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -197,9 +199,7 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同')];
-                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push(h('Button', {
+                                }, '申请合同'),h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -238,6 +238,9 @@
             this.getListData(this.params);
         },
         methods:{
+            showKey: function (ev) {
+                this.lowerSubmit();
+            },
             showSearch () {
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
@@ -311,9 +314,6 @@
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
-            },
-            lowerChange(param){
-                this.params.customerName=param.target.value;
             },
             lowerSubmit(){
                 this.getListData(this.params);

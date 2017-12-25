@@ -121,7 +121,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==renewForm.items.length-1}" v-show="item.show">
+            <Row  v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -147,6 +147,15 @@
                     </Col>  
             </Row>
         </FormItem>
+        <Row style="margin-bottom:10px">
+                <Col sapn="24">
+                    <div class="total-money" v-if="renewForm.items.length">
+                        <span>优惠金额总计</span>
+                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmounts}}</span>
+                    </div>
+                </Col>
+                </Row>
         </DetailStyle>
               <div style="padding-left:24px">
             <Row>
@@ -198,8 +207,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
+     <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation"></stationList>
+        @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -223,6 +233,15 @@ import utils from '~/plugins/utils';
 
     export default {
         data() {
+             const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                    callback(new Error('首付款日期不得晚于起始日期'));
+                }else{
+                    callback()
+                }
+            };
            return{
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
@@ -257,7 +276,7 @@ import utils from '~/plugins/utils';
                         { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
                     ],
                     firstPayTime: [
-                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                     endDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
@@ -321,6 +340,8 @@ import utils from '~/plugins/utils';
                 ssoId:'',
                 ssoName:'',
                 salerName:'请选择',
+                saleAmount:0,
+                saleAmounts:0,
 
            }
         },
@@ -896,6 +917,10 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
+                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
+
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {

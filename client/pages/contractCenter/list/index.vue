@@ -292,8 +292,8 @@
                             if(!obj.row.endDate || !obj.row.startDate){
                                 return "-";
                             }
-                            let end=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.endDate));
-                            let start = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            let end=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
+                            let start = dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
                             return start+"至"+end;
                         }
                     },

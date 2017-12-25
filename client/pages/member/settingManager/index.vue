@@ -17,7 +17,8 @@
             <div style="margin: 10px;overflow: hidden">
                 <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
-                    <Page  
+                    <Page
+                        :current="page" 
                         :total="totalCount" 
                         :page-size="pageSize"
                         show-total 
@@ -71,6 +72,7 @@ export default {
             totalCount:0,
             pageSize:15,
             tableData:[],
+            page:1,
             Params:{
                 page:1,
                 pageSize:15
@@ -148,10 +150,12 @@ export default {
         },
         changePage(page){
                 this.Params.page=page;
+                this.page=page;
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
                 this.Params.page=1;
+                this.page=1;
                 this.Params.csrName=this.csrName;
                 this.getTableData(this.Params);
         },
@@ -164,6 +168,7 @@ export default {
         },
         searchSubmit(){
                 this.Params.page=1;
+                this.page=1;
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
                 this.getTableData(this.Params)

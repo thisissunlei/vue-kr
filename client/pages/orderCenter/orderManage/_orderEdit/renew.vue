@@ -63,12 +63,6 @@
                     <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
-                <Col class="col">
-                    <FormItem label="出租方" style="width:252px"  prop="corporationId">
-                    <SelectCorporation name="renewForm.corporationId" :onchange="changeCorporation" :value="corporationName"></SelectCorporation>
-                    </FormItem>
-                </Col>
-                
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -217,7 +211,6 @@ import stationList from './stationList.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-import SelectCorporation from '~/components/SelectCorporation.vue'
 
 
 
@@ -266,9 +259,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
-                    corporationId:[
-                        { required: true, message: '此项不可为空', trigger: 'change' }
-                    ]
                },
                stationListData:[],
                selecedStation:[],
@@ -339,7 +329,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             SelectCustomers,
             SelectSaler,
             stationList,
-            SelectCorporation,
             planMap
         },
         mounted(){
@@ -390,13 +379,11 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
-                    _this.depositAmount = '3';
+                    _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
                     _this.renewForm.stationAmount = money;
                     _this.stationAmount = utils.smalltoBIG(money)
-                    _this.renewForm.corporationId = JSON.stringify(data.corporationId) || '2';
-                    _this.corporationName = data.corporationName || 'chuzufang';
                     
                     setTimeout(function(){
                         data.contractTactics = data.contractTactics.map((item,index)=>{
@@ -439,7 +426,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 })
                  renewForm.id = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
-                renewForm.deposite = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
@@ -448,7 +435,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.signDate = signDate;
                 renewForm.startDate = start;
-                renewForm.corporationId = this.renewForm.corporationId;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
                 let _this = this;
@@ -525,14 +511,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     this.clearStation()
                 }else{
                     this.renewForm.customerId = '';
-                }
-
-            },
-             changeCorporation:function(value){
-                if(value){
-                    this.renewForm.corporationId = value;
-                }else{
-                    this.renewForm.corporationId = '';
                 }
 
             },

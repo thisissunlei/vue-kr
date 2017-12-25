@@ -176,4 +176,10 @@ export default  {
         url: '/api/krspace-op-web/seat-reduce-amount?',
         method: 'get'
     },
+    
+    // 出租方列表--组件
+    'get-orporation-list': {
+        url: '/api/krspace-op-web/order-seat/corporation-list',
+        method: 'get'
+    },
 }

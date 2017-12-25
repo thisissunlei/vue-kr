@@ -43,11 +43,6 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
-                <Col class="col">
-                    <FormItem label="出租方" style="width:252px">
-                        <SelectCorporation name="formItem.corporationId" :onchange="changeCorporation" :value="corporationName"></SelectCorporation>
-                    </FormItem>
-                </Col>
                 
             </Row>
             </DetailStyle>
@@ -229,7 +224,6 @@ import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-import SelectCorporation from '~/components/SelectCorporation.vue'
 
 
 
@@ -363,7 +357,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            SelectCorporation,
             planMap
         },
         mounted(){
@@ -414,8 +407,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.getSaleTactics({communityId:data.communityId})
                     _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
-                    _this.corporationName = data.corporationName || '出租方';
-                    _this.formItem.corporationId = JSON.stringify(data.corporationId) || '2'; 
                     _this.formItem.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
                     _this.formItem.salerId = JSON.stringify(data.salerId);
@@ -430,7 +421,7 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                     _this.formItem.stationAmount = data.rentAmount;
                     
                     _this.stationAmount = utils.smalltoBIG(data.rentAmount);
-                    _this.selectDeposit('3')
+                    _this.selectDeposit(data.deposit)
                     _this.selectPayType(data.installmentType);
                     setTimeout(function(){
                         data.contractTactics = data.contractTactics.map((item,index)=>{
@@ -477,9 +468,8 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 })
                 formItem.id = params.orderEdit;
                 formItem.installmentType = this.installmentType;
-                formItem.deposite = this.depositAmount;
+                formItem.deposit = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
-                formItem.corporationId = this.formItem.corporationId;
                 formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
@@ -751,15 +741,6 @@ import SelectCorporation from '~/components/SelectCorporation.vue'
                 this.getFloor = +new Date()
 
             },
-            changeCorporation:function(value){
-                if(value){
-                    this.formItem.corporationId = value;
-                }else{
-                    this.formItem.corporationId = '';
-                }
-
-            },
-            
             changeSaler:function(value){
                 // 销售员
                 this.formItem.salerId = value;

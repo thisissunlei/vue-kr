@@ -80,22 +80,6 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                    <Form-item label="支付状态" class='bill-search-class' v-show='type'>
-                    <Select 
-                        v-model="formItem.payStatus" 
-                        placeholder="请输入支付状态" 
-                        style="width: 252px"
-                        clearable
-                    >
-                        <Option 
-                            v-for="item in payList" 
-                            :value="item.value" 
-                            :key="item.value"
-                        >
-                            {{ item.label }}
-                        </Option>
-                   </Select> 
-                </Form-item>
                 <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
                         v-model="formItem.cStartDate"

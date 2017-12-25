@@ -25,7 +25,7 @@
 							</div>
 							
 						</Upload>
-						<div class="file-list" v-for="item in defaultList" @click="downFille" >
+						<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
 								{{item.fileName}}
 						</div>
 					</div>
@@ -237,7 +237,9 @@ export default{
 		onTokenSuccess(){
 
 		},
-		downFille(){
+		downFille(params){
+			var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
+        	window.location.href = url;
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);

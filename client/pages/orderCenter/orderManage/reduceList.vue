@@ -12,7 +12,7 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
-                                @on-change="lowerChange"
+                                @keyup.enter.native="showKey($event)"
                             ></i-input>
                         </div>
                         <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -56,17 +56,30 @@
                 :warn="warn"
                 v-on:changeOpen="onChangeOpen"
             ></Message>
+
+            <Modal
+                v-model="openApply"
+                title="提示信息"
+                @on-ok="applySubmit"
+                width="500"
+            >
+                <ApplyContract></ApplyContract>
+            </Modal>
+
+            <Loading :loading='loadingStatus'/>
     </div>
 </template>
 
 
 <script>
     import HeightSearch from './heightSearch';
+    import ApplyContract from './applyContract';
     import Nullify from './nullify';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
+    import Loading from '~/components/Loading';
 
     export default {
         name:'join',
@@ -74,11 +87,14 @@
             HeightSearch,
             Nullify,
             Message,
-            Buttons
+            Buttons,
+            ApplyContract,
+            Loading
         },
         data () {
             
             return {
+                loadingStatus:true,
                 openMessage:false,
                 warn:'',
                 MessageType:'',
@@ -95,6 +111,7 @@
                 joinData:[],
                 openSearch:false,
                 openNullify:false,
+                openApply:false,
                 joinOrder: [
                     {
                         title: '订单编号',
@@ -166,7 +183,9 @@
                                             this.showView(params)
                                         }
                                     }
-                                }),  
+                                })];
+                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
+                               btnRender.push( 
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -180,9 +199,7 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同')];
-                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push(h('Button', {
+                                }, '申请合同'),h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -221,6 +238,9 @@
             this.getListData(this.params);
         },
         methods:{
+            showKey: function (ev) {
+                this.lowerSubmit();
+            },
             showSearch () {
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
@@ -236,7 +256,8 @@
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
             },
             showApply(params){
-                window.open(`/contractCenter/${params.row.id}/viewCenter`,'_blank');
+                this.id=params.row.id;
+                this.openApply=true;
             },
             showView(params){
                 window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
@@ -254,7 +275,23 @@
                 }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
-                })   
+                }) 
+                 this.openNullify=false;  
+            },
+            applySubmit(){
+                let params={
+                    id:this.id
+                };
+                 this.openMessage=true;
+                 this.$http.post('apply-contract', params, r => {
+                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.warn=r.message;
+                    this.getListData(this.params);
+                }, e => {
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })
+                 this.openApply=false;     
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
@@ -266,6 +303,7 @@
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
+                    _this.loadingStatus=false;
                 }, e => {
                     _this.openMessage=true;
                     _this.MessageType="error";
@@ -276,9 +314,6 @@
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
-            },
-            lowerChange(param){
-                this.params.customerName=param.target.value;
             },
             lowerSubmit(){
                 this.getListData(this.params);

@@ -40,7 +40,7 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler"></SelectSaler>
+                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
             </Row>
@@ -61,8 +61,13 @@
                     </FormItem>
                 </Col>
                  <Col class="col">
-                    <FormItem label="租赁时长" style="width:252px" prop="timeRange">
-                        <Input v-model="formItem.timeRange" placeholder="租赁时长"></Input>
+                    <FormItem label="租赁时长" style="width:252px" >
+                        <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
+                    </FormItem>
+                </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -112,13 +117,8 @@
                         
                     </Col>
                     <Col span="5" class="discount-table-head" >
-                        <span>折扣</span>
-                        
+                        <span>折扣</span>  
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
-                    
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
@@ -126,7 +126,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==formItem.items.length-1}" v-show="item.show">
+            <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -137,13 +137,10 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <!-- <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart"></DatePicker > -->
                         <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
-                    
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -153,6 +150,15 @@
                     </Col>  
             </Row>
         </FormItem>
+            <Row style="margin-bottom:10px">
+                <Col sapn="24">
+                    <div class="total-money" v-if="formItem.items.length">
+                        <span>优惠金额总计</span>
+                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmounts}}</span>
+                    </div>
+                </Col>
+                </Row>
         </DetailStyle>
         <div style="padding-left:24px">
             <Row>
@@ -163,7 +169,7 @@
                  </Col>
                  <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" ></DatePicker >
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker >
                     </FormItem> 
                  </Col>
             </Row>
@@ -177,10 +183,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
+                        <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
             </Row>
             
@@ -188,7 +195,6 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
 
     </Form>
@@ -203,7 +209,7 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
     </Modal>
 
         
@@ -218,7 +224,6 @@ import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
-
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
@@ -232,6 +237,15 @@ import utils from '~/plugins/utils';
 
     export default {
         data() {
+            const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(new Date(this.formItem.startDate)<new Date(value)){
+                    callback(new Error('首付款日期不得晚于起始日期'));
+                }else{
+                     callback();
+                }
+            };
             return {
                 openStation:false,
                 selectAll:false,
@@ -266,6 +280,8 @@ import utils from '~/plugins/utils';
                     {label:'5个月',value:'5'},
                     {label:'6个月',value:'6'},
                 ],
+                saleAmount:0,
+                saleAmounts:utils.smalltoBIG(0),
                 youhui:[],
                 columns4: [
                     {
@@ -301,6 +317,7 @@ import utils from '~/plugins/utils';
                     customerId: '',
                     communityId: '',
                     startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
+                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
@@ -317,20 +334,11 @@ import utils from '~/plugins/utils';
                         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
                     ],
                     firstPayTime: [
-                        { required: true,type: 'date', message: '请先选择首付款日期', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
-                    timeRange: [
-                        { required: true, message: '请填写在租赁时长', trigger: 'blur' }
-                    ],
-                    // city:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // floor:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
@@ -340,12 +348,16 @@ import utils from '~/plugins/utils';
                     salerId:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    // floor: [
-                    //     { validator: validateFloor, trigger: 'change' }
-                    // ],
+                    signDate:[
+                        { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                    ]
                 },
                 getFloor:+new Date(),
-                changeSale:+new Date()
+                changeSale:+new Date(),
+                salerName:'请选择',
+                ssoId:'',
+                errorAmount:false,
+                ssoName:'',
 
             }
         },
@@ -360,17 +372,15 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap
+            planMap,
         },
         created(){
             // this.openStation = false
         },
         watch:{
-            formItem(){
-                console.log('=========')
-            },
            getFloor(){
             let _this = this;
+            this.config()
             if(this.formItem.communityId && this.formItem.customerId){
                 let params = {
                     communityId:this.formItem.communityId,
@@ -378,8 +388,18 @@ import utils from '~/plugins/utils';
                 }
                  this.$http.get('get-community-floor', params, r => {
                     _this.floors = r.data.floor;
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
+                    if(!_this.formItem.salerId){
+                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
+
+                    }
 
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                         console.log('error',e)
                 })
@@ -400,10 +420,9 @@ import utils from '~/plugins/utils';
                 this.config()
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
-                console.log('joinFormSubmit',this.formItem.items)
-                // formItem = this.formItem;
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
@@ -412,20 +431,22 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 formItem.installmentType = this.installmentType;
-                formItem.depositAmount = this.depositAmount;
+                formItem.deposit = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
+                formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
+
                 formItem.rentAmount=this.formItem.rentAmount;
                 formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
 
                 formItem.startDate = start;
                 formItem.endDate =end;
-                formItem.corporationId = 11;//临时加的-无用但包错
-                console.log('handleSubmit',formItem,start,end)
+                formItem.ssoId = this.ssoId;
+                formItem.ssoName = this.ssoName;
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
                     window.location.href='/orderCenter/orderManage';
@@ -488,6 +509,9 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.post('count-sale', params, r => {
+                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
 
@@ -519,15 +543,35 @@ import utils from '~/plugins/utils';
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.depositAmount){
+                    this.errorAmount = true;
+                }
                 if(this.timeError){
                     this.$Notice.error({
                         title:'租赁开始时间不得大于结束时间'
                     });
                     return
                 }
+
+                
+
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        console.log('handleSubmit',valid)
+                        if(this.errorPayType || this.errorAmount){
+                            this.$Notice.error({
+                                title:'请填写完表单'
+                            });
+                            return;
+                        }
+                        if(!_this.stationList.length){
+                            _this.$Notice.error({
+                                title:'请选择入驻工位'
+                            });
+                            _this.disabled = false;
+                            return
+                        }
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;
@@ -753,6 +797,7 @@ import utils from '~/plugins/utils';
             selectDeposit:function(value){
                 // 选择保证金
                 this.depositAmount = value
+                this.errorAmount = false;
             },
             selectPayType:function(value){
                 // 选择付款方式
@@ -778,7 +823,7 @@ import utils from '~/plugins/utils';
             },
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
-                console.log('changeBeginTime',val);
+                this.clearStation()
                 if(!val || !this.formItem.endDate){
                     return;
                 }
@@ -798,7 +843,7 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.clearStation()
+                
             },
             dealEndDate(val){
                 let str = val.split('-');
@@ -811,6 +856,7 @@ import utils from '~/plugins/utils';
 
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                this.clearStation()
                 if(!val){
                     return;
                 }
@@ -843,9 +889,13 @@ import utils from '~/plugins/utils';
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
+                this.config();
                  this.$http.get('contract-date-range', params, r => {
                     _this.formItem.timeRange = r.data;
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                     console.log('error',e)
                 })
@@ -917,7 +967,7 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                     })
                 }
-            }
+            },
                     
                
         }

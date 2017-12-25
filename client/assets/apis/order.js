@@ -1,13 +1,14 @@
 //公共的api
 export default  {
+  
   //获取平面图信息
   'getplanmap': {
-      url: '/api/krspace-finance-web/cmt/floor-graph/select-info?',
+      url: '/api/krspace-op-web/cmt/floor-graph/select-info?',
       method: 'get'
   },
   //获取社区List组件
     'get-mainbill-community': {
-        url: '/api/krspace-finance-web/finaVerify/data/get-mainbill-community?',
+        url: '/api/krspace-op-web/finaVerify/data/get-mainbill-community?',
         method: 'get'
   },
   //获取客户List组件
@@ -119,51 +120,51 @@ export default  {
   },
   //优惠选项communityId
     'sale-tactics': {
-        url: '/api/krspace-finance-web/sale-tactics?',
+        url: '/api/krspace-op-web/sale-tactics?',
         method: 'get'
     },
     //计算优惠
     'count-sale': {
-        url: '/api/krspace-finance-web/count-order-sale',
+        url: '/api/krspace-op-web/count-order-sale',
         method: 'post'
     },
     //获取可选择的续租工位
      'get-renew-station': {
-        url: '/api/krspace-finance-web/order-seat-detail/continue?',
+        url: '/api/krspace-op-web/order-seat-detail/continue?',
         method: 'get'
     },
     //获取可选择的减租工位
      'get-reduce-station': {
-        url: '/api/krspace-finance-web/order-seat-detail/reduce?',
+        url: '/api/krspace-op-web/order-seat-detail/reduce?',
         method: 'get'
     },
     //入驻新建提交
      'save-join': {
-        url: '/api/krspace-finance-web/order-seat-add',
+        url: '/api/krspace-op-web/order-seat-add',
         method: 'post'
     },
     //续驻新建提交
      'save-renew': {
-        url: '/api/krspace-finance-web/order-seat-continue',
+        url: '/api/krspace-op-web/order-seat-continue',
         method: 'post'
     },
     'save-reduce': {
-        url: '/api/krspace-finance-web/order-seat-reduce',
+        url: '/api/krspace-op-web/order-seat-reduce',
         method: 'post'
     },
     //计算工位服务费小计
     'get-station-amount': {
-        url: '/api/krspace-finance-web/order-seat-detail/amount',
+        url: '/api/krspace-op-web/order-seat-detail/amount',
         method: 'post'
     },
     // 获取社区-楼层接口
     'get-community-floor': {
-        url: '/api/krspace-finance-web/order-seat/community-floor?',
+        url: '/api/krspace-op-web/order-seat/community-floor?',
         method: 'get'
     },
   //获取售货员List组件
   'get-customer': {
-      url: '/api/krspace-finance-web/customer/my-customers?',
+      url: '/api/krspace-op-web/customer/my-customers?',
       method: 'get'
   },
     'get-cancel-msg': {
@@ -172,7 +173,13 @@ export default  {
     },
     // 获取社区-楼层接口
     'get-reduce-station-amount': {
-        url: '/api/krspace-finance-web/seat-reduce-amount?',
+        url: '/api/krspace-op-web/seat-reduce-amount?',
+        method: 'get'
+    },
+    
+    // 出租方列表--组件
+    'get-orporation-list': {
+        url: '/api/krspace-op-web/order-seat/corporation-list',
         method: 'get'
     },
 }

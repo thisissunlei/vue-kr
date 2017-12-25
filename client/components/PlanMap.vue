@@ -56,25 +56,17 @@ import http from '~/plugins/http.js';
         destroyed(){
         },
         mounted:function(){
-        	console.log('mounted')
+        	this.getData()
         },
         updated:function(){
         },
         beforeUpdate:function(){
-        	console.log('beforeUpdate')
+        	
         },
         watch:{
-        	params:function(){
-        		if(this.params.floor){
-        			if(!!this.Map){
-        				this.Map.destory();
-        			}
-        			this.selectedObjs = this.stationData.submitData;
-        			this.getData()
-        		}
+        	params:function(val){
         	},
         	stationData:function(val){
-        		console.log('stationData',this.stationData.submitData)
         		this.selectedObjs = this.stationData.submitData;
         	},
         	stationArr:function(val){
@@ -98,6 +90,7 @@ import http from '~/plugins/http.js';
 			getData:function(){
 				let params = this.params;
 				let selectedObjs = []
+				let _this = this;
 				http.get('getplanmap', params, r => {
 					let response = r.data;
 					let floors = [];
@@ -145,6 +138,9 @@ import http from '~/plugins/http.js';
 						allDataObj["a" + item.floor] = [].concat(allData);
 				
 				}, e => {
+					_this.$Notice.error({
+                        title:e.message
+                    });
 				
 
 				})
@@ -157,7 +153,6 @@ import http from '~/plugins/http.js';
 				this.newfloor=floors[0].value;
 				// this.submitData=allDataObj;
 				this.canvasEles()
-				console.log('getData',this.stationData)
 
 				})
 			},
@@ -189,16 +184,16 @@ import http from '~/plugins/http.js';
 							obj.belongId = Number(item.belongId);
 							obj.id = Number(item.id);
 							obj.canFigureId = item.canFigureId;
+							obj.capacity = item.capacity;
 							obj.type = obj.belongType;
 							obj.price = item.price;
 							obj.checked = false;
 							if (item.status) {
 								obj.status = item.status;
 							}
-							// obj.checked = true;
 							for (let j = 0; j < selectedObjs.length; j++) {
 								let belongType = "STATION";
-								if (selectedObjs[j].belongType == 2) {
+								if (selectedObjs[j].belongType == 2 || selectedObjs[j].belongType == 'SPACE') {
 									belongType = "SPACE";
 								}
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
@@ -216,6 +211,8 @@ import http from '~/plugins/http.js';
 								select.id = Number(item.belongId);
 								select.canFigureId = item.canFigureId;
 								select.type = obj.belongType;
+								select.capacity = item.capacity;
+
 								select.price = item.price;
 
 								startToEnd.push(select)
@@ -224,7 +221,7 @@ import http from '~/plugins/http.js';
 							return obj;
 						})
 						dainitializeConfigs = {
-							stations: arr,
+							stations: arr ||[],
 
 							isMode: 'select',
 							plugin: {
@@ -243,7 +240,6 @@ import http from '~/plugins/http.js';
 					}
 
 				}
-				console.log('渲染',this.stationData)
 
 				this.Map = Map("plan-map-content", dainitializeConfigs);
 				if(startToEnd.length){
@@ -271,7 +267,6 @@ import http from '~/plugins/http.js';
 				this.canvasEles();
 			},
 			dataChange: function(data, allData) {
-				console.log('dataChange')
 				const {
 					selectedObjs,
 					newfloor,
@@ -314,7 +309,6 @@ import http from '~/plugins/http.js';
 					if (item.belongType == "SPACE") {
 						belongType = 2;
 					}
-					console.log('datachange',item)
 					obj1.id = item.belongId;
 					obj1.type = belongType;
 					obj1.seatType = item.type == 'STATION'?'OPEN':item.type;
@@ -322,6 +316,7 @@ import http from '~/plugins/http.js';
 					obj1.whereFloor = item.whereFloor;
 					obj1.name = item.name;
 					obj1.price = item.price;
+					obj1.capacity = item.capacity;
 					return obj1
 
 				})

@@ -1,0 +1,60 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/liuyihao/kr-dev:/Users/liuyihao/kr-dev/bin:/Users/liuyihao/.fzf/bin
+
+Yarn version: 
+  0.21.3
+
+Node version: 
+  8.0.0
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+    "name": "kr-vue",
+    "version": "1.0.0",
+    "description": "kr-vue",
+    "author": "张屈 <joneyphair@qq.com>",
+    "private": true,
+    "scripts": {
+      "dev": "cross-env NODE_ENV=development nodemon  server/index.js",
+      "build": "nuxt build",
+      "start": "cross-env NODE_ENV=production node server/index.js",
+      "template": "node task/loadTemplate.js"
+    },
+    "devDependencies": {  
+        "express": "^4.16.2",
+     "cross-env": "^5.0.1",
+      "axios": "^0.17.1",
+      "babel-eslint": "^7.1.1",
+      "backpack-core": "^0.3.0",
+      "eslint": "^3.13.1",
+      "eslint-config-standard": "^10.2.1",
+      "eslint-plugin-html": "^2.0.3",
+      "eslint-plugin-import": "^2.2.0",
+      "eslint-plugin-node": "^4.2.2",
+      "eslint-plugin-promise": "^3.4.0",
+      "eslint-plugin-standard": "^3.0.1",
+      "extract-text-webpack-plugin": "^3.0.2",
+      "iview": "^2.7.4",
+      "less": "^2.7.3",
+      "less-loader": "^4.0.5",
+      "nodemon": "^1.12.5",
+      "nuxt": "^1.0.0-rc11",
+      "scmp": "^2.0.0",
+      "vue-dateutils": "^1.0.8"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: EEXIST: file already exists, mkdir '/Users/liuyihao/kr-dev/Code/kr-vue/node_modules/@nuxtjs/youch'

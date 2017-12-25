@@ -55,7 +55,12 @@
                 </Col>
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" ></SelectSaler>
+                    <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    </FormItem>
+                </Col>
+                 <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
             </Row>
@@ -116,7 +121,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==renewForm.items.length-1}" v-show="item.show">
+            <Row  v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -142,6 +147,15 @@
                     </Col>  
             </Row>
         </FormItem>
+        <Row style="margin-bottom:10px">
+                <Col sapn="24">
+                    <div class="total-money" v-if="renewForm.items.length">
+                        <span>优惠金额总计</span>
+                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmounts}}</span>
+                    </div>
+                </Col>
+                </Row>
         </DetailStyle>
               <div style="padding-left:24px">
             <Row>
@@ -149,6 +163,11 @@
                     <FormItem label="服务费总额" style="width:252px">
                         <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
+                 </Col>
+                 <Col class="col">
+                    <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
+                    </FormItem> 
                  </Col>
             </Row>
             <Row>
@@ -161,10 +180,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
+                         <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
             </Row>
             </div>
@@ -187,8 +207,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
+     <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation"></stationList>
+        @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -209,8 +230,18 @@ import utils from '~/plugins/utils';
 
 
 
+
     export default {
         data() {
+             const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                    callback(new Error('首付款日期不得晚于起始日期'));
+                }else{
+                    callback()
+                }
+            };
            return{
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
@@ -222,7 +253,8 @@ import utils from '~/plugins/utils';
                     endDate:'',
                     saler:'',
                     rentAmount:'',
-                    items:[]
+                    items:[],
+                    signDate:new Date()
                },
                disabled:false,//提交按钮是否禁止
                discountError:{
@@ -243,7 +275,13 @@ import utils from '~/plugins/utils';
                     time: [
                         { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
                     ],
+                    firstPayTime: [
+                        { required: true, trigger: 'change' ,validator: validateFirst},
+                    ],
                     endDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    ],
+                    signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
@@ -253,6 +291,7 @@ import utils from '~/plugins/utils';
                depositAmount:'',
                installmentType:'',
                maxDiscount:'',
+               errorAmount:false,
                columns: [
                     {
                         type: 'selection',
@@ -297,7 +336,12 @@ import utils from '~/plugins/utils';
                 selectAll:false,//工位全选
                 youhui:[],
                 errorPayType:false,
-                getStationFn:''
+                getStationFn:'',
+                ssoId:'',
+                ssoName:'',
+                salerName:'请选择',
+                saleAmount:0,
+                saleAmounts:0,
 
            }
         },
@@ -322,6 +366,9 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
                 }
+                if(this.renewForm.customerId && this.renewForm.communityId){
+                    this.getSignUser()
+                }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
                 }
@@ -331,6 +378,26 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
+            getSignUser(){
+                let params = {
+                    communityId:this.renewForm.communityId,
+                    customerId:this.renewForm.customerId
+                }
+                let _this = this;
+                 this.$http.get('get-community-floor', params, r => {
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
+                    if(!_this.renewForm.salerId){
+                        _this.renewForm.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
+
+                    }
+
+                }, e => {
+
+                        console.log('error',e)
+                })
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -338,9 +405,10 @@ import utils from '~/plugins/utils';
                 });
             },
             renewFormSubmit(){
-                this.config()
+                this.config();
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
                  saleList = saleList.map(item=>{
@@ -351,18 +419,18 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.signDate = signDate;
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
 
                 renewForm.startDate = start;
                 renewForm.endDate =end;
-                renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
                     window.location.href='/orderCenter/orderManage';
@@ -382,12 +450,32 @@ import utils from '~/plugins/utils';
                 let message = '请填写完整表单';
                 this.config()
                 let _this = this;
-                this.disabled = true;
+                
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
+                if(!this.depositAmount){
+                    this.errorAmount = true
+                }
+                
+                
+                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择续租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
+                        if(this.errorAmount || this.errorPayType){
+                            this.$Notice.error({
+                                title:'请填写完整表单'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
                         this.renewFormSubmit()
                         this.$Message.success('Success!');
                     } else {
@@ -466,9 +554,15 @@ import utils from '~/plugins/utils';
 
             },
             changeTime:function(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+
+                }
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
-                this.clearStation()
+                
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
@@ -502,6 +596,7 @@ import utils from '~/plugins/utils';
             },
             selectDeposit:function(value){
                 this.depositAmount = value;
+                this.errorAmount = false;
 
             },
             selectPayType:function(value){
@@ -572,8 +667,7 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                console.log('deleteStation==============',stationVos)
-                // this.selecedStation = stationVos;
+                this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
 
@@ -755,6 +849,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })
@@ -822,6 +917,10 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
+                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    _this.saleAmount = Math.round(money*100)/100;
+                    _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
+
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
@@ -832,10 +931,7 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                 })
 
-            },
-
-                    
-               
+            },       
         }
     }
 </script>

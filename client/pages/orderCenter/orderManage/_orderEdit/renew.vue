@@ -58,6 +58,11 @@
                     <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col  class="col">
+                    <FormItem label="签署日期" style="width:252px" prop="signDate">
+                    <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="金额信息">
@@ -105,9 +110,6 @@
                         <span>折扣</span>
                         
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -116,7 +118,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row v-bind:class="{lastRow:index==renewForm.items.length-1}" v-show="item.show">
+            <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -132,7 +134,6 @@
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -142,6 +143,15 @@
                     </Col>  
             </Row>
         </FormItem>
+        <Row style="margin-bottom:10px">
+                <Col sapn="24">
+                    <div class="total-money" v-if="renewForm.items.length">
+                        <span>优惠金额总计</span>
+                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmounts}}</span>
+                    </div>
+                </Col>
+                </Row>
         </DetailStyle>
               <div style="padding-left:24px">
             <Row>
@@ -149,6 +159,11 @@
                     <FormItem label="服务费总额" style="width:252px">
                         <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
                     </FormItem>
+                 </Col>
+                 <Col class="col">
+                    <FormItem label="首付款日期" style="width:252px">
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
+                    </FormItem> 
                  </Col>
             </Row>
             <Row>
@@ -161,7 +176,7 @@
 
                  </Col>
                  <Col class="col">
-                    <span style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
@@ -187,8 +202,9 @@
         @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
+        <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
-        @on-station-change="onStationChange" v-if="openStation"></stationList>
+        @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
     </Modal>
     </div>
 </template>
@@ -209,8 +225,18 @@ import utils from '~/plugins/utils';
 
 
 
+
     export default {
         data() {
+            const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                    callback(new Error('首付款日期不得晚于起始日期'));
+                }else{
+                    callback()
+                }
+            };
            return{
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
@@ -227,6 +253,8 @@ import utils from '~/plugins/utils';
                     rentAmount:'',
                     items:[]
                },
+               saleAmount:0,
+               saleAmounts:0,
                disabled:false,//提交按钮是否禁止
                discountError:{
                 error:false,
@@ -234,21 +262,27 @@ import utils from '~/plugins/utils';
                },
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
-                    // communityId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // customerId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // salerId:[
-                    //     { required: true, message: '此项不可为空', trigger: 'change' }
-                    // ],
-                    // time: [
-                    //     { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
-                    // ],
-                    // endDate: [
-                    //     { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
-                    // ],
+                    communityId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    salerId:[
+                        { required: true, message: '此项不可为空', trigger: 'change' }
+                    ],
+                    time: [
+                        { required: true,type: 'date', message: '此项不可为空!', trigger: 'change' }
+                    ],
+                    firstPayTime: [
+                        { required: true, trigger: 'change' ,validator: validateFirst},
+                    ],
+                    endDate: [
+                        { required: true,message: '此项不可为空'}
+                    ],
+                    signDate: [
+                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                    ],
                },
                stationListData:[],
                selecedStation:[],
@@ -302,7 +336,8 @@ import utils from '~/plugins/utils';
                 errorPayType:false,
                 getStationFn:'',
                 stationAmount:'',
-                orderSeatId:''
+                orderSeatId:'',
+                corporationName:'',
 
            }
         },
@@ -341,32 +376,54 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let {params}=this.$route;
                 let from={
-                    // id:4095
                     id:params.orderEdit
                 };
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
+                    let money = 0;
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        money += item.amount;
                         obj.name = item.seatName;
+                        obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
-                    _this.renewForm.customerId = data.customerId;
+                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.renewForm.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
-                    _this.renewForm.communityId = data.communityId;
+                    _this.renewForm.communityId = JSON.stringify(data.communityId);
                      _this.salerName = data.salerName;
-                    _this.renewForm.salerId = data.salerId;
+                    _this.renewForm.salerId = JSON.stringify(data.salerId);
                     _this.communityName = data.communityName;
-                    _this.renewForm.endDate = data.endDate;
+                    _this.renewForm.endDate = new Date(data.endDate);
+                    _this.renewForm.signDate = new Date(data.signDate);
+
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
-                    _this.depositAmount = '3';
+                    _this.depositAmount = data.deposit;
+                    _this.renewForm.firstPayTime = data.firstPayTime;
                     _this.getStationFn = +new Date();
-                    _this.renewForm.stationAmount = data.rentAmount;
-                    _this.stationAmount = utils.smalltoBIG(data.rentAmount)
-                    _this.getSaleTactics({communityId:data.customerId})
+                    _this.renewForm.stationAmount = money;
+                    _this.stationAmount = utils.smalltoBIG(money)
+                    
+                    setTimeout(function(){
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+                        _this.renewForm.items = data.contractTactics;
+                    },200)
                     }, e => {
                         _this.$Message.info(e);
                 })
@@ -381,6 +438,7 @@ import utils from '~/plugins/utils';
                 this.config();
                 let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
@@ -390,20 +448,20 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                 renewForm.orderSeatId = params.orderEdit;
+                 renewForm.id = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
-                renewForm.depositAmount = this.depositAmount;
+                renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
+                renewForm.signDate = signDate;
                 renewForm.startDate = start;
+                renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
-                renewForm.corporationId = 11;//临时加的-无用但包错
                 let _this = this;
-                console.log('======================')
                  this.$http.post('save-renew', renewForm, r => {
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
@@ -428,8 +486,14 @@ import utils from '~/plugins/utils';
                 }
                 this.$refs[name].validate((valid) => {
                     if (valid) {
+                        if(!this.selecedStation.length){
+                            this.$Notice.error({
+                                title:'请选择续租工位'
+                            });
+                            _this.disabled = false;
+                            return;
+                        }
                         this.renewFormSubmit()
-                        this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
 
@@ -506,9 +570,15 @@ import utils from '~/plugins/utils';
 
             },
             changeTime:function(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+                }
+                
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
-                this.clearStation()
+                
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
@@ -795,6 +865,7 @@ import utils from '~/plugins/utils';
                     _this.maxDiscount = maxDiscount;
 
                 }, e => {
+                    _this.youhui = []
 
                     console.log('error',e)
                 })

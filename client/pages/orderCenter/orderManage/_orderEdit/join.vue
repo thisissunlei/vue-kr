@@ -987,7 +987,7 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    obj.originalPrice = iobj.originalPrice  || tem.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));

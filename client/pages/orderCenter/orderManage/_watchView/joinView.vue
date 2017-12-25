@@ -60,11 +60,11 @@
          <DetailStyle info="金额信息">
 			<Table :columns="service" :data="serviceData"></Table>
             <LabelText label="服务费总计：" style='font-weight:bold;'>
-				{{serviceAll}}  {{capitalService}}
+				{{basicInfo.seatRentAmount}}  {{capitalService}}
 			</LabelText>
             <Table :columns="treatment" :data="treatmentData"></Table>
             <LabelText label="优惠总计：" style='font-weight:bold;'>
-				{{treatAll}}  {{capitalTreatment}}
+				{{basicInfo.tactiscAmount}}  {{capitalTreatment}}
 			</LabelText>
             <div>
                 <LabelText label="服务费总额：" style='color:red;'>
@@ -103,8 +103,6 @@ export default {
 			basicInfo:{},
 			capitalService:'',
 			capitalTreatment:'',
-			serviceAll:0,
-			treatAll:0,
 			ctime:'',
 			startDate:'',
 			endDate:'',
@@ -211,14 +209,8 @@ export default {
 				   _this.startDate=r.data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate)):'';
 				   _this.endDate=r.data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate)):'';
 				   _this.payDate=r.data.firstPayTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime)):'';
-				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
-					    _this.serviceAll=_this.serviceAll+item.amount;
-				   })
-				   r.data.contractTactics&&r.data.contractTactics.map((item,index)=>{
-					    _this.treatAll=_this.treatAll+item.amount;
-				   })
-				   _this.capitalTreatment=_this.treatAll?utils.smalltoBIG(_this.treatAll):'';
-				   _this.capitalService=_this.serviceAll?utils.smalltoBIG(_this.serviceAll):'';
+				   _this.capitalTreatment=r.data.tactiscAmount?utils.smalltoBIG(r.data.tactiscAmount):'';
+				   _this.capitalService=r.data.seatRentAmount?utils.smalltoBIG(r.data.seatRentAmount):'';
 				   _this.serviceData=r.data.orderSeatDetailVo||[];
 				   _this.treatmentData=r.data.contractTactics||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];

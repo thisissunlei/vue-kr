@@ -1,7 +1,7 @@
 //公共的api
 module.exports = {
     'post-list-upload-url': {
-        url: '/krspace-erp-web/wf/request-attachment/add',
+        url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
     }, 
     //入驻订单列表

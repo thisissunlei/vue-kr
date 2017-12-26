@@ -1,5 +1,13 @@
 <style lang="less">
 
+  body{
+        padding-left:180px;
+        min-height:100%;
+        #__nuxt{
+            height:100%;
+        }
+    }
+    
    
 </style>
 <template>

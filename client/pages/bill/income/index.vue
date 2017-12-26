@@ -280,9 +280,12 @@ import CommonFuc from '~/components/CommonFuc';
                 this.getTableData(this.tabParams)
             },
             lowerSubmit(){
-                this.tabParams.page=1;
                 this.page=1;
-                this.tabParams.customerName=this.customerName;
+                this.tabParams={
+                    customerName:this.customerName,
+                    page:1,
+                    pageSize:15
+                }
                 this.getTableData(this.tabParams);
             },
             changePage(page){

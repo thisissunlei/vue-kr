@@ -5,9 +5,6 @@ var axios = require('axios')
 var root = '/'
 
 function getUrl(path) {
-
-    let server = Envs[env] || '';
-
     var url = APIS[path].url;
 
     if(!url){

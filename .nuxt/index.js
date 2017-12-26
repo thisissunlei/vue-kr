@@ -36,7 +36,7 @@ Vue.use(Meta, {
 
 const defaultTransition = {"name":"page","mode":"out-in","beforeEnter":function(el) {
       console.log('Before enter...');
-    },"appear":true,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
+    },"appear":false,"appearClass":"appear","appearActiveClass":"appear-active","appearToClass":"appear-to"}
 
 async function createApp (ssrContext) {
   const router = createRouter()

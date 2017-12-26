@@ -736,7 +736,7 @@
                              },
                              {
                                 primaryText: "企业管理员设置",
-                                router: 'member/settingManager',
+                                router: 'member/setting-manager',
                                 type:'vue',
                                 menuCode: 'fina_manager_setting_page'
                                

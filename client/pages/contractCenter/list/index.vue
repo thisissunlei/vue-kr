@@ -74,6 +74,7 @@
         </div>
         <Table 
             border 
+            :loading="loadingStatus"
             ref="selection" 
             :columns="columns" 
             :data="detail" 

@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border></Table>
+            <Table :loading="loadingStatus" :columns="joinOrder" :data="joinData" border></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">

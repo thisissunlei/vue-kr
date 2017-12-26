@@ -24,8 +24,8 @@
                    </div>
             </div>
 
-            <Table :loading="loadingStatus" :columns="joinOrder" :data="joinData" border></Table>
-            <div style="margin: 10px;overflow: hidden">
+            <Table :columns="joinOrder" :data="joinData" border style="margin:20px"></Table>
+            <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>

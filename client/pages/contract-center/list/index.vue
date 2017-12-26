@@ -74,12 +74,12 @@
         </div>
         <Table 
             border 
-            :loading="loadingStatus"
             ref="selection" 
             :columns="columns" 
             :data="detail" 
+            style="margin:20px"
         ></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
                 <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>

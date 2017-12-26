@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   srcDir: 'client/',
-  cache: true,
+  cache:{ max: 20, maxAge: 600000 },
   transition: {
     name: 'page',
     mode: 'out-in',

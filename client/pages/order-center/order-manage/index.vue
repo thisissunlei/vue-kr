@@ -1,6 +1,6 @@
 <template>
     <div class='m-bill-wrap'>
-        <Tabs active-key="key1" @on-click='tabsClick'>
+        <Tabs active-key="key1" @on-click='tabsClick' :animated="false">
             <Tab-pane label="入驻订单" key="key1">   
                 <JoinList v-if='joinKey'></JoinList>
             </Tab-pane>

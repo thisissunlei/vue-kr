@@ -149,7 +149,7 @@
                 </div>
         </Modal>
 
-        <Loading :loading='loadingStatus'/>
+        <!-- <Loading :loading='loadingStatus'/> -->
         
     </div>
   
@@ -478,8 +478,8 @@
                 utils.clearForm(this.upperData);
             },
             openView(params){
-
-                location.href=`./${params.row.id}/viewCenter?contractType=&requestId=${params.row.requestId}`;
+                window.open(`./${params.row.id}/viewCenter?contractType=&requestId=${params.row.requestId}`,'_blank')  
+                // location.href=;
             },
             //下载
             downLoad(params){

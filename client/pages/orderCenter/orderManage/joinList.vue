@@ -67,7 +67,7 @@
                 <ApplyContract></ApplyContract>
             </Modal>
 
-            <Loading :loading='loadingStatus'/>
+            <!-- <Loading :loading='loadingStatus'/> -->
     </div>
 </template>
 

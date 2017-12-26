@@ -108,7 +108,7 @@ import HighSearch from './highSearch';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import http from '~/plugins/utils';
 export default {
         name: 'Meeting',
         components:{
@@ -264,7 +264,7 @@ export default {
         },
         methods:{
             showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                http.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
             openView(params){
@@ -347,7 +347,7 @@ export default {
                     page:1,
                     pageSize:15
                 }
-                
+                http.addParams(this.params);
                 this.getTableData(this.params);
             },
 

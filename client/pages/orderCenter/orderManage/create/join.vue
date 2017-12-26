@@ -377,8 +377,8 @@ import utils from '~/plugins/utils';
             SelectSaler,
             planMap,
         },
-        created(){
-            // this.openStation = false
+        mounted(){
+            GLOBALSIDESWITCH("false");
         },
         watch:{
            getFloor(){

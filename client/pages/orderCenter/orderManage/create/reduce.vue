@@ -203,8 +203,8 @@ import utils from '~/plugins/utils';
             SelectSaler,
             reduceStation,
         },
-        created:function(){
-            
+        mounted(){
+            GLOBALSIDESWITCH("false");
         },
         watch:{
             getStationFn:function(){

@@ -360,7 +360,8 @@ import utils from '~/plugins/utils';
             stationList,
             planMap
         },
-        created(){
+        mounted(){
+            GLOBALSIDESWITCH("false");
         },
         watch:{
             getStationFn:function(){

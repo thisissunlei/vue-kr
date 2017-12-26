@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border></Table>
+            <Table :loading="loadingStatus" :columns="joinOrder" :data="joinData" border></Table>
             <div style="margin: 10px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
@@ -67,7 +67,6 @@
                 <ApplyContract></ApplyContract>
             </Modal>
 
-            <Loading :loading='loadingStatus'/>
     </div>
 </template>
 
@@ -80,7 +79,6 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    import Loading from '~/components/Loading';
     
 
     export default {
@@ -90,8 +88,7 @@
             Nullify,
             Message,
             Buttons,
-            ApplyContract,
-            Loading
+            ApplyContract
         },
         data () {
             

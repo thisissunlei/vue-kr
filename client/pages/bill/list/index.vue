@@ -504,22 +504,24 @@ import CommonFuc from '~/components/CommonFuc';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                this.getTableData(this.tabParams)
+                this.getTableData(this.tabParams);
+
             },
             onChangeOpen(data){
                 this.openMessage=data;
             },
             lowerSubmit(){
                 this.page=1;
-                this.tabParams.page=1;
-                this.tabParams.customerName=this.customerName;
+                this.tabParams={
+                    page:1,
+                    pageSize:15,
+                    customerName:this.customerName
+                }
                 this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;
                 this.page=page;
-                
-
                 this.getTableData(this.tabParams);
             }
             

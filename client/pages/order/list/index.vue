@@ -315,7 +315,6 @@ export default {
                  console.log('导出')
             },
             getTableData(params){
-
                 this.$http.get('order-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;

@@ -91,7 +91,7 @@
                              '<div class="header-nav" id="j_header">${header}</div>' +
  
                                  '<div class = "j_header_other">' +
-                                     '<div id = "j_msg_btn"></div>' +
+                                    // '<div id = "j_msg_btn"></div>' +
                                      '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +

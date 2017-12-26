@@ -1230,7 +1230,7 @@
                     menuItems: [
                         {
                             primaryText: "订单列表",
-                            router: 'orderCenter/orderManage',
+                            router: 'order-center/order-manage',
                             type:'vue',
                             menuCode: 'order_seat_list',
                         },

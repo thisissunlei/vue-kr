@@ -1267,7 +1267,6 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'pay_created_bill_page'
-                            // menuCode: 'iot_door_open_log',
                         },
                         {
                             primaryText: "回款管理",

@@ -48,7 +48,8 @@
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page   
+                <Page 
+                    :current="page" 
                     :total="totalCount" 
                     :page-size="pageSize"
                     show-total 
@@ -120,6 +121,7 @@ import CommonFuc from '~/components/CommonFuc';
                 warn:'',
                 MessageType:'',
                 pageSize:15,
+                page:1,
                 tabParams:{
                     page:1,
                     pageSize:15
@@ -273,14 +275,19 @@ import CommonFuc from '~/components/CommonFuc';
             },
             searchSubmit(){
                 this.tabParams=this.searchData;
+                this.tabParams.page=1;
+                this.page=1;
                 this.getTableData(this.tabParams)
             },
             lowerSubmit(){
+                this.tabParams.page=1;
+                this.page=1;
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;
+                this.page=page;
                 this.getTableData(this.tabParams);
             }
 

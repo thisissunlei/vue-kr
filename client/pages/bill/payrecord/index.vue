@@ -43,6 +43,7 @@
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
+                    :current="page" 
                     :total="totalCount" 
                     :page-size="pageSize"
                     @on-change="changePage" 
@@ -68,6 +69,7 @@ export default {
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
+                page:1,
                 params:{
                     page:1,
                     pageSize:15
@@ -171,10 +173,13 @@ export default {
             },
             lowerSubmit(){
                 this.params.tradeNo=this.tradeNo;
+                this.page=1;
+                this.params.page=1;
                 this.getTableData(this.params);
             },
             changePage(page){
                this.params.page=page;
+               this.page=page;
                 this.getTableData(this.params);
             },
             

@@ -377,9 +377,6 @@ import utils from '~/plugins/utils';
             SelectSaler,
             planMap,
         },
-        mounted(){
-            GLOBALSIDESWITCH("false");
-        },
         watch:{
            getFloor(){
             let _this = this;
@@ -408,9 +405,6 @@ import utils from '~/plugins/utils';
                 })
             }
            },
-           changeSale(){
-            // this.dealSaleInfo()
-           }
         },
         methods: {
             config:function(){

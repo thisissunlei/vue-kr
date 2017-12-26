@@ -304,6 +304,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
+                          fixed: 'right',
                       
                         render:(h,params)=>{
                             let arr = params.row.file||[];
@@ -480,7 +481,6 @@
             },
             openView(params){
                 window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
-                // location.href=;
             },
             //下载
             downLoad(params){

@@ -1,6 +1,6 @@
-.test-enter-active, .test-leave-active {
+.page-enter-active, .page-leave-active {
   transition: opacity .5s;
 }
-.test-enter, .test-leave-active {
+.page-enter, .page-leave-to {
   opacity: 0;
 }

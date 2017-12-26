@@ -254,10 +254,10 @@
                 utils.clearForm(this.upperData);
             },
             showJoin(){
-                window.open('/orderCenter/orderManage/create/join','_blank')
+                window.open('/order-center/order-manage/create/join','_blank')
             },
             showRenew(){
-                window.open('/orderCenter/orderManage/create/renew','_blank')
+                window.open('/order-center/order-manage/create/renew','_blank')
             },
             showApply(params){
                 this.id=params.row.id;
@@ -270,7 +270,7 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/orderCenter/orderManage/${params.row.id}/${viewName}`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,'_blank');
             },
             showNullify(params){
                 this.id=params.row.id;
@@ -292,7 +292,7 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
                 let params={

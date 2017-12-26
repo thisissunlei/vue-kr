@@ -247,17 +247,17 @@
                 this.openNullify=true;
             },
             showReduce(){
-                window.open('/orderCenter/orderManage/create/reduce','_blank')
+                window.open('/order-center/order-manage/create/reduce','_blank')
             },
             showEdit(params){
-                window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/reduce`,'_blank')
             },
             showApply(params){
                 this.id=params.row.id;
                 this.openApply=true;
             },
             showView(params){
-                window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/reduceView`,'_blank');
             },
             nullifySubmit (){
                 var _this=this;

@@ -302,11 +302,11 @@
                     id:this.id
                 };
                  this.openMessage=true;
-                 this.$http.post('join-nullify', params).then( r => {
+                 this.$http.post('join-nullify', params,r => {
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn='作废成功';
                     this.getListData(this.params);
-                }).catch( e => {
+                }, e => {
                     this.MessageType="error";
                     this.warn=e.message;
                 })

@@ -786,7 +786,7 @@ import utils from '~/plugins/utils';
                 let station = val.map(item=>{
                     let obj = item;
                     obj.originalPrice = item.price;
-                    obj.seatId = item.id || item.seatId;
+                    obj.seatId = item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));

@@ -22,7 +22,7 @@
 <template>
 	<div class="u-wrap">
 		<div class="u-text">
-			应结账金额为<span class="u-txt-red"> ￥{{detail.amount}}	</span>，您确定要结账吗？
+			应结账金额为<span class="u-txt-red"> ￥{{detail.payableAmount}}	</span>，您确定要结账吗？
 			<p>（账户余额为 ¥{{amount}}）</p>
 		</div>
 	</div>

@@ -43,7 +43,6 @@
      function GlobalRouter() {
          this.routes = {};
          this.currentUrl = '';
-         
      }
      //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){
@@ -81,6 +80,7 @@
         };
          this.isInit = false;
          this.html = '<div class="app-header">'+
+
                          '<div class="c-header"> ' +
  
                              '<div class="brand"></div> ' +
@@ -148,7 +148,7 @@
                     if (child.type && child.type == "vue") {
                         href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
-                        href = "#/" + child.router;
+                        href =location.protocol+"//"+ location.hostname +"new/#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
@@ -733,6 +733,13 @@
                                  router: 'member/membermanage/cardmanage',
                                  menuCode: 'mbr_card_base',
                              },
+                             {
+                                primaryText: "企业管理员设置",
+                                router: 'member/setting-manager',
+                                type:'vue',
+                                menuCode: 'fina_manager_setting_page'
+                               
+                            },
                          ]
                      },
                      {
@@ -1273,7 +1280,7 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'pay_created_bill_page'
-                            // menuCode: 'iot_door_open_log',
+                             //menuCode: 'pay_cerated_bill_page',
                         },
                         {
                             primaryText: "回款管理",

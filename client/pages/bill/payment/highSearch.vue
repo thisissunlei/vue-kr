@@ -78,11 +78,11 @@
                     @on-change="endChange"
                ></DatePicker> 
             </FormItem>
-            <FormItem label="回款方式" class="u-input u-right">
+            <FormItem label="支付方式" class="u-input u-right">
                   <Select 
                     v-model="formItem.payWay" 
                     style="width:250px"
-                    placeholder="请选择回款方式" 
+                    placeholder="请选择支付方式" 
                     >
                     <Option 
                         v-for="item in payWay" 

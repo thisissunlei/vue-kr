@@ -418,7 +418,6 @@ import CommonFuc from '~/components/CommonFuc';
             },
             getTableData(params){
                 this.$http.get('get-bill-list', params, r => {
-                    CommonFuc.clearForm(this.tabParams);
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
@@ -502,9 +501,9 @@ import CommonFuc from '~/components/CommonFuc';
             //     })
             // },
             searchSubmit(){
+                this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                this.tabParams=this.searchData;
                 this.getTableData(this.tabParams)
             },
             onChangeOpen(data){
@@ -519,6 +518,8 @@ import CommonFuc from '~/components/CommonFuc';
             changePage(page){
                 this.tabParams.page=page;
                 this.page=page;
+                
+
                 this.getTableData(this.tabParams);
             }
             

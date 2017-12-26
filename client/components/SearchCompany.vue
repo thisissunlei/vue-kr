@@ -7,7 +7,7 @@
 <template>
     <div class="com-select-customers">
          <Select
-            v-model="test.customerId"
+            :v-model="test.customerId"
             filterable
             remote
             :loading="loading1"

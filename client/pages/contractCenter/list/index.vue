@@ -164,14 +164,12 @@
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
-    import Describe from './describe';
     var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
             krUpload,
             HeightSearch,
-            Describe,
             Loading
         },
         head () {
@@ -339,20 +337,21 @@
                                             this.downLoadClick(params)
                                         }
                                     }
-                                }, '下载'), h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.clickDescribe(params)
+                                }, '下载'), 
+                                h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.contractFor(params)
+                                            }
                                         }
-                                    }
-                                }, '其他约定'),
+                                    }, '合同生效'),
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -376,12 +375,15 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.contractFor(params)
+                                                this.clickDescribe(params)
                                             }
                                         }
-                                    }, '合同生效'))
+                                    }, '其他约定'))
                                 }
-                        //   console.log("=======",this.maxWidth);
+                                if(!params.row.isEffect  ){
+
+                                }
+                        
                            return h('div',btnRender);  
                         }
                     }
@@ -456,6 +458,9 @@
                 }, (response) => {
                     that.describeSwitch();
                     that.getListData(this.params);
+                     that.$Notice.success({
+                        title:"提交成功！"
+                    });
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

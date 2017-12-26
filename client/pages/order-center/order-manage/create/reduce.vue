@@ -15,20 +15,21 @@
 
 <template>
     <div class="create-new-order">
-       <sectionTitle label="编辑减租服务订单管理"></sectionTitle>
+       <sectionTitle label="新建减租服务订单管理"></sectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form" style="padding:30px 24px">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customerId">
-                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer" :value="customerName"></selectCustomers>
+                    <selectCustomers name="renewForm.customerId" :onchange="changeCustomer"></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <selectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></selectCommunities>
+                    <selectCommunities test="renewForm" :onchange="changeCommunity"></selectCommunities>
                     </FormItem>
                 </Col>
+                
                 <Col class="col">
                     <FormItem label="减租开始日期" style="width:252px" prop="startDate" >
                         <DatePicker type="date" placeholder="减租开始日期" v-model="renewForm.startDate" style="display:block" @on-change="changeTime"></DatePicker>
@@ -107,7 +108,6 @@ import utils from '~/plugins/utils';
                     saler:'',
                     items:[]
                },
-               corporationName:'',
                disabled:false,//提交按钮是否禁止
                discountError:{
                 error:false,
@@ -131,11 +131,10 @@ import utils from '~/plugins/utils';
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
                     ],
                },
-               stationList:[],
+               stationList:[
+               ],
                selecedStation:[],
                selecedArr:[],
-               customerName:'',
-               communityName:'',
                depositType:'',
                payType:'',
                columns: [
@@ -149,7 +148,7 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
-                       title: '减租期限',
+                        title: '减租期限',
                         key: 'address',
                         render: (h, params) => {
                             return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(this.renewForm.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
@@ -157,6 +156,21 @@ import utils from '~/plugins/utils';
                     },
                 ],
                 stationAmount:'',
+                payList:[
+                    {value:'ONE',label:'月付'},
+                    {value:'TWO',label:'两月付'},
+                    {value:'THREE',label:'季付'},
+                    {value:'SIX',label:'半年付'},
+                    {value:'TWELVE',label:'年付'},
+                    {value:'ALL',label:'全款'},
+                ],
+                depositList:[
+                    {label:'2个月',value:'2个月'},
+                    {label:'3个月',value:'3个月'},
+                    {label:'4个月',value:'4个月'},
+                    {label:'5个月',value:'5个月'},
+                    {label:'6个月',value:'6个月'},
+                ],
                 selectAll:false,//工位全选
                 youhui:[
                     {
@@ -179,7 +193,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '编辑减租服务订单管理'
+                title: '新建减租服务订单管理'
             }
         },
         components: {
@@ -190,7 +204,7 @@ import utils from '~/plugins/utils';
             reduceStation,
         },
         mounted(){
-            this.getDetailData()
+            GLOBALSIDESWITCH("false");
         },
         watch:{
             getStationFn:function(){
@@ -200,43 +214,10 @@ import utils from '~/plugins/utils';
             },
         },
         methods: {
-            getDetailData(){
-                let _this = this;
-                let {params}=this.$route;
-                let from={
-                    id:params.orderEdit
-                };
-                this.$http.get('reduce-bill-detail', from, r => {
-                    let data = r.data;
-                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
-                        let obj = item;
-                        _this.renewForm.endDate = new Date(item.endDate);
-
-                        obj.name = item.seatName;
-                        return obj;
-                    })
-                    _this.renewForm.customerId = JSON.stringify(data.customerId);
-                    _this.customerName = data.customerName;
-                    _this.renewForm.communityId = JSON.stringify(data.communityId);
-                    _this.communityName = data.communityName;
-                    _this.renewForm.startDate = new Date(data.startDate);
-                    _this.selecedStation = data.orderSeatDetailVo;
-                    _this.renewForm.rentAmount = data.rentAmount || 0;
-                    _this.getStationFn = +new Date()
-                    _this.renewForm.stationAmount = data.rentAmount || 0;
-                    _this.getStationFn = +new Date()
-                    _this.stationAmount = utils.smalltoBIG(_this.renewForm.stationAmount)
-                    }, e => {
-                        _this.$Message.info(e);
-                })
-            },
             reduceFormSubmit(){
                 this.config()
-                 let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let renewForm = {} 
-                 renewForm.id = params.orderEdit;
-
                 renewForm.seats=JSON.stringify(this.selecedStation);
                 renewForm.customerId=this.renewForm.customerId;
                 renewForm.communityId=this.renewForm.communityId;
@@ -245,6 +226,7 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =start;
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
+                    _this.$Message.success('Success!');
                     window.location.href='/orderCenter/orderManage';
                 }, e => {
                      _this.$Notice.error({
@@ -391,7 +373,7 @@ import utils from '~/plugins/utils';
             submitStation:function(){
                 this.selecedStation =  this.selecedArr;
                 this.getStationAmount()
-                this.openStation = false
+                this.openStation = false;
             },
             getStationAmount(){
                 this.config()
@@ -468,6 +450,7 @@ import utils from '~/plugins/utils';
                 })
 
             },
+
                     
                
         }

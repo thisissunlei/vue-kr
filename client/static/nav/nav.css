@@ -72,14 +72,19 @@
     .ivu-col{
         transition: width .2s ease-in-out;
     }
-   
+
+
+
+
+
 
 
 
 
 .app-header .c-header {
   position: fixed;
-  z-index: 999;
+
+  z-index: 500;
   left: 0;
   top: 0;
   right: 0;

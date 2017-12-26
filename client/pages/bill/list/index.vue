@@ -58,11 +58,12 @@
           
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList" ></Table>
+        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
+                    :current="page"
                     :total="totalCount"
                     :page-size="pageSize" 
                     show-total 
@@ -164,6 +165,7 @@ import CommonFuc from '~/components/CommonFuc';
                 billIds:[],
                 itemDetail:{},
                 pageSize:15,
+                page:1,
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -210,16 +212,35 @@ import CommonFuc from '~/components/CommonFuc';
                         }
                     },
                     {
-                        title: '账单金额',
-                        key: 'amount',
+                        title: '账单总额',
+                        key: 'totalAmount',
                         align:'center',
                         width:80,
                     },
                     {
-                        title: '结账金额',
-                        key: 'paidAmount',
+                        title: '减免金额',
+                        key: 'freeAmount',
                         align:'center',
                         width:80,
+                    },
+                    {
+                        title: '应付金额',
+                        key: 'payableAmount',
+                        align:'center',
+                        width:80,
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        align:'center',
+                        width:90,
+                        render(h, obj){
+                            if(!obj.row.billingDate){
+                                return '-'
+                            }
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                            return time;
+                        }
                     },
                     {
                         title: '付款截止日期',
@@ -232,7 +253,7 @@ import CommonFuc from '~/components/CommonFuc';
                         }
                     },
                     {
-                        title: '账单状态',
+                        title: '支付状态',
                         key: 'payStatus',
                         align:'center',
                         width:90,
@@ -249,7 +270,7 @@ import CommonFuc from '~/components/CommonFuc';
 										style: {
 											color:'#666666'
 										}       
-                                    }, '已付款');
+                                    }, '已付清');
                                     
                                 }else if(obj.row.payStatus==='PAYMENT'){
                                     return h('span', { 
@@ -397,6 +418,7 @@ import CommonFuc from '~/components/CommonFuc';
             },
             getTableData(params){
                 this.$http.get('get-bill-list', params, r => {
+                    CommonFuc.clearForm(this.tabParams);
                     this.billList=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
@@ -405,12 +427,14 @@ import CommonFuc from '~/components/CommonFuc';
                 })
             },
             onBillPay(){
+                
                 if(this.billIds.length<=0){
                      this.openClose=true; 
                      return;  
                 }
+                let billIds=this.billIds.join(',');
                 let params={
-                    billIds:JSON.stringify(this.billIds)
+                    billIds:this.billIds.join(',')
                 }
                 this.$http.post('batch-pay',params, r => {
                     if(r.code==-1){
@@ -420,8 +444,9 @@ import CommonFuc from '~/components/CommonFuc';
                         return;
                     }
                     this.MessageType="success";
-                    this.warn="结算成功！"
+                    this.warn=`已成功结算${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
+                    this.billIds=""
                     this.getTableData(this.tabParams);
                 }, e => {
                     console.log('error',e)
@@ -477,21 +502,24 @@ import CommonFuc from '~/components/CommonFuc';
             //     })
             // },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.page=1;
+                this.tabParams.page=1;
+                this.tabParams=this.searchData;
+                this.getTableData(this.tabParams)
             },
             onChangeOpen(data){
                 this.openMessage=data;
             },
             lowerSubmit(){
+                this.page=1;
+                this.tabParams.page=1;
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.tabParams.page=page;
+                this.page=page;
+                this.getTableData(this.tabParams);
             }
             
         }

@@ -248,7 +248,7 @@ export default {
                     },
                     
                     {
-                        title: '回款方式',
+                        title: '支付方式',
                         key: 'payWay',
                         align:'center',
                         width:110,
@@ -413,18 +413,16 @@ export default {
                 this.searchData=form;
             },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.params=this.searchData;
+                this.getTableData(this.params)
             },
             lowerSubmit(){
                 this.params.customerName=this.customerName;
                 this.getTableData(this.params);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.params.page=page;
+                this.getTableData(this.params);
             },
             handleUpload (file) {
                 this.file = file;
@@ -447,7 +445,7 @@ export default {
                     }
                     this.openImport=false;
                     this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`
+                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
                    this.getTableData(this.params);
                 }, e => {

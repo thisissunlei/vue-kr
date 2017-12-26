@@ -80,13 +80,15 @@ export default {
                         align:'center',
                     },
                     {
-                        title: '回款日期',
-                        key: 'ctime',
-                        align:'center',
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
-                            return time;
-                        }
+                        title: '付款账户',
+                        key: 'payAccount',
+                        align:'center'
+                        
+                    },
+                    {
+                        title: '收款账户',
+                        key: 'receiveAccount',
+                        align:'center'
                     },
                     {
                         title: '回款金额（元）',
@@ -96,7 +98,7 @@ export default {
                     },
                     
                     {
-                        title: '回款方式',
+                        title: '支付方式',
                         key: 'payWay',
                         align:'center',
                         render(h, obj){
@@ -112,17 +114,6 @@ export default {
                                 return '银行转账';
                             }
                         }
-                    },
-                    {
-                        title: '付款账户',
-                        key: 'payAccount',
-                        align:'center'
-                        
-                    },
-                    {
-                        title: '收款账户',
-                        key: 'receiveAccount',
-                        align:'center'
                     },
                     {
                         title: '支付状态',
@@ -150,6 +141,15 @@ export default {
                             }
                         }
                     },
+                    {
+                        title: '创建时间',
+                        key: 'ctime',
+                        align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            return time;
+                        }
+                    },
                 ]
                 
             }
@@ -174,11 +174,8 @@ export default {
                 this.getTableData(this.params);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+               this.params.page=page;
+                this.getTableData(this.params);
             },
             
 

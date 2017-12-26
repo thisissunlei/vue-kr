@@ -31,7 +31,7 @@
 				{{dealDate}}
 			</LabelText>
 			<LabelText label="操作人员：">
-				{{basicInfo.creater}}
+				{{basicInfo.createrName}}
 			</LabelText>
 			<LabelText label="操作时间：">
 				{{ctime}}
@@ -75,7 +75,7 @@ export default {
 			this.$http.get('get-income-detail', from, r => {
 				let data=r.data;
 				this.basicInfo=data;
-				this.dealDate=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.dealDate));
+				this.dealDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 				if(data.incomeType=='MEETING'){
 					this.incomeType='会议室账单';

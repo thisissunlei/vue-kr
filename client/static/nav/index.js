@@ -80,9 +80,7 @@
             salidNav:[],
         };
          this.isInit = false;
-         this.html = '<link href="/styles/index.css" rel="stylesheet" />' +
-                     '<link href="/styles/icomoon/style.css" rel="stylesheet" />' +
-                     '<div class="app-header">'+
+         this.html = '<div class="app-header">'+
                          '<div class="c-header"> ' +
  
                              '<div class="brand"></div> ' +

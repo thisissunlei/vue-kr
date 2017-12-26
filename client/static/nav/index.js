@@ -1252,7 +1252,7 @@
                     menuItems: [
                         {
                             primaryText: "合同列表",
-                            router: 'contractCenter/list',
+                            router: 'contract-center/list',
                             type:'vue',
                             menuCode: 'iot_door_open_log',
                             //menuCode: 'fina_meeting_order_page'

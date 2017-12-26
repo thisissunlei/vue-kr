@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div>
-			<div @click = "switchList">
+			<div @click = "switchList" style="cursor: pointer;">
 				合同附件
 			</div>
 			<div class = "list-box" v-show = "isOpenList">
@@ -18,7 +18,7 @@
 							:before-upload= "onChange"
 							:on-remove="listMove"
 						>
-							<Button type="ghost" icon="ios-plus-outline">上传附件</Button>
+							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>
 							<!-- <Icon type="ios-plus-outline"></Icon> -->
 							<div v-bind:style="{display:isShowProgress}">
 								<Progress  :percent="progress" :stroke-width="5"></Progress>	
@@ -26,7 +26,7 @@
 							
 						</Upload>
 						<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
-								{{item.fileName}}
+							{{item.fileName}}
 						</div>
 					</div>
 				</div>

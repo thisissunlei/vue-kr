@@ -64,13 +64,15 @@
         ok-text="保存"
         cancel-text="取消"
         width="450"
-        @on-ok="submitStation"
-        @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
         <div v-if="openStation && !stationList.length">无可减租工位</div>
         <reduceStation label="可减租工位" :stationList="stationList" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation && stationList.length"></reduceStation>
+        <div slot="footer">
+            <Button type="primary" @click="submitStation">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
     </Modal>
     </div>
 </template>
@@ -389,6 +391,7 @@ import utils from '~/plugins/utils';
             submitStation:function(){
                 this.selecedStation =  this.selecedArr;
                 this.getStationAmount()
+                this.openStation = false
             },
             getStationAmount(){
                 this.config()
@@ -442,6 +445,7 @@ import utils from '~/plugins/utils';
                     obj.time = +new Date()
                     return obj;
                 })
+                this.openStation = false
             },
             onStationChange:function(val){
                 this.selecedArr = val;

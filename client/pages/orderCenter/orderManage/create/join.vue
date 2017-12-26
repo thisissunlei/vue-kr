@@ -205,11 +205,14 @@
         ok-text="保存"
         cancel-text="取消"
         width="750"
-        @on-ok="submitStation"
-        @on-cancel="cancelStation"
+       
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
+        <div slot="footer">
+            <Button type="primary" @click="submitStation">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
     </Modal>
 
         
@@ -295,7 +298,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -306,7 +309,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 stationList: [
@@ -808,6 +811,8 @@ import utils from '~/plugins/utils';
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
                 this.getStationAmount()
+                this.openStation = false
+                
 
             },
             onResultChange:function(val){//组件互通数据的触发事件
@@ -819,6 +824,7 @@ import utils from '~/plugins/utils';
                     submitData:this.stationList,
                     deleteData:[],
                 };
+                this.openStation = false
 
             },
             
@@ -950,7 +956,7 @@ import utils from '~/plugins/utils';
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            money += item.amount;
+                            money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;

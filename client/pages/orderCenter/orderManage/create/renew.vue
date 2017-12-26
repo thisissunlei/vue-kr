@@ -202,14 +202,15 @@
         ok-text="保存"
         cancel-text="取消"
         width="600"
-
-        @on-ok="submitStation"
-        @on-cancel="cancelStation"
          class-name="vertical-center-modal"
      >
      <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
+        <div slot="footer">
+            <Button type="primary" @click="submitStation">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
     </Modal>
     </div>
 </template>
@@ -304,7 +305,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'price'
+                        key: 'originalPrice'
                     },
                     {
                         title: '租赁期限',
@@ -315,7 +316,7 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'amount'
+                        key: 'originalAmount'
                     }
                 ],
                 payList:[
@@ -341,7 +342,7 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 salerName:'请选择',
                 saleAmount:0,
-                saleAmounts:0,
+                saleAmounts:utils.smalltoBIG(0),
 
            }
         },
@@ -760,18 +761,24 @@ import utils from '~/plugins/utils';
                 this.renewForm.items = items;
             },
             submitStation:function(){
+               
                 let val = this.selecedArr || [];
+                this.openStation = false
                 if(!val.length){
                     return;
                 }
-
+                var date = val[0].endDate;
+                date = new Date(date).getTime();
+               
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].startDate + day;
+                let start = date + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+               
                 this.getStationAmount()
+                
             },
             getStationAmount(){
-
+               
                 let val = this.selecedArr;
                 let _this = this;
                 this.config()
@@ -779,18 +786,21 @@ import utils from '~/plugins/utils';
                 let station = val.map(item=>{
                     let obj = item;
                     obj.originalPrice = item.price;
-                    obj.seatId = item.id || item.seatId;
+                    obj.seatId = item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.startDate;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
+                 console.log("9999999",this.renewForm.startDate)
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
+
                 }
+               
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
@@ -821,9 +831,10 @@ import utils from '~/plugins/utils';
                     obj.time = +new Date()
                     return obj;
                 })
+                this.openStation = false;
             },
             onStationChange:function(val){
-                console.log('onStationChange',val)
+                console.log(val,"mmmmm")
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息

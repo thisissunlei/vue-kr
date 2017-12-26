@@ -13,14 +13,8 @@
          },
          navNum:8
      }
- 
-     /**
-      * 查找被点击的数据
-      */
- 
- 
+    //获取侧边栏里的数据
      function getClickNav(arr,str) {
-         
          for(var i=0;i<arr.length;i++){
              var every = arr[i];
              var href = "";
@@ -28,12 +22,9 @@
                  str = location.hash.split("#/")[1]
                  href = every.router;
              } else {
- 
-                 href = "http://" + location.hostname + "/" + every.router;
+                 href = location.protocol+"//" + location.hostname + "/" + every.router;
              }
-             
              if (href === str){
-                
                  return every;
              }else{
                  if (every.menuItems && every.menuItems.length){
@@ -48,73 +39,47 @@
          }
      }
  
-     /**
-      * =====================路由生成部分======================
-      */
+     //路由
      function GlobalRouter() {
          this.routes = {};
          this.currentUrl = '';
          
      }
+     //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){
          var router = location.href.split('?')[0];
-        
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
          }
+         globalNav.allSwitch()
      }
-     GlobalRouter.prototype.route = function (path, callback) {
-         this.routes[path] = callback || function () { };
-     };
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-             var router = location.href.split('?')[0];
-            var loading = document.getElementById('j_nav-loading');
-            
-            setTimeout(function (params) {
-                // loading.style.opacity = 0;
-                loading.style.display = "none";
-            }, 1000);
-             // console.log(getClickNav([].concat(NavItems), router),"------")
-             var activeData = getClickNav([].concat(NavItems), router);
-            
-             navUtils.activeData = Object.assign({},activeData);
-             var j_sidebar = document.getElementById('j_sidebar');
-             var j_header = document.getElementById('j_header');
-             var j_menu_btn = document.getElementById('j_menu_btn');
-             var docBody = document.body;
-             if (navUtils.closeRoutrs.indexOf(router)!=-1){
-                 navUtils.isHome = true;
-                 globalNav.allSwitch("false")
-             }else{
-                 navUtils.isHome = false;
-                 globalNav.allSwitch( "true")   
-             }
-             j_sidebar.innerHTML = globalNav.getCreateSidebarHtmlStr();
-             j_header.innerHTML = globalNav.getCreateHeaderHtmlStr();
-            
-            
-     
+        var router = location.href.split('?')[0];
+        var activeData = getClickNav([].concat(NavItems), router);
+        if (activeData){
+            navUtils.activeData = Object.assign({}, activeData);
+        }
+        var j_sidebar = document.getElementById('j_sidebar');
+        var j_header = document.getElementById('j_header');
+         globalNav.allSwitch();
+        j_sidebar.innerHTML = globalNav.getCreateSidebarHtmlStr();
+        j_header.innerHTML = globalNav.getCreateHeaderHtmlStr();
      };
+
      GlobalRouter.prototype.init = function () {
-         window.addEventListener('load', this.refresh.bind(this), false);
-        //  window.addEventListener('hashchange', this.refresh.bind(this), false);
+        this.refresh();
      }
-     /**
-      * =======================导航渲染部分=========================
-      */
+    //导航渲染
      var GlobalNav = function () {
- 
-         this.state = {
-             navs: [],
-             user: {
-                 nickname: ''
-             },
-             salidNav:[],
-         };
- 
+        this.state = {
+            navs: [],
+            user: {
+                nickname: ''
+            },
+            salidNav:[],
+        };
          this.isInit = false;
- 
          this.html = '<link href="/styles/index.css" rel="stylesheet" />' +
                      '<link href="/styles/icomoon/style.css" rel="stylesheet" />' +
                      '<div class="app-header">'+
@@ -128,10 +93,7 @@
  
                                  '<div class = "j_header_other">' +
                                      '<div id = "j_msg_btn"></div>' +
-                                     '<div id = "j_account_btn">' +
-                             // '<span></span>'+
-                                     '</div>' +
- 
+                                     '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
  
@@ -145,8 +107,8 @@
                                  '</div>' +
                              '</div> ' +
  
-                                '<div id="j_sidebar" class="sidebar" style = "display:block;"> ${sidebar} </div> ' +
-                                '<div id="j_nav-loading" class="nav-loading">'+
+                                '<div id="j_sidebar" class="sidebar" style = "display:none;"> ${sidebar} </div> ' +
+                                '<div id="j_nav-loading" class="nav-loading" style="display:none;">'+
 
                                     '<div class="item-loader-container">'+
                                        
@@ -162,11 +124,8 @@
                         
                      '</div>';
  
- 
          this.getNavData();
-        
          this.render();
-          
      };
  
  
@@ -183,28 +142,22 @@
          }
          sidebarNavs.menuItems.map(function (item) {
              let iconName = item.iconName ? item.iconName : '';
-            
              html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span>' + item.primaryText + '</div>';
-           
- 
              if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
- 
-                 html += '<ul>';
- 
-                 item.menuItems.map(function (child) {
+                html += '<ul>';
+                item.menuItems.map(function (child) {
                     var href = ""
-                    if (item.type && item.type == "vue") {
-                        href = "http://" + location.hostname + "/" + child.router;
+                    if (child.type && child.type == "vue") {
+                        href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
                         href = "#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
-                 })
+                })
+                html += '</ul>';
+            }
  
-                 html += '</ul>';
-             }
- 
-             html += '</div>';
+            html += '</div>';
  
          });
  
@@ -214,8 +167,6 @@
      
      //用户名
      GlobalNav.prototype.getUserHtmlStr = function () {
-        //  var loading = document.getElementById('j_nav-loading');
-        //  loading.style.display='none';
          return this.state.user.nickname;
      }
      //生成头部导航
@@ -224,14 +175,12 @@
          var html = '<ul class="more-nav-ul">';
          var { navs } = this.state;
          if (!navs.length) {
-             return '';
+            return '';
          }
          var router = ''
          if (navUtils.activeData){
-             router = navUtils.activeData.router;
-            
+            router = navUtils.activeData.router;
          }
- 
          navs.map(function (item,index) {
              var href ="";
             
@@ -240,11 +189,10 @@
                  href = item.menuItems[0].menuItems[0].router;
              }
              if (item.type && item.type == "vue") {
-                 href = "http://" + location.hostname + "/" + href;
+                 href = location.protocol+"//" + location.hostname + "/" + href;
              } else {
-                 href ="http://"+ location.hostname + "/new/#/" + href;
+                 href =location.protocol+"//"+ location.hostname + "/new/#/" + href;
              }
- 
  
              if(index > navUtils.navNum-1){
                  more+='<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
@@ -264,28 +212,23 @@
          }else{
             html += '</ul>';
          }
- 
          return html;
      }
      
  
     
      GlobalNav.prototype.allSwitch = function (isOpen) {
+        
          var j_sidebar = document.getElementById('j_sidebar');
          var j_header = document.getElementById('j_header');
          var j_menu_btn = document.getElementById('j_menu_btn');
+         var router = location.href.split('?')[0];    
          var docBody = document.body;
-         if ((isOpen && isOpen == "false")){
+         if (navUtils.closeRoutrs.indexOf(router) != -1) {
              j_sidebar.style.display = 'none';
              docBody.style.paddingLeft = '0px';
              j_menu_btn.setAttribute('class', 'menu-btn menu-btn-close')
-             return ;
-         }
-         if ((isOpen && isOpen == "true")){
-             j_menu_btn.setAttribute('class', 'menu-btn menu-btn-open')
-             j_sidebar.style.display = 'block';
-             docBody.style.paddingLeft = '180px';
-             return ;
+             return;
          }
          if (j_sidebar.style.display === 'block') {
              j_sidebar.style.display = 'none';
@@ -301,70 +244,52 @@
          
      }   
      GlobalNav.prototype.registerEvent = function () {
- 
- 
          var that = this;
- 
          window.addEventListener('load', function () {
+            var j_sidebar = document.getElementById('j_sidebar');
+            var j_menu_btn = document.getElementById('j_menu_btn');
+            var docBody = document.body;
+            var j_account_btn = document.getElementById('j_account_btn');
+            var j_account_box = document.getElementById('j_account_box');
+            var j_account_list = document.querySelectorAll('.j_account_list');
+            var j_account_detail_mask = document.getElementById('j_account_detail_mask');
+            var j_more_id =  document.getElementById('more-id')
+            j_menu_btn.addEventListener('click', function () {
+                if (!navUtils.isHome){
+                    globalNav.allSwitch()
+                }
+            });
+            j_account_btn.addEventListener('click', function () {
+                if (j_account_box.style.display == 'none') {
+                    j_account_box.style.display = 'block';
+                }
+            })
  
-             var j_sidebar = document.getElementById('j_sidebar');
-             var j_menu_btn = document.getElementById('j_menu_btn');
-             var docBody = document.body;
-             var j_account_btn = document.getElementById('j_account_btn');
-             var j_account_box = document.getElementById('j_account_box');
-             var j_account_list = document.querySelectorAll('.j_account_list');
-             var j_account_detail_mask = document.getElementById('j_account_detail_mask');
-             var j_more_id =  document.getElementById('more-id')
- 
-             j_menu_btn.addEventListener('click', function () {
-                 if (!navUtils.isHome){
-                     globalNav.allSwitch()
-                 }
-                 
-               
-             });
-             j_account_btn.addEventListener('click', function () {
-                 if (j_account_box.style.display == 'none') {
-                     j_account_box.style.display = 'block';
-                 }
-             })
- 
-             j_account_list[0].addEventListener('click', function () {
- 
-                 if (j_account_box.style.display == 'block') {
-                     j_account_box.style.display = 'none';
-                 }
-             })
-             j_account_list[1].addEventListener('click', function () {
- 
- 
- 
- 
-                 var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
-                 xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
- 
-                 xhr.responseType = 'json';
- 
- 
-                 xhr.onreadystatechange = function () {
- 
-                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                         window.location.href = "/new/login.html";
-                         if (j_account_box.style.display == 'block') {
-                             j_account_box.style.display = 'none';
-                         }
-                     }
-                 };
-                 xhr.send();
- 
- 
- 
-             })
-             j_account_detail_mask.addEventListener('click', function () {
-                 if (j_account_box.style.display == 'block') {
-                     j_account_box.style.display = 'none';
-                 }
-             })
+            j_account_list[0].addEventListener('click', function () {
+
+                if (j_account_box.style.display == 'block') {
+                    j_account_box.style.display = 'none';
+                }
+            })
+            j_account_list[1].addEventListener('click', function () {
+                var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
+                xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
+                xhr.responseType = 'json';
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
+                        window.location.href = "/new/login.html";
+                        if (j_account_box.style.display == 'block') {
+                            j_account_box.style.display = 'none';
+                        }
+                    }
+                };
+                xhr.send();
+            })
+            j_account_detail_mask.addEventListener('click', function () {
+                if (j_account_box.style.display == 'block') {
+                    j_account_box.style.display = 'none';
+                }
+            })
              
             /*nav更多*/
             if(j_more_id){
@@ -377,90 +302,81 @@
                     next.style.display='none';
                 },false);
             }
-            
+        });
  
+    }
  
- 
-         });
- 
-     }
- 
-     GlobalNav.prototype.setState = function (state) {
-         this.state = Object.assign({}, this.state, state);
-         this.render();
-     };
- 
- 
-     GlobalNav.prototype.componentDidMount = function () {
-         this.registerEvent();
- 
-         this.header = document.getElementById('j_header');
-         this.sidebar = document.getElementById('j_sidebar');
-         this.username = document.getElementById('j_username');
-     }
+    GlobalNav.prototype.setState = function (state) {
+        this.state = Object.assign({}, this.state, state);
+        this.render();
+    };
+
+    GlobalNav.prototype.componentDidMount = function () {
+        this.registerEvent();
+        this.header = document.getElementById('j_header');
+        this.sidebar = document.getElementById('j_sidebar');
+        this.username = document.getElementById('j_username');
+    }
      //变量替换
-     GlobalNav.prototype.getCreateHtmlStr = function () {
- 
-         var header = this.getCreateHeaderHtmlStr();
-         var sidebar = this.getCreateSidebarHtmlStr();
-         var html = this.html;
- 
-         html = html.replace('${header}', header).replace('${sidebar}', sidebar).replace('${username}', this.state.user.realName);
- 
-         return html;
- 
-     }
- 
-     GlobalNav.prototype.render = function () {
- 
-         if (!this.isInit) {
-             document.write(this.getCreateHtmlStr());
-             this.componentDidMount();
-             this.isInit = true;
-             return;
-         }
-         this.header.innerHTML = this.getCreateHeaderHtmlStr();
-         this.sidebar.innerHTML = this.getCreateSidebarHtmlStr();
-         this.username.innerHTML = this.getUserHtmlStr();
-     };
-     //获取后台权限数据
-     GlobalNav.prototype.getNavData = function () {
-         var that = this;
-         this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
-             menuCode = response.data.menusCode;
-             var user = response.data.userInfo;
-             var navs = [].concat(firstMenus(NavItems));
-             that.setState({ navs, user });
-         })
-     }
+    GlobalNav.prototype.getCreateHtmlStr = function () {
+        var header = this.getCreateHeaderHtmlStr();
+        var sidebar = this.getCreateSidebarHtmlStr();
+        var html = this.html;
+        html = html.replace('${header}', header).replace('${sidebar}', sidebar).replace('${username}', this.state.user.realName);
+        return html;
+    }
+    //html渲染
+    GlobalNav.prototype.render = function () {
+
+        if (!this.isInit) {
+            document.write(this.getCreateHtmlStr());
+            this.componentDidMount();
+            this.isInit = true;
+            return;
+        }
+        this.header.innerHTML = this.getCreateHeaderHtmlStr();
+        this.sidebar.innerHTML = this.getCreateSidebarHtmlStr();
+        this.username.innerHTML = this.getUserHtmlStr();
+    };
+    //获取后台权限数据
+    GlobalNav.prototype.getNavData = function () {
+        var that = this;
+        this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
+            menuCode = response.data.menusCode;
+            var user = response.data.userInfo;
+            var navs = [].concat(firstMenus(NavItems));
+            that.setState({ navs, user });
+        })
+    }
   
      //ajax请求抽离方法
-     GlobalNav.prototype.http = function (type,url,callback) {
-         var that = this;
-         var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
-         xhr.open(type, url, true);
-         xhr.responseType = 'json';
-         xhr.onreadystatechange = function () {
-             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                 if (xhr.response.code<0) {
-                     window.location = '/new/login.html';
-                     return;
-                 }
-                 callback(xhr.response)
-             }
-         };
-         xhr.send();
-     }
- 
-     var Router = new GlobalRouter();
-     Router.init();
+    GlobalNav.prototype.http = function (type,url,callback) {
+        var that = this;
+        var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
+        xhr.open(type, url, true);
+        xhr.responseType = 'json';
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
+                if (xhr.response.code<0) {
+                    window.location = '/new/login.html';
+                    return;
+                }
+                callback(xhr.response)
+            }
+        };
+        xhr.send();
+    }
+
+     
      /**
       * ===================数据部分=======================
       */
-     var globalNav = new GlobalNav();
-     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    var globalNav = new GlobalNav();
      // console.log("GLOBALSIDESWITCH",GLOBALSIDESWITCH)
- 
+    var Router = new GlobalRouter();
+    global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    
+    Router.init();
      //第一级菜单
      function firstMenus(firstData) {
  

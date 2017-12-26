@@ -111,10 +111,12 @@
         
          <Modal
             v-model="openDescribe"
-            title="添加描述"
+            title="其他约定"
             width="660"
         >
-            <Describe v-on:bindData="describeDataChange" detailData="describeData"></Describe>
+            <!-- <Describe v-on:bindData="describeDataChange" :detailData="this.columnDetail"></Describe> -->
+            <Input v-model="otherAgreed" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
+
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
@@ -146,6 +148,8 @@
                     <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
                 </div>
         </Modal>
+
+        <Loading :loading='loadingStatus'/>
         
     </div>
   
@@ -155,18 +159,18 @@
 
    
     import sectionTitle from '~/components/SectionTitle.vue';
+    import Loading from '~/components/Loading';
     import krUpload from '~/components/KrUpload.vue';
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
-    import Describe from './describe';
     var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
             krUpload,
             HeightSearch,
-            Describe
+            Loading
         },
         head () {
             return {
@@ -185,8 +189,9 @@
                 openTakeEffect:false,
                 openDescribe:false,
                 selectAllData:[],
-                loadingStatus: false,
+                loadingStatus: true,
                 file: null,
+                otherAgreed:'',
                 parameter:{},//获取pdf-id的参数
                 upperData:{},//高级查询的数据
                 upperError:false,
@@ -223,13 +228,13 @@
                         title: '合同类型',
                         key: 'contractType',
                         align:'center',
-                        width: 80,
+                        width: 150,
                     },
                     {
                         title: '合同状态',
                         key: 'contractStatusName',
                         align:'center',
-                        width: 80,
+                        width: 150,
                     },
                     {
                         title: '创建人',
@@ -253,10 +258,20 @@
                         align:'center',
                         width: 80,
                     },{
-                        title: '工位数/独立空间',
-                        key: ' stationAndBoard',
+                        title: '其他约定',
+                        key: 'otherAgreed',
                         align:'center',
-                        // width: 80,
+                        width: 100,
+                    },{
+                        title: '附件',
+                        key: 'haveAttachment',
+                        align:'center',
+                        width: 80,
+                    },{//其他约定	
+                        title: '工位数/独立空间',
+                        key: 'stationAndBoard',
+                        align:'center',
+                        width: 150,
                     },
                    
                     {
@@ -278,8 +293,8 @@
                             if(!obj.row.endDate || !obj.row.startDate){
                                 return "-";
                             }
-                            let end=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.endDate));
-                            let start = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.startDate));
+                            let end=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
+                            let start = dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
                             return start+"至"+end;
                         }
                     },
@@ -322,20 +337,21 @@
                                             this.downLoadClick(params)
                                         }
                                     }
-                                }, '下载'), h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.clickDescribe(params)
+                                }, '下载'), 
+                                h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.contractFor(params)
+                                            }
                                         }
-                                    }
-                                }, '合同描述'),
+                                    }, '合同生效'),
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -359,12 +375,15 @@
                                         },
                                         on: {
                                             click: () => {
-                                                this.contractFor(params)
+                                                this.clickDescribe(params)
                                             }
                                         }
-                                    }, '合同生效'))
+                                    }, '其他约定'))
                                 }
-                        //   console.log("=======",this.maxWidth);
+                                if(!params.row.isEffect  ){
+
+                                }
+                        
                            return h('div',btnRender);  
                         }
                     }
@@ -389,7 +408,6 @@
                     if(width>1870){
                         this.maxWidth = width - 1700;
                     }else {
-                        console.log("9999999")
                         this.maxWidth = 170;
                     }
                 }
@@ -421,6 +439,7 @@
             },
             //其他约定按钮点击
             clickDescribe(detail){
+                this.otherAgreed = detail.row.otherAgreed;
                 this.columnDetail = detail.row;
                 this.describeSwitch();
                 this.getOtherConvention({requestId:detail.row.requestId});
@@ -434,9 +453,14 @@
                
                 this.$http.post("post-contract-other-convention", {
                     requestId:colDetail.requestId,
-                    otherAgreed:describeData.otherAgreed||''
+                    otherAgreed:this.otherAgreed||''
+                    
                 }, (response) => {
                     that.describeSwitch();
+                    that.getListData(this.params);
+                     that.$Notice.success({
+                        title:"提交成功！"
+                    });
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -491,7 +515,7 @@
             outSubmit (){
                 var _this=this;
                 var params = Object.assign({},this.params);
-                params.ids = [].concat(this.selectAllData);
+                
                 utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
             getListData(params){
@@ -501,7 +525,7 @@
                     _this.totalCount=r.data.totalCount;
                     _this.detail=r.data.items;
                     _this.openSearch=false;
-                   
+                   _this.loadingStatus=false;
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
@@ -542,6 +566,7 @@
                 if(this.upperError){
                     return ;
                 }
+                console.log("-----",this.upperData)
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
                 this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';

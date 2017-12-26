@@ -1,6 +1,5 @@
 <style lang="less">
 
-   
 </style>
 <template>
     <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">

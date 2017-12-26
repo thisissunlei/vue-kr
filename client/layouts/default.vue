@@ -1,5 +1,4 @@
 <style lang="less">
-
   body{
         padding-left:180px;
         min-height:100%;
@@ -8,8 +7,8 @@
         }
     }
     
-   
 </style>
+
 <template>
     <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
         <Row type="flex">

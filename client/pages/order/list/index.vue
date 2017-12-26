@@ -335,6 +335,7 @@ export default {
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
+                http.addParams(this.params);
                 this.getTableData(this.params)
             },
             onChangeOpen(data){

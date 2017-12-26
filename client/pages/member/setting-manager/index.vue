@@ -53,11 +53,11 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-import CommonFuc from '~/components/CommonFuc';
 import HighSearch from './highSearch';
 import Drawer from '~/components/Drawer';
 import Setting from './setting';
 import dateUtils from 'vue-dateutils';
+import http from '~/plugins/utils';
 export default {
     components:{
         SectionTitle,
@@ -153,14 +153,18 @@ export default {
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
-                CommonFuc.clearForm(this.searchData);
-                this.Params.page=1;
+                http.clearForm(this.searchData);
                 this.page=1;
-                this.Params.csrName=this.csrName;
+                this.Params={
+                    page:1,
+                    pageSize:1,
+                    csrName:this.csrName
+                }
+                http.addParams(this.Params);
                 this.getTableData(this.Params);
         },
         showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                http.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
         },
         getSearchData(form){
@@ -171,6 +175,7 @@ export default {
                 this.page=1;
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
+                http.addParams(this.Params);
                 this.getTableData(this.Params)
         },
         openSetting(params){

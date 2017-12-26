@@ -61,18 +61,15 @@
     //高级搜索时url上带参数
     function addParams(params){
         let path=window.location.href;
+        let url=path.split('?')[0]
         var where = [];
-        let url;
 		for(var field in params){
 			if(params.hasOwnProperty(field)){
 				where.push(`${field}=${params[field]}`);
 			}
         }
-        if(path.indexOf('?')==-1){
-           url=path+"?"+where.join('&');
-        }else{
-            url=path+where.join('&');
-        }
+        
+        url=url+"?"+where.join('&');
         location.href=url;
     }
    

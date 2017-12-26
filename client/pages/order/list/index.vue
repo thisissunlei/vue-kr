@@ -342,8 +342,12 @@ export default {
             },
             lowerSubmit(){
                 this.page=1;
-                this.params.page=1;
-                this.params.customerName=this.customerName;
+                this.params={
+                    customerName:this.customerName,
+                    page:1,
+                    pageSize:15
+                }
+                
                 this.getTableData(this.params);
             },
 

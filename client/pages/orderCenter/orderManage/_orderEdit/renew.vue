@@ -806,9 +806,11 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
+                var date = val[0].endDate;
+                date = new Date(date).getTime();
 
                 let day = 1000 * 60* 60*24;
-                let start =  val[0].startDate + day;
+                let start =  date + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
                 

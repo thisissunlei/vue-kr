@@ -3,6 +3,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 module.exports = {
+  mode:'spa',
   srcDir: 'client/',
   cache:{ max: 20, maxAge: 600000 },
   transition: {

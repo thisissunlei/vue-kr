@@ -382,6 +382,7 @@ import utils from '~/plugins/utils';
         },
         mounted(){
             this.getDetailData();
+            GLOBALSIDESWITCH("false");
         },
         watch:{
            getFloor(){

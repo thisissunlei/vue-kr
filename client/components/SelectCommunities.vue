@@ -15,7 +15,7 @@
 <template>
     <div class="com-select-community">
          <Select
-            :v-model="test.communityId"
+            v-model="test.communityId"
 
             filterable
             remote

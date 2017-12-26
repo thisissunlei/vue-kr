@@ -1,7 +1,7 @@
 <template>
     <div class='m-bill-list'>
             
-            <div style='width:100%;padding:0 0 0 10px;'>
+            <div style='width:100%;padding:0 0 0 20px;'>
                     <div style='display:inline-block;width:20%;'>
                         <Button type="primary" @click="showJoin" style='margin-right:30px;'>入驻</Button>
                         <Button type="primary" @click="showRenew">续租</Button>
@@ -24,7 +24,7 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border style="margin:20px"></Table>
+            <Table :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
             <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">

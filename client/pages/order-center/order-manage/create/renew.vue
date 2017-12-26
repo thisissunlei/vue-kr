@@ -360,9 +360,6 @@ import utils from '~/plugins/utils';
             stationList,
             planMap
         },
-        mounted(){
-            GLOBALSIDESWITCH("false");
-        },
         watch:{
             getStationFn:function(){
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){

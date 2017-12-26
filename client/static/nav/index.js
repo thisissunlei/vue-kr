@@ -149,7 +149,7 @@
                     if (child.type && child.type == "vue") {
                         href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
-                        href = "#/" + child.router;
+                        href =location.protocol+"//"+ location.hostname +"new/#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
@@ -1267,6 +1267,7 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'pay_created_bill_page'
+                             //menuCode: 'pay_cerated_bill_page',
                         },
                         {
                             primaryText: "回款管理",

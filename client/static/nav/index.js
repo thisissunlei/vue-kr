@@ -43,7 +43,6 @@
      function GlobalRouter() {
          this.routes = {};
          this.currentUrl = '';
-         
      }
      //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){

@@ -767,14 +767,8 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
-                /**
-                 * 第一次和第二次进来时的val[0].startDate不一样第一次是毫秒值第二次是日期
-                */
-                var date = val[0].startDate;
-                if(isNaN(val[0].startDate)){
-                    date = new Date(val[0].startDate.replace(/-/g, '/'));
-                    date = date.getTime();
-                }
+                var date = val[0].endDate;
+                date = new Date(date).getTime();
                
                 let day = 1000 * 60* 60*24;
                 let start = date + day;

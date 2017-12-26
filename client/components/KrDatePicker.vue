@@ -13,7 +13,6 @@ export default{
     name:'krDatePicker',
     methods: {
         handleChange(data){
-            console.log(this,"LLLLL")
             this.$emit('change', data)
         },
     }

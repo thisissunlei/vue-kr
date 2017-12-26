@@ -90,7 +90,7 @@
                              '<div class="header-nav" id="j_header">${header}</div>' +
  
                                  '<div class = "j_header_other">' +
-                                     '<div id = "j_msg_btn"></div>' +
+                                     //'<div id = "j_msg_btn"></div>' +
                                      '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
@@ -108,15 +108,15 @@
                                 '<div id="j_sidebar" class="sidebar" style = "display:none;"> ${sidebar} </div> ' +
                                 '<div id="j_nav-loading" class="nav-loading" style="display:none;">'+
 
-                                    '<div class="item-loader-container">'+
+                                    // '<div class="item-loader-container">'+
                                        
-                                        '<div class="la-2x" >'+
-                                            '<div></div>'+
-                                            '<div></div>'+
+                                    //     '<div class="la-2x" >'+
+                                    //         '<div></div>'+
+                                    //         '<div></div>'+
                                             
-                                        '</div >'+
-                                        '<span>加载中...<span>'+
-                                    '</div >'+
+                                    //     '</div >'+
+                                    //     '<span>加载中...<span>'+
+                                    // '</div >'+
                                 '</div>' +
                             '</div>'+
                         

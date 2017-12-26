@@ -1,7 +1,6 @@
 .page-enter-active, .page-leave-active {
-  transition: all .5s;
+  transition: opacity .5s;
 }
 .page-enter, .page-leave-to {
   opacity: 0;
-  transform: scale(0);
 }

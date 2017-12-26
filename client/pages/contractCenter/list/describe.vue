@@ -30,15 +30,14 @@
         name:'describe',
         props:["detailData"],
         data (){
+            console.log(this.detailData,"ppp")
             return{
                 dateError:false,
-                formItem:{
-                   otherAgreed:this.detailData.otherAgreed||'',
-                }
+                formItem:this.detailData,
             }
         },
         updated:function(){
-            this.$emit('bindData', this.formItem,this.dateError);
+            this.$emit('bindData',this.formItem,this.dateError);
         }
     }
 </script>

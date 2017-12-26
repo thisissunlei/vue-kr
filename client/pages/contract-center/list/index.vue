@@ -479,7 +479,7 @@
                 utils.clearForm(this.upperData);
             },
             openView(params){
-                window.open(`./${params.row.id}/viewCenter?contractType=&requestId=${params.row.requestId}`,'_blank')  
+                window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
                 // location.href=;
             },
             //下载

@@ -1,58 +1,222 @@
-import axios from 'axios'
-// import store from '../../vuex/'
-import { stringify } from 'qs'
-// axios 配置
-axios.defaults.timeout = 8000
-// http response 拦截器
-axios.interceptors.response.use(
-  response => {
-    return response
-  },
-  error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 404:
-          console.log('请求404')
-          break
-        case 500:
-          console.log('请求500')
-          break
-      }
+import Promise from 'promise-polyfill';
+import APIS from '../assets/apis/index';
+import Qs from 'qs';
+var axios = require('axios')
+var root = '/'
+
+function getUrl(path) {
+
+    let server = Envs[env] || '';
+
+    var url = APIS[path].url;
+
+    if(!url){
+      return ;
     }
-    console.log(error)
-    return Promise.reject({ code: '-100', message: '网络异常请稍后再试！' })
+   
+    if(url.indexOf('mockjs') !==-1){
+       root='http://rap.krspace.cn';
+    }
   }
-)
-// 封装请求
-export function fetch (url, options) {
-  var opt = options || {}
-  console.log('=======',options,url)
-  return new Promise((resolve, reject) => {
-    axios({
-      method: opt.type || 'get',
-      url: url,
-      params: opt.params || {},
-      // 判断是否有自定义头部，以对参数进行序列化。不定义头部，默认对参数序列化为查询字符串。
-      data: (opt.headers ? opt.data : stringify(opt.data)) || {},
-      responseType: opt.dataType || 'json',
-      // 设置默认请求头
-      headers: opt.headers || {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-    })
-    .then(response => {
-      if (response.data.code === 0) {
-        resolve(response.data)
-      } else if (response.data.code === '000') {
-        resolve(response.data)
-      } else {
-        reject(response.data)
-        // store.commit('SET_LOADING', false)
-      }
-    })
-    .catch(error => {
-      console.log(error)
-      reject(error)
-      // store.commit('SET_LOADING', false)
-    })
-  })
+function toType (obj) {
+  return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
-export default axios
+// 参数过滤函数
+  function filterNull (o) {
+  for (var key in o) {
+    if (o[key] === null) {
+      delete o[key]
+    }
+    if (toType(o[key]) === 'string') {
+      o[key] = o[key].trim()
+    } else if (toType(o[key]) === 'object') {
+      o[key] = filterNull(o[key])
+    } else if (toType(o[key]) === 'array') {
+      o[key] = filterNull(o[key])
+    }
+  }
+  return o
+}
+
+
+
+  function getMethod(path) {
+    const apiConfig = APIS[path];
+    return apiConfig.method;
+  }
+  function jsonParse(res){
+    return res.data;
+  }
+  function check401(res) {
+    if (res.code ===-4011) {
+      window.location.href = '/new/login.html';
+    } else if (res.code ===-4033) {
+       this.$Notice.error({
+          title:'您没有操作权限，请联系管理员!'
+       })
+    }
+    return res;
+  }
+
+  const http = {
+    transformPreResponse(response){
+      var data = response;
+      if(Object.prototype.toString.call(response) === '[object Array]'){
+        data = response.pop();
+      }
+      return data;
+    },
+    transformResponse:function(response){
+      return response.data;
+    },
+    get: (url, params) => new Promise((resolve, reject) => {
+
+      if (!url) {
+        return;
+      }
+      getUrl(url)
+      if (params) {
+        params = filterNull(params)
+      }
+
+      axios({
+          method: 'get',
+          url: APIS[url].url,
+          params: params,
+          baseURL: root,
+          withCredentials: false,
+        })
+      .then(jsonParse)
+      .then(check401)
+      .then(http.transformPreResponse)
+      .then(json => {
+        if(parseInt(json.code)>0){
+          //处理数据格式
+          resolve(http.transformResponse(json));
+        }else{
+          reject(json);
+        }
+      })
+      .catch(function(err){
+        if(err == 'TypeError: Failed to fetch'){
+            return ;
+        }
+        reject(err)
+      });
+
+      
+    }),
+
+    post: (url, params, payload) => new Promise((resolve, reject) => {
+
+      if (!url) {
+        return
+      }
+      getUrl(url)
+      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+
+      axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
+
+      axios({
+          method: 'post',
+          url: APIS[url].url,
+          data: Qs.stringify(params),
+          baseURL: root,
+          withCredentials: false,
+        })
+       .then(jsonParse)
+      .then(check401)
+      .then(http.transformPreResponse)
+      .then(json => {
+        if(parseInt(json.code)>0){
+          //处理数据格式
+          resolve(http.transformResponse(json));
+        }else{
+          reject(json);
+        }
+      })
+      .catch(function(err){
+        if(err == 'TypeError: Failed to fetch'){
+            return ;
+        }
+        reject(err)
+      });
+    }),
+
+    update: (url, params, payload) => new Promise((resolve, reject) => {
+      const searchParams = new URLSearchParams();
+
+      if (!url) {
+        return
+      }
+      getUrl(url)
+ if (params) {
+        params = filterNull(params)
+      }
+      axios({
+          method: method,
+          url: APIS[url].url,
+          data: method === 'POST' || method === 'PUT' ? params : null,
+          params: method === 'GET' || method === 'DELETE' ? params : null,
+          baseURL: root,
+          withCredentials: false,
+        })
+      .then(jsonParse)
+      .then(check401)
+      .then(http.transformPreResponse)
+      .then(json => {
+        if(parseInt(json.code)>0){
+          //处理数据格式
+          resolve(http.transformResponse(json));
+        }else{
+          reject(json);
+        }
+      })
+      .catch(function(err){
+        if(err == 'TypeError: Failed to fetch'){
+            return ;
+        }
+        reject(err)
+      });
+    }),
+
+    remove: (url, params, payload) => new Promise((resolve, reject) => {
+      const searchParams = new URLSearchParams();
+
+      if (!url) {
+        return
+      }
+      getUrl(url)
+ if (params) {
+        params = filterNull(params)
+      }
+      axios({
+          method: method,
+          url: APIS[url].url,
+          data: method === 'POST' || method === 'PUT' ? params : null,
+          params: method === 'GET' || method === 'DELETE' ? params : null,
+          baseURL: root,
+          withCredentials: false,
+        })
+      .then(jsonParse)
+      .then(check401)
+      .then(http.transformPreResponse)
+      .then(json => {
+        if(parseInt(json.code)>0){
+          //处理数据格式
+          resolve(http.transformResponse(json));
+        }else{
+          reject(json);
+        }
+      })
+      .catch(function(err){
+        if(err == 'TypeError: Failed to fetch'){
+            return ;
+        }
+        reject(err)
+      });
+    }),
+  }
+
+
+export default http;

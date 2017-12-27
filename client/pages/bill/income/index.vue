@@ -215,6 +215,7 @@ import utils from '~/plugins/utils';
         },
         created(){
              this.getTableData(this.$route.query);
+             this.customerName=this.$route.query.customerName;
         },
         methods:{
             showSearch (params) {

@@ -178,6 +178,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
+             this.bizTradeNo=this.$route.query.bizTradeNo;
         },
         methods:{
             onExport(){

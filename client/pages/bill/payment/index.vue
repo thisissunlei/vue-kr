@@ -371,6 +371,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
+             this.customerName=this.$route.query.customerName;
         },
         methods:{
 

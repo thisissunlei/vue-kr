@@ -133,7 +133,9 @@
                 this.$http.get('join-bill-community','', r => {    
                     _this.communityList=r.data.items 
                     }, e => {
-                    _this.$Message.info(e);
+                    _this.$Notice.error({
+                        title:e.message
+                    });
                 })
             },
             getOrderList(){
@@ -143,7 +145,9 @@
                     _this.payList=r.data.payStatusVos;
                     _this.typeList=r.data.seatOrderTypeVos;
                 }, e => {
-                    _this.$Message.info(e);
+                    _this.$Notice.error({
+                        title:e.message
+                    });
                 })   
             }
         },

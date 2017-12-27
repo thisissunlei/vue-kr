@@ -1,5 +1,7 @@
-<style lang="less"> 
+<style lang="less">
+
 .g-high-search{
+
     form{
         width:540px;
         margin:0 auto;
@@ -12,22 +14,24 @@
         display: block;
         visibility: hidden;
     }
+
     .u-input{
         width:250px;
-        float:left; 
+        float:left;
         margin-bottom:10px;
         &:nth-child(2n-1){
-            margin-right:30px;  
+            margin-right:30px;
         }
         &.u-right{
-            margin-right:30px;  
+            margin-right:30px;
         }
         &.u-right-none{
             margin-right:0;
         }
     }
+
     .u-date{
-        width:530px; 
+        width:530px;
         label{
             width:100%;
             display: block;
@@ -42,51 +46,53 @@
     }
 }
 
-    
+
 </style>
+
 <template>
+
 <div class="g-high-search">
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
             <FormItem label="交易流水号" class="u-input">
-                <Input 
-                    v-model="formItem.tradeNo" 
-                    placeholder="请输入交易流水号" 
+                <Input
+                    v-model="formItem.tradeNo"
+                    placeholder="请输入交易流水号"
                     style="width: 250px"
-               ></Input> 
+               ></Input>
             </FormItem>
             <FormItem label="客户名称" class="u-input">
-               <Input 
-                    v-model="formItem.customerName" 
-                    placeholder="请输入客户名称" 
+               <Input
+                    v-model="formItem.customerName"
+                    placeholder="请输入客户名称"
                     style="width: 250px"
-               ></Input>  
+               ></Input>
             </FormItem>
             <FormItem label="回款日期"  class="u-input u-date">
-                <DatePicker 
-                    type="date" 
-                    v-model="formItem.starttime" 
-                    placeholder="请选择开始日期" 
+                <DatePicker
+                    type="date"
+                    v-model="formItem.starttime"
+                    placeholder="请选择开始日期"
                     style="width: 250px;"
                      @on-change="startChange"
-               ></DatePicker> 
+               ></DatePicker>
                 <span class="u-date-txt">至</span>
-               <DatePicker 
-                    type="date" 
-                    v-model="formItem.endtime" 
-                    placeholder="请选择结束日期" 
+               <DatePicker
+                    type="date"
+                    v-model="formItem.endtime"
+                    placeholder="请选择结束日期"
                     style="width: 250px;"
                     @on-change="endChange"
-               ></DatePicker> 
+               ></DatePicker>
             </FormItem>
             <FormItem label="支付方式" class="u-input u-right">
-                  <Select 
-                    v-model="formItem.payWay" 
+                  <Select
+                    v-model="formItem.payWay"
                     style="width:250px"
-                    placeholder="请选择支付方式" 
+                    placeholder="请选择支付方式"
                     >
-                    <Option 
-                        v-for="item in payWay" 
-                        :value="item.value" 
+                    <Option
+                        v-for="item in payWay"
+                        :value="item.value"
                         :key="item.value"
                     >
                         {{ item.label }}
@@ -94,16 +100,19 @@
                 </Select>
             </FormItem>
             <FormItem label="收款账户" class="u-input u-right-none">
-                <Input 
-                    v-model="formItem.receiveAccount" 
-                    placeholder="请输入收款账户" 
+                <Input
+                    v-model="formItem.receiveAccount"
+                    placeholder="请输入收款账户"
                     style="width: 250px"
                ></Input>
             </FormItem>
         </Form>
 </div>
-</template>	
+
+</template>
+
 <script>
+
 export default{
     name:'highSearch',
     data (){
@@ -140,27 +149,23 @@ export default{
                     label:'支付宝app '
                 }
             ],
-            
+
 		}
+
     },
      methods:{
+
         startChange(data){
             this.formItem.startTime=data;
         },
         endChange(date){
             this.formItem.endTime=date;
         }
+        
     },
     updated:function(){
         this.$emit('formData', this.formItem);
     },
-	
+
 }
 </script>
-
-
-
-
-
-
-

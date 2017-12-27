@@ -1,62 +1,80 @@
-<style lang="less"> 
+<style lang="less">
+
 .g-order{
+
    .u-search{
+
         height:32px;
         margin:16px 0;
         padding-left: 20px;
+
         .m-search{
-            color:#2b85e4; 
+            color:#2b85e4;
             display:inline-block;
             margin-left:10px;
             font-size:14px;
             cursor:pointer;
         }
+
     }
+
     .ivu-table-cell{
         padding:0;
     }
+
     .u-table{
         padding:0 20px;
     }
+
     .u-txt-red{
 	    color:#FF6868;
 	}
-}   
+
+}
 
 </style>
+
 <template>
+
 <div class="g-order">
+
     <SectionTitle label="交易流水"></SectionTitle>
+
     <div class="u-search" >
         <div style='display:inline-block;float:right;padding-right:20px;'>
-            <Input 
-                v-model="tradeNo" 
+            <Input
+                v-model="tradeNo"
                 placeholder="请输入交易流水号"
                 style="width: 252px"
             ></Input>
             <div class='m-search' @click="lowerSubmit">搜索</div>
-         </div> 
+         </div>
     </div>
+
     <div class="u-table">
+
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
+
         <div style="margin: 10px 0 ;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page 
-                    :current="page" 
-                    :total="totalCount" 
+                <Page
+                    :current="page"
+                    :total="totalCount"
                     :page-size="pageSize"
-                    @on-change="changePage" 
-                    show-total 
+                    @on-change="changePage"
+                    show-total
                     show-elevator
                 ></Page>
             </div>
         </div>
     </div>
 </div>
+
 </template>
 
 <script>
+
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 
@@ -85,7 +103,7 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center'
-                        
+
                     },
                     {
                         title: '收款账户',
@@ -98,12 +116,13 @@ export default {
                         align:'center',
                         width:160,
                     },
-                    
+
                     {
                         title: '支付方式',
                         key: 'payWay',
                         align:'center',
                         render(h, obj){
+
                             if(obj.row.payWay==='ALIAPPPAY'){
                                 return '支付宝app';
                             }else if(obj.row.payWay==='ALIWEBPAY'){
@@ -122,6 +141,7 @@ export default {
                         key: 'payStatus',
                         align:'center',
                         render(h, obj){
+
                             if(obj.row.payStatus==='WAIT'){
                                 return '待支付';
                             }else if(obj.row.payStatus==='SUCCESS'){
@@ -129,6 +149,7 @@ export default {
                             }else if(obj.row.payStatus==='FAILED'){
                                 return <span class="u-txt-red">支付失败</span>;
                             }
+
                         }
                     },
                     {
@@ -148,12 +169,12 @@ export default {
                         key: 'ctime',
                         align:'center',
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time = dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
                             return time;
                         }
                     },
                 ]
-                
+
             }
         },
         mounted:function(){
@@ -161,30 +182,32 @@ export default {
         },
         methods:{
             onExport(){
-                 console.log('导出')
+
             },
             getTableData(params){
+
                 this.$http.get('get-payrecord-list', params, r => {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
-                }, e => {
-                    console.log('error',e)
                 })
+
             },
             lowerSubmit(){
+
                 this.params.tradeNo=this.tradeNo;
                 this.page=1;
                 this.params.page=1;
                 this.getTableData(this.params);
+
             },
             changePage(page){
+
                this.params.page=page;
                this.page=page;
-                this.getTableData(this.params);
+               this.getTableData(this.params);
+
             },
             
-
-
         }
 
     }

@@ -1,6 +1,6 @@
 <template>
     <div class='m-bill-list'>
-            <div style='width:100%;padding:0 0 0 10px;'>
+            <div style='width:100%;padding:0 0 0 20px;'>
                     <div style='display:inline-block;width:20%;'>
                         <Button type="primary" @click="showReduce">减租</Button>
                     </div>
@@ -23,8 +23,8 @@
             </div>
 
 
-            <Table :loading="loadingStatus" :columns="joinOrder" :data="joinData" border></Table>
-            <div style="margin: 10px;overflow: hidden">
+            <Table :loading="loadingStatus" :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
+            <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
@@ -247,17 +247,17 @@
                 this.openNullify=true;
             },
             showReduce(){
-                window.open('/orderCenter/orderManage/create/reduce','_blank')
+                window.open('/order-center/order-manage/create/reduce','_blank')
             },
             showEdit(params){
-                window.open(`/orderCenter/orderManage/${params.row.id}/reduce`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/reduce`,'_blank')
             },
             showApply(params){
                 this.id=params.row.id;
                 this.openApply=true;
             },
             showView(params){
-                window.open(`/orderCenter/orderManage/${params.row.id}/reduceView`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/reduceView`,'_blank');
             },
             nullifySubmit (){
                 var _this=this;

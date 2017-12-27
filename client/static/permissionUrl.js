@@ -1,5 +1,4 @@
 (function(window){
-   
     var xhr = new XMLHttpRequest();
     xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", true);
     xhr.responseType = 'json';
@@ -9,5 +8,5 @@
         }
     };
     xhr.send();
-
+    
 })(window)

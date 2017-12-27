@@ -185,7 +185,7 @@ import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import utils from '~/plugins/utils';
 import SelectCommunities from '~/components/SelectCommunities';
 
 export default {
@@ -357,7 +357,7 @@ export default {
         },
         methods:{
             showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
             openView(params){
@@ -366,7 +366,7 @@ export default {
             bindPerson (params) {
                 this.$refs[this.form].resetFields();
                 this.itemDetail=params;
-                CommonFuc.clearForm(this.formItem);
+                utils.clearForm(this.formItem);
                 this.openBind=!this.openBind;
             },
             onExport(){

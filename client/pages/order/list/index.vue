@@ -108,7 +108,9 @@ import HighSearch from './highSearch';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
-import http from '~/plugins/utils';
+import utils from '~/plugins/utils';
+
+
 export default {
         name: 'Meeting',
         components:{
@@ -259,12 +261,12 @@ export default {
                 
             }
         },
-        mounted:function(){
+        mounted:function(parms){
             this.getTableData(this.params);
         },
         methods:{
             showSearch (params) {
-                http.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
             openView(params){
@@ -335,7 +337,7 @@ export default {
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
-                http.addParams(this.params);
+                //utils.addParams(this.params);
                 this.getTableData(this.params)
             },
             onChangeOpen(data){
@@ -348,7 +350,7 @@ export default {
                     page:1,
                     pageSize:15
                 }
-                http.addParams(this.params);
+                //utils.addParams(this.params);
                 this.getTableData(this.params);
             },
 

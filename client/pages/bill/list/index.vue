@@ -143,7 +143,7 @@ import settleAccounts from './settleAccounts';
 import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import utils from '~/plugins/utils';
 
     export default {
         name: 'Bill',
@@ -392,7 +392,7 @@ import CommonFuc from '~/components/CommonFuc';
         },
         methods:{
             showSearch (params) {
-                 CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
             openView(params){

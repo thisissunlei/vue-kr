@@ -101,7 +101,7 @@ import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import AddIncome from './addIncome';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import utils from '~/plugins/utils';
     export default {
         name: 'income',
         components:{
@@ -214,7 +214,7 @@ import CommonFuc from '~/components/CommonFuc';
         },
         methods:{
             showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
 
             },
@@ -225,7 +225,7 @@ import CommonFuc from '~/components/CommonFuc';
                  console.log('导出')
             },
             showIncome(){
-               CommonFuc.clearForm(this.addData);
+               utils.clearForm(this.addData);
                 this.addData.startTime=new Date();
                this.openIncome=!this.openIncome;
                this.cancelCallback && this.cancelCallback();

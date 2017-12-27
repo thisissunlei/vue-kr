@@ -74,12 +74,12 @@
         </div>
         <Table 
             border 
-            :loading="loadingStatus"
             ref="selection" 
             :columns="columns" 
             :data="detail" 
+            style="margin:20px"
         ></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
                 <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
@@ -265,7 +265,7 @@
                         width: 100,
                     },{
                         title: '附件',
-                        key: 'haveAttachment',
+                        key: 'haveAttachmentName',
                         align:'center',
                         width: 80,
                     },{//其他约定	
@@ -304,6 +304,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
+                          fixed: 'right',
                       
                         render:(h,params)=>{
                             let arr = params.row.file||[];
@@ -339,20 +340,6 @@
                                         }
                                     }
                                 }, '下载'), 
-                                h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.contractFor(params)
-                                            }
-                                        }
-                                    }, '合同生效'),
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -381,8 +368,22 @@
                                         }
                                     }, '其他约定'))
                                 }
-                                if(!params.row.isEffect  ){
-
+                                if(!params.row.isEffect && !params.row.haveAttachment){
+                                    btnRender.push( h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.contractFor(params)
+                                            }
+                                        }
+                                    }, '合同生效'))
+                                
                                 }
                         
                            return h('div',btnRender);  
@@ -479,8 +480,7 @@
                 utils.clearForm(this.upperData);
             },
             openView(params){
-                window.open(`./${params.row.id}/viewCenter?contractType=&requestId=${params.row.requestId}`,'_blank')  
-                // location.href=;
+                window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
             },
             //下载
             downLoad(params){

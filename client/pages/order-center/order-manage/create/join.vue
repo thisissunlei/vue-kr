@@ -54,10 +54,15 @@
                     </FormItem>
                     
                 </Col>
+                <Col  class="col" v-if="false">
+                    <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
+                    <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    </FormItem>
+                </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndDateStatus"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -163,8 +168,8 @@
         <div style="padding-left:24px">
             <Row>
                  <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="formItem.rentAmount" placeholder="服务费总额" disabled></Input>
+                    <FormItem label="优惠后服务费总额" style="width:252px">
+                        <Input v-model="formItem.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
@@ -342,6 +347,9 @@ import utils from '~/plugins/utils';
                     endDate: [
                         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
                     ],
+                    endDateStatus: [
+                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
+                    ],
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
@@ -377,7 +385,7 @@ import utils from '~/plugins/utils';
             SelectSaler,
             planMap,
         },
-        mounted(){
+         mounted(){
             GLOBALSIDESWITCH("false");
         },
         watch:{
@@ -408,9 +416,6 @@ import utils from '~/plugins/utils';
                 })
             }
            },
-           changeSale(){
-            // this.dealSaleInfo()
-           }
         },
         methods: {
             config:function(){
@@ -424,7 +429,7 @@ import utils from '~/plugins/utils';
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
-                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate || this.formItem.endDateStatus));
                 let formItem = {} 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
@@ -452,7 +457,7 @@ import utils from '~/plugins/utils';
                 formItem.ssoName = this.ssoName;
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
-                    window.location.href='/orderCenter/orderManage';
+                    window.location.href='/order-center/order-manage';
                 }, e => {
                      _this.$Notice.error({
                         title:e.message
@@ -892,6 +897,36 @@ import utils from '~/plugins/utils';
                 this.timeError = error;
                 this.clearStation();
 
+            },
+            changeEndDateStatus(val){
+                this.clearStation()
+                if(!val){
+                    return;
+                }
+
+                let error = false;
+
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
+                let params = {
+                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
+                    end:val
+                }
+                this.config();
+                if(new Date(this.formItem.startDate)>new Date(val)){
+                    error = true;
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    })
+                }else{
+                    this.contractDateRange(params)
+                }
+                this.timeError = error;
+                this.clearStation();
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;

@@ -258,29 +258,30 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:90,
                         render(h, obj){
-                                if(obj.row.payStatus==='WAIT'){
-                                    return h('span', { 
+                             switch (obj.row.payStatus){
+                                case 'WAIT':
+                                        return h('span', { 
                                             style: {
                                                 color:'#FF6868'
                                             }       
-                                    }, '待付款');
-                                   
-                                }else if(obj.row.payStatus==='PAID'){
-                                    return h('span', { 
+                                        }, '待付款');
+                                break;
+                                case 'PAID':
+                                        return h('span', { 
                                             style: {
                                                 color:'#666666'
                                             }       
-                                    }, '已付清');
-                                    
-                                }else if(obj.row.payStatus==='PAYMENT'){
-                                    return h('span', { 
+                                        }, '已付清');
+                                break;
+                                case 'PAYMENT':
+                                        return h('span', { 
 										style: {
 											color:'#F5A623'
 										}       
-                                    }, '未付清');
-                                    
-                                }
-                            }
+                                        }, '未付清');
+                                break;
+                             }
+                        }
                     },
                     {
                         title: '操作',

@@ -265,7 +265,7 @@
                         width: 100,
                     },{
                         title: '附件',
-                        key: 'haveAttachment',
+                        key: 'haveAttachmentName',
                         align:'center',
                         width: 80,
                     },{//其他约定	
@@ -340,20 +340,6 @@
                                         }
                                     }
                                 }, '下载'), 
-                                h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.contractFor(params)
-                                            }
-                                        }
-                                    }, '合同生效'),
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -382,8 +368,22 @@
                                         }
                                     }, '其他约定'))
                                 }
-                                if(!params.row.isEffect  ){
-
+                                if(!params.row.isEffect && !params.row.haveAttachment){
+                                    btnRender.push( h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.contractFor(params)
+                                            }
+                                        }
+                                    }, '合同生效'))
+                                
                                 }
                         
                            return h('div',btnRender);  

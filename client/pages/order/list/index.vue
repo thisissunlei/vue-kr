@@ -175,7 +175,7 @@ export default {
                         align:'center',
                         width:100,
                         render(h, obj){
-                            switch (data.incomeType){
+                            switch (obj.row.orderstatus){
                                 case 'VALID':
                                 return h('span', { 
                       										style: {

@@ -255,17 +255,15 @@ export default {
                         align:'center',
                         width:110,
                         render(h, obj){
-                            if(obj.row.payWay==='ALIAPPPAY'){
-                                return '支付宝app';
-                            }else if(obj.row.payWay==='ALIWEBPAY'){
-                                return '支付宝网银';
-                            }else if(obj.row.payWay==='WXPAY'){
-                                return '微信';
-                            }else if(obj.row.payWay==='BANKONLINE'){
-                                return '网银';
-                            }else if(obj.row.payWay==='BANKTRANSFER'){
-                                return '银行转账';
+                            let payWay={
+                              'ALIAPPPAY':'支付宝app',
+                              'ALIWEBPAY':'支付宝网银',
+                              'WXPAY':'微信',
+                              'BANKONLINE':'网银',
+                              'BANKTRANSFER':'银行转账',
+                              
                             }
+                            return payWay[obj.row.payWay]
                         }
                     },
                     {

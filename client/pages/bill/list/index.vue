@@ -202,13 +202,13 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:90,
                         render(h, obj){
-                            if(obj.row.bizType==='MEETING'){
-                                return '会议室账单';
-                            }else if(obj.row.bizType==='PRINT'){
-                                return '打印服务账单 ';
-                            }else if(obj.row.bizType==='CONTRACT'){
-                                return '工位服务订单';
-                            }
+                          let bizType={
+                            'MEETING':'会议室账单',
+                            'PRINT':'打印服务账单',
+                            'CONTRACT':'工位服务订单',
+                            
+                          }
+                          return bizType[obj.row.bizType];
                         }
                     },
                     {

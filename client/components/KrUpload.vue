@@ -42,7 +42,7 @@
  
 export default{
 	name:'krUpload',
-	props:["columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:["upUrl","columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
 	data(){
 		return {
 			isOpenList:false,
@@ -88,22 +88,9 @@ export default{
 			// this.getUpUrl();
 		},
 		submitUpload(detail){
-
-			var that = this;
 			this.config();
-
-			var _this = this;
-			http.post("post-list-upload-url", {
-				fileList:JSON.stringify(detail),
-
-				requestId:_this.columnDetail.requestId,
-			}, (response) => {
-				
-			}, (error) => {
-				that.$Notice.error({
-                    title:error.message
-                });
-			})   
+			this.upUrl && this.upUrl(detail,this.columnDetail);
+			
 		},
 		//获取上传图片
 		getUpUrl(){
@@ -222,10 +209,6 @@ export default{
 			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
 			xhr.responseType = 'json';
 			xhr.send();
-			// 暂时觉得此处用不着了，等连上服务器需要再检查一下
-			
-
-
 		},
 		//上传成功
 		onSuccess(params){

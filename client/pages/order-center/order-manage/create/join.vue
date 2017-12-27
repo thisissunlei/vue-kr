@@ -397,17 +397,17 @@ import utils from '~/plugins/utils';
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
-                 this.$http.get('get-community-floor', params).then( r => {
-                    _this.floors = r.floor;
-                    _this.ssoId = r.ssoId;
-                    _this.ssoName = r.ssoName;
+                 this.$http.get('get-community-floor', params, r => {
+                    _this.floors = r.data.floor;
+                    _this.ssoId = r.data.ssoId;
+                    _this.ssoName = r.data.ssoName;
                     if(!_this.formItem.salerId){
-                        _this.formItem.salerId = JSON.stringify(r.ssoId);
-                        _this.salerName = r.ssoName
+                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
+                        _this.salerName = r.data.ssoName
 
                     }
 
-                }).catch( e => {
+                }, e => {
                     _this.$Notice.error({
                         title:e.message
                     });
@@ -456,9 +456,9 @@ import utils from '~/plugins/utils';
                 formItem.ssoId = this.ssoId;
                 formItem.ssoName = this.ssoName;
                 let _this = this;
-                 this.$http.post('save-join', formItem).then( r => {
-                    window.location.href='/orderCenter/orderManage';
-                }).catch( e => {
+                 this.$http.post('save-join', formItem, r => {
+                    window.location.href='/order-center/order-manage';
+                }, e => {
                      _this.$Notice.error({
                         title:e.message
                     })
@@ -516,12 +516,12 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                 this.$http.post('count-sale', params).then( r => {
-                    let money = r.originalTotalrent - r.totalrent;
+                 this.$http.post('count-sale', params, r => {
+                    let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
-                    _this.formItem.rentAmount = r.totalrent;
-                }).catch( e => {
+                    _this.formItem.rentAmount = r.data.totalrent;
+                }, e => {
 
                      _this.$Notice.error({
                         title:e.message
@@ -931,10 +931,9 @@ import utils from '~/plugins/utils';
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
                 this.config();
-                 this.$http.get('contract-date-range', params).then( r => {
-                    console.log('contract-date-range',r)
-                    _this.formItem.timeRange = r;
-                }).catch( e => {
+                 this.$http.get('contract-date-range', params, r => {
+                    _this.formItem.timeRange = r.data;
+                }, e => {
                     _this.$Notice.error({
                         title:e.message
                     });
@@ -946,9 +945,9 @@ import utils from '~/plugins/utils';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                 this.$http.get('sale-tactics', params).then( r => {
-                    if(r.length){
-                        list = r.map(item=>{
+                 this.$http.get('sale-tactics', params, r => {
+                    if(r.data.length){
+                        list = r.data.map(item=>{
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
@@ -963,7 +962,7 @@ import utils from '~/plugins/utils';
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 
-                }).catch( e => {
+                }, e => {
                      _this.youhui = [];
                     console.log('error',e)
                 })
@@ -988,10 +987,9 @@ import utils from '~/plugins/utils';
                 }
                 let _this = this;
                 if(val.length){
-                    console.log('===========',params)
-                     this.$http.post('get-station-amount', params).then( r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
-                        _this.stationList = r.seats.map(item=>{
+                        _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
@@ -1002,12 +1000,20 @@ import utils from '~/plugins/utils';
                         _this.formItem.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
-                    }).catch( e => {
+                    }, e => {
                         _this.$Notice.error({
                             title:e.message
                         })
 
                         console.log('error',e)
+                    })
+                }
+            },
+                    
+               
+        }
+    }
+</script>rror',e)
                     })
                 }
             },

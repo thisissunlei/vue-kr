@@ -1,15 +1,25 @@
-//引入apis
-import APIS from '../assets/apis/index';
+ import axios from 'axios'
+ import APIS from '../assets/apis/index';
+ // 超时时间
+ axios.defaults.timeout = 2000
+ // http请求拦截器
+axios.interceptors.request.use(config => {
+  if(config.url.indexOf('mockjs') !==-1 ){
+    console.log('mockjs',config)
+    config.baseURL = 'http://rap.krspace.cn';
+  }else{
+    config.baseURL = '/';
+  } 
+  return config
+}, error => {
+  console.log('加载超时')
+  return Promise.reject(error)
+})
 
-import Qs from 'qs';
-
-// 引用axios
-var axios = require('axios')
 
 function toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
-
 // 参数过滤函数
 function filterNull (o) {
   for (var key in o) {
@@ -27,82 +37,81 @@ function filterNull (o) {
   return o
 }
 
+ function check401(res) {
+  res = res.data;
+    if (res.code ===-4011) {
+      console.log('登录')
+      window.location.href = 'http://optest.krspace.cn/new/login.html';
+    } else if (res.code ===-4033) {
+      console.log('您没有操作权限，请联系管理员')
 
-function apiAxios (method, name, params, success, failure) {
-
-  if (params) {
-    params = filterNull(params)
-  }
-
-  let root = '';
-  let url = APIS[name].url;
-
-  if(url.indexOf('mockjs') !==-1){
-       root='http://rap.krspace.cn';
-  }
-
-  axios({
-    method: method,
-    url: url,
-    data: method === 'POST' || method === 'PUT' ? params : null,
-    params: method === 'GET' || method === 'DELETE' ? params : null,
-    baseURL: root,
-    withCredentials: false,
-  }).then(function (res) {
-    
-    if (res.status === 200) {
-
-      if (success && res.data.code == 1) {
-        success(res.data)
-      }
-      if(res.data.code == -1 && failure){
-         failure(res.data)
-      }
-    } else {
-      if (failure) {
-        failure(res.data)
-      } else {
-        console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
-      }
+        // Notify.error('您没有操作权限，请联系管理员!');
     }
-  }).catch(function (err) {
-    
-    let res = err.response
-    if (err) {
-      failure(res.data)
-      console.log('api error, HTTP CODE: ' + res)
-    }
-  })
-}
-
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.interceptors.request.use((config) => {
-
-  if(config.method  == 'post'){
-    let data = Qs.stringify(config.data);
-    config.data = data;
+    return res;
   }
 
-  return config;
 
-},(error) =>{
-  return Promise.reject(error);
-});
-
-axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
 
 export default {
   
-  get: function (url, params, success, failure) {
-    return apiAxios('GET', url, params, success, failure)
-  },
-  post: function (url, params, success, failure) {
-    return apiAxios('POST', url, params, success, failure)
-  },
-  put: function (url, params, success, failure) {
-    return apiAxios('PUT', url, params, success, failure)
-  },
-  delete: function (url, params, success, failure) {
-    return apiAxios('DELETE', url, params, success, failure)
-  }
+  get: (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.get(APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      success && success(data)
+      resolve(data)
+    })
+    .catch(function (error) {
+      failure && failure(error)
+      reject(error)
+    });
+  }),
+  post: (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.post(APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      success && success(data)
+      resolve(response)
+    })
+    .catch(function (error) {
+      failure && failure(error)
+      reject(error)
+    });
+  }),
+  put:  (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.put(APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      success && success(data)
+      resolve(response)
+    })
+    .catch(function (error) {
+      failure && failure(error)
+      reject(error)
+    });
+  }),
+  delete: (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.delete(APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      success && success(data)
+      resolve(data)
+    })
+    .catch(function (error) {
+      failure && failure(error)
+      reject(error)
+    });
+  }),
 }

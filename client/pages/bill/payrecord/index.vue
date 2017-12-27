@@ -77,6 +77,7 @@
 
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 
 export default {
         components:{
@@ -175,8 +176,8 @@ export default {
 
             }
         },
-        mounted:function(){
-            this.getTableData(this.params);
+        created(){
+             this.getTableData(this.$route.query);
         },
         methods:{
             onExport(){
@@ -195,6 +196,7 @@ export default {
                 this.params.bizTradeNo=this.bizTradeNo;
                 this.page=1;
                 this.params.page=1;
+                utils.addParams(this.params);
                 this.getTableData(this.params);
 
             },

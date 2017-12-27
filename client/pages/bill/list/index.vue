@@ -388,8 +388,8 @@ import utils from '~/plugins/utils';
                 
             }
         },
-        mounted:function(){
-            this.getTableData(this.tabParams);
+        created(){
+             this.getTableData(this.$route.query);
         },
         methods:{
             showSearch (params) {
@@ -501,6 +501,7 @@ import utils from '~/plugins/utils';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams);
 
             },
@@ -514,6 +515,7 @@ import utils from '~/plugins/utils';
                     pageSize:15,
                     customerName:this.customerName
                 }
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams);
             },
             changePage(page){

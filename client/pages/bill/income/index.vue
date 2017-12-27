@@ -213,15 +213,13 @@ import utils from '~/plugins/utils';
                 
             }
         },
-       
-        mounted:function(){
-            this.getTableData(this.tabParams);
+        created(){
+             this.getTableData(this.$route.query);
         },
         methods:{
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
-
             },
             openView(params){
                  location.href=`./income/detail/${params.id}`;
@@ -282,6 +280,7 @@ import utils from '~/plugins/utils';
                 this.tabParams=this.searchData;
                 this.tabParams.page=1;
                 this.page=1;
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams)
             },
             lowerSubmit(){
@@ -291,6 +290,7 @@ import utils from '~/plugins/utils';
                     page:1,
                     pageSize:15
                 }
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams);
             },
             changePage(page){

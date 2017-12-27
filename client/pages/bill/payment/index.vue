@@ -369,8 +369,8 @@ export default {
 
             }
         },
-        mounted:function(){
-            this.getTableData(this.params);
+        created(){
+             this.getTableData(this.$route.query);
         },
         methods:{
 
@@ -447,6 +447,7 @@ export default {
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
+                utils.addParams(this.params);
                 this.getTableData(this.params)
             },
 
@@ -457,6 +458,7 @@ export default {
                     pageSize:15,
                     customerName:this.customerName
                 }
+                utils.addParams(this.params);
                 this.getTableData(this.params);
             },
 

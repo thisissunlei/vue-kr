@@ -27,14 +27,13 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "nodemon": "^1.12.5",
-    "nuxt": "^1.0.0-rc11",
     "scmp": "^2.0.0",
     "vue-dateutils": "^1.0.8"
   },
   "dependencies": {
     "@nuxtjs/axios": "^4.5.0",
     "iview": "^2.8.0",
-    "nuxt": "^1.0.0-rc11",
+    "nuxt": "git+https://git@github.com/nuxt/nuxt.js.git#dev",
     "vue-pdf": "^2.0.4"
   }
 }

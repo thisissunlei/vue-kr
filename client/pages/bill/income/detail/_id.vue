@@ -43,7 +43,9 @@
 		</DetailStyle>
 	</div>
 </div>
+
 </template>
+
 <script>
 
 import DetailStyle from '~/components/DetailStyle';
@@ -70,28 +72,35 @@ export default {
 		GLOBALSIDESWITCH("false")
 	},
 	methods:{
+	
 		getInfo(){
+		
 			var _this=this;
-			let {params}=this.$route
+			
+			let {params}=this.$route;
+			
 			let from={
 				id:params.id
 			};
-			this.$http.get('get-income-detail', from, r => {
-				let data=r.data;
-				this.basicInfo=data;
-				this.dealDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
-				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
-				if(data.incomeType=='MEETING'){
-					this.incomeType='会议室账单';
-				}else if (data.incomeType=='PRINT'){
-					this.incomeType='打印服务账单';
-				}else if (data.incomeType=='CONTRACT'){
-					this.incomeType='工位服务订单';
-				}
 
-           	}, e => {
-                console.log('error',e)
-            })
+			var incomeType = {
+					'MEETING':'会议室账单',
+					'PRINT':'打印服务账单',
+					'CONTRACT':'工位服务订单'
+			}
+			
+			this.$http.get('get-income-detail', from, r => {
+			
+				let data = r.data;
+				this.basicInfo = data;
+				this.dealDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
+				this.ctime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
+
+				this.incomeType = incomeType[data.incomeType];
+
+				});
+				
+
 		},
 	},
 

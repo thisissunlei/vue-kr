@@ -260,16 +260,16 @@ import utils from '~/plugins/utils';
                         render(h, obj){
                                 if(obj.row.payStatus==='WAIT'){
                                     return h('span', { 
-										style: {
-											color:'#FF6868'
-										}       
+                  										style: {
+                  											color:'#FF6868'
+                  										}       
                                     }, '待付款');
                                    
                                 }else if(obj.row.payStatus==='PAID'){
                                     return h('span', { 
-										style: {
-											color:'#666666'
-										}       
+                										style: {
+                											color:'#666666'
+                										}       
                                     }, '已付清');
                                     
                                 }else if(obj.row.payStatus==='PAYMENT'){

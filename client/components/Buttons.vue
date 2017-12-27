@@ -25,7 +25,7 @@
         mounted:function(){
             var _this=this;
             setTimeout(function() {
-                _this.data=global.resourcesCode||[];
+                _this.data=window.resourcesCode||[];
             }, 200);
         }
     }

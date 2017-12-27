@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    window.resourcesCode=[];
+    // window.resourcesCode=[];
     export default {
         props:[
             'label',
@@ -36,13 +36,13 @@
             }
         },
         mounted:function(){
-           var _this=this;
-           if(window.resourcesCode.length==0){
-               this.userData();    
-           }
-           setTimeout(function() {
-               _this.data=window.resourcesCode;
-           },300);   
+           // var _this=this;
+           // if(window.resourcesCode.length==0){
+           //     this.userData();    
+           // }
+           // setTimeout(function() {
+           //     _this.data=window.resourcesCode;
+           // },300);   
         }
     }
 </script>

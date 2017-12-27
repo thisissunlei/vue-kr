@@ -130,7 +130,9 @@ export default{
         this.$http.get('join-bill-community','', r => {    
                 this.communityList=r.data.items 
             }, e => {
-                this.$Message.info(e);
+                this.$Notice.error({
+                    title:e.message
+                });
         })
     },
     methods:{

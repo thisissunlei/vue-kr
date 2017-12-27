@@ -484,7 +484,9 @@ import utils from '~/plugins/utils';
                             return;
                         }
                         this.renewFormSubmit()
-                        this.$Message.success('Success!');
+                        this.$Notice.success({
+                            title:'Success!'
+                        });
                     } else {
                         _this.disabled = false;
 

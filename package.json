@@ -34,6 +34,7 @@
     "@nuxtjs/axios": "^4.5.0",
     "iview": "^2.8.0",
     "nuxt": "git+https://git@github.com/nuxt/nuxt.js.git#dev",
+    "promise-polyfill": "^7.0.0",
     "vue-pdf": "^2.0.4"
   }
 }

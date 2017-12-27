@@ -145,12 +145,16 @@
             this.$http.get('join-bill-community','', r => {    
                 _this.communityList=r.data.items 
             }, e => {
-                _this.$Message.info(e);
+                _this.$Notice.error({
+                     title:e.message
+                });
             })
             this.$http.get('get-center-prepare-data','',r => {
                 _this.typeList = r.data.items;
             }, e => {
-                _this.$Message.info(e);
+                _this.$Notice.error({
+                    title:e.message
+                });
             })
         },
         updated:function(){

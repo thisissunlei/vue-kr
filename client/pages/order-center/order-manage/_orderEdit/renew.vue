@@ -456,7 +456,9 @@ import utils from '~/plugins/utils';
                     //     _this.dealSaleInfo()
                     // },200)
                     }, e => {
-                        _this.$Message.info(e);
+                        _this.$Notice.error({
+                           title:e.message
+                        });
                 })
             },
             config:function(){

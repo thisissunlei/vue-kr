@@ -149,7 +149,7 @@
                     if (child.type && child.type == "vue") {
                         href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
-                        href =location.protocol+"//"+ location.hostname +"new/#/" + child.router;
+                        href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })

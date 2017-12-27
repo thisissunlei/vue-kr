@@ -395,13 +395,15 @@ export default {
             },
 
             getTableData(params){
-                this.$http.get('get-payment-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-payment-list', params, res => {
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
 
             onchange(data){
@@ -417,10 +419,10 @@ export default {
                 this.$refs[this.form].validate((valid)=>{
                     if(valid){
                         this.formItem.paymentId=this.itemDetail.id;
-                        this.$http.post('payment-bind', this.formItem, r => {
-                            if(r.code==-1){
+                        this.$http.post('payment-bind', this.formItem, res => {
+                            if(res.code==-1){
                                 this.MessageType="error";
-                                this.warn=r.message;
+                                this.warn=res.message;
                                 this.openMessage=true;
                                 return;
                             }
@@ -429,6 +431,10 @@ export default {
                             this.warn="客户绑定成功！"
                             this.openMessage=true;
                             this.getTableData(this.params);
+                        }, err => {
+                            this.$Notice.error({
+                                title:err.message
+                            });
                         })
                     }
                 });
@@ -482,19 +488,23 @@ export default {
              importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
-                this.$http.put('import-bank-flow', data, r => {
-                    if(r.code==-1){
+                this.$http.put('import-bank-flow', data, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
                     this.openImport=false;
                     this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`;
+                    this.warn=`已成功导入交易流水${res.data.successNum}条,失败${res.data.errorNum}条`;
                     this.openMessage=true;
                    this.getTableData(this.params);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
 
             },
         }

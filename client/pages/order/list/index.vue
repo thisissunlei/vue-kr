@@ -279,15 +279,17 @@ export default {
             },
             cancel (params) {
 
-                this.$http.get('get-cancel-msg', {orderId:params.orderId}, r => {
-                    this.msg=r.data.msg;
-                    if(r.code=='2'){
+                this.$http.get('get-cancel-msg', {orderId:params.orderId}, res => {
+                    this.msg=res.data.msg;
+                    if(res.code=='2'){
                         this.ifCancel=false
                     }else{
                         this.ifCancel=true;
                     }
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
                 this.openCancel=!this.openCancel;
                 this.itemDetail=params;
@@ -302,10 +304,10 @@ export default {
             let  params={
                     orderId:itemDetail.orderId
                 }
-                this.$http.post('cancel-order', params, r => {
-                    if(r.code==-1){
+                this.$http.post('cancel-order', params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -314,20 +316,24 @@ export default {
                     this.warn="作废成功!"
                     this.openMessage=true;
                     this.getTableData(this.params);
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
             },
             onExport(){
                  console.log('导出')
             },
             getTableData(params){
-                this.$http.get('order-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('order-list', params, res => {
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
             },
             changePage(page){

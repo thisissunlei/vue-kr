@@ -224,14 +224,18 @@ export default {
 				'PAID':'已付清',
 				'PAYMENT':'未付清',
 			}
-			this.$http.get('get-bill-detail', from, r => {
-				let data=r.data;
+			this.$http.get('get-bill-detail', from, res => {
+				let data=res.data;
 				data.bizType=bizType[data.bizType];
 				data.payStatus=payStatus[data.payStatus];
 				this.basicInfo=data;
 				this.costInfo=data.feeList;
 				this.settleInfo=data.payList;
-      })
+      		}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+        	})
 			
 		},
 		showTab(){

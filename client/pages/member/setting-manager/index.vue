@@ -143,9 +143,11 @@ export default {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
         },
         changePage(page){
                 this.Params.page=page;

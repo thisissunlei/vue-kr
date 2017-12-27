@@ -177,10 +177,12 @@ export default{
 		}
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', r => {
-                this.communityList=r.data.items
-            }, e => {
-                this.$Message.info(e);
+        this.$http.get('join-bill-community','', res => {
+                this.communityList=res.data.items
+        }, err => {
+            this.$Notice.error({
+                title:err.message
+            });
         })
     },
     methods:{

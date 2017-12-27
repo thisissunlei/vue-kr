@@ -147,7 +147,11 @@ export default {
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 				data.payWay=payType[data.payWay];
 
-           	})
+           	}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+        	})
 		},
 	},
 

@@ -418,13 +418,15 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
-                this.$http.get('get-bill-list', params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-bill-list', params, res => {
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             onBillPay(){
                 
@@ -448,7 +450,11 @@ import utils from '~/plugins/utils';
                     this.openMessage=true;
                     this.billIds=""
                     this.getTableData(this.tabParams);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
 
             },
             
@@ -474,7 +480,11 @@ import utils from '~/plugins/utils';
                     this.warn="结算成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             // antiSettleSubmit(){
             //     let params={

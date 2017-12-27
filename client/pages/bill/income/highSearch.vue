@@ -102,7 +102,9 @@ export default{
         this.$http.get('join-bill-community','', res => {    
                 this.communityList = res.data.items 
         }, err => {
-                this.$Message.info(err);
+              this.$Notice.error({
+                title:err.message
+            });
         });
         
     },

@@ -229,18 +229,20 @@ import utils from '~/plugins/utils';
             },
             showIncome(){
                utils.clearForm(this.addData);
-                this.addData.startTime=new Date();
+               this.addData.startTime=new Date();
                this.openIncome=!this.openIncome;
                this.cancelCallback && this.cancelCallback();
             },
             getTableData(params){
-                this.$http.get('get-income-list', params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-income-list', params, res => {
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             getAddData(form,callback,cancel){
                 this.addData=form;
@@ -256,11 +258,11 @@ import utils from '~/plugins/utils';
             },
             add(){
                 let params=this.addData;
-                this.$http.post('add-income', params, r => {
+                this.$http.post('add-income', params, res => {
                     this.openIncome=false;
-                    if(r.code==-1){
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -268,7 +270,11 @@ import utils from '~/plugins/utils';
                     this.warn="挂收入成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             onChangeOpen(data){
                 this.openMessage=data;

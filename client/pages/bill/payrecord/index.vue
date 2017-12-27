@@ -185,10 +185,14 @@ export default {
             },
             getTableData(params){
 
-                this.$http.get('get-payrecord-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
-                })
+                this.$http.get('get-payrecord-list', params, res => {
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
 
             },
             lowerSubmit(){

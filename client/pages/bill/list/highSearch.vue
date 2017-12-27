@@ -1,10 +1,13 @@
-<style lang="less"> 
+<style lang="less">
 .g-high-search{
+
     form{
         width:540px;
         margin:0 auto;
     }
+
     .u-clearfix { zoom:1; }
+
     .u-clearfix:after {
         clear: both;
         content: '.';
@@ -14,56 +17,63 @@
     }
     .u-input{
         width:250px;
-        float:left; 
+        float:left;
         margin-bottom:10px;
         &:nth-child(2n-1){
-            margin-right:30px;  
+            margin-right:30px;
         }
     }
     .u-date{
-        width:530px; 
+
+        width:530px;
+
         label{
+
             width:100%;
             display: block;
+
         }
+
         .u-date-txt{
+
             font-size: 14px;
             color: #666666;
             display: inline-block;
             width:30px;
             text-align: center
+
         }
     }
-}   
+}
 </style>
 <template>
 <div class="g-high-search">
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
             <FormItem label="账单编号" class="u-input">
-                <Input 
-                    v-model="formItem.billNo" 
-                    placeholder="请输入账单编号" 
-                    style="width: 250px"
-               ></Input> 
-            </FormItem>
-            <FormItem label="客户名称" class="u-input">
-                 <Input 
-                    v-model="formItem.customerName" 
-                    placeholder="请输入客户名称" 
+                <Input
+                    v-model="formItem.billNo"
+                    placeholder="请输入账单编号"
                     style="width: 250px"
                ></Input>
-               
             </FormItem>
-            
+            <FormItem label="客户名称" class="u-input">
+                 <Input
+                    v-model="formItem.customerName"
+                    placeholder="请输入客户名称"
+                    style="width: 250px"
+               ></Input>
+
+            </FormItem>
+
             <FormItem label="社区名称" class="u-input">
-                  <Select 
-                        v-model="formItem.communityId" 
+                  <Select
+                        v-model="formItem.communityId"
                         style="width:250px"
-                        placeholder="请选择社区" 
+                        placeholder="请选择社区"
                     >
-                        <Option 
-                            v-for="item in communityList" 
-                            :value="item.id" 
+                        <Option
+                            v-for="item in communityList"
+                            :value="item.id"
                             :key="item.id"
                         >
                             {{ item.name }}
@@ -71,14 +81,14 @@
                     </Select>
             </FormItem>
              <FormItem label="账单类型" class="u-input">
-                  <Select 
-                    v-model="formItem.billType" 
+                  <Select
+                    v-model="formItem.billType"
                     style="width:250px"
-                    placeholder="请输入账单类型" 
+                    placeholder="请输入账单类型"
                 >
-                    <Option 
-                        v-for="item in typeList" 
-                        :value="item.value" 
+                    <Option
+                        v-for="item in typeList"
+                        :value="item.value"
                         :key="item.value"
                     >
                         {{ item.label }}
@@ -87,31 +97,31 @@
             </FormItem>
             </FormItem>
             <FormItem label="账单日"  class="u-input u-date">
-                <DatePicker 
-                    type="date" 
-                    v-model="formItem.startTime" 
-                    placeholder="请选择开始日期" 
+                <DatePicker
+                    type="date"
+                    v-model="formItem.startTime"
+                    placeholder="请选择开始日期"
                     style="width: 250px;"
                     @on-change="startChange"
-               ></DatePicker> 
+               ></DatePicker>
                 <span class="u-date-txt">至</span>
-               <DatePicker 
-                    type="date" 
-                     v-model="formItem.endTime" 
-                    placeholder="请选择截止日期" 
+               <DatePicker
+                    type="date"
+                     v-model="formItem.endTime"
+                    placeholder="请选择截止日期"
                     style="width: 250px;"
                     @on-change="endChange"
-               ></DatePicker> 
+               ></DatePicker>
             </FormItem>
              <FormItem label="支付状态" class="u-input">
-                  <Select 
-                    v-model="formItem.payStatus" 
+                  <Select
+                    v-model="formItem.payStatus"
                     style="width:250px"
-                    placeholder="请输入支付状态" 
+                    placeholder="请输入支付状态"
                 >
-                    <Option 
-                        v-for="item in statusList" 
-                        :value="item.value" 
+                    <Option
+                        v-for="item in statusList"
+                        :value="item.value"
                         :key="item.value"
                     >
                         {{ item.label }}
@@ -120,7 +130,7 @@
             </FormItem>
         </Form>
 </div>
-</template>	
+</template>
 <script>
 export default{
     name:'highSearch',
@@ -167,8 +177,8 @@ export default{
 		}
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', r => {    
-                this.communityList=r.data.items 
+        this.$http.get('join-bill-community','', r => {
+                this.communityList=r.data.items
             }, e => {
                 this.$Message.info(e);
         })
@@ -184,13 +194,6 @@ export default{
     updated:function(){
         this.$emit('formData', this.formItem);
     },
-	
+
 }
 </script>
-
-
-
-
-
-
-

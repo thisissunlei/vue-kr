@@ -76,7 +76,7 @@ export default {
     axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
-      success && success(data)
+      success && success(response)
       resolve(response)
     })
     .catch(function (error) {
@@ -91,7 +91,7 @@ export default {
     axios.put(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
-      success && success(data)
+      success && success(response)
       resolve(response)
     })
     .catch(function (error) {

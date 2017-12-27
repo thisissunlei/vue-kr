@@ -931,9 +931,9 @@ import utils from '~/plugins/utils';
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
                 this.config();
-                 this.$http.get('contract-date-range', params, r => {
+                 this.$http.get('contract-date-range', params).then( r => {
                     _this.formItem.timeRange = r.data;
-                }, e => {
+                }).catch( e => {
                     _this.$Notice.error({
                         title:e.message
                     });
@@ -987,8 +987,9 @@ import utils from '~/plugins/utils';
                 }
                 let _this = this;
                 if(val.length){
-                     this.$http.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
+                        console.log('get-station-amount',r)
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;
@@ -1000,7 +1001,7 @@ import utils from '~/plugins/utils';
                         _this.formItem.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
-                    }, e => {
+                    }).catch( e => {
                         _this.$Notice.error({
                             title:e.message
                         })

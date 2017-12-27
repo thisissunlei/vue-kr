@@ -38,7 +38,7 @@
 			</LabelText>
 
 			<LabelText label="回款方式：">
-				{{basicInfo.payType}}
+				{{basicInfo.payWay}}
 			</LabelText>
 
 			<LabelText label="客户名称：">
@@ -133,29 +133,21 @@ export default {
 			let from={
 				paymentId:params.paymentId
 			};
+			let payType={
+				'ALIAPPPAY':'支付宝app',
+				'ALIWEBPAY':'支付宝网银',
+				'WXPAY':'微信',
+				'BANKONLINE':'网银',
+				'BANKTRANSFER':'银行转账',
+			}
+			this.$http.get('get-payment-detail', from, res => {
 
-			this.$http.get('get-payment-detail', from, r => {
-
-				let data=r.data;
+				let data=res.data;
 				this.basicInfo=data;
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
+				data.payWay=payType[data.payWay];
 
-				if(data.payWay==='ALIAPPPAY'){
-					data.payType='支付宝app';
-				}else if(data.payWay==='ALIWEBPAY'){
-					data.payType='支付宝网银';
-				}else if(data.payWay==='WXPAY'){
-					data.payType='微信';
-				}else if(data.payWay==='BANKONLINE'){
-					data.payType='网银';
-				}else if(data.payWay==='BANKTRANSFER'){
-					data.payType='银行转账';
-				}
-
-
-           	}, e => {
-                console.log('error',e)
-            })
+           	})
 		},
 	},
 

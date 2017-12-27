@@ -171,31 +171,31 @@ export default {
                     },
                     {
                         title: '订单状态',
-                        key: 'orderstatus',
+                        key: 'orderStatus',
                         align:'center',
                         width:100,
                         render(h, obj){
-                            switch (obj.row.orderstatus){
+                            switch (obj.row.orderStatus){
                                 case 'VALID':
                                 return h('span', { 
-                      										style: {
-                      											color:'#666666'
-                      										}       
+                                            style: {
+                                                color:'#666666'
+                                            }       
                                         }, '已生效');
                                 break;
                                 case 'CANCEL':
                                 return h('span', { 
-                      										style: {
-                      											color:'#F5A623'
-                      										}       
+                                            style: {
+                                                color:'#F5A623'
+                                            }       
                                         }, '已作废');
                                 break;
                                 case 'REFUND':
                                 return h('span', { 
-                      										style: {
-                      											color:'#FF6868'
-                      										}       
-                                        }, '已退订');
+                                            style: {
+                                                color:'#FF6868'
+                                            }       
+                                    }, '已退订');
                                 break;
                             }
                            

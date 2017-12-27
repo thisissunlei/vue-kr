@@ -157,7 +157,7 @@ export default {
                 this.page=1;
                 this.Params={
                     page:1,
-                    pageSize:1,
+                    pageSize:15,
                     csrName:this.csrName
                 }
                 //utils.addParams(this.Params);

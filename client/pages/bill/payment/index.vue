@@ -1,4 +1,5 @@
-<style lang="less"> 
+<style lang="less">
+
 .g-order{
    .u-search{
         height:32px;
@@ -8,12 +9,12 @@
             width:22px;
             height:22px;
             background:url('~/assets/images/upperSearch.png') no-repeat center;
-            background-size: contain;  
+            background-size: contain;
             float:right;
-        
+
         }
         .m-search{
-            color:#2b85e4; 
+            color:#2b85e4;
             display:inline-block;
             margin-left:10px;
             font-size:14px;
@@ -40,8 +41,8 @@
         display: block;
         visibility: hidden;
     }
-    
-}   
+
+}
 .u-bind{
   width:330px;
   margin:25px auto 0;
@@ -61,37 +62,43 @@
     }
 }
 </style>
+
 <template>
+
 <div class="g-order">
     <SectionTitle label="回款管理"></SectionTitle>
     <div class="u-search" >
          <Button type="primary" @click="importDetail">导入回款明细</Button>
-        <span class="u-high-search" @click="showSearch"></span>  
+        <span class="u-high-search" @click="showSearch"></span>
         <div style='display:inline-block;float:right;padding-right:20px;'>
-            <Input 
-                v-model="customerName" 
+
+            <Input
+                v-model="customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
+
             <div class='m-search' @click="lowerSubmit">搜索</div>
-         </div> 
+         </div>
     </div>
+
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page 
-                    :current="page" 
-                    :total="totalCount" 
+                <Page
+                    :current="page"
+                    :total="totalCount"
                     :page-size="pageSize"
-                    @on-change="changePage" 
-                    show-total 
+                    @on-change="changePage"
+                    show-total
                     show-elevator
                 ></Page>
             </div>
         </div>
     </div>
+
      <Modal
         v-model="openSearch"
         title="高级查询"
@@ -105,6 +112,7 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
         </div>
     </Modal>
+
     <Modal
         v-model="openBind"
         title="绑定客户"
@@ -113,41 +121,50 @@
         width="490"
      >
         <div class="u-cancel-title">
-            <Form  
-                ref="form" 
-                :model="formItem" 
-                label-position="left"  
-                :label-width="80"  
+
+            <Form
+                ref="form"
+                :model="formItem"
+                label-position="left"
+                :label-width="80"
                 class="u-bind u-clearfix"
-                :rules="ruleValidate" 
+                :rules="ruleValidate"
             >
+
                  <FormItem label="所在社区" prop="communityId">
                     <SelectCommunities
-                        :test="formItem" 
+                        :test="formItem"
                         style="width: 250px"
                         :onchange="onCommunityChange"
                     ></SelectCommunities>
                 </FormItem>
+
                 <FormItem label="客户名称" prop="customerId">
                     <SearchCompany
-                        :test="formItem" 
+                        :test="formItem"
                         style="width: 250px"
                         :onchange="onchange"
                     ></SearchCompany>
                 </FormItem>
+
             </Form>
+
         </div>
+
         <div slot="footer">
             <Button type="primary" @click="bindSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="bindPerson">取消</Button>
         </div>
+
     </Modal>
-    <Message 
-        :type="MessageType" 
+
+    <Message
+        :type="MessageType"
         :openMessage="openMessage"
         :warn="warn"
         v-on:changeOpen="onChangeOpen"
     ></Message>
+
     <Modal
         v-model="openImport"
         title="导入回款明细"
@@ -176,10 +193,12 @@
         </div>
     </Modal>
 </div>
+
 </template>
 
 
 <script>
+
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import HighSearch from './highSearch';
@@ -248,7 +267,7 @@ export default {
                         align:'center',
                         width:100,
                     },
-                    
+
                     {
                         title: '支付方式',
                         key: 'payWay',
@@ -272,7 +291,7 @@ export default {
                         title: '付款账户',
                         key: 'payAccount',
                         align:'center',
-                        
+
                     },
                     {
                         title: '收款账户',
@@ -333,45 +352,50 @@ export default {
                                         }
                                     }
                                 }, '查看')
-                            ]);  
-                              
-                             
-                          } 
-                             
+                            ]);
+                          }
+
                         }
                     }
                 ],
                 ruleValidate:{
+
                     customerId: [
                         { required: true, message: '请选择客户名称'}
                     ],
+
                     communityId: [
                         { required: true, message: '请选择所在社区'}
                     ],
                 }
-                
+
             }
         },
         mounted:function(){
             this.getTableData(this.params);
         },
         methods:{
+
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
+
             openView(params){
                 location.href=`./payment/detail/${params.id}`;
             },
+
             bindPerson (params) {
                 this.$refs[this.form].resetFields();
                 this.itemDetail=params;
                 utils.clearForm(this.formItem);
                 this.openBind=!this.openBind;
             },
+
             onExport(){
                  console.log('导出')
             },
+
             getTableData(params){
                 this.$http.get('get-payment-list', params, r => {
                     this.tableData=r.data.items;
@@ -381,13 +405,17 @@ export default {
                     console.log('error',e)
                 })
             },
+
             onchange(data){
                 this.formItem.customerId=data;
             },
+
             onCommunityChange(data){
                 this.formItem.communityId=data;
             },
+
             bindSubmit(){
+
                 this.$refs[this.form].validate((valid)=>{
                     if(valid){
                         this.formItem.paymentId=this.itemDetail.id;
@@ -406,20 +434,24 @@ export default {
                         })
                     }
                 });
-                
+
             },
+
             onChangeOpen(data){
                 this.openMessage=data;
             },
+
             getSearchData(form){
                 this.searchData=form;
             },
+
             searchSubmit(){
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
                 this.getTableData(this.params)
             },
+
             lowerSubmit(){
                 this.page=1;
                 this.params={
@@ -429,20 +461,24 @@ export default {
                 }
                 this.getTableData(this.params);
             },
+
             changePage(page){
                 this.params.page=page;
                 this.page=page;
                 this.getTableData(this.params);
             },
+
             handleUpload (file) {
                 this.file = file;
                 return false;
             },
+
             importDetail(){
                 this.$refs.upload.clearFiles();
                 this.file =null;
                 this.openImport=!this.openImport;
             },
+
              importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
@@ -458,10 +494,8 @@ export default {
                     this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`;
                     this.openMessage=true;
                    this.getTableData(this.params);
-                }, e => {
-                    console.log('error',e)
                 })
-               
+
             },
         }
 

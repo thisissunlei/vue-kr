@@ -23,10 +23,10 @@
             }
         },
         mounted:function(){
-           var _this=this;
-           setTimeout(function() {
-               _this.data=window.resourcesCode;
-           },300);   
+            var _this=this;
+            setTimeout(function() {
+                _this.data=global.resourcesCode||[];
+            }, 200);
         }
     }
 </script>

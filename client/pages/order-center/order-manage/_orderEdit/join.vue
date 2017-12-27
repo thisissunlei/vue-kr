@@ -1,5 +1,5 @@
 <style lang="less"> 
-   .required-label{
+    .required-label{
     // padding:10px 0;
     font-size: 14px;
     position: relative;
@@ -20,48 +20,53 @@
 </style>
 
 
-
 <template>
     <div class="create-new-order">
-        <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
+        <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
-            <Row style="margin-bottom:30px">  
+            <Row>  
                 <Col class="col">
-                    <FormItem label="客户名称" style="width:252px" prop="customerId">
-                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                    <FormItem label="客户名称" style="width:252px" >
+                    <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName" ></selectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                    <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                    <FormItem label="所属社区" style="width:252px">
+                    <selectCommunities test="formItem" :onchange="changeCommunity" :value="communityName"></selectCommunities>
                     </FormItem>
                 </Col>
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    <FormItem label="销售员" style="width:252px">
+                        <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
             <Row  style="margin-bottom:30px">   
                 <Col class="col">
                     <FormItem label="租赁开始日期" style="width:252px" prop="startDate">
-                        <DatePicker type="date" placeholder="租赁开始时间" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
+                        <DatePicker type="date" placeholder="租赁开始日期" v-model="formItem.startDate" style="display:block" @on-change="changeBeginTime"></DatePicker>
                         <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div>
                     </FormItem>
                     
                 </Col>
-                
-                <Col  class="col">
+                <Col  class="col" v-if="false">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
                     <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                 </Col>
+                
+                <Col  class="col">
+                    <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
+                    <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTimeStatus"></DatePicker>
+                    </FormItem>
+                </Col>
                  <Col class="col">
-                    <FormItem label="租赁时长" style="width:252px" >
+                    <FormItem label="租赁时长" style="width:252px">
                         <Input v-model="formItem.timeRange" placeholder="租赁时长" disabled></Input>
                     </FormItem>
                 </Col>
@@ -117,8 +122,10 @@
                         
                     </Col>
                     <Col span="5" class="discount-table-head" >
-                        <span>折扣</span>  
+                        <span>折扣</span>
+                        
                     </Col>
+                    
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
@@ -150,7 +157,7 @@
                     </Col>  
             </Row>
         </FormItem>
-            <Row style="margin-bottom:10px">
+        <Row style="margin-bottom:10px">
                 <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length">
                         <span>优惠金额总计</span>
@@ -163,13 +170,13 @@
         <div style="padding-left:24px">
             <Row>
                  <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="formItem.rentAmount" placeholder="服务费总额" disabled></Input>
+                    <FormItem label="优惠后服务费总额" style="width:252px">
+                        <Input v-model="formItem.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
                     <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
-                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime"></DatePicker >
+                        <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="formItem.firstPayTime" ></DatePicker >
                     </FormItem> 
                  </Col>
             </Row>
@@ -183,11 +190,11 @@
 
                  </Col>
                  <Col class="col">
-                    <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
-                        <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
+                        <div class="pay-error" v-if="errorAmount">请选择付款方式</div>
                  </Col>
             </Row>
             
@@ -195,6 +202,7 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
         </FormItem>
 
     </Form>
@@ -205,7 +213,6 @@
         ok-text="保存"
         cancel-text="取消"
         width="750"
-       
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
@@ -221,18 +228,17 @@
 
 
 <script>
-
-
 import sectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
+
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
+
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-
 
 
 
@@ -246,25 +252,32 @@ import utils from '~/plugins/utils';
                 } else if(new Date(this.formItem.startDate)<new Date(value)){
                     callback(new Error('首付款日期不得晚于起始日期'));
                 }else{
-                     callback();
+                    callback()
                 }
             };
+            
             return {
                 openStation:false,
+                customerName:'',
+                communityName:'',
                 selectAll:false,
                 discountError:false,
                 index:0,
+                saleAmount:0,
+                saleAmounts:0,
+                salerName:'',
                 depositAmount:'',
+                errorAmount:false,
                 disabled:false,
                 delStation:[],
                 stationAmount:'',
                 installmentType:'',
                 maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
+                corporationName:'',
                 stationData:{
                     submitData:[],
                     deleteData:[],
-                    clearAll:false
                 },
                 stationAll:{},
                 payList:[
@@ -283,8 +296,6 @@ import utils from '~/plugins/utils';
                     {label:'5个月',value:'5'},
                     {label:'6个月',value:'6'},
                 ],
-                saleAmount:0,
-                saleAmounts:utils.smalltoBIG(0),
                 youhui:[],
                 columns4: [
                     {
@@ -320,7 +331,6 @@ import utils from '~/plugins/utils';
                     customerId: '',
                     communityId: '',
                     startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
-                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     endDate: '',
                     timeRange:'',
                     floor:'',
@@ -328,6 +338,7 @@ import utils from '~/plugins/utils';
                     firstPayTime:'',
                     rentAmount:'',
                     items:[],
+                    signDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     stationAmount:0,
                 },
 
@@ -352,21 +363,18 @@ import utils from '~/plugins/utils';
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
                     signDate:[
-                        { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
+                        { required: true,type: 'date',  message: '请先选择签署时间', trigger: 'change' }
                     ]
                 },
                 getFloor:+new Date(),
-                changeSale:+new Date(),
-                salerName:'请选择',
                 ssoId:'',
-                errorAmount:false,
                 ssoName:'',
-
+                changeSale:+new Date()
             }
         },
         head() {
             return {
-                title: '新建订单'
+                title: '编辑入驻订单'
             }
         },
         components: {
@@ -375,44 +383,95 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap,
+            planMap
         },
-        created(){
-            // this.openStation = false
+        mounted(){
+            this.getDetailData();
+            GLOBALSIDESWITCH("false");
         },
         watch:{
            getFloor(){
             let _this = this;
-            this.config()
             if(this.formItem.communityId && this.formItem.customerId){
                 let params = {
                     communityId:this.formItem.communityId,
                     customerId:this.formItem.customerId
                 }
-                 this.$http.get('get-community-floor', params).then( r => {
-                    _this.floors = r.floor;
-                    _this.ssoId = r.ssoId;
-                    _this.ssoName = r.ssoName;
-                    if(!_this.formItem.salerId){
-                        _this.formItem.salerId = JSON.stringify(r.ssoId);
-                        _this.salerName = r.ssoName
+                 this.$http.get('get-community-floor', params, r => {
+                    _this.floors = r.data.floor;
 
-                    }
-
-                }).catch( e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
+                }, e => {
 
                         console.log('error',e)
                 })
             }
            },
-           changeSale(){
-            // this.dealSaleInfo()
-           }
         },
         methods: {
+
+             getDetailData(){
+                let _this = this;
+                let {params}=this.$route;
+                let from={
+                    // id:4095
+                    id:params.orderEdit
+                };
+                this.$http.get('join-bill-detail', from, r => {
+                    let data = r.data;
+                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
+                        let obj = item;
+                        obj.belongType = item.seatType;
+                        obj.id = item.seatId;
+                        obj.name = item.seatName;
+                        obj.startDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
+                        return obj;
+                    })
+                    _this.stationData = {
+                        submitData:data.orderSeatDetailVo,
+                        deleteData:[]
+                    };
+                    _this.getSaleTactics({communityId:data.communityId})
+                    _this.formItem.customerId = JSON.stringify(data.customerId);
+                    _this.customerName = data.customerName;
+                    _this.formItem.communityId = JSON.stringify(data.communityId);
+                     _this.salerName = data.salerName;
+                    _this.formItem.salerId = JSON.stringify(data.salerId);
+                    _this.communityName = data.communityName;
+                    _this.formItem.startDate = new Date(data.startDate);
+                    _this.formItem.endDate = new Date(data.endDate);
+                    _this.formItem.signDate = new Date(data.signDate);
+                    _this.changeBeginTime(data.startDate)
+                    _this.stationList = data.orderSeatDetailVo;
+                    _this.formItem.firstPayTime = new Date(data.firstPayTime);
+                    _this.selectDeposit(data.deposit)
+                    _this.selectPayType(data.installmentType);
+                    setTimeout(function(){
+                        _this.getStationAmount()
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
+
+                        _this.formItem.items = data.contractTactics;
+                        _this.dealSaleInfo()
+                    },200)
+                    // _this.depositAmount = '3';
+                    _this.getFloor = +new Date()
+                    console.log('contractTactics',_this.formItem)
+                    
+                    }, e => {
+                        _this.$Message.info(e);
+                })
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -420,43 +479,43 @@ import utils from '~/plugins/utils';
                 });
             },
             joinFormSubmit(){
-                this.config()
+                this.config();
+                 let {params}=this.$route;
                 let saleList = this.formItem.items
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
-                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
+                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
                 let formItem = {} 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
+                formItem.id = params.orderEdit;
                 formItem.installmentType = this.installmentType;
                 formItem.deposit = this.depositAmount;
                 formItem.saleList=JSON.stringify(saleList);
+                formItem.signDate = signDate;
                 formItem.seats=JSON.stringify(this.stationList);
                 formItem.customerId=this.formItem.customerId;
                 formItem.communityId=this.formItem.communityId;
                 formItem.salerId=this.formItem.salerId;
-                formItem.signDate = signDate;
                 formItem.timeRange=this.formItem.timeRange;
-
                 formItem.rentAmount=this.formItem.rentAmount;
-                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.firstPayTime);
+                formItem.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.firstPayTime));
 
                 formItem.startDate = start;
                 formItem.endDate =end;
-                formItem.ssoId = this.ssoId;
-                formItem.ssoName = this.ssoName;
+                console.log('handleSubmit',formItem)
                 let _this = this;
-                 this.$http.post('save-join', formItem).then( r => {
-                    window.location.href='/orderCenter/orderManage';
-                }).catch( e => {
+                 this.$http.post('save-join', formItem, r => {
+                    window.location.href='/order-center/order-manage';
+                }, e => {
                      _this.$Notice.error({
                         title:e.message
                     })
+                     _this.disabled = false
 
                         console.log('error',e)
                 })
@@ -505,23 +564,23 @@ import utils from '~/plugins/utils';
                 this.config()
                 let params = {
                     communityId:this.formItem.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.startDate),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.formItem.endDate),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate)),
                     seats:JSON.stringify(this.stationList),
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                 this.$http.post('count-sale', params).then( r => {
-                    let money = r.originalTotalrent - r.totalrent;
+                 this.$http.post('count-sale', params, r => {
+                    _this.formItem.rentAmount = r.data.totalrent;
+                    let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
-                    _this.formItem.rentAmount = r.totalrent;
-                }).catch( e => {
+                    
+                }, e => {
 
                      _this.$Notice.error({
                         title:e.message
                     })
-                    // _this.formItem.items=[]
 
                         console.log('error',e)
                 })
@@ -555,19 +614,16 @@ import utils from '~/plugins/utils';
                     });
                     return
                 }
-
                 
-
+                if(this.errorPayType || this.errorAmount){
+                    this.$Notice.error({
+                        title:'请填写完表单'
+                    });
+                }
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        console.log('handleSubmit',valid)
-                        if(this.errorPayType || this.errorAmount){
-                            this.$Notice.error({
-                                title:'请填写完表单'
-                            });
-                            return;
-                        }
+                        console.log('========>',_this.stationList.length)
                         if(!_this.stationList.length){
                             _this.$Notice.error({
                                 title:'请选择入驻工位'
@@ -697,14 +753,12 @@ import utils from '~/plugins/utils';
             clearStation:function(){
                 // 清除所选的工位
                 if(this.stationList.length){
-
                     this.stationData={
                         submitData:[],
                         deleteData:[],
                     };
                     this.stationList = [];
-                    this.formItem.items = [];
-                    this.formItem.rentAmount = '0'
+                    this.formItem.items = []
                 }
             },
             changeCustomer:function(value){
@@ -808,15 +862,17 @@ import utils from '~/plugins/utils';
                 this.errorPayType = false;
             },
             submitStation:function(){//工位弹窗的提交
+
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
+                 console.log('submitStation',this.stationData)
                 this.getStationAmount()
                 this.openStation = false
-                
 
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
+
                 
             },
             cancelStation:function(){//工位弹窗的取消
@@ -824,16 +880,16 @@ import utils from '~/plugins/utils';
                     submitData:this.stationList,
                     deleteData:[],
                 };
-                this.openStation = false
+                this.openStation = false;
 
             },
             
             changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
+                let error = false;
                 this.clearStation()
-                if(!val || !this.formItem.endDate){
+                 if(!val || !this.formItem.endDate){
                     return;
                 }
-                let error = false;
                 this.config();
                 val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
                 let params = {
@@ -861,11 +917,46 @@ import utils from '~/plugins/utils';
                 return val ;
 
             },
-            changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
-                this.clearStation()
+            changeEndTimeStatus(val){
+                  this.clearStation();
                 if(!val){
                     return;
                 }
+
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                let error = false;
+
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
+
+                let params = {
+                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
+                    end:val
+                }
+                this.config();
+
+                if(new Date(this.formItem.startDate)>new Date(val)){
+                    error = true;
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    })
+                }else{
+                    this.contractDateRange(params)
+                }
+                this.timeError = error;
+              
+            },
+            changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
+                  this.clearStation();
+                if(!val){
+                    return;
+                }
+
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+
 
                 val = this.dealEndDate(val);
                 let error = false;
@@ -876,11 +967,13 @@ import utils from '~/plugins/utils';
                 if(!this.formItem.startDate){
                     return;
                 }
+
                 let params = {
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     end:val
                 }
                 this.config();
+
                 if(new Date(this.formItem.startDate)>new Date(val)){
                     error = true;
                     this.$Notice.error({
@@ -890,18 +983,14 @@ import utils from '~/plugins/utils';
                     this.contractDateRange(params)
                 }
                 this.timeError = error;
-                this.clearStation();
+              
 
             },
             contractDateRange:function(params){//获取租赁范围
                 let _this = this;
-                this.config();
-                 this.$http.get('contract-date-range', params).then( r => {
-                    _this.formItem.timeRange = r;
-                }).catch( e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
+                 this.$http.get('contract-date-range', params, r => {
+                    _this.formItem.timeRange = r.data;
+                }, e => {
 
                     console.log('error',e)
                 })
@@ -910,9 +999,9 @@ import utils from '~/plugins/utils';
                 let list = [];
                 let maxDiscount = '';
                 let _this = this;
-                 this.$http.get('sale-tactics', params).then( r => {
-                    if(r.length){
-                        list = r.map(item=>{
+                 this.$http.get('sale-tactics', params, r => {
+                    if(r.data.length){
+                        list = r.data.map(item=>{
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
@@ -921,14 +1010,13 @@ import utils from '~/plugins/utils';
                             }
                             return obj;
                         })
-                    }else{
-                        list = []
                     }
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 
-                }).catch( e => {
-                     _this.youhui = [];
+                }, e => {
+                    _this.youhui = []
+
                     console.log('error',e)
                 })
             },
@@ -937,7 +1025,7 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    obj.originalPrice = item.originalPrice  || item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
@@ -952,9 +1040,9 @@ import utils from '~/plugins/utils';
                 }
                 let _this = this;
                 if(val.length){
-                     this.$http.post('get-station-amount', params).then( r => {
+                     this.$http.post('get-station-amount', params, r => {
                         let money = 0;
-                        _this.stationList = r.seats.map(item=>{
+                        _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
@@ -965,7 +1053,7 @@ import utils from '~/plugins/utils';
                         _this.formItem.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
 
-                    }).catch( e => {
+                    }, e => {
                         _this.$Notice.error({
                             title:e.message
                         })
@@ -973,7 +1061,7 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                     })
                 }
-            },
+            }
                     
                
         }

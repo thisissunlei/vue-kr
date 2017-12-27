@@ -38,6 +38,7 @@
 
 <script>
 import utils from '~/plugins/utils';
+
 export default {
   data(){
     return {

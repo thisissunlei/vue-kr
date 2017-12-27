@@ -35,6 +35,22 @@ function toType (obj) {
   return o
 }
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.interceptors.request.use((config) => {
+
+  if(config.method  == 'post'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
+
+  return config;
+
+},(error) =>{
+  return Promise.reject(error);
+});
+
+axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
+
 
 
   function getMethod(path) {
@@ -109,17 +125,19 @@ function toType (obj) {
       if (!url) {
         return
       }
-      getUrl(url)
-      axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-
-      axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
+      console.log('POST========',url,params)
+      // getUrl(url)
 
       axios({
-          method: 'post',
+          method: 'POST',
           url: APIS[url].url,
-          data: Qs.stringify(params),
+          data: params,
+          params: null,
           baseURL: root,
           withCredentials: false,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         })
        .then(jsonParse)
       .then(check401)
@@ -146,6 +164,8 @@ function toType (obj) {
       if (!url) {
         return
       }
+      axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
+
       getUrl(url)
  if (params) {
         params = filterNull(params)

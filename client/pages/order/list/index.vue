@@ -284,7 +284,9 @@ export default {
                 this.itemDetail=params;
             },
             orderCancel(){
+               
                 if(!this.ifCancel){
+                     this.openCancel=false;
                     return;
                 }
             let itemDetail=this.itemDetail;
@@ -321,17 +323,15 @@ export default {
                 })
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.params.page=page;
+                this.getTableData(this.params);
             },
              getSearchData(form){
                 this.searchData=form;
             },
              searchSubmit(){
-                this.getTableData(this.searchData)
+                this.params=this.searchData;
+                this.getTableData(this.params)
             },
             onChangeOpen(data){
                 this.openMessage=data;

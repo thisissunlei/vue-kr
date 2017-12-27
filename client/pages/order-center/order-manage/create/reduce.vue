@@ -203,8 +203,8 @@ import utils from '~/plugins/utils';
             SelectSaler,
             reduceStation,
         },
-        created:function(){
-            
+        mounted(){
+            GLOBALSIDESWITCH("false");
         },
         watch:{
             getStationFn:function(){
@@ -227,7 +227,7 @@ import utils from '~/plugins/utils';
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
                     _this.$Message.success('Success!');
-                    window.location.href='/orderCenter/orderManage';
+                    window.location.href='/order-center/order-manage';
                 }, e => {
                      _this.$Notice.error({
                         title:e.message

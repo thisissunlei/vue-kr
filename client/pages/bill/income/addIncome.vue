@@ -106,7 +106,6 @@
 <script>
 import SearchCompany from '~/components/SearchCompany';
 import SelectCommunities from '~/components/SelectCommunities';
-
 export default{
     name:'highSearch',
     components:{

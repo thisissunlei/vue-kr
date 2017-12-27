@@ -1,7 +1,7 @@
 <template>
     <div class='m-bill-list'>
             
-            <div style='width:100%;padding:0 0 0 10px;'>
+            <div style='width:100%;padding:0 0 0 20px;'>
                     <div style='display:inline-block;width:20%;'>
                         <Button type="primary" @click="showJoin" style='margin-right:30px;'>入驻</Button>
                         <Button type="primary" @click="showRenew">续租</Button>
@@ -24,8 +24,8 @@
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border></Table>
-            <div style="margin: 10px;overflow: hidden">
+            <Table :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
+            <div style="margin: 10px 20px;overflow: hidden">
                     <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
@@ -67,7 +67,6 @@
                 <ApplyContract></ApplyContract>
             </Modal>
 
-            <Loading :loading='loadingStatus'/>
     </div>
 </template>
 
@@ -80,7 +79,6 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    import Loading from '~/components/Loading';
     
 
     export default {
@@ -90,8 +88,7 @@
             Nullify,
             Message,
             Buttons,
-            ApplyContract,
-            Loading
+            ApplyContract
         },
         data () {
             
@@ -257,10 +254,10 @@
                 utils.clearForm(this.upperData);
             },
             showJoin(){
-                window.open('/orderCenter/orderManage/create/join','_blank')
+                window.open('/order-center/order-manage/create/join','_blank')
             },
             showRenew(){
-                window.open('/orderCenter/orderManage/create/renew','_blank')
+                window.open('/order-center/order-manage/create/renew','_blank')
             },
             showApply(params){
                 this.id=params.row.id;
@@ -273,7 +270,7 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/orderCenter/orderManage/${params.row.id}/${viewName}`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,'_blank');
             },
             showNullify(params){
                 this.id=params.row.id;
@@ -295,7 +292,7 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/orderCenter/orderManage/${params.row.id}/${type}`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/${type}`,'_blank')
             },
             nullifySubmit (){
                 let params={

@@ -5,6 +5,7 @@
 </template>
 
 <script>
+    // window.resourcesCode=[];
     export default {
         props:[
             'label',
@@ -20,13 +21,28 @@
         methods:{
             buttonClick(){
                 this.$emit('click');
+            },
+            userData(){
+                var _this=this;
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", true);
+                xhr.responseType = 'json';
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        window.resourcesCode=xhr.response.data.resourcesCode;
+                    }
+                };
+                xhr.send();
             }
         },
         mounted:function(){
-            var _this=this;
-            setTimeout(function() {
-                 _this.data=window.resourcesCode;
-            }, 300);
+           // var _this=this;
+           // if(window.resourcesCode.length==0){
+           //     this.userData();    
+           // }
+           // setTimeout(function() {
+           //     _this.data=window.resourcesCode;
+           // },300);   
         }
     }
 </script>

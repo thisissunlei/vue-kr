@@ -43,7 +43,6 @@
      function GlobalRouter() {
          this.routes = {};
          this.currentUrl = '';
-         
      }
      //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){
@@ -80,9 +79,8 @@
             salidNav:[],
         };
          this.isInit = false;
-         this.html = '<link href="/styles/index.css" rel="stylesheet" />' +
-                     '<link href="/styles/icomoon/style.css" rel="stylesheet" />' +
-                     '<div class="app-header">'+
+         this.html = '<div class="app-header">'+
+
                          '<div class="c-header"> ' +
  
                              '<div class="brand"></div> ' +
@@ -92,7 +90,7 @@
                              '<div class="header-nav" id="j_header">${header}</div>' +
  
                                  '<div class = "j_header_other">' +
-                                     '<div id = "j_msg_btn"></div>' +
+                                     //'<div id = "j_msg_btn"></div>' +
                                      '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
@@ -110,15 +108,15 @@
                                 '<div id="j_sidebar" class="sidebar" style = "display:none;"> ${sidebar} </div> ' +
                                 '<div id="j_nav-loading" class="nav-loading" style="display:none;">'+
 
-                                    '<div class="item-loader-container">'+
+                                    // '<div class="item-loader-container">'+
                                        
-                                        '<div class="la-2x" >'+
-                                            '<div></div>'+
-                                            '<div></div>'+
+                                    //     '<div class="la-2x" >'+
+                                    //         '<div></div>'+
+                                    //         '<div></div>'+
                                             
-                                        '</div >'+
-                                        '<span>加载中...<span>'+
-                                    '</div >'+
+                                    //     '</div >'+
+                                    //     '<span>加载中...<span>'+
+                                    // '</div >'+
                                 '</div>' +
                             '</div>'+
                         
@@ -150,7 +148,7 @@
                     if (child.type && child.type == "vue") {
                         href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
-                        href = "#/" + child.router;
+                        href =location.protocol+"//"+ location.hostname +"new/#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
@@ -735,6 +733,13 @@
                                  router: 'member/membermanage/cardmanage',
                                  menuCode: 'mbr_card_base',
                              },
+                             {
+                                primaryText: "企业管理员设置",
+                                router: 'member/setting-manager',
+                                type:'vue',
+                                menuCode: 'fina_manager_setting_page'
+                               
+                            },
                          ]
                      },
                      {
@@ -1232,7 +1237,7 @@
                     menuItems: [
                         {
                             primaryText: "订单列表",
-                            router: 'orderCenter/orderManage',
+                            router: 'order-center/order-manage',
                             type:'vue',
                             menuCode: 'order_seat_list',
                         },
@@ -1247,7 +1252,7 @@
                     menuItems: [
                         {
                             primaryText: "合同列表",
-                            router: 'contractCenter/list',
+                            router: 'contract-center/list',
                             type:'vue',
                             menuCode: 'iot_door_open_log',
                             //menuCode: 'fina_meeting_order_page'
@@ -1275,7 +1280,7 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'pay_created_bill_page'
-                            // menuCode: 'iot_door_open_log',
+                             //menuCode: 'pay_cerated_bill_page',
                         },
                         {
                             primaryText: "回款管理",

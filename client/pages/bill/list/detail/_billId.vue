@@ -37,6 +37,27 @@
 		background:url('~assets/images/arrow_top.svg') no-repeat center center;
 	}
 }
+.u-amount-list{
+	text-align: right;
+	height: 90px;
+	margin-bottom:24px;
+}
+.u-amount{
+	height:28px;
+	line-height:28px;
+	span{
+		display:inline-block;
+		width:100px;
+		text-align: right;
+	}
+}
+.txt-bold{
+	font-weight: bold;
+}
+
+.u-txt-red{
+	color:#FF6868;
+}
 
 
 }
@@ -63,27 +84,37 @@
 			<LabelText label="付款截止日期：">
 				{{basicInfo.billEndTime}}
 			</LabelText>
-			<LabelText label="账单状态：">
+			<LabelText label="支付状态：">
 				{{basicInfo.billStatus}}
 			</LabelText>
-			<LabelText label="账单总金额：">
-				￥{{basicInfo.amount}}
+			<LabelText label="账单金额：">
+				￥{{basicInfo.payableAmount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
 				￥{{basicInfo.paidAmount}}
 			</LabelText>
-			<LabelText label="账单生成时间：">
-				{{basicInfo.createTime}}
+			<LabelText label="账单日：">
+				{{basicInfo.billingDate}}
 			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<div v-bind:class="[ISshow?showClass:hideClass]" >
 				<Table border :columns="cost" :data="costInfo"></Table>
 			</div>
-
 			<div v-if="costInfo.length>5" class="u-show-tip">
 				<div v-if="!ISshow" @click="showTab">展开<span class="u-bottom"></span></div>
 				<div v-if="ISshow"@click="hideTab">收起<span class="u-top"></span></div>
+			</div>
+			<div class="u-amount-list">
+				<div class="u-amount">
+					费用合计：<span>￥{{basicInfo.totalAmount}}</span>
+				</div>
+				<div class="u-amount">
+					减免金额：<span>￥-{{basicInfo.freeAmount}}</span>
+				</div>
+				<div class="u-amount txt-bold">
+					账单金额：<span class="u-txt-red">￥{{basicInfo.payableAmount}}</span>
+				</div>
 			</div>
 		</DetailStyle>	
 		<DetailStyle info="结算记录">

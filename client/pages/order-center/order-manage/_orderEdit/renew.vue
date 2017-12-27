@@ -33,24 +33,29 @@
 
 <template>
     <div class="create-new-order">
-       <SectionTitle label="新建续租服务订单管理"></SectionTitle>
+       <SectionTitle label="编辑续租服务订单管理"></SectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px"  prop="customerId">
-                    <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer"></SelectCustomers>
+                    <SelectCustomers name="renewForm.customerId" :onchange="changeCustomer" :value="customerName"></SelectCustomers>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="所属社区" style="width:252px" prop="communityId" >
-                    <SelectCommunities test="renewForm" :onchange="changeCommunity"></SelectCommunities>
+                    <SelectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></SelectCommunities>
+                    </FormItem>
+                </Col>
+                <Col class="col" v-if="false">
+                    <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
+                        <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
                 <Col class="col">
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
-                        <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                        <DatePicker type="date" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTimeStatus"></DatePicker>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -58,7 +63,7 @@
                     <SelectSaler name="renewForm.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
-                 <Col  class="col">
+                <Col  class="col">
                     <FormItem label="签署日期" style="width:252px" prop="signDate">
                     <DatePicker type="date" placeholder="签署日期" format="yyyy-MM-dd" v-model="renewForm.signDate" style="display:block"></DatePicker>
                     </FormItem>
@@ -110,9 +115,6 @@
                         <span>折扣</span>
                         
                     </Col>
-                   <!--  <Col span="5" class="discount-table-head" style="border-right:1px solid #e9eaec;">
-                        <span>优惠金额</span>
-                    </Col> -->
                     
                 </Row>
                     <FormItem
@@ -121,7 +123,7 @@
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 :prop="'items.' + index + '.type'"
                 :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
-            <Row  v-show="item.show">
+            <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
@@ -137,7 +139,6 @@
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     
-                        <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
@@ -160,12 +161,12 @@
               <div style="padding-left:24px">
             <Row>
                  <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
+                    <FormItem label="优惠后服务费总额" style="width:252px">
+                        <Input v-model="renewForm.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
-                    <FormItem label="首付款日期" style="width:252px" prop="firstPayTime">
+                    <FormItem label="首付款日期" style="width:252px">
                         <DatePicker type="date" placeholder="首付款日期" style="width:252px" v-model="renewForm.firstPayTime" ></DatePicker >
                     </FormItem> 
                  </Col>
@@ -180,11 +181,10 @@
 
                  </Col>
                  <Col class="col">
-                    <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
+                    <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
                             <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
                         </div>
-                         <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
             </Row>
             </div>
@@ -204,7 +204,7 @@
         width="600"
          class-name="vertical-center-modal"
      >
-     <div v-if="!stationListData.length">无可续租工位</div>
+        <div v-if="!stationListData.length">无可续租工位</div>
         <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
         <div slot="footer">
@@ -234,7 +234,7 @@ import utils from '~/plugins/utils';
 
     export default {
         data() {
-             const validateFirst = (rule, value, callback) => {
+            const validateFirst = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请先选择首付款日期'));
                 } else if(new Date(this.renewForm.startDate)<new Date(value)){
@@ -248,15 +248,19 @@ import utils from '~/plugins/utils';
                 index:1,//优惠的index
                 openStation:false,//弹窗开关
                 stationAmount:'',
+                communityName:'',
+                customerName:'',
+                salerName:'',
                renewForm:{
                     communityId:'',
                     customerId:'',
                     endDate:'',
                     saler:'',
                     rentAmount:'',
-                    items:[],
-                    signDate:new Date()
+                    items:[]
                },
+               saleAmount:0,
+               saleAmounts:0,
                disabled:false,//提交按钮是否禁止
                discountError:{
                 error:false,
@@ -280,7 +284,7 @@ import utils from '~/plugins/utils';
                         { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                     endDate: [
-                        { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
+                        { required: true,message: '此项不可为空'}
                     ],
                     signDate: [
                         { required: true, type: 'date',message: '此项不可为空', trigger: 'change' }
@@ -292,7 +296,6 @@ import utils from '~/plugins/utils';
                depositAmount:'',
                installmentType:'',
                maxDiscount:'',
-               errorAmount:false,
                columns: [
                     {
                         type: 'selection',
@@ -338,17 +341,15 @@ import utils from '~/plugins/utils';
                 youhui:[],
                 errorPayType:false,
                 getStationFn:'',
-                ssoId:'',
-                ssoName:'',
-                salerName:'请选择',
-                saleAmount:0,
-                saleAmounts:utils.smalltoBIG(0),
+                stationAmount:'',
+                orderSeatId:'',
+                corporationName:'',
 
            }
         },
         head() {
             return {
-                title: '新建续租服务订单管理'
+                title: '编辑续租服务订单管理'
             }
         },
         components: {
@@ -360,15 +361,14 @@ import utils from '~/plugins/utils';
             stationList,
             planMap
         },
-        created(){
+        mounted(){
+            this.getDetailData();
+            GLOBALSIDESWITCH("false");
         },
         watch:{
             getStationFn:function(){
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
                     this.getRenewStation()
-                }
-                if(this.renewForm.customerId && this.renewForm.communityId){
-                    this.getSignUser()
                 }
                 if(this.renewForm.communityId){
                     this.getSaleTactics({communityId:this.renewForm.communityId})
@@ -379,24 +379,84 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
-            getSignUser(){
-                let params = {
-                    communityId:this.renewForm.communityId,
-                    customerId:this.renewForm.customerId
-                }
+            getDetailData(){
                 let _this = this;
-                 this.$http.get('get-community-floor', params, r => {
-                    _this.ssoId = r.data.ssoId;
-                    _this.ssoName = r.data.ssoName;
-                    if(!_this.renewForm.salerId){
-                        _this.renewForm.salerId = JSON.stringify(r.data.ssoId);
-                        _this.salerName = r.data.ssoName
+                let {params}=this.$route;
+                let from={
+                    id:params.orderEdit
+                };
+                this.$http.get('join-bill-detail', from, r => {
+                    let data = r.data;
+                    let money = 0;
+                    data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
+                        let obj = item;
+                        money += item.amount;
+                        obj.name = item.seatName;
+                        obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
+                        return obj;
+                    })
+                    _this.getSaleTactics({communityId:data.communityId})
+                    _this.renewForm.customerId = JSON.stringify(data.customerId);
+                    _this.customerName = data.customerName;
+                    _this.renewForm.communityId = JSON.stringify(data.communityId);
+                     _this.salerName = data.salerName;
+                    _this.renewForm.salerId = JSON.stringify(data.salerId);
+                    _this.communityName = data.communityName;
+                    _this.renewForm.endDate = new Date(data.endDate);
+                    _this.renewForm.signDate = new Date(data.signDate);
 
-                    }
+                    _this.renewForm.startDate = data.startDate;
+                    _this.selecedStation = data.orderSeatDetailVo;
+                    _this.selecedArr = data.orderSeatDetailVo;
+                    // _this.renewForm.rentAmount = data.rentAmount;
+                    _this.installmentType = data.installmentType;
+                    _this.depositAmount = data.deposit;
+                    _this.renewForm.firstPayTime = data.firstPayTime;
+                    _this.getStationAmount()
+                    
 
-                }, e => {
+                     setTimeout(function(){
+                        
+                        data.contractTactics = data.contractTactics.map((item,index)=>{
+                            let obj = {};
+                            obj.status = 1;
+                            obj.show = true;
+                            obj.validStart = item.freeStart;
+                            obj.validEnd = item.freeEnd;
+                            obj.type = item.tacticsType+'-'+index;
+                            obj.tacticsId = item.tacticsId ;
+                            obj.discount = item.discountNum;
+                            obj.tacticsType = JSON.stringify(item.tacticsType);
+                            return obj;
+                        })
 
-                        console.log('error',e)
+                        _this.renewForm.items = data.contractTactics;
+                        _this.dealSaleInfo()
+                    },200)
+                     _this.getStationFn = +new Date();
+                    
+                    // setTimeout(function(){
+                    //     _this.getStationAmount()
+                    //     data.contractTactics = data.contractTactics.map((item,index)=>{
+                    //         console.log('========',item)
+                    //         let obj = {};
+                    //         obj.status = 1;
+                    //         obj.show = true;
+                    //         obj.validStart = item.freeStart;
+                    //         obj.validEnd = item.freeEnd;
+                    //         obj.type = item.tacticsType+'-'+index;
+                    //         obj.tacticsId = item.tacticsId ;
+                    //         obj.discount = item.discountNum;
+                    //         obj.tacticsType = JSON.stringify(item.tacticsType);
+                    //         return obj;
+                    //     })
+
+                    //     _this.renewForm.items = data.contractTactics;
+                    //     _this.dealSaleInfo()
+                    // },200)
+                    }, e => {
+                        _this.$Message.info(e);
                 })
             },
             config:function(){
@@ -407,18 +467,19 @@ import utils from '~/plugins/utils';
             },
             renewFormSubmit(){
                 this.config();
+                let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
-                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
+                let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
                 let saleList = this.renewForm.items;
                  saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
+                 renewForm.id = params.orderEdit;
                 renewForm.installmentType = this.installmentType;
                 renewForm.deposit = this.depositAmount;
                 renewForm.saleList=JSON.stringify(saleList);
@@ -428,13 +489,12 @@ import utils from '~/plugins/utils';
                 renewForm.salerId=this.renewForm.salerId;
                 renewForm.rentAmount=this.renewForm.rentAmount;
                 renewForm.signDate = signDate;
-                renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.firstPayTime);
-
                 renewForm.startDate = start;
+                renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-                    window.location.href='/orderCenter/orderManage';
+                    window.location.href='/order-center/order-manage';
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
@@ -451,16 +511,10 @@ import utils from '~/plugins/utils';
                 let message = '请填写完整表单';
                 this.config()
                 let _this = this;
-                
+                this.disabled = true;
                 if(!this.installmentType){
                     this.errorPayType = true
                 }
-                if(!this.depositAmount){
-                    this.errorAmount = true
-                }
-                
-                
-                this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         if(!this.selecedStation.length){
@@ -470,15 +524,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return;
                         }
-                        if(this.errorAmount || this.errorPayType){
-                            this.$Notice.error({
-                                title:'请填写完整表单'
-                            });
-                            _this.disabled = false;
-                            return;
-                        }
                         this.renewFormSubmit()
-                        this.$Message.success('Success!');
                     } else {
                         _this.disabled = false;
 
@@ -554,13 +600,29 @@ import utils from '~/plugins/utils';
                 return val ;
 
             },
+            changeTimeStatus(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+                }
+                value = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(value))
+
+                this.renewForm.endDate = value;
+                
+                let _this = this;
+                setTimeout(function(){
+                 _this.getStationFn = +new Date()
+
+                },200)
+            },
             changeTime:function(value){
                 this.clearStation()
                 if(!value){
                     this.renewForm.endDate = '';
                     return;
-
                 }
+                
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
                 
@@ -597,7 +659,6 @@ import utils from '~/plugins/utils';
             },
             selectDeposit:function(value){
                 this.depositAmount = value;
-                this.errorAmount = false;
 
             },
             selectPayType:function(value){
@@ -668,6 +729,7 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
+                console.log('deleteStation==============',stationVos)
                 this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
@@ -761,7 +823,6 @@ import utils from '~/plugins/utils';
                 this.renewForm.items = items;
             },
             submitStation:function(){
-               
                 let val = this.selecedArr || [];
                 this.openStation = false
                 if(!val.length){
@@ -769,16 +830,15 @@ import utils from '~/plugins/utils';
                 }
                 var date = val[0].endDate;
                 date = new Date(date).getTime();
-               
+
                 let day = 1000 * 60* 60*24;
-                let start = date + day;
+                let start =  date + day;
                 this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
-               
                 this.getStationAmount()
                 
             },
             getStationAmount(){
-               
+
                 let val = this.selecedArr;
                 let _this = this;
                 this.config()
@@ -792,21 +852,19 @@ import utils from '~/plugins/utils';
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
-                 console.log("9999999",this.renewForm.startDate)
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
-
                 }
-               
+                console.log(this.renewForm.startDate,"iiiiii")
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                          _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+=item.amount;
+                            money+=item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
@@ -831,10 +889,10 @@ import utils from '~/plugins/utils';
                     obj.time = +new Date()
                     return obj;
                 })
-                this.openStation = false;
+                this.openStation = false
             },
             onStationChange:function(val){
-                console.log(val,"mmmmm")
+                // console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
@@ -922,18 +980,16 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:this.renewForm.startDate,
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.endDate),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
+                    _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
-
-                    _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
-                    console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
@@ -942,7 +998,10 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                 })
 
-            },       
+            },
+
+                    
+               
         }
     }
 </script>

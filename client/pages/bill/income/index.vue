@@ -30,7 +30,7 @@
 
 <template>
 <div class="g-bill">
-    <SectionTitle label="收入管理"></SectionTitle>
+    <SectionTitle label="应收管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="showIncome">挂收入</Button>
         <span class="u-high-search" @click="showSearch"></span>  
@@ -224,6 +224,7 @@ import CommonFuc from '~/components/CommonFuc';
             },
             showIncome(){
                CommonFuc.clearForm(this.addData);
+                this.addData.startTime=new Date();
                this.openIncome=!this.openIncome;
                this.cancelCallback && this.cancelCallback();
             },
@@ -271,18 +272,16 @@ import CommonFuc from '~/components/CommonFuc';
                 this.searchData=form;
             },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.tabParams=this.searchData;
+                this.getTableData(this.tabParams)
             },
             lowerSubmit(){
                 this.tabParams.customerName=this.customerName;
                 this.getTableData(this.tabParams);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.tabParams.page=page;
+                this.getTableData(this.tabParams);
             }
 
             

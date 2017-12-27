@@ -1,15 +1,20 @@
  import axios from 'axios'
  import APIS from '../assets/apis/index';
+ import Qs from 'qs'; 
  // 超时时间
  axios.defaults.timeout = 2000
  // http请求拦截器
 axios.interceptors.request.use(config => {
+  if(config.method  == 'post'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
   if(config.url.indexOf('mockjs') !==-1 ){
-    console.log('mockjs',config)
     config.baseURL = 'http://rap.krspace.cn';
   }else{
     config.baseURL = '/';
   } 
+  console.log('http请求拦截器',config)
   return config
 }, error => {
   console.log('加载超时')
@@ -73,6 +78,7 @@ export default {
     if (params) {
       params = filterNull(params)
     }
+    // let params = Qs.stringify(params);
     axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (response) {

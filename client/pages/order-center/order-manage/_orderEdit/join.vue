@@ -401,6 +401,9 @@ import utils from '~/plugins/utils';
                     _this.floors = r.data.floor;
 
                 }, e => {
+                    _this.$Notice.error({
+                        title:e.message
+                    });
 
                         console.log('error',e)
                 })
@@ -469,7 +472,9 @@ import utils from '~/plugins/utils';
                     console.log('contractTactics',_this.formItem)
                     
                     }, e => {
-                        _this.$Message.info(e);
+                        _this.$Notice.error({
+                            title:e.message
+                        });
                 })
             },
             config:function(){

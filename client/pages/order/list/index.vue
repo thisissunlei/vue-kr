@@ -266,8 +266,8 @@ export default {
                 
             }
         },
-        mounted:function(parms){
-            this.getTableData(this.params);
+        created(){
+             this.getTableData(this.$route.query);
         },
         methods:{
             showSearch (params) {
@@ -342,7 +342,7 @@ export default {
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
-                //utils.addParams(this.params);
+                utils.addParams(this.params);
                 this.getTableData(this.params)
             },
             onChangeOpen(data){
@@ -355,7 +355,7 @@ export default {
                     page:1,
                     pageSize:15
                 }
-                //utils.addParams(this.params);
+                utils.addParams(this.params);
                 this.getTableData(this.params);
             },
 

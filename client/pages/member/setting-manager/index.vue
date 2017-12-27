@@ -134,8 +134,8 @@ export default {
             ]
         }
     },
-    mounted:function(){
-        this.getTableData(this.Params);
+    created(){
+        this.getTableData(this.$route.query);
     },
     methods:{
         getTableData(params){
@@ -160,7 +160,7 @@ export default {
                     pageSize:15,
                     csrName:this.csrName
                 }
-                //utils.addParams(this.Params);
+                utils.addParams(this.Params);
                 this.getTableData(this.Params);
         },
         showSearch (params) {
@@ -175,7 +175,7 @@ export default {
                 this.page=1;
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
-                //utils.addParams(this.Params);
+                utils.addParams(this.Params);
                 this.getTableData(this.Params)
         },
         openSetting(params){

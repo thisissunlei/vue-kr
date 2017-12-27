@@ -435,20 +435,18 @@ import utils from '~/plugins/utils';
                 let params={
                     billIds:this.billIds.join(',')
                 }
-                this.$http.post('batch-pay',params, r => {
-                    if(r.code==-1){
+                this.$http.post('batch-pay',params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
                     this.MessageType="success";
-                    this.warn=`已成功结算${r.data.successNum}条,失败${r.data.errorNum}条`;
+                    this.warn=`已成功结算${res.data.successNum}条,失败${res.data.errorNum}条`;
                     this.openMessage=true;
                     this.billIds=""
                     this.getTableData(this.tabParams);
-                }, e => {
-                    console.log('error',e)
                 })
 
             },
@@ -463,10 +461,10 @@ import utils from '~/plugins/utils';
                 let params={
                     billId:this.itemDetail.billId
                 }
-                this.$http.post('bill-pay',params, r => {
-                    if(r.code==-1){
+                this.$http.post('bill-pay',params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -475,8 +473,6 @@ import utils from '~/plugins/utils';
                     this.warn="结算成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, e => {
-                    
                 })
             },
             // antiSettleSubmit(){

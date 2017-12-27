@@ -134,8 +134,9 @@ export default {
             ]
         }
     },
-    mounted:function(){
-        this.getTableData(this.Params);
+    created(){
+        this.getTableData(this.$route.query);
+        this.csrName=this.$route.query.csrName;
     },
     methods:{
         getTableData(params){
@@ -143,9 +144,11 @@ export default {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
         },
         changePage(page){
                 this.Params.page=page;
@@ -160,7 +163,7 @@ export default {
                     pageSize:15,
                     csrName:this.csrName
                 }
-                //utils.addParams(this.Params);
+                utils.addParams(this.Params);
                 this.getTableData(this.Params);
         },
         showSearch (params) {
@@ -175,7 +178,7 @@ export default {
                 this.page=1;
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
-                //utils.addParams(this.Params);
+                utils.addParams(this.Params);
                 this.getTableData(this.Params)
         },
         openSetting(params){

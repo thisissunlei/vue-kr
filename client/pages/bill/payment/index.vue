@@ -274,17 +274,15 @@ export default {
                         align:'center',
                         width:110,
                         render(h, obj){
-                            if(obj.row.payWay==='ALIAPPPAY'){
-                                return '支付宝app';
-                            }else if(obj.row.payWay==='ALIWEBPAY'){
-                                return '支付宝网银';
-                            }else if(obj.row.payWay==='WXPAY'){
-                                return '微信';
-                            }else if(obj.row.payWay==='BANKONLINE'){
-                                return '网银';
-                            }else if(obj.row.payWay==='BANKTRANSFER'){
-                                return '银行转账';
+                            let payWay={
+                              'ALIAPPPAY':'支付宝app',
+                              'ALIWEBPAY':'支付宝网银',
+                              'WXPAY':'微信',
+                              'BANKONLINE':'网银',
+                              'BANKTRANSFER':'银行转账',
+                              
                             }
+                            return payWay[obj.row.payWay]
                         }
                     },
                     {
@@ -371,8 +369,9 @@ export default {
 
             }
         },
-        mounted:function(){
-            this.getTableData(this.params);
+        created(){
+             this.getTableData(this.$route.query);
+             this.customerName=this.$route.query.customerName;
         },
         methods:{
 
@@ -397,13 +396,15 @@ export default {
             },
 
             getTableData(params){
-                this.$http.get('get-payment-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-payment-list', params, res => {
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
 
             onchange(data){
@@ -419,10 +420,10 @@ export default {
                 this.$refs[this.form].validate((valid)=>{
                     if(valid){
                         this.formItem.paymentId=this.itemDetail.id;
-                        this.$http.post('payment-bind', this.formItem, r => {
-                            if(r.code==-1){
+                        this.$http.post('payment-bind', this.formItem, res => {
+                            if(res.code==-1){
                                 this.MessageType="error";
-                                this.warn=r.message;
+                                this.warn=res.message;
                                 this.openMessage=true;
                                 return;
                             }
@@ -431,6 +432,10 @@ export default {
                             this.warn="客户绑定成功！"
                             this.openMessage=true;
                             this.getTableData(this.params);
+                        }, err => {
+                            this.$Notice.error({
+                                title:err.message
+                            });
                         })
                     }
                 });
@@ -449,6 +454,7 @@ export default {
                 this.params=this.searchData;
                 this.page=1;
                 this.params.page=1;
+                utils.addParams(this.params);
                 this.getTableData(this.params)
             },
 
@@ -459,6 +465,7 @@ export default {
                     pageSize:15,
                     customerName:this.customerName
                 }
+                utils.addParams(this.params);
                 this.getTableData(this.params);
             },
 
@@ -482,19 +489,23 @@ export default {
              importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
-                this.$http.put('import-bank-flow', data, r => {
-                    if(r.code==-1){
+                this.$http.put('import-bank-flow', data, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
                     this.openImport=false;
                     this.MessageType="success";
-                    this.warn=`已成功导入交易流水${r.data.successNum}条,失败${r.data.errorNum}条`;
+                    this.warn=`已成功导入交易流水${res.data.successNum}条,失败${res.data.errorNum}条`;
                     this.openMessage=true;
                    this.getTableData(this.params);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
 
             },
         }

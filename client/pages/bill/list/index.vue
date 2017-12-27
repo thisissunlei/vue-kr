@@ -202,13 +202,13 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:90,
                         render(h, obj){
-                            if(obj.row.bizType==='MEETING'){
-                                return '会议室账单';
-                            }else if(obj.row.bizType==='PRINT'){
-                                return '打印服务账单 ';
-                            }else if(obj.row.bizType==='CONTRACT'){
-                                return '工位服务订单';
-                            }
+                          let bizType={
+                            'MEETING':'会议室账单',
+                            'PRINT':'打印服务账单',
+                            'CONTRACT':'工位服务订单',
+                            
+                          }
+                          return bizType[obj.row.bizType];
                         }
                     },
                     {
@@ -258,29 +258,30 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:90,
                         render(h, obj){
-                                if(obj.row.payStatus==='WAIT'){
-                                    return h('span', { 
-										style: {
-											color:'#FF6868'
-										}       
-                                    }, '待付款');
-                                   
-                                }else if(obj.row.payStatus==='PAID'){
-                                    return h('span', { 
-										style: {
-											color:'#666666'
-										}       
-                                    }, '已付清');
-                                    
-                                }else if(obj.row.payStatus==='PAYMENT'){
-                                    return h('span', { 
+                             switch (obj.row.payStatus){
+                                case 'WAIT':
+                                        return h('span', { 
+                                            style: {
+                                                color:'#FF6868'
+                                            }       
+                                        }, '待付款');
+                                break;
+                                case 'PAID':
+                                        return h('span', { 
+                                            style: {
+                                                color:'#666666'
+                                            }       
+                                        }, '已付清');
+                                break;
+                                case 'PAYMENT':
+                                        return h('span', { 
 										style: {
 											color:'#F5A623'
 										}       
-                                    }, '未付清');
-                                    
-                                }
-                            }
+                                        }, '未付清');
+                                break;
+                             }
+                        }
                     },
                     {
                         title: '操作',
@@ -387,8 +388,9 @@ import utils from '~/plugins/utils';
                 
             }
         },
-        mounted:function(){
-            this.getTableData(this.tabParams);
+        created(){
+             this.getTableData(this.$route.query);
+             this.customerName=this.$route.query.customerName;
         },
         methods:{
             showSearch (params) {
@@ -417,13 +419,15 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
-                this.$http.get('get-bill-list', params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-bill-list', params, res => {
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             onBillPay(){
                 
@@ -435,21 +439,23 @@ import utils from '~/plugins/utils';
                 let params={
                     billIds:this.billIds.join(',')
                 }
-                this.$http.post('batch-pay',params, r => {
-                    if(r.code==-1){
+                this.$http.post('batch-pay',params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
                     this.MessageType="success";
-                    this.warn=`已成功结算${r.data.successNum}条,失败${r.data.errorNum}条`;
+                    this.warn=`已成功结算${res.data.successNum}条,失败${res.data.errorNum}条`;
                     this.openMessage=true;
                     this.billIds=""
                     this.getTableData(this.tabParams);
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
 
             },
             
@@ -463,10 +469,10 @@ import utils from '~/plugins/utils';
                 let params={
                     billId:this.itemDetail.billId
                 }
-                this.$http.post('bill-pay',params, r => {
-                    if(r.code==-1){
+                this.$http.post('bill-pay',params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -475,9 +481,11 @@ import utils from '~/plugins/utils';
                     this.warn="结算成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, e => {
-                    
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             // antiSettleSubmit(){
             //     let params={
@@ -504,6 +512,7 @@ import utils from '~/plugins/utils';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams);
 
             },
@@ -517,6 +526,7 @@ import utils from '~/plugins/utils';
                     pageSize:15,
                     customerName:this.customerName
                 }
+                utils.addParams(this.tabParams);
                 this.getTableData(this.tabParams);
             },
             changePage(page){

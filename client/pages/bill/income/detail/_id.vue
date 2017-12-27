@@ -89,16 +89,20 @@ export default {
 					'CONTRACT':'工位服务订单'
 			}
 			
-			this.$http.get('get-income-detail', from, r => {
+			this.$http.get('get-income-detail', from, res => {
 			
-				let data = r.data;
+				let data = res.data;
 				this.basicInfo = data;
 				this.dealDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
 				this.ctime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 
 				this.incomeType = incomeType[data.incomeType];
 
-				});
+				}, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		});
 				
 
 		},

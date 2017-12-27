@@ -216,7 +216,9 @@ export default {
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
            		console.log('e',e)
-                _this.$Message.info(e.message);
+                _this.$Notice.error({
+                    title:e.message
+                });
         })
 	}
 }

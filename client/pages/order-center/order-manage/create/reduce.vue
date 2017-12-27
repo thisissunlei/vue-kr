@@ -226,7 +226,9 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =start;
                 let _this = this;
                  this.$http.post('save-reduce', renewForm, r => {
-                    _this.$Message.success('Success!');
+                     _this.$Notice.success({
+                        title:'Success!'
+                    });
                     window.location.href='/order-center/order-manage';
                 }, e => {
                      _this.$Notice.error({

@@ -228,7 +228,9 @@ import utils from '~/plugins/utils';
                     _this.getStationFn = +new Date()
                     _this.stationAmount = utils.smalltoBIG(_this.renewForm.stationAmount)
                     }, e => {
-                        _this.$Message.info(e);
+                        _this.$Notice.error({
+                          title:e.message
+                      });
                 })
             },
             reduceFormSubmit(){

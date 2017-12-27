@@ -43,7 +43,7 @@
     <div class="u-search" >
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input
-                v-model="tradeNo"
+                v-model="bizTradeNo"
                 placeholder="请输入交易流水号"
                 style="width: 252px"
             ></Input>
@@ -92,11 +92,11 @@ export default {
                     page:1,
                     pageSize:15
                 },
-                tradeNo:'',
+                bizTradeNo:'',
                 columns: [
                     {
                         title: '交易流水号',
-                        key: 'tradeNo',
+                        key: 'bizTradeNo',
                         align:'center',
                     },
                     {
@@ -122,18 +122,14 @@ export default {
                         key: 'payWay',
                         align:'center',
                         render(h, obj){
-
-                            if(obj.row.payWay==='ALIAPPPAY'){
-                                return '支付宝app';
-                            }else if(obj.row.payWay==='ALIWEBPAY'){
-                                return '支付宝网银';
-                            }else if(obj.row.payWay==='WXPAY'){
-                                return '微信';
-                            }else if(obj.row.payWay==='BANKONLINE'){
-                                return '网银';
-                            }else if(obj.row.payWay==='BANKTRANSFER'){
-                                return '银行转账';
+                            let payWay={
+                                'ALIAPPPAY':'支付宝app',
+                                'ALIWEBPAY':'支付宝网银',
+                                'WXPAY':'微信',
+                                'BANKONLINE':'网银',
+                                'BANKTRANSFER':'银行转账',
                             }
+                            return payWay[obj.row.payWay];
                         }
                     },
                     {
@@ -141,15 +137,17 @@ export default {
                         key: 'payStatus',
                         align:'center',
                         render(h, obj){
-
-                            if(obj.row.payStatus==='WAIT'){
-                                return '待支付';
-                            }else if(obj.row.payStatus==='SUCCESS'){
-                                return '支付成功';
-                            }else if(obj.row.payStatus==='FAILED'){
-                                return <span class="u-txt-red">支付失败</span>;
+                            switch (obj.row.payStatus){
+                                case 'WAIT':
+                                    return '待支付';
+                                break;
+                                case 'SUCCESS':
+                                    return '支付成功';
+                                break;
+                                case 'FAILED':
+                                    return <span class="u-txt-red">支付失败</span>;
+                                break;
                             }
-
                         }
                     },
                     {
@@ -194,7 +192,7 @@ export default {
             },
             lowerSubmit(){
 
-                this.params.tradeNo=this.tradeNo;
+                this.params.bizTradeNo=this.bizTradeNo;
                 this.page=1;
                 this.params.page=1;
                 this.getTableData(this.params);

@@ -932,6 +932,7 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 this.config();
                  this.$http.get('contract-date-range', params).then( r => {
+                    console.log('contract-date-range',r)
                     _this.formItem.timeRange = r;
                 }).catch( e => {
                     _this.$Notice.error({

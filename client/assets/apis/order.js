@@ -159,7 +159,8 @@ export default  {
     },
     // 获取社区-楼层接口
     'get-community-floor': {
-        url: '/api/krspace-op-web/order-seat/community-floor?',
+        // url: '/api/krspace-op-web/order-seat/community-floor?',
+        url: '/mockjs/66/order-seat/community-floor?',
         method: 'get'
     },
   //获取售货员List组件

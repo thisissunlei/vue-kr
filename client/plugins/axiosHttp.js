@@ -1,25 +1,27 @@
-import Promise from 'promise-polyfill';
-import APIS from '../assets/apis/index';
-import Qs from 'qs';
-var axios = require('axios')
-var root = '/'
+ import axios from 'axios'
+ import APIS from '../assets/apis/index';
+ // 超时时间
+ axios.defaults.timeout = 2000
+ // http请求拦截器
+axios.interceptors.request.use(config => {
+  if(config.url.indexOf('mockjs') !==-1 ){
+    console.log('mockjs')
+    axios.defaults.baseURL = 'http://rap.krspace.cn';
+  }else{
+    axios.defaults.baseURL = '/';
+  } 
+  return config
+}, error => {
+  console.log('加载超时')
+  return Promise.reject(error)
+})
 
-function getUrl(path) {
-    var url = APIS[path].url;
 
-    if(!url){
-      return ;
-    }
-   
-    if(url.indexOf('mockjs') !==-1){
-       root='http://rap.krspace.cn';
-    }
-  }
 function toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
 // 参数过滤函数
-  function filterNull (o) {
+function filterNull (o) {
   for (var key in o) {
     if (o[key] === null) {
       delete o[key]
@@ -35,205 +37,77 @@ function toType (obj) {
   return o
 }
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.interceptors.request.use((config) => {
-
-  if(config.method  == 'post'){
-    let data = Qs.stringify(config.data);
-    config.data = data;
-  }
-
-  return config;
-
-},(error) =>{
-  return Promise.reject(error);
-});
-
-axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
-
-
-
-  function getMethod(path) {
-    const apiConfig = APIS[path];
-    return apiConfig.method;
-  }
-  function jsonParse(res){
-    return res.data;
-  }
-  function check401(res) {
+ function check401(res) {
+  res = res.data;
     if (res.code ===-4011) {
+      console.log('登录')
       window.location.href = '/new/login.html';
     } else if (res.code ===-4033) {
-       this.$Notice.error({
-          title:'您没有操作权限，请联系管理员!'
-       })
+      console.log('您没有操作权限，请联系管理员')
+
+        // Notify.error('您没有操作权限，请联系管理员!');
+    }else if(res.code === -1){
+      console.log(res.message)
     }
     return res;
   }
 
-  const http = {
-    transformPreResponse(response){
-      var data = response;
-      if(Object.prototype.toString.call(response) === '[object Array]'){
-        data = response.pop();
-      }
-      return data;
-    },
-    transformResponse:function(response){
-      return response.data;
-    },
-    get: (url, params) => new Promise((resolve, reject) => {
-
-      if (!url) {
-        return;
-      }
-      getUrl(url)
-      if (params) {
-        params = filterNull(params)
-      }
-
-      axios({
-          method: 'get',
-          url: APIS[url].url,
-          params: params,
-          baseURL: root,
-          withCredentials: false,
-        })
-      .then(jsonParse)
-      .then(check401)
-      .then(http.transformPreResponse)
-      .then(json => {
-        if(parseInt(json.code)>0){
-          //处理数据格式
-          resolve(http.transformResponse(json));
-        }else{
-          reject(json);
-        }
-      })
-      .catch(function(err){
-        if(err == 'TypeError: Failed to fetch'){
-            return ;
-        }
-        reject(err)
-      });
-
-      
-    }),
-
-    post: (url, params, payload) => new Promise((resolve, reject) => {
-
-      if (!url) {
-        return
-      }
-      console.log('POST========',url,params)
-      // getUrl(url)
-
-      axios({
-          method: 'POST',
-          url: APIS[url].url,
-          data: params,
-          params: null,
-          baseURL: root,
-          withCredentials: false,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        })
-       .then(jsonParse)
-      .then(check401)
-      .then(http.transformPreResponse)
-      .then(json => {
-        if(parseInt(json.code)>0){
-          //处理数据格式
-          resolve(http.transformResponse(json));
-        }else{
-          reject(json);
-        }
-      })
-      .catch(function(err){
-        if(err == 'TypeError: Failed to fetch'){
-            return ;
-        }
-        reject(err)
-      });
-    }),
-
-    update: (url, params, payload) => new Promise((resolve, reject) => {
-      const searchParams = new URLSearchParams();
-
-      if (!url) {
-        return
-      }
-      axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
-
-      getUrl(url)
- if (params) {
-        params = filterNull(params)
-      }
-      axios({
-          method: method,
-          url: APIS[url].url,
-          data: method === 'POST' || method === 'PUT' ? params : null,
-          params: method === 'GET' || method === 'DELETE' ? params : null,
-          baseURL: root,
-          withCredentials: false,
-        })
-      .then(jsonParse)
-      .then(check401)
-      .then(http.transformPreResponse)
-      .then(json => {
-        if(parseInt(json.code)>0){
-          //处理数据格式
-          resolve(http.transformResponse(json));
-        }else{
-          reject(json);
-        }
-      })
-      .catch(function(err){
-        if(err == 'TypeError: Failed to fetch'){
-            return ;
-        }
-        reject(err)
-      });
-    }),
-
-    remove: (url, params, payload) => new Promise((resolve, reject) => {
-      const searchParams = new URLSearchParams();
-
-      if (!url) {
-        return
-      }
-      getUrl(url)
- if (params) {
-        params = filterNull(params)
-      }
-      axios({
-          method: method,
-          url: APIS[url].url,
-          data: method === 'POST' || method === 'PUT' ? params : null,
-          params: method === 'GET' || method === 'DELETE' ? params : null,
-          baseURL: root,
-          withCredentials: false,
-        })
-      .then(jsonParse)
-      .then(check401)
-      .then(http.transformPreResponse)
-      .then(json => {
-        if(parseInt(json.code)>0){
-          //处理数据格式
-          resolve(http.transformResponse(json));
-        }else{
-          reject(json);
-        }
-      })
-      .catch(function(err){
-        if(err == 'TypeError: Failed to fetch'){
-            return ;
-        }
-        reject(err)
-      });
-    }),
-  }
 
 
-export default http;
+export default {
+  
+  get: (url, params) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.get(APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      console.log('resolve',data)
+      resolve(data.data)
+    })
+    .catch(function (error) {
+      reject(error)
+    });
+  }),
+  post: (url, params) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.post(APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      resolve(response.data)
+    })
+    .catch(function (error) {
+      reject(error)
+    });
+  }),
+  put:  (url, params) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.put(APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      resolve(response.data)
+    })
+    .catch(function (error) {
+      reject(error)
+    });
+  }),
+  delete: (url, params) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    axios.delete(APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      console.log('resolve',data)
+      resolve(data.data)
+    })
+    .catch(function (error) {
+      reject(error)
+    });
+  }),
+}

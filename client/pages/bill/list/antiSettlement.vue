@@ -1,4 +1,5 @@
 <style lang="less">
+
 	.u-wrap{
 		width:252px;
 		margin:0 auto;
@@ -16,18 +17,23 @@
 		input{
 			text-align: center;
 		}
-	
+
 }
 
+
+
+
 </style>
+
 <template>
+
 	<div class="u-wrap">
 		<div class="u-text">
-			结账金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>	
+			结账金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>
 		</div>
-		 <Input 
-		 	v-model="value"  
-		 	placeholder="请输入反结账金额" 
+		 <Input
+		 	v-model="value"
+		 	placeholder="请输入反结账金额"
 		 	size="large"
 		 	style="width: 252px;margin-bottom:30px;"
 		 ></Input>

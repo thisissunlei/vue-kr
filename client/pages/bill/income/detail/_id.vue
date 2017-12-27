@@ -1,18 +1,22 @@
 <style lang="less">
+
 .g-income-detail{
 	.m-detail-content{
 		padding:30px 24px;
 	}
 }
+
 </style>
+
 <template>
+
 <div class="g-income-detail">
 	<SectionTitle label="收入详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="收入编号：">
 				{{basicInfo.id}}
-			</LabelText>	
+			</LabelText>
 			<LabelText label="收入类型：">
 				{{incomeType}}
 			</LabelText>
@@ -84,17 +88,17 @@ export default {
 				}else if (data.incomeType=='CONTRACT'){
 					this.incomeType='工位服务订单';
 				}
-                
+
            	}, e => {
                 console.log('error',e)
             })
 		},
 	},
-	
+
 
 
 
 }
 
-	
+
 </script>

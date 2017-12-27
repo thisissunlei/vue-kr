@@ -1,4 +1,5 @@
-<style lang="less"> 
+<style lang="less">
+
 .g-high-search{
     form{
         width:540px;
@@ -14,14 +15,14 @@
     }
     .u-input{
         width:250px;
-        float:left; 
+        float:left;
         margin-bottom:10px;
         &:nth-child(2n-1){
-            margin-right:30px;  
+            margin-right:30px;
         }
     }
     .u-date{
-        width:530px; 
+        width:530px;
         label{
             width:100%;
             display: block;
@@ -34,34 +35,38 @@
             text-align: center
         }
     }
-}   
+}
+
 </style>
+
 <template>
+
 <div class="g-high-search">
-    <Form  
-        ref="formValidate" 
-        :model="formItem" 
-        :rules="ruleValidate" 
-        label-position="left"  
+
+    <Form
+        ref="formValidate"
+        :model="formItem"
+        :rules="ruleValidate"
+        label-position="left"
         class="u-clearfix"
-        
+
     >
             <FormItem label="客户名称"  prop="customerId" class="u-input">
                 <SearchCompany
-                    :test="formItem" 
+                    :test="formItem"
                     style="width: 250px"
                     :onchange="onchange"
                 ></SearchCompany>
             </FormItem>
              <FormItem label="社区名称"  prop="communityId" class="u-input">
-                 <Select 
-                    v-model="formItem.communityId" 
+                 <Select
+                    v-model="formItem.communityId"
                     style="width:250px"
-                    placeholder="请选择社区" 
+                    placeholder="请选择社区"
                 >
-                    <Option 
-                        v-for="item in communityList" 
-                        :value="item.id" 
+                    <Option
+                        v-for="item in communityList"
+                        :value="item.id"
                         :key="item.id"
                     >
                         {{ item.name }}
@@ -69,30 +74,30 @@
                 </Select>
             </FormItem>
             <FormItem label="含税收入" prop="amount" class="u-input">
-                <Input 
-                    v-model="formItem.amount" 
-                    placeholder="请输入含税收入" 
+                <Input
+                    v-model="formItem.amount"
+                    placeholder="请输入含税收入"
                     style="width: 250px"
-               ></Input> 
+               ></Input>
             </FormItem>
             <FormItem label="确认收入日期" prop="dealDate" class="u-input">
-                <DatePicker 
+                <DatePicker
                     v-model="formItem.startTime"
-                    type="date" 
-                    placeholder="请选择确认收入日期" 
+                    type="date"
+                    placeholder="请选择确认收入日期"
                     style="width: 250px;"
                     @on-change="dateChange"
                ></DatePicker>
             </FormItem>
             <FormItem label="收入类型"  prop="incomeType" class="u-input">
-                  <Select 
-                    v-model="formItem.incomeType" 
+                  <Select
+                    v-model="formItem.incomeType"
                     style="width:250px"
-                    placeholder="请选择账单类型" 
+                    placeholder="请选择账单类型"
                 >
-                    <Option 
-                        v-for="item in incomeType" 
-                        :value="item.value" 
+                    <Option
+                        v-for="item in incomeType"
+                        :value="item.value"
                         :key="item.value"
                     >
                         {{ item.label }}
@@ -102,10 +107,14 @@
             </FormItem>
         </Form>
 </div>
-</template>	
+
+</template>
+
 <script>
+
 import SearchCompany from '~/components/SearchCompany';
 import SelectCommunities from '~/components/SelectCommunities';
+
 export default{
     name:'highSearch',
     components:{
@@ -137,56 +146,54 @@ export default{
                     label:'工位租金'
                 },
             ],
-            communityList:[
-
-            ],
+            communityList:[],
             ruleValidate:{
                 customerId: [
                         { required: true, message: '请选择客户名称'}
-                    ],
+                ],
                 communityId: [
                         { required: true, message: '请选择社区' }
-                    ],
+                ],
                 amount: [
                         { required: true, message: '请输入含税收入' }
-                    ],
+                ],
                 dealDate: [
                         { required: true, message: '请选择确认收入日期' }
-                    ],
+                ],
                 incomeType: [
                         { required: true, message: '请选择账单类型' }
-                    ],
+                ],
             }
 		}
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', r => {    
-                this.communityList=r.data.items 
+
+        this.$http.get('join-bill-community','', r => {
+                this.communityList=r.data.items
             }, e => {
                 this.$Message.info(e);
         })
+
     },
     methods:{
+
         onchange(data){
             this.formItem.customerId=data;
         },
         dateChange(date){
             this.formItem.dealDate=date;
         }
-        
+
     },
     updated:function(){
-       let callback=this.$refs[this.formValidate].validate;
-       let cancel=this.$refs[this.formValidate].resetFields;
-        this.$emit('formData', this.formItem,callback,cancel);
+    
+      var formValidate = this.$refs[this.formValidate];
+       let callback = formValidate.validate;
+       let cancel = formValidate.resetFields;
+
+       this.$emit('formData', this.formItem,callback,cancel);
+
     },
-	
+
 }
 </script>
-
-
-
-
-
-
-

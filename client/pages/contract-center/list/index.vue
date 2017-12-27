@@ -344,7 +344,8 @@
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,
-                                        columnDetail:params.row||{}
+                                        columnDetail:params.row||{},
+                                        upUrl:this.urlUpLoad
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -368,7 +369,10 @@
                                         }
                                     }, '其他约定'))
                                 }
-                                if(!params.row.isEffect && !params.row.haveAttachment){
+                                if(params.row.isEffect || !params.row.haveAttachment){
+                                    
+                                
+                                }else{
                                     btnRender.push( h('Button', {
                                         props: {
                                             type: 'text',
@@ -383,7 +387,6 @@
                                             }
                                         }
                                     }, '合同生效'))
-                                
                                 }
                         
                            return h('div',btnRender);  
@@ -493,7 +496,6 @@
                     parameter.contractType = "NOSEAL"
                 }
                 this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-                    // _this.communityList=r.data.items 
                     if(!r.data.fileId){
                         that.$Notice.error({
                                 title:"fileId不能为空！"
@@ -541,7 +543,6 @@
             },
             //获取其他约定的信息
             getOtherConvention(params){
-               
                 var _this=this;
                 this.config()
                 this.$http.get('get-contract-other-convention-data', params, r => {
@@ -567,7 +568,6 @@
                 if(this.upperError){
                     return ;
                 }
-                console.log("-----",this.upperData)
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
                 this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
@@ -585,6 +585,29 @@
                 var parameter = {requestId:params.row.requestId}
                 this.parameter = parameter;
                this.downSwitch(); 
+            },
+            urlUpLoad(detail,col){
+                console.log(detail,"------------",col)
+                var _this = this;
+                this.$http.post("post-list-upload-url", {
+                    fileList:JSON.stringify(detail),
+                    requestId:col.requestId,
+                }, (response) => {
+                    this.allAttachmentChagne(col.requestId);
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
+            },
+            allAttachmentChagne(requestId){
+                this.detail = this.detail.map((item,index)=>{
+                    if(item.requestId == requestId){
+                        item.haveAttachment = true;
+                        item.haveAttachmentName = "有";
+                    }
+                    return item;
+                })
             }
             
         },

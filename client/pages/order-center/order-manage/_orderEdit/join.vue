@@ -54,10 +54,15 @@
                     </FormItem>
                     
                 </Col>
+                <Col  class="col" v-if="false">
+                    <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
+                    <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    </FormItem>
+                </Col>
                 
                 <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
-                    <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
+                    <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTimeStatus"></DatePicker>
                     </FormItem>
                 </Col>
                  <Col class="col">
@@ -165,8 +170,8 @@
         <div style="padding-left:24px">
             <Row>
                  <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="formItem.rentAmount" placeholder="服务费总额" disabled></Input>
+                    <FormItem label="优惠后服务费总额" style="width:252px">
+                        <Input v-model="formItem.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
@@ -505,7 +510,7 @@ import utils from '~/plugins/utils';
                 console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
-                    window.location.href='/orderCenter/orderManage';
+                    window.location.href='/order-center/order-manage';
                 }, e => {
                      _this.$Notice.error({
                         title:e.message
@@ -911,6 +916,38 @@ import utils from '~/plugins/utils';
                 val = year+'-'+month+'-'+day;
                 return val ;
 
+            },
+            changeEndTimeStatus(val){
+                  this.clearStation();
+                if(!val){
+                    return;
+                }
+
+                val = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(val));
+                let error = false;
+
+                this.formItem.endDate = val;
+
+                if(!this.formItem.startDate){
+                    return;
+                }
+
+                let params = {
+                    start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
+                    end:val
+                }
+                this.config();
+
+                if(new Date(this.formItem.startDate)>new Date(val)){
+                    error = true;
+                    this.$Notice.error({
+                        title:'租赁开始时间不得大于结束时间'
+                    })
+                }else{
+                    this.contractDateRange(params)
+                }
+                this.timeError = error;
+              
             },
             changeEndTime:function(val){//租赁结束时间的触发事件，判断时间大小
                   this.clearStation();

@@ -48,9 +48,14 @@
                     <SelectCommunities test="renewForm" :onchange="changeCommunity"></SelectCommunities>
                     </FormItem>
                 </Col>
-                <Col class="col">
+                 <Col class="col" v-if="false">
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
+                    </FormItem>
+                </Col>
+                <Col class="col">
+                    <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
+                        <DatePicker type="date" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTimeStatus"></DatePicker>
                     </FormItem>
                 </Col>
                 <Col class="col">
@@ -160,8 +165,8 @@
               <div style="padding-left:24px">
             <Row>
                  <Col class="col">
-                    <FormItem label="服务费总额" style="width:252px">
-                        <Input v-model="renewForm.rentAmount" placeholder="服务费总额" disabled></Input>
+                    <FormItem label="优惠后服务费总额" style="width:252px">
+                        <Input v-model="renewForm.rentAmount" placeholder="优惠后服务费总额" disabled></Input>
                     </FormItem>
                  </Col>
                  <Col class="col">
@@ -360,6 +365,9 @@ import utils from '~/plugins/utils';
             stationList,
             planMap
         },
+         mounted(){
+            GLOBALSIDESWITCH("false");
+        },
         watch:{
             getStationFn:function(){
                 if(this.renewForm.customerId && this.renewForm.communityId && this.renewForm.endDate){
@@ -432,7 +440,7 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =end;
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-                    window.location.href='/orderCenter/orderManage';
+                    window.location.href='/order-center/order-manage';
                 }, e => {
                     _this.$Notice.error({
                         title:e.message
@@ -561,6 +569,22 @@ import utils from '~/plugins/utils';
                 }
                 value = this.dealEndDate(value);
                 this.renewForm.endDate = value;
+                
+                let _this = this;
+                setTimeout(function(){
+                 _this.getStationFn = +new Date()
+
+                },200)
+            },
+            changeTimeStatus(value){
+                this.clearStation()
+                if(!value){
+                    this.renewForm.endDate = '';
+                    return;
+
+                }
+                // value = this.dealEndDate(value);
+                this.renewForm.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(value));
                 
                 let _this = this;
                 setTimeout(function(){

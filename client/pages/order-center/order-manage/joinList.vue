@@ -141,13 +141,16 @@
                         title: '订单类型',
                         key: 'orderType',
                         align:'center',
-                        render(h, obj){
-                            if(obj.row.orderType==='IN'){
-                                return <span class="u-txt">入驻服务订单</span>;
-                            }else if(obj.row.orderType==='INCREASE'){
-                                return <span class="u-txt-orange">增租服务订单</span>;
-                            }else if(obj.row.orderType==='CONTINUE'){
-                                return <span class="u-txt-red">续租服务订单</span>;
+                        render(tag,params){
+                            var orderType={
+                               'IN':'入驻服务订单',
+                               'INCREASE':'增租服务订单',
+                               'CONTINUE':'续租服务订单'
+                            }
+                            for(var item in orderType){
+                                if(item==params.row.orderType){
+                                    return <span class="u-txt">{orderType[item]}</span>;
+                                }
                             }
                         }
                     },
@@ -155,13 +158,16 @@
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',
-                        render(h, obj){
-                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
-                                return <span class="u-txt">未生效</span>;
-                            }else if(obj.row.orderStatus==='EFFECTIVE'){
-                                return <span class="u-txt-orange">已生效</span>;
-                            }else if(obj.row.orderStatus==='INVALID'){
-                                return <span class="u-txt-red">已作废</span>;
+                        render(tag, params){
+                            var orderStatus={
+                               'NOT_EFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'INVALID':'已作废'
+                            }
+                            for(var item in orderStatus){
+                                if(item==params.row.orderStatus){
+                                    return <span class="u-txt">{orderStatus[item]}</span>;
+                                }
                             }
                         }
                     },
@@ -194,7 +200,8 @@
                                     }
                                 })];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push(h('Button', {
+                               btnRender.push(
+                                h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -207,7 +214,8 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同'),h('Button', {
+                                }, '申请合同'),
+                                h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'

@@ -143,13 +143,16 @@
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',
-                        render(h, obj){
-                            if(obj.row.orderStatus==='NOT_EFFECTIVE'){
-                                return <span class="u-txt">未生效</span>;
-                            }else if(obj.row.orderStatus==='EFFECTIVE'){
-                                return <span class="u-txt-orange">已生效</span>;
-                            }else if(obj.row.orderStatus==='INVALID'){
-                                return <span class="u-txt-red">已作废</span>;
+                        render(tag, params){
+                             var orderStatus={
+                               'NOT_EFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'INVALID':'已作废'
+                            }
+                            for(var item in orderStatus){
+                                if(item==params.row.orderStatus){
+                                    return <span class="u-txt">{orderStatus[item]}</span>;
+                                }
                             }
                         }
                     },
@@ -196,7 +199,8 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同'),h('Button', {
+                                }, '申请合同'),
+                                h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'

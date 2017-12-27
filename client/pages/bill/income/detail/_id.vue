@@ -16,7 +16,7 @@
 		<DetailStyle info="基本信息">
 			<LabelText label="收入编号：">
 				{{basicInfo.id}}
-			</LabelText>	
+			</LabelText>
 			<LabelText label="收入类型：">
 				{{incomeType}}
 			</LabelText>
@@ -96,18 +96,18 @@ export default {
 				this.dealDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
 				this.ctime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 
-
-					this.incomeType = incomeType[data.incomeType];
+				this.incomeType = incomeType[data.incomeType];
 
 				});
 				
+
 		},
 	},
-	
+
 
 
 
 }
 
-	
+
 </script>

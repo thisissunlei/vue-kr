@@ -14,10 +14,8 @@ axios.interceptors.request.use(config => {
   }else{
     config.baseURL = '/';
   } 
-  console.log('http请求拦截器',config)
   return config
 }, error => {
-  console.log('加载超时')
   return Promise.reject(error)
 })
 
@@ -49,6 +47,9 @@ function filterNull (o) {
       window.location.href = 'http://optest.krspace.cn/new/login.html';
     } else if (res.code ===-4033) {
       console.log('您没有操作权限，请联系管理员')
+      // this.$Notice.error({
+      //   title:e.message
+      // });
 
         // Notify.error('您没有操作权限，请联系管理员!');
     }
@@ -70,6 +71,7 @@ export default {
       resolve(data)
     })
     .catch(function (error) {
+      error = error.response.data
       failure && failure(error)
       reject(error)
     });
@@ -86,6 +88,7 @@ export default {
       resolve(response)
     })
     .catch(function (error) {
+      error = error.response.data
       failure && failure(error)
       reject(error)
     });
@@ -101,6 +104,7 @@ export default {
       resolve(response)
     })
     .catch(function (error) {
+      error = error.response.data
       failure && failure(error)
       reject(error)
     });
@@ -116,6 +120,7 @@ export default {
       resolve(data)
     })
     .catch(function (error) {
+      error = error.response.data
       failure && failure(error)
       reject(error)
     });

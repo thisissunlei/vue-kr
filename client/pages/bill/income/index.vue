@@ -1,4 +1,5 @@
 <style lang="less">
+
 .g-bill{
     .u-search{
             height:32px;
@@ -12,12 +13,15 @@
                 float:right;
             }
     }
+    
     .ivu-table-cell{
         padding:0;
     }
+    
     .u-table{
         padding:0 20px;
-    } 
+    }
+     
     .m-search{
         color:#2b85e4; 
         display:inline-block;
@@ -25,6 +29,7 @@
         font-size:14px;
         cursor:pointer;
     } 
+    
 }
 </style>
 

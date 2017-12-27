@@ -1,5 +1,7 @@
 <style lang="less"> 
+
 .g-high-search{
+
     form{
         width:540px;
         margin:0 auto;
@@ -12,6 +14,7 @@
         display: block;
         visibility: hidden;
     }
+    
     .u-input{
         width:250px;
         float:left; 
@@ -21,11 +24,14 @@
         }
     }
     .u-date{
+    
         width:530px; 
+        
         label{
             width:100%;
             display: block;
         }
+        
         .u-date-txt{
             font-size: 14px;
             color: #666666;
@@ -33,12 +39,18 @@
             width:30px;
             text-align: center
         }
+        
     }
 }   
+
 </style>
+
 <template>
+
 <div class="g-high-search">
+
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
+    
             <FormItem label="客户名称" class="u-input">
                <Input 
                     v-model="formItem.customerName" 
@@ -46,6 +58,7 @@
                     style="width: 250px"
                ></Input>
             </FormItem>
+            
             <FormItem label="社区名称" class="u-input">
                     <Select 
                         v-model="formItem.communityId" 
@@ -61,34 +74,42 @@
                         </Option>
                     </Select>
             </FormItem>
+            
         </Form>
+        
 </div>
-</template>	
-<script>
 
+</template>	
+
+<script>
 
 export default{
     name:'highSearch',
     data(){
-		return{
-			formItem:{
+    
+		  return{
+			   formItem:{
                 customerName:'',
                 communityId:''
-            },
-            communityList:[],
-		}
+          },
+          communityList:[],
+		    }
+        
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', r => {    
-                this.communityList=r.data.items 
-            }, e => {
-                this.$Message.info(e);
-        })
+    
+        this.$http.get('join-bill-community','', res => {    
+                this.communityList = res.data.items 
+        }, err => {
+                this.$Message.info(err);
+        });
+        
     },
     updated:function(){
+    
         this.$emit('formData', this.formItem);
-    },
-	
+        
+    }
 }
 </script>
 

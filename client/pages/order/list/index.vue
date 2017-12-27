@@ -175,25 +175,30 @@ export default {
                         align:'center',
                         width:100,
                         render(h, obj){
-                            if(obj.row.orderStatus==='VALID'){
-                                 return h('span', { 
-										style: {
-											color:'#666666'
-										}       
-                                    }, '已生效');
-                            }else if(obj.row.orderStatus==='CANCEL'){
+                            switch (data.incomeType){
+                                case 'VALID':
                                 return h('span', { 
-										style: {
-											color:'#F5A623'
-										}       
-                                }, '已作废');
-                            }else if(obj.row.orderStatus==='REFUND'){
+                      										style: {
+                      											color:'#666666'
+                      										}       
+                                        }, '已生效');
+                                break;
+                                case 'CANCEL':
                                 return h('span', { 
-										style: {
-											color:'#FF6868'
-										}       
-                                }, '已退订');
+                      										style: {
+                      											color:'#F5A623'
+                      										}       
+                                        }, '已作废');
+                                break;
+                                case 'REFUND':
+                                return h('span', { 
+                      										style: {
+                      											color:'#FF6868'
+                      										}       
+                                        }, '已退订');
+                                break;
                             }
+                           
                         }
                     },
                     {

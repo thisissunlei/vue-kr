@@ -270,31 +270,33 @@
                 let params={
                     id:this.id
                 };
-                 this.openMessage=true;
+                 
                  this.$http.post('join-nullify', params, r => {
+                    this.openMessage=true;
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.getListData(this.params);
                 }, e => {
+                    this.openMessage=true;
                     this.MessageType="error";
                     this.warn=e.message;
                 }) 
-                 this.openNullify=false;  
             },
             applySubmit(){
                 let params={
                     id:this.id
                 };
-                 this.openMessage=true;
+                
                  this.$http.post('apply-contract', params, r => {
+                    this.openMessage=true;
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn=r.message;
                     this.getListData(this.params);
                 }, e => {
+                    this.openMessage=true;
                     this.MessageType="error";
                     this.warn=e.message;
-                })
-                 this.openApply=false;     
+                })   
             },
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);

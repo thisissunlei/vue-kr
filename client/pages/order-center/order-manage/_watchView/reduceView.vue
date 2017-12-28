@@ -137,7 +137,9 @@ export default {
 				   _this.reduceStation=r.data.orderSeatDetailVo||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
-                _this.$Message.info(e);
+                _this.$Notice.error({
+                     title:e.message
+                });
         })
 	}
 }

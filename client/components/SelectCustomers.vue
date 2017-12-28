@@ -78,7 +78,7 @@ import http from '~/plugins/http.js';
 
                     _this.customerOptions = list;
                 }, e => {
-                    console.log('error',e)
+                    console.log('error--->',e)
                 })
                  return list;
 

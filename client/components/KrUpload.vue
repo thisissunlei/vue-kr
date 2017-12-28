@@ -221,8 +221,24 @@ export default{
 
 		},
 		downFille(params){
-			var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
-        	window.location.href = url;
+			var that=this;
+			this.$http.post('get-station-contract-pdf-url', {
+				id:params.fileId,
+				
+			}, (response) => {
+			
+				//this.serverUrl = response.data.serverUrl;
+				//var url = `/api/krspace-op-web/sys/down-file?fileId=${params.fileId}`
+				//window.location.href = url;
+				// window.open(response.data,"_blank");
+				  window.location.href = response.data;
+			}, (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})   
+			// var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
+        	
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);

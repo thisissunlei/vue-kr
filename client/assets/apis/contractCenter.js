@@ -28,7 +28,7 @@ module.exports = {
    //获取pdf地址
     'get-station-contract-pdf-url': {
         url: '/api/krspace-op-web/sys/down-file',
-        method: 'get'
+        method: 'post'
     },
     //获取其他约定的数据
     'get-contract-other-convention-data': {

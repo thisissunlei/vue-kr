@@ -488,17 +488,21 @@ export default {
                 var data=new FormData();
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data, res => {
+                    this.openMessage=true;
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
-                        this.openMessage=true;
                         return;
                     }
+                    if(res.data.errorNum>0){
+                        this.MessageType="error";
+                    }else{
+                        this.MessageType="success";
+                    }
+                    this.warn=`已成功导入交易流水<span class="u-txt-green">${res.data.successNum}</span>条,失败<span class="u-txt-red">${res.data.errorNum}</span>条`;
                     this.openImport=false;
-                    this.MessageType="success";
-                    this.warn=`已成功导入交易流水${res.data.successNum}条,失败${res.data.errorNum}条`;
-                    this.openMessage=true;
-                   this.getTableData(this.params);
+                    this.getTableData(this.params);
+                   
                 }, err => {
 					this.$Notice.error({
 						title:err.message

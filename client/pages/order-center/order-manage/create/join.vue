@@ -917,10 +917,10 @@ import utils from '~/plugins/utils';
                     end:val
                 }
                 this.config();
-                if(new Date(this.formItem.startDate)>new Date(val)){
+                if(new Date(this.formItem.startDate)>=new Date(val)){
                     error = true;
                     this.$Notice.error({
-                        title:'租赁开始时间不得大于结束时间'
+                        title:'租赁开始时间不得大于等于结束时间'
                     })
                 }else{
                     this.contractDateRange(params)

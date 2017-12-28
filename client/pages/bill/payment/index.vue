@@ -73,7 +73,7 @@
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
             <Input
-                v-model="customerName"
+                v-model="params.customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -228,7 +228,8 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:'',
                 },
                 formItem:{
                     customerId:'',
@@ -237,7 +238,6 @@ export default {
                 openMessage:false,
                 MessageType:'',
                 warn:'',
-                customerName:'',
                 file: null,
                 IsCookie:true,
                 columns: [
@@ -371,7 +371,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.params=this.$route.query;
         },
         methods:{
 
@@ -459,11 +459,7 @@ export default {
 
             lowerSubmit(){
                 this.page=1;
-                this.params={
-                    page:1,
-                    pageSize:15,
-                    customerName:this.customerName
-                }
+                this.params.page=1;
                 utils.addParams(this.params);
             },
 

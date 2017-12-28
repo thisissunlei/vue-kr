@@ -43,7 +43,7 @@
     <div class="u-search" >
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input
-                v-model="bizTradeNo"
+                v-model="params.bizTradeNo"
                 placeholder="请输入交易流水号"
                 style="width: 252px"
             ></Input>
@@ -91,9 +91,10 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    bizTradeNo :'',
                 },
-                bizTradeNo:'',
+               
                 columns: [
                     {
                         title: '交易流水号',
@@ -178,7 +179,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
-             this.bizTradeNo=this.$route.query.bizTradeNo;
+             this.params=this.$route.query;
         },
         methods:{
             onExport(){
@@ -197,8 +198,6 @@ export default {
 
             },
             lowerSubmit(){
-
-                this.params.bizTradeNo=this.bizTradeNo;
                 this.page=1;
                 this.params.page=1;
                 utils.addParams(this.params);

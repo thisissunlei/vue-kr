@@ -396,9 +396,13 @@
                 detail:[]
             }
         },
+       created(){
+          var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
+          this.getListData(params);
+          this.params=params; 
+        },
         mounted(){
-           this.getListData(this.params);
-           this.onWindowSize();
+            this.onWindowSize();
         },
         methods:{
             config:function(){
@@ -556,7 +560,7 @@
       
             //搜索框
             lowerSubmit(){
-                this.getListData(this.params);
+                utils.addParams(this.params);
             },
             // 高级查询修改
             upperChange(params,error){
@@ -571,7 +575,7 @@
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
                 this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
-                this.getListData(this.params);
+                utils.addParams(this.params);
 
             },
             selectCachet(select){
@@ -593,7 +597,8 @@
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-                    _this.getListData(_this.params);
+
+                     _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

@@ -54,13 +54,13 @@
                     </FormItem>
                     
                 </Col>
-                <Col  class="col" v-if="false">
+                <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
                     <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                 </Col>
                 
-                <Col  class="col">
+                <Col  class="col"  v-if="false">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
                     <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTimeStatus"></DatePicker>
                     </FormItem>
@@ -416,7 +416,6 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let {params}=this.$route;
                 let from={
-                    // id:4095
                     id:params.orderEdit
                 };
                 this.$http.get('join-bill-detail', from, r => {
@@ -467,7 +466,6 @@ import utils from '~/plugins/utils';
                         _this.formItem.items = data.contractTactics;
                         _this.dealSaleInfo()
                     },200)
-                    // _this.depositAmount = '3';
                     _this.getFloor = +new Date()
                     console.log('contractTactics',_this.formItem)
                     
@@ -628,7 +626,6 @@ import utils from '~/plugins/utils';
                 this.disabled = true;
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        console.log('========>',_this.stationList.length)
                         if(!_this.stationList.length){
                             _this.$Notice.error({
                                 title:'请选择入驻工位'
@@ -943,10 +940,10 @@ import utils from '~/plugins/utils';
                 }
                 this.config();
 
-                if(new Date(this.formItem.startDate)>new Date(val)){
+                if(new Date(this.formItem.startDate)>=new Date(val)){
                     error = true;
                     this.$Notice.error({
-                        title:'租赁开始时间不得大于结束时间'
+                        title:'租赁开始时间不得大于等于结束时间'
                     })
                 }else{
                     this.contractDateRange(params)

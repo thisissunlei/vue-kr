@@ -177,7 +177,7 @@
                 ref="upload"
                 name="file"
                 :before-upload="handleUpload"
-                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
+                action="/api/krspace-pay/pay-record/importBankFlow"
                 :with-credentials="IsCookie"
             >
                 <div class="u-upload-content">

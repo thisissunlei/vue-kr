@@ -72,7 +72,8 @@
         url = url + "?" + where.join('&');
         location.href = url;
     }
-
+    
+    
    
    export default{
       smalltoBIG,

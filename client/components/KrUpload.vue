@@ -221,7 +221,7 @@ export default{
 
 		},
 		downFille(params){
-			var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
+			var url = `/api/krspace-op-web/sys/down-file?fileId=${params.fileId}`
         	window.location.href = url;
 		},
 		listMove(file,fileList){

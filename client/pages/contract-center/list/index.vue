@@ -587,13 +587,13 @@
                this.downSwitch(); 
             },
             urlUpLoad(detail,col){
-                console.log(detail,"------------",col)
+               
                 var _this = this;
                 this.$http.post("post-list-upload-url", {
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-                    this.allAttachmentChagne(col.requestId);
+                    _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

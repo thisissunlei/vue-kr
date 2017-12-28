@@ -169,7 +169,9 @@ export default {
                 this.searchData=form;
         },
         searchSubmit(){
+                let csrName=this.Params.csrName;
                 this.Params=this.searchData;
+                this.Params.csrName=csrName;
                 this.Params.page=1;
                 this.page=1;
                 utils.addParams(this.Params);

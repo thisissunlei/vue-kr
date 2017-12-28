@@ -49,7 +49,7 @@
         <span class="u-high-search" @click="showSearch"></span> 
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
-                v-model="customerName" 
+                v-model="tabParams.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -169,11 +169,11 @@ import utils from '~/plugins/utils';
                 tabParams:{
                     page:1,
                     pageSize:15,
+                    customerName:''
                 },
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                customerName:'',
                 columns1: [
                     {
                         type: 'selection',
@@ -390,7 +390,7 @@ import utils from '~/plugins/utils';
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.tabParams=this.$route.query;
         },
         methods:{
             showSearch (params) {
@@ -513,7 +513,6 @@ import utils from '~/plugins/utils';
                 this.page=1;
                 this.tabParams.page=1;
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams);
 
             },
             onChangeOpen(data){
@@ -521,13 +520,8 @@ import utils from '~/plugins/utils';
             },
             lowerSubmit(){
                 this.page=1;
-                this.tabParams={
-                    page:1,
-                    pageSize:15,
-                    customerName:this.customerName
-                }
+                this.tabParams.page=1;
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

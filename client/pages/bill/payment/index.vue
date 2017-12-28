@@ -73,7 +73,7 @@
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
             <Input
-                v-model="customerName"
+                v-model="params.customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -177,7 +177,7 @@
                 ref="upload"
                 name="file"
                 :before-upload="handleUpload"
-                action="http://optest01.krspace.cn/api/krspace-pay/pay-record/importBankFlow"
+                action="/api/krspace-pay/pay-record/importBankFlow"
                 :with-credentials="IsCookie"
             >
                 <div class="u-upload-content">
@@ -228,7 +228,8 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:'',
                 },
                 formItem:{
                     customerId:'',
@@ -237,7 +238,6 @@ export default {
                 openMessage:false,
                 MessageType:'',
                 warn:'',
-                customerName:'',
                 file: null,
                 IsCookie:true,
                 columns: [
@@ -371,7 +371,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.params=this.$route.query;
         },
         methods:{
 
@@ -455,18 +455,12 @@ export default {
                 this.page=1;
                 this.params.page=1;
                 utils.addParams(this.params);
-                this.getTableData(this.params)
             },
 
             lowerSubmit(){
                 this.page=1;
-                this.params={
-                    page:1,
-                    pageSize:15,
-                    customerName:this.customerName
-                }
+                this.params.page=1;
                 utils.addParams(this.params);
-                this.getTableData(this.params);
             },
 
             changePage(page){
@@ -490,17 +484,21 @@ export default {
                 var data=new FormData();
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data, res => {
+                    this.openMessage=true;
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
-                        this.openMessage=true;
                         return;
                     }
+                    if(res.data.errorNum>0){
+                        this.MessageType="error";
+                    }else{
+                        this.MessageType="success";
+                    }
+                    this.warn=`已成功导入交易流水<span class="u-txt-green">${res.data.successNum}</span>条,失败<span class="u-txt-red">${res.data.errorNum}</span>条`;
                     this.openImport=false;
-                    this.MessageType="success";
-                    this.warn=`已成功导入交易流水${res.data.successNum}条,失败${res.data.errorNum}条`;
-                    this.openMessage=true;
-                   this.getTableData(this.params);
+                    this.getTableData(this.params);
+                   
                 }, err => {
 					this.$Notice.error({
 						title:err.message

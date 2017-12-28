@@ -238,7 +238,6 @@ export default{
                 });
 			})   
 			// var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
-        	
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);

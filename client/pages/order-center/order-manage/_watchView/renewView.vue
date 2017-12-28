@@ -216,7 +216,9 @@ export default {
 				   _this.treatmentData=r.data.contractTactics||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
-                _this.$Message.info(e);
+                _this.$Notice.error({
+                    title:e.message
+                });
         })
 	}
 }

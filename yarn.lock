@@ -3691,8 +3691,8 @@ number-is-nan@^1.0.0:
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"
 
 nuxt@^1.0.0-rc11:
-  version "1.0.0-rc9"
-  resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-1.0.0-rc9.tgz#74bb73f85b1e92a8ad7d7108386fbecccbe7a3d4"
+  version "1.0.0-rc11"
+  resolved "http://registry.npm.taobao.org/nuxt/download/nuxt-1.0.0-rc11.tgz#e30ea7f203cb936b3643527d897501e45eb0965e"
   dependencies:
     "@nuxtjs/youch" "3.0.2"
     ansi-html "^0.0.7"
@@ -4634,10 +4634,13 @@ progress@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/progress/-/progress-1.1.8.tgz#e260c78f6161cdd9b0e56cc3e0a85de17c7a57be"
 
+<<<<<<< HEAD
+=======
 promise-polyfill@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-7.0.0.tgz#c665b6da1f97e21c3f2f7aa0543c90209127cb15"
 
+>>>>>>> 8d62eaa7f7dce29d8c3b00536580fb3148983e1a
 promise@^7.1.1:
   version "7.3.1"
   resolved "https://registry.yarnpkg.com/promise/-/promise-7.3.1.tgz#064b72602b18f90f29192b8b1bc418ffd1ebd3bf"

@@ -342,7 +342,7 @@
         this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
             menuCode = response.data.menusCode;
             var user = response.data.userInfo;
-            global.resourcesCode=response.data.resourcesCode;
+            window.resourcesCode=response.data.resourcesCode;
             var navs = [].concat(firstMenus(NavItems));
             that.setState({ navs, user });
         })

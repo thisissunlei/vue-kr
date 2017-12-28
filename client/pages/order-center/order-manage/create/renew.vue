@@ -466,7 +466,7 @@ import utils from '~/plugins/utils';
                 }
                 
                 
-                this.disabled = true;
+                
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         if(!this.selecedStation.length){
@@ -483,10 +483,8 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return;
                         }
+                        this.disabled = true;
                         this.renewFormSubmit()
-                        this.$Notice.success({
-                            title:'Success!'
-                        });
                     } else {
                         _this.disabled = false;
 

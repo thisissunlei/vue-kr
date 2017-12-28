@@ -563,10 +563,10 @@ import utils from '~/plugins/utils';
 
                 
 
-                this.disabled = true;
+                
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        console.log('handleSubmit',valid)
+                        
                         if(this.errorPayType || this.errorAmount){
                             this.$Notice.error({
                                 title:'请填写完表单'
@@ -580,6 +580,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return
                         }
+                        this.disabled = true;
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;

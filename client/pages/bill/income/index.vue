@@ -176,13 +176,12 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:120,
                         render(h, obj){
-                            if(obj.row.incomeType==='MEETING'){
-                                return '会议室';
-                            }else if(obj.row.incomeType==='PRINT'){
-                                return '打印服务 ';
-                            }else if(obj.row.incomeType==='RENT'){
-                                return '工位服务';
+                             let incomeType={
+                              'MEETING':'会议室',
+                              'PRINT':'打印服务',
+                              'RENT':'工位服务'
                             }
+                            return incomeType[obj.row.incomeType]
                         }
                     },
                     {

@@ -67,8 +67,14 @@ export default {
     axios.get(APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
-      success && success(data)
-      resolve(data)
+      if(parseInt(data.code)>0){
+        success && success(data)
+        resolve(data)
+      }else{
+        failure && failure(data)
+        reject(data);
+      }
+      
     })
     .catch(function (error) {
       error = error.response.data
@@ -84,8 +90,13 @@ export default {
     axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
-      success && success(response)
-      resolve(response)
+      if(parseInt(response.code)>0){
+        success && success(response)
+        resolve(response)
+      }else{
+        failure && failure(response)
+        reject(response);
+      }
     })
     .catch(function (error) {
       error = error.response.data
@@ -100,8 +111,15 @@ export default {
     axios.put(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
-      success && success(response)
-      resolve(response)
+      if(parseInt(response.code)>0){
+        success && success(response)
+        resolve(response)
+      }else{
+        failure && failure(response)
+        reject(response);
+      }
+      // success && success(response)
+      // resolve(response)
     })
     .catch(function (error) {
       error = error.response.data
@@ -116,8 +134,13 @@ export default {
     axios.delete(APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
-      success && success(data)
-      resolve(data)
+      if(parseInt(data.code)>0){
+        success && success(data)
+        resolve(data)
+      }else{
+        failure && failure(data)
+        reject(data);
+      }
     })
     .catch(function (error) {
       error = error.response.data

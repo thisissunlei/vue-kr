@@ -350,7 +350,6 @@ export default {
                 this.page=1;
                 this.params.page=1;
                 utils.addParams(this.params);
-                this.getTableData(this.params)
             },
             onChangeOpen(data){
                 this.openMessage=data;
@@ -363,7 +362,6 @@ export default {
                     pageSize:15
                 }
                 utils.addParams(this.params);
-                this.getTableData(this.params);
             },
 
         }

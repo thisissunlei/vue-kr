@@ -164,7 +164,6 @@ export default {
                     csrName:this.csrName
                 }
                 utils.addParams(this.Params);
-                this.getTableData(this.Params);
         },
         showSearch (params) {
                 utils.clearForm(this.searchData);
@@ -179,7 +178,6 @@ export default {
                 this.Params=this.searchData;
                 this.Params.csrName=this.csrName;
                 utils.addParams(this.Params);
-                this.getTableData(this.Params)
         },
         openSetting(params){
                 this.itemDetail=params;

@@ -513,7 +513,6 @@ import utils from '~/plugins/utils';
                 this.page=1;
                 this.tabParams.page=1;
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams);
 
             },
             onChangeOpen(data){
@@ -527,7 +526,6 @@ import utils from '~/plugins/utils';
                     customerName:this.customerName
                 }
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

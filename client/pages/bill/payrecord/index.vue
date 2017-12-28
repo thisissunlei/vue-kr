@@ -202,7 +202,6 @@ export default {
                 this.page=1;
                 this.params.page=1;
                 utils.addParams(this.params);
-                this.getTableData(this.params);
 
             },
             changePage(page){

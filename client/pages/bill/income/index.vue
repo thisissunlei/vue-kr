@@ -288,7 +288,6 @@ import utils from '~/plugins/utils';
                 this.tabParams.page=1;
                 this.page=1;
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams)
             },
             lowerSubmit(){
                 this.page=1;
@@ -298,7 +297,6 @@ import utils from '~/plugins/utils';
                     pageSize:15
                 }
                 utils.addParams(this.tabParams);
-                this.getTableData(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

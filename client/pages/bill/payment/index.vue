@@ -130,6 +130,13 @@
                 class="u-bind u-clearfix"
                 :rules="ruleValidate"
             >
+                <FormItem label="客户名称" prop="customerId">
+                    <SearchCompany
+                        :test="formItem"
+                        style="width: 250px"
+                        :onchange="onchange"
+                    ></SearchCompany>
+                </FormItem>
 
                  <FormItem label="所在社区" prop="communityId">
                     <SelectCommunities
@@ -137,14 +144,6 @@
                         style="width: 250px"
                         :onchange="onCommunityChange"
                     ></SelectCommunities>
-                </FormItem>
-
-                <FormItem label="客户名称" prop="customerId">
-                    <SearchCompany
-                        :test="formItem"
-                        style="width: 250px"
-                        :onchange="onchange"
-                    ></SearchCompany>
                 </FormItem>
 
             </Form>

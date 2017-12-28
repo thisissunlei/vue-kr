@@ -507,12 +507,28 @@
                         return;
                     }
                     
-                    var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
-                    window.location.href = url;
+                    // var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
+                    // window.location.href = url;
+                    that.downLoadPdf(r.data);
                     that.downSwitch();
                 }, e => {
                     that.$Message.info(e);
                 })
+            },
+            downLoadPdf(params){
+                var that=this;
+                this.$http.post('get-station-contract-pdf-url', {
+                    id:params.fileId,
+                    
+                }, (response) => {
+                
+                    window.open(response.data,"_blank");
+                    //window.location.href = response.data;
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
             },
             describeDataChange(params,error){
 
@@ -591,13 +607,14 @@
                this.downSwitch(); 
             },
             urlUpLoad(detail,col){
-                console.log(detail,"------------",col)
+               
                 var _this = this;
                 this.$http.post("post-list-upload-url", {
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-                    this.allAttachmentChagne(col.requestId);
+
+                     _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

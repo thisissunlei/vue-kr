@@ -235,8 +235,10 @@
                 ]
             }
         },
-        mounted:function(){
-            this.getListData(this.params);
+        created:function(){
+            var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
+            this.getListData(params);
+            this.params=params;
         },
         methods:{
             showKey: function (ev) {
@@ -317,7 +319,7 @@
                 this.getListData(params);
             },
             lowerSubmit(){
-                this.getListData(this.params);
+                 utils.addParams(this.params);
             },
             upperChange(params,error){
                 this.upperError=error;
@@ -329,9 +331,10 @@
                 }
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.page=1;
+                this.params.pageSize=15;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
-                this.getListData(this.params);
+                utils.addParams(this.params);
             },
             onChangeOpen(data){
                 this.openMessage=data;

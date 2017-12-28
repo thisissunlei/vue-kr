@@ -5,7 +5,7 @@
             <span class="u-high-search" @click="showSearch"></span>  
             <div style='display:inline-block;float:right;padding-right:20px;'>
                 <Input 
-                    v-model="csrName" 
+                    v-model="Params.csrName" 
                     placeholder="请输入公司名称"
                     style="width: 252px"
                 ></Input>
@@ -75,10 +75,10 @@ export default {
             page:1,
             Params:{
                 page:1,
-                pageSize:15
+                pageSize:15,
+                csrName:'',
             },
             itemDetail:{},
-            csrName:'',
             searchData:{},
             isRefresh:false,
             tableHeader:[
@@ -136,7 +136,7 @@ export default {
     },
     created(){
         this.getTableData(this.$route.query);
-        this.csrName=this.$route.query.csrName;
+        this.Params=this.$route.query;
     },
     methods:{
         getTableData(params){
@@ -158,11 +158,7 @@ export default {
         lowerSubmit(){
                 utils.clearForm(this.searchData);
                 this.page=1;
-                this.Params={
-                    page:1,
-                    pageSize:15,
-                    csrName:this.csrName
-                }
+                this.Params.page=1;
                 utils.addParams(this.Params);
         },
         showSearch (params) {
@@ -173,10 +169,9 @@ export default {
                 this.searchData=form;
         },
         searchSubmit(){
+                this.Params=this.searchData;
                 this.Params.page=1;
                 this.page=1;
-                this.Params=this.searchData;
-                this.Params.csrName=this.csrName;
                 utils.addParams(this.Params);
         },
         openSetting(params){

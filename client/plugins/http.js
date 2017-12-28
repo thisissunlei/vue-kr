@@ -2,7 +2,7 @@
  import APIS from '../assets/apis/index';
  import Qs from 'qs'; 
  // 超时时间
- axios.defaults.timeout = 2000
+ // axios.defaults.timeout = 2000
  // http请求拦截器
 axios.interceptors.request.use(config => {
   if(config.method  == 'post'){

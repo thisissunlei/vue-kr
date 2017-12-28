@@ -39,7 +39,7 @@
         <span @click="showSearch"></span> 
          <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
-                v-model="customerName" 
+                v-model="params.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -128,12 +128,12 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:''
                 },
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                customerName:'',
                 msg:'',
                 ifCancel:true,
                 columns: [
@@ -268,7 +268,8 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.params=this.$route.query;
+           
         },
         methods:{
             showSearch (params) {
@@ -340,6 +341,7 @@ export default {
             changePage(page){
                 this.params.page=page;
                 this.page=page;
+                
                 this.getTableData(this.params);
             },
              getSearchData(form){
@@ -356,11 +358,7 @@ export default {
             },
             lowerSubmit(){
                 this.page=1;
-                this.params={
-                    customerName:this.customerName,
-                    page:1,
-                    pageSize:15
-                }
+                this.params.page=1;
                 utils.addParams(this.params);
             },
 

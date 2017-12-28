@@ -1,4 +1,5 @@
 <style lang="less">
+
 .g-bill{
     .u-search{
             height:32px;
@@ -12,12 +13,15 @@
                 float:right;
             }
     }
+    
     .ivu-table-cell{
         padding:0;
     }
+    
     .u-table{
         padding:0 20px;
-    } 
+    }
+     
     .m-search{
         color:#2b85e4; 
         display:inline-block;
@@ -25,12 +29,13 @@
         font-size:14px;
         cursor:pointer;
     } 
+    
 }
 </style>
 
 <template>
 <div class="g-bill">
-    <SectionTitle label="收入管理"></SectionTitle>
+    <SectionTitle label="应收管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="showIncome">挂收入</Button>
         <span class="u-high-search" @click="showSearch"></span>  
@@ -48,7 +53,8 @@
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
-                <Page   
+                <Page 
+                    :current="page" 
                     :total="totalCount" 
                     :page-size="pageSize"
                     show-total 
@@ -100,7 +106,7 @@ import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import AddIncome from './addIncome';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import utils from '~/plugins/utils';
     export default {
         name: 'income',
         components:{
@@ -120,6 +126,7 @@ import CommonFuc from '~/components/CommonFuc';
                 warn:'',
                 MessageType:'',
                 pageSize:15,
+                page:1,
                 tabParams:{
                     page:1,
                     pageSize:15
@@ -206,15 +213,14 @@ import CommonFuc from '~/components/CommonFuc';
                 
             }
         },
-       
-        mounted:function(){
-            this.getTableData(this.tabParams);
+        created(){
+             this.getTableData(this.$route.query);
+             this.customerName=this.$route.query.customerName;
         },
         methods:{
             showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
-
             },
             openView(params){
                  location.href=`./income/detail/${params.id}`;
@@ -223,18 +229,21 @@ import CommonFuc from '~/components/CommonFuc';
                  console.log('导出')
             },
             showIncome(){
-               CommonFuc.clearForm(this.addData);
+               utils.clearForm(this.addData);
+               this.addData.startTime=new Date();
                this.openIncome=!this.openIncome;
                this.cancelCallback && this.cancelCallback();
             },
             getTableData(params){
-                this.$http.get('get-income-list', params, r => {
-                    this.billList=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('get-income-list', params, res => {
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             getAddData(form,callback,cancel){
                 this.addData=form;
@@ -250,11 +259,11 @@ import CommonFuc from '~/components/CommonFuc';
             },
             add(){
                 let params=this.addData;
-                this.$http.post('add-income', params, r => {
+                this.$http.post('add-income', params, res => {
                     this.openIncome=false;
-                    if(r.code==-1){
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -262,7 +271,11 @@ import CommonFuc from '~/components/CommonFuc';
                     this.warn="挂收入成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
             },
             onChangeOpen(data){
                 this.openMessage=data;
@@ -271,18 +284,24 @@ import CommonFuc from '~/components/CommonFuc';
                 this.searchData=form;
             },
             searchSubmit(){
-                this.getTableData(this.searchData)
+                this.tabParams=this.searchData;
+                this.tabParams.page=1;
+                this.page=1;
+                utils.addParams(this.tabParams);
             },
             lowerSubmit(){
-                this.tabParams.customerName=this.customerName;
-                this.getTableData(this.tabParams);
+                this.page=1;
+                this.tabParams={
+                    customerName:this.customerName,
+                    page:1,
+                    pageSize:15
+                }
+                utils.addParams(this.tabParams);
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.tabParams.page=page;
+                this.page=page;
+                this.getTableData(this.tabParams);
             }
 
             

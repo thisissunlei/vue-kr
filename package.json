@@ -31,7 +31,7 @@
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "nodemon": "^1.12.5",
-    "nuxt": "^1.0.0-rc11",
+    "nuxt": "git+https://git@github.com/nuxt/nuxt.js.git#dev",
     "scmp": "^2.0.0",
     "vue-dateutils": "^1.0.8"
   }

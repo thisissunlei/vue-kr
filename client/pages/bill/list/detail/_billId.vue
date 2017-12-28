@@ -37,6 +37,27 @@
 		background:url('~assets/images/arrow_top.svg') no-repeat center center;
 	}
 }
+.u-amount-list{
+	text-align: right;
+	height: 90px;
+	margin-bottom:24px;
+}
+.u-amount{
+	height:28px;
+	line-height:28px;
+	span{
+		display:inline-block;
+		width:100px;
+		text-align: right;
+	}
+}
+.txt-bold{
+	font-weight: bold;
+}
+
+.u-txt-red{
+	color:#FF6868;
+}
 
 
 }
@@ -50,7 +71,7 @@
 				{{basicInfo.billNo}}
 			</LabelText>	
 			<LabelText label="账单类型：">
-				{{basicInfo.billType}}
+				{{basicInfo.bizType}}
 			</LabelText>
 			<LabelText label="客户名称：">
 				<a href="">
@@ -63,27 +84,37 @@
 			<LabelText label="付款截止日期：">
 				{{basicInfo.billEndTime}}
 			</LabelText>
-			<LabelText label="账单状态：">
-				{{basicInfo.billStatus}}
+			<LabelText label="支付状态：">
+				{{basicInfo.payStatus}}
 			</LabelText>
-			<LabelText label="账单总金额：">
-				￥{{basicInfo.amount}}
+			<LabelText label="账单金额：">
+				￥{{basicInfo.payableAmount}}
 			</LabelText>
 			<LabelText label="实际付款金额：">
 				￥{{basicInfo.paidAmount}}
 			</LabelText>
-			<LabelText label="账单生成时间：">
-				{{basicInfo.createTime}}
+			<LabelText label="账单日：">
+				{{basicInfo.billingDate}}
 			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<div v-bind:class="[ISshow?showClass:hideClass]" >
 				<Table border :columns="cost" :data="costInfo"></Table>
 			</div>
-
 			<div v-if="costInfo.length>5" class="u-show-tip">
 				<div v-if="!ISshow" @click="showTab">展开<span class="u-bottom"></span></div>
 				<div v-if="ISshow"@click="hideTab">收起<span class="u-top"></span></div>
+			</div>
+			<div class="u-amount-list">
+				<div class="u-amount">
+					费用合计：<span>￥{{basicInfo.totalAmount}}</span>
+				</div>
+				<div class="u-amount">
+					减免金额：<span>￥-{{basicInfo.freeAmount}}</span>
+				</div>
+				<div class="u-amount txt-bold">
+					账单金额：<span class="u-txt-red">￥{{basicInfo.payableAmount}}</span>
+				</div>
 			</div>
 		</DetailStyle>	
 		<DetailStyle info="结算记录">
@@ -183,28 +214,28 @@ export default {
 			let from={
 				billId:params.billId
 			};
-			this.$http.get('get-bill-detail', from, r => {
-				let data=r.data;
-				if(data.bizType=='MEETING'){
-					data.billType='会议室账单';
-				}else if (data.bizType=='PRINT'){
-					data.billType='打印服务账单';
-				}else if (data.bizType=='CONTRACT'){
-					data.billType='工位服务订单';
-				}
-				if(data.payStatus=='WAIT'){
-					data.billStatus='待付款';
-				}else if (data.payStatus=='PAID'){
-					data.billStatus='已付清';
-				}else if (data.payStatus=='PAYMENT'){
-					data.billStatus='未付清';
-				}
+			let bizType={
+				'MEETING':'会议室账单',
+				'PRINT':'打印服务账单',
+				'CONTRACT':'工位服务订单',
+			}
+			let payStatus={
+				'WAIT':'待付款',
+				'PAID':'已付清',
+				'PAYMENT':'未付清',
+			}
+			this.$http.get('get-bill-detail', from, res => {
+				let data=res.data;
+				data.bizType=bizType[data.bizType];
+				data.payStatus=payStatus[data.payStatus];
 				this.basicInfo=data;
 				this.costInfo=data.feeList;
 				this.settleInfo=data.payList;
-           	}, e => {
-                console.log('error',e)
-			})
+      		}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+        	})
 			
 		},
 		showTab(){

@@ -26,7 +26,7 @@
 				{{basicInfo.orderNo}}
 			</LabelText>
 			<LabelText label="订单状态：">
-				{{orderStatus}}
+				{{basicInfo.orderStatus}}
 			</LabelText>
 			<LabelText label="预订会议室名称：">
 				{{basicInfo.roomName}}
@@ -85,7 +85,6 @@ export default {
 			billInfo:[],
 			orderStartTime:'',
 			orderEndTime:'',
-			orderStatus:'',
 			createTime:'',
 			costInfo:[],
 			cost:[
@@ -167,22 +166,21 @@ export default {
 			let from={
 				orderId:params.orderId
 			};
-
-			this.$http.get('order-detail', from, r => {
+			let orderStatus={
+				'VALID':'已生效',
+				'CANCEL':'已作废',
+				'REFUND':'已退订',
+			}
+			this.$http.get('order-detail', from, res => {
 				
-				let data=r.data;
+				let data=res.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
 				this.orderEndTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderEndTime));
 				this.createTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.createTime));
 				this.payStatus=data.payStatus=='WAIT'?'待付款':'已付款';
-				if(data.orderStatus=='VALID'){
-					this.orderStatus='已生效'
-				}else if(data.orderStatus=='CANCEL'){
-					this.orderStatus='已作废'
-				}else if(data.orderStatus=='REFUND'){
-					this.orderStatus='已退订'
-				}
+				data.orderStatus=orderStatus[data.orderStatus]
+				
 				this.costInfo=[
 					{
 					refundAmount:data.refundAmount,
@@ -200,9 +198,11 @@ export default {
 					}
 				]
 					
-           	}, e => {
-                console.log('error',e)
-            })
+           	}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+			})
 		},
 	},
 	

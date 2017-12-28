@@ -597,7 +597,7 @@
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-                    this.allAttachmentChagne(col.requestId);
+                     _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

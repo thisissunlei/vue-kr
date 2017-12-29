@@ -94,6 +94,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <span class="pay-error" v-show="discountError">{{discountError}}</span>
                 </Col>
 
                 </Row>
@@ -145,7 +146,8 @@
                         <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
+                        <Input v-model="item.discount" placeholder="折扣" @on-change="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
                         
@@ -249,6 +251,7 @@ import utils from '~/plugins/utils';
                 }
             };
            return{
+                discount:0,
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
                 openStation:false,//弹窗开关
@@ -263,10 +266,7 @@ import utils from '~/plugins/utils';
                     signDate:new Date()
                },
                disabled:false,//提交按钮是否禁止
-               discountError:{
-                error:false,
-                message:''
-               },
+               discountError:false,
                selectedDel:[],//选择要删除的工位
                ruleCustom:{
                     communityId:[
@@ -750,6 +750,7 @@ import utils from '~/plugins/utils';
                         item.validStart=this.renewForm.startDate
                         item.tacticsId = this.getTacticsId('1')
                         item.validEnd = this.renewForm.endDate
+                        item.discount = this.maxDiscount;
                     }
                     return item;
                 })
@@ -781,6 +782,7 @@ import utils from '~/plugins/utils';
                     items[itemIndex].show = false;
                 }
                 this.renewForm.items = items;
+                this.dealSaleInfo()
             },
             submitStation:function(){
                
@@ -899,6 +901,19 @@ import utils from '~/plugins/utils';
                 },200)
             },
             changezhekou(val){
+                if(val<this.maxDiscount){
+                 val = this.maxDiscount
+                 this.$Notice.error({
+                     title:'折扣不得小于'+this.maxDiscount
+                 })
+             }
+             if(val>9.9){
+                 val = this.maxDiscount
+                 this.$Notice.error({
+                     title:'折扣不得大于9.9'
+                 })
+             }
+             this.discount = val;
                 this.dealSaleInfo()
             },
             dealSaleInfo(){
@@ -913,6 +928,9 @@ import utils from '~/plugins/utils';
                 //检查手否有未填写完整的折扣项
                 let complete = true;
                 saleList.map(item=>{
+                     if(item.tacticsType == '1' && this.discount){
+                        item.discount = this.discount
+                    }
                     if(!item.tacticsType){
                         complete = false
                     }
@@ -950,6 +968,8 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
+                     _this.disabled = false;
+                    _this.discountError = false;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -957,6 +977,8 @@ import utils from '~/plugins/utils';
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
+                    _this.disabled = true;
+                   _this.discountError = e.message;
                     _this.$Notice.error({
                         title:e.message
                     });

@@ -125,8 +125,8 @@
             width="660"
         >
             <!-- <Describe v-on:bindData="describeDataChange" :detailData="this.columnDetail"></Describe> -->
-            <Input v-model="otherAgreed" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
-
+            <Input v-model="otherAgreed" :maxlength="1000" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
+            <div style="text-align:right">{{otherAgreed?otherAgreed.length:0+"/1000"}}</div>
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
@@ -211,7 +211,7 @@
                 selectAllData:[],
                 loadingStatus: true,
                 file: null,
-                otherAgreed:'',
+                otherAgreed:0,
                 parameter:{},//获取pdf-id的参数
                 upperData:{},//高级查询的数据
                 upperError:false,

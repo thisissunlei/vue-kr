@@ -441,6 +441,9 @@
                 }, (response) => {
                     that.takeEffectSwitch();
                     that.getListData(that.params);
+                    that.$Notice.success({
+                        title:"合同已生效"
+                    });
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

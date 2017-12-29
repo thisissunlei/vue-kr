@@ -104,6 +104,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <span class="pay-error" v-show="discountError">{{discountError}}</span>
                 </Col>
 
                 </Row>
@@ -148,7 +149,8 @@
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
+                        <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
                         
@@ -209,7 +211,7 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="750"
+        width="900"
        
          class-name="vertical-center-modal"
      >
@@ -256,6 +258,7 @@ import utils from '~/plugins/utils';
             };
             return {
                 openStation:false,
+                inputNumberType:true,
                 selectAll:false,
                 discountError:false,
                 index:0,
@@ -369,6 +372,7 @@ import utils from '~/plugins/utils';
                 ssoId:'',
                 errorAmount:false,
                 ssoName:'',
+                discount:0,
 
             }
         },
@@ -433,7 +437,6 @@ import utils from '~/plugins/utils';
                 let formItem = {} 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
@@ -479,6 +482,9 @@ import utils from '~/plugins/utils';
                 //检查手否有未填写完整的折扣项
                 let complete = true;
                 saleList.map(item=>{
+                     if(item.tacticsType == '1' && this.discount){
+                        item.discount = this.discount
+                     }
                     if(!item.tacticsType){
                         complete = false
                     }
@@ -503,6 +509,7 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 this.formItem.items = saleList;
+                console.log('saleList',saleList)
 
                 this.getSaleAmount(saleList)
             },
@@ -517,22 +524,47 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.post('count-sale', params, r => {
+                    _this.disabled = false;
+                    _this.discountError = false;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
+                    _this.disabled = true;
+                    _this.discountError = e.message;
 
                      _this.$Notice.error({
                         title:e.message
                     })
-                    // _this.formItem.items=[]
-
-                        console.log('error',e)
                 })
 
             },
             changezhekou(val){
+                val = val.target.value;
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return
+                }
+                if(val<this.maxDiscount){
+                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.maxDiscount
+                    })
+                    return;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return;
+                }
+                this.discount = val;
                 this.dealSaleInfo()
             },
             changeSaleTime(val){
@@ -654,7 +686,7 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
-
+                        item.discount = this.maxDiscount;
                         item.validEnd = this.formItem.endDate
                     }
                     return item;
@@ -687,6 +719,7 @@ import utils from '~/plugins/utils';
                     items[itemIndex].show = false;
                 }
                 this.formItem.items = items;
+                this.dealSaleInfo()
             },
             changeCommunity:function(value){
                 // 选择社区

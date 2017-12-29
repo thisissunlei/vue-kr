@@ -200,7 +200,7 @@
           
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
         </FormItem>
         </Form>
         <Modal

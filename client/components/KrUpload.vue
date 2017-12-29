@@ -250,7 +250,7 @@ export default{
 
 <style lang="less">
 .list-box{
-	// position: fixed;
+	position: fixed;
 	width: 100%;
 	height: 100%;
 	left: 0px;

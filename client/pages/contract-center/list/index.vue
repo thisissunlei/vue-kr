@@ -529,7 +529,7 @@
                     id:params.fileId,
                     
                 }, (response) => {
-                
+                  
                     //window.open(response.data,"_blank");
                     window.location.href = response.data;
                 }, (error) => {
@@ -621,7 +621,9 @@
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-
+                    // _this.$Notice.success({
+                    //     title:"合同已生效"
+                    // });
                      _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({

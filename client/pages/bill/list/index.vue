@@ -519,8 +519,13 @@ import utils from '~/plugins/utils';
                 this.openMessage=data;
             },
             lowerSubmit(){
+                let customerName=this.tabParams.customerName;
                 this.page=1;
-                this.tabParams.page=1;
+                this.tabParams={
+                    page:1,
+                    pageSize:15,
+                    customerName:customerName
+                }
                 utils.addParams(this.tabParams);
             },
             changePage(page){

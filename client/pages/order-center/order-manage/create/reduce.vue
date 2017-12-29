@@ -391,8 +391,8 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 let params = {
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    startDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    endDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
                     communityId:this.renewForm.communityId,
                     customerId:this.renewForm.customerId,
                     seats:JSON.stringify(station)

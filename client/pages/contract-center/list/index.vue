@@ -400,41 +400,43 @@
                                     },
                                 },'44')
                                 ];
-                                
-                                if(!params.row.isEffect){
-                                    btnRender.push(h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.clickDescribe(params)
+                                console.log(params.row.contractStatus,"ppppp")
+                                if(params.row.contractStatus=="INVALID"){
+                                    if(!params.row.isEffect){
+                                        btnRender.push(h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.clickDescribe(params)
+                                                }
                                             }
-                                        }
-                                    }, '其他约定'))
-                                }
-                                if(params.row.isEffect || !params.row.haveAttachment){
+                                        }, '其他约定'))
+                                    }
+                                    if(params.row.isEffect || !params.row.haveAttachment){
+                                        
                                     
-                                
-                                }else{
-                                    btnRender.push( h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.contractFor(params)
+                                    }else{
+                                        btnRender.push( h('Button', {
+                                            props: {
+                                                type: 'text',
+                                                size: 'small'
+                                            },
+                                            style: {
+                                                color:'#2b85e4'
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.contractFor(params)
+                                                }
                                             }
-                                        }
-                                    }, '合同生效'))
+                                        }, '合同生效'))
+                                    }
                                 }
                         
                            return h('div',btnRender);  

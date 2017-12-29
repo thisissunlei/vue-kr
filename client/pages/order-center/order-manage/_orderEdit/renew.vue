@@ -473,7 +473,13 @@ import utils from '~/plugins/utils';
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
-                let saleList = this.renewForm.items;
+                // let saleList = this.renewForm.items;
+                let saleList = this.renewForm.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
                  saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))

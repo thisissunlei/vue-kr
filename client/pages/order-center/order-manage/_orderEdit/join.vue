@@ -487,7 +487,13 @@ import utils from '~/plugins/utils';
             joinFormSubmit(){
                 this.config();
                  let {params}=this.$route;
-                let saleList = this.formItem.items
+                // let saleList = this.formItem.items
+                let saleList = this.formItem.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
@@ -562,7 +568,7 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                this.formItem.items = saleList;
+                // this.formItem.items = saleList;
 
                 this.getSaleAmount(saleList)
             },

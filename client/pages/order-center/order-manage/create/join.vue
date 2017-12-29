@@ -434,7 +434,13 @@ import utils from '~/plugins/utils';
             },
             joinFormSubmit(){
                 this.config()
-                let saleList = this.formItem.items
+                //处理已删除的数据
+                let saleList = this.formItem.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate || this.formItem.endDateStatus));
@@ -512,8 +518,8 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                this.formItem.items = saleList;
-                console.log('saleList',saleList)
+                // this.formItem.items = saleList;
+                // console.log('saleList',saleList)
 
                 this.getSaleAmount(saleList)
             },

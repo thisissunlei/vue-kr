@@ -151,7 +151,14 @@
                             }
                             for(var item in orderStatus){
                                 if(item==params.row.orderStatus){
-                                    return <span class="u-txt">{orderStatus[item]}</span>;
+                                    var style={};
+                                    if(item=='NOT_EFFECTIVE'){
+                                        style='u-red';
+                                    }
+                                    if(item=='INVALID'){
+                                        style='u-nullify';
+                                    }
+                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
                                 }
                             }
                         }
@@ -253,17 +260,17 @@
                 this.openNullify=true;
             },
             showReduce(){
-                window.open('/order-center/order-manage/create/reduce','_blank')
+                window.open('/order-center/order-manage/create/reduce','reduce')
             },
             showEdit(params){
-                window.open(`/order-center/order-manage/${params.row.id}/reduce`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/reduce`,params.row.id)
             },
             showApply(params){
                 this.id=params.row.id;
                 this.openApply=true;
             },
             showView(params){
-                window.open(`/order-center/order-manage/${params.row.id}/reduceView`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/reduceView`,params.row.id);
             },
             nullifySubmit (){
                 var _this=this;
@@ -364,5 +371,11 @@
             color:#2b85e4;
             display:inline-block;
             cursor:pointer;
+     }
+     .u-red{
+         color:red;
+     }
+     .u-nullify{
+         text-decoration: line-through;
      }
 </style>

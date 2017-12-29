@@ -449,7 +449,8 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =end;
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-                    window.location.href='/order-center/order-manage';
+                      window.close();
+                      window.opener.location.reload();
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

@@ -527,8 +527,8 @@
                     
                 }, (response) => {
                 
-                    window.open(response.data,"_blank");
-                    //window.location.href = response.data;
+                    //window.open(response.data,"_blank");
+                    window.location.href = response.data;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

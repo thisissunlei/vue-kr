@@ -229,7 +229,7 @@ export default{
 			
 				//this.serverUrl = response.data.serverUrl;
 				//var url = `/api/krspace-op-web/sys/down-file?fileId=${params.fileId}`
-				//window.location.href = url;
+				// window.location.href = url;
 				// window.open(response.data,"_blank");
 				  window.location.href = response.data;
 			}, (error) => {

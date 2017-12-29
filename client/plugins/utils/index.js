@@ -34,16 +34,15 @@
     }
 
     /*导出*/
-    function commonExport(props,url){
+    function commonExport(props,url,type){
         var where=[];
         for(var item in props){
             if(props.hasOwnProperty(item)){
                 where.push(`${item}=${props[item]}`);
             }
         }
-       
         var url = `${url}?${where.join('&')}`
-        window.location.href = url;
+        type=='open'?window.open(url,'123'): window.location.href = url;
     }
     //获取url的参数
     function getRequest() {

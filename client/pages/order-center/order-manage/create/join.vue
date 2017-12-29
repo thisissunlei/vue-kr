@@ -457,7 +457,7 @@ import utils from '~/plugins/utils';
                 formItem.ssoName = this.ssoName;
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
-                    window.location.href='/order-center/order-manage';
+                     utils.commonExport(this.$route.query,'/order-center/order-manage');
                 }, e => {
                      _this.$Notice.error({
                         title:e.message

@@ -264,10 +264,11 @@
                 utils.clearForm(this.upperData);
             },
             showJoin(){
-                window.open('/order-center/order-manage/create/join','_blank')
+                utils.commonExport(this.$route.query,'/order-center/order-manage/create/join','open');
+                //window.open('/order-center/order-manage/create/join','123')
             },
             showRenew(){
-                window.open('/order-center/order-manage/create/renew','_blank')
+                window.open('/order-center/order-manage/create/renew','345')
             },
             showApply(params){
                 this.id=params.row.id;
@@ -280,7 +281,7 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,params.row.id);
             },
             showNullify(params){
                 this.id=params.row.id;
@@ -302,7 +303,7 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/order-center/order-manage/${params.row.id}/${type}`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/${type}`,params.row.id)
             },
             nullifySubmit (){
                 let params={

@@ -49,12 +49,17 @@
             background-position:center;
         }
      }
+     .contract-center-list{
+         .ivu-table-fixed-right::before, .ivu-table-fixed::before{
+             z-index: 3;
+         }
+     }
 </style>
 
 
 <template>
 
-    <div>
+    <div class="contract-center-list">
         <sectionTitle label = "合同列表"></sectionTitle>
        <div style='text-align:right;margin-bottom:10px'>
           
@@ -436,6 +441,9 @@
                 }, (response) => {
                     that.takeEffectSwitch();
                     that.getListData(that.params);
+                    that.$Notice.success({
+                        title:"合同已生效"
+                    });
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -521,7 +529,7 @@
                     id:params.fileId,
                     
                 }, (response) => {
-                
+                  
                     //window.open(response.data,"_blank");
                     window.location.href = response.data;
                 }, (error) => {
@@ -613,7 +621,9 @@
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-
+                    // _this.$Notice.success({
+                    //     title:"合同已生效"
+                    // });
                      _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({

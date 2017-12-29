@@ -72,11 +72,11 @@ export default{
 		switchList:function(event){
 			var detail = event.target.getBoundingClientRect();
 			this.isOpenList = !this.isOpenList;
-			if(this.isOpenList){
-				document.body.style.overflow = "hidden";
-			}else{
-				document.body.style.overflow = "auto";
-			}
+			// if(this.isOpenList){
+			// 	document.body.style.overflow = "hidden";
+			// }else{
+			// 	document.body.style.overflow = "auto";
+			// }
 			this.listStyle = {
 				left:detail.left+Math.ceil(detail.width/2)+"px",
 				top:detail.top+detail.height+5+"px",

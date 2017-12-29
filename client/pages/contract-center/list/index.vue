@@ -49,12 +49,17 @@
             background-position:center;
         }
      }
+     .contract-center-list{
+         .ivu-table-fixed-right::before, .ivu-table-fixed::before{
+             z-index: 3;
+         }
+     }
 </style>
 
 
 <template>
 
-    <div>
+    <div class="contract-center-list">
         <sectionTitle label = "合同列表"></sectionTitle>
        <div style='text-align:right;margin-bottom:10px'>
           
@@ -149,7 +154,12 @@
                     <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
                 </div>
         </Modal>
-
+        <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+        ></Message>
         <!-- <Loading :loading='loadingStatus'/> -->
         
     </div>
@@ -165,13 +175,15 @@
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
+    import Message from '~/components/Message';
     var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
             krUpload,
             HeightSearch,
-            Loading
+            Loading,
+            Message
         },
         head () {
             return {
@@ -185,6 +197,9 @@
                     page:1,
                     pageSize:15,
                 },
+                MessageType:'',
+                openMessage:false,
+                warn:'',
                 openDown:false,
                 isCachet:false,
                 openTakeEffect:false,
@@ -436,6 +451,9 @@
                 }, (response) => {
                     that.takeEffectSwitch();
                     that.getListData(that.params);
+                    that.openMessage=true;
+                    that.MessageType=response.message=='ok'?"success":"error";
+                    that.warn=response.message;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -521,7 +539,7 @@
                     id:params.fileId,
                     
                 }, (response) => {
-                
+                  
                     //window.open(response.data,"_blank");
                     window.location.href = response.data;
                 }, (error) => {
@@ -613,7 +631,9 @@
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-
+                    // _this.$Notice.success({
+                    //     title:"合同已生效"
+                    // });
                      _this.getListData(_this.params);
                 }, (error) => {
                     that.$Notice.error({
@@ -629,7 +649,10 @@
                     }
                     return item;
                 })
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
             
         },
         

@@ -25,8 +25,10 @@
 							</div>
 							
 						</Upload>
-						<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
-							{{item.fileName}}
+						<div class="item-box">
+							<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
+								{{item.fileName}}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -275,6 +277,10 @@ export default{
 		right: 0px;
 		// background: red;
 
+	}
+	.item-box{
+		max-height: 200px;
+		overflow: auto;
 	}
 	.file-list{
 		padding: 5px;

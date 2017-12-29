@@ -49,12 +49,17 @@
             background-position:center;
         }
      }
+     .contract-center-list{
+         .ivu-table-fixed-right::before, .ivu-table-fixed::before{
+             z-index: 3;
+         }
+     }
 </style>
 
 
 <template>
 
-    <div>
+    <div class="contract-center-list">
         <sectionTitle label = "合同列表"></sectionTitle>
        <div style='text-align:right;margin-bottom:10px'>
           

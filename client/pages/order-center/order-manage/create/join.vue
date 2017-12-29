@@ -202,6 +202,7 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
         </FormItem>
 
     </Form>
@@ -218,7 +219,7 @@
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button> -->
         </div>
     </Modal>
 
@@ -427,6 +428,9 @@ import utils from '~/plugins/utils';
                     top: 80,
                     duration: 3
                 });
+            },
+            back(){
+                window.history.go(-1);
             },
             joinFormSubmit(){
                 this.config()

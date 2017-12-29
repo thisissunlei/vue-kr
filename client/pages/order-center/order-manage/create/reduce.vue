@@ -385,7 +385,7 @@ import utils from '~/plugins/utils';
                 let station = val.map(item=>{
                     let obj = item;
                     obj.originalPrice = item.price;
-                    obj.seatId = item.id || item.seatId;
+                    obj.seatId = item.seatId;
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate));
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate));
                     return obj;

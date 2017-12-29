@@ -53,6 +53,10 @@
          .ivu-table-fixed-right::before, .ivu-table-fixed::before{
              z-index: 3;
          }
+        .ivu-tooltip-inner{
+            white-space: normal;
+        }
+         
      }
 </style>
 
@@ -278,6 +282,35 @@
                         key: 'otherAgreed',
                         align:'center',
                         width: 100,
+                        render:(h,params)=>{
+                            if(!params.row.otherAgreed){
+                                return "无";
+                            }
+                            var str = "";
+                            return h('Tooltip',{
+                                props:{
+                                    placement: 'top'
+                                }
+                            }, [h('div',{
+                                style:{
+                                    width:"60px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap"
+                                }
+                            },params.row.otherAgreed),h('div', {
+                                    style:{
+                                       
+                                      
+                                        // height:300+"px",
+                                        // background:"red"
+                                        wordWrap:"break-word"
+                                    },
+                                    slot: 'content'
+                                },params.row.otherAgreed
+                                )]
+                            )
+                        }
                     },{
                         title: '附件',
                         key: 'haveAttachmentName',
@@ -453,7 +486,7 @@
                     that.getListData(that.params);
                     that.openMessage=true;
                     that.MessageType=response.message=='ok'?"success":"error";
-                    that.warn=response.message;
+                    that.warn="合同生效！";
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

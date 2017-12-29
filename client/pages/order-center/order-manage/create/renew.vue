@@ -678,11 +678,11 @@ import utils from '~/plugins/utils';
                 select = items.map((item)=>{
                     return item.selelct;
                 })
-                items = items.filter(function(item, index) {
+                items = items.map(function(item, index) {
                     if (item.select) {
-                        return false;
+                        item.show=false
                     }
-                return true;
+                return item;
                 });
                 this.renewForm.items = items;
                 this.selectDiscount(false)
@@ -752,6 +752,7 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
+                        item.validStart=''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
 

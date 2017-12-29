@@ -94,7 +94,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
-                    <span class="pay-error" v-show="discountError">{{discountError}}</span>
+                    <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                 </Col>
 
                 </Row>
@@ -715,11 +715,11 @@ import utils from '~/plugins/utils';
                 select = items.map((item)=>{
                     return item.selelct;
                 })
-                items = items.filter(function(item, index) {
+                items = items.map(function(item, index) {
                     if (item.select) {
-                        return false;
+                        item.show = false
                     }
-                return true;
+                return item;
                 });
                 this.renewForm.items = items;
                 this.selectDiscount(false)
@@ -790,6 +790,7 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
+                        item.validStart=''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
 

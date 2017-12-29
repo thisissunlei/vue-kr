@@ -154,7 +154,12 @@
                     <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
                 </div>
         </Modal>
-
+        <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+        ></Message>
         <!-- <Loading :loading='loadingStatus'/> -->
         
     </div>
@@ -190,6 +195,9 @@
                     page:1,
                     pageSize:15,
                 },
+                MessageType:'',
+                openMessage:false,
+                warn:'',
                 openDown:false,
                 isCachet:false,
                 openTakeEffect:false,
@@ -441,9 +449,9 @@
                 }, (response) => {
                     that.takeEffectSwitch();
                     that.getListData(that.params);
-                    that.$Notice.success({
-                        title:"合同已生效"
-                    });
+                    that.openMessage=true;
+                    that.MessageType=response.message=='ok'?"success":"error";
+                    that.warn=response.message;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -639,7 +647,10 @@
                     }
                     return item;
                 })
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
             
         },
         

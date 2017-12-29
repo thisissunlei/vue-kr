@@ -73,7 +73,7 @@
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
             <Input
-                v-model="customerName"
+                v-model="params.customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -130,6 +130,13 @@
                 class="u-bind u-clearfix"
                 :rules="ruleValidate"
             >
+                <FormItem label="客户名称" prop="customerId">
+                    <SearchCompany
+                        :test="formItem"
+                        style="width: 250px"
+                        :onchange="onchange"
+                    ></SearchCompany>
+                </FormItem>
 
                  <FormItem label="所在社区" prop="communityId">
                     <SelectCommunities
@@ -137,14 +144,6 @@
                         style="width: 250px"
                         :onchange="onCommunityChange"
                     ></SelectCommunities>
-                </FormItem>
-
-                <FormItem label="客户名称" prop="customerId">
-                    <SearchCompany
-                        :test="formItem"
-                        style="width: 250px"
-                        :onchange="onchange"
-                    ></SearchCompany>
                 </FormItem>
 
             </Form>
@@ -228,7 +227,8 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:'',
                 },
                 formItem:{
                     customerId:'',
@@ -237,7 +237,6 @@ export default {
                 openMessage:false,
                 MessageType:'',
                 warn:'',
-                customerName:'',
                 file: null,
                 IsCookie:true,
                 columns: [
@@ -371,7 +370,7 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.params=this.$route.query;
         },
         methods:{
 
@@ -458,11 +457,12 @@ export default {
             },
 
             lowerSubmit(){
+                let customerName=this.params.customerName;
                 this.page=1;
                 this.params={
                     page:1,
                     pageSize:15,
-                    customerName:this.customerName
+                    customerName:customerName
                 }
                 utils.addParams(this.params);
             },

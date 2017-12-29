@@ -41,7 +41,7 @@
         <span class="u-high-search" @click="showSearch"></span>  
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
-                v-model="customerName" 
+                v-model="tabParams.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -129,11 +129,11 @@ import utils from '~/plugins/utils';
                 page:1,
                 tabParams:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:'',
                 },
                 billList:[],
                 addData:{},
-                customerName:'',
                 callback:null,
                 cancelCallback:null,
                 columns1: [
@@ -176,13 +176,12 @@ import utils from '~/plugins/utils';
                         align:'center',
                         width:120,
                         render(h, obj){
-                            if(obj.row.incomeType==='MEETING'){
-                                return '会议室';
-                            }else if(obj.row.incomeType==='PRINT'){
-                                return '打印服务 ';
-                            }else if(obj.row.incomeType==='RENT'){
-                                return '工位服务';
+                             let incomeType={
+                              'MEETING':'会议室',
+                              'PRINT':'打印服务',
+                              'RENT':'工位服务'
                             }
+                            return incomeType[obj.row.incomeType]
                         }
                     },
                     {
@@ -215,7 +214,7 @@ import utils from '~/plugins/utils';
         },
         created(){
              this.getTableData(this.$route.query);
-             this.customerName=this.$route.query.customerName;
+             this.tabParams=this.$route.query;
         },
         methods:{
             showSearch (params) {
@@ -290,11 +289,12 @@ import utils from '~/plugins/utils';
                 utils.addParams(this.tabParams);
             },
             lowerSubmit(){
+                let customerName=this.tabParams.customerName;
                 this.page=1;
                 this.tabParams={
-                    customerName:this.customerName,
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:customerName
                 }
                 utils.addParams(this.tabParams);
             },

@@ -84,9 +84,9 @@ export default {
 			};
 
 			var incomeType = {
-					'MEETING':'会议室账单',
-					'PRINT':'打印服务账单',
-					'CONTRACT':'工位服务订单'
+					'MEETING':'会议室服务',
+					'PRINT':'打印服务',
+					'RENT':'工位租金'
 			}
 			
 			this.$http.get('get-income-detail', from, res => {

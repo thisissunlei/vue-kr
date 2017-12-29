@@ -146,7 +146,7 @@
                         <!-- <DatePicker type="date" placeholder="结束时间" v-show="item.tacticsType == 'zhekou'" v-model="item.validEnd" ></DatePicker> -->
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <Input v-model="item.discount" placeholder="折扣" @on-change="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
@@ -901,19 +901,30 @@ import utils from '~/plugins/utils';
                 },200)
             },
             changezhekou(val){
+                val = val.target.value;
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return
+                }
                 if(val<this.maxDiscount){
-                 val = this.maxDiscount
-                 this.$Notice.error({
-                     title:'折扣不得小于'+this.maxDiscount
-                 })
-             }
-             if(val>9.9){
-                 val = this.maxDiscount
-                 this.$Notice.error({
-                     title:'折扣不得大于9.9'
-                 })
-             }
-             this.discount = val;
+                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.maxDiscount
+                    })
+                    return;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return;
+                }
+                this.discount = val;
                 this.dealSaleInfo()
             },
             dealSaleInfo(){

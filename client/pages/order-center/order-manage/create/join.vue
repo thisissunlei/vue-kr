@@ -149,7 +149,7 @@
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <Input v-model="item.discount" placeholder="折扣" @on-change="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'" :number="inputNumberType"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
@@ -258,6 +258,7 @@ import utils from '~/plugins/utils';
             };
             return {
                 openStation:false,
+                inputNumberType:true,
                 selectAll:false,
                 discountError:false,
                 index:0,
@@ -508,6 +509,7 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 this.formItem.items = saleList;
+                console.log('saleList',saleList)
 
                 this.getSaleAmount(saleList)
             },
@@ -539,17 +541,28 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
+                val = val.target.value;
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return
+                }
                 if(val<this.maxDiscount){
-                    val = this.maxDiscount
+                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                    this.disabled = true;
+
                     this.$Notice.error({
                         title:'折扣不得小于'+this.maxDiscount
                     })
+                    return;
                 }
                 if(val>9.9){
-                    val = this.maxDiscount
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
                     this.$Notice.error({
                         title:'折扣不得大于9.9'
                     })
+                    return;
                 }
                 this.discount = val;
                 this.dealSaleInfo()

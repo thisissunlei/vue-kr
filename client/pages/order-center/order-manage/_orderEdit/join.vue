@@ -104,6 +104,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                    <span class="pay-error" v-show="discountError">{{discountError}}</span>
                 </Col>
 
                 </Row>
@@ -150,7 +151,8 @@
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
-                        <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber>
+                        <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
 
                         
@@ -275,6 +277,7 @@ import utils from '~/plugins/utils';
                 maxDiscount:'',//折扣最大限制
                 timeError:false,//租赁时间校验
                 corporationName:'',
+                discount:0,
                 stationData:{
                     submitData:[],
                     deleteData:[],
@@ -573,13 +576,18 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
+
                  this.$http.post('count-sale', params, r => {
+                    _this.disabled = false;
+                    _this.discountError = false;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     
                 }, e => {
+                     _this.disabled = true;
+                    _this.discountError = e.message;
 
                      _this.$Notice.error({
                         title:e.message
@@ -590,6 +598,30 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
+                val = val.target.value;
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return
+                }
+                if(val<this.maxDiscount){
+                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.maxDiscount
+                    })
+                    return;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return;
+                }
+                this.discount = val;
                 this.dealSaleInfo()
             },
             changeSaleTime(val){
@@ -706,7 +738,7 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
-
+                        item.discount = this.maxDiscount;
                         item.validEnd = this.formItem.endDate
                     }
                     return item;
@@ -739,6 +771,7 @@ import utils from '~/plugins/utils';
                     items[itemIndex].show = false;
                 }
                 this.formItem.items = items;
+                this.dealSaleInfo()
             },
             changeCommunity:function(value){
                 // 选择社区

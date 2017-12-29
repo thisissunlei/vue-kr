@@ -202,6 +202,7 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
         </FormItem>
 
     </Form>
@@ -218,7 +219,7 @@
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button> -->
         </div>
     </Modal>
 
@@ -428,9 +429,18 @@ import utils from '~/plugins/utils';
                     duration: 3
                 });
             },
+            back(){
+                window.history.go(-1);
+            },
             joinFormSubmit(){
                 this.config()
-                let saleList = this.formItem.items
+                //处理已删除的数据
+                let saleList = this.formItem.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate || this.formItem.endDateStatus));
@@ -508,8 +518,8 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                this.formItem.items = saleList;
-                console.log('saleList',saleList)
+                // this.formItem.items = saleList;
+                // console.log('saleList',saleList)
 
                 this.getSaleAmount(saleList)
             },

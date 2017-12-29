@@ -200,7 +200,7 @@
           
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px">重置</Button> -->
+            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
         </FormItem>
         </Form>
         <Modal
@@ -385,6 +385,9 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
+            back(){
+                window.history.go(-1);
+            },
             getSignUser(){
                 let params = {
                     communityId:this.renewForm.communityId,
@@ -417,7 +420,13 @@ import utils from '~/plugins/utils';
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
-                let saleList = this.renewForm.items;
+                //处理已删除的数据
+                let saleList = this.renewForm.items.filter(item=>{
+                    if(!item.show){
+                        return false;
+                    }
+                    return true;
+                })
                  saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     console.log('dealSaleInfo',item.validEnd,dateUtils.dateToStr("YYYY-MM-dd 00:00:00",item.validEnd));

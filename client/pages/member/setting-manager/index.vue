@@ -157,8 +157,13 @@ export default {
         },
         lowerSubmit(){
                 utils.clearForm(this.searchData);
+                let csrName=this.Params.csrName;
                 this.page=1;
-                this.Params.page=1;
+                this.Params={
+                    page:1,
+                    pageSize:15,
+                    csrName:csrName
+                }
                 utils.addParams(this.Params);
         },
         showSearch (params) {

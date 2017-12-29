@@ -518,8 +518,6 @@ import utils from '~/plugins/utils';
                     obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                // this.formItem.items = saleList;
-                // console.log('saleList',saleList)
 
                 this.getSaleAmount(saleList)
             },
@@ -653,6 +651,7 @@ import utils from '~/plugins/utils';
                 })
                 items = items.filter(function(item, index) {
                     if (item.select) {
+                        item.show = false
                         return false;
                     }
                 return true;

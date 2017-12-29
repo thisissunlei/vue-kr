@@ -94,7 +94,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
-                    <span class="pay-error" v-show="discountError">{{discountError}}</span>
+                    <span class="pay-error" v-show="discountError" style="padding-left:15px">{{discountError}}</span>
                 </Col>
 
                 </Row>

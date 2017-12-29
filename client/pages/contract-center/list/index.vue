@@ -175,13 +175,15 @@
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
+    import Message from '~/components/Message';
     var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
             krUpload,
             HeightSearch,
-            Loading
+            Loading,
+            Message
         },
         head () {
             return {

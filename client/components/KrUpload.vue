@@ -25,8 +25,10 @@
 							</div>
 							
 						</Upload>
-						<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
-							{{item.fileName}}
+						<div class="item-box">
+							<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
+								{{item.fileName}}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -72,11 +74,11 @@ export default{
 		switchList:function(event){
 			var detail = event.target.getBoundingClientRect();
 			this.isOpenList = !this.isOpenList;
-			// if(this.isOpenList){
-			// 	document.body.style.overflow = "hidden";
-			// }else{
-			// 	document.body.style.overflow = "auto";
-			// }
+			if(this.isOpenList){
+				document.body.style.overflow = "hidden";
+			}else{
+				document.body.style.overflow = "auto";
+			}
 			this.listStyle = {
 				left:detail.left+Math.ceil(detail.width/2)+"px",
 				top:detail.top+detail.height+5+"px",
@@ -275,6 +277,10 @@ export default{
 		right: 0px;
 		// background: red;
 
+	}
+	.item-box{
+		max-height: 200px;
+		overflow: auto;
 	}
 	.file-list{
 		padding: 5px;

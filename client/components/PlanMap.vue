@@ -12,15 +12,15 @@
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
-		<div id = "plan-map-content"  style ='width:700px;height:350px;border:1px solid #000'>
+		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>
 
 		</div>
 	</div>
 </template>
 <style>
 	.plan-map-content{
-		width: 700px;
-		height: 400px;
+		width: 850px;
+		height: 500px;
 	}
 </style>
 <script>
@@ -192,14 +192,18 @@ import http from '~/plugins/http.js';
 								obj.status = item.status;
 							}
 							for (let j = 0; j < selectedObjs.length; j++) {
+
 								let belongType = "STATION";
 								if (selectedObjs[j].belongType == 2 || selectedObjs[j].belongType == 'SPACE') {
 									belongType = "SPACE";
 								}
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
+									console.log('selectedObjs',obj)
 									obj.checked = true;
+									obj.status = 3;
 
 								}
+
 							}
 							if (cellName >= start && cellName <= end && item.status!=1) {
 								obj.checked = true;

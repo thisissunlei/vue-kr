@@ -53,6 +53,10 @@
          .ivu-table-fixed-right::before, .ivu-table-fixed::before{
              z-index: 3;
          }
+        .ivu-tooltip-inner{
+            white-space: normal;
+        }
+         
      }
 </style>
 
@@ -121,8 +125,8 @@
             width="660"
         >
             <!-- <Describe v-on:bindData="describeDataChange" :detailData="this.columnDetail"></Describe> -->
-            <Input v-model="otherAgreed" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
-
+            <Input v-model="otherAgreed" :maxlength="1000" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
+            <div style="text-align:right">{{otherAgreed?otherAgreed.length:0+"/1000"}}</div>
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
@@ -154,7 +158,12 @@
                     <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
                 </div>
         </Modal>
-
+        <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                v-on:changeOpen="onChangeOpen"
+        ></Message>
         <!-- <Loading :loading='loadingStatus'/> -->
         
     </div>
@@ -170,13 +179,15 @@
     import HeightSearch from './heightSearch';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
+    import Message from '~/components/Message';
     var maxWidth = 170;
     export default {
         components: {
             sectionTitle,
             krUpload,
             HeightSearch,
-            Loading
+            Loading,
+            Message
         },
         head () {
             return {
@@ -190,6 +201,9 @@
                     page:1,
                     pageSize:15,
                 },
+                MessageType:'',
+                openMessage:false,
+                warn:'',
                 openDown:false,
                 isCachet:false,
                 openTakeEffect:false,
@@ -197,7 +211,7 @@
                 selectAllData:[],
                 loadingStatus: true,
                 file: null,
-                otherAgreed:'',
+                otherAgreed:0,
                 parameter:{},//获取pdf-id的参数
                 upperData:{},//高级查询的数据
                 upperError:false,
@@ -268,6 +282,35 @@
                         key: 'otherAgreed',
                         align:'center',
                         width: 100,
+                        render:(h,params)=>{
+                            if(!params.row.otherAgreed){
+                                return "无";
+                            }
+                            var str = "";
+                            return h('Tooltip',{
+                                props:{
+                                    placement: 'top'
+                                }
+                            }, [h('div',{
+                                style:{
+                                    width:"60px",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    whiteSpace: "nowrap"
+                                }
+                            },params.row.otherAgreed),h('div', {
+                                    style:{
+                                       
+                                      
+                                        // height:300+"px",
+                                        // background:"red"
+                                        wordWrap:"break-word"
+                                    },
+                                    slot: 'content'
+                                },params.row.otherAgreed
+                                )]
+                            )
+                        }
                     },{
                         title: '附件',
                         key: 'haveAttachmentName',
@@ -441,9 +484,9 @@
                 }, (response) => {
                     that.takeEffectSwitch();
                     that.getListData(that.params);
-                    that.$Notice.success({
-                        title:"合同已生效"
-                    });
+                    that.openMessage=true;
+                    that.MessageType=response.message=='ok'?"success":"error";
+                    that.warn="合同生效！";
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message
@@ -639,7 +682,10 @@
                     }
                     return item;
                 })
-            }
+            },
+            onChangeOpen(data){
+                this.openMessage=data;
+            },
             
         },
         

@@ -410,8 +410,8 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 let params = {
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
-                    leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    startDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    endDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
                     communityId:this.renewForm.communityId,
                     customerId:this.renewForm.customerId,
                     seats:JSON.stringify(station)
@@ -424,7 +424,7 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             // money+= item.amount;
 
-                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });

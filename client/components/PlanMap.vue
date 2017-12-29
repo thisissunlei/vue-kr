@@ -31,7 +31,7 @@ import http from '~/plugins/http.js';
 
 
     export default {
-        props:['stationsubmit','params','floors','stationData'],
+        props:['stationsubmit','params','floors','stationData','originStationList'],
 
         data () {
             return {
@@ -48,6 +48,7 @@ import http from '~/plugins/http.js';
                 originData:[],//预备删除
                 floor:'',
                 startToEnd:[],
+                origin:this.originStationList,
                 stationArr:this.stationData,//提交父组件字段
                 // stationAll:this.stationData//①创建props属性result的副本--myResult
 
@@ -69,6 +70,9 @@ import http from '~/plugins/http.js';
         	stationData:function(val){
         		this.selectedObjs = this.stationData.submitData;
         	},
+        	originStationList(val){
+        		this.origin = val;
+        	},
         	stationArr:function(val){
 				
 				this.$emit("on-result-change", val); //③组件内对myResult变更后向外部发送事件通知
@@ -84,7 +88,6 @@ import http from '~/plugins/http.js';
         		}
         	},
         },
-        props:['stationsubmit','params','floors','stationData'],
         methods: {
 			//获取平面图基础数据
 			getData:function(){
@@ -166,6 +169,7 @@ import http from '~/plugins/http.js';
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
+				let originStationList = this.origin || []
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];
@@ -191,6 +195,19 @@ import http from '~/plugins/http.js';
 							if (item.status) {
 								obj.status = item.status;
 							}
+							for (let j = 0; j < originStationList.length; j++) {
+
+								let belongType = "STATION";
+								if (originStationList[j].belongType == 2 || originStationList[j].belongType == 'SPACE') {
+									belongType = "SPACE";
+								}
+								if (item.belongId == originStationList[j].id && item.belongType == belongType) {
+									obj.checked = false;
+									obj.status = 3;
+
+								}
+
+							}
 							for (let j = 0; j < selectedObjs.length; j++) {
 
 								let belongType = "STATION";
@@ -198,13 +215,13 @@ import http from '~/plugins/http.js';
 									belongType = "SPACE";
 								}
 								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
-									console.log('selectedObjs',obj)
 									obj.checked = true;
 									obj.status = 3;
 
 								}
 
 							}
+
 							if (cellName >= start && cellName <= end && item.status!=1) {
 								obj.checked = true;
 								let select = {};

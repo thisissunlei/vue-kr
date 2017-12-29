@@ -166,7 +166,14 @@
                             }
                             for(var item in orderStatus){
                                 if(item==params.row.orderStatus){
-                                    return <span class="u-txt">{orderStatus[item]}</span>;
+                                    var style={};
+                                    if(item=='NOT_EFFECTIVE'){
+                                        style='u-red';
+                                    }
+                                    if(item=='INVALID'){
+                                        style='u-nullify';
+                                    }
+                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
                                 }
                             }
                         }
@@ -264,10 +271,10 @@
                 utils.clearForm(this.upperData);
             },
             showJoin(){
-                window.open('/order-center/order-manage/create/join','_blank')
+                window.open('/order-center/order-manage/create/join','join');
             },
             showRenew(){
-                window.open('/order-center/order-manage/create/renew','_blank')
+                window.open('/order-center/order-manage/create/renew','renew');
             },
             showApply(params){
                 this.id=params.row.id;
@@ -280,7 +287,7 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,'_blank');
+                window.open(`/order-center/order-manage/${params.row.id}/${viewName}`,params.row.id);
             },
             showNullify(params){
                 this.id=params.row.id;
@@ -302,7 +309,7 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/order-center/order-manage/${params.row.id}/${type}`,'_blank')
+                window.open(`/order-center/order-manage/${params.row.id}/${type}`,params.row.id)
             },
             nullifySubmit (){
                 let params={
@@ -401,5 +408,11 @@
             color:#2b85e4;
             display:inline-block;
             cursor:pointer;
+     }
+     .u-red{
+         color:red;
+     }
+     .u-nullify{
+         text-decoration: line-through;
      }
 </style>

@@ -341,7 +341,6 @@ export default {
             changePage(page){
                 this.params.page=page;
                 this.page=page;
-                
                 this.getTableData(this.params);
             },
              getSearchData(form){
@@ -357,8 +356,13 @@ export default {
                 this.openMessage=data;
             },
             lowerSubmit(){
+                let customerName=this.params.customerName;
                 this.page=1;
-                this.params.page=1;
+                this.params={
+                    page:1,
+                    pageSize:15,
+                    customerName:customerName
+                }
                 utils.addParams(this.params);
             },
 

@@ -217,7 +217,7 @@
         width="900"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
+        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
@@ -372,7 +372,8 @@ import utils from '~/plugins/utils';
                 getFloor:+new Date(),
                 ssoId:'',
                 ssoName:'',
-                changeSale:+new Date()
+                changeSale:+new Date(),
+                originStationList:[]
             }
         },
         head() {
@@ -432,6 +433,8 @@ import utils from '~/plugins/utils';
                         obj.endDate =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
+                    _this.originStationList = data.orderSeatDetailVo;
+                    // console.log('data.orderSeatDetailVo',data.orderSeatDetailVo)
                     _this.stationData = {
                         submitData:data.orderSeatDetailVo,
                         deleteData:[]
@@ -835,6 +838,7 @@ import utils from '~/plugins/utils';
             showStation:function(){
                 // 选择工位的按钮
                 this.config()
+                console.log('originStationList----',this.originStationList)
 
                 if(!this.formItem.communityId){
                     this.$Notice.error({

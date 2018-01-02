@@ -593,6 +593,10 @@ import utils from '~/plugins/utils';
                 if(this.renewForm.items.length){
                     this.renewForm.items = []
                 }
+                if(this.discountError){
+                    this.discountError = false;
+                    this.disabled = false;
+                }
                 this.renewForm.rentAmount = '0'
 
             },

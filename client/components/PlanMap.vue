@@ -9,6 +9,7 @@
 			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
+			<!-- <Slider :v-model="scaleNumber/100"  min="0.1" max="2" step="0.1" @on-change="rangeSelect"></Slider> -->
             <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>

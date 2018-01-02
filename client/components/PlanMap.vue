@@ -9,7 +9,7 @@
 			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
-            <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
+            <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/>
             <output>{{scaleNumber}}</output>%
 		</div>
 		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>

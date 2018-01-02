@@ -179,6 +179,9 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
+             if(!this.$route.query.bizTradeNo){
+                 this.$route.query.bizTradeNo=""
+             }
              this.params=this.$route.query;
         },
         methods:{

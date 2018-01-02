@@ -268,6 +268,9 @@ export default {
         },
         created(){
              this.getTableData(this.$route.query);
+             if(!this.$route.query.customerName){
+                 this.$route.query.customerName=""
+             }
              this.params=this.$route.query;
            
         },

@@ -124,9 +124,7 @@
                     <FormItem
                 v-for="(item, index) in renewForm.items"
                 :key="index"
-                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
-                :prop="'items.' + index + '.type'"
-                :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
             <Row  v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>

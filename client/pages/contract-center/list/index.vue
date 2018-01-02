@@ -401,7 +401,7 @@
                                 },'44')
                                 ];
                                 console.log(params.row.contractStatus,"ppppp")
-                                if(params.row.contractStatus=="INVALID"){
+                                if(params.row.contractStatus!=="INVALID"){
                                     if(!params.row.isEffect){
                                         btnRender.push(h('Button', {
                                             props: {

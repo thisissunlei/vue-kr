@@ -71,7 +71,9 @@ export default {
         success && success(data)
         resolve(data)
       }else{
+        console.log(data, "ooooooo")
         failure && failure(data)
+        
         reject(data);
       }
       

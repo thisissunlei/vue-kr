@@ -25,11 +25,19 @@
                 <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
             </div>
       </Modal>
-     <div class="box">
-      <Button type="info" @click="downSwitch">下载pdf</Button>
+      <div class="box">
+        <div style="width:100%;padding:20px;">
+          <Button type="info" @click="downSwitch">下载pdf</Button>
+          <div style="float:right;">
+            <Button @click="pageSub" icon="minus"></Button>
+            {{page+'/'+numPages}}
+            <Button @click="pageAdd" icon="plus"></Button>
+          </div>
+        </div>
         <div class="pdf-box"> 
-         <pdf  :src="src" ></pdf>
-            
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="numPages = $event||1" :page = "page" dpi="10"></pdf>
+        <!-- <pdf v-if="show" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @password="password" @progress="loadedRatio = $event" @error="error" @numPages="numPages = $event"></pdf> -->
+         
         </div>
     </div>
     
@@ -45,7 +53,9 @@ export default {
       isCachet:false,
       openDown:false,
       fileId:'100100',
-      src:''
+      src:'',
+      numPages:0,
+      page:1,
     }
   },
   mounted:function(){
@@ -59,13 +69,29 @@ export default {
           that.fileId = r.data.fileId || '';
           that.getPdfUrl(r.data.fileId||'');
       }, e => {
-          that.$Message.info(e);
+           that.$Notice.error({
+                title:error.message||"后台出错请联系管理员"
+            });
       })
   },
   methods:{
     selectCachet(select){
       this.isCachet = select;
       
+    },
+    pageSub(){
+      if(this.page==1){
+        this.page = 1;
+      }else {
+        this.page -=1;
+      }
+    },
+    pageAdd(){
+      if(this.page==this.numPages){
+        this.page = this.numPages;
+      }else {
+        this.page +=1;
+      }
     },
     config:function(){
         this.$Notice.config({
@@ -79,7 +105,11 @@ export default {
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
           that.src = r.data;
       }, e => {
+        if(!e.message){
+          e.message = "后台出错请联系管理员"
+        }
           that.$Message.info(e);
+         
       })
     },
     downLoad(){
@@ -95,7 +125,7 @@ export default {
           // _this.communityList=r.data.items 
           if(!r.data.fileId){
               that.$Notice.error({
-                  title:"fileId不能为空！"
+                        title:error.message||"后台出错请联系管理员"
               });
               return;
           }
@@ -120,7 +150,7 @@ export default {
                       window.location.href = response.data;
                 }, (error) => {
                     that.$Notice.error({
-                        title:error.message
+                        title:error.message||"后台出错请联系管理员"
                     });
                 })   
             },
@@ -136,6 +166,7 @@ export default {
   padding:20px;
   width:210mm;
   margin:auto;
+  position: relative;
 }
 .pdf-box{
    height:250mm;

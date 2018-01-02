@@ -30,7 +30,7 @@ module.exports = {
 
   plugins: [
     { src: '~plugins/iview', ssr: true },
-    { src: '~plugins/vue-pdf', ssr: false },
+    { src: '~plugins/vue-pdf', ssr: false }
   ],
   css: ['~assets/css/main.css'],
   loading: { color: '#000000' },

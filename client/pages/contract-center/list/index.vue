@@ -401,7 +401,7 @@
                                 },'44')
                                 ];
                                 console.log(params.row.contractStatus,"ppppp")
-                                if(params.row.contractStatus!=="INVALID"){
+                                if(params.row.contractStatus!=="CANCELLATION"){
                                     if(!params.row.isEffect){
                                         btnRender.push(h('Button', {
                                             props: {
@@ -488,7 +488,7 @@
                     that.getListData(that.params);
                     that.openMessage=true;
                     that.MessageType=response.message=='ok'?"success":"error";
-                    that.warn="合同生效！";
+                    that.warn="已合同生效！";
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

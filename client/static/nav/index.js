@@ -131,7 +131,8 @@
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
          var html = '';
-         var router = location.href;
+         //var router = location.href;
+         var router = location.href.split('?')[0];
          if (!sidebarNavs) {
              return html;
          }   

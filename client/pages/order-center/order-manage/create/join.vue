@@ -764,6 +764,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = [];
                     this.formItem.rentAmount = '0'
                 }
+                if(this.formItem.items.length){
+                    this.formItem.items = []
+                }
                 if(this.discountError){
                     this.discountError = false;
                     this.disabled = false

@@ -390,6 +390,9 @@ import utils from '~/plugins/utils';
         },
         created(){
              this.getTableData(this.$route.query);
+             if(!this.$route.query.customerName){
+                 this.$route.query.customerName=""
+             }
              this.tabParams=this.$route.query;
         },
         methods:{

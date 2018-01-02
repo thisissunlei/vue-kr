@@ -136,6 +136,9 @@ export default {
     },
     created(){
         this.getTableData(this.$route.query);
+         if(!this.$route.query.csrName){
+                 this.$route.query.csrName=""
+         }
         this.Params=this.$route.query;
     },
     methods:{

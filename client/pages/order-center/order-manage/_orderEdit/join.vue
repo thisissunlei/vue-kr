@@ -804,6 +804,11 @@ import utils from '~/plugins/utils';
                     this.stationList = [];
                     this.formItem.items = []
                 }
+                if(this.discountError){
+                    this.discountError = false;
+                    this.disabled = false
+
+                }
             },
             changeCustomer:function(value){
                 // 客户

@@ -48,12 +48,12 @@
                     <SelectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></SelectCommunities>
                     </FormItem>
                 </Col>
-                <Col class="col" >
+                <Col class="col" v-if="false" >
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
-                <Col class="col" v-if="false">
+                <Col class="col">
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="date" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTimeStatus"></DatePicker>
                     </FormItem>
@@ -789,7 +789,7 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
-                        item.validStart=''
+                        item.validStart=item.validStart || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
 

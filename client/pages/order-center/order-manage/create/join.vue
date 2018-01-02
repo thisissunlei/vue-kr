@@ -54,13 +54,13 @@
                     </FormItem>
                     
                 </Col>
-                <Col  class="col">
+                <Col  class="col"   v-if="false">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
                     <DatePicker type="month" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndTime"></DatePicker>
                     </FormItem>
                 </Col>
                 
-                <Col  class="col"  v-if="false">
+                <Col  class="col">
                     <FormItem label="租赁结束日期" style="width:252px" prop="endDate">
                     <DatePicker type="date" placeholder="租赁结束日期" format="yyyy-MM-dd" v-model="formItem.endDate" style="display:block" @on-change="changeEndDateStatus"></DatePicker>
                     </FormItem>
@@ -687,7 +687,7 @@ import utils from '~/plugins/utils';
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
                     }else if(item.tacticsType == 3){
-                        item.validStart=''
+                        item.validStart=item.validStart || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = this.getTacticsId('3')
 

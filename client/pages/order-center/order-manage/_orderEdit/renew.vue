@@ -48,12 +48,12 @@
                     <SelectCommunities test="renewForm" :onchange="changeCommunity" :value="communityName"></SelectCommunities>
                     </FormItem>
                 </Col>
-                <Col class="col" >
+                <Col class="col" v-if="false" >
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="month" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTime"></DatePicker>
                     </FormItem>
                 </Col>
-                <Col class="col" v-if="false">
+                <Col class="col">
                     <FormItem label="续租结束日期" style="width:252px" prop="endDate" >
                         <DatePicker type="date" placeholder="续租结束日期" format="yyyy-MM-dd" v-model="renewForm.endDate" style="display:block" @on-change="changeTimeStatus"></DatePicker>
                     </FormItem>
@@ -121,9 +121,7 @@
                     <FormItem
                 v-for="(item, index) in renewForm.items"
                 :key="index"
-                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
-                :prop="'items.' + index + '.type'"
-                :rules="{required: true, message: '此项没填完', trigger: 'blur'}">
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
             <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
                         <Checkbox v-model="item.select"></Checkbox>
@@ -144,7 +142,7 @@
                     <Col span="5" class="discount-table-content">
                     <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" placeholder="折扣" disabled></Input>
+                        <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'" disabled></Input>
 
                         
                     </Col>  
@@ -790,7 +788,7 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
-                        item.validStart=''
+                        item.validStart=item.validStart || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
 

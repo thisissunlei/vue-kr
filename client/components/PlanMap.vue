@@ -11,7 +11,7 @@
 			<span class="til">当前比例：</span>
 			<Slider :v-model="scaleNumber"  :min="40" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
             <!-- <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/> -->
-            <output style="margin-left:15px">{{scaleNumber}}</output>%
+            <output style="margin-left:15px" >{{scaleNumber}}</output>%
 		</div>
 		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>
 
@@ -50,6 +50,7 @@ import http from '~/plugins/http.js';
                 floor:'',
                 startToEnd:[],
                 origin:this.originStationList,
+                showSlider:true,
                 stationArr:this.stationData,//提交父组件字段
                 // stationAll:this.stationData//①创建props属性result的副本--myResult
 
@@ -271,11 +272,7 @@ import http from '~/plugins/http.js';
 			},
 			//放大比例
 			rangeSelect :function(value){
-				console.log('value',value)
 				var scaleNumber = parseInt(value);
-				// var scaleSize = Number(event.target.value);
-
-
 				this.scaleNumber = scaleNumber
 		        this.Map.setScale(scaleNumber/100);
 			},
@@ -283,7 +280,6 @@ import http from '~/plugins/http.js';
 			floorsChange:function (value) {
 				if(this.Map){
 					this.Map.destory();
-					this.scaleNumber = 50;
 					this.canvasEles();
 				}
 			},

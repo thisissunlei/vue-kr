@@ -200,7 +200,7 @@
           
             <FormItem style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('renewForm')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
         </FormItem>
         </Form>
         <Modal
@@ -449,7 +449,8 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =end;
                 let _this = this;
                  this.$http.post('save-renew', renewForm, r => {
-                    window.location.href='/order-center/order-manage';
+                      window.close();
+                      window.opener.location.reload();
                 }, e => {
                     _this.$Notice.error({
                         title:e.message

@@ -166,7 +166,14 @@
                             }
                             for(var item in orderStatus){
                                 if(item==params.row.orderStatus){
-                                    return <span class="u-txt">{orderStatus[item]}</span>;
+                                    var style={};
+                                    if(item=='NOT_EFFECTIVE'){
+                                        style='u-red';
+                                    }
+                                    if(item=='INVALID'){
+                                        style='u-nullify';
+                                    }
+                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
                                 }
                             }
                         }
@@ -264,11 +271,10 @@
                 utils.clearForm(this.upperData);
             },
             showJoin(){
-                utils.commonExport(this.$route.query,'/order-center/order-manage/create/join','open');
-                //window.open('/order-center/order-manage/create/join','123')
+                window.open('/order-center/order-manage/create/join','join');
             },
             showRenew(){
-                window.open('/order-center/order-manage/create/renew','345')
+                window.open('/order-center/order-manage/create/renew','renew');
             },
             showApply(params){
                 this.id=params.row.id;
@@ -402,5 +408,11 @@
             color:#2b85e4;
             display:inline-block;
             cursor:pointer;
+     }
+     .u-red{
+         color:red;
+     }
+     .u-nullify{
+         text-decoration: line-through;
      }
 </style>

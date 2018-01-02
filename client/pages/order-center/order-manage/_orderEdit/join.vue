@@ -525,7 +525,8 @@ import utils from '~/plugins/utils';
                 console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
-                    window.location.href='/order-center/order-manage';
+                      window.close();
+                      window.opener.location.reload();
                 }, e => {
                      _this.$Notice.error({
                         title:e.message

@@ -202,7 +202,7 @@
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
             <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button>
+            <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
         </FormItem>
 
     </Form>
@@ -470,7 +470,8 @@ import utils from '~/plugins/utils';
                 formItem.ssoName = this.ssoName;
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
-                     utils.commonExport(this.$route.query,'/order-center/order-manage');
+                      window.close();
+                      window.opener.location.reload();
                 }, e => {
                      _this.$Notice.error({
                         title:e.message

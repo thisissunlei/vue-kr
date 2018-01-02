@@ -34,16 +34,17 @@
     }
 
     /*导出*/
-    function commonExport(props,url,type){
+    function commonExport(props,url){
         var where=[];
         for(var item in props){
             if(props.hasOwnProperty(item)){
                 where.push(`${item}=${props[item]}`);
             }
         }
-        var url = `${url}?${where.join('&')}`
-        type=='open'?window.open(url,'123'): window.location.href = url;
+        var url = `${url}?${where.join('&')}`;
+        window.location.href = url;
     }
+
     //获取url的参数
     function getRequest() {
         var url = location.search; //获取url中"?"符后的字串
@@ -57,6 +58,7 @@
         }
         return theRequest;
     }
+
     //高级搜索时url上带参数
     function addParams(params) {
         let path = window.location.href;
@@ -72,12 +74,11 @@
         location.href = url;
     }
     
-    
    
-   export default{
-      smalltoBIG,
-      clearForm,
-      commonExport,
-      getRequest,
-      addParams
-   }
+    export default{
+        smalltoBIG,
+        clearForm,
+        commonExport,
+        getRequest,
+        addParams
+    }

@@ -9,9 +9,9 @@
 			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
-			<!-- <Slider :v-model="scaleNumber/100"  min="0.1" max="2" step="0.1" @on-change="rangeSelect"></Slider> -->
-            <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/>
-            <output>{{scaleNumber}}</output>%
+			<Slider :v-model="scaleNumber"  :min="40" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
+            <!-- <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/> -->
+            <output style="margin-left:15px">{{scaleNumber}}</output>%
 		</div>
 		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>
 
@@ -270,11 +270,14 @@ import http from '~/plugins/http.js';
 				
 			},
 			//放大比例
-			rangeSelect :function(event){
-				var scaleSize = Number(event.target.value);
-				var scaleNumber = parseInt(event.target.value * 100);
+			rangeSelect :function(value){
+				console.log('value',value)
+				var scaleNumber = parseInt(value);
+				// var scaleSize = Number(event.target.value);
+
+
 				this.scaleNumber = scaleNumber
-		        this.Map.setScale(scaleSize);
+		        this.Map.setScale(scaleNumber/100);
 			},
 			//更换楼层
 			floorsChange:function (value) {

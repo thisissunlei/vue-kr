@@ -133,7 +133,7 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
@@ -403,6 +403,11 @@ import utils from '~/plugins/utils';
                     _this.renewForm.endDate = new Date(data.endDate);
                     _this.renewForm.signDate = new Date(data.signDate);
 
+
+                    _this.renewForm.rentAmount = data.rentAmount;
+                    _this.renewForm.stationAmount = data.seatRentAmount;
+                    _this.stationAmount = utils.smalltoBIG(data.seatRentAmount)
+
                     _this.renewForm.startDate = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.selecedArr = data.orderSeatDetailVo;
@@ -410,7 +415,7 @@ import utils from '~/plugins/utils';
                     _this.installmentType = data.installmentType;
                     _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
-                    _this.getStationAmount()
+                    // _this.getStationAmount()
                     
 
                      setTimeout(function(){
@@ -429,7 +434,7 @@ import utils from '~/plugins/utils';
                         })
 
                         _this.renewForm.items = data.contractTactics;
-                        _this.dealSaleInfo()
+                        _this.dealSaleInfo(false)
                     },200)
                      _this.getStationFn = +new Date();
                     
@@ -725,7 +730,7 @@ import utils from '~/plugins/utils';
                 });
                 this.renewForm.items = items;
                 this.selectDiscount(false)
-                this.dealSaleInfo()
+                this.dealSaleInfo(true)
 
                 // this.setCheckFalse(items)
 
@@ -833,7 +838,7 @@ import utils from '~/plugins/utils';
                     items[itemIndex].show = false;
                 }
                 this.renewForm.items = items;
-                this.dealSaleInfo()
+                this.dealSaleInfo(false)
             },
             submitStation:function(){
                 let val = this.selecedArr || [];
@@ -944,7 +949,7 @@ import utils from '~/plugins/utils';
             changeSaleTime(val){
                 let _this = this;
                 setTimeout(function(){
-                    _this.dealSaleInfo()
+                    _this.dealSaleInfo(true)
                 },200)
             },
             changezhekou(val){
@@ -972,9 +977,9 @@ import utils from '~/plugins/utils';
                     return;
                 }
                 this.discount = val;
-                this.dealSaleInfo()
+                this.dealSaleInfo(true)
             },
-            dealSaleInfo(){
+            dealSaleInfo(show){
                 this.config()
                 //处理已删除的数据
                 let saleList = this.renewForm.items.filter(item=>{
@@ -989,7 +994,7 @@ import utils from '~/plugins/utils';
                     if(!item.tacticsType){
                         complete = false
                     }
-                    if(item.tacticsType!='1' && (!item.validStart || !item.validEnd)){
+                    if(item.tacticsType!='1' && (!item.startDate || !item.validEnd)){
                         complete = false
 
                     }
@@ -998,16 +1003,24 @@ import utils from '~/plugins/utils';
 
                     }
                 });
-                if(!complete){
+                if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
                     return;
                 }
+                if(!complete && !show){
+                    return;
+                }
+
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                   obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    if(item.tacticsType=='3'){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
+                    obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
                     return obj;
                 })
                 this.getSaleAmount(saleList)

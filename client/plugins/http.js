@@ -44,7 +44,7 @@ function filterNull (o) {
   res = res.data;
     if (res.code ===-4011) {
       console.log('登录')
-      window.location.href = 'http://optest.krspace.cn/new/login.html';
+      window.location.href = '/new/login.html';
     } else if (res.code ===-4033) {
       console.log('您没有操作权限，请联系管理员')
       // this.$Notice.error({

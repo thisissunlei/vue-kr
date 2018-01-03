@@ -280,7 +280,7 @@
                  
                  this.$http.post('join-nullify', params, r => {
                     this.openMessage=true;
-                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.MessageType="success";
                     this.warn='作废成功';
                     this.getListData(this.params);
                 }, e => {
@@ -296,7 +296,7 @@
                 
                  this.$http.post('apply-contract', params, r => {
                     this.openMessage=true;
-                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.MessageType="success";
                     this.warn='申请成功';
                     this.getListData(this.params);
                 }, e => {

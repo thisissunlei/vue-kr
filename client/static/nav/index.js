@@ -1243,6 +1243,12 @@
                             type:'vue',
                             menuCode: 'order_seat_list',
                         },
+                        {
+                            primaryText: "通用订单列表",
+                            router: 'order-center/order-manage/general-order-manage',
+                            type:'vue',
+                            menuCode: 'order_seat_list',
+                        },
                     ]
                 },
                 {

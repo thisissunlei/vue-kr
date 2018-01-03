@@ -45,7 +45,7 @@
                 </Col>
 
                  <Col class="col">
-                   <FormItem label="订单类型" style="width:252px" prop='orderType'>
+                    <FormItem label="订单类型" style="width:252px" prop='orderType'>
                     <Select 
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
@@ -59,8 +59,8 @@
                         >
                             {{ item.label }}
                         </Option>
-                   </Select> 
-                 </FormItem>
+                     </Select> 
+                    </FormItem>
                 </Col>
 
                 <Col class="col">
@@ -118,6 +118,16 @@ import utils from '~/plugins/utils';
 
 export default {
         data() {
+           const validateMoney = (rule, value, callback) => {
+                var numReg=/^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/;
+                if (value === '') {
+                    callback(new Error('请填写金额'));
+                } else if(!numReg.test(value)){
+                    callback(new Error('请填写最多两位小数的正数'));
+                }else{
+                    callback();
+                }
+            };
            return {
                 disabled:false,
                 typeList:[{label:'123',value:'1'}],
@@ -135,7 +145,7 @@ export default {
                         { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
                     ],
                     money: [
-                        { required: true,message: '请填写金额', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateMoney}
                     ],
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }

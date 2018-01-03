@@ -125,8 +125,8 @@
             width="660"
         >
             <!-- <Describe v-on:bindData="describeDataChange" :detailData="this.columnDetail"></Describe> -->
-            <Input v-model="otherAgreed" :maxlength="1000" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
-            <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/1000":0+"/1000"}}</div>
+            <Input v-model="otherAgreed" :maxlength="999" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
+            <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div>
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
@@ -401,7 +401,7 @@
                                 },'44')
                                 ];
                                 console.log(params.row.contractStatus,"ppppp")
-                                if(params.row.contractStatus!=="INVALID"){
+                                if(params.row.contractStatus!=="CANCELLATION"){
                                     if(!params.row.isEffect){
                                         btnRender.push(h('Button', {
                                             props: {
@@ -488,7 +488,7 @@
                     that.getListData(that.params);
                     that.openMessage=true;
                     that.MessageType=response.message=='ok'?"success":"error";
-                    that.warn="合同生效！";
+                    that.warn="已合同生效！";
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

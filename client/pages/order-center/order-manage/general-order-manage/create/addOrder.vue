@@ -89,6 +89,12 @@
                     <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
+
+                <Col  class="col">
+                    <FormItem label="备注信息" prop="otherAgreed" style="width:702px">
+                      <Input v-model="formItem.otherAgreed" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."></Input>
+                    </FormItem>
+                </Col>
             </Row>
 
             <FormItem style="margin-top:40px" >

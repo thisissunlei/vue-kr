@@ -170,7 +170,14 @@ export default {
 				{
 				 title: '折扣比例',
                  key: 'discountNum',
-                 align:'center'	
+                 align:'center',
+				 render(h, obj){
+					 if(obj.row.discountNum==0){
+						 return '-';
+					 }else{
+						 return obj.row.discountNum
+					 }
+				  }			
 				}
             ],
             contract:[

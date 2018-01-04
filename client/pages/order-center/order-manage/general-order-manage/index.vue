@@ -225,7 +225,7 @@
                     id:this.id
                 };
                  
-                 this.$http.post('join-nullify', params,r => {
+                 this.$http.post('general-order-nullify', params,r => {
                     this.openMessage=true;
                     this.MessageType=r.message=='ok'?"success":"error";
                     this.warn='作废成功';
@@ -238,7 +238,7 @@
             },
             getListData(params){
                 var _this=this;
-                 this.$http.get('join-bill-list', params, r => {
+                 this.$http.get('general-order-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;

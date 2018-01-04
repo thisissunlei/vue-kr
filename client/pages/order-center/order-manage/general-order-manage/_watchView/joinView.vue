@@ -31,31 +31,31 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="订单编号：">
-			    {{basicInfo.customerName}}
+			    {{basicInfo.orderNum}}
 			</LabelText>
 			<LabelText label="订单状态：">
-				{{basicInfo.communityName}}
+				{{basicInfo.statusName}}
 			</LabelText>
 			<LabelText label="订单类型：">
-				{{basicInfo.salerName}}
+				{{basicInfo.typeName}}
 			</LabelText>
 			<LabelText label="订单金额：">
-				{{ctime}}
+				{{basicInfo.money}}
 			</LabelText>
 			<LabelText label="客户名称：">
-				{{startDate}}
+				{{basicInfo.customerName}}
 			</LabelText>
 			<LabelText label="社区名称：">
-				{{endDate}}
+				{{basicInfo.communityName}}
 			</LabelText>
 			<LabelText label="销售人员：">
-				{{basicInfo.installmentTypeName}}
+				{{basicInfo.salespersonName}}
 			</LabelText>
 			<LabelText label="销售日期：">
-				{{payDate}}
+				{{saleDate}}
 			</LabelText>
 			<LabelText label=" 备注信息：">
-				{{payDate}}
+				{{basicInfo.remark}}
 			</LabelText>
          </DetailStyle>
 		 <DetailStyle info="相关账单">
@@ -84,21 +84,21 @@ export default {
 	data(){
 		return{
 			basicInfo:{},
-			ctime:'',
+			saleDate:'',
             contract:[
                {
 				 title: '账单编号',
-                 key: 'contractNum',
+                 key: 'billNum',
                  align:'center'	
 				},
 				{
 				 title: '账单类型',
-                 key: 'rentAmount',
+                 key: 'billType',
                  align:'center'	
 				},
 				{
 				 title: '账单生成日期',
-                 key: 'orderStatusTypeName',
+                 key: 'billCreateDate',
 				 align:'center',
 				 render(h, obj){
 					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.ctime));
@@ -107,7 +107,7 @@ export default {
 				},
 				{
 				 title: '付款截止日期',
-                 key: 'orderStatusTypeName',
+                 key: 'billPayDate',
                  align:'center',
 				 render(h, obj){
 					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.ctime));
@@ -116,7 +116,7 @@ export default {
 				},
 				{
 				 title: '账单状态',
-                 key: 'orderStatusTypeName',
+                 key: 'billStatus',
                  align:'center'	
 				}   
 			],
@@ -133,8 +133,8 @@ export default {
 	     this.$http.get('join-bill-detail', from, r => {
 				   _this.basicInfo=r.data;
 				      
-				   _this.ctime=r.data.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime)):'';
-				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
+				   _this.saleDate=r.data.saleDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.saleDate)):'';
+				   _this.contractData=r.data.bill[0].contractNum?r.data.bill:[];
            	}, e => {
                 _this.$Notice.error({
                     title:e.message

@@ -45,9 +45,9 @@
                 </Col>
 
                  <Col class="col">
-                   <FormItem label="订单类型" style="width:252px" prop='orderType'>
+                   <FormItem label="订单类型" style="width:252px" prop='type'>
                     <Select 
-                        v-model="formItem.orderType" 
+                        v-model="formItem.type" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
@@ -74,21 +74,21 @@
                 </Col>
                 
                 <Col class="col">
-                    <FormItem label="销售员" style="width:252px" prop="salerId">
-                    <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    <FormItem label="销售员" style="width:252px" prop="salesperson">
+                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
-                    <FormItem label="销售日期" style="width:252px" prop="signDate">
-                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.signDate" style="display:block"></DatePicker>
+                    <FormItem label="销售日期" style="width:252px" prop="saleDate">
+                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"></DatePicker>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
-                    <FormItem label="备注信息" prop="otherAgreed" style="width:702px">
-                      <Input v-model="formItem.otherAgreed" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."></Input>
-                      <div style="text-align:right">{{formItem.otherAgreed?formItem.otherAgreed.length+"/500":0+"/500"}}</div>
+                    <FormItem label="备注信息" prop="remark" style="width:702px">
+                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."></Input>
+                      <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
                     </FormItem>
                 </Col>
             </Row>
@@ -131,21 +131,29 @@ export default {
 
            return {
                 disabled:false,
-                typeList:[{label:'123',value:'1'}],
+                typeList:[
+                   {value:'REGISTER',label:'注册订单'},
+                   {value:'INCONSUME',label:'场内消费订单'},
+                   {value:'ACTIVITY',label:'活动订单'},
+                   {value:'ADVERT',label:'广告订单'},
+                   {value:'APPRECIATION6',label:'增值服务订单'},
+                   {value:'TRAIN',label:'培训订单'},  
+                   {value:'OTHER',label:'其他服务订单'}
+                ],
                 customerName:'',
                 communityName:'',
                 salerName:'请选择',
                 formItem: {
                     customerId: '',
                     communityId: '',
-                    signDate:'',
-                    orderType:'',
-                    otherAgreed:'',
-                    salerId:'',
+                    saleDate:'',
+                    type:'',
+                    remark:'',
+                    salesperson:'',
                     money:''
                 },
                 ruleCustom:{
-                    signDate: [
+                    saleDate: [
                         { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
                     ],
                     money: [
@@ -157,10 +165,10 @@ export default {
                     customerId:[
                         { required: true, message: '请选择客户', trigger: 'change' }
                     ],
-                    salerId:[
+                    salesperson:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    orderType:[
+                    type:[
                         { required: true, message: '请选择订单类型', trigger: 'change' }
                     ]
                 },
@@ -188,15 +196,15 @@ export default {
                 let from={
                     id:281
                 };
-                this.$http.get('join-bill-detail', from, r => {
+                this.$http.get('general-order-watch', from, r => {
                        this.formItem=Object.assign({},r.data);
                        this.formItem.customerId=JSON.stringify(this.formItem.customerId);
                        this.formItem.communityId=JSON.stringify(this.formItem.communityId);
-                       this.formItem.salerId=JSON.stringify(this.formItem.salerId);
+                       this.formItem.salesperson=JSON.stringify(this.formItem.salesperson);
                        this.customerName = this.formItem.customerName;
                        this.communityName = this.formItem.communityName;
                        this.salerName = this.formItem.salerName;
-                       this.formItem.signDate = new Date(this.formItem.signDate);
+                       this.formItem.saleDate = new Date(this.formItem.saleDate);
                     }, e => {
                        this.$Notice.error({
                             title:e.message
@@ -204,12 +212,12 @@ export default {
                 })
             },
             joinFormSubmit(){
-                let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
+                let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
-                formItem.signDate = signDate;
+                formItem.saleDate = saleDate;
                 let params=Object.assign({},this.formItem,formItem);
                 let _this = this;
-                 this.$http.post('save-join', params, r => {
+                 this.$http.post('general-order-edit', params, r => {
                       window.close();
                       window.opener.location.reload();
                 }, e => {
@@ -252,7 +260,7 @@ export default {
                 }
             },
             changeSaler:function(value){
-                this.formItem.salerId = value;
+                this.formItem.salesperson = value;
             }
         }
     }

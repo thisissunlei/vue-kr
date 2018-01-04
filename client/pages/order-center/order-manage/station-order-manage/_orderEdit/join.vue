@@ -459,6 +459,7 @@ import utils from '~/plugins/utils';
                             obj.status = 1;
                             obj.show = true;
                             obj.validStart = item.freeStart;
+                            obj.startDate = item.freeStart;
                             obj.validEnd = item.freeEnd;
                             obj.type = item.tacticsType+'-'+index;
                             obj.tacticsId = item.tacticsId ;
@@ -502,7 +503,11 @@ import utils from '~/plugins/utils';
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                     if(item.tacticsType == 3){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
                     return obj;
                 })
                 formItem.id = params.orderEdit;

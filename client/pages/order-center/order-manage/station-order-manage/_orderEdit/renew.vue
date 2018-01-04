@@ -437,26 +437,6 @@ import utils from '~/plugins/utils';
                         _this.dealSaleInfo(false)
                     },200)
                      _this.getStationFn = +new Date();
-                    
-                    // setTimeout(function(){
-                    //     _this.getStationAmount()
-                    //     data.contractTactics = data.contractTactics.map((item,index)=>{
-                    //         console.log('========',item)
-                    //         let obj = {};
-                    //         obj.status = 1;
-                    //         obj.show = true;
-                    //         obj.validStart = item.freeStart;
-                    //         obj.validEnd = item.freeEnd;
-                    //         obj.type = item.tacticsType+'-'+index;
-                    //         obj.tacticsId = item.tacticsId ;
-                    //         obj.discount = item.discountNum;
-                    //         obj.tacticsType = JSON.stringify(item.tacticsType);
-                    //         return obj;
-                    //     })
-
-                    //     _this.renewForm.items = data.contractTactics;
-                    //     _this.dealSaleInfo()
-                    // },200)
                     }, e => {
                         _this.$Notice.error({
                            title:e.message
@@ -597,6 +577,8 @@ import utils from '~/plugins/utils';
                 }
                 if(this.renewForm.items.length){
                     this.renewForm.items = []
+                    this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 }
                 if(this.discountError){
                     this.discountError = false;
@@ -744,7 +726,6 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                console.log('deleteStation==============',stationVos)
                 this.selecedStation = stationVos;
                 this.selecedArr = stationVos;
                 this.getStationAmount()
@@ -876,7 +857,6 @@ import utils from '~/plugins/utils';
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
-                console.log(this.renewForm.startDate,"iiiiii")
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
@@ -910,7 +890,6 @@ import utils from '~/plugins/utils';
                 this.openStation = false
             },
             onStationChange:function(val){
-                // console.log('onStationChange',val)
                 this.selecedArr = val;
             },
             getSaleTactics:function(params){//获取优惠信息
@@ -1003,6 +982,8 @@ import utils from '~/plugins/utils';
 
                     }
                 });
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'

@@ -26,7 +26,7 @@
             <Table :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
             <div style="margin: 10px 20px;overflow: hidden">
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
+                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator></Page>
                     </div>
             </div>
             <Modal

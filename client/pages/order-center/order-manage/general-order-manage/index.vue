@@ -117,56 +117,25 @@
                     },
                     {
                         title: '订单金额',
-                        key: 'rentAmount',
+                        key: 'money',
                         align:'center'
                     },
                     {
                         title: '订单类型',
-                        key: 'orderType',
-                        align:'center',
-                        render(tag,params){
-                            var orderType={
-                               'IN':'入驻服务订单',
-                               'INCREASE':'增租服务订单',
-                               'CONTINUE':'续租服务订单'
-                            }
-                            for(var item in orderType){
-                                if(item==params.row.orderType){
-                                    return <span class="u-txt">{orderType[item]}</span>;
-                                }
-                            }
-                        }
+                        key: 'typeName',
+                        align:'center'
                     },
                     {
                         title: '订单状态',
-                        key: 'orderStatus',
-                        align:'center',
-                        render(tag, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废'
-                            }
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    var style={};
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                                }
-                            }
-                        }
+                        key: 'statusName',
+                        align:'center'
                     },
                     {
                         title: '创建时间',
-                        key: 'ctime',
+                        key: 'cTime',
                         align:'center',
                         render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
                             return time;
                         }
                     },
@@ -179,7 +148,6 @@
                                h(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'order_seat_show',
                                         label:'查看',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
@@ -189,7 +157,7 @@
                                         }
                                     }
                                 })];
-                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
+                           if(params.row.status=='EFFECT'){
                                btnRender.push(
                                 h('Button', {
                                     props: {
@@ -300,8 +268,8 @@
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.page=1;
                 this.params.pageSize=20;
-                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                this.params.cTimeBegin=this.params.cTimeBegin?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeBegin)):'';
+                this.params.cTimeEnd=this.params.cTimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeEnd)):'';
                 utils.addParams(this.params);
             },
             onChangeOpen(data){

@@ -48,9 +48,9 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单类型" class='bill-search-class' v-show='type'>
+                <Form-item label="订单类型" class='bill-search-class'>
                     <Select 
-                        v-model="formItem.orderType" 
+                        v-model="formItem.type" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
@@ -66,7 +66,7 @@
                 </Form-item>
                 <Form-item label="订单状态" class='bill-search-class'>
                     <Select 
-                        v-model="formItem.orderStatus" 
+                        v-model="formItem.status" 
                         placeholder="请输入订单状态" 
                         style="width: 252px"
                         clearable
@@ -82,14 +82,14 @@
                 </Form-item>
                 <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.cStartDate"
+                        v-model="formItem.cTimeBegin"
                         type="date" 
                         placeholder="创建开始日期" 
                         style="width: 252px"
                     ></DatePicker>
                    <span class="u-date-txt">至</span>
                     <DatePicker 
-                        v-model="formItem.cEndDate"
+                        v-model="formItem.cTimeEnd"
                         type="date" 
                         placeholder="创建结束日期" 
                         style="width: 252px"
@@ -109,23 +109,31 @@
                 formItem:{
                    orderNum:'',
                    customerName:'',
-                   payStatus:'',
-                   orderStatus:'',
-                   orderType:'',
+                   status:'',
+                   type:'',
                    communityId:'',
-                   cEndDate:'',
-                   cStartDate:''
+                   cTimeBegin:'',
+                   cTimeEnd:''
                 },
-                type:this.mask=='join'?true:false,
-                orderList:[],
-                payList:[],
-                typeList:[],
+                orderList:[
+                   {value:'EFFECT',label:'已生效'},
+                   {value:'FINISH',label:'已完成'},
+                   {value:'CANCEL',label:'已作废'},
+                ],
+                typeList:[
+                   {value:'REGISTER',label:'注册订单'},
+                   {value:'INCONSUME',label:'场内消费订单'},
+                   {value:'ACTIVITY',label:'活动订单'},
+                   {value:'ADVERT',label:'广告订单'},
+                   {value:'APPRECIATION6',label:'增值服务订单'},
+                   {value:'TRAIN',label:'培训订单'},  
+                   {value:'OTHER',label:'其他服务订单'}
+                ],
                 communityList:[]
             }
         },
         mounted:function(){
             this.getCommunity();
-            this.getOrderList();
         },
         methods:{
              getCommunity(){
@@ -137,23 +145,11 @@
                         title:e.message
                     });
                 })
-            },
-            getOrderList(){
-                var _this=this;
-                this.$http.get('order-pay-list','',r => {
-                    _this.orderList=r.data.orderTypeVos;
-                    _this.payList=r.data.payStatusVos;
-                    _this.typeList=r.data.seatOrderTypeVos;
-                }, e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
-                })   
             }
         },
         updated:function(){
-            if(this.formItem.cStartDate&&this.formItem.cEndDate){
-                if(this.formItem.cStartDate>this.formItem.cEndDate){
+            if(this.formItem.cTimeBegin&&this.formItem.cTimeEnd){
+                if(this.formItem.cTimeBegin>this.formItem.cTimeEnd){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 

@@ -420,7 +420,7 @@ import utils from '~/plugins/utils';
                 let renewForm = {} 
 
                 let complete = this.dealSaleInfo(true)
-                if(!complete){
+                if(complete == 'complete'){
                     return;
                 }
                 //处理已删除的数据
@@ -984,7 +984,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return 'complete';
                 }
                 if(!complete && !show){
 

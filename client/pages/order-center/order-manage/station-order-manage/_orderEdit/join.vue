@@ -496,7 +496,7 @@ import utils from '~/plugins/utils';
                     return true;
                 })
                 let complete = this.dealSaleInfo(true);
-                if(!complete){
+                if(complete == 'complete'){
                     return
                 }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
@@ -571,7 +571,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return complete;
+                    return 'complete';
                 }
                 if(!complete && !show){
                     return;

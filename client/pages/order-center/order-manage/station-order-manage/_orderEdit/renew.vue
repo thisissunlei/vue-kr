@@ -453,7 +453,7 @@ import utils from '~/plugins/utils';
             renewFormSubmit(){
                 this.config();
                 let complete = this.dealSaleInfo(true);
-                if(!complete){
+                if(complete =='complete'){
                     return;
                 }
                 let {params}=this.$route;
@@ -997,7 +997,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return complete;
+                    return 'complete';
                 }
                 if(!complete && !show){
                     return ;

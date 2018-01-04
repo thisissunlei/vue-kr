@@ -457,7 +457,7 @@ import utils from '~/plugins/utils';
                 let formItem = {} 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    if(tacticsType == 3){
+                    if(item.tacticsType == 3){
                         obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
                     }else{
                         obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
@@ -484,6 +484,7 @@ import utils from '~/plugins/utils';
                 formItem.ssoId = this.ssoId;
                 formItem.ssoName = this.ssoName;
                 let _this = this;
+                console.log('=======')
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();

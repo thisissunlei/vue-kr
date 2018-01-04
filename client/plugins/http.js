@@ -43,15 +43,9 @@ function filterNull (o) {
  function check401(res) {
   res = res.data;
     if (res.code ===-4011) {
-      console.log('登录')
       window.location.href = '/new/login.html';
     } else if (res.code ===-4033) {
-      console.log('您没有操作权限，请联系管理员')
-      // this.$Notice.error({
-      //   title:e.message
-      // });
-
-        // Notify.error('您没有操作权限，请联系管理员!');
+      // console.log('您没有操作权限，请联系管理员')
     }
     return res;
   }
@@ -64,6 +58,9 @@ export default {
     if (params) {
       params = filterNull(params)
     }
+    if(!APIS[url].url){
+      return
+    }
     axios.get(APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
@@ -71,9 +68,7 @@ export default {
         success && success(data)
         resolve(data)
       }else{
-        console.log(data, "ooooooo")
         failure && failure(data)
-        
         reject(data);
       }
       
@@ -88,7 +83,9 @@ export default {
     if (params) {
       params = filterNull(params)
     }
-    // let params = Qs.stringify(params);
+    if(!APIS[url].url){
+      return
+    }
     axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
@@ -110,6 +107,9 @@ export default {
     if (params) {
       params = filterNull(params)
     }
+    if(!APIS[url].url){
+      return
+    }
     axios.put(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
@@ -120,8 +120,6 @@ export default {
         failure && failure(response)
         reject(response);
       }
-      // success && success(response)
-      // resolve(response)
     })
     .catch(function (error) {
       error = error.response.data
@@ -132,6 +130,9 @@ export default {
   delete: (url, params, success, failure) => new Promise((resolve, reject) => {
     if (params) {
       params = filterNull(params)
+    }
+    if(!APIS[url].url){
+      return
     }
     axios.delete(APIS[url].url, {params:params})
     .then(check401)

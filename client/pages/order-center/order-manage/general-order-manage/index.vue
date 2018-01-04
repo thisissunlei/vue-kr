@@ -255,6 +255,7 @@
                 this.getListData(params);
             },
             lowerSubmit(){
+                this.params.page=1;
                 utils.addParams(this.params);
             },
             upperChange(params,error){

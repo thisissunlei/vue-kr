@@ -418,6 +418,11 @@ import utils from '~/plugins/utils';
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
+
+                let complete = this.dealSaleInfo(true)
+                if(!complete){
+                    return;
+                }
                 //处理已删除的数据
                 let saleList = this.renewForm.items.filter(item=>{
                     if(!item.show){

@@ -450,7 +450,10 @@ import utils from '~/plugins/utils';
                     }
                     return true;
                 })
-                this.dealSaleInfo(true)
+               let complete = this.dealSaleInfo(true)
+                if(!complete){
+                    return;
+                }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate || this.formItem.endDateStatus));
@@ -528,7 +531,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return complete;
                 }
 
                 if(!complete && !show){
@@ -549,7 +552,8 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
 
-                this.getSaleAmount(saleList)
+                this.getSaleAmount(saleList);
+                // return complete;
             },
             getSaleAmount(list){
                 this.config()

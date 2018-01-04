@@ -472,7 +472,6 @@ import utils from '~/plugins/utils';
                         _this.dealSaleInfo(false)
                     },200)
                     _this.getFloor = +new Date()
-                    console.log('contractTactics',_this.formItem)
                     
                     }, e => {
                         _this.$Notice.error({
@@ -496,6 +495,10 @@ import utils from '~/plugins/utils';
                     }
                     return true;
                 })
+                let complete = this.dealSaleInfo(true);
+                if(!complete){
+                    return
+                }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
@@ -568,7 +571,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return complete;
                 }
                 if(!complete && !show){
                     return;

@@ -452,6 +452,10 @@ import utils from '~/plugins/utils';
             },
             renewFormSubmit(){
                 this.config();
+                let complete = this.dealSaleInfo(true);
+                if(!complete){
+                    return;
+                }
                 let {params}=this.$route;
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
@@ -993,10 +997,10 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return complete;
                 }
                 if(!complete && !show){
-                    return;
+                    return ;
                 }
 
                 saleList = saleList.map(item=>{

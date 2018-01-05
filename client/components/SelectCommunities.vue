@@ -36,11 +36,7 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:{
-            test:Object,
-            onchange :Function,
-            value:String
-        },
+        props:['test','onchange','value'],
         data () {
             return {
                 community:'',

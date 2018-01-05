@@ -24,7 +24,19 @@ import dateUtils from 'vue-dateutils';
 
 
     export default {
-        props:['label','stationList','selecedStation'],
+        props:{
+            label:{
+                type: String,
+                required: true
+            },
+            stationList:{
+                type:Array,
+                required: true
+            },
+            selecedStation:{
+                type:Array
+            }
+        },
         data() {
             let selecedStation = []
             if(this.selecedStation.length){

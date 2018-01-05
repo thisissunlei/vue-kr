@@ -1,25 +1,3 @@
-<style lang="less"> 
-    .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   
-</style>
-
-
 <template>
     <div class="create-new-order">
         <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
@@ -1138,3 +1116,23 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   
+</style>

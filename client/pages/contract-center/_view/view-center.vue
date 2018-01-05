@@ -34,9 +34,8 @@
             <Button @click="pageAdd" icon="plus"></Button>
           </div>
         </div>
-        <div class="pdf-box"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="getNumPage" :page = "page" dpi="10"></pdf>
-         
+        <div class="pdf-box" v-if="openPage"> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="getNumPage" :page = "page" dpi="10"></pdf> 
         </div>
     </div>
     
@@ -55,11 +54,12 @@ export default {
       src:'',
       numPages:1,
       page:1,
+      openPage:false
     }
   },
   mounted:function(){
     console.log("---------iiiiiii")
-    
+    this.openPage = true;
     GLOBALSIDESWITCH("false");
      var that = this;
       this.config();

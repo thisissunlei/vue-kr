@@ -1238,8 +1238,8 @@
                     type:'vue',
                     menuItems: [
                         {
-                            primaryText: "订单列表",
-                            router: 'order-center/order-manage',
+                            primaryText: "工位订单列表",
+                            router: 'order-center/order-manage/station-order-manage',
                             type:'vue',
                             menuCode: 'order_seat_list',
                         },

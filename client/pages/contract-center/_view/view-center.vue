@@ -25,11 +25,17 @@
                 <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
             </div>
       </Modal>
-     <div class="box">
-      <Button type="info" @click="downSwitch">下载pdf</Button>
-        <div class="pdf-box"> 
-         <pdf  :src="src" ></pdf>
-            
+      <div class="box">
+        <div style="width:100%;padding:20px;">
+          <Button type="info" @click="downSwitch">下载pdf</Button>
+          <div style="float:right;">
+            <Button @click="pageSub" icon="minus"></Button>
+            {{page+'/'+numPages}}
+            <Button @click="pageAdd" icon="plus"></Button>
+          </div>
+        </div>
+        <div class="pdf-box" v-if="openPage"> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="getNumPage" :page = "page" dpi="10"></pdf> 
         </div>
     </div>
     
@@ -45,10 +51,15 @@ export default {
       isCachet:false,
       openDown:false,
       fileId:'100100',
-      src:''
+      src:'',
+      numPages:1,
+      page:1,
+      openPage:false
     }
   },
   mounted:function(){
+    console.log("---------iiiiiii")
+    this.openPage = true;
     GLOBALSIDESWITCH("false");
      var that = this;
       this.config();
@@ -59,13 +70,33 @@ export default {
           that.fileId = r.data.fileId || '';
           that.getPdfUrl(r.data.fileId||'');
       }, e => {
-          that.$Message.info(e);
+           that.$Notice.error({
+                title:error.message||"后台出错请联系管理员"
+            });
       })
   },
   methods:{
     selectCachet(select){
       this.isCachet = select;
       
+    },
+    getNumPage(detail){
+      this.numPages = detail || 3;
+      console.log(detail,"iiiiiii")
+    },
+    pageSub(){
+      if(this.page==1){
+        this.page = 1;
+      }else {
+        this.page -=1;
+      }
+    },
+    pageAdd(){
+      if(this.page==this.numPages){
+        this.page = this.numPages;
+      }else {
+        this.page +=1;
+      }
     },
     config:function(){
         this.$Notice.config({
@@ -79,7 +110,11 @@ export default {
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
           that.src = r.data;
       }, e => {
+        if(!e.message){
+          e.message = "后台出错请联系管理员"
+        }
           that.$Message.info(e);
+         
       })
     },
     downLoad(){
@@ -92,15 +127,12 @@ export default {
         parameter.contractType = "NOSEAL"
       }
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          // _this.communityList=r.data.items 
           if(!r.data.fileId){
               that.$Notice.error({
-                  title:"fileId不能为空！"
+                        title:error.message||"后台出错请联系管理员"
               });
               return;
           }
-          // var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
-          // window.location.href = url;
           that.downLoadPdf(r.data);
           that.downSwitch();
       }, e => {
@@ -120,7 +152,7 @@ export default {
                       window.location.href = response.data;
                 }, (error) => {
                     that.$Notice.error({
-                        title:error.message
+                        title:error.message||"后台出错请联系管理员"
                     });
                 })   
             },
@@ -136,6 +168,7 @@ export default {
   padding:20px;
   width:210mm;
   margin:auto;
+  position: relative;
 }
 .pdf-box{
    height:250mm;

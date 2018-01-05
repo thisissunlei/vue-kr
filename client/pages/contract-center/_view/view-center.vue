@@ -58,6 +58,8 @@ export default {
     }
   },
   mounted:function(){
+    console.log("---------iiiiiii")
+    
     GLOBALSIDESWITCH("false");
      var that = this;
       this.config();

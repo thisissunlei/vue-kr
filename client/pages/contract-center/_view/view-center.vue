@@ -79,7 +79,7 @@ export default {
       
     },
     getNumPage(detail){
-      this.numPages = detail || 1;
+      this.numPages = detail || 3;
       // console.log(detail,"iiiiiii")
     },
     pageSub(){

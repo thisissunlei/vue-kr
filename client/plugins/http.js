@@ -1,9 +1,20 @@
  import axios from 'axios'
  import APIS from '../assets/apis/index';
+ import envs from '../configs/envs';
  import Qs from 'qs'; 
  // 超时时间
  // axios.defaults.timeout = 6000
  // http请求拦截器
+
+ const env = process.env.NODE_ENV;
+ 
+ 
+const hostname = envs[env]['local'];
+
+ axios.defaults.withCredentials = true;
+ 
+ axios.defaults.mode = 'cors';
+
 axios.interceptors.request.use(config => {
   if(config.method  == 'post'){
     let data = Qs.stringify(config.data);
@@ -14,6 +25,8 @@ axios.interceptors.request.use(config => {
   }else{
     config.baseURL = '/';
   } 
+  
+
   return config
 }, error => {
   return Promise.reject(error)
@@ -55,13 +68,14 @@ function filterNull (o) {
 export default {
   
   get: (url, params, success, failure) => new Promise((resolve, reject) => {
+
     if (params) {
       params = filterNull(params)
     }
     if(!APIS[url].url){
       return
     }
-    axios.get(APIS[url].url, {params:params})
+    axios.get(hostname+APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){
@@ -86,7 +100,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.post(APIS[url].url, params)
+    axios.post(hostname+APIS[url].url, params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -110,7 +124,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.put(APIS[url].url, params)
+    axios.put(hostname+APIS[url].url, params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -134,7 +148,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.delete(APIS[url].url, {params:params})
+    axios.delete(hostname+APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){

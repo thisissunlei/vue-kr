@@ -42,27 +42,27 @@ export default {
   },
   //通用订单列表
   'general-order-list': {
-    url: '/mockjsdata/69/api/krspace-finance-web/order/common/search',
+    url: '/api/krspace-finance-web/order/common/search',
     method: 'get'
   },
   //新建通用订单
   'general-order-add': {
-    url: '/mockjsdata/69/api/krspace-finance-web/order/common/add',
+    url: '/api/krspace-finance-web/order/common/add',
     method: 'post'
   },
   //编辑通用订单
   'general-order-edit': {
-    url: '/mockjsdata/69/api/krspace-finance-web/order/common/update',
+    url: '/api/krspace-finance-web/order/common/update',
     method: 'post'
   },
   //查看通用订单
   'general-order-watch': {
-    url: '/mockjsdata/69/api/krspace-finance-web/order/common/getDetails',
+    url: '/api/krspace-finance-web/order/common/getDetails',
     method: 'get'
   },
   //作废通用订单
   'general-order-nullify': {
-    url: '/mockjsdata/69/api/krspace-finance-web/order/common/cancel',
+    url: '/api/krspace-finance-web/order/common/cancel',
     method: 'post'
   }
 

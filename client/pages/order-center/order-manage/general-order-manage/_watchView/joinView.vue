@@ -1,31 +1,7 @@
-<style lang="less"> 
-.g-order-detail{
-		margin:-10px;
-		.m-detail-header{
-			height:50px;
-			border-bottom: 1px solid #E8E9E9;
-			line-height: 50px;
-			font-size: 16px;
-			color: #666666;
-			.u-border-left{
-				width:0;
-				height:24px;
-				border:2px solid  #499DF1;
-				margin-right:20px;
-			}
-		}
-		.m-detail-content{
-			padding:30px 24px;
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-		}
-	}
-</style>
 <template>
 <div class="g-order-detail">
 	<div class="m-detail-header">
-		<span class="u-border-left"></span>
+		<span class="u-border-left"/>
 		订单详情
 	</div>
 	<div class="m-detail-content">
@@ -76,15 +52,19 @@ export default {
 		DetailStyle,
 		LabelText
 	},
+
 	head() {
         return {
             title: '订单详情'
         }
-    },
+	},
+	
 	data(){
 		return{
 			basicInfo:{},
+
 			saleDate:'',
+
             contract:[
                {
 				 title: '账单编号',
@@ -100,8 +80,8 @@ export default {
 				 title: '账单生成日期',
                  key: 'billCreateDate',
 				 align:'center',
-				 render(h, obj){
-					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.ctime));
+				 render(tag,params){
+					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime));
 					return time;
                   }	
 				},
@@ -109,8 +89,8 @@ export default {
 				 title: '付款截止日期',
                  key: 'billPayDate',
                  align:'center',
-				 render(h, obj){
-					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.ctime));
+				 render(tag, params){
+					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime));
 					return time;
                   }		
 				},
@@ -120,9 +100,11 @@ export default {
                  align:'center'	
 				}   
 			],
+
 			contractData:[]
 		}
 	},
+
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
@@ -130,7 +112,7 @@ export default {
 			id:params.watchView
 		};
 		var _this=this;
-	     this.$http.get('join-bill-detail', from, r => {
+	     this.$http.get('general-order-watch', from, r => {
 				   _this.basicInfo=r.data;
 				      
 				   _this.saleDate=r.data.saleDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.saleDate)):'';
@@ -143,3 +125,28 @@ export default {
 	}
 }
 </script>
+
+<style lang="less" scoped> 
+.g-order-detail{
+		margin:-10px;
+		.m-detail-header{
+			height:50px;
+			border-bottom: 1px solid #E8E9E9;
+			line-height: 50px;
+			font-size: 16px;
+			color: #666666;
+			.u-border-left{
+				width:0;
+				height:24px;
+				border:2px solid  #499DF1;
+				margin-right:20px;
+			}
+		}
+		.m-detail-content{
+			padding:30px 24px;
+			.ivu-table-wrapper{
+				margin-bottom:30px;
+			}
+		}
+	}
+</style>

@@ -1,6 +1,6 @@
 var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
+const env = process.env.NODE_ENV;
 
 module.exports = {
   //mode:'spa',
@@ -41,9 +41,18 @@ module.exports = {
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
+
+
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(env)
+      }),
+
       new ExtractTextPlugin({
         filename: 'styles.css'
-      })
+      }),
+
+
+
     ]
   }
 }

@@ -1,60 +1,62 @@
 <template>
-    <div class='m-bill-list'>
-            <SectionTitle label = "通用订单列表"></SectionTitle>
-            <div style='width:100%;padding:0 0 0 20px;'>
-                    <div style='display:inline-block;width:20%;'>
-                        <Button type="primary" @click="showOrder" style='margin-right:30px;'>新建订单</Button>
+    <div class='m-order-list'>
+            <SectionTitle label = "通用订单列表"/>
+            <div  class='list-banner'>
+                    <div class='list-btn'>
+                        <Button type="primary" @click="showOrder">新建订单</Button>
                     </div>
 
-                    <div style='margin-bottom:10px;display:inline-block;width:80%;text-align:right;margin-top:10px;'>
-                         <div style='display:inline-block;margin:10px 20px;'>
+                    <div class='list-search'>
+                         <div class='lower-search'>
                             <span style='padding-right:10px'>客户名称</span>
                             <i-input 
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
                                 @keyup.enter.native="showKey($event)"
-                            ></i-input>
+                            />
                         </div>
                         <div class='m-search' @click="lowerSubmit">搜索</div>
                         <div class="m-bill-search" @click="showSearch">
-                          <span></span>   
+                          <span/>   
                         </div> 
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
-            <div style="margin: 10px 20px;overflow: hidden">
+            <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+            <div class='list-footer'>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator></Page>
+                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator/>
                     </div>
             </div>
+
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <HeightSearch @bindData="upperChange"/>
                 <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
+
             <Modal
                 v-model="openNullify"
                 title="提示信息"
                 @on-ok="nullifySubmit"
                 width="500"
             >
-                <Nullify></Nullify>
+                <Nullify/>
             </Modal>
 
             <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                v-on:changeOpen="onChangeOpen"
-            ></Message>
+                @changeOpen="onChangeOpen"
+            />
 
     </div>
 </template>
@@ -142,8 +144,8 @@
                         title: '创建时间',
                         key: 'cTime',
                         align:'center',
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.cTime));
+                        render(tag, params){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.cTime));
                             return time;
                         }
                     },
@@ -151,23 +153,25 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
-                        render:(h,params)=>{
+                        render:(tag,params)=>{
                            var btnRender=[
-                               h(Buttons, {
+                               tag('Button', {
                                    props: {
                                         type: 'text',
-                                        label:'查看',
-                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
                                     },
                                     on: {
                                         click: () => {
                                             this.showView(params)
                                         }
                                     }
-                                })];
-                           if(params.row.status=='EFFECT'){
+                                },'查看')];
+                           if(params.row.status=='FINISH'){
                                btnRender.push(
-                                h('Button', {
+                                tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -181,7 +185,7 @@
                                         }
                                     }
                                 }, '作废'),
-                                h('Button', {
+                                tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -196,7 +200,7 @@
                                     }
                                 }, '编辑'))
                            }
-                           return h('div',btnRender);  
+                           return tag('div',btnRender);  
                         }
                     }
                 ]
@@ -300,7 +304,38 @@
     }
 </script>
 
-<style lang='less' >
+<style lang='less' scoped>
+   .m-order-list{
+        .list-banner{
+            width:100%;
+            padding:0 0 0 20px;
+            .list-btn{
+                display:inline-block;
+                width:20%;
+                .join-btn{
+                    margin-right:30px;
+                }
+            }
+            .list-search{
+                margin-bottom:10px;
+                display:inline-block;
+                width:80%;
+                text-align:right;
+                .lower-search{
+                    display:inline-block;
+                    margin:10px 20px;
+                }
+            }
+        }
+        .list-table{
+            margin:20px;
+            margin-top:0px;
+        }
+        .list-footer{
+            margin: 10px 20px;
+            overflow: hidden;
+        }
+   }
    .m-bill-search{
         display:inline-block;
         height:22px;

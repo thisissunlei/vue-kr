@@ -274,6 +274,7 @@
                 var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
                 xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
                 xhr.responseType = 'json';
+                xhr.withCredentials = true;
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                         window.location.href = "/new/login.html";
@@ -340,7 +341,7 @@
     //获取后台权限数据
     GlobalNav.prototype.getNavData = function () {
         var that = this;
-        this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
+        this.http('GET', "http://optest02.krspace.cn/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
             menuCode = response.data.menusCode;
             var user = response.data.userInfo;
             window.resourcesCode=response.data.resourcesCode;
@@ -355,6 +356,7 @@
         var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
         xhr.open(type, url, true);
         xhr.responseType = 'json';
+        xhr.withCredentials = true;
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {

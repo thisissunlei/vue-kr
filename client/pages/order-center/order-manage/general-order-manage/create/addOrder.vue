@@ -1,46 +1,18 @@
-<style lang="less"> 
-   .required-label{
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   .vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .ivu-modal{
-            top: 0;
-        }
-    }
-</style>
-
-
 <template>
     <div class="create-new-order">
-        <sectionTitle label="新建订单"></sectionTitle>
+        <sectionTitle label="新建订单"/>
          <div style='padding:0 24px;'>
           <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer"/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                      <selectCommunities test="formItem" :onchange="changeCommunity"/>
                     </FormItem>
                 </Col>
 
@@ -69,25 +41,25 @@
                         v-model="formItem.money" 
                         placeholder="请输入订单金额"
                         style="width: 252px"
-                    ></i-input>
+                    />
                    </Form-item>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
                     <FormItem label="销售日期" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"></DatePicker>
+                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
                     <FormItem label="备注信息" prop="remark" style="width:702px">
-                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."></Input>
+                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
                       <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
                     </FormItem>
                 </Col>
@@ -118,6 +90,7 @@ import utils from '~/plugins/utils';
 
 export default {
         data() {
+            
            const validateMoney = (rule, value, callback) => {
                 var numReg=/^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/;
                 if (value === '') {
@@ -128,8 +101,11 @@ export default {
                     callback();
                 }
             };
+
            return {
+
                 disabled:false,
+
                 typeList:[
                    {value:'REGISTER',label:'注册订单'},
                    {value:'INCONSUME',label:'场内消费订单'},
@@ -139,15 +115,17 @@ export default {
                    {value:'TRAIN',label:'培训订单'},  
                    {value:'OTHER',label:'其他服务订单'}
                 ],
+
                 formItem: {
-                    customerId: '',
-                    communityId: '',
+                    customerId: 1,
+                    communityId: 1,
                     saleDate:'',
                     type:'',
                     remark:'',
-                    salesperson:'',
+                    salesperson:1,
                     money:''
                 },
+
                 ruleCustom:{
                     saleDate: [
                         { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
@@ -168,14 +146,17 @@ export default {
                         { required: true, message: '请选择订单类型', trigger: 'change' }
                     ]
                 },
+
                 salerName:'请选择',
             }
         },
+
         head() {
             return {
                 title: '新建订单'
             }
         },
+
         components: {
             sectionTitle,
             selectCommunities,
@@ -183,10 +164,13 @@ export default {
             selectCustomers,
             SelectSaler
         },
+
          mounted(){
             GLOBALSIDESWITCH("false");
         },
+
         methods: {
+
             joinFormSubmit(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
@@ -202,6 +186,7 @@ export default {
                     })
                })  
             },
+
             handleSubmit:function(name) {
                 let message = '请填写完表单';
                 this.$Notice.config({
@@ -221,6 +206,7 @@ export default {
                     }
                 })
             },
+
             changeCommunity:function(value){
                 if(value){
                     this.formItem.communityId = value;
@@ -228,6 +214,7 @@ export default {
                     this.formItem.communityId = '';
                 }       
             },
+
             changeCustomer:function(value){
                 if(value){
                     this.formItem.customerId = value;
@@ -235,9 +222,38 @@ export default {
                     this.formItem.customerId = '';
                 }
             },
+            
             changeSaler:function(value){
                 this.formItem.salesperson = value;
             }
         }
     }
 </script>
+
+<style lang="less" scoped> 
+   .required-label{
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .ivu-modal{
+            top: 0;
+        }
+    }
+</style>
+

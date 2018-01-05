@@ -54,7 +54,7 @@ export default {
       openDown:false,
       fileId:'100100',
       src:'',
-      numPages:0,
+      numPages:1,
       page:1,
     }
   },

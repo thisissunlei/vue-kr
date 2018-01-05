@@ -13,12 +13,13 @@
     </div>
 </template>
 
-<script>
 
+<script>
 import JoinList from './joinList';
 import ReduceList from './reduceList';
+
 export default {
-   name:'list',
+   name:'List',
    data(){
        return {
            joinKey:true,

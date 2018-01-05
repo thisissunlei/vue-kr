@@ -1,62 +1,64 @@
 <template>
-    <div class='m-bill-list'>
+    <div class='m-join-list'>
             
-            <div style='width:100%;padding:0 0 0 20px;'>
-                    <div style='display:inline-block;width:20%;'>
-                        <Button type="primary" @click="showJoin" style='margin-right:30px;'>入驻</Button>
+            <div class='list-banner'>
+                    <div class='list-btn'>
+                        <Button type="primary" @click="showJoin" class='join-btn'>入驻</Button>
                         <Button type="primary" @click="showRenew">续租</Button>
                     </div>
 
-                    <div style='margin-bottom:10px;display:inline-block;width:80%;text-align:right;'>
-                         <div style='display:inline-block;margin:10px 20px;'>
+                    <div class='list-search'>
+                         <div class='lower-search'>
                             <span style='padding-right:10px'>客户名称</span>
                             <i-input 
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
                                 @keyup.enter.native="showKey($event)"
-                            ></i-input>
-                        </div>
-                        <div class='m-search' @click="lowerSubmit">搜索</div>
-                        <div class="m-bill-search" @click="showSearch">
-                          <span></span>   
-                        </div> 
+                            />
+                         </div>
+                         <div class='m-search' @click="lowerSubmit">搜索</div>
+                         <div class="m-bill-search" @click="showSearch">
+                           <span/>
+                         </div> 
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border style="margin:20px;marginTop:0px;"></Table>
-            <div style="margin: 10px 20px;overflow: hidden">
-                    <Buttons label='导出'  type='primary' v-on:click='outSubmit' checkAction='order_seat_export' />
+            <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
+            <div  class='list-footer'>
+                    <Buttons label='导出'  type='primary' @click='outSubmit' checkAction='order_seat_export'/>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
+                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
                     </div>
             </div>
+
             <Modal
                 v-model="openSearch"
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch v-on:bindData="upperChange" mask='join'></HeightSearch>
+                <HeightSearch @bindData="upperChange" mask='join'/>
                 <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
+            
             <Modal
                 v-model="openNullify"
                 title="提示信息"
                 @on-ok="nullifySubmit"
                 width="500"
             >
-                <Nullify></Nullify>
+                <Nullify/>
             </Modal>
 
             <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                v-on:changeOpen="onChangeOpen"
-            ></Message>
+                @changeOpen="onChangeOpen"
+            />
 
             <Modal
                 v-model="openApply"
@@ -64,7 +66,7 @@
                 @on-ok="applySubmit"
                 width="500"
             >
-                <ApplyContract></ApplyContract>
+                <ApplyContract/>
             </Modal>
 
     </div>
@@ -82,7 +84,7 @@
     
 
     export default {
-        name:'join',
+        name:'Join',
         components:{
             HeightSearch,
             Nullify,
@@ -93,24 +95,36 @@
         data () {
             
             return {
-                loadingStatus:true,
                 openMessage:false,
+
                 warn:'',
+
                 MessageType:'',
+
                 upperData:{},
+
                 upperError:false,
-                totalCount:1,
+
                 id:'',
+
                 props:{},
+
+                totalCount:1,
+
                 params:{
                     page:1,
                     pageSize:15,
                     customerName:"",
                 },
-                joinData:[],
+
                 openSearch:false,
+
                 openNullify:false,
+
                 openApply:false,
+
+                joinData:[],
+
                 joinOrder: [
                     {
                         title: '订单编号',
@@ -182,8 +196,8 @@
                         title: '创建时间',
                         key: 'ctime',
                         align:'center',
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(obj.row.ctime));
+                        render(tag, params){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                             return time;
                         }
                     },
@@ -191,9 +205,9 @@
                         title: '操作',
                         key: 'action',
                         align:'center',
-                        render:(h,params)=>{
+                        render:(tag,params)=>{
                            var btnRender=[
-                               h(Buttons, {
+                               tag(Buttons, {
                                    props: {
                                         type: 'text',
                                         checkAction:'order_seat_show',
@@ -208,7 +222,7 @@
                                 })];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(
-                                h('Button', {
+                                tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -222,7 +236,7 @@
                                         }
                                     }
                                 }, '申请合同'),
-                                h('Button', {
+                                tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -236,7 +250,7 @@
                                         }
                                     }
                                 }, '作废'),
-                                h('Button', {
+                                tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -251,35 +265,43 @@
                                     }
                                 }, '编辑'))
                            }
-                           return h('div',btnRender);  
+                           return tag('div',btnRender);  
                         }
                     }
                 ]
             }
         },
+        
         created(){
-          var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
+          var params=Object.assign({},this.$route.query,{page:1,pageSize:15});
           this.getListData(params);
           this.params=params;
         },
+
         methods:{
+
             showKey: function (ev) {
                 this.lowerSubmit();
             },
+
             showSearch () {
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
             },
+            
             showJoin(){
                 window.open('/order-center/order-manage/station-order-manage/create/join','join');
             },
+
             showRenew(){
                 window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
             },
+
             showApply(params){
                 this.id=params.row.id;
                 this.openApply=true;
             },
+
             showView(params){
                 var viewName='';
                 if(params.row.orderType=='CONTINUE'){
@@ -289,10 +311,12 @@
                 }
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,params.row.id);
             },
+
             showNullify(params){
                 this.id=params.row.id;
                 this.openNullify=true;
             },
+
             showEdit(params){
                 let type = '';
                 switch (params.row.orderType){
@@ -311,6 +335,7 @@
                 }
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
             },
+
             nullifySubmit (){
                 let params={
                     id:this.id
@@ -327,6 +352,7 @@
                     this.warn=e.message;
                 })
             },
+
             applySubmit(){
                 let params={
                     id:this.id
@@ -342,35 +368,40 @@
                     this.warn=e.message;
                 })  
             },
+
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
                 utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
+
             getListData(params){
                 var _this=this;
                  this.$http.get('join-bill-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
-                    _this.loadingStatus=false;
                 }, e => {
                     _this.openMessage=true;
                     _this.MessageType="error";
                     _this.warn=e.message;
                 })   
             },
+
             changePage (index) {
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
             },
+
             lowerSubmit(){
                 utils.addParams(this.params);
             },
+
             upperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
             },
+
             upperSubmit(){
                 if(this.upperError){
                     return ;
@@ -382,6 +413,7 @@
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 utils.addParams(this.params);
             },
+
             onChangeOpen(data){
                 this.openMessage=data;
             }
@@ -389,8 +421,39 @@
     }
 </script>
 
-<style lang='less'>
- .m-bill-search{
+<style lang='less' scoped>
+   .m-join-list{
+        .list-banner{
+            width:100%;
+            padding:0 0 0 20px;
+            .list-btn{
+                display:inline-block;
+                width:20%;
+                .join-btn{
+                    margin-right:30px;
+                }
+            }
+            .list-search{
+                margin-bottom:10px;
+                display:inline-block;
+                width:80%;
+                text-align:right;
+                .lower-search{
+                    display:inline-block;
+                    margin:10px 20px;
+                }
+            }
+        }
+        .list-table{
+            margin:20px;
+            margin-top:0px;
+        }
+        .list-footer{
+            margin: 10px 20px;
+            overflow: hidden;
+        }
+   }
+   .m-bill-search{
         display:inline-block;
         height:22px;
         margin:16px 20px;

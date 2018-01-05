@@ -1,36 +1,3 @@
-<style lang="less"> 
-.vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
-    .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   
-   
-</style>
-
-
-
 <template>
     <div class="create-new-order">
        <SectionTitle label="新建续租服务订单管理"></SectionTitle>
@@ -418,6 +385,11 @@ import utils from '~/plugins/utils';
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
+
+                let complete = this.dealSaleInfo(true)
+                if(complete == 'complete'){
+                    return;
+                }
                 //处理已删除的数据
                 let saleList = this.renewForm.items.filter(item=>{
                     if(!item.show){
@@ -427,9 +399,12 @@ import utils from '~/plugins/utils';
                 })
                  saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-
+                    if(item.tacticsType == 3){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
                 renewForm.installmentType = this.installmentType;
@@ -553,7 +528,9 @@ import utils from '~/plugins/utils';
                     this.selecedArr = [];
                 }
                 if(this.renewForm.items.length){
-                    this.renewForm.items = []
+                    this.renewForm.items = [];
+                    this.saleAmount = 0;
+                    this.saleAmounts = utils.smalltoBIG(0)
                 }
                 if(this.discountError){
                     this.discountError = false;
@@ -968,14 +945,16 @@ import utils from '~/plugins/utils';
 
                     }
                 });
-
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return 'complete';
                 }
                 if(!complete && !show){
+
                     return;
                 }
 
@@ -1024,3 +1003,33 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   
+   
+</style>

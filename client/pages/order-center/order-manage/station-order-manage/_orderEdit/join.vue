@@ -1,25 +1,3 @@
-<style lang="less"> 
-    .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   
-</style>
-
-
 <template>
     <div class="create-new-order">
         <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
@@ -459,6 +437,7 @@ import utils from '~/plugins/utils';
                             obj.status = 1;
                             obj.show = true;
                             obj.validStart = item.freeStart;
+                            obj.startDate = item.freeStart;
                             obj.validEnd = item.freeEnd;
                             obj.type = item.tacticsType+'-'+index;
                             obj.tacticsId = item.tacticsId ;
@@ -471,7 +450,6 @@ import utils from '~/plugins/utils';
                         _this.dealSaleInfo(false)
                     },200)
                     _this.getFloor = +new Date()
-                    console.log('contractTactics',_this.formItem)
                     
                     }, e => {
                         _this.$Notice.error({
@@ -495,6 +473,10 @@ import utils from '~/plugins/utils';
                     }
                     return true;
                 })
+                let complete = this.dealSaleInfo(true);
+                if(complete == 'complete'){
+                    return
+                }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
@@ -502,7 +484,11 @@ import utils from '~/plugins/utils';
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                     if(item.tacticsType == 3){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
                     return obj;
                 })
                 formItem.id = params.orderEdit;
@@ -557,11 +543,13 @@ import utils from '~/plugins/utils';
                         complete = false;
                     }
                 });
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return 'complete';
                 }
                 if(!complete && !show){
                     return;
@@ -812,6 +800,8 @@ import utils from '~/plugins/utils';
                 }
                 if(this.formItem.items.length){
                     this.formItem.items = []
+                    this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 }
                 if(this.discountError){
                     this.discountError = false;
@@ -1126,3 +1116,23 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   
+</style>

@@ -1,36 +1,3 @@
-<style lang="less"> 
-   .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   .vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
-   
-   
-</style>
-
-
-
 <template>
     <div class="create-new-order">
         <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
@@ -450,14 +417,18 @@ import utils from '~/plugins/utils';
                     }
                     return true;
                 })
-                this.dealSaleInfo(true)
+               let complete = this.dealSaleInfo(true)
+
+                if(complete == 'complete'){
+                    return;
+                }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate || new Date()));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate || this.formItem.endDateStatus));
                 let formItem = {} 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
-                    if(tacticsType == 3){
+                    if(item.tacticsType == 3){
                         obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
                     }else{
                         obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
@@ -521,15 +492,20 @@ import utils from '~/plugins/utils';
                         complete = false;
                     }
                 });
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
-                    return;
+                    return 'complete';
                 }
+
                 if(!complete && !show){
+
                     return;
                 }
+                
 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
@@ -543,7 +519,8 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
 
-                this.getSaleAmount(saleList)
+                this.getSaleAmount(saleList);
+                // return complete;
             },
             getSaleAmount(list){
                 this.config()
@@ -782,6 +759,8 @@ import utils from '~/plugins/utils';
                 }
                 if(this.formItem.items.length){
                     this.formItem.items = []
+                    this.saleAmount = 0;
+                    this.saleAmounts = utils.smalltoBIG(0)
                 }
                 if(this.discountError){
                     this.discountError = false;
@@ -1092,3 +1071,33 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+   .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+   
+   
+</style>

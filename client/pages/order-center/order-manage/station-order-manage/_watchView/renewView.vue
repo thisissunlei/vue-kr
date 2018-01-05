@@ -1,31 +1,7 @@
-<style lang="less"> 
-.g-order-detail{
-		margin:-10px;
-		.m-detail-header{
-			height:50px;
-			border-bottom: 1px solid #E8E9E9;
-			line-height: 50px;
-			font-size: 16px;
-			color: #666666;
-			.u-border-left{
-				width:0;
-				height:24px;
-				border:2px solid  #499DF1;
-				margin-right:20px;
-			}
-		}
-		.m-detail-content{
-			padding:30px 24px;
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-		}
-	}
-</style>
 <template>
 <div class="g-order-detail">
 	<div class="m-detail-header">
-		<span class="u-border-left"></span>
+		<span class="u-border-left"/>
   		 续租订单详情
 	</div>
 	<div class="m-detail-content">
@@ -102,12 +78,19 @@ export default {
 	data(){
 		return{
 			basicInfo:{},
+
 			capitalService:'',
+
 			capitalTreatment:'',
+
 			ctime:'',
+
 			startDate:'',
+
 			endDate:'',
+
 			payDate:'',
+
 			service:[
 				{
 				 title: '工位/房间编号',
@@ -123,8 +106,8 @@ export default {
 				 title: '开始日期',
                  key: 'startDate',
 				 align:'center',
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.startDate));
+				 render(tag,params){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate));
 					 return time;
 				 }	
                 },
@@ -132,8 +115,8 @@ export default {
 				 title: '结束日期',
                  key: 'endDate',
 				 align:'center',
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.endDate));
+				 render(tag, params){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
 					 return time;
 				 }	
                 },
@@ -143,6 +126,7 @@ export default {
                  align:'center'	
 				}
 			],
+
 			treatment:[
 				{
 				 title: '优惠类型',
@@ -153,8 +137,8 @@ export default {
 				 title: '开始日期',
                  key: 'freeStart',
 				 align:'center',
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.freeStart));
+				 render(tag, params){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeStart));
 					 return time;
 				 }		
 				},
@@ -162,17 +146,25 @@ export default {
 				 title: '结束日期',
                  key: 'freeEnd',
 				 align:'center',
-				 render(h, obj){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.freeEnd));
+				 render(tag, params){
+					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeEnd));
 					 return time;
 				 }		
 				},
 				{
 				 title: '折扣比例',
                  key: 'discountNum',
-                 align:'center'	
+                 align:'center',
+				 render(tag, params){
+					 if(params.row.discountNum==0){
+						 return '-';
+					 }else{
+						 return params.row.discountNum
+					 }
+				  }			
 				}
-            ],
+			],
+			
             contract:[
                {
 				 title: '合同编号',
@@ -190,11 +182,15 @@ export default {
                  align:'center'	
 				}  
 			],
+
 			serviceData:[],
+
 			treatmentData:[],
+
 			contractData:[]
 		}
 	},
+
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
@@ -223,3 +219,28 @@ export default {
 	}
 }
 </script>
+
+<style lang="less" scoped> 
+   .g-order-detail{
+		margin:-10px;
+		.m-detail-header{
+			height:50px;
+			border-bottom: 1px solid #E8E9E9;
+			line-height: 50px;
+			font-size: 16px;
+			color: #666666;
+			.u-border-left{
+				width:0;
+				height:24px;
+				border:2px solid  #499DF1;
+				margin-right:20px;
+			}
+		}
+		.m-detail-content{
+			padding:30px 24px;
+			.ivu-table-wrapper{
+				margin-bottom:30px;
+			}
+		}
+	}
+</style>

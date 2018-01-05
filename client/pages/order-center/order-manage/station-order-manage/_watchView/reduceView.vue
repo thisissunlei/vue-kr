@@ -1,35 +1,7 @@
-<style lang="less"> 
-.g-order-detail{
-		margin:-10px;
-		.m-detail-header{
-			height:50px;
-			border-bottom: 1px solid #E8E9E9;
-			line-height: 50px;
-			font-size: 16px;
-			color: #666666;
-			.u-border-left{
-				width:0;
-				height:24px;
-				border:2px solid  #499DF1;
-				margin-right:20px;
-			}
-		}
-		.m-detail-content{
-			padding:30px 24px;
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-		}
-		.m-reduce-room{
-			padding-left:15px;
-			margin-bottom:20px;
-		}
-	}
-</style>
 <template>
 <div class="g-order-detail">
 	<div class="m-detail-header">
-		<span class="u-border-left"></span>
+		<span class="u-border-left"/>
 		减租订单详情
 	</div>
 	<div class="m-detail-content">
@@ -112,6 +84,7 @@ export default {
 			contractData:[]
 		}
 	},
+	
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
@@ -144,3 +117,32 @@ export default {
 	}
 }
 </script>
+
+<style lang="less" scoped> 
+   .g-order-detail{
+		margin:-10px;
+		.m-detail-header{
+			height:50px;
+			border-bottom: 1px solid #E8E9E9;
+			line-height: 50px;
+			font-size: 16px;
+			color: #666666;
+			.u-border-left{
+				width:0;
+				height:24px;
+				border:2px solid  #499DF1;
+				margin-right:20px;
+			}
+		}
+		.m-detail-content{
+			padding:30px 24px;
+			.ivu-table-wrapper{
+				margin-bottom:30px;
+			}
+		}
+		.m-reduce-room{
+			padding-left:15px;
+			margin-bottom:20px;
+		}
+	}
+</style>

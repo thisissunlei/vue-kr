@@ -36,7 +36,6 @@
         </div>
         <div class="pdf-box"> 
           <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="numPages = $event||1" :page = "page" dpi="10"></pdf>
-        <!-- <pdf v-if="show" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @password="password" @progress="loadedRatio = $event" @error="error" @numPages="numPages = $event"></pdf> -->
          
         </div>
     </div>

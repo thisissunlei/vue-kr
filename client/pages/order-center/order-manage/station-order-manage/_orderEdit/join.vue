@@ -143,7 +143,7 @@
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
                         <DatePicker type="date" v-show="item.tacticsType != '3'" placeholder="开始时间" v-model="item.validStart" disabled></DatePicker >
-                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.validStart" @on-change="changeSaleTime"></DatePicker >
+                        <DatePicker type="date" v-show="item.tacticsType == '3'" placeholder="开始时间" v-model="item.startDate" @on-change="changeSaleTime"></DatePicker >
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <DatePicker type="date" placeholder="开始时间" v-model="item.validEnd" disabled ></DatePicker >
@@ -459,6 +459,7 @@ import utils from '~/plugins/utils';
                             obj.status = 1;
                             obj.show = true;
                             obj.validStart = item.freeStart;
+                            obj.startDate = item.freeStart;
                             obj.validEnd = item.freeEnd;
                             obj.type = item.tacticsType+'-'+index;
                             obj.tacticsId = item.tacticsId ;
@@ -468,10 +469,9 @@ import utils from '~/plugins/utils';
                         })
 
                         _this.formItem.items = data.contractTactics;
-                        _this.dealSaleInfo()
+                        _this.dealSaleInfo(false)
                     },200)
                     _this.getFloor = +new Date()
-                    console.log('contractTactics',_this.formItem)
                     
                     }, e => {
                         _this.$Notice.error({
@@ -495,6 +495,10 @@ import utils from '~/plugins/utils';
                     }
                     return true;
                 })
+                let complete = this.dealSaleInfo(true);
+                if(complete == 'complete'){
+                    return
+                }
                 let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.startDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.endDate));
@@ -502,7 +506,11 @@ import utils from '~/plugins/utils';
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                     if(item.tacticsType == 3){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
                     return obj;
                 })
                 formItem.id = params.orderEdit;
@@ -535,7 +543,7 @@ import utils from '~/plugins/utils';
                 })
                 
             },
-            dealSaleInfo(){
+            dealSaleInfo(show){
                 this.config()
                 //处理已删除的数据
                 let saleList = this.formItem.items.filter(item=>{
@@ -550,27 +558,35 @@ import utils from '~/plugins/utils';
                     if(!item.tacticsType){
                         complete = false
                     }
-                    if(item.tacticsType!='1' && (!item.validStart || !item.validEnd)){
+                    if(item.tacticsType!='1' && (!item.startDate || !item.validEnd)){
                         complete = false;
                     }
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }
                 });
-                if(!complete){
+                this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
+                if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    return 'complete';
+                }
+                if(!complete && !show){
                     return;
                 }
 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
+                    if(item.tacticsType=='3'){
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate))
+                    }else{
+                        obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
+                    }
                     obj.validEnd =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validEnd))
-                    obj.validStart =  dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.validStart))
                     return obj;
                 })
-                // this.formItem.items = saleList;
 
                 this.getSaleAmount(saleList)
             },
@@ -630,12 +646,12 @@ import utils from '~/plugins/utils';
                     return;
                 }
                 this.discount = val;
-                this.dealSaleInfo()
+                this.dealSaleInfo(true)
             },
             changeSaleTime(val){
                 let _this = this;
                 setTimeout(function(){
-                    _this.dealSaleInfo()
+                    _this.dealSaleInfo(true)
                 },200)
             },
             handleSubmit:function(name) {
@@ -709,7 +725,7 @@ import utils from '~/plugins/utils';
                 });
                 this.formItem.items = items;
                 this.selectDiscount(false);
-                this.dealSaleInfo()
+                this.dealSaleInfo(true)
 
             },
             getTacticsId(type){
@@ -780,7 +796,7 @@ import utils from '~/plugins/utils';
                     items[itemIndex].show = false;
                 }
                 this.formItem.items = items;
-                this.dealSaleInfo()
+                this.dealSaleInfo(false)
             },
             changeCommunity:function(value){
                 // 选择社区
@@ -806,6 +822,8 @@ import utils from '~/plugins/utils';
                 }
                 if(this.formItem.items.length){
                     this.formItem.items = []
+                    this.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
                 }
                 if(this.discountError){
                     this.discountError = false;

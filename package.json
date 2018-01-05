@@ -35,6 +35,6 @@
     "iview": "^2.8.0",
     "nuxt": "^1.0.0-rc11",
     "promise-polyfill": "^7.0.0",
-    "vue-pdf": "^2.0.4"
+    "vue-pdf": "2.0.4"
   }
 }

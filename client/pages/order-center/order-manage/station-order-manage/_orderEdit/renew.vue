@@ -392,7 +392,12 @@ import utils from '~/plugins/utils';
                             obj.status = 1;
                             obj.show = true;
                             obj.validStart = item.freeStart;
-                            obj.startDate = item.freeStart;
+                            if(item.tacticsType == 3){
+                               obj.startDate = item.freeStart; 
+                           }else{
+                            obj.startDate = '';
+                           }
+                            
                             obj.validEnd = item.freeEnd;
                             obj.type = item.tacticsType+'-'+index;
                             obj.tacticsId = item.tacticsId ;
@@ -754,7 +759,7 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
-                        item.validStart=item.validStart || ''
+                        item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
 

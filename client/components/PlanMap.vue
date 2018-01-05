@@ -36,7 +36,7 @@ import http from '~/plugins/http.js';
 		props:{
 			params:Object,
 			floors:Array,
-			stationData:Array,
+			stationData:Object,
 			originStationList:Array
 		},
         data () {

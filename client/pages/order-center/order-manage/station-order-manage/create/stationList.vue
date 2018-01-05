@@ -1,30 +1,3 @@
-<style lang="less"> 
-   .select-station-list{
-    border:1px solid #e9eaec;
-    padding:10px;
-   }
-   .station-type{
-    padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-
-    }
-   }
-   .station-list{
-    max-height: 400px;
-    overflow: auto;
-   }
-</style>
-
-
-
 <template>
     <div class="station-list">
        <div class="station-type">{{label}}</div>
@@ -194,3 +167,28 @@ import dateUtils from 'vue-dateutils';
         }
     }
 </script>
+<style lang="less"> 
+   .select-station-list{
+    border:1px solid #e9eaec;
+    padding:10px;
+   }
+   .station-type{
+    padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+
+    }
+   }
+   .station-list{
+    max-height: 400px;
+    overflow: auto;
+   }
+</style>
+

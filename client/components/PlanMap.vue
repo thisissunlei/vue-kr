@@ -32,8 +32,13 @@ import http from '~/plugins/http.js';
 
 
     export default {
-        props:['stationsubmit','params','floors','stationData','originStationList'],
-
+        // props:['stationsubmit','params','floors','stationData','originStationList'],
+		props:{
+			params:Object,
+			floors:Array,
+			stationData:Array,
+			originStationList:Array
+		},
         data () {
             return {
                 data:'',//平面图基础数据
@@ -67,8 +72,6 @@ import http from '~/plugins/http.js';
         	
         },
         watch:{
-        	params:function(val){
-        	},
         	stationData:function(val){
         		this.selectedObjs = this.stationData.submitData;
         	},

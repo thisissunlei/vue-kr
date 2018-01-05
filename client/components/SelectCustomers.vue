@@ -33,7 +33,10 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:['onchange','value'],
+        props:{
+            onchange :Function,
+            value:String
+        },
         data () {
             
             return {

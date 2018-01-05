@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="pdf-box"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="numPages = $event||1" :page = "page" dpi="10"></pdf>
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="getNumPage" :page = "page" dpi="10"></pdf>
          
         </div>
     </div>
@@ -77,6 +77,10 @@ export default {
     selectCachet(select){
       this.isCachet = select;
       
+    },
+    getNumPage(detail){
+      this.numPages = detail || 1;
+      // console.log(detail,"iiiiiii")
     },
     pageSub(){
       if(this.page==1){
@@ -121,15 +125,12 @@ export default {
         parameter.contractType = "NOSEAL"
       }
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          // _this.communityList=r.data.items 
           if(!r.data.fileId){
               that.$Notice.error({
                         title:error.message||"后台出错请联系管理员"
               });
               return;
           }
-          // var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
-          // window.location.href = url;
           that.downLoadPdf(r.data);
           that.downSwitch();
       }, e => {

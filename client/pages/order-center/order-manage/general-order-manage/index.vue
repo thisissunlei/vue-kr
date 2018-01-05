@@ -71,7 +71,7 @@
     
 
     export default {
-        name:'join',
+        name:'Order',
         components:{
             HeightSearch,
             Nullify,
@@ -79,26 +79,34 @@
             Buttons,
             SectionTitle
         },
-        data () {
-            
-            return {
-                loadingStatus:true,
-                openMessage:false,
-                warn:'',
-                MessageType:'',
+        data () {    
+            return {     
                 upperData:{},
-                upperError:false,
-                totalCount:1,
+
                 id:'',
-                props:{},
+                
+                totalCount:1,
+
                 params:{
                     page:1,
                     pageSize:20,
                     customerName:"",
                 },
-                joinData:[],
+
                 openSearch:false,
+
                 openNullify:false,
+
+                openMessage:false,
+
+                warn:'',
+
+                MessageType:'',
+
+                upperError:false,
+
+                joinData:[],
+
                 joinOrder: [
                     {
                         title: '订单编号',
@@ -194,37 +202,44 @@
                 ]
             }
         },
+
         created(){
           var params=Object.assign({},{page:1,pageSize:20},this.$route.query);
           this.getListData(params);
           this.params=params;
         },
+
         methods:{
             showKey: function (ev) {
                 this.lowerSubmit();
             },
+
             showSearch () {
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
             },
+
             showOrder(){
                 window.open('/order-center/order-manage/general-order-manage/create/addOrder','order');
             },
+
             showView(params){
                 window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
             },
+
             showNullify(params){
                 this.id=params.row.id;
                 this.openNullify=true;
             },
+
             showEdit(params){
                 window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/editOrder`,params.row.id)
             },
+
             nullifySubmit (){
                 let params={
                     id:this.id
-                };
-                 
+                };   
                  this.$http.post('general-order-nullify', params,r => {
                     this.openMessage=true;
                     this.MessageType=r.message=='ok'?"success":"error";
@@ -236,32 +251,36 @@
                     this.warn=e.message;
                 })
             },
+
             getListData(params){
                 var _this=this;
                  this.$http.get('general-order-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
-                    _this.loadingStatus=false;
                 }, e => {
                     _this.openMessage=true;
                     _this.MessageType="error";
                     _this.warn=e.message;
                 })   
             },
+
             changePage (index) {
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
             },
+
             lowerSubmit(){
                 this.params.page=1;
                 utils.addParams(this.params);
             },
+
             upperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
             },
+
             upperSubmit(){
                 if(this.upperError){
                     return ;
@@ -273,6 +292,7 @@
                 this.params.cTimeEnd=this.params.cTimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeEnd)):'';
                 utils.addParams(this.params);
             },
+
             onChangeOpen(data){
                 this.openMessage=data;
             }
@@ -280,8 +300,8 @@
     }
 </script>
 
-<style lang='less'>
- .m-bill-search{
+<style lang='less' >
+   .m-bill-search{
         display:inline-block;
         height:22px;
         margin:16px 20px;

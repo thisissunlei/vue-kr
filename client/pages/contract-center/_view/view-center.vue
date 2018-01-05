@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="pdf-box" v-if="openPage"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="getNumPage" :page = "page" dpi="10"></pdf> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10"></pdf> 
         </div>
     </div>
     
@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted:function(){
-    console.log("---------iiiiiii")
+   
     this.openPage = true;
     GLOBALSIDESWITCH("false");
      var that = this;

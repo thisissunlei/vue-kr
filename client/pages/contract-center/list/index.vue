@@ -64,7 +64,7 @@
 <template>
 
     <div class="contract-center-list">
-        <sectionTitle label = "合同列表"></sectionTitle>
+        <sectionTitle label = "合同"></sectionTitle>
        <div style='text-align:right;margin-bottom:10px'>
           
             <div style='display:inline-block;margin:10px 20px;'>

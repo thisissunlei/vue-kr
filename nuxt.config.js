@@ -9,9 +9,6 @@ module.exports = {
   transition: {
     name: 'page',
     mode: 'out-in',
-    beforeEnter(el) {
-      console.log('Before enter...');
-    }
   },
   router: {
     base: '/'

@@ -1,4 +1,4 @@
-<script>
+
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -32,10 +32,50 @@
              originParams[item]='';
          }
     }
+
+    /*导出*/
+    function commonExport(props,url){
+        var where=[];
+        for(var item in props){
+            if(props.hasOwnProperty(item)){
+                where.push(`${item}=${props[item]}`);
+            }
+        }
+       
+        var url = `${url}?${where.join('&')}`
+        window.location.href = url;
+    }
+    //获取url的参数
+    function getRequest() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            var strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+    //高级搜索时url上带参数
+    function addParams(params){
+        let path=window.location.href;
+        let url=path.split('?')[0];
+        var where = [];
+		for(var field in params){
+			if(params.hasOwnProperty(field)){
+				where.push(`${field}=${params[field]}`);
+			}
+        }
+        url=url+"?"+where.join('&');
+        location.href=url;
+    }
    
    export default{
       smalltoBIG,
-      clearForm
+      clearForm,
+      commonExport,
+      getRequest,
+      addParams
    }
-
-</script>

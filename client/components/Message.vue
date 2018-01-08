@@ -23,6 +23,12 @@
      border:none;
      padding:0;
 }
+.u-txt-green{
+    color: #77cd50;
+}
+.u-txt-red{
+    color:#FF6868;
+}
 }
 
 </style>
@@ -31,11 +37,11 @@
         <div class="ui-message-content">
             <div v-if="type=='success'">
                 <img src="~assets/images/success.png" />
-                <p class="ui-reminder">{{warn}}</p>
+                <p class="ui-reminder" v-html="warn"></p>
             </div>
             <div v-else-if="type=='error'">
                 <img src="~assets/images/error.png" />
-                <p class="ui-reminder">{{warn}}</p>
+                <p class="ui-reminder"  v-html="warn"></p>
             </div>
         </div>
         <div slot="footer">

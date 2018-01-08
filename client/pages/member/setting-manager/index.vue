@@ -5,7 +5,7 @@
             <span class="u-high-search" @click="showSearch"></span>  
             <div style='display:inline-block;float:right;padding-right:20px;'>
                 <Input 
-                    v-model="csrName" 
+                    v-model="Params.csrName" 
                     placeholder="请输入公司名称"
                     style="width: 252px"
                 ></Input>
@@ -53,11 +53,11 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
-import CommonFuc from '~/components/CommonFuc';
 import HighSearch from './highSearch';
 import Drawer from '~/components/Drawer';
 import Setting from './setting';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 export default {
     components:{
         SectionTitle,
@@ -75,10 +75,10 @@ export default {
             page:1,
             Params:{
                 page:1,
-                pageSize:15
+                pageSize:15,
+                csrName:'',
             },
             itemDetail:{},
-            csrName:'',
             searchData:{},
             isRefresh:false,
             tableHeader:[
@@ -134,8 +134,12 @@ export default {
             ]
         }
     },
-    mounted:function(){
-        this.getTableData(this.Params);
+    created(){
+        this.getTableData(this.$route.query);
+         if(!this.$route.query.csrName){
+                 this.$route.query.csrName=""
+         }
+        this.Params=this.$route.query;
     },
     methods:{
         getTableData(params){
@@ -143,9 +147,11 @@ export default {
                     this.tableData=r.data.items;
                     this.totalCount=r.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
-                })
+                }, err => {
+					this.$Notice.error({
+						title:err.message
+					});
+        		})
         },
         changePage(page){
                 this.Params.page=page;
@@ -153,25 +159,30 @@ export default {
                 this.getTableData(this.Params);
         },
         lowerSubmit(){
-                CommonFuc.clearForm(this.searchData);
-                this.Params.page=1;
+                utils.clearForm(this.searchData);
+                let csrName=this.Params.csrName;
                 this.page=1;
-                this.Params.csrName=this.csrName;
-                this.getTableData(this.Params);
+                this.Params={
+                    page:1,
+                    pageSize:15,
+                    csrName:csrName
+                }
+                utils.addParams(this.Params);
         },
         showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
         },
         getSearchData(form){
                 this.searchData=form;
         },
         searchSubmit(){
+                let csrName=this.Params.csrName;
+                this.Params=this.searchData;
+                this.Params.csrName=csrName;
                 this.Params.page=1;
                 this.page=1;
-                this.Params=this.searchData;
-                this.Params.csrName=this.csrName;
-                this.getTableData(this.Params)
+                utils.addParams(this.Params);
         },
         openSetting(params){
                 this.itemDetail=params;

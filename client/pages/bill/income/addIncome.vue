@@ -1,9 +1,12 @@
 <style lang="less"> 
+
 .g-high-search{
+
     form{
         width:540px;
         margin:0 auto;
     }
+    
     .u-clearfix { zoom:1; }
     .u-clearfix:after {
         clear: both;
@@ -12,6 +15,7 @@
         display: block;
         visibility: hidden;
     }
+    
     .u-input{
         width:250px;
         float:left; 
@@ -34,10 +38,14 @@
             text-align: center
         }
     }
-}   
+}  
+ 
 </style>
+
 <template>
+
 <div class="g-high-search">
+
     <Form  
         ref="formValidate" 
         :model="formItem" 
@@ -53,6 +61,7 @@
                     :onchange="onchange"
                 ></SearchCompany>
             </FormItem>
+            
              <FormItem label="社区名称"  prop="communityId" class="u-input">
                  <Select 
                     v-model="formItem.communityId" 
@@ -68,6 +77,7 @@
                     </Option>
                 </Select>
             </FormItem>
+            
             <FormItem label="含税收入" prop="amount" class="u-input">
                 <Input 
                     v-model="formItem.amount" 
@@ -75,46 +85,44 @@
                     style="width: 250px"
                ></Input> 
             </FormItem>
+            
             <FormItem label="确认收入日期" prop="dealDate" class="u-input">
-                <DatePicker 
-                    v-model="formItem.startTime"
-                    type="date" 
-                    placeholder="请选择确认收入日期" 
-                    style="width: 250px;"
-                    @on-change="dateChange"
-               ></DatePicker>
+                <DatePicker  v-model="formItem.startTime"  type="date"  placeholder="请选择确认收入日期"   style="width: 250px;" @on-change="dateChange" ></DatePicker>
             </FormItem>
+
             <FormItem label="收入类型"  prop="incomeType" class="u-input">
-                  <Select 
-                    v-model="formItem.incomeType" 
-                    style="width:250px"
-                    placeholder="请选择账单类型" 
-                >
-                    <Option 
-                        v-for="item in incomeType" 
-                        :value="item.value" 
-                        :key="item.value"
-                    >
+            
+                  <Select  v-model="formItem.incomeType"  style="width:250px" placeholder="请选择账单类型" >
+                    <Option v-for="item in incomeType" :value="item.value" :key="item.value">
                         {{ item.label }}
                     </Option>
                 </Select>
+                
             </FormItem>
-            </FormItem>
+                  
         </Form>
+        
 </div>
+
 </template>	
+
 <script>
+
 import SearchCompany from '~/components/SearchCompany';
 import SelectCommunities from '~/components/SelectCommunities';
+
 export default{
+
     name:'highSearch',
     components:{
         SelectCommunities,
         SearchCompany
     },
     data (){
+    
 		return{
-			formItem:{
+    
+			     formItem:{
                 amount:'',
                 communityId:'',
                 customerId:'',
@@ -124,40 +132,29 @@ export default{
             },
             formValidate:'formValidate',
             incomeType:[
-                {
-                    value:'MEETING',
-                    label:'会议室服务费'
-                },
-                {
-                    value:'PRINT',
-                    label:'打印服务费'
-                },
-                {
-                    value:'RENT',
-                    label:'工位租金'
-                },
+                {value:'MEETING',label:'会议室服务费'},
+                {value:'PRINT',label:'打印服务费'},
+                {value:'RENT',label:'工位租金'},
             ],
-            communityList:[
-
-            ],
+            communityList:[],
             ruleValidate:{
                 customerId: [
-                        { required: true, message: '请选择客户名称'}
-                    ],
+                    {required: true, message: '请选择客户名称'}
+                ],
                 communityId: [
-                        { required: true, message: '请选择社区' }
-                    ],
+                    {required: true, message: '请选择社区'}
+                ],
                 amount: [
-                        { required: true, message: '请输入含税收入' }
-                    ],
+                    {required: true, message: '请输入含税收入'}
+                ],
                 dealDate: [
-                        { required: true, message: '请选择确认收入日期' }
-                    ],
+                      {required: true, message: '请选择确认收入日期'}
+                ],
                 incomeType: [
-                        { required: true, message: '请选择账单类型' }
-                    ],
+                   {required: true, message: '请选择账单类型'}
+                ],
             }
-		}
+		 }
     },
     mounted:function(){
         this.$http.get('join-bill-community','', r => {    
@@ -167,8 +164,10 @@ export default{
                     title:e.message
                 });
         })
+
     },
     methods:{
+    
         onchange(data){
             this.formItem.customerId=data;
         },
@@ -178,12 +177,17 @@ export default{
         
     },
     updated:function(){
-       let callback=this.$refs[this.formValidate].validate;
-       let cancel=this.$refs[this.formValidate].resetFields;
-        this.$emit('formData', this.formItem,callback,cancel);
-    },
+
+      var formValidate = this.$refs[this.formValidate];
+       let callback = formValidate.validate;
+       let cancel = formValidate.resetFields;
+       
+       this.$emit('formData', this.formItem,callback,cancel);  
+       
+    }
 	
 }
+
 </script>
 
 

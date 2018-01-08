@@ -17,17 +17,23 @@ export default {
     }
   },
 
+
   asyncData ({ req }) {
+
     return {
       name: req ? 'server' : 'client'
     }
+    
   },
-  head () {
-    return {
-      title: `About Page (${this.name}-side)`
-    }
+
+  created(){
+
+    console.log(this.$route.query)
   }
+
+
 }
+
 </script>
 
 <style scoped>

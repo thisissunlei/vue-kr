@@ -176,23 +176,27 @@ export default {
 		},
 		getInfo(){
 			this.Params.csrId=this.detail.csrId;
-			this.$http.get('customer-manager-detail', this.Params, r => {
-				this.listInfo=r.data.items;
-				this.totalCount=r.data.totalCount;
-           	}, e => {
-                console.log('error',e)
-			})
+			this.$http.get('customer-manager-detail', this.Params, res => {
+				this.listInfo=res.data.items;
+				this.totalCount=res.data.totalCount;
+           	}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+        	})
 			this.getCount();
 		},
 		getCount(){
 			let Params={
 				csrId:this.detail.csrId
 			}
-			this.$http.get('get-manager-count', Params, r => {
-				this.managerCount=r.data.managerCount;
+			this.$http.get('get-manager-count', Params, res => {
+				this.managerCount=res.data.managerCount;
 				this.renderList();
-           	}, e => {
-                console.log('error',e)
+           	}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
 			})
 		},
 		changePage(page){
@@ -221,10 +225,10 @@ export default {
 			}
 			this.isRefresh=true;
 			this.$emit('changeOpen',this.isRefresh);
-			this.$http.post('edit-customer-manager', Params, r => {
-				 if(r.code==-1){
+			this.$http.post('edit-customer-manager', Params, res => {
+				 if(res.code==-1){
 					this.MessageType="error";
-					this.warn=r.message;
+					this.warn=res.message;
 					this.openMessage=true;
 					return;
 				}
@@ -233,9 +237,11 @@ export default {
 				this.warn=`${this.TipTxt}管理员成功！`
 				this.openMessage=true;
 				this.getInfo();
-           	}, e => {
-                console.log('error',e)
-            })
+           	}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+			})
 		},
 		onChangeOpen(data){
                 this.openMessage=data;

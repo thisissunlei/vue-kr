@@ -981,7 +981,7 @@ import utils from '~/plugins/utils';
                         complete = false
 
                     }else{
-                        complete = this.dealzhekou(item.discount)
+                       this.dealzhekou(item.discount)
                     }
                 });
                 this.saleAmount = 0;

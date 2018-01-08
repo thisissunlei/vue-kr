@@ -493,7 +493,7 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        complete = this.dealzhekou(item.discount)
+                        this.dealzhekou(item.discount)
                     }
                 });
                 this.saleAmount = 0;
@@ -706,7 +706,6 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
-                console.log(val)
                 //优惠类型选择
                 if(!val){
                     return;

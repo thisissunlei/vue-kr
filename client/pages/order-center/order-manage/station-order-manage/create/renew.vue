@@ -738,11 +738,7 @@ import utils from '~/plugins/utils';
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = this.getTacticsId('3')
-                        if(!item.name){
-                            item.discount = this.maxDiscount[label];
-                        }else{
-                            item.discount = item.discount
-                        }
+                        item.discount = ''
                         item.name = label;
                     }else if(item.tacticsType == 1){
                         item.validStart=this.renewForm.startDate

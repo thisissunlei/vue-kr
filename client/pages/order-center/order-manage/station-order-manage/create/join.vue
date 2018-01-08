@@ -697,17 +697,11 @@ import utils from '~/plugins/utils';
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = this.getTacticsId('3')
                         item.name = label;
-
                         item.discount = '';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
-                        if(!item.name){
-                            item.discount = this.maxDiscount[label];
-                        }else{
-                            item.discount = item.discount;
-                        }
-                        
+                        item.discount = '';
                         item.validEnd = this.formItem.endDate;
                         item.name = label;
                     }

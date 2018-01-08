@@ -9,9 +9,6 @@ module.exports = {
   transition: {
     name: 'page',
     mode: 'out-in',
-    beforeEnter(el) {
-      console.log('Before enter...');
-    }
   },
   router: {
     base: '/'
@@ -41,13 +38,9 @@ module.exports = {
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
-
       new ExtractTextPlugin({
         filename: 'styles.css'
-      }),
-
-
-
+      })
     ]
   }
 }

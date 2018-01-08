@@ -71,7 +71,7 @@
 				{{basicInfo.billNo}}
 			</LabelText>	
 			<LabelText label="账单类型：">
-				{{basicInfo.billType}}
+				{{basicInfo.bizType}}
 			</LabelText>
 			<LabelText label="客户名称：">
 				<a href="">
@@ -85,7 +85,7 @@
 				{{basicInfo.billEndTime}}
 			</LabelText>
 			<LabelText label="支付状态：">
-				{{basicInfo.billStatus}}
+				{{basicInfo.payStatus}}
 			</LabelText>
 			<LabelText label="账单金额：">
 				￥{{basicInfo.payableAmount}}
@@ -214,28 +214,28 @@ export default {
 			let from={
 				billId:params.billId
 			};
-			this.$http.get('get-bill-detail', from, r => {
-				let data=r.data;
-				if(data.bizType=='MEETING'){
-					data.billType='会议室账单';
-				}else if (data.bizType=='PRINT'){
-					data.billType='打印服务账单';
-				}else if (data.bizType=='CONTRACT'){
-					data.billType='工位服务订单';
-				}
-				if(data.payStatus=='WAIT'){
-					data.billStatus='待付款';
-				}else if (data.payStatus=='PAID'){
-					data.billStatus='已付清';
-				}else if (data.payStatus=='PAYMENT'){
-					data.billStatus='未付清';
-				}
+			let bizType={
+				'MEETING':'会议室账单',
+				'PRINT':'打印服务账单',
+				'CONTRACT':'工位服务订单',
+			}
+			let payStatus={
+				'WAIT':'待付款',
+				'PAID':'已付清',
+				'PAYMENT':'未付清',
+			}
+			this.$http.get('get-bill-detail', from, res => {
+				let data=res.data;
+				data.bizType=bizType[data.bizType];
+				data.payStatus=payStatus[data.payStatus];
 				this.basicInfo=data;
 				this.costInfo=data.feeList;
 				this.settleInfo=data.payList;
-           	}, e => {
-                console.log('error',e)
-			})
+      		}, err => {
+				this.$Notice.error({
+					title:err.message
+				});
+        	})
 			
 		},
 		showTab(){

@@ -12,3 +12,5 @@ elif [ $1 = 'all' ]; then
 rsync -rvltOD ./ ali-krspace-web-01:/data/work/${build_dir}/
 rsync -rvltOD ./ ali-krspace-web-02:/data/work/${build_dir}/
 fi
+
+

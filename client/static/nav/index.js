@@ -90,7 +90,9 @@
                              '<div class="header-nav" id="j_header">${header}</div>' +
  
                                  '<div class = "j_header_other">' +
-                                     //'<div id = "j_msg_btn"></div>' +
+
+                                    // '<div id = "j_msg_btn"></div>' +
+
                                      '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
@@ -131,8 +133,7 @@
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
          var html = '';
-         //var router = location.href;
-         var router = location.href.split('?')[0];
+         var router = location.href.split('?')[0];;
          if (!sidebarNavs) {
              return html;
          }   
@@ -149,7 +150,7 @@
                     if (child.type && child.type == "vue") {
                         href = location.protocol+"//"+ location.hostname + "/" + child.router;
                     } else {
-                        href =location.protocol+"//"+ location.hostname +"new/#/" + child.router;
+                        href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
                     }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })

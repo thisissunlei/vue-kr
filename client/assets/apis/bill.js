@@ -12,7 +12,7 @@ export default  {
     },
     //账单中心--获取账单列表
     'get-bill-list': {
-      url: '/api/krspace-pay/bill/list?',
+      url: '/api/krspace-pay/bill/list',
       method: 'get'
     },
     //账单中心--账单结算

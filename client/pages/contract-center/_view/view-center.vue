@@ -145,9 +145,9 @@ export default {
                     
                 }, (response) => {
                 
-                    // window.open(response.data,"_blank");
+                    window.open(response.data,"_blank");
 
-                      window.location.href = response.data;
+                      // window.location.href = response.data;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message||"后台出错请联系管理员"

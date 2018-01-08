@@ -440,7 +440,14 @@ import utils from '~/plugins/utils';
                             obj.validStart = item.freeStart;
                             obj.startDate = item.freeStart;
                             obj.validEnd = item.freeEnd;
-                            obj.type = item.tacticsType+'-'+index;
+                            let i = _this.youhui.filter((items,i)=>{
+                                if(items.tacticsName == item.tacticsName){
+                                    items.index = i;
+                                    return true
+                                }
+                                return false
+                            })
+                            obj.type = item.tacticsType+'-'+index+'-'+i[0].index;
                             obj.tacticsId = item.tacticsId ;
                             obj.discount = item.discountNum;
                             obj.tacticsType = JSON.stringify(item.tacticsType);
@@ -449,7 +456,7 @@ import utils from '~/plugins/utils';
 
                         _this.formItem.items = data.contractTactics;
                         _this.dealSaleInfo(false)
-                    },200)
+                    },700)
                     _this.getFloor = +new Date()
                     
                     }, e => {
@@ -712,7 +719,7 @@ import utils from '~/plugins/utils';
             getTacticsId(type){
                 let typeId = '';
                 typeId = this.youhui.filter((item)=>{
-                    if(item.tacticsType != type ){
+                    if(item.tacticsName != type ){
                         return false;
                     }
                     return true;
@@ -766,12 +773,12 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 3){
                         item.validStart=item.validStart || ''
                         item.validEnd = this.formItem.endDate
-                        item.tacticsId = this.getTacticsId('3')
+                        item.tacticsId = this.getTacticsId(label)
                         item.discount = '';
                         item.name = label;
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
-                        item.tacticsId = this.getTacticsId('1')
+                        item.tacticsId = this.getTacticsId(label)
                         item.discount = item.discount || '';
                         item.name = label;
                         item.validEnd = this.formItem.endDate

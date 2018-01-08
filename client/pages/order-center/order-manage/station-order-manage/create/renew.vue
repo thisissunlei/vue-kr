@@ -706,7 +706,7 @@ import utils from '~/plugins/utils';
             getTacticsId(type){
                 let typeId = '';
                 typeId = this.youhui.filter((item)=>{
-                    if(item.tacticsType != type ){
+                    if(item.tacticsName != type ){
                         return false;
                     }
                     return true;
@@ -737,12 +737,12 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 3){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
-                        item.tacticsId = this.getTacticsId('3')
+                        item.tacticsId = this.getTacticsId(label)
                         item.discount = ''
                         item.name = label;
                     }else if(item.tacticsType == 1){
                         item.validStart=this.renewForm.startDate
-                        item.tacticsId = this.getTacticsId('1')
+                        item.tacticsId = this.getTacticsId(label)
                         item.validEnd = this.renewForm.endDate
                         item.discount = item.discount|| ''
                     }

@@ -1,64 +1,4 @@
-<style lang="less"> 
-    .page {
-        margin-top:20px;
-    }
-    .m-bill-search{
-        display:inline-block;
-        height:22px;
-        margin:16px 20px;
-        vertical-align: bottom;
 
-        span{
-            width:22px;
-            height:22px;
-            background-size: contain;  
-            float:right;
-            cursor:pointer;
-            background:url('~assets/images/upperSearch.png') no-repeat center;
-            background-size: contain;  
-            float:right;
-        }
-    }
-    .m-search{
-            color:#2b85e4;
-            display:inline-block;
-            cursor:pointer;
-     }
-     .cachet-box{
-        width:50%;
-        position:relative;
-        float:left;
-        text-align:center;
-        cursor: pointer;
-        .select{
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-left: -31px;
-            margin-top: -31px;
-
-        }
-        .cachet{
-            border: 2px solid #7ED321;
-            background: #7ED321 url('~/assets/images/check.svg') no-repeat;
-            background-size: 60%;
-            background-position:center;
-        }
-     }
-     .contract-center-list{
-         .ivu-table-fixed-right::before, .ivu-table-fixed::before{
-             z-index: 3;
-         }
-        .ivu-tooltip-inner{
-            white-space: normal;
-        }
-         
-     }
-</style>
 
 
 <template>
@@ -100,7 +40,7 @@
             width="660"
             @on-ok='upperSubmit'
         >
-            <HeightSearch :params = "params" v-on:bindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" @:bindData="upperChange" mask='join'></HeightSearch>
             <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -124,7 +64,6 @@
             title="其他约定"
             width="660"
         >
-            <!-- <Describe v-on:bindData="describeDataChange" :detailData="this.columnDetail"></Describe> -->
             <Input v-model="otherAgreed" :maxlength="999" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
             <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div>
             <div slot="footer">
@@ -162,7 +101,7 @@
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                v-on:changeOpen="onChangeOpen"
+                @changeOpen="onChangeOpen"
         ></Message>
         <!-- <Loading :loading='loadingStatus'/> -->
         
@@ -693,3 +632,64 @@
         
     }
 </script>
+<style lang="less"> 
+    .page {
+        margin-top:20px;
+    }
+    .m-bill-search{
+        display:inline-block;
+        height:22px;
+        margin:16px 20px;
+        vertical-align: bottom;
+
+        span{
+            width:22px;
+            height:22px;
+            background-size: contain;  
+            float:right;
+            cursor:pointer;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;  
+            float:right;
+        }
+    }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
+     .cachet-box{
+        width:50%;
+        position:relative;
+        float:left;
+        text-align:center;
+        cursor: pointer;
+        .select{
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -31px;
+            margin-top: -31px;
+
+        }
+        .cachet{
+            border: 2px solid #7ED321;
+            background: #7ED321 url('~/assets/images/check.svg') no-repeat;
+            background-size: 60%;
+            background-position:center;
+        }
+     }
+     .contract-center-list{
+         .ivu-table-fixed-right::before, .ivu-table-fixed::before{
+             z-index: 3;
+         }
+        .ivu-tooltip-inner{
+            white-space: normal;
+        }
+         
+     }
+</style>

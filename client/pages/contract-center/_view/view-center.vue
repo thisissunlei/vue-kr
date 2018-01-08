@@ -58,7 +58,6 @@ export default {
     }
   },
   mounted:function(){
-   
     this.openPage = true;
     GLOBALSIDESWITCH("false");
      var that = this;
@@ -66,12 +65,11 @@ export default {
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-         console.log(r.data.fileId)
           that.fileId = r.data.fileId || '';
           that.getPdfUrl(r.data.fileId||'');
       }, e => {
            that.$Notice.error({
-                title:error.message||"后台出错请联系管理员"
+              title:error.message||"后台出错请联系管理员"
             });
       })
   },

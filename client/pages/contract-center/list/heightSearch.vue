@@ -1,20 +1,4 @@
-<style lang='less'>
-    .bill-search-class{
-        display:inline-block;
-        width:50%;
-        padding-left:32px;
-    }
-    .bill-search{
-        display:inline-block;
-        padding-left:32px;
-        .u-date-txt{
-            padding:0 25px;
-            font-size: 14px;
-            color: #666;
-        }
-    }
 
-</style> 
 
  
     <template>         
@@ -172,3 +156,20 @@
     }
 </script>
 
+<style lang='less'>
+    .bill-search-class{
+        display:inline-block;
+        width:50%;
+        padding-left:32px;
+    }
+    .bill-search{
+        display:inline-block;
+        padding-left:32px;
+        .u-date-txt{
+            padding:0 25px;
+            font-size: 14px;
+            color: #666;
+        }
+    }
+
+</style> 

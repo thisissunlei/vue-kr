@@ -113,8 +113,8 @@
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
-                         <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                         <Select v-model="item.type" label-in-value @on-change="changeType">
+                            <Option v-for="(types,i) in youhui" :value="types.value+'-'+index+'-'+i" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -244,7 +244,7 @@ import utils from '~/plugins/utils';
                 delStation:[],
                 stationAmount:'',
                 installmentType:'',
-                maxDiscount:'',//折扣最大限制
+                maxDiscount:{},//折扣最大限制
                 timeError:false,//租赁时间校验
                 stationData:{
                     submitData:[],
@@ -350,6 +350,7 @@ import utils from '~/plugins/utils';
                 errorAmount:false,
                 ssoName:'',
                 discount:0,
+                minDiscount:'',
 
             }
         },
@@ -550,18 +551,19 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
+                console.log('changezhekou',val,this.minDiscount)
                 val = val.target.value;
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
                     return
                 }
-                if(val<this.maxDiscount){
-                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
                     this.$Notice.error({
-                        title:'折扣不得小于'+this.maxDiscount
+                        title:'折扣不得小于'+this.minDiscount
                     })
                     return;
                 }
@@ -673,11 +675,13 @@ import utils from '~/plugins/utils';
 
             },
             
-            changeType:function(value){
+            changeType:function(val){
                 //优惠类型选择
-                if(!value){
+                if(!val){
                     return;
                 }
+                let label = val.label;
+                let value = val.value
                 this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
@@ -685,7 +689,6 @@ import utils from '~/plugins/utils';
                 let items = [];
 
                 items = this.formItem.items.map((item)=>{
-                    console.log('changeType--map',item)
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
@@ -693,13 +696,20 @@ import utils from '~/plugins/utils';
                         item.validStart= item.startDate || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = this.getTacticsId('3')
+                        item.name = label;
 
                         item.discount = '';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
-                        item.discount = this.maxDiscount;
-                        item.validEnd = this.formItem.endDate
+                        if(!item.name){
+                            item.discount = this.maxDiscount[label];
+                        }else{
+                            item.discount = item.discount;
+                        }
+                        
+                        item.validEnd = this.formItem.endDate;
+                        item.name = label;
                     }
                     return item;
                 })
@@ -729,7 +739,10 @@ import utils from '~/plugins/utils';
                         title:message
                     });
                     items[itemIndex].show = false;
+                    this.formItem.items = items;
+                    return;
                 }
+                 this.minDiscount = this.maxDiscount[label]
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
@@ -999,7 +1012,7 @@ import utils from '~/plugins/utils';
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
-                let maxDiscount = '';
+                let maxDiscount = {};
                 let _this = this;
                  this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
@@ -1008,13 +1021,14 @@ import utils from '~/plugins/utils';
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
                             if(item.tacticsType == 1){
-                                maxDiscount = obj.discount;
+                                maxDiscount[item.tacticsName] = obj.discount;
                             }
                             return obj;
                         })
                     }else{
                         list = []
                     }
+                    console.log('maxDiscount',maxDiscount)
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 

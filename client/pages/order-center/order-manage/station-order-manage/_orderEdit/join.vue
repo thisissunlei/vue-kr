@@ -115,8 +115,8 @@
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
-                         <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                         <Select v-model="item.type" label-in-value  @on-change="changeType">
+                            <Option v-for="(types,i) in youhui" :value="types.value+'-'+index+'-'+i" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -250,7 +250,8 @@ import utils from '~/plugins/utils';
                 delStation:[],
                 stationAmount:'',
                 installmentType:'',
-                maxDiscount:'',//折扣最大限制
+                maxDiscount:{},//折扣最大限制
+                minDiscount:'',
                 timeError:false,//租赁时间校验
                 corporationName:'',
                 discount:0,
@@ -606,12 +607,12 @@ import utils from '~/plugins/utils';
                     this.disabled = true;
                     return
                 }
-                if(val<this.maxDiscount){
-                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
                     this.$Notice.error({
-                        title:'折扣不得小于'+this.maxDiscount
+                        title:'折扣不得小于'+this.minDiscount
                     })
                     return;
                 }
@@ -718,11 +719,13 @@ import utils from '~/plugins/utils';
 
             },
             
-            changeType:function(value){
+            changeType:function(val){
                 //优惠类型选择
-                if(!value){
+                if(!val){
                     return;
                 }
+                let label = val.label;
+                let value = val.value;
                 this.config()
                 let itemValue = value.split('-')[0];
                 let itemIndex = value.split('-')[1];
@@ -732,16 +735,22 @@ import utils from '~/plugins/utils';
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
+                        item.name = label;
                     }else if(item.tacticsType == 3){
                         item.validStart=item.validStart || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = this.getTacticsId('3')
-
-                        item.discount = '';
+                        if(!item.name){
+                            item.discount = this.maxDiscount[label];
+                        }else{
+                            item.discount = item.discount;
+                        }
+                        item.name = label;
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
                         item.discount = this.maxDiscount;
+                        item.name = label;
                         item.validEnd = this.formItem.endDate
                     }
                     return item;
@@ -772,7 +781,10 @@ import utils from '~/plugins/utils';
                         title:message
                     });
                     items[itemIndex].show = false;
+                    this.formItem.items = items;
+                    return;
                 }
+                this.minDiscount = this.maxDiscount[label]
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
@@ -1046,7 +1058,7 @@ import utils from '~/plugins/utils';
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
-                let maxDiscount = '';
+                let maxDiscount = {};
                 let _this = this;
                  this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
@@ -1055,7 +1067,7 @@ import utils from '~/plugins/utils';
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
                             if(item.tacticsType == 1){
-                                maxDiscount = obj.discount;
+                                maxDiscount[item.tacticsName] = obj.discount;
                             }
                             return obj;
                         })

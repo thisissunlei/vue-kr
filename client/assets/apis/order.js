@@ -8,7 +8,7 @@ export default  {
   },
   //获取社区List组件
     'get-mainbill-community': {
-        url: '/api/krspace-op-web/finaVerify/data/get-mainbill-community?',
+        url: '/api/krspace-finance-web/finaVerify/data/get-mainbill-community?',
         method: 'get'
   },
   //获取客户List组件
@@ -165,7 +165,7 @@ export default  {
     },
   //获取售货员List组件
   'get-customer': {
-      url: '/api/krspace-op-web/customer/my-customers?',
+      url: '/api/krspace-finance-web/customer/my-customers?',
       method: 'get'
   },
     'get-cancel-msg': {

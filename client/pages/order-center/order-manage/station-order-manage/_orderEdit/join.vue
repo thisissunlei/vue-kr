@@ -611,6 +611,9 @@ import utils from '~/plugins/utils';
             },
             changezhekou(val){
                 val = val.target.value;
+                if(!val){
+                    return
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;

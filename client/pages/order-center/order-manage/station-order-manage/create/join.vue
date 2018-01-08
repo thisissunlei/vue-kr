@@ -555,6 +555,9 @@ import utils from '~/plugins/utils';
             },
             changezhekou(val){
                 val = val.target.value;
+                if(!val){
+                    return
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
@@ -703,6 +706,7 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
+                console.log(val)
                 //优惠类型选择
                 if(!val){
                     return;

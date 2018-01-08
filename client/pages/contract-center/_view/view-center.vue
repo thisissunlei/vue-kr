@@ -140,13 +140,19 @@ export default {
     },
     downLoadPdf(params){
                 var that=this;
+                var newWin = window.open('/contract-center/list',"_blank");
                 this.$http.post('get-station-contract-pdf-url', {
                     id:params.fileId,
                     
                 }, (response) => {
                 
-                    window.open(response.data,"_blank");
+                    // window.open(response.data,"_blank");
+                   
 
+                   
+                        // 重定向到目标页面
+                        newWin.location.href = response.data;
+                  
                       // window.location.href = response.data;
                 }, (error) => {
                     that.$Notice.error({

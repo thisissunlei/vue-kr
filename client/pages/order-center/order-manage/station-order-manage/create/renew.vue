@@ -706,7 +706,7 @@ import utils from '~/plugins/utils';
             getTacticsId(type){
                 let typeId = '';
                 typeId = this.youhui.filter((item)=>{
-                    if(item.tacticsType != type ){
+                    if(item.tacticsName != type ){
                         return false;
                     }
                     return true;
@@ -737,18 +737,14 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 3){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
-                        item.tacticsId = this.getTacticsId('3')
-                        if(!item.name){
-                            item.discount = this.maxDiscount[label];
-                        }else{
-                            item.discount = item.discount
-                        }
+                        item.tacticsId = this.getTacticsId(label)
+                        item.discount = ''
                         item.name = label;
                     }else if(item.tacticsType == 1){
                         item.validStart=this.renewForm.startDate
-                        item.tacticsId = this.getTacticsId('1')
+                        item.tacticsId = this.getTacticsId(label)
                         item.validEnd = this.renewForm.endDate
-                        item.discount = this.maxDiscount;
+                        item.discount = item.discount|| ''
                     }
                     return item;
                 })
@@ -903,6 +899,9 @@ import utils from '~/plugins/utils';
             },
             changezhekou(val){
                 val = val.target.value;
+                if(!val){
+                    return;
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
@@ -953,6 +952,8 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false
 
+                    }else{
+                        complete = this.dealzhekou(item.discount)
                     }
                 });
                 this.saleAmount = 0;
@@ -979,6 +980,31 @@ import utils from '~/plugins/utils';
                     return obj;
                 })
                 this.getSaleAmount(saleList)
+            },
+            dealzhekou(val){
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return false
+                }
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.minDiscount
+                    })
+                    return false;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return false;
+                }
+                return true;
             },
              getSaleAmount(list){
                 this.config()

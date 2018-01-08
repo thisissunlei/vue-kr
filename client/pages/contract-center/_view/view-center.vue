@@ -2,7 +2,7 @@
  <div>
       <Modal
         v-model="openDown"
-        title="下载pdf"
+        title="下载pdf-"
         width="660"
       >
             <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>
@@ -54,7 +54,8 @@ export default {
       src:'',
       numPages:1,
       page:1,
-      openPage:false
+      openPage:false,
+      newWin:''
     }
   },
   mounted:function(){
@@ -80,7 +81,6 @@ export default {
     },
     getNumPage(detail){
       this.numPages = detail||1;
-      console.log(detail,"iiiiiii")
     },
     pageSub(){
       if(this.page==1){
@@ -118,16 +118,18 @@ export default {
     downLoad(){
       var that = this;
       this.config();
+      
       var parameter = utils.getRequest()
       if(this.isCachet){
         parameter.contractType = "HAVESEAL"
       }else{
         parameter.contractType = "NOSEAL"
       }
+      this.newWin = window.open()
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
           if(!r.data.fileId){
               that.$Notice.error({
-                        title:error.message||"后台出错请联系管理员"
+                title:error.message||"后台出错请联系管理员"
               });
               return;
           }
@@ -140,20 +142,12 @@ export default {
     },
     downLoadPdf(params){
                 var that=this;
-                var newWin = window.open('/contract-center/list',"_blank");
+               
                 this.$http.post('get-station-contract-pdf-url', {
                     id:params.fileId,
                     
                 }, (response) => {
-                
-                    // window.open(response.data,"_blank");
-                   
-
-                   
-                        // 重定向到目标页面
-                        newWin.location.href = response.data;
-                  
-                      // window.location.href = response.data;
+                 that.newWin.location = response.data;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message||"后台出错请联系管理员"

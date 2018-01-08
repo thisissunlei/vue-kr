@@ -140,6 +140,8 @@
                     page:1,
                     pageSize:15,
                 },
+                newWin:'',
+
                 MessageType:'',
                 openMessage:false,
                 warn:'',
@@ -491,6 +493,8 @@
                 }else{
                     parameter.contractType = "NOSEAL"
                 }
+                this.newWin = window.open()
+
                 this.$http.get('get-station-contract-pdf-id',parameter, r => {    
                     if(!r.data.fileId){
                         that.$Notice.error({
@@ -499,8 +503,7 @@
                         return;
                     }
                     
-                    // var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
-                    // window.location.href = url;
+                  
                     that.downLoadPdf(r.data);
                     that.downSwitch();
                 }, e => {
@@ -514,8 +517,7 @@
                     
                 }, (response) => {
                   
-                    window.open(response.data,"_blank");
-                    // window.location.href = response.data;
+                    that.newWin.location = response.data;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message

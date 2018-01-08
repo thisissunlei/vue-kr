@@ -317,7 +317,7 @@
                 }
             }
             .list-search{
-                margin-bottom:10px;
+                margin:10px 0;
                 display:inline-block;
                 width:80%;
                 text-align:right;

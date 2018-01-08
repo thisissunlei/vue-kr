@@ -47,7 +47,7 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"/>
+                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salespersonName"/>
                     </FormItem>
                 </Col>
 
@@ -120,7 +120,7 @@ export default {
 
                 communityName:'',
 
-                salerName:'请选择',
+                salespersonName:'请选择',
 
                 formItem: {
                     customerId: '',
@@ -188,7 +188,7 @@ export default {
                        this.formItem.salesperson=JSON.stringify(this.formItem.salesperson);
                        this.customerName = this.formItem.customerName;
                        this.communityName = this.formItem.communityName;
-                       this.salerName = this.formItem.salerName;
+                       this.salespersonName = this.formItem.salespersonName;
                        this.formItem.saleDate = new Date(this.formItem.saleDate);
                     }, e => {
                        this.$Notice.error({

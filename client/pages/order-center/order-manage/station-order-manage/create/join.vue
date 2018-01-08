@@ -487,10 +487,13 @@ import utils from '~/plugins/utils';
                         complete = false
                     }
                     if(item.tacticsType=='3' && (!item.startDate || !item.validEnd)){
+
                         complete = false;
                     }
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
+                    }else{
+                        complete = this.dealzhekou(item.discount)
                     }
                 });
                 this.saleAmount = 0;
@@ -551,7 +554,6 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
-                console.log('changezhekou',val,this.minDiscount)
                 val = val.target.value;
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
@@ -674,6 +676,31 @@ import utils from '~/plugins/utils';
                 return typeId[0].tacticsId
 
             },
+            dealzhekou(val){
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return false
+                }
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.minDiscount
+                    })
+                    return false;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return false;
+                }
+                return true;
+            },
             
             changeType:function(val){
                 //优惠类型选择
@@ -701,7 +728,7 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = this.getTacticsId('1')
-                        item.discount = '';
+                        item.discount = item.discount|| ''
                         item.validEnd = this.formItem.endDate;
                         item.name = label;
                     }

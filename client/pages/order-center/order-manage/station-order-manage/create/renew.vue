@@ -779,8 +779,10 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
+                if(itemValue == 1){
+                 this.minDiscount = this.maxDiscount[label]
+                }
                 this.renewForm.items = items;
-                this.minDiscount = this.maxDiscount[label]
                 this.dealSaleInfo(false)
             },
             submitStation:function(){
@@ -815,7 +817,6 @@ import utils from '~/plugins/utils';
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
-                 console.log("9999999",this.renewForm.startDate)
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
                     leaseBegindate:this.renewForm.startDate,
@@ -957,7 +958,7 @@ import utils from '~/plugins/utils';
                         complete = false
 
                     }else{
-                        zhekou = this.dealzhekou(item.discount)
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
                 // this.saleAmount = 0;

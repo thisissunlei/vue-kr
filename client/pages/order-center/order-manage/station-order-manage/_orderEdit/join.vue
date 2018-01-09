@@ -553,7 +553,7 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        zhekou = this.dealzhekou(item.discount)
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
                 // this.saleAmount = 0;
@@ -829,7 +829,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
-                this.minDiscount = this.maxDiscount[label]
+                if(itemValue == 1){
+                    this.minDiscount = this.maxDiscount[label]
+                }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },

@@ -459,7 +459,7 @@ import utils from '~/plugins/utils';
                         _this.formItem.items = data.contractTactics;
                         _this.dealSaleInfo(true)
                     },700)
-                    // _this.getFloor = +new Date()
+                    _this.getFloor = +new Date()
                     
                     }, e => {
                         _this.$Notice.error({

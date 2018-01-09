@@ -13,15 +13,15 @@
             <!-- <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/> -->
             <output style="margin-left:15px" >{{scaleNumber}}</output>%
 		</div>
-		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>
+		<div id = "plan-map-content"  style ='width:100%;height:450px;border:1px solid #000'>
 
 		</div>
 	</div>
 </template>
 <style>
 	.plan-map-content{
-		width: 850px;
-		height: 500px;
+		width: 100%;
+		height: 450px;
 	}
 </style>
 <script>

@@ -188,14 +188,13 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="900"
+        width="90%"
        
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button> -->
         </div>
     </Modal>
 

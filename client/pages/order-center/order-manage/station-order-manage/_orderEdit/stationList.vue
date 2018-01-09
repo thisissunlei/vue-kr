@@ -182,7 +182,7 @@ import dateUtils from 'vue-dateutils';
                 let num = list.join(",").split(demo).length-1;
                 if(num != list.length){
                     this.$Notice.error({
-                        title:'不同选择不同时间段的工位'
+                        title:'工位原结束时间不一致，不可同时进行续租操作'
                     });
                     this.clearAllCheck()
                     return false;

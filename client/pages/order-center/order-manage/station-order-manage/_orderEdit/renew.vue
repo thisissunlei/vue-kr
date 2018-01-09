@@ -1060,6 +1060,7 @@ import utils from '~/plugins/utils';
                 };
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
+                     // _this.renewForm.items = r.data.saleList
                     _this.discountError = false;
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;

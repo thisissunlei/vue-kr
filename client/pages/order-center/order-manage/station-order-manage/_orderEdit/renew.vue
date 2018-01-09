@@ -95,7 +95,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" label-in-value @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'-'+index+'-'+i" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -402,14 +402,13 @@ import utils from '~/plugins/utils';
                             obj.validEnd = item.freeEnd;
                             obj.tacticsId = item.tacticsId ;
                             obj.discount = item.discountNum;
-                            let i = _this.youhui.filter((items,i)=>{
-                                if(items.tacticsName == item.tacticsName){
-                                    items.index = i;
+                           let i = _this.youhui.filter((items,i)=>{
+                                if(items.name == item.tacticsName){
                                     return true
                                 }
                                 return false
                             })
-                            obj.type = item.tacticsType+'-'+index+'-'+i[0].index;
+                            obj.type = item.tacticsType+'/'+index+'/'+i[0].name+'/'+i[0].id;
                             obj.tacticsType = JSON.stringify(item.tacticsType);
                             return obj;
                         })
@@ -758,8 +757,12 @@ import utils from '~/plugins/utils';
                 let value = val.value;
                 this.config()
                 let _this = this;
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
+                let itemValue = value.split('/')[0];
+                let itemIndex = value.split('/')[1];
+                let itemName = value.split('/')[2]
+                let itemId = value.split('/')[3]
+                this.renewForm.items[itemIndex].tacticsName = itemName;
+                this.renewForm.items[itemIndex].tacticsId = itemId;
                 this.renewForm.items[itemIndex].tacticsType = itemValue;
 
                 let items = [];
@@ -772,15 +775,12 @@ import utils from '~/plugins/utils';
                     }else if(item.tacticsType == 3){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
-                        item.tacticsId = this.getTacticsId(label)
+                        item.tacticsId = item.tacticsId || itemId;
                         item.discount = ''; 
-                        item.name = label
-                        
                     }else if(item.tacticsType == 1){
                         item.validStart=this.renewForm.startDate
-                        item.tacticsId = this.getTacticsId(label)
+                        item.tacticsId = item.tacticsId || itemId;
                          item.discount = item.discount|| ''
-                        item.name = label
                         item.validEnd = this.renewForm.endDate
                     }
                     return item;
@@ -899,7 +899,8 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
-                            obj.tacticsId = item.tacticsId;
+                            obj.id = item.tacticsId;
+                            obj.name = item.tacticsName;
                             if(item.tacticsType == 1){
                                 maxDiscount[item.tacticsName] = obj.discount;
                             }
@@ -969,6 +970,7 @@ import utils from '~/plugins/utils';
                 })
                 //检查手否有未填写完整的折扣项
                 let complete = true;
+                let zhekou = true;
                 saleList.map(item=>{
                     if(!item.tacticsType){
                         complete = false
@@ -981,7 +983,7 @@ import utils from '~/plugins/utils';
                         complete = false
 
                     }else{
-                        complete = this.dealzhekou(item.discount)
+                       zhekou = this.dealzhekou(item.discount)
                     }
                 });
                 this.saleAmount = 0;
@@ -994,6 +996,9 @@ import utils from '~/plugins/utils';
                 }
                 if(!complete && !show){
                     return ;
+                }
+                if(!zhekou && !show){
+                    return;
                 }
 
                 saleList = saleList.map(item=>{
@@ -1009,6 +1014,9 @@ import utils from '~/plugins/utils';
                 this.getSaleAmount(saleList)
             },
             dealzhekou(val){
+                if(!val){
+                    return false;
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;

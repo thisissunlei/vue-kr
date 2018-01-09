@@ -24,7 +24,7 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.id" 
+                            :value="''+item.id" 
                             :key="item.id"
                         >
                             {{ item.name }}
@@ -84,6 +84,7 @@
 <script>
 
     export default{
+        name:'HeighSearch',
         props: {
              mask: {
                 type: String
@@ -95,7 +96,6 @@
                 formItem:{
                    orderNum:'',
                    customerName:'',
-                   payStatus:'',
                    orderStatus:'',
                    orderType:'',
                    communityId:'',
@@ -104,12 +104,15 @@
                 },
                 type:this.mask=='join'?true:false,
                 orderList:[],
-                payList:[],
                 typeList:[],
                 communityList:[]
             }
         },
 
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
+        },
+        
         mounted:function(){
             this.getCommunity();
             this.getOrderList();
@@ -145,7 +148,6 @@
                 var _this=this;
                 this.$http.get('order-pay-list','',r => {
                     _this.orderList=r.data.orderTypeVos;
-                    _this.payList=r.data.payStatusVos;
                     _this.typeList=r.data.seatOrderTypeVos;
                 }, e => {
                     _this.$Notice.error({

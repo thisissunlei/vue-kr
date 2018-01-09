@@ -100,7 +100,7 @@
                    maxCTime:'',
                    minCTime:'',
                    serialNumber:'',
-                },this.params),
+                 },this.params),
                
                 type:this.mask=='join'?true:false,
                 //合同状态
@@ -124,6 +124,11 @@
                 communityList:[]
             }
         },
+
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
+        },
+
         mounted:function(){
             var _this = this;
             this.$http.get('join-bill-community','', r => {    

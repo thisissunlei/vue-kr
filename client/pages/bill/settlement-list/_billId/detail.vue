@@ -2,58 +2,59 @@
    <div class="g-order-detail">
 	<div class="m-detail-header">
 		<span class="u-border-left"/>
-		工位订单详情
+		客户撤场结算单
 	</div>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
-			<LabelText label="客户名称：">
+			<LabelText label="结算单编号：">
 			    {{basicInfo.customerName}}
+			</LabelText>
+			<LabelText label="服务尾期：">
+				{{ctime | dateFormat('YYYY-MM-dd')}}
+			</LabelText>
+			<LabelText label="客户名称：">
+				{{basicInfo.salerName}}
 			</LabelText>
 			<LabelText label="社区名称：">
 				{{basicInfo.communityName}}
 			</LabelText>
-			<LabelText label="销售人员：">
-				{{basicInfo.salerName}}
-			</LabelText>
-			<LabelText label="创建时间：">
-				{{ctime}}
-			</LabelText>
          </DetailStyle>
-         <DetailStyle info="租赁信息">
-			<LabelText label="租赁开始日期：">
-				{{startDate}}
-			</LabelText>
-			<LabelText label="租赁结束日期：">
-				{{endDate}}
-			</LabelText>
-			<LabelText label="分期方式：">
-				{{basicInfo.installmentTypeName}}
-			</LabelText>
-			<LabelText label="首付款日期：">
-				{{payDate}}
-			</LabelText>
-         </DetailStyle>
-         <DetailStyle info="金额信息">
-			<Table :columns="service" :data="serviceData"></Table>
-            <LabelText label="服务费总计：" style='font-weight:bold;'>
-				{{basicInfo.seatRentAmount}}  {{capitalService}}
-			</LabelText>
-            <Table :columns="treatment" :data="treatmentData"></Table>
-            <LabelText label="优惠总计：" style='font-weight:bold;'>
-				{{basicInfo.tactiscAmount}}  {{capitalTreatment}}
-			</LabelText>
-            <div>
-                <LabelText label="服务费总额：" style='color:red;'>
+
+         <DetailStyle info="结算信息">
+			<Table :columns="service" :data="serviceData" border></Table>
+            
+            <div >
+            	<LabelText label="用户余额：" class="amount-list">
+					{{basicInfo.seatRentAmount}} 
+				</LabelText>
+	            <LabelText label="在押履约保证金："class="amount-list">
+					{{basicInfo.tactiscAmount}} 
+				</LabelText>
+                <LabelText label="未结算总额：" class="amount-list">
                     {{basicInfo.rentAmount}}
                 </LabelText>
-                <LabelText label="履约保证金总额：" style='color:red;'>
+                <LabelText label="应退款金额：" class="amount-list" style="color:red">
                     {{basicInfo.depositAmount}}
                 </LabelText>
             </div>
 		</DetailStyle>
-		<DetailStyle info="相关合同">
-			<Table :columns="contract" :data="contractData"></Table>
+
+		<!-- <DetailStyle info="附件信息">
+			
+         </DetailStyle> -->
+
+		<DetailStyle info="操作记录">
+            <Table :columns="contract" :data="contractData" border></Table>
 		</DetailStyle>
+	</div>
+	<div class="m-detail-buttons">
+		
+		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
+		<Button type="primary" @click="upload" style="margin-left:8px">上传附件</Button>
+		<!-- //未生效时才可编辑 -->
+		<Button type="primary" @click="edit" style="margin-left:8px">编辑</Button>
+		<!-- 未生效并且有PDF才可显示 -->
+		<Button type="primary" @click="becomeEffective" :v-show="disabled" style="margin-left:8px">生效</Button>
 	</div>
 </div>	
 </template>
@@ -76,6 +77,7 @@ export default {
     },
 	data(){
 		return{
+			disabled:false,
 			basicInfo:{},
 
 			capitalService:'',
@@ -92,37 +94,15 @@ export default {
 
 			service:[
 				{
-				 title: '工位/房间编号',
+				 title: '费用名称',
                  key: 'seatName',
-                 align:'center'	
+                 align:'center'	,
+                 // width: 200,
 				},
-				{
-				 title: '标准单价(元/月)',
-                 key: 'originalPrice',
-                 align:'center'	
-                },
                 {
-				 title: '开始日期',
-                 key: 'startDate',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate));
-					 return time;
-				 }	
-                },
-                {
-				 title: '结束日期',
-                 key: 'endDate',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
-					 return time;
-				 }	
-                },
-                {
-				 title: '小计',
+				 title: '费用金额(元)',
                  key: 'originalAmount',
-                 align:'center'	
+                 align:'right'	
 				}
 			],
 
@@ -166,17 +146,18 @@ export default {
 			
             contract:[
                {
-				 title: '合同编号',
+				 title: '时间',
                  key: 'contractNum',
-                 align:'center'	
+                 align:'center'	,
 				},
 				{
-				 title: '合同金额',
+				 title: '账号',
                  key: 'rentAmount',
-                 align:'center'	
+                 align:'center',
+
 				},
 				{
-				 title: '状态',
+				 title: '详情',
                  key: 'orderStatusTypeName',
                  align:'center'	
 				}  
@@ -201,12 +182,12 @@ export default {
 				   _this.basicInfo=r.data;
 				   
 				   
-				   _this.ctime=r.data.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime)):'';
-				   _this.startDate=r.data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate)):'';
-				   _this.endDate=r.data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.endDate)):'';
-				   _this.payDate=r.data.firstPayTime?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.firstPayTime)):'';
-				   _this.capitalTreatment=r.data.tactiscAmount?utils.smalltoBIG(r.data.tactiscAmount):'';
-				   _this.capitalService=r.data.seatRentAmount?utils.smalltoBIG(r.data.seatRentAmount):'';
+				   _this.ctime=r.data.ctime;
+				   _this.startDate=r.data.startDate;
+				   _this.endDate=r.data.endDate
+				   _this.payDate=r.data.firstPayTime;
+				   _this.capitalTreatment=r.data.tactiscAmount;
+				   _this.capitalService=r.data.seatRentAmount;
 				   _this.serviceData=r.data.orderSeatDetailVo||[];
 				   _this.treatmentData=r.data.contractTactics||[];
 				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
@@ -215,6 +196,22 @@ export default {
                     title:e.message
                 });
         })
+	},
+	methods:{
+		becomeEffective(){
+
+		},
+		edit(){
+			let {params}=this.$route;
+            window.open(`/bill/settlement-list/${params.billId}/edit/`,params.billId);
+
+		},
+		download(){
+
+		},
+		upload(){
+
+		}
 	}
 }
 </script>
@@ -240,6 +237,16 @@ export default {
 			.ivu-table-wrapper{
 				margin-bottom:30px;
 			}
+		}
+		.m-detail-buttons{
+			margin-left: 40px;
+			margin-bottom: 40px;
+		}
+		.amount-list{
+			font-weight:bold;
+			display:block;
+			width:200px;
+			margin-left:auto;
 		}
 	}
 </style>

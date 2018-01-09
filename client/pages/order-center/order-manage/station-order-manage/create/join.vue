@@ -492,11 +492,12 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        zhekou = this.dealzhekou(item.discount)
+                        
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -554,8 +555,9 @@ import utils from '~/plugins/utils';
                 })
 
             },
-            changezhekou(val){
-                val = val.target.value;
+            changezhekou(value){
+
+                let val = value.target.value;
                 if(!val){
                     return
                 }
@@ -565,7 +567,6 @@ import utils from '~/plugins/utils';
                     return
                 }
                 if(val<this.minDiscount){
-                    console.log('val',val,this.minDiscount)
                     this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
@@ -711,7 +712,6 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
-                console.log('val',val)
                 //优惠类型选择
                 if(!val){
                     return;
@@ -774,7 +774,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
+                if(itemValue == 1){
                  this.minDiscount = this.maxDiscount[label]
+                }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
@@ -1062,7 +1064,6 @@ import utils from '~/plugins/utils';
                     }else{
                         list = []
                     }
-                    console.log('maxDiscount',maxDiscount)
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 
@@ -1093,7 +1094,6 @@ import utils from '~/plugins/utils';
                 if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
-                        console.log('get-station-amount',r)
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;

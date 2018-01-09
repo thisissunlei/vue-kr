@@ -814,7 +814,9 @@ import utils from '~/plugins/utils';
                     this.renewForm.items = items;
                     return;
                 }
-                this.minDiscount = this.maxDiscount[label]
+                if(itemValue == 1){
+                    this.minDiscount = this.maxDiscount[label]
+                }
                 this.renewForm.items = items;
                 this.dealSaleInfo(false)
             },
@@ -983,11 +985,11 @@ import utils from '~/plugins/utils';
                         complete = false
 
                     }else{
-                       zhekou = this.dealzhekou(item.discount)
+                       zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'

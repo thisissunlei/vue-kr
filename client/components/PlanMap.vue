@@ -21,7 +21,7 @@
 <style>
 	.plan-map-content{
 		width: 100%;
-		height: 450px;
+		height: 500px;
 	}
 </style>
 <script>

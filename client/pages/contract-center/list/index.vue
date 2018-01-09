@@ -38,9 +38,8 @@
             v-model="openSearch"
             title="高级搜索"
             width="660"
-            @on-ok='upperSubmit'
         >
-            <HeightSearch :params = "params" @:bindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" @bindData="upperChange" mask='join'></HeightSearch>
             <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -475,10 +474,8 @@
                 this.columnDetail = detail.row;
                 this.takeEffectSwitch()
             },
-            showSearch (params) {
-
-                this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
+            showSearch (params) {    
+                this.openSearch=!this.openSearch; 
             },
             openView(params){
                 window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  

@@ -71,11 +71,19 @@
         url=url+"?"+where.join('&');
         location.href=url;
     }
+
+    function arrayNoRepeat(array){
+            var res = array.filter(function(item, index, array){
+                return array.indexOf(item) === index;
+            })
+            return res;    
+    }
    
    export default{
       smalltoBIG,
       clearForm,
       commonExport,
       getRequest,
-      addParams
+      addParams,
+      arrayNoRepeat
    }

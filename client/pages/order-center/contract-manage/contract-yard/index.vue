@@ -12,23 +12,17 @@
                          <div class='lower-search'>
                             <span style='padding-right:10px'>合同编号</span>
                             <i-input 
-                                v-model="params.customerName" 
+                                v-model="params.serialNumber" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
                                 @keyup.enter.native="showKey($event)"
                             />
                         </div>
-                        <div class='m-search' @click="lowerSubmit">查询</div>
+                        <div class='m-search' @click="showKey">查询</div>
                    </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
-
-            <div class='list-footer'>
-                    <div style="float: right;">
-                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator/>
-                    </div>
-            </div>
+            <Table :columns="joinOrder" :data="joinData" border class='list-table' @on-selection-change="selectData"/>
 
             <Message 
                 :type="MessageType" 
@@ -40,10 +34,10 @@
             <Modal
                 v-model="openYard"
                 title="提示信息"
-                @on-ok="nullifySubmit"
+                @on-ok="yardSubmit"
                 width="500"
             >
-                <ContractYard/>
+                <ContractYard @bindData="bindYard"/>
             </Modal>
 
     </div>
@@ -67,28 +61,27 @@
             ContractYard
         },
         data () {    
-            return {     
-                id:'',
-                
-                totalCount:1,
+            return {   
+                selectId:[],
 
                 params:{
-                    page:1,
-                    pageSize:20,
-                    serialNumber:"",
+                    serialNumber:""
                 },
 
                 openYard:false,
-
                 openMessage:false,
-
                 warn:'',
-
                 MessageType:'',
-
-                joinData:[],
+                joinOldData:[],
+                joinData:[],   
+                yardData:{},
 
                 joinOrder: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '合同编号',
                         key: 'serialNumber',
@@ -150,19 +143,23 @@
             }
         },
 
-        created(){
-          var params=Object.assign({},{page:1,pageSize:20},this.$route.query);
-          this.getListData(params);
-          this.params=params;
-        },
-
         methods:{
             showKey: function (ev) {
-                this.lowerSubmit();
+                let param={
+                    serialNumber:ev.target.value,
+                }
+                let searchParams=Object.assign({},this.params,param);
+                 this.getListData(searchParams);
             },
 
             showYard(){
-               
+                if(this.selectId.length==0){
+                    this.$Notice.error({
+                        title:'请勾选归档合同'
+                    });
+                    return;
+                }
+                this.openYard=true;
             },
 
             showView(params){
@@ -170,26 +167,43 @@
             },
             
             getListData(params){
-                var _this=this;
-                 this.$http.get('contract-yard-list', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.joinData=r.data.items;
+                this.$http.get('contract-yard-list', params, r => {
+                    this.joinOldData.push(r.data.items);
+                    let data=utils.arrayNoRepeat(this.joinOldData);
+                    this.joinData=data.reverse();
                 }, e => {
-                    _this.openMessage=true;
-                    _this.MessageType="error";
-                    _this.warn=e.message;
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                }) 
+            },
+
+            selectData(params){
+                if(params.length!=0){
+                     let id=[];
+                     params.map((item,index)=>{
+                       id.push(item.id);
+                     })
+                    this.selectId=id;
+                }else{
+                    this.selectId=[]; 
+                }
+            },
+
+            bindYard(params){
+                this.yardData=params;
+            },
+
+            yardSubmit (){
+               let params=Object.assign({},this.yardData);
+               params.requestId=this.selectId;
+               this.$http.post('contract-batch-file', params, r => {
+                    
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
                 })   
-            },
-
-            changePage (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
-            },
-
-            lowerSubmit(){
-                this.params.page=1;
-                utils.addParams(this.params);
             },
 
             onChangeOpen(data){

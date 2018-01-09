@@ -177,7 +177,7 @@
          class-name="vertical-center-modal"
      >
      <div v-if="!stationListData.length">无可续租工位</div>
-        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData"
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
@@ -209,7 +209,7 @@ import utils from '~/plugins/utils';
              const validateFirst = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                } else if(new Date(this.renewForm.start)<new Date(value)){
                     callback(new Error('首付款日期不得晚于起始日期'));
                 }else{
                     callback()
@@ -282,7 +282,7 @@ import utils from '~/plugins/utils';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.end)))
                         }
                     },
                     {
@@ -382,7 +382,7 @@ import utils from '~/plugins/utils';
             },
             renewFormSubmit(){
                 this.config();
-                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let renewForm = {} 
@@ -735,7 +735,7 @@ import utils from '~/plugins/utils';
                 let items = [];
                 items = this.renewForm.items.map((item)=>{
                     if(item.tacticsType == 'qianmian'){
-                        item.validStart = this.renewForm.startDate;
+                        item.validStart = this.renewForm.start;
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
@@ -743,7 +743,7 @@ import utils from '~/plugins/utils';
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = item.tacticsId || itemId;
                     }else if(item.tacticsType == 1){
-                        item.validStart=this.renewForm.startDate
+                        item.validStart=this.renewForm.start
                         item.tacticsId = item.tacticsId || itemId
                         item.validEnd = this.renewForm.endDate
                         item.discount = item.discount|| ''
@@ -792,7 +792,7 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
-                var date = val[0].endDate;
+                var date = val[0].begin;
                 date = new Date(date).getTime();
                
                 let day = 1000 * 60* 60*24;
@@ -822,7 +822,7 @@ import utils from '~/plugins/utils';
                 })
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
-                    leaseBegindate:this.renewForm.startDate,
+                    leaseBegindate:this.renewForm.start,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
 
@@ -832,22 +832,32 @@ import utils from '~/plugins/utils';
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                         let list = [];
-                        list = r.data.seats.map(item=>{
+                        _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
                             money+=item.amount;
+                            obj.start = item.startDate
+                            obj.end = item.endDate
                             return obj;
-                        });
-                        _this.selecedStation = _this.selecedArr.map(item=>{
-                            list.map((value)=>{
-                                if(value.id == item.id){
-                                    item.originalAmount = value.originalAmount
-                                    item.start = value.startDate
-                                    item.endDate = startDate
-                                }
-                            })
-                            
-                            return item
                         })
+                        // list = r.data.seats.map(item=>{
+                        //     let obj = item;
+                        //     money+=item.amount;
+                        //     return obj;
+                        // });
+                        // _this.selecedStation = _this.selecedArr.map(item=>{
+                        //     list.map((value)=>{
+                        //         if(value.id == item.id){
+                        //             item.originalAmount = value.originalAmount
+                        //             item.start = value.startDate
+                        //             item.end = _this.renewForm.endDate
+                        //             item.endDate = startDate
+                        //             item.amount = value.amount
+                        //             item.originalAmount = value.originalAmount
+                        //         }
+                        //     })
+                            
+                        //     return item
+                        // })
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
@@ -1036,7 +1046,7 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:this.renewForm.startDate,
+                    leaseBegindate:this.renewForm.start,
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",this.renewForm.endDate),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)

@@ -2,7 +2,7 @@
 	<div>
 		<div>
 			<div @click = "switchList" style="cursor: pointer;">
-				合同附件
+				上传附件
 			</div>
 			<div class = "list-box" v-show = "isOpenList">
 				<div class="mask" @click = "switchList" ></div>

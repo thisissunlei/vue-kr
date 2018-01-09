@@ -341,7 +341,6 @@
                                     },
                                 },'44')
                                 ];
-                                console.log(params.row.contractStatus,"ppppp")
                                 if(params.row.contractStatus!=="CANCELLATION"){
                                     if(!params.row.isEffect){
                                         btnRender.push(h('Button', {

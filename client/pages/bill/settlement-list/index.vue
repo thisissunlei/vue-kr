@@ -1,12 +1,7 @@
 <template>
-    <div class='m-join-list'>
-            
+    <div class='m-settlement-list'>
+            <sectionTitle label="结算单管理"></sectionTitle>
             <div class='list-banner'>
-                    <div class='list-btn'>
-                        <Button type="primary" @click="showJoin" class='join-btn'>入驻</Button>
-                        <Button type="primary" @click="showRenew">续租</Button>
-                    </div>
-
                     <div class='list-search'>
                          <div class='lower-search'>
                             <span style='padding-right:10px'>客户名称</span>
@@ -45,13 +40,16 @@
             </Modal>
             
             <Modal
-                v-model="openNullify"
-                title="提示信息"
-                @on-ok="nullifySubmit"
-                width="500"
-            >
-                <Nullify/>
-            </Modal>
+            v-model="openTakeEffect"
+            title="合同生效"
+            width="660"
+        >
+            <div>合同是否生效?</div>
+            <div slot="footer">
+                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="takeEffectSwitch">取消</Button>
+            </div>
+        </Modal>
 
             <Message 
                 :type="MessageType" 
@@ -60,42 +58,35 @@
                 @changeOpen="onChangeOpen"
             />
 
-            <Modal
-                v-model="openApply"
-                title="提示信息"
-                @on-ok="applySubmit"
-                width="500"
-            >
-                <ApplyContract/>
-            </Modal>
 
     </div>
 </template>
 
 
 <script>
-    // import HeightSearch from './heightSearch';
-    // import Nullify from './nullify';
-    // import ApplyContract from './applyContract';
-    // import dateUtils from 'vue-dateutils';
-    // import utils from '~/plugins/utils';
+    import HeightSearch from './heightSearch';
+    import dateUtils from 'vue-dateutils';
+    import krUpload from '~/components/KrUpload.vue';
+    import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    
+    import sectionTitle from '~/components/sectionTitle';
 
     export default {
         name:'Join',
         components:{
-            // HeightSearch,
+            HeightSearch,
             // Nullify,
             Message,
             Buttons,
+            sectionTitle,
             // ApplyContract
         },
         data () {
             
             return {
                 openMessage:false,
+                openTakeEffect:false,
 
                 warn:'',
 
@@ -119,7 +110,6 @@
 
                 openSearch:false,
 
-                openNullify:false,
 
                 openApply:false,
 
@@ -127,7 +117,7 @@
 
                 joinOrder: [
                     {
-                        title: '订单编号',
+                        title: '结算单编号',
                         key: 'orderNum',
                         align:'center'
                     },
@@ -142,58 +132,12 @@
                         align:'center'
                     },
                     {
-                        title: '服务费总额',
+                        title: '退费金额',
                         key: 'rentAmount',
                         align:'center'
                     },
                     {
-                        title: '履约保证金',
-                        key: 'depositAmount',
-                        align:'center'
-                    },
-                    {
-                        title: '订单类型',
-                        key: 'orderType',
-                        align:'center',
-                        render(tag,params){
-                            var orderType={
-                               'IN':'入驻服务订单',
-                               'INCREASE':'增租服务订单',
-                               'CONTINUE':'续租服务订单'
-                            }
-                            for(var item in orderType){
-                                if(item==params.row.orderType){
-                                    return <span class="u-txt">{orderType[item]}</span>;
-                                }
-                            }
-                        }
-                    },
-                    {
-                        title: '订单状态',
-                        key: 'orderStatus',
-                        align:'center',
-                        render(tag, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废'
-                            }
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    var style={};
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                                }
-                            }
-                        }
-                    },
-                    {
-                        title: '创建时间',
+                        title: '生成日期',
                         key: 'ctime',
                         align:'center',
                         render(tag, params){
@@ -202,10 +146,48 @@
                         }
                     },
                     {
+                        title: '状态',
+                        key: 'orderStatus',
+                        align:'center',
+                        render(h, params){
+                            var orderStatus={
+                               'NOT_EFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'INVALID':'已作废',
+                               'INVALID':'已完成'
+                            }
+                            var style='';
+                            let status = ''
+                            for(var item in orderStatus){
+                                if(item==params.row.orderStatus){
+                                    
+                                    if(item=='NOT_EFFECTIVE'){
+                                        style='u-red';
+                                    }
+                                    if(item=='INVALID'){
+                                        style='u-nullify';
+                                    }
+                                    status = orderStatus[item] 
+                                }
+                            }
+                            return h('div', [
+                                h('span', {
+                                class:`u-txt ${style}`,                                    
+                                }, status)
+                            ]);
+                        }
+                    },
+                   
+                    {
                         title: '操作',
                         key: 'action',
                         align:'center',
                         render:(tag,params)=>{
+                             let arr = params.row.file||[];
+                            let newArr = []
+                            for(let i=0;i<arr.length;i++){
+                                newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
+                            }
                            var btnRender=[
                                tag(Buttons, {
                                    props: {
@@ -236,20 +218,17 @@
                                         }
                                     }
                                 }, '申请合同'),
-                                tag('Button', {
+                                tag(krUpload, {
                                     props: {
-                                        type: 'text',
-                                        size: 'small'
+                                        action:'//jsonplaceholder.typicode.com/posts/',
+                                        file: newArr,
+                                        columnDetail:params.row||{},
+                                        upUrl:this.urlUpLoad
                                     },
                                     style: {
                                         color:'#2b85e4'
                                     },
-                                    on: {
-                                        click: () => {
-                                            this.showNullify(params)
-                                        }
-                                    }
-                                }, '作废'),
+                                },'44'),
                                 tag('Button', {
                                     props: {
                                         type: 'text',
@@ -265,6 +244,25 @@
                                     }
                                 }, '编辑'))
                            }
+                           if(params.row.isEffect || !params.row.haveAttachment){
+                                        
+                                    
+                            // }else{
+                                btnRender.push( tag('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.contractFor(params)
+                                        }
+                                    }
+                                }, '合同生效'))
+                            }
                            return tag('div',btnRender);  
                         }
                     }
@@ -279,6 +277,52 @@
         },
 
         methods:{
+            urlUpLoad(detail,col){
+               
+                var _this = this;
+                this.$http.post("post-list-upload-url", {
+                    fileList:JSON.stringify(detail),
+                    requestId:col.requestId,
+                }, (response) => {
+                    // _this.$Notice.success({
+                    //     title:"合同已生效"
+                    // });
+                     _this.getListData(_this.params);
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
+            },
+            //合同生效
+            contractFor(detail){
+                this.columnDetail = detail.row;
+                this.takeEffectSwitch()
+            },
+            //合同生效开关
+            takeEffectSwitch(){
+                this.openTakeEffect = !this.openTakeEffect;
+            },
+            //生效确定
+            takeEffectSubmit(){
+                var that = this;
+                this.config();
+                var detail = Object.assign({},this.columnDetail);
+               
+                this.$http.post("post-contract-take-effect", {
+                    requestId:detail.requestId
+                }, (response) => {
+                    that.takeEffectSwitch();
+                    that.getListData(that.params);
+                    that.openMessage=true;
+                    that.MessageType=response.message=='ok'?"success":"error";
+                    that.warn="已合同生效！";
+                }, (error) => {
+                    that.$Notice.error({
+                        title:error.message
+                    });
+                })   
+            },
 
             showKey: function (ev) {
                 this.lowerSubmit();
@@ -289,34 +333,17 @@
                 utils.clearForm(this.upperData);
             },
             
-            showJoin(){
-                window.open('/order-center/order-manage/station-order-manage/create/join','join');
-            },
-
-            showRenew(){
-                window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
-            },
-
+            //申请合同
             showApply(params){
                 this.id=params.row.id;
                 this.openApply=true;
             },
-
+            // 查看
             showView(params){
-                var viewName='';
-                if(params.row.orderType=='CONTINUE'){
-                    viewName='renewView';  
-                }else{
-                    viewName='joinView';   
-                }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,params.row.id);
+                console.log('params',params)
+                window.open(`/bill/settlement-list/${params.row.id}/detail/`,params.row.id);
             },
-
-            showNullify(params){
-                this.id=params.row.id;
-                this.openNullify=true;
-            },
-
+            // 编辑
             showEdit(params){
                 let type = '';
                 switch (params.row.orderType){
@@ -335,16 +362,13 @@
                 }
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
             },
-
+            // 提示信息
             nullifySubmit (){
                 let params={
                     id:this.id
                 };
                  
                  this.$http.post('join-nullify', params,r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='作废成功';
                     this.getListData(this.params);
                 }, e => {
                     this.openMessage=true;
@@ -353,27 +377,12 @@
                 })
             },
 
-            applySubmit(){
-                let params={
-                    id:this.id
-                };
-                 this.$http.post('apply-contract', params, r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='申请成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })  
-            },
-
+            // 导出
             outSubmit (){
                 this.props=Object.assign({},this.props,this.params);
                 utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
-
+            // 列表基础数据
             getListData(params){
                 var _this=this;
                  this.$http.get('join-bill-list', params, r => {
@@ -386,22 +395,22 @@
                     _this.warn=e.message;
                 })   
             },
-
+            // 分页
             changePage (index) {
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
             },
-
+            // 搜索穿参
             lowerSubmit(){
                 utils.addParams(this.params);
             },
-
+            // 高级搜索数据
             upperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
             },
-
+            // 高级搜索提交
             upperSubmit(){
                 if(this.upperError){
                     return ;
@@ -422,7 +431,7 @@
 </script>
 
 <style lang='less' scoped>
-   .m-join-list{
+   .m-settlement-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;
@@ -436,7 +445,7 @@
             .list-search{
                 margin-bottom:10px;
                 display:inline-block;
-                width:80%;
+                width:100%;
                 text-align:right;
                 .lower-search{
                     display:inline-block;
@@ -478,4 +487,9 @@
      .u-nullify{
          text-decoration: line-through;
      }
+     .m-nullify{
+       padding: 30px;
+       font-size: 16px;
+       text-align: center;
+   }
 </style>

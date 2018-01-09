@@ -36,7 +36,9 @@
             label:String
         },
         data () {
-            return {};
+            return {
+                
+            };
         }
     }
 </script>

@@ -190,7 +190,7 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="900"
+        width="95%"
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation" :originStationList.sync="originStationList"></planMap>
@@ -1176,7 +1176,7 @@ import utils from '~/plugins/utils';
     }
 </script>
 <style lang="less"> 
-    .required-label{
+   .required-label{
     // padding:10px 0;
     font-size: 14px;
     position: relative;
@@ -1193,5 +1193,15 @@ import utils from '~/plugins/utils';
    .pay-error{
     color:#ed3f14;
    }
+   .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+   
    
 </style>

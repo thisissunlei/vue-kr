@@ -279,7 +279,7 @@ import utils from '~/plugins/utils';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                     {
@@ -831,11 +831,13 @@ import utils from '~/plugins/utils';
 
                 let day = 1000 * 60* 60*24;
                 let start =  date + day;
-                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+                this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
                 
             },
             getStationAmount(){
+                //工位原始结束日期，续租开始日期前一天
+                let startDate = '';
 
                 let val = this.selecedArr;
                 let _this = this;
@@ -845,8 +847,9 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
+                    startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
-                    obj.startDate = this.renewForm.startDate;
+                    obj.startDate = this.renewForm.start;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
@@ -859,13 +862,23 @@ import utils from '~/plugins/utils';
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
-                         _this.selecedStation = r.data.seats.map(item=>{
+                        let list = [];
+                        list = r.data.seats.map(item=>{
                             let obj = item;
-                            money+=item.originalAmount;
-                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
-                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            money+=item.amount;
                             return obj;
                         });
+                        _this.selecedStation = _this.selecedArr.map(item=>{
+                            list.map((value)=>{
+                                if(value.id == item.id){
+                                    item.originalAmount = value.originalAmount
+                                    item.start = value.startDate
+                                    item.endDate = startDate
+                                }
+                            })
+                            
+                            return item
+                        })
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)

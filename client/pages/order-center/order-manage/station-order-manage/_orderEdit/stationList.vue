@@ -95,8 +95,26 @@ import dateUtils from 'vue-dateutils';
 
         },
         methods: {
+              checkAllSelect(){
+                let result = false;
+                for(let i in this.checkAll){
+                    if(this.checkAll[i]){
+                       result = true
+                    }
+                }
+                return result
+            },
               handleCheckAll (index) {
                 if(!this.checkAll['seat'+index]){
+                    let result = this.checkAllSelect()
+                    if(result){
+                       this.$Notice.error({
+                            title:'工位原结束时间不一致，不可同时进行续租操作'
+                        });
+                        this.clearAllCheck()
+                        return false; 
+                    }
+                    console.log('checkAllSelect',result)
                     this.clearAllCheck();
                     this.checkAll['seat'+index] = true;
                 }else{

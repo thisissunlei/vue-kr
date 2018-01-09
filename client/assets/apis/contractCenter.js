@@ -1,5 +1,5 @@
 //订单管理-合同管理api
-module.exports = {
+export default {
     //获取合同列表
     'get-center-list-contract': {
         url: '/api/krspace-erp-web/wf/station/contract/enter/search',
@@ -47,7 +47,12 @@ module.exports = {
     },
     //合同扫码列表
     'contract-yard-list': {
-        url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
+        url: '/mockjsdata/60/api/krspace-erp-web/wf/station/contract/pigeonhole/search',
         method: 'get'
     },
+    //合同扫码-批量归档
+    'contract-batch-file': {
+        url: '/mockjsdata/60/api/krspace-erp-web/wf/station/contract/pigeonhole/update',
+        method: 'post'
+    }
 }

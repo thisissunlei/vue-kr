@@ -1,6 +1,8 @@
 <template>
     <div class='m-order-list'>
+
             <SectionTitle label = "合同扫码"/>
+
             <div  class='list-banner'>
                     <div class='list-btn'>
                         <Button type="primary" @click="showYard">批量归档</Button>
@@ -21,12 +23,12 @@
             </div>
 
             <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
+
             <div class='list-footer'>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator/>
                     </div>
             </div>
-
 
             <Message 
                 :type="MessageType" 
@@ -35,9 +37,17 @@
                 @changeOpen="onChangeOpen"
             />
 
+            <Modal
+                v-model="openYard"
+                title="提示信息"
+                @on-ok="nullifySubmit"
+                width="500"
+            >
+                <ContractYard/>
+            </Modal>
+
     </div>
 </template>
-
 
 <script>
     import dateUtils from 'vue-dateutils';
@@ -45,14 +55,16 @@
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
     import SectionTitle from '~/components/SectionTitle';
+    import ContractYard from './ContractYard';
     
 
     export default {
-        name:'Order',
+        name:'Yard',
         components:{
             Message,
             Buttons,
-            SectionTitle
+            SectionTitle,
+            ContractYard
         },
         data () {    
             return {     
@@ -63,8 +75,10 @@
                 params:{
                     page:1,
                     pageSize:20,
-                    customerName:"",
+                    serialNumber:"",
                 },
+
+                openYard:false,
 
                 openMessage:false,
 
@@ -76,33 +90,23 @@
 
                 joinOrder: [
                     {
-                        title: '订单编号',
-                        key: 'orderNum',
+                        title: '合同编号',
+                        key: 'serialNumber',
                         align:'center'
                     },
                     {
-                        title: '客户名称',
-                        key: 'customerName',
+                        title: '合同名称',
+                        key: 'lesseeName',
                         align:'center'
                     },
                     {
-                        title: '社区名称',
-                        key: 'communityName',
+                        title: '合同请求标题',
+                        key: 'title',
                         align:'center'
                     },
                     {
-                        title: '订单金额',
-                        key: 'money',
-                        align:'center'
-                    },
-                    {
-                        title: '订单类型',
-                        key: 'typeName',
-                        align:'center'
-                    },
-                    {
-                        title: '订单状态',
-                        key: 'statusName',
+                        title: '创建人',
+                        key: 'creatorName',
                         align:'center'
                     },
                     {
@@ -113,6 +117,11 @@
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.cTime));
                             return time;
                         }
+                    },
+                    {
+                        title: '归档状态',
+                        key: 'pigeonholedName',
+                        align:'center'
                     },
                     {
                         title: '操作',
@@ -157,12 +166,12 @@
             },
 
             showView(params){
-                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
+                window.open(`./${params.row.id}/view`,params.row.id);
             },
-
+            
             getListData(params){
                 var _this=this;
-                 this.$http.get('general-order-list', params, r => {
+                 this.$http.get('contract-yard-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                 }, e => {

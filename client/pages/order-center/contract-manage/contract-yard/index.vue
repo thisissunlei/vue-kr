@@ -204,6 +204,7 @@
                 display:inline-block;
                 width:80%;
                 text-align:right;
+                padding-right: 20px;
                 .lower-search{
                     display:inline-block;
                     margin:10px 20px;

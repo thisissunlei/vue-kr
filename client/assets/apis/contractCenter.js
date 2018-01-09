@@ -39,4 +39,15 @@ module.exports = {
         url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
         method: 'get'
     },
+
+    //合同扫码列表
+    'contract-yard-list': {
+        url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
+        method: 'get'
+    },
+    //合同扫码列表
+    'contract-yard-list': {
+        url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
+        method: 'get'
+    },
 }

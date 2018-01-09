@@ -495,8 +495,8 @@ import utils from '~/plugins/utils';
                         zhekou = this.dealzhekou(item.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -711,7 +711,6 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
-                console.log('val',val)
                 //优惠类型选择
                 if(!val){
                     return;

@@ -36,6 +36,25 @@
                 </Col>
 
                 <Col class="col">
+                    <FormItem label="费用明细类型" style="width:252px" prop='feeType'>
+                    <Select 
+                        v-model="formItem.feeType" 
+                        placeholder="请输入费用明细类型" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in freeList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                     </Select> 
+                    </FormItem>
+                </Col>
+
+                <Col class="col">
                    <Form-item label="订单金额" style="width:252px" prop="money">
                     <i-input 
                         v-model="formItem.money" 
@@ -57,12 +76,12 @@
                     </FormItem>
                 </Col>
 
-                <Col  class="col">
-                    <FormItem label="备注信息" prop="remark" style="width:702px">
-                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
-                      <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
-                    </FormItem>
-                </Col>
+                
+                <FormItem label="备注信息" prop="remark" style="width:702px">
+                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
+                    <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                </FormItem>
+                
             </Row>
 
             <FormItem>
@@ -106,15 +125,9 @@ export default {
 
                 disabled:false,
 
-                typeList:[
-                   {value:'REGISTER',label:'注册订单'},
-                   {value:'INCONSUME',label:'场内消费订单'},
-                   {value:'ACTIVITY',label:'活动订单'},
-                   {value:'ADVERT',label:'广告订单'},
-                   {value:'APPRECIATION6',label:'增值服务订单'},
-                   {value:'TRAIN',label:'培训订单'},  
-                   {value:'OTHER',label:'其他服务订单'}
-                ],
+                typeList:[],
+
+                freeList:[],
 
                 formItem: {
                     customerId: 1,
@@ -123,7 +136,8 @@ export default {
                     type:'',
                     remark:'',
                     salesperson:1,
-                    money:''
+                    money:'',
+                    feeType:''
                 },
 
                 ruleCustom:{
@@ -144,6 +158,9 @@ export default {
                     ],
                     type:[
                         { required: true, message: '请选择订单类型', trigger: 'change' }
+                    ],
+                    feeType:[
+                        { required: true, message: '请选择费用明细类型', trigger: 'change' }
                     ]
                 },
 
@@ -167,8 +184,9 @@ export default {
 
          mounted(){
             GLOBALSIDESWITCH("false");
+            this.getCommonData();
         },
-
+        
         methods: {
 
             joinFormSubmit(){
@@ -205,6 +223,17 @@ export default {
                         });
                     }
                 })
+            },
+
+            getCommonData(){
+               this.$http.get('general-common-list','', r => {
+                     this.typeList=r.data.ERP_BizType;
+                     this.freeList=r.data.ERP_FeeType;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })    
             },
 
             changeCommunity:function(value){

@@ -172,7 +172,7 @@
          class-name="vertical-center-modal"
      >
         <div v-if="!stationListData.length">无可续租工位</div>
-        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData" 
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
@@ -204,7 +204,7 @@ import utils from '~/plugins/utils';
             const validateFirst = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                } else if(new Date(this.renewForm.start)<new Date(value)){
                     callback(new Error('首付款日期不得晚于起始日期'));
                 }else{
                     callback()
@@ -279,7 +279,7 @@ import utils from '~/plugins/utils';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.end)))
                         }
                     },
                     {
@@ -358,6 +358,8 @@ import utils from '~/plugins/utils';
                         money += item.amount;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
@@ -376,7 +378,7 @@ import utils from '~/plugins/utils';
                     _this.renewForm.stationAmount = data.seatRentAmount;
                     _this.stationAmount = utils.smalltoBIG(data.seatRentAmount)
 
-                    _this.renewForm.startDate = data.startDate;
+                    _this.renewForm.start = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.selecedArr = data.orderSeatDetailVo;
                     // _this.renewForm.rentAmount = data.rentAmount;
@@ -436,7 +438,7 @@ import utils from '~/plugins/utils';
                     return;
                 }
                 let {params}=this.$route;
-                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -768,7 +770,7 @@ import utils from '~/plugins/utils';
                 let items = [];
                 items = this.renewForm.items.map((item)=>{
                     if(item.tacticsType == 'qianmian'){
-                        item.validStart = this.renewForm.startDate;
+                        item.validStart = this.renewForm.start;
                         item.discount = '';
                         item.name = label
                         item.tacticsId = this.getTacticsId()
@@ -778,7 +780,7 @@ import utils from '~/plugins/utils';
                         item.tacticsId = item.tacticsId || itemId;
                         item.discount = ''; 
                     }else if(item.tacticsType == 1){
-                        item.validStart=this.renewForm.startDate
+                        item.validStart=this.renewForm.start
                         item.tacticsId = item.tacticsId || itemId;
                          item.discount = item.discount|| ''
                         item.validEnd = this.renewForm.endDate
@@ -826,16 +828,18 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
-                var date = val[0].endDate;
+                var date = val[0].begin;
                 date = new Date(date).getTime();
 
                 let day = 1000 * 60* 60*24;
                 let start =  date + day;
-                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+                this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
                 
             },
             getStationAmount(){
+                //工位原始结束日期，续租开始日期前一天
+                let startDate = '';
 
                 let val = this.selecedArr;
                 let _this = this;
@@ -845,25 +849,26 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
+                    startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
-                    obj.startDate = this.renewForm.startDate;
+                    obj.startDate = this.renewForm.start;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
-                    leaseBegindate:this.renewForm.startDate,
+                    leaseBegindate:this.renewForm.start,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
-                         _this.selecedStation = r.data.seats.map(item=>{
+                        _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+=item.originalAmount;
-                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
-                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            money+=item.amount;
+                            item.start = value.startDate
+                            item.end = value.endDate
                             return obj;
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
@@ -1048,13 +1053,14 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
+                     // _this.renewForm.items = r.data.saleList
                     _this.discountError = false;
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;

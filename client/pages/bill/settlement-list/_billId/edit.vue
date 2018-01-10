@@ -10,7 +10,7 @@
 			    {{basicInfo.customerName}}
 			</LabelText>
 			<LabelText label="服务尾期：">
-				{{ctime | dateFormat('YYYY-MM-dd')}}
+				{{basicInfo.ctime | dateFormat('YYYY-MM-dd')}}
 			</LabelText>
 			<LabelText label="客户名称：">
 				{{basicInfo.salerName}}
@@ -21,6 +21,44 @@
          </DetailStyle>
 
          <DetailStyle info="结算信息">
+         	<Form :model="formItem">
+	         <Row style="margin-bottom:10px">  
+	            <Col class="col">
+	                <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
+	                <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+	            </Col>
+	         </Row>
+            <Row style="margin-top:30px">
+                    <Col span="3" class="discount-table-head"  >
+                        <Checkbox v-model="selectAll" @on-change="selectDiscount" ></Checkbox>
+                    </Col>
+                    <Col span="11" class="discount-table-head" >
+                       <span> 费用名称</span>
+                    </Col>
+                    <Col span="10" class="discount-table-head" >
+                        <span>费用金额</span>
+                    </Col>
+                </Row>
+                <FormItem
+                v-for="(item, index) in list"
+                :key="index"
+                style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
+                >
+            <Row v-show="item.show">
+                <Col span="3" class="discount-table-content" style="padding:0">
+                    <Checkbox v-model="item.select" :disabled="!item.edit"></Checkbox>
+                </Col>
+                <Col span="11"  class="discount-table-content">
+                   <span> {{item.name}}</span>
+                </Col>
+                <Col span="10"  class="discount-table-content" >
+                    <span>费用金额</span>
+                </Col>
+                      
+            </Row>
+        </FormItem>
+
+        </Form>
             
 		</DetailStyle>
 
@@ -37,7 +75,6 @@
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import utils from '~/plugins/utils';
-import dateUtils from 'vue-dateutils';
 
 export default {
 	components:{
@@ -46,102 +83,58 @@ export default {
 	},
 	head() {
         return {
-            title: '入驻详情'
+            title: '结算单详情'
         }
     },
 	data(){
 		return{
-			disabled:false,
 			basicInfo:{},
-
-			capitalService:'',
-
-			capitalTreatment:'',
-
-			ctime:'',
-
-			startDate:'',
-
-			endDate:'',
-
-			payDate:'',
-
-			service:[
+			list:[
 				{
-				 title: '费用名称',
-                 key: 'seatName',
-                 align:'center'	,
-                 // width: 200,
+					name:'客户余额',
+					amount:30000,
+					edit:false,
+					show:true
 				},
-                {
-				 title: '费用金额(元)',
-                 key: 'originalAmount',
-                 align:'right'	
-				}
+				{
+					name:'客户余额',
+					amount:30000,
+					edit:false,
+					show:true
+				},
+				{
+					name:'客户余额',
+					amount:30000,
+					edit:true,
+					show:true
+				},
+				{
+					name:'客户余额',
+					amount:30000,
+					show:true,
+					edit:false,
+				},
 			],
-
-			treatment:[
+			settlementOption:[
 				{
-				 title: '优惠类型',
-                 key: 'tacticsName',
-                 align:'center'	
+					value:'zhuozo',
+					label:'桌子'
 				},
 				{
-				 title: '开始日期',
-                 key: 'freeStart',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeStart));
-					 return time;
-				 }		
+					value:'zhuozo1',
+					label:'桌子1'
 				},
 				{
-				 title: '结束日期',
-                 key: 'freeEnd',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeEnd));
-					 return time;
-				 }		
+					value:'zhuozo2',
+					label:'桌子2'
 				},
 				{
-				 title: '折扣比例',
-                 key: 'discountNum',
-                 align:'center',
-				 render(tag, params){
-					 if(params.row.discountNum==0){
-						 return '-';
-					 }else{
-						 return params.row.discountNum
-					 }
-				 }		
-			   }
+					value:'zhuozo3',
+					label:'桌子3'
+				},
 			],
-			
-            contract:[
-               {
-				 title: '时间',
-                 key: 'contractNum',
-                 align:'center'	,
-				},
-				{
-				 title: '账号',
-                 key: 'rentAmount',
-                 align:'center',
-
-				},
-				{
-				 title: '详情',
-                 key: 'orderStatusTypeName',
-                 align:'center'	
-				}  
-			],
-
-			serviceData:[],
-
-			treatmentData:[],
-
-			contractData:[]
+			selectAll:false,
+			formItem:{}
 		}
 	},
 	
@@ -154,17 +147,6 @@ export default {
 		var _this=this;
 	     this.$http.get('join-bill-detail', from, r => {
 				   _this.basicInfo=r.data;
-				   
-				   
-				   _this.ctime=r.data.ctime;
-				   _this.startDate=r.data.startDate;
-				   _this.endDate=r.data.endDate
-				   _this.payDate=r.data.firstPayTime;
-				   _this.capitalTreatment=r.data.tactiscAmount;
-				   _this.capitalService=r.data.seatRentAmount;
-				   _this.serviceData=r.data.orderSeatDetailVo||[];
-				   _this.treatmentData=r.data.contractTactics||[];
-				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
            	}, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -172,6 +154,17 @@ export default {
         })
 	},
 	methods:{
+		handleAdd(){
+		//添加结算信息
+			this.list.push({
+				name:'',
+				amount:'',
+				show:true,
+				edit:true
+
+			})
+
+		},
 		becomeEffective(){
 
 		},
@@ -180,10 +173,19 @@ export default {
             window.open(`/bill/settlement-list/${params.billId}/edit/`,params.billId);
 
 		},
-		download(){
+		downSwitch(){
 
 		},
 		upload(){
+
+		},
+		deleteDiscount(){
+
+		},
+		selectDiscount(){
+
+		},
+		downLoad(){
 
 		}
 	}
@@ -222,5 +224,26 @@ export default {
 			width:200px;
 			margin-left:auto;
 		}
+		.discount-table-head{
+                background: #F5F6FA;
+                height:50px;
+                line-height:50px;
+                text-align:center;
+                font-weight: 500;
+                border:1px solid #e9eaec;
+                border-left:none;
+                border-right:none;
+                border-left:1px solid #e9eaec;
+                
+            }
+            .discount-table-content{
+                background: #fff;
+                padding:0 15px;
+                height:50px;
+                line-height:50px;
+                text-align:center;
+                border-left:1px solid #e9eaec;
+                border-bottom:1px solid #e9eaec;
+            }
 	}
 </style>

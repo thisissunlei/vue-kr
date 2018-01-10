@@ -241,10 +241,6 @@
                                 }
                             },params.row.otherAgreed),h('div', {
                                     style:{
-                                       
-                                      
-                                        // height:300+"px",
-                                        // background:"red"
                                         wordWrap:"break-word"
                                     },
                                     slot: 'content'
@@ -341,7 +337,6 @@
                                     },
                                 },'44')
                                 ];
-                                console.log(params.row.contractStatus,"ppppp")
                                 if(params.row.contractStatus!=="CANCELLATION"){
                                     if(!params.row.isEffect){
                                         btnRender.push(h('Button', {

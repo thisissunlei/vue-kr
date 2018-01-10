@@ -41,7 +41,7 @@
                         clearable
                     >
                         <Option 
-                            v-for="item in orderList" 
+                            v-for="item in statusList" 
                             :value="item.value" 
                             :key="item.value"
                          >
@@ -51,14 +51,14 @@
                 </Form-item>
                 <Form-item label="服务尾日" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.EndLastDay"
+                        v-model="formItem.StartLastDay"
                         type="date" 
                         placeholder="开始日期" 
                         style="width: 252px"
                     ></DatePicker>
                    <span class="u-date-txt">至</span>
                     <DatePicker 
-                        v-model="formItem.StartLastDay"
+                        v-model="formItem.EndLastDay"
                         type="date" 
                         placeholder="结束日期" 
                         style="width: 252px"
@@ -86,23 +86,6 @@
                 },this.params),
                
                 type:this.mask=='join'?true:false,
-                //合同状态
-                orderList:[
-                    
-                    {
-                        value:'UNENFORCED',
-                        label:'未生效'
-                    },
-                    {
-                        value:'EXECUTED',
-                        label:'已生效'
-                    },
-                    {
-                        value:'CANCELLATION',
-                        label:'已作废'
-                    }
-                ],
-                //合同类型
                 statusList:[],
                 communityList:[]
             }
@@ -117,7 +100,7 @@
                 });
             })
             this.$http.get('get-from-field-status','',r => {
-                _this.statusList = r.data.items;
+                _this.statusList = r.data;
             }, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -134,7 +117,8 @@
             }else{
                 this.dateError=false; 
             }
-            this.$emit('bindData', this.formItem,this.dateError);
+
+            this.$emit('fromFieldBindData', this.formItem,this.dateError);
         }
     }
 </script>

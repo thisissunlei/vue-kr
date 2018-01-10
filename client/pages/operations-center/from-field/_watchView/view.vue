@@ -19,7 +19,7 @@
 				{{detailData.cmtName}}
 			</LabelText>
             <LabelText label="服务尾日：">
-				{{detailData.detailData}}
+				{{detailData.lastDay| dateFormat('YYYY-MM-dd')}}
 			</LabelText>
          </DetailStyle>
 	</div>

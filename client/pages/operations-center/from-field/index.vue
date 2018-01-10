@@ -1,11 +1,8 @@
-
-
-
 <template>
     <div class="from-field-list">
-        <sectionTitle label = "合同"></sectionTitle>
+        <sectionTitle label = "撤场记录管理"></sectionTitle>
         <div style="padding:20px;padding-right:0;">
-            <Button type="primary" class='join-btn'>新建撤场</Button>
+            <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
             <div class="m-bill-search" @click="showSearch">
                 <span></span>   
             </div> 
@@ -24,14 +21,25 @@
         </div>
         <Modal
             v-model="openSearch"
-            title="其他约定"
+            title="高级查询"
             width="660"
         >
-            <HeightSearch :params = "params" @:bindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" @fromFieldBindData="upperChange" mask='join'></HeightSearch>
 
             <div slot="footer">
                 <Button type="primary" @click="submitSearch">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+            </div>
+        </Modal>
+         <Modal
+            v-model="openNewPage"
+            title="新建离场"
+            width="660"
+        >
+            <NewPage :params = "params" @bindData="upperChange" mask='join'></NewPage>
+            <div slot="footer">
+                <Button type="primary" @click="submitNewPage">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="showNewPage">取消</Button>
             </div>
         </Modal>
         <Message 
@@ -50,13 +58,16 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import HeightSearch from './HeightSearch'
+    import NewPage from './NewPage'
     export default {
         components: {
             sectionTitle,
             krUpload,
             Loading,
             Message,
-            HeightSearch
+            HeightSearch,
+            NewPage,
+           
         },
         head () {
             return {
@@ -71,6 +82,7 @@
                     pageSize:15,
                 },
                 MessageType:'',
+                openNewPage:false,
                 openMessage:false,
                 warn:'',
                 openDown:false,
@@ -113,7 +125,9 @@
                         align:'center',
                       
                         render:(h,params)=>{
-                           var btnRender=[
+                            var status = params.row.withdrawalStatus;
+
+                            var btnRender=[
                                h('Button', {
                                     props: {
                                         type: 'text',
@@ -127,7 +141,9 @@
                                             this.openView(params)
                                         }
                                     }
-                                }, '查看'), h('Button', {
+                                }, '查看')];
+                            if(status === "HAS_INITATE"){
+                                btnRender.push( h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -137,10 +153,11 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.downLoadClick(params)
+                                            this.invalidClick(params)
                                         }
                                     }
-                                }, '作废')];
+                                }, '作废'));
+                            }
                            return h('div',btnRender);  
                         }
                     }
@@ -164,6 +181,9 @@
 
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
+            },
+            showNewPage(){
+                this.openNewPage = !this.openNewPage;
             },
             openView(params){
                 window.open(`./from-field/${params.row.id}/view`,'_blank')  
@@ -190,6 +210,7 @@
            
             // 高级查询修改
             upperChange(params,error){
+                
                 this.upperError=error;
                 this.upperData=params;
             },
@@ -199,15 +220,29 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
-                this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
-                this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
+                this.params.StartLastDay=this.params.StartLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.StartLastDay)):'';
+                this.params.EndLastDay=this.params.EndLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.EndLastDay)):'';
                 utils.addParams(this.params);
 
             },
             onChangeOpen(data){
                 this.openMessage=data;
             },
-            
+            invalidClick(data){
+                var id = data.row.id;
+                var that = this;
+                this.$http.post('post-from-field-invalid', {id,id}, r => {
+                    utils.addParams(that.params);
+                   
+                }, e => {
+                    that.$Notice.error({
+                        title:e.message
+                    });
+                })   
+            },
+            submitNewPage(params){
+
+            }
         },
         
     }

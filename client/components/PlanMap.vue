@@ -1,5 +1,5 @@
 <template>
-	<div class = "plan-map-content">
+	<div class = "plan-map-content" :style="{height:page.height}">
 		<div class="num-type" style="margin-bottom:15px">
 			<Select v-model="newfloor" style="width:100px;margin-right:15px;" @on-change="floorsChange" placeholder="floor">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
@@ -10,18 +10,16 @@
 
 			<span class="til">当前比例：</span>
 			<Slider :v-model="scaleNumber"  :min="40" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
-            <!-- <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" @on-change="rangeSelect" style="vertical-align:middle"/> -->
             <output style="margin-left:15px" >{{scaleNumber}}</output>%
 		</div>
-		<div id = "plan-map-content"  style ='width:850px;height:450px;border:1px solid #000'>
+		<div id = "plan-map-content"  :style='stylePlan'>
 
 		</div>
 	</div>
 </template>
 <style>
 	.plan-map-content{
-		width: 850px;
-		height: 500px;
+		width: 100%;
 	}
 </style>
 <script>
@@ -57,6 +55,9 @@ import http from '~/plugins/http.js';
                 origin:this.originStationList,
                 showSlider:true,
                 stationArr:this.stationData,//提交父组件字段
+                page:{},//显示器的宽高
+                stylePlan:{
+                }
                 // stationAll:this.stationData//①创建props属性result的副本--myResult
 
             }
@@ -64,7 +65,8 @@ import http from '~/plugins/http.js';
         destroyed(){
         },
         mounted:function(){
-        	this.getData()
+        	this.getData();
+        	this.getPageWidthOrHeight()
         },
         updated:function(){
         },
@@ -94,6 +96,26 @@ import http from '~/plugins/http.js';
         	},
         },
         methods: {
+        	//获取屏幕的高度
+        	getPageWidthOrHeight(){
+
+				var page = {};
+				page.width = window.innerWidth;
+				page.height = window.innerHeight;
+				if(document.compatMode == 'CSS1Compat'){
+					page.width = document.documentElement.clientWidth;
+					page.height = document.documentElement.clientHeight;
+				}else{
+					page.width = document.body.clientWidth;
+					page.height = document.body.clientHeight;
+				}
+				this.page = Object.assign({},page)
+				this.stylePlan = {
+					width:'100%',
+					height:page.height-200+"px",
+					border:'1px solid #000'
+				}
+			},
 			//获取平面图基础数据
 			getData:function(){
 				let params = this.params;

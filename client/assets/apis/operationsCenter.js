@@ -11,5 +11,10 @@ export default {
     'get-from-field-status': {
         url: '/benDi/csr-with-drawal/status',
         method: 'get'
+    },
+    'post-from-field-invalid': {
+        url: '/benDi/cs-with-drawal/updateStatus',
+        method: 'get'
     }
+   
 }

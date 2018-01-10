@@ -1,9 +1,25 @@
 
+
+ 
     <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
+                <Form-item label="结算单编号"  class='bill-search-class'>
+                    <i-input 
+                        v-model="formItem.serialNumber" 
+                        placeholder="请输入结算单编号"
+                        style="width: 252px"
+                    ></i-input>
+                </Form-item>
+                <Form-item label="客户名称" class='bill-search-class'>
+                    <i-input 
+                        v-model="formItem.customName" 
+                        placeholder="请输入客户名称"
+                        style="width: 252px"
+                    ></i-input>
+                </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
                    <Select 
-                        v-model="formItem.cmtId" 
+                        v-model="formItem.communityName" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
@@ -18,24 +34,29 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="客户名称" class='bill-search-class'>
-                    <i-input 
-                        v-model="formItem.csrName" 
-                        placeholder="请输入客户名称"
+                <Form-item label="状态" class='bill-search-class'>
+                    <Select 
+                        v-model="formItem.contractStatus" 
+                        placeholder="请输入状态" 
                         style="width: 252px"
-                    ></i-input>
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in orderList" 
+                            :value="item.value" 
+                            :key="item.value"
+                         >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
                 </Form-item>
-               
-              
-               
-                <Form-item label="服务尾日" class="bill-search">
+                <Form-item label="生成日期" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.StartLastDay"
+                        v-model="formItem.minCTime"
                         type="date" 
-                        placeholder="开始日期" 
+                        placeholder="生成日期" 
                         style="width: 252px"
                     ></DatePicker>
-                  
              </Form-item>
             
          </Form>
@@ -49,16 +70,33 @@
             return{
                 dateError:false,
                 formItem:Object.assign({
-                   withdrawalNum:'',
-                   withdrawalStatus:'',
-                   csrName:'',
-                   cmtId:'',
-                   StartLastDay:'',
-                   EndLastDay:'',
+                   communityName:'',
+                   contractType:'',
+                   customName:'',
+                   maxCTime:'',
+                   minCTime:'',
+                   serialNumber:'',
                 },this.params),
                
                 type:this.mask=='join'?true:false,
-                statusList:[],
+                //合同状态
+                orderList:[
+                    
+                    {
+                        value:'UNENFORCED',
+                        label:'未生效'
+                    },
+                    {
+                        value:'EXECUTED',
+                        label:'已生效'
+                    },
+                    {
+                        value:'CANCELLATION',
+                        label:'已作废'
+                    }
+                ],
+                //合同类型
+                typeList:[],
                 communityList:[]
             }
         },
@@ -71,8 +109,8 @@
                      title:e.message
                 });
             })
-            this.$http.get('get-from-field-status','',r => {
-                _this.statusList = r.data;
+            this.$http.get('get-center-prepare-data','',r => {
+                _this.typeList = r.data.items;
             }, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -80,8 +118,8 @@
             })
         },
         updated:function(){
-            if(this.formItem.StartLastDay&&this.formItem.EndLastDay){
-                if(this.formItem.StartLastDay>this.formItem.EndLastDay){
+            if(this.formItem.minCTime&&this.formItem.maxCTime){
+                if(this.formItem.minCTime>this.formItem.maxCTime){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 
@@ -89,7 +127,6 @@
             }else{
                 this.dateError=false; 
             }
-
             this.$emit('bindData', this.formItem,this.dateError);
         }
     }

@@ -393,7 +393,7 @@
         },
         mounted(){
             this.onWindowSize();
-            this.tableHeight = document.documentElement.clientHeight-350;
+            this.tableHeight = document.documentElement.clientHeight-360;
             console.log(document.documentElement.clientHeight)
         },
         methods:{

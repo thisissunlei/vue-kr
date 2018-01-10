@@ -813,7 +813,7 @@ import utils from '~/plugins/utils';
                
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    // obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;

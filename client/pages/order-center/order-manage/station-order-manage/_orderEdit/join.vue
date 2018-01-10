@@ -1,6 +1,6 @@
 <template>
     <div class="create-new-order">
-        <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
+        <sectionTitle :label="'编辑'+orderType+'服务订单管理'"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
             <Row>  
@@ -355,7 +355,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '编辑入驻订单'
+                title: '编辑订单'
             }
         },
         components: {
@@ -401,6 +401,7 @@ import utils from '~/plugins/utils';
                 };
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
+                    _this.orderType = data.orderType=='INCREASE'?'增租':'入驻';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
                         obj.belongType = item.seatType;

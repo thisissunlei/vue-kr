@@ -71,7 +71,7 @@ export default {
 	},
 	head() {
         return {
-            title: '入驻详情'
+            title:'工位订单详情'
         }
     },
 	data(){

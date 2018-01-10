@@ -1,7 +1,15 @@
 //公共的api
-module.exports = {
+export default {
     'get-from-field-list': {
-        url: '/api/krspace-op-web/csr-with-drawal/list',
+        url: '/benDi/csr-with-drawal/list',
+        method: 'get'
+    },
+    'get-from-field-view': {
+        url: '/benDi/csr-with-drawal/show',
+        method: 'get'
+    },
+    'get-from-field-status': {
+        url: '/benDi/csr-with-drawal/status',
         method: 'get'
     }
 }

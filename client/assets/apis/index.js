@@ -1,10 +1,11 @@
 
-import OrderApi from './order.js';
-import OrderManageApi from './orderManage.js';
+import OrderApi from './order';
+import OrderManageApi from './orderManage';
 import ContractCenter from './contractCenter'
 import apiPublic from './apiPublic'
 import BillApi from './bill.js';
-import MemberApi from './member.js';
+import MemberApi from './member';
+import operationsCenter from './operationsCenter'
 
 export default {
   ...OrderApi,
@@ -12,5 +13,6 @@ export default {
   ...ContractCenter,
   ...apiPublic,
   ...BillApi,
-  ...MemberApi
+  ...MemberApi,
+  ...operationsCenter
 }

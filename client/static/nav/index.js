@@ -274,7 +274,7 @@
                 xhr.responseType = 'json';
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                        window.location.href = "/new/login.html";
+                        // window.location.href = "/new/login.html";
                         if (j_account_box.style.display == 'block') {
                             j_account_box.style.display = 'none';
                         }
@@ -356,7 +356,7 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {
-                    window.location = '/new/login.html';
+                    // window.location = '/new/login.html';
                     return;
                 }
                 callback(xhr.response)

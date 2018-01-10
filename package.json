@@ -42,9 +42,9 @@
     "nuxt": "1.0.0-rc11",
     "promise-polyfill": "7.0.0",
     "validate-commit-msg": "^2.14.0",
-    "vue": "2.5.13",
+    "vue": "^2.3.4",
     "vue-pdf": "3.1.0",
     "vue-server-renderer": "2.3.4",
-    "vue-template-compiler": "2.4.4"
+    "vue-template-compiler": "^2.4.4"
   }
 }

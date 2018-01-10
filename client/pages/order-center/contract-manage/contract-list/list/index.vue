@@ -292,7 +292,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
-                      
+                       fixed: 'right',
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []

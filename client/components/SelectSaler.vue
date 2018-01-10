@@ -29,7 +29,10 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:['value','onchange'],
+        props:{
+            onchange :Function,
+            value:String
+        },
         data () {
             return {
                 saler:'',

@@ -45,7 +45,6 @@
         var url = `${url}?${where.join('&')}`
         window.location.href = url;
     }
-
     //获取url的参数
     function getRequest() {
         var url = location.search; //获取url中"?"符后的字串
@@ -59,7 +58,6 @@
         }
         return theRequest;
     }
-
     //高级搜索时url上带参数
     function addParams(params){
         let path=window.location.href;
@@ -81,4 +79,3 @@
       getRequest,
       addParams
    }
-

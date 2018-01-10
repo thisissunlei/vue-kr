@@ -1,18 +1,3 @@
-<style lang="less"> 
-.vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
-   
-</style>
-
-
-
 <template>
     <div class="create-new-order">
        <sectionTitle label="新建减租服务订单管理"></sectionTitle>
@@ -459,3 +444,16 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+   
+</style>
+

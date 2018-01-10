@@ -1,30 +1,3 @@
-<style lang="less"> 
-   .select-station-list{
-    border:1px solid #e9eaec;
-    padding:10px;
-   }
-   .station-type{
-    padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-
-    }
-   }
-   .station-list{
-    max-height: 400px;
-    overflow: auto;
-   }
-</style>
-
-
-
 <template>
     <div class="station-list">
        <div class="station-type">{{label}}</div>
@@ -51,27 +24,41 @@ import dateUtils from 'vue-dateutils';
 
 
     export default {
-        props:['label','stationList','selecedStation'],
+        props:{
+            label:{
+                type: String,
+                required: true
+            },
+            stationList:{
+                type:Array,
+                required: true
+            },
+            // selecedStation:{
+            //     type:Array
+            // }
+        },
         data() {
             let selecedStation = []
-            if(this.selecedStation.length){
-                selecedStation = this.selecedStation.map(item=>{
-                    return item.name
-                })
-            }
+            // if(this.selecedStation.length){
+            //     selecedStation = this.selecedStation.map(item=>{
+            //         return item.name
+            //     })
+            // }
             let checkAll = {};
             let selectSeat = {};
             this.stationList.map((item,index)=>{
                 checkAll['seat'+index] = false;
-                item.value.map(value=>{
+                item.value.map(value=>{ 
+                    value.begin = value.begin || value.endDate;  
                     selectSeat['seat'+index+value.name] = false;
                 })
-                
+                return item;
             })
+            console.log('this.stationList=======',this.stationList)
            return{
             checkAll: checkAll,
             selectSeat:selectSeat,
-            selecedStations: selecedStation,
+            // selecedStations: selecedStation,
             selectionIndex:[]
            }
         },
@@ -108,8 +95,26 @@ import dateUtils from 'vue-dateutils';
 
         },
         methods: {
+              checkAllSelect(){
+                let result = false;
+                for(let i in this.checkAll){
+                    if(this.checkAll[i]){
+                       result = true
+                    }
+                }
+                return result
+            },
               handleCheckAll (index) {
                 if(!this.checkAll['seat'+index]){
+                    let result = this.checkAllSelect()
+                    if(result){
+                       this.$Notice.error({
+                            title:'工位原结束时间不一致，不可同时进行续租操作'
+                        });
+                        this.clearAllCheck()
+                        return false; 
+                    }
+                    console.log('checkAllSelect',result)
                     this.clearAllCheck();
                     this.checkAll['seat'+index] = true;
                 }else{
@@ -177,7 +182,7 @@ import dateUtils from 'vue-dateutils';
                 let num = list.join(",").split(demo).length-1;
                 if(num != list.length){
                     this.$Notice.error({
-                        title:'不同选择不同时间段的工位'
+                        title:'工位原结束时间不一致，不可同时进行续租操作'
                     });
                     this.clearAllCheck()
                     return false;
@@ -194,3 +199,28 @@ import dateUtils from 'vue-dateutils';
         }
     }
 </script>
+<style lang="less"> 
+   .select-station-list{
+    border:1px solid #e9eaec;
+    padding:10px;
+   }
+   .station-type{
+    padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+
+    }
+   }
+   .station-list{
+    max-height: 400px;
+    overflow: auto;
+   }
+</style>
+

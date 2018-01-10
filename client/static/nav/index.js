@@ -1263,7 +1263,7 @@
                     menuItems: [
                         {
                             primaryText: "合同列表",
-                            router: 'contract-center/list',
+                            router: 'order-center/contract-manage/contract-list/list',
                             type:'vue',
                             menuCode: 'iot_door_open_log',
                             //menuCode: 'fina_meeting_order_page'
@@ -1290,21 +1290,21 @@
                             primaryText: "已出账单管理",
                             router: 'bill/list',
                             type:'vue',
-                            menuCode: 'pay_created_bill_page'
+                            menuCode: 'order_seat_list'
                              //menuCode: 'pay_cerated_bill_page',
                         },
                         {
                             primaryText: "回款管理",
                             router: 'bill/payment',
                             type:'vue',
-                            menuCode: 'pay_payment_page'
+                            menuCode: 'order_seat_list'
                             // menuCode: 'iot_door_open_log',
                         },
                         {
                             primaryText: "应收管理",
                             router: 'bill/income',
                             type:'vue',
-                            menuCode: 'pay_income_page'
+                            menuCode: 'order_seat_list'
                             // menuCode: 'iot_door_open_log',
                         },
                         

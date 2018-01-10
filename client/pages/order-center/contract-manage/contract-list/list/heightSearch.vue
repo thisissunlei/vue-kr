@@ -1,20 +1,4 @@
-<style lang='less'>
-    .bill-search-class{
-        display:inline-block;
-        width:50%;
-        padding-left:32px;
-    }
-    .bill-search{
-        display:inline-block;
-        padding-left:32px;
-        .u-date-txt{
-            padding:0 25px;
-            font-size: 14px;
-            color: #666;
-        }
-    }
 
-</style> 
 
  
     <template>         
@@ -116,7 +100,7 @@
                    maxCTime:'',
                    minCTime:'',
                    serialNumber:'',
-                },this.params),
+                 },this.params),
                
                 type:this.mask=='join'?true:false,
                 //合同状态
@@ -140,6 +124,11 @@
                 communityList:[]
             }
         },
+
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
+        },
+
         mounted:function(){
             var _this = this;
             this.$http.get('join-bill-community','', r => {    
@@ -172,3 +161,20 @@
     }
 </script>
 
+<style lang='less'>
+    .bill-search-class{
+        display:inline-block;
+        width:50%;
+        padding-left:32px;
+    }
+    .bill-search{
+        display:inline-block;
+        padding-left:32px;
+        .u-date-txt{
+            padding:0 25px;
+            font-size: 14px;
+            color: #666;
+        }
+    }
+
+</style> 

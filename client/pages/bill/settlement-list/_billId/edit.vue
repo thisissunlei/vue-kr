@@ -49,10 +49,14 @@
                     <Checkbox v-model="item.select" :disabled="!item.edit"></Checkbox>
                 </Col>
                 <Col span="11"  class="discount-table-content">
-                   <span> {{item.name}}</span>
+                   	<span v-if="item.edit == false"> {{item.name}}</span>
+                  	<Select v-model="item.value" label-in-value @on-change="changeType" v-if="item.edit != false" style="width:200px">
+                            <Option v-for="(types,i) in settlementOption" :value="types.value+'/'+index" :key="types.value" >{{ types.label }}</Option>
+                    </Select>
                 </Col>
                 <Col span="10"  class="discount-table-content" >
-                    <span>费用金额</span>
+                    <span v-if="item.edit == false">{{item.amount}}</span>
+                    <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit != false" style="width:200px"></Input>
                 </Col>
                       
             </Row>
@@ -65,7 +69,7 @@
 	</div>
 	<div class="m-detail-buttons">
 		
-		<Button type="primary" @click="downLoad">确定</Button>
+		<Button type="primary" @click="submitForm">确定</Button>
         <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
 	</div>
 </div>	
@@ -100,12 +104,6 @@ export default {
 					name:'客户余额',
 					amount:30000,
 					edit:false,
-					show:true
-				},
-				{
-					name:'客户余额',
-					amount:30000,
-					edit:true,
 					show:true
 				},
 				{
@@ -185,8 +183,15 @@ export default {
 		selectDiscount(){
 
 		},
-		downLoad(){
+		submitForm(){
+			console.log('submitForm',this.list)
 
+		},
+		changeType(value){
+			console.log('value',value)
+		},
+		changeAmount(val){
+			console.log('changeAmount',val)
 		}
 	}
 }

@@ -78,7 +78,7 @@ import dateUtils from 'vue-dateutils';
 
                 if (this.checkAll) {
                     this.checkAllGroup = this.stationList.map(item=>{
-                        return item.name+item.orderSeatId
+                        return item.name+'/'+item.orderSeatId
                     })
                 } else {
                     this.checkAllGroup = [];

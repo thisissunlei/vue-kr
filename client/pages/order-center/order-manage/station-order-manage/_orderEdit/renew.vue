@@ -701,6 +701,7 @@ import utils from '~/plugins/utils';
                 return item;
                 });
                 this.renewForm.items = items;
+                this.discount = ''
                 this.selectDiscount(false)
                 this.dealSaleInfo(true)
 
@@ -774,12 +775,12 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.name = label
                         item.tacticsId = this.getTacticsId()
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3&& item.show){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = item.tacticsId || itemId;
                         item.discount = ''; 
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1&& item.show){
                         item.validStart=this.renewForm.start
                         item.tacticsId = item.tacticsId || itemId;
                          item.discount = item.discount|| ''
@@ -1060,7 +1061,7 @@ import utils from '~/plugins/utils';
                 };
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
-                     // _this.renewForm.items = r.data.saleList
+                     _this.renewForm.items =list
                     _this.discountError = false;
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;

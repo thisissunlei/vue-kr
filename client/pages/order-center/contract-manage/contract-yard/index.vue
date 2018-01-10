@@ -198,7 +198,10 @@
                let params=Object.assign({},this.yardData);
                params.requestId=this.selectId;
                this.$http.post('contract-batch-file', params, r => {
-                    
+                    this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='归档成功';
                 }, e => {
                     this.openMessage=true;
                     this.MessageType="error";

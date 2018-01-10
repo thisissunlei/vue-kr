@@ -71,12 +71,27 @@
         url=url+"?"+where.join('&');
         location.href=url;
     }
-
+    
+    //数组去重
     function arrayNoRepeat(array){
             var res = array.filter(function(item, index, array){
                 return array.indexOf(item) === index;
             })
             return res;    
+    }
+
+    //两个数组比较去重
+    function arrayCompare(array1,array2,param1,param2){
+          for(var i=0;i<array2.length;i++){
+            for(var j=0;j<array1.length;j++){
+                var middle1=param1?array1[j][param1]:array1[j];
+                var middle2=param2?array2[i][param2]:array2[i];
+                if(middle1==middle2){
+                    array1.splice(j,1);
+                }
+            }
+          }   
+          return  array1
     }
    
    export default{
@@ -85,5 +100,6 @@
       commonExport,
       getRequest,
       addParams,
-      arrayNoRepeat
+      arrayNoRepeat,
+      arrayCompare
    }

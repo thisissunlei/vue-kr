@@ -47,10 +47,13 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" @click="nullifySubmit" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
@@ -63,10 +66,13 @@
             <Modal
                 v-model="openApply"
                 title="提示信息"
-                @on-ok="applySubmit"
                 width="500"
             >
                 <ApplyContract/>
+                <div slot="footer">
+                    <Button type="primary" @click="applySubmit" :disabled="applyDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelApply">取消</Button>
+                </div>
             </Modal>
 
     </div>
@@ -96,6 +102,10 @@
             
             return {
                 openMessage:false,
+
+                nullDisabled:false,
+
+                applyDisabled:false,
 
                 warn:'',
 
@@ -300,7 +310,7 @@
 
             showApply(params){
                 this.id=params.row.id;
-                this.openApply=true;
+                this.cancelApply();
             },
 
             showView(params){
@@ -315,7 +325,7 @@
 
             showNullify(params){
                 this.id=params.row.id;
-                this.openNullify=true;
+                this.cancelNullify();
             },
 
             showEdit(params){
@@ -338,11 +348,25 @@
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
             },
 
+            cancelNullify(){
+                this.openNullify=!this.openNullify;
+                this.nullDisabled=false;
+            },
+
+            cancelApply(){
+                this.openApply=!this.openApply;
+                this.applyDisabled=false;
+            },
+
             nullifySubmit (){
                 let params={
                     id:this.id
                 };
-                 
+                 if(this.nullDisabled){
+                     return ;
+                 }
+                 this.nullDisabled=true;
+                 this.cancelNullify();
                  this.$http.post('join-nullify', params,r => {
                     this.openMessage=true;
                     this.MessageType="success";
@@ -359,6 +383,11 @@
                 let params={
                     id:this.id
                 };
+                if(this.applyDisabled){
+                    return ;
+                }
+                 this.applyDisabled=true;
+                 this.cancelApply();
                  this.$http.post('apply-contract', params, r => {
                     this.openMessage=true;
                     this.MessageType="success";

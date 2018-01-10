@@ -1,18 +1,16 @@
 <template>
     <div class='m-bill-wrap'>
-        <Tabs active-key="key1" @on-click='tabsClick' :animated="false">
-            <Tab-pane label="入驻订单" key="key1">   
-                <JoinList v-if='joinKey'></JoinList>
+        <Tabs :value="activeKey" :animated="false">
+            <Tab-pane label="入驻订单" name="key1">   
+                <JoinList></JoinList>
             </Tab-pane>
 
-            <Tab-pane label="减租订单" key="key2">
-                <ReduceList v-if='reduceKey'></ReduceList>
+            <Tab-pane label="减租订单" name="key2">
+                <ReduceList></ReduceList>
             </Tab-pane>
-
         </Tabs>    
     </div>
 </template>
-
 
 <script>
 import JoinList from './joinList';
@@ -22,8 +20,7 @@ export default {
    name:'List',
    data(){
        return {
-           joinKey:true,
-           reduceKey:false
+           activeKey:'key1'
        }
    },
    components:{
@@ -35,11 +32,10 @@ export default {
             title: '订单管理'
         }
     },
-    methods:{
-       tabsClick(key){
-           this.joinKey=key==0?true:false;
-           this.reduceKey=key==1?true:false;
-       } 
+    mounted(){
+       if(this.$route.query.mask=='reduce'){
+           this.activeKey='key2';
+       }
     }
  }
 </script>

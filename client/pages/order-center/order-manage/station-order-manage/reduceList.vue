@@ -279,10 +279,12 @@
             },
 
             showReduce(){
+                utils.addParams({mask:'reduce'});
                 window.open('/order-center/order-manage/station-order-manage/create/reduce','reduce')
             },
 
             showEdit(params){
+                utils.addParams({mask:'reduce'});
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,params.row.id)
             },
 

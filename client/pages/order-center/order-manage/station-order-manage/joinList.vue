@@ -289,10 +289,12 @@
             },
             
             showJoin(){
+                utils.addParams({mask:''});
                 window.open('/order-center/order-manage/station-order-manage/create/join','join');
             },
 
             showRenew(){
+                utils.addParams({mask:''});
                 window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
             },
 
@@ -317,6 +319,7 @@
             },
 
             showEdit(params){
+                utils.addParams({mask:''});
                 let type = '';
                 switch (params.row.orderType){
                     case 'IN':

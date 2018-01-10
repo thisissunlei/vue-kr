@@ -27,7 +27,7 @@
             :columns="columns" 
             :data="detail" 
             style="margin:20px"
-            height="200" 
+            :height="tableHeight<200?200:tableHeight" 
         ></Table>
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
@@ -141,7 +141,7 @@
                     pageSize:15,
                 },
                 newWin:'',
-
+                tableHeight:300,
                 MessageType:'',
                 openMessage:false,
                 warn:'',
@@ -393,6 +393,8 @@
         },
         mounted(){
             this.onWindowSize();
+            this.tableHeight = document.documentElement.clientHeight-350;
+            console.log(document.documentElement.clientHeight)
         },
         methods:{
             config:function(){

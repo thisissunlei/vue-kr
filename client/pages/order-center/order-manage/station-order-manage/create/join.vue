@@ -114,7 +114,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" label-in-value @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'-'+index+'-'+i" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -188,14 +188,12 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="900"
-       
+        width="90%"
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button> -->
         </div>
     </Modal>
 
@@ -479,6 +477,7 @@ import utils from '~/plugins/utils';
                 })
                 //检查手否有未填写完整的折扣项
                 let complete = true;
+                let zhekou = true;
                 saleList.map(item=>{
                      if(item.tacticsType == '1' && this.discount){
                         item.discount = this.discount
@@ -493,11 +492,12 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        complete = this.dealzhekou(item.discount)
+                        
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -509,8 +509,10 @@ import utils from '~/plugins/utils';
 
                     return;
                 }
+                if(!zhekou && !show ){
+                    return;
+                }
                 
-
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     if(item.tacticsType=='3'){
@@ -539,6 +541,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
+                    _this.formItem.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -553,8 +556,9 @@ import utils from '~/plugins/utils';
                 })
 
             },
-            changezhekou(val){
-                val = val.target.value;
+            changezhekou(value){
+
+                let val = value.target.value;
                 if(!val){
                     return
                 }
@@ -664,6 +668,7 @@ import utils from '~/plugins/utils';
                     return item;
                 });
                 this.formItem.items = items;
+                this.discount = ''
                 this.selectDiscount(false);
                 this.dealSaleInfo(true)
 
@@ -680,6 +685,9 @@ import utils from '~/plugins/utils';
 
             },
             dealzhekou(val){
+                if(!val){
+                    return false
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
@@ -706,7 +714,6 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
-                console.log(val)
                 //优惠类型选择
                 if(!val){
                     return;
@@ -714,27 +721,28 @@ import utils from '~/plugins/utils';
                 let label = val.label;
                 let value = val.value
                 this.config()
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
+                let itemValue = value.split('/')[0];
+                let itemIndex = value.split('/')[1];
+                let itemName = value.split('/')[2]
+                let itemId = value.split('/')[3]
                 this.formItem.items[itemIndex].tacticsType = itemValue;
+                this.formItem.items[itemIndex].tacticsName = itemName;
+                this.formItem.items[itemIndex].tacticsId = itemId;
                 let items = [];
-
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart= item.startDate || ''
                         item.validEnd = this.formItem.endDate
-                        item.tacticsId = this.getTacticsId(label)
-                        item.name = label;
+                        item.tacticsId = item.tacticsId || itemId;
                         item.discount = '';
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.formItem.startDate
-                        item.tacticsId = this.getTacticsId(label)
+                        item.tacticsId = item.tacticsId || itemId
                         item.discount = item.discount|| ''
                         item.validEnd = this.formItem.endDate;
-                        item.name = label;
                     }
                     return item;
                 })
@@ -767,7 +775,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
+                if(itemValue == 1){
                  this.minDiscount = this.maxDiscount[label]
+                }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
@@ -894,6 +904,7 @@ import utils from '~/plugins/utils';
                     index: this.index,
                     status: 1,
                     show:true,
+                    discount:''
                 });
             },
             selectDeposit:function(value){
@@ -1045,6 +1056,8 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
+                            obj.id = item.tacticsId;
+                            obj.name = item.tacticsName;
                             if(item.tacticsType == 1){
                                 maxDiscount[item.tacticsName] = obj.discount;
                             }
@@ -1053,7 +1066,6 @@ import utils from '~/plugins/utils';
                     }else{
                         list = []
                     }
-                    console.log('maxDiscount',maxDiscount)
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 
@@ -1084,7 +1096,6 @@ import utils from '~/plugins/utils';
                 if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
-                        console.log('get-station-amount',r)
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;

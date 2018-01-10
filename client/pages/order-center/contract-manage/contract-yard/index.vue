@@ -163,7 +163,7 @@
             },
 
             showView(params){
-                window.open(`./${params.row.id}/view`,params.row.id);
+                window.open(`./${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,params.row.id);
             },
             
             getListData(params){

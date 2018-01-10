@@ -1263,7 +1263,7 @@
                     menuItems: [
                         {
                             primaryText: "合同列表",
-                            router: 'order-center/contract-manage/contract-list',
+                            router: 'order-center/contract-manage/contract-list/list',
                             type:'vue',
                             menuCode: 'iot_door_open_log',
                             //menuCode: 'fina_meeting_order_page'

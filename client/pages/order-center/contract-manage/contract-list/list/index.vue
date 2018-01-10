@@ -27,6 +27,7 @@
             :columns="columns" 
             :data="detail" 
             style="margin:20px"
+            height="200" 
         ></Table>
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
@@ -688,6 +689,8 @@
         .ivu-tooltip-inner{
             white-space: normal;
         }
-         
+        .ivu-table-fixed-right{
+            
+        }
      }
 </style>

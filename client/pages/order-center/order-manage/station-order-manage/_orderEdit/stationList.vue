@@ -109,7 +109,7 @@ import dateUtils from 'vue-dateutils';
                     let result = this.checkAllSelect()
                     if(result){
                        this.$Notice.error({
-                            title:'工位原结束时间不一致，不可同时进行续租操作'
+                            title:'工位原结束时间不同，不可同时进行续租'
                         });
                         this.clearAllCheck()
                         return false; 
@@ -182,7 +182,7 @@ import dateUtils from 'vue-dateutils';
                 let num = list.join(",").split(demo).length-1;
                 if(num != list.length){
                     this.$Notice.error({
-                        title:'工位原结束时间不一致，不可同时进行续租操作'
+                        title:'工位原结束时间不同，不可同时进行续租'
                     });
                     this.clearAllCheck()
                     return false;

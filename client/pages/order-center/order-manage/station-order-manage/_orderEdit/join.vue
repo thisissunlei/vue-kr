@@ -598,6 +598,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
+                    _this.formItem.items = list;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
@@ -721,6 +722,7 @@ import utils from '~/plugins/utils';
                 return item;
                 });
                 this.formItem.items = items;
+                this.discount = ''
                 this.selectDiscount(false);
                 this.dealSaleInfo(true)
 
@@ -787,12 +789,12 @@ import utils from '~/plugins/utils';
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
                         item.name = label;
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart=item.validStart || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = '';
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = item.discount || '';

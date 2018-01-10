@@ -666,6 +666,7 @@ import utils from '~/plugins/utils';
                 return item;
                 });
                 this.renewForm.items = items;
+                this.discount = ''
                 this.selectDiscount(false)
                 this.dealSaleInfo(true)
 
@@ -738,11 +739,11 @@ import utils from '~/plugins/utils';
                         item.validStart = this.renewForm.start;
                         item.discount = '';
                         item.tacticsId = this.getTacticsId()
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = item.tacticsId || itemId;
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.renewForm.start
                         item.tacticsId = item.tacticsId || itemId
                         item.validEnd = this.renewForm.endDate
@@ -812,7 +813,7 @@ import utils from '~/plugins/utils';
                
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    // obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
@@ -1054,12 +1055,11 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
                     _this.discountError = false;
+                    _this.renewForm.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
-
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
-                    console.log('rentAmount',_this.renewForm.rentAmount)
                 }, e => {
                     _this.disabled = true;
                    _this.discountError = e.message;

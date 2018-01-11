@@ -27,6 +27,7 @@
             :columns="columns" 
             :data="detail" 
             style="margin:20px"
+            :height="tableHeight<200?200:tableHeight" 
         ></Table>
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
@@ -142,6 +143,7 @@
                 newWin:'',
                 effectDisabled:false,
                 describeDisabled:false,
+                tableHeight:200,
                 MessageType:'',
                 openMessage:false,
                 warn:'',
@@ -293,7 +295,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
-                      
+                       fixed: 'right',
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []
@@ -393,6 +395,8 @@
         },
         mounted(){
             this.onWindowSize();
+            this.tableHeight = document.documentElement.clientHeight-360;
+            console.log(document.documentElement.clientHeight)
         },
         methods:{
             config:function(){
@@ -697,6 +701,8 @@
         .ivu-tooltip-inner{
             white-space: normal;
         }
-         
+        .ivu-table-fixed-right{
+            
+        }
      }
 </style>

@@ -65,9 +65,9 @@ export default {
     url: '/api/krspace-finance-web/order/common/cancel',
     method: 'post'
   },
-  //通用订单枚举列表
+  //通用订单类型枚举列表
   'general-common-list': {
-    url: '/api/krspace-erp-web/dict/common',
+    url: '/api/krspace-finance-web/dict/common',
     method: 'get'
   }
   

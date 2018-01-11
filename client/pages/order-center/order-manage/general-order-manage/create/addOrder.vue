@@ -226,8 +226,7 @@ export default {
 
             getTypeData(){
                this.$http.get('general-common-list','', r => {
-                     this.typeList=r.data.ERP_BizType;
-                     this.freeList=r.data.ERP_FeeType;
+                     this.typeList=r.data.BizType;
                 }, e => {
                      this.$Notice.error({
                         title:e.message

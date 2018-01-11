@@ -30,7 +30,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                    </Select> 
                  </FormItem>
@@ -50,7 +50,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                      </Select> 
                     </FormItem>

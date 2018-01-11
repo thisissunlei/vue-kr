@@ -1,6 +1,6 @@
 const envs = {
     'development':{
-        'op':'http://optest02.krspace.cn',
+        'op':'http://optest.krspace.cn',
         'local':'http://local.krspace.cn',
         'app':'http://apptest.krspace.cn',
     },

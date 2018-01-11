@@ -342,7 +342,7 @@
     //获取后台权限数据
     GlobalNav.prototype.getNavData = function () {
         var that = this;
-        this.http('GET', "http://optest02.krspace.cn/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
+        this.http('GET', "/api/krspace-sso-web/sso/sysOwn/findUserData?forceUpdate=1", function (response) {
             menuCode = response.data.menusCode;
             var user = response.data.userInfo;
             window.resourcesCode=response.data.resourcesCode;

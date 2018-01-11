@@ -10,14 +10,5 @@
         确定要作废此订单吗？
     </div>       
 </template>
-<script>
-    export default{
-        name:'nullify',
-        data (){
-            return{
-               
-            }
-        }
-    }
-</script>
+
 

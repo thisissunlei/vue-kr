@@ -14,7 +14,7 @@
 
 <template>
     <div class="com-select-community">
-         <Select
+         <!-- <Select
             :v-model="test.communityId"
 
             filterable
@@ -25,6 +25,9 @@
             :loading="loading1"
             @on-change="changeContent">
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+        </Select> -->
+        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value">
+            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -55,19 +58,19 @@ import http from '~/plugins/http.js';
                 this.onchange(value)
             },
 
-            remoteMethod1 (query) {
+            // remoteMethod1 (query) {
 
-                if (query !== '') {
-                    this.loading1 = true;
-                    setTimeout(() => {
-                        this.loading1 = false;
-                        this.getCusomerList(query)
-                    }, 200);
-                } else {
-                    this.getCusomerList(' ')
+            //     if (query !== '') {
+            //         this.loading1 = true;
+            //         setTimeout(() => {
+            //             this.loading1 = false;
+            //             this.getCusomerList(query)
+            //         }, 200);
+            //     } else {
+            //         this.getCusomerList(' ')
 
-                }
-            },
+            //     }
+            // },
             getCusomerList:function(name){
                 let params = {
                     communityName:name

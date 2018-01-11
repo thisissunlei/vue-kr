@@ -6,13 +6,13 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :value="customerName"/>
+                      <selectCustomers name="formItem.customerId" :value="customerName" disabled/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test='formItem' :value="communityName"/>
+                      <selectCommunities test='formItem' :value="communityName" disabled/>
                     </FormItem>
                 </Col>
 
@@ -68,7 +68,7 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson"  :value="salespersonName"/>
+                    <SelectSaler name="formItem.salesperson"  :value="salespersonName" disabled/>
                     </FormItem>
                 </Col>
 

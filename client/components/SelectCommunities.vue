@@ -23,6 +23,7 @@
 
             :remote-method="remoteMethod1"
             :loading="loading1"
+            :disabled="disabled"
             @on-change="changeContent">
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
@@ -36,7 +37,7 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:['test','onchange','value'],
+        props:['test','onchange','value','disabled'],
         data () {
             return {
                 community:'',

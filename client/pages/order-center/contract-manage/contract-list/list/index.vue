@@ -27,6 +27,7 @@
             :columns="columns" 
             :data="detail" 
             style="margin:20px"
+            :height="tableHeight<200?200:tableHeight" 
         ></Table>
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
@@ -53,7 +54,7 @@
         >
             <div>合同是否生效?</div>
             <div slot="footer">
-                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="primary" @click="takeEffectSubmit" :disabled="effectDisabled">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="takeEffectSwitch">取消</Button>
             </div>
         </Modal>
@@ -66,7 +67,7 @@
             <Input v-model="otherAgreed" :maxlength="999" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
             <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div>
             <div slot="footer">
-                <Button type="primary" @click="describeSubmit">确定</Button>
+                <Button type="primary" @click="describeSubmit" :disabled="describeDisabled">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
             </div>
         </Modal>
@@ -140,7 +141,9 @@
                     pageSize:15,
                 },
                 newWin:'',
-
+                effectDisabled:false,
+                describeDisabled:false,
+                tableHeight:200,
                 MessageType:'',
                 openMessage:false,
                 warn:'',
@@ -292,7 +295,7 @@
                         key: 'action',
                         align:'center',
                         width: 150,
-                      
+                       fixed: 'right',
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []
@@ -392,6 +395,8 @@
         },
         mounted(){
             this.onWindowSize();
+            this.tableHeight = document.documentElement.clientHeight-360;
+            console.log(document.documentElement.clientHeight)
         },
         methods:{
             config:function(){
@@ -419,11 +424,15 @@
                 var that = this;
                 this.config();
                 var detail = Object.assign({},this.columnDetail);
-               
+                
+                 if(this.effectDisabled){
+                     return ;
+                 }
+                 this.effectDisabled=true;
+                 that.takeEffectSwitch();
                 this.$http.post("post-contract-take-effect", {
                     requestId:detail.requestId
                 }, (response) => {
-                    that.takeEffectSwitch();
                     that.getListData(that.params);
                     that.openMessage=true;
                     that.MessageType=response.message=='ok'?"success":"error";
@@ -451,13 +460,17 @@
                 this.config();
                 var colDetail = Object.assign({},this.columnDetail);
                 var describeData = Object.assign({},this.describeData);
-               
+
+                if(this.describeDisabled){
+                     return ;
+                 }
+                 this.describeDisabled=true;
+                 that.describeSwitch();
                 this.$http.post("post-contract-other-convention", {
                     requestId:colDetail.requestId,
                     otherAgreed:this.otherAgreed||''
                     
                 }, (response) => {
-                    that.describeSwitch();
                     that.getListData(this.params);
                      that.$Notice.success({
                         title:"提交成功！"
@@ -688,6 +701,8 @@
         .ivu-tooltip-inner{
             white-space: normal;
         }
-         
+        .ivu-table-fixed-right{
+            
+        }
      }
 </style>

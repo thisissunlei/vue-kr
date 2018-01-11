@@ -1,11 +1,11 @@
 <template>
     <div class='m-bill-wrap'>
-        <Tabs :value="activeKey" :animated="false">
-            <Tab-pane label="入驻订单" name="key1">   
+        <Tabs :value="activeKey" @on-click='tabsClick' :animated="false">
+            <Tab-pane label="入驻订单" name="join">   
                 <JoinList></JoinList>
             </Tab-pane>
 
-            <Tab-pane label="减租订单" name="key2">
+            <Tab-pane label="减租订单" name="reduce">
                 <ReduceList></ReduceList>
             </Tab-pane>
         </Tabs>    
@@ -20,7 +20,7 @@ export default {
    name:'List',
    data(){
        return {
-           activeKey:'key1'
+           activeKey:'join',
        }
    },
    components:{
@@ -32,9 +32,14 @@ export default {
             title: '订单管理'
         }
     },
+    methods:{
+        tabsClick(key){
+           sessionStorage.setItem('orderMask',key);
+        }
+    },
     mounted(){
        if(this.$route.query.mask=='reduce'){
-           this.activeKey='key2';
+            this.activeKey=sessionStorage.getItem('orderMask');
        }
     }
  }

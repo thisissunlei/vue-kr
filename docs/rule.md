@@ -8,7 +8,8 @@
 独立的、可复用的、微小的和可测试的。
 
 如果你的组件做了太多的事或是变得臃肿,请将其拆分成更小的组件并保
-持单一的原则。一般来说，尽量保证每一个文件的代码行数不要超过100 行。也请保证组件可独立的运行。比较好的做法是增加一个单独的demo示例。
+持单一的原则。一般来说，尽量保证每一个文件的代码行数不要超过100行。
+也请保证组件可独立的运行。比较好的做法是增加一个单独的demo示例。
 
 ```
 
@@ -241,6 +242,7 @@
 文件中进行说明。
 
 ```
+
 
 
 
@@ -482,8 +484,29 @@
 
   ```
 
+**(13)method**
 
+```
+ajax方法以get、post开头，以data结尾（good：getListData、postFormData）（bad：takeData、confirmData、getList、postForm） 
 
+尽量使用常用单词开头（set、get、open、close、jump）
+
+驼峰命名（good: getListData）（bad: get_list_data、getlistData）
+
+```
+
+**(14)文件命名(页面)**
+
+```
+尽量是名词
+
+大写开头，开头的单词就是所属模块名字（CarDetail、CarEdit、CarList）
+
+名字至少两个单词（good: CarDetail）（bad: Car）
+
+主页面进来index.vue
+
+```
 
 ###谨慎使用
 

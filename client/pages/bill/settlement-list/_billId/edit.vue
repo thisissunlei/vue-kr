@@ -21,7 +21,7 @@
          </DetailStyle>
 
          <DetailStyle info="结算信息">
-         	<Form :model="formItem">
+         	<Form :model="formItem" ref="formItem">
 	         <Row style="margin-bottom:10px">  
 	            <Col class="col">
 	                <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
@@ -40,8 +40,10 @@
                     </Col>
                 </Row>
                 <FormItem
-                v-for="(item, index) in list"
+                v-for="(item, index) in formItem.list"
                 :key="index"
+                :prop="'list.'+index+'.amount'"
+                :rules="{required: true, message: '请填写金额', trigger: 'blur'}"
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 >
             <Row v-show="item.show">
@@ -55,7 +57,8 @@
                     </Select>
                 </Col>
                 <Col span="10"  class="discount-table-content" >
-                    <span v-if="item.edit == false">{{item.amount}}</span>
+                    <!-- <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit == false" style="width:200px" :disabled="item.edit != false" ></Input> -->
+                     <span v-if="item.edit == false">{{item.amount}}</span>
                     <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit != false" style="width:200px"></Input>
                 </Col>
                       
@@ -69,7 +72,7 @@
 	</div>
 	<div class="m-detail-buttons">
 		
-		<Button type="primary" @click="submitForm">确定</Button>
+		<Button type="primary" @click="submitForm('formItem')">确定</Button>
         <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
 	</div>
 </div>	
@@ -93,26 +96,28 @@ export default {
 	data(){
 		return{
 			basicInfo:{},
-			list:[
-				{
-					name:'客户余额',
-					amount:30000,
-					edit:false,
-					show:true
-				},
-				{
-					name:'客户余额',
-					amount:30000,
-					edit:false,
-					show:true
-				},
-				{
-					name:'客户余额',
-					amount:30000,
-					show:true,
-					edit:false,
-				},
-			],
+			formItem:{
+				list:[
+					{
+						name:'客户余额',
+						amount:30000,
+						edit:false,
+						show:true
+					},
+					{
+						name:'客户余额',
+						amount:30000,
+						edit:false,
+						show:true
+					},
+					{
+						name:'客户余额',
+						amount:30000,
+						show:true,
+						edit:false,
+					},
+				]
+			},
 			settlementOption:[
 				{
 					value:'zhuozo',
@@ -132,7 +137,6 @@ export default {
 				},
 			],
 			selectAll:false,
-			formItem:{}
 		}
 	},
 	
@@ -154,7 +158,7 @@ export default {
 	methods:{
 		handleAdd(){
 		//添加结算信息
-			this.list.push({
+			this.formItem.list.push({
 				name:'',
 				amount:'',
 				show:true,
@@ -183,8 +187,21 @@ export default {
 		selectDiscount(){
 
 		},
-		submitForm(){
+		submitForm(name){
 			console.log('submitForm',this.list)
+
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        
+                        this.disabled = true;
+                    } else {
+                        _this.disabled = false;
+
+                        this.$Notice.error({
+                            title:message
+                        });
+                    }
+                })
 
 		},
 		changeType(value){

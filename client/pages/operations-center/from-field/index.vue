@@ -3,9 +3,21 @@
         <sectionTitle label = "撤场记录管理"></sectionTitle>
         <div style="padding:20px;padding-right:0;">
             <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
-            <div class="m-bill-search" @click="showSearch">
-                <span></span>   
-            </div> 
+            <div style="float:right;">
+                <div style='display:inline-block;margin:10px 20px;'>
+                    <span style='padding-right:10px'>客户名称</span>
+                    <i-input 
+                        v-model="params.csrName" 
+                        placeholder="请输入客户名称"
+                        style="width: 252px"
+                    
+                    ></i-input>
+                </div>
+                <div style="display:inline-block;color: #2b85e4;cursor: pointer;" @click="lowerSubmit">搜索</div>
+                <div class="m-bill-search" @click="showSearch">
+                    <span></span>   
+                </div> 
+            </div>
          </div>
         <Table 
             border 
@@ -36,9 +48,10 @@
             title="新建离场"
             width="660"
         >
-            <NewPage :params = "params" @bindData="upperChange" mask='join'></NewPage>
-            <div slot="footer">
-                <Button type="primary" @click="submitNewPage">确定</Button>
+            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" ></NewPage>
+           <div slot="footer">
+                <Button v-if="!newPageIsSubmit" disabled>确定</Button>
+                <Button v-if="newPageIsSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="showNewPage">取消</Button>
             </div>
         </Modal>
@@ -91,6 +104,8 @@
                 openSearch:false,
                 detail:[],
                 totalCount:1,
+                newPageData:{},
+                newPageIsSubmit:true,
                 columns: [
                     
                     {
@@ -177,7 +192,7 @@
                     duration: 3
                 });
             },
-            showSearch (params) {
+            showSearch(params) {
 
                 this.openSearch=!this.openSearch;
                 utils.clearForm(this.upperData);
@@ -214,8 +229,12 @@
                 this.upperError=error;
                 this.upperData=params;
             },
+            lowerSubmit(){
+                 utils.addParams(this.params);
+            },
              //高级查询确定
             submitSearch(){
+                
                 if(this.upperError){
                     return ;
                 }
@@ -240,8 +259,48 @@
                     });
                 })   
             },
-            submitNewPage(params){
-
+            submitNewPage(name){
+                var newPageRefs = this.$refs.fromFieldNewPage.$refs;
+                console.log(newPageRefs[name],"PPPP")
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+                      return;
+                    }
+                })
+                var that = this;
+                var params =Object.assign({},this.newPageData);
+                this.$http.post('post-from-field-newpage',params, r => {
+                       
+                    that.newPageIsSubmit = false;
+                    that.openMessage=true;
+                    that.MessageType="success";
+                    that.warn="新建成功";
+                    that.showNewPage();
+                }, e => {
+                    that.newPageIsSubmit = false;
+                    that.openMessage=true;
+                    that.MessageType="error";
+                    that.warn=e.message;
+                })   
+                
+            },
+            newPageDataChange(data){
+                if(data){
+                    var that = this;
+                    data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
+                    
+                    this.newPageData = Object.assign({},data);
+                    var params = Object.assign({},data)
+                    this.$http.post('post-create-from-field',params, r => {
+                        that.newPageIsSubmit = true;
+                    
+                    }, e => {
+                        that.newPageIsSubmit = false;
+                        that.openMessage=true;
+                        that.MessageType="error";
+                        that.warn=e.message;
+                    })   
+                }
             }
         },
         

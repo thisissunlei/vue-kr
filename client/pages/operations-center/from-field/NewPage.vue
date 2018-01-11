@@ -1,64 +1,86 @@
 
     <template>         
-            <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="社区名称" class='bill-search-class'> 
+            <Form ref="fromFieldValidate" :model="validate" :rules="ruleValidate" label-position="top">
+                <FormItem label="社区名称" prop="cmtId" class='bill-search-class'> 
                    <Select 
-                        v-model="formItem.cmtId" 
+                        v-model="validate.cmtId" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
                         clearable
+                        @on-change="getCustomer"
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.name" 
+                            :value="item.id" 
                             :key="item.id"
                         >
                             {{ item.name }}
                         </Option>
                    </Select> 
-                </Form-item>
-                <Form-item label="客户名称" class='bill-search-class'>
-                    <i-input 
-                        v-model="formItem.csrName" 
-                        placeholder="请输入客户名称"
+                </FormItem>
+                <FormItem label="客户名称" prop="csrId" class='bill-search-class'>
+                    <Select 
+                        v-model="validate.csrId" 
+                        placeholder="请输入客户名称" 
                         style="width: 252px"
-                    ></i-input>
-                </Form-item>
+                        filterable
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in customerList" 
+                            :value="item.id" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                   </Select> 
+                </FormItem>
                
               
                
-                <Form-item label="服务尾日" class="bill-search">
+                <FormItem label="服务尾日" prop="leaveDate" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.StartLastDay"
+                        v-model="validate.leaveDate"
                         type="date" 
-                        placeholder="开始日期" 
+                        placeholder="请选择尾款日期" 
                         style="width: 252px"
                     ></DatePicker>
                   
-             </Form-item>
-            
+             </FormItem>
+          
          </Form>
 </template>
 <script>
     import Vue from 'vue';
     export default{
-        props:['mask','params'],
+        props:{
+            close:Function
+            },
         data (){
             
             return{
                 dateError:false,
-                formItem:Object.assign({
-                   withdrawalNum:'',
-                   withdrawalStatus:'',
-                   csrName:'',
+                updatedNum:1,
+                validate:{
                    cmtId:'',
-                   StartLastDay:'',
-                   EndLastDay:'',
-                },this.params),
-               
-                type:this.mask=='join'?true:false,
-                statusList:[],
+                   csrId:'',
+                   leaveDate:'',
+                },
+                ruleValidate:{
+                    cmtId:[
+                        { required: true, message: '社区名称为必填项'}
+                    ],
+                    csrId:[
+                        { required: true, message: '客户名称为必填项'}
+                    ],
+                    leaveDate:[
+                        { required: true, message: '尾款日期为必填项'}
+                        
+                    ]
+                    
+                },
+                customerList:[],
                 communityList:[]
             }
         },
@@ -71,26 +93,44 @@
                      title:e.message
                 });
             })
-            this.$http.get('get-from-field-status','',r => {
-                _this.statusList = r.data;
-            }, e => {
-                _this.$Notice.error({
-                    title:e.message
-                });
-            })
+        },
+        methods:{
+            getCustomer(){
+                var that = this;
+                var params = {
+                    communityId:this.validate.cmtId
+                }
+                this.$http.get('get-from-field-customer',params, r => {    
+                    that.customerList=r.data 
+                }, e => {
+                    that.$Notice.error({
+                        title:e.message
+                    });
+                })  
+            },
+            handleSubmit(name){
+                 this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            }
         },
         updated:function(){
-            if(this.formItem.StartLastDay&&this.formItem.EndLastDay){
-                if(this.formItem.StartLastDay>this.formItem.EndLastDay){
-                    this.dateError=true;
-                }else{
-                    this.dateError=false; 
+            var data = false;
+            var haveNull = false;
+            for(let key in this.validate){
+                if(!this.validate[key]){
+                    haveNull = true;
                 }
-            }else{
-                this.dateError=false; 
             }
-
-            this.$emit('bindData', this.formItem,this.dateError);
+            if(!haveNull){
+                data = Object.assign({},this.validate);
+            }
+            this.$emit('newPageData', data);  
+        
         }
     }
 </script>

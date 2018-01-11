@@ -6,20 +6,20 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer"/>
+                      <selectCustomers name="formItem.customerId" :onchange="onCustomerChange"/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test="formItem" :onchange="changeCommunity"/>
+                      <selectCommunities test="formItem" :onchange="onCommunityChange"/>
                     </FormItem>
                 </Col>
 
                  <Col class="col">
-                    <FormItem label="订单类型" style="width:252px" prop='type'>
+                    <FormItem label="订单类型" style="width:252px" prop='orderType'>
                     <Select 
-                        v-model="formItem.type" 
+                        v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
@@ -66,7 +66,7 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"/>
+                    <SelectSaler name="formItem.salesperson" :onchange="onSalerChange" :value="salerName"/>
                     </FormItem>
                 </Col>
 
@@ -108,6 +108,12 @@ import utils from '~/plugins/utils';
 
 
 export default {
+        head() {
+            return {
+                title: '新建订单'
+            }
+        },
+
         data() {
             
            const validateMoney = (rule, value, callback) => {
@@ -124,16 +130,14 @@ export default {
            return {
 
                 disabled:false,
-
                 typeList:[],
-
                 freeList:[],
 
                 formItem: {
                     customerId: 1,
                     communityId: 1,
                     saleDate:'',
-                    type:'',
+                    orderType:'',
                     remark:'',
                     salesperson:1,
                     money:'',
@@ -156,7 +160,7 @@ export default {
                     salesperson:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    type:[
+                    orderType:[
                         { required: true, message: '请选择订单类型', trigger: 'change' }
                     ],
                     feeType:[
@@ -165,12 +169,6 @@ export default {
                 },
 
                 salerName:'请选择',
-            }
-        },
-
-        head() {
-            return {
-                title: '新建订单'
             }
         },
 
@@ -187,9 +185,8 @@ export default {
             this.getCommonData();
         },
         
-        methods: {
-
-            joinFormSubmit(){
+         methods: {
+            submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
@@ -215,7 +212,7 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.disabled = true;
-                        this.joinFormSubmit()
+                        this.submitForm();
                     } else {
                         _this.disabled = false;
                         this.$Notice.error({
@@ -236,7 +233,7 @@ export default {
                 })    
             },
 
-            changeCommunity:function(value){
+            onCommunityChange:function(value){
                 if(value){
                     this.formItem.communityId = value;
                 }else{
@@ -244,7 +241,7 @@ export default {
                 }       
             },
 
-            changeCustomer:function(value){
+            onCustomerChange:function(value){
                 if(value){
                     this.formItem.customerId = value;
                 }else{
@@ -252,7 +249,7 @@ export default {
                 }
             },
             
-            changeSaler:function(value){
+            onSalerChange:function(value){
                 this.formItem.salesperson = value;
             }
         }

@@ -109,6 +109,12 @@ import utils from '~/plugins/utils';
 
 
 export default {
+       head() {
+            return {
+                title: '编辑订单'
+            }
+        },
+
         data() {
 
            const validateMoney = (rule, value, callback) => {
@@ -125,15 +131,10 @@ export default {
            return {
                
                 disabled:false,
-
                 typeList:[],
-
                 freeList:[],
-
                 customerName:'',
-
                 communityName:'',
-
                 salespersonName:'请选择',
 
                 formItem: {
@@ -152,12 +153,6 @@ export default {
                         { required: true,trigger: 'change' ,validator: validateMoney}
                     ]
                 }
-            }
-        },
-
-        head() {
-            return {
-                title: '编辑订单'
             }
         },
 
@@ -209,7 +204,7 @@ export default {
                 })    
             },
 
-            joinFormSubmit(){
+            submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
@@ -235,7 +230,7 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.disabled = true;
-                        this.joinFormSubmit()
+                        this.submitForm();
                     } else {
                         _this.disabled = false;
                         this.$Notice.error({

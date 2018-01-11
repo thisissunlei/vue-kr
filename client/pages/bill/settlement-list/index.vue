@@ -118,22 +118,22 @@
                 joinOrder: [
                     {
                         title: '结算单编号',
-                        key: 'orderNum',
+                        key: 'checklistNum',
                         align:'center'
                     },
                     {
                         title: '客户名称',
-                        key: 'customerName',
+                        key: 'csrName',
                         align:'center'
                     },
                     {
                         title: '社区名称',
-                        key: 'communityName',
+                        key: 'cmtName',
                         align:'center'
                     },
                     {
                         title: '退费金额',
-                        key: 'rentAmount',
+                        key: 'totalRefunds',
                         align:'center'
                     },
                     {
@@ -147,7 +147,7 @@
                     },
                     {
                         title: '状态',
-                        key: 'orderStatus',
+                        key: 'checklistStatus',
                         align:'center',
                         render(h, params){
                             var orderStatus={
@@ -385,7 +385,7 @@
             // 列表基础数据
             getListData(params){
                 var _this=this;
-                 this.$http.get('join-bill-list', params, r => {
+                 this.$http.get('get-settlements-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;

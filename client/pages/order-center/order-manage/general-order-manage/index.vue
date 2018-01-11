@@ -3,7 +3,7 @@
             <SectionTitle label = "通用订单列表"/>
             <div  class='list-banner'>
                     <div class='list-btn'>
-                        <Button type="primary" @click="showOrder">新建订单</Button>
+                        <Button type="primary" @click="jumpOrder">新建订单</Button>
                     </div>
 
                     <div class='list-search'>
@@ -87,7 +87,6 @@
                     customerName:"",
                 },
 
-                upperData:{},
                 id:'',          
                 totalCount:1,
                 openSearch:false,
@@ -95,6 +94,7 @@
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                upperData:{},
                 upperError:false,
                 joinData:[],
 
@@ -154,7 +154,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 },'查看')];
@@ -212,14 +212,6 @@
                 utils.clearForm(this.upperData);
             },
 
-            showOrder(){
-                window.open('/order-center/order-manage/general-order-manage/create/addOrder','order');
-            },
-
-            showView(params){
-                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
-            },
-
             showNullify(params){
                 this.id=params.row.id;
                 this.openNullify=true;
@@ -227,6 +219,14 @@
 
             showEdit(params){
                 window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/editOrder`,params.row.id)
+            },
+
+            jumpOrder(){
+                window.open('/order-center/order-manage/general-order-manage/create/addOrder','order');
+            },
+
+            jumpView(params){
+                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
             },
 
             nullifySubmit (){

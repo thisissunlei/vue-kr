@@ -23,6 +23,7 @@
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        @on-change="onTypeChange"
                     >
                         <Option 
                             v-for="item in typeList" 
@@ -35,7 +36,7 @@
                     </FormItem>
                 </Col>
 
-                <Col class="col">
+                <Col class="col" v-show="type">
                     <FormItem label="费用明细类型" style="width:252px" prop='feeType'>
                     <Select 
                         v-model="formItem.feeType" 
@@ -132,6 +133,7 @@ export default {
                 disabled:false,
                 typeList:[],
                 freeList:[],
+                type:false,
 
                 formItem: {
                     customerId: 1,
@@ -182,7 +184,7 @@ export default {
 
          mounted(){
             GLOBALSIDESWITCH("false");
-            this.getCommonData();
+            this.getTypeData();
         },
         
          methods: {
@@ -222,7 +224,7 @@ export default {
                 })
             },
 
-            getCommonData(){
+            getTypeData(){
                this.$http.get('general-common-list','', r => {
                      this.typeList=r.data.ERP_BizType;
                      this.freeList=r.data.ERP_FeeType;
@@ -233,7 +235,24 @@ export default {
                 })    
             },
 
-            onCommunityChange:function(value){
+            getCostData(value){
+                this.$http.get('general-common-list','', r => {
+                     this.freeList=r.data.ERP_FeeType;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })   
+            },
+
+            onTypeChange(value){
+                this.type=value?true:false;
+                if(value){
+                    this.getCostData(value);
+                }
+            },
+
+            onCommunityChange(value){
                 if(value){
                     this.formItem.communityId = value;
                 }else{
@@ -241,7 +260,7 @@ export default {
                 }       
             },
 
-            onCustomerChange:function(value){
+            onCustomerChange(value){
                 if(value){
                     this.formItem.customerId = value;
                 }else{
@@ -249,7 +268,7 @@ export default {
                 }
             },
             
-            onSalerChange:function(value){
+            onSalerChange(value){
                 this.formItem.salesperson = value;
             }
         }

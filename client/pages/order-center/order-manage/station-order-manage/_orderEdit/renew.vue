@@ -516,14 +516,16 @@ import utils from '~/plugins/utils';
                 })
             },
             getRenewStation(){
-                let params = {
+                let {params} = this.$route;
+                let paramsform = {
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    id:params.orderEdit
                 };
                 let _this = this;
-               this.$http.get('get-renew-station', params, r => {
+               this.$http.get('get-renew-station', paramsform, r => {
                     let station = []
                     for(let i in r.data){
                         let obj = {};

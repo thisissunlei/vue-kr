@@ -46,10 +46,13 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" @click="nullifySubmit" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
@@ -62,10 +65,13 @@
             <Modal
                 v-model="openApply"
                 title="提示信息"
-                @on-ok="applySubmit"
                 width="500"
             >
                 <ApplyContract/>
+                <div slot="footer">
+                    <Button type="primary" @click="applySubmit" :disabled="applyDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelApply">取消</Button>
+                </div>
             </Modal>
 
     </div>
@@ -94,6 +100,10 @@
             
             return {
                 openMessage:false,
+
+                nullDisabled:false,
+
+                applyDisabled:false,
 
                 warn:'',
 
@@ -271,29 +281,40 @@
 
             showSearch () {
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
             },
 
             showNullify(params){
                 this.id=params.row.id;
-                this.openNullify=true;
+                this.cancelNullify();
             },
 
             showReduce(){
-                window.open('/order-center/order-manage/station-order-manage/create/reduce','reduce')
+                utils.addParams({mask:'reduce'});
+                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
             },
 
             showEdit(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,params.row.id)
+                utils.addParams({mask:'reduce'});
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,'_blank')
             },
 
             showApply(params){
                 this.id=params.row.id;
-                this.openApply=true;
+                this.cancelApply();
             },
 
             showView(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,params.row.id);
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,'_blank');
+            },
+
+            cancelNullify(){
+                this.openNullify=!this.openNullify;
+                this.nullDisabled=false;
+            },
+
+            cancelApply(){
+                this.openApply=!this.openApply;
+                this.applyDisabled=false;
             },
 
             nullifySubmit (){
@@ -301,7 +322,11 @@
                 let params={
                     id:this.id
                 };
-                 
+                 if(this.nullDisabled){
+                     return ;
+                 }
+                 this.nullDisabled=true;
+                 this.cancelNullify();
                  this.$http.post('join-nullify', params, r => {
                     this.openMessage=true;
                     this.MessageType="success";
@@ -313,11 +338,16 @@
                     this.warn=e.message;
                 }) 
             },
-
+            
             applySubmit(){
                 let params={
                     id:this.id
-                };     
+                };   
+                if(this.applyDisabled){
+                    return ;
+                }  
+                 this.applyDisabled=true;
+                 this.cancelApply();
                  this.$http.post('apply-contract', params, r => {
                     this.openMessage=true;
                     this.MessageType="success";

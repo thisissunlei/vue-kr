@@ -21,7 +21,6 @@
 
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
-                    <Buttons label='导出'  type='primary' @click='outSubmit' checkAction='order_seat_export'/>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
                     </div>
@@ -73,7 +72,7 @@
     import sectionTitle from '~/components/sectionTitle';
 
     export default {
-        name:'Join',
+        name:'settlement',
         components:{
             HeightSearch,
             // Nullify,
@@ -81,6 +80,11 @@
             Buttons,
             sectionTitle,
             // ApplyContract
+        },
+         head() {
+            return {
+                title: '结算单管理'
+            }
         },
         data () {
             
@@ -345,22 +349,7 @@
             },
             // 编辑
             showEdit(params){
-                let type = '';
-                switch (params.row.orderType){
-                    case 'IN':
-                        type = 'join';
-                        break;
-                    case 'INCREASE':
-                        type = 'join';
-                        break;
-                    case 'CONTINUE':
-                        type = 'renew';
-                        break;
-                    default:
-                        type = 'join';
-                        break;
-                }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
+
             },
             // 提示信息
             nullifySubmit (){
@@ -375,12 +364,6 @@
                     this.MessageType="error";
                     this.warn=e.message;
                 })
-            },
-
-            // 导出
-            outSubmit (){
-                this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
             // 列表基础数据
             getListData(params){
@@ -418,8 +401,8 @@
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.page=1;
                 this.params.pageSize=15;
-                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                this.params.ctimeStart=this.params.ctimeStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.ctimeStart)):'';
+                this.params.ctimeEnd=this.params.ctimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.ctimeEnd)):'';
                 utils.addParams(this.params);
             },
 

@@ -426,7 +426,8 @@ import utils from '~/plugins/utils';
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate))
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate)),
+                    id:null
 
                 };
                 let _this = this;

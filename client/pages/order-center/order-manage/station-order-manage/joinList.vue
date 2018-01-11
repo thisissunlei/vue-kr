@@ -47,10 +47,13 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" @click="nullifySubmit" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
@@ -63,10 +66,13 @@
             <Modal
                 v-model="openApply"
                 title="提示信息"
-                @on-ok="applySubmit"
                 width="500"
             >
                 <ApplyContract/>
+                <div slot="footer">
+                    <Button type="primary" @click="applySubmit" :disabled="applyDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelApply">取消</Button>
+                </div>
             </Modal>
 
     </div>
@@ -96,6 +102,10 @@
             
             return {
                 openMessage:false,
+
+                nullDisabled:false,
+
+                applyDisabled:false,
 
                 warn:'',
 
@@ -286,20 +296,21 @@
 
             showSearch () {
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
             },
             
             showJoin(){
-                window.open('/order-center/order-manage/station-order-manage/create/join','join');
+                utils.addParams({mask:''});
+                window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
             },
 
             showRenew(){
-                window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
+                utils.addParams({mask:''});
+                window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
             },
 
             showApply(params){
                 this.id=params.row.id;
-                this.openApply=true;
+                this.cancelApply();
             },
 
             showView(params){
@@ -309,15 +320,16 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,params.row.id);
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
             },
 
             showNullify(params){
                 this.id=params.row.id;
-                this.openNullify=true;
+                this.cancelNullify();
             },
 
             showEdit(params){
+                utils.addParams({mask:''});
                 let type = '';
                 switch (params.row.orderType){
                     case 'IN':
@@ -333,14 +345,28 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,'_blank')
+            },
+
+            cancelNullify(){
+                this.openNullify=!this.openNullify;
+                this.nullDisabled=false;
+            },
+
+            cancelApply(){
+                this.openApply=!this.openApply;
+                this.applyDisabled=false;
             },
 
             nullifySubmit (){
                 let params={
                     id:this.id
                 };
-                 
+                 if(this.nullDisabled){
+                     return ;
+                 }
+                 this.nullDisabled=true;
+                 this.cancelNullify();
                  this.$http.post('join-nullify', params,r => {
                     this.openMessage=true;
                     this.MessageType="success";
@@ -357,6 +383,11 @@
                 let params={
                     id:this.id
                 };
+                if(this.applyDisabled){
+                    return ;
+                }
+                 this.applyDisabled=true;
+                 this.cancelApply();
                  this.$http.post('apply-contract', params, r => {
                     this.openMessage=true;
                     this.MessageType="success";

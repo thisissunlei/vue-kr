@@ -441,15 +441,17 @@ import utils from '~/plugins/utils';
 
             },
              getRenewStation(){
-                let params = {
+                let {params}=this.$route;
+                let paramsForm = {
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate))
+                    reduceDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.startDate)),
+                     id:params.orderEdit
 
                 };
                 let _this = this;
-                 this.$http.get('get-reduce-station', params, r => {
+                 this.$http.get('get-reduce-station', paramsForm, r => {
                     _this.stationList = r.data;
                 }, e => {
 

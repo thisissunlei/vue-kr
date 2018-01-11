@@ -7,7 +7,7 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="结算单编号：">
-			    {{basicInfo.customerName}}
+			    {{basicInfo.checklistNum}}
 			</LabelText>
 			<LabelText label="服务尾期：">
 				{{ctime | dateFormat('YYYY-MM-dd')}}
@@ -72,7 +72,7 @@ export default {
 	},
 	head() {
         return {
-            title: '入驻详情'
+            title: '结算单详情页'
         }
     },
 	data(){
@@ -175,10 +175,10 @@ export default {
 		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
 		let from={
-			id:params.billId
+			checklistId:params.billId
 		};
 		var _this=this;
-	     this.$http.get('join-bill-detail', from, r => {
+	     this.$http.get('get-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
 				   
 				   

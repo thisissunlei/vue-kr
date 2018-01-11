@@ -350,7 +350,8 @@ import utils from '~/plugins/utils';
                 ssoId:'',
                 ssoName:'',
                 changeSale:+new Date(),
-                originStationList:[]
+                originStationList:[],
+                orderType:''
             }
         },
         head() {
@@ -519,6 +520,7 @@ import utils from '~/plugins/utils';
                 formItem.endDate =end;
                 console.log('handleSubmit',formItem)
                 let _this = this;
+                return
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();
@@ -600,6 +602,7 @@ import utils from '~/plugins/utils';
                     _this.disabled = false;
                     _this.discountError = false;
                     _this.formItem.items = list;
+                    _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;

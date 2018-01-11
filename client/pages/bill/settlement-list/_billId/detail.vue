@@ -34,16 +34,16 @@
             
             <div >
             	<LabelText label="用户余额：" class="amount-list">
-					{{basicInfo.seatRentAmount}} 
+					{{basicInfo.balance}} 
 				</LabelText>
 	            <LabelText label="在押履约保证金："class="amount-list">
-					{{basicInfo.tactiscAmount}} 
+					{{basicInfo.deposit}} 
 				</LabelText>
                 <LabelText label="未结算总额：" class="amount-list">
                     {{basicInfo.rentAmount}}
                 </LabelText>
                 <LabelText label="应退款金额：" class="amount-list" style="color:red">
-                    {{basicInfo.depositAmount}}
+                    {{basicInfo.totalRefunds}}
                 </LabelText>
             </div>
 		</DetailStyle>
@@ -104,55 +104,16 @@ export default {
 			service:[
 				{
 				 title: '费用名称',
-                 key: 'seatName',
+                 key: 'feeTypeName',
                  align:'center'	,
                  // width: 200,
 				},
                 {
 				 title: '费用金额(元)',
-                 key: 'originalAmount',
+                 key: 'payableAmount',
                  align:'right'	
 				}
 			],
-
-			treatment:[
-				{
-				 title: '优惠类型',
-                 key: 'tacticsName',
-                 align:'center'	
-				},
-				{
-				 title: '开始日期',
-                 key: 'freeStart',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeStart));
-					 return time;
-				 }		
-				},
-				{
-				 title: '结束日期',
-                 key: 'freeEnd',
-				 align:'center',
-				 render(tag, params){
-					 let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.freeEnd));
-					 return time;
-				 }		
-				},
-				{
-				 title: '折扣比例',
-                 key: 'discountNum',
-                 align:'center',
-				 render(tag, params){
-					 if(params.row.discountNum==0){
-						 return '-';
-					 }else{
-						 return params.row.discountNum
-					 }
-				 }		
-			   }
-			],
-			
             contract:[
                {
 				 title: '时间',

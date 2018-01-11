@@ -300,12 +300,12 @@
             
             showJoin(){
                 utils.addParams({mask:''});
-                window.open('/order-center/order-manage/station-order-manage/create/join','join');
+                window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
             },
 
             showRenew(){
                 utils.addParams({mask:''});
-                window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
+                window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
             },
 
             showApply(params){
@@ -320,7 +320,7 @@
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,params.row.id);
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
             },
 
             showNullify(params){
@@ -345,7 +345,7 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,'_blank')
             },
 
             cancelNullify(){

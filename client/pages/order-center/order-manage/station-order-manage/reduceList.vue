@@ -290,12 +290,12 @@
 
             showReduce(){
                 utils.addParams({mask:'reduce'});
-                window.open('/order-center/order-manage/station-order-manage/create/reduce','reduce')
+                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
             },
 
             showEdit(params){
                 utils.addParams({mask:'reduce'});
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,params.row.id)
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,'_blank')
             },
 
             showApply(params){
@@ -304,7 +304,7 @@
             },
 
             showView(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,params.row.id);
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,'_blank');
             },
 
             cancelNullify(){

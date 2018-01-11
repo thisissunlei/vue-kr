@@ -51,6 +51,7 @@ import http from '~/plugins/http.js';
                 this.onchange(value)
             },
             remoteCustomer (query) {
+                console.log('remoteCustomer-->',query)
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {

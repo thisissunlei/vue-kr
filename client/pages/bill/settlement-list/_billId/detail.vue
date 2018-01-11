@@ -9,19 +9,28 @@
 			<LabelText label="结算单编号：">
 			    {{basicInfo.checklistNum}}
 			</LabelText>
-			<LabelText label="服务尾期：">
-				{{ctime | dateFormat('YYYY-MM-dd')}}
+			<LabelText label="状态：">
+				{{basicInfo.checklistStatusName}}
 			</LabelText>
 			<LabelText label="客户名称：">
-				{{basicInfo.salerName}}
+				{{basicInfo.csrName}}
 			</LabelText>
 			<LabelText label="社区名称：">
-				{{basicInfo.communityName}}
+				{{basicInfo.cmtName}}
+			</LabelText>
+			<LabelText label="服务尾日：">
+			    {{basicInfo.lastServiceDate| dateFormat('YYYY-MM-dd')}}
+			</LabelText>
+			<LabelText label="生效日期：">
+				{{basicInfo.effectDate | dateFormat('YYYY-MM-dd HH:mm:ss')}}
+			</LabelText>
+			<LabelText label="生成日期：">
+				{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:ss')}}
 			</LabelText>
          </DetailStyle>
 
          <DetailStyle info="结算信息">
-			<Table :columns="service" :data="serviceData" border></Table>
+			<Table :columns="service" :data="details" border></Table>
             
             <div >
             	<LabelText label="用户余额：" class="amount-list">
@@ -163,7 +172,7 @@ export default {
 				}  
 			],
 
-			serviceData:[],
+			details:[],
 
 			treatmentData:[],
 
@@ -180,17 +189,7 @@ export default {
 		var _this=this;
 	     this.$http.get('get-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
-				   
-				   
-				   _this.ctime=r.data.ctime;
-				   _this.startDate=r.data.startDate;
-				   _this.endDate=r.data.endDate
-				   _this.payDate=r.data.firstPayTime;
-				   _this.capitalTreatment=r.data.tactiscAmount;
-				   _this.capitalService=r.data.seatRentAmount;
-				   _this.serviceData=r.data.orderSeatDetailVo||[];
-				   _this.treatmentData=r.data.contractTactics||[];
-				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
+				   _this.details = r.data.details
            	}, e => {
                 _this.$Notice.error({
                     title:e.message

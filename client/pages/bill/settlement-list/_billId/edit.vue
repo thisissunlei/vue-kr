@@ -7,16 +7,16 @@
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="结算单编号：">
-			    {{basicInfo.customerName}}
+			    {{basicInfo.checklistNum}}
 			</LabelText>
 			<LabelText label="服务尾期：">
-				{{basicInfo.ctime | dateFormat('YYYY-MM-dd')}}
+				{{basicInfo.lastServiceDate | dateFormat('YYYY-MM-dd')}}
 			</LabelText>
 			<LabelText label="客户名称：">
-				{{basicInfo.salerName}}
+				{{basicInfo.csrName}}
 			</LabelText>
 			<LabelText label="社区名称：">
-				{{basicInfo.communityName}}
+				{{basicInfo.cmtName}}
 			</LabelText>
          </DetailStyle>
 
@@ -26,6 +26,7 @@
 	            <Col class="col">
 	                <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
 	                <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+	                <span v-if="error" style="display:inline-block;color:red;margin-left:20px">{{errorMessage}}</span>
 	            </Col>
 	         </Row>
             <Row style="margin-top:30px">
@@ -42,8 +43,6 @@
                 <FormItem
                 v-for="(item, index) in formItem.list"
                 :key="index"
-                :prop="'list.'+index+'.amount'"
-                :rules="{required: true, message: '请填写金额', trigger: 'blur'}"
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 >
             <Row v-show="item.show">
@@ -53,13 +52,12 @@
                 <Col span="11"  class="discount-table-content">
                    	<span v-if="item.edit == false"> {{item.name}}</span>
                   	<Select v-model="item.value" label-in-value @on-change="changeType" v-if="item.edit != false" style="width:200px">
-                            <Option v-for="(types,i) in settlementOption" :value="types.value+'/'+index" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in settlementOption" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                     </Select>
                 </Col>
                 <Col span="10"  class="discount-table-content" >
-                    <!-- <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit == false" style="width:200px" :disabled="item.edit != false" ></Input> -->
                      <span v-if="item.edit == false">{{item.amount}}</span>
-                    <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit != false" style="width:200px"></Input>
+                    <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit != false" style="width:200px" number></Input>
                 </Col>
                       
             </Row>
@@ -94,8 +92,23 @@ export default {
         }
     },
 	data(){
+		const validatePass = (rule, value, callback) => {
+			console.log('validatePass-rule',rule)
+			console.log('validatePass-value',value)
+			return;
+            if (value === '') {
+                callback(new Error('Please enter your password'));
+            } else {
+                if (this.formCustom.passwdCheck !== '') {
+                    // 对第二个密码框单独验证
+                    this.$refs.formCustom.validateField('passwdCheck');
+                }
+                callback();
+            }
+       	};
 		return{
 			basicInfo:{},
+			validatePass:validatePass,
 			formItem:{
 				list:[
 					{
@@ -137,6 +150,8 @@ export default {
 				},
 			],
 			selectAll:false,
+			errorMessage:'ssssss',
+			error:false,
 		}
 	},
 	
@@ -144,11 +159,12 @@ export default {
 		GLOBALSIDESWITCH("false");
 		let {params}=this.$route;
 		let from={
-			id:params.billId
+			checklistId:params.billId
 		};
 		var _this=this;
-	     this.$http.get('join-bill-detail', from, r => {
+	     this.$http.get('get-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
+				   _this.details = r.data.details
            	}, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -170,11 +186,6 @@ export default {
 		becomeEffective(){
 
 		},
-		edit(){
-			let {params}=this.$route;
-            window.open(`/bill/settlement-list/${params.billId}/edit/`,params.billId);
-
-		},
 		downSwitch(){
 
 		},
@@ -182,26 +193,47 @@ export default {
 
 		},
 		deleteDiscount(){
+			// 删除选中的优惠信息
+                let items = this.formItem.list;
+                let select = []
+                select = items.map((item)=>{
+                	console.log('item.select',item)
+                    return item.select;
+                })
+                console.log('deleteDiscount',select)
+                items = items.map(function(item, index) {
+                    if (item.select) {
+                        item.show = false
+                    }
+                    return item;
+                });
+                this.formItem.list = items;
+                this.checkList()
+                this.selectDiscount(false)
 
 		},
-		selectDiscount(){
+		selectDiscount(value){
+			// checkbox的全选事件
+                let items = this.formItem.list;
+                items = items.map((item)=>{
+                    let obj = item;
+                    if(item.edit){
+                    	obj.select = value;
+                    }
+                    return obj;
+                })
+                this.selectAll = value;
+                this.formItem.list = items;
 
 		},
 		submitForm(name){
-			console.log('submitForm',this.list)
-
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        
-                        this.disabled = true;
-                    } else {
-                        _this.disabled = false;
-
-                        this.$Notice.error({
-                            title:message
-                        });
-                    }
-                })
+			this.checkList()
+			if(this.error){
+				console.log('不能提交')
+			}else{
+				console.log('提交')
+			}
+		
 
 		},
 		changeType(value){
@@ -209,6 +241,31 @@ export default {
 		},
 		changeAmount(val){
 			console.log('changeAmount',val)
+		},
+		//处理结算信息是否有未填项
+		checkList(){
+			//处理结算信息的费用名称是否选
+			let _this = this;
+			let items = this.formItem.list.filter((item,index)=>{
+				if(item.edit && item.show){
+					return true
+					
+				}
+				return false
+			})
+			console.log('items',items)
+			if(items.length){
+				items.map(item=>{
+					if(!item.value || !item.amount){
+						_this.error = true;
+						_this.errorMessage = "结算表单未填写完整"
+					}					
+				})
+			}else{
+				this.error = false
+			}
+
+					
 		}
 	}
 }

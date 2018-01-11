@@ -497,6 +497,8 @@ init、refresh单词除外
 
 驼峰命名（good: getListData）（bad: get_list_data、getlistData）
 
+自定义顺序：submit、on事件、get(set)、jump、show、close(有异议的咱们再讨论)
+
 ```
 
 **(14)文件命名(页面)**

@@ -235,8 +235,11 @@ export default {
             },
 
             getCostData(value){
-                this.$http.get('general-common-list','', r => {
-                     this.freeList=r.data.ERP_FeeType;
+                let param={
+                    bizType:value
+                }
+                this.$http.get('general-cost-list',param, r => {
+                     this.freeList=r.data.items;
                 }, e => {
                      this.$Notice.error({
                         title:e.message

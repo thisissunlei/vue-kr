@@ -259,6 +259,7 @@ import utils from '~/plugins/utils';
                     submitData:[],
                     deleteData:[],
                 },
+                orderType:'',
                 stationAll:{},
                 payList:[
                     {value:'ONE',label:'月付'},
@@ -600,6 +601,7 @@ import utils from '~/plugins/utils';
                     _this.disabled = false;
                     _this.discountError = false;
                     _this.formItem.items = list;
+                    _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;

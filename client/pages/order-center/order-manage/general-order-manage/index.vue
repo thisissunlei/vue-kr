@@ -26,7 +26,7 @@
             <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
             <div class='list-footer'>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator/>
+                        <Page :total="totalCount" :page-size='20' show-total show-elevator @on-change="changePage"/>
                     </div>
             </div>
 
@@ -45,8 +45,8 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
+                @on-ok="nullifySubmit"  
             >
                 <Nullify/>
             </Modal>
@@ -57,10 +57,8 @@
                 :warn="warn"
                 @changeOpen="onChangeOpen"
             />
-
     </div>
 </template>
-
 
 <script>
     import HeightSearch from './heightSearch';
@@ -83,30 +81,21 @@
         },
         data () {    
             return {     
-                upperData:{},
-
-                id:'',
-                
-                totalCount:1,
-
                 params:{
                     page:1,
                     pageSize:20,
                     customerName:"",
                 },
 
+                upperData:{},
+                id:'',          
+                totalCount:1,
                 openSearch:false,
-
                 openNullify:false,
-
                 openMessage:false,
-
                 warn:'',
-
                 MessageType:'',
-
                 upperError:false,
-
                 joinData:[],
 
                 joinOrder: [

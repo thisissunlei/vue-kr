@@ -11,7 +11,7 @@
 
 <template>
     <div class="com-select-customers">
-        <!--  <Select
+         <Select
             :v-model="customer"
             filterable
             remote
@@ -20,9 +20,6 @@
             :loading="loading1"
             @on-change="changeContent"
             >
-            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
-        </Select> -->
-        <Select v-model="customer" filterable @on-change="changeContent" :placeholder="value">
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -53,18 +50,17 @@ import http from '~/plugins/http.js';
                 console.log('value',value)
                 this.onchange(value)
             },
-            // remoteCustomer (query) {
-            //     console.log('remoteCustomer============',query)
-            //     if (query !== '') {
-            //         this.loading1 = true;
-            //         setTimeout(() => {
-            //             this.getCusomerList(query)
-            //         }, 200);
-            //     } else {
-            //         this.getCusomerList(' ')
+            remoteCustomer (query) {
+                if (query !== '') {
+                    this.loading1 = true;
+                    setTimeout(() => {
+                        this.getCusomerList(query)
+                    }, 200);
+                } else {
+                    this.getCusomerList(' ')
 
-            //     }
-            // },
+                }
+            },
             getCusomerList:function(name){
                 let params = {
                     company:name

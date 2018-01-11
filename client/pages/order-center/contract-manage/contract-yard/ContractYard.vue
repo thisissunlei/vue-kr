@@ -10,7 +10,7 @@
          </Form-item>
        
        <Form-item label="备注" style="width:380px;">
-            <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."></Input>
+            <Input v-model="formItem.remark" :maxlength="200" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="备注..."/>
             <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/200":0+"/200"}}</div>
        </Form-item>
 
@@ -20,7 +20,6 @@
 <script>
     export default{
         name:'File',
-
         data (){
             return{
                formItem:{

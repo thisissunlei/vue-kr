@@ -1,43 +1,41 @@
 <template>
     <div class='m-order-list'>
-
             <SectionTitle label = "合同扫码"/>
-
             <div  class='list-banner'>
-                    <div class='list-btn'>
-                        <Button type="primary" @click="showYard">批量归档</Button>
-                    </div>
+                <div class='list-btn'>
+                    <Button type="primary" @click="showYard">批量归档</Button>
+                </div>
 
-                    <div class='list-search'>
-                         <div class='lower-search'>
-                            <span style='padding-right:10px'>合同编号</span>
-                            <i-input 
-                                v-model="params.serialNumber" 
-                                placeholder="请输入客户名称"
-                                style="width: 252px"
-                                @keyup.enter.native="showKey($event)"
-                            />
-                        </div>
-                        <div class='m-search' @click="showKey">查询</div>
-                   </div>
+                <div class='list-search'>
+                    <div class='lower-search'>
+                        <span style='padding-right:10px'>合同编号</span>
+                        <i-input 
+                            v-model="params.serialNumber" 
+                            placeholder="请输入客户名称"
+                            style="width: 252px"
+                            @keyup.enter.native="onKeyEnter($event)"
+                        />
+                    </div>
+                    <div class='m-search' @click="submitLower">查询</div>
+                </div>
             </div>
 
-            <Table :columns="joinOrder" :data="joinData" border class='list-table' @on-selection-change="selectData"/>
+            <Table :columns="joinOrder" :data="joinData" border class='list-table' @on-selection-change="onBoxSelect"/>
 
             <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                @changeOpen="onChangeOpen"
+                @changeOpen="onMessageChange"
             />
 
             <Modal
                 v-model="openYard"
                 title="提示信息"
-                @on-ok="yardSubmit"
+                @on-ok="submitYard"
                 width="500"
             >
-                <ContractYard @bindData="bindYard"/>
+                <ContractYard @bindData="onYardChange"/>
             </Modal>
 
     </div>
@@ -144,25 +142,26 @@
         },
 
         methods:{
-            showKey: function (ev) {
-                let param={
-                    serialNumber:ev.target.value,
-                }
-                let searchParams=Object.assign({},this.params,param);
-                 this.getListData(searchParams);
+            submitYard (){
+               let params=Object.assign({},this.yardData);
+               params.requestId=this.selectId;
+               this.$http.post('contract-batch-file', params, r => {
+                    this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='归档成功';
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })   
             },
 
-            showYard(){
-                if(this.selectId.length==0){
-                    this.$Notice.error({
-                        title:'请勾选归档合同'
-                    });
-                    return;
-                }
-                this.openYard=true;
+            submitLower(){
+               this.getListData(this.params); 
             },
 
-            showView(params){
+            jumpView(params){
                 window.open(`./${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,params.row.id);
             },
             
@@ -178,7 +177,11 @@
                 }) 
             },
 
-            selectData(params){
+            onKeyEnter: function (ev) {
+                this.submitLower();
+            },
+
+            onBoxSelect(params){
                 if(params.length!=0){
                      let id=[];
                      params.map((item,index)=>{
@@ -190,27 +193,22 @@
                 }
             },
 
-            bindYard(params){
+            onYardChange(params){
                 this.yardData=params;
             },
 
-            yardSubmit (){
-               let params=Object.assign({},this.yardData);
-               params.requestId=this.selectId;
-               this.$http.post('contract-batch-file', params, r => {
-                    this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='归档成功';
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })   
-            },
-
-            onChangeOpen(data){
+            onMessageChange(data){
                 this.openMessage=data;
+            },
+            
+            showYard(){
+                if(this.selectId.length==0){
+                    this.$Notice.error({
+                        title:'请勾选归档合同'
+                    });
+                    return;
+                }
+                this.openYard=true;
             }
         }
     }

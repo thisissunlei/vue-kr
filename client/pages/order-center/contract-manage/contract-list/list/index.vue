@@ -417,6 +417,7 @@
             },
             //合同生效开关
             takeEffectSwitch(){
+                this.effectDisabled=false;
                 this.openTakeEffect = !this.openTakeEffect;
             },
             //生效确定
@@ -445,6 +446,7 @@
             },
             //其他约定页面开关
             describeSwitch(){
+                this.describeDisabled=false;
                 this.openDescribe = !this.openDescribe;
             },
             //其他约定按钮点击

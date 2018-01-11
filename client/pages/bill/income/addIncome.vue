@@ -157,6 +157,7 @@ export default{
 		 }
     },
     mounted:function(){
+
         this.$http.get('join-bill-community','', res => {    
                 this.communityList = res.data.items 
         }, err => {

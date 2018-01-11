@@ -2,7 +2,7 @@
  <div>
       <Modal
         v-model="openDown"
-        title="下载pdf"
+        title="下载pdf-"
         width="660"
       >
             <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>
@@ -34,10 +34,8 @@
             <Button @click="pageAdd" icon="plus"></Button>
           </div>
         </div>
-        <div class="pdf-box"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @numPages="numPages = $event||1" :page = "page" dpi="10"></pdf>
-        <!-- <pdf v-if="show" ref="pdf" style="border: 1px solid red" :src="src" :page="page" :rotate="rotate" @password="password" @progress="loadedRatio = $event" @error="error" @numPages="numPages = $event"></pdf> -->
-         
+        <div class="pdf-box" v-if="openPage"> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10"></pdf> 
         </div>
     </div>
     
@@ -54,23 +52,25 @@ export default {
       openDown:false,
       fileId:'100100',
       src:'',
-      numPages:0,
+      numPages:1,
       page:1,
+      openPage:false,
+      newWin:''
     }
   },
   mounted:function(){
+    this.openPage = true;
     GLOBALSIDESWITCH("false");
      var that = this;
       this.config();
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-         console.log(r.data.fileId)
           that.fileId = r.data.fileId || '';
           that.getPdfUrl(r.data.fileId||'');
       }, e => {
            that.$Notice.error({
-                title:error.message||"后台出错请联系管理员"
+              title:error.message||"后台出错请联系管理员"
             });
       })
   },
@@ -78,6 +78,9 @@ export default {
     selectCachet(select){
       this.isCachet = select;
       
+    },
+    getNumPage(detail){
+      this.numPages = detail||1;
     },
     pageSub(){
       if(this.page==1){
@@ -115,22 +118,21 @@ export default {
     downLoad(){
       var that = this;
       this.config();
+      
       var parameter = utils.getRequest()
       if(this.isCachet){
         parameter.contractType = "HAVESEAL"
       }else{
         parameter.contractType = "NOSEAL"
       }
+      this.newWin = window.open()
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          // _this.communityList=r.data.items 
           if(!r.data.fileId){
               that.$Notice.error({
-                        title:error.message||"后台出错请联系管理员"
+                title:error.message||"后台出错请联系管理员"
               });
               return;
           }
-          // var url = `/api/krspace-op-web/sys/downFile?fileId=${r.data.fileId}`
-          // window.location.href = url;
           that.downLoadPdf(r.data);
           that.downSwitch();
       }, e => {
@@ -140,14 +142,12 @@ export default {
     },
     downLoadPdf(params){
                 var that=this;
+               
                 this.$http.post('get-station-contract-pdf-url', {
                     id:params.fileId,
                     
                 }, (response) => {
-                
-                    // window.open(response.data,"_blank");
-
-                      window.location.href = response.data;
+                 that.newWin.location = response.data;
                 }, (error) => {
                     that.$Notice.error({
                         title:error.message||"后台出错请联系管理员"

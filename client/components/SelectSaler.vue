@@ -18,6 +18,7 @@
             :placeholder="value"
             :remote-method="remoteSaler"
             :loading="loading1"
+            :disabled="disabled"
             @on-change="changeContent">
             <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
@@ -29,7 +30,11 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:['value','onchange'],
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean
+        },
         data () {
             return {
                 saler:'',

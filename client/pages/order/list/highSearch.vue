@@ -128,6 +128,7 @@ export default{
     },
     mounted:function(){
 
+
         this.$http.get('join-bill-community','', res => {    
                 this.communityList=res.data.items 
             }, err => {
@@ -135,6 +136,7 @@ export default{
 					title:err.message
 				});
 			})
+
 
     },
     methods:{

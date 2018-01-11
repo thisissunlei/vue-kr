@@ -1,36 +1,3 @@
-<style lang="less"> 
-   .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   .vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
-   
-   
-</style>
-
-
-
 <template>
     <div class="create-new-order">
         <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
@@ -146,8 +113,8 @@
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
-                         <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                         <Select v-model="item.type" label-in-value @on-change="changeType">
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -221,14 +188,12 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="900"
-       
+        width="90%"
          class-name="vertical-center-modal"
      >
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
-            <!-- <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button> -->
         </div>
     </Modal>
 
@@ -277,7 +242,7 @@ import utils from '~/plugins/utils';
                 delStation:[],
                 stationAmount:'',
                 installmentType:'',
-                maxDiscount:'',//折扣最大限制
+                maxDiscount:{},//折扣最大限制
                 timeError:false,//租赁时间校验
                 stationData:{
                     submitData:[],
@@ -383,6 +348,7 @@ import utils from '~/plugins/utils';
                 errorAmount:false,
                 ssoName:'',
                 discount:0,
+                minDiscount:'',
 
             }
         },
@@ -511,6 +477,7 @@ import utils from '~/plugins/utils';
                 })
                 //检查手否有未填写完整的折扣项
                 let complete = true;
+                let zhekou = true;
                 saleList.map(item=>{
                      if(item.tacticsType == '1' && this.discount){
                         item.discount = this.discount
@@ -519,14 +486,18 @@ import utils from '~/plugins/utils';
                         complete = false
                     }
                     if(item.tacticsType=='3' && (!item.startDate || !item.validEnd)){
+
                         complete = false;
                     }
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
+                    }else{
+                        
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -538,8 +509,10 @@ import utils from '~/plugins/utils';
 
                     return;
                 }
+                if(!zhekou && !show ){
+                    return;
+                }
                 
-
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
                     if(item.tacticsType=='3'){
@@ -582,19 +555,23 @@ import utils from '~/plugins/utils';
                 })
 
             },
-            changezhekou(val){
-                val = val.target.value;
+            changezhekou(value){
+
+                let val = value.target.value;
+                if(!val){
+                    return
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
                     return
                 }
-                if(val<this.maxDiscount){
-                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
                     this.$Notice.error({
-                        title:'折扣不得小于'+this.maxDiscount
+                        title:'折扣不得小于'+this.minDiscount
                     })
                     return;
                 }
@@ -697,7 +674,7 @@ import utils from '~/plugins/utils';
             getTacticsId(type){
                 let typeId = '';
                 typeId = this.youhui.filter((item)=>{
-                    if(item.tacticsType != type ){
+                    if(item.tacticsName != type ){
                         return false;
                     }
                     return true;
@@ -705,34 +682,66 @@ import utils from '~/plugins/utils';
                 return typeId[0].tacticsId
 
             },
+            dealzhekou(val){
+                if(!val){
+                    return false
+                }
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return false
+                }
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.minDiscount
+                    })
+                    return false;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return false;
+                }
+                return true;
+            },
             
-            changeType:function(value){
+            changeType:function(val){
                 //优惠类型选择
-                if(!value){
+                if(!val){
                     return;
                 }
+                let label = val.label;
+                let value = val.value
                 this.config()
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
+                let itemValue = value.split('/')[0];
+                let itemIndex = value.split('/')[1];
+                let itemName = value.split('/')[2]
+                let itemId = value.split('/')[3]
                 this.formItem.items[itemIndex].tacticsType = itemValue;
+                this.formItem.items[itemIndex].tacticsName = itemName;
+                this.formItem.items[itemIndex].tacticsId = itemId;
                 let items = [];
 
                 items = this.formItem.items.map((item)=>{
-                    console.log('changeType--map',item)
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
                     }else if(item.tacticsType == 3){
                         item.validStart= item.startDate || ''
                         item.validEnd = this.formItem.endDate
-                        item.tacticsId = this.getTacticsId('3')
-
+                        item.tacticsId = item.tacticsId || itemId;
                         item.discount = '';
                     }else if(item.tacticsType == 1){
                         item.validStart=this.formItem.startDate
-                        item.tacticsId = this.getTacticsId('1')
-                        item.discount = this.maxDiscount;
-                        item.validEnd = this.formItem.endDate
+                        item.tacticsId = item.tacticsId || itemId
+                        item.discount = item.discount|| ''
+                        item.validEnd = this.formItem.endDate;
                     }
                     return item;
                 })
@@ -762,6 +771,11 @@ import utils from '~/plugins/utils';
                         title:message
                     });
                     items[itemIndex].show = false;
+                    this.formItem.items = items;
+                    return;
+                }
+                if(itemValue == 1){
+                 this.minDiscount = this.maxDiscount[label]
                 }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
@@ -1032,7 +1046,7 @@ import utils from '~/plugins/utils';
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
-                let maxDiscount = '';
+                let maxDiscount = {};
                 let _this = this;
                  this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
@@ -1040,8 +1054,10 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
+                            obj.id = item.tacticsId;
+                            obj.name = item.tacticsName;
                             if(item.tacticsType == 1){
-                                maxDiscount = obj.discount;
+                                maxDiscount[item.tacticsName] = obj.discount;
                             }
                             return obj;
                         })
@@ -1078,7 +1094,6 @@ import utils from '~/plugins/utils';
                 if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
-                        console.log('get-station-amount',r)
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;
@@ -1104,3 +1119,33 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+   .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+   
+   
+</style>

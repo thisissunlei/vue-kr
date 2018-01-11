@@ -245,6 +245,7 @@
 
 
 
+
 ###3.代码/样式：
 
 
@@ -483,7 +484,20 @@
 
   ```
 
+**(13)method**
 
+```
+ajax方法以get、post开头，以data结尾（good：getListData、postFormData）（bad：takeData、confirmData、getList、postForm） 
+
+事件方法以on开头（onTypeChange、onUsernameInput）
+
+init、refresh单词除外
+
+尽量使用常用单词开头（set、get、show、close、jump、submit）
+
+驼峰命名（good: getListData）（bad: get_list_data、getlistData）
+
+```
 
 
 ###谨慎使用

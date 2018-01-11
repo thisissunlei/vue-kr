@@ -1,36 +1,3 @@
-<style lang="less"> 
-.vertical-center-modal{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .ivu-modal{
-            top: 0;
-        }
-    }
-    .required-label{
-    // padding:10px 0;
-    font-size: 14px;
-    position: relative;
-    margin-left: 5px;
-    &&:before{
-        content:'*';
-        color: red;
-        position: absolute;
-        font-size: 18px;
-        left:-7px;
-        top:14px;
-    }
-   } 
-   .pay-error{
-    color:#ed3f14;
-   }
-   
-   
-</style>
-
-
-
 <template>
     <div class="create-new-order">
        <SectionTitle label="编辑续租服务订单管理"></SectionTitle>
@@ -127,8 +94,8 @@
                         <Checkbox v-model="item.select"></Checkbox>
                     </Col>
                     <Col span="6" class="discount-table-content">
-                         <Select v-model="item.type" @on-change="changeType">
-                            <Option v-for="types in youhui" :value="types.value+'-'+index" :key="types.value" >{{ types.label }}</Option>
+                         <Select v-model="item.type" label-in-value @on-change="changeType">
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -205,7 +172,7 @@
          class-name="vertical-center-modal"
      >
         <div v-if="!stationListData.length">无可续租工位</div>
-        <stationList label="可续租工位" :stationList="stationListData" :selecedStation="selecedStation" 
+        <stationList label="可续租工位" :stationList="stationListData" 
         @on-station-change="onStationChange" v-if="openStation && stationListData.length"></stationList>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
@@ -237,7 +204,7 @@ import utils from '~/plugins/utils';
             const validateFirst = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.renewForm.startDate)<new Date(value)){
+                } else if(new Date(this.renewForm.start)<new Date(value)){
                     callback(new Error('首付款日期不得晚于起始日期'));
                 }else{
                     callback()
@@ -292,7 +259,8 @@ import utils from '~/plugins/utils';
                selecedArr:[],
                depositAmount:'',
                installmentType:'',
-               maxDiscount:'',
+               maxDiscount:{},
+               minDiscount:'',
                columns: [
                     {
                         type: 'selection',
@@ -311,7 +279,7 @@ import utils from '~/plugins/utils';
                         title: '租赁期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.end)))
                         }
                     },
                     {
@@ -390,6 +358,8 @@ import utils from '~/plugins/utils';
                         money += item.amount;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
+                        obj.end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.endDate));
                         return obj;
                     })
@@ -408,7 +378,7 @@ import utils from '~/plugins/utils';
                     _this.renewForm.stationAmount = data.seatRentAmount;
                     _this.stationAmount = utils.smalltoBIG(data.seatRentAmount)
 
-                    _this.renewForm.startDate = data.startDate;
+                    _this.renewForm.start = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
                     _this.selecedArr = data.orderSeatDetailVo;
                     // _this.renewForm.rentAmount = data.rentAmount;
@@ -425,18 +395,29 @@ import utils from '~/plugins/utils';
                             obj.status = 1;
                             obj.show = true;
                             obj.validStart = item.freeStart;
-                            obj.startDate = item.freeStart;
+                            if(item.tacticsType == 3){
+                               obj.startDate = item.freeStart; 
+                           }else{
+                            obj.startDate = '';
+                           }
+                            
                             obj.validEnd = item.freeEnd;
-                            obj.type = item.tacticsType+'-'+index;
                             obj.tacticsId = item.tacticsId ;
                             obj.discount = item.discountNum;
+                           let i = _this.youhui.filter((items,i)=>{
+                                if(items.name == item.tacticsName){
+                                    return true
+                                }
+                                return false
+                            })
+                            obj.type = item.tacticsType+'/'+index+'/'+i[0].name+'/'+i[0].id;
                             obj.tacticsType = JSON.stringify(item.tacticsType);
                             return obj;
                         })
 
                         _this.renewForm.items = data.contractTactics;
                         _this.dealSaleInfo(false)
-                    },200)
+                    },500)
                      _this.getStationFn = +new Date();
                     }, e => {
                         _this.$Notice.error({
@@ -457,7 +438,7 @@ import utils from '~/plugins/utils';
                     return;
                 }
                 let {params}=this.$route;
-                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate));
+                let start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start));
                 let signDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.signDate));
                 let end = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate));
                 let renewForm = {} 
@@ -760,7 +741,7 @@ import utils from '~/plugins/utils';
             getTacticsId(type){
                 let typeId = '';
                 typeId = this.youhui.filter((item)=>{
-                    if(item.tacticsType != type ){
+                    if(item.tacticsName != type ){
                         return false;
                     }
                     return true;
@@ -769,33 +750,39 @@ import utils from '~/plugins/utils';
 
             },
             //优惠类型选择
-            changeType:function(value){
+            changeType:function(val){
                 //优惠类型选择
-                if(!value){
+                if(!val){
                     return;
                 }
+                let label = val.label;
+                let value = val.value;
                 this.config()
                 let _this = this;
-                let itemValue = value.split('-')[0];
-                let itemIndex = value.split('-')[1];
+                let itemValue = value.split('/')[0];
+                let itemIndex = value.split('/')[1];
+                let itemName = value.split('/')[2]
+                let itemId = value.split('/')[3]
+                this.renewForm.items[itemIndex].tacticsName = itemName;
+                this.renewForm.items[itemIndex].tacticsId = itemId;
                 this.renewForm.items[itemIndex].tacticsType = itemValue;
 
                 let items = [];
                 items = this.renewForm.items.map((item)=>{
                     if(item.tacticsType == 'qianmian'){
-                        item.validStart = this.renewForm.startDate;
+                        item.validStart = this.renewForm.start;
                         item.discount = '';
+                        item.name = label
                         item.tacticsId = this.getTacticsId()
                     }else if(item.tacticsType == 3){
-                        item.validStart=item.validStart || ''
+                        item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
-                        item.tacticsId = this.getTacticsId('3')
-
-                        item.discount = '';
+                        item.tacticsId = item.tacticsId || itemId;
+                        item.discount = ''; 
                     }else if(item.tacticsType == 1){
-                        item.validStart=this.renewForm.startDate
-                        item.tacticsId = this.getTacticsId('1')
-                         item.discount = this.maxDiscount;
+                        item.validStart=this.renewForm.start
+                        item.tacticsId = item.tacticsId || itemId;
+                         item.discount = item.discount|| ''
                         item.validEnd = this.renewForm.endDate
                     }
                     return item;
@@ -826,6 +813,11 @@ import utils from '~/plugins/utils';
                         title:message
                     });
                     items[itemIndex].show = false;
+                    this.renewForm.items = items;
+                    return;
+                }
+                if(itemValue == 1){
+                    this.minDiscount = this.maxDiscount[label]
                 }
                 this.renewForm.items = items;
                 this.dealSaleInfo(false)
@@ -836,16 +828,18 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
-                var date = val[0].endDate;
+                var date = val[0].begin;
                 date = new Date(date).getTime();
 
                 let day = 1000 * 60* 60*24;
                 let start =  date + day;
-                this.renewForm.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
+                this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                 this.getStationAmount()
                 
             },
             getStationAmount(){
+                //工位原始结束日期，续租开始日期前一天
+                let startDate = '';
 
                 let val = this.selecedArr;
                 let _this = this;
@@ -855,25 +849,26 @@ import utils from '~/plugins/utils';
                     let obj = item;
                     obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
+                    startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
-                    obj.startDate = this.renewForm.startDate;
+                    obj.startDate = this.renewForm.start;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate)),
-                    leaseBegindate:this.renewForm.startDate,
+                    leaseBegindate:this.renewForm.start,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
                 }
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
-                         _this.selecedStation = r.data.seats.map(item=>{
+                        _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
-                            money+=item.originalAmount;
-                            obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
-                            obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            money+=item.amount;
+                            item.start = value.startDate
+                            item.end = value.endDate
                             return obj;
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
@@ -903,7 +898,7 @@ import utils from '~/plugins/utils';
             },
             getSaleTactics:function(params){//获取优惠信息
                 let list = [];
-                let maxDiscount = '';
+                let maxDiscount = {};
                 let _this = this;
                  this.$http.get('sale-tactics', params, r => {
                     if(r.data.length){
@@ -911,9 +906,10 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             obj.label = item.tacticsName;
                             obj.value = item.tacticsType+'';
-                            obj.tacticsId = item.tacticsId;
+                            obj.id = item.tacticsId;
+                            obj.name = item.tacticsName;
                             if(item.tacticsType == 1){
-                                maxDiscount = obj.discount;
+                                maxDiscount[item.tacticsName] = obj.discount;
                             }
                             return obj;
                         })
@@ -942,17 +938,20 @@ import utils from '~/plugins/utils';
             },
             changezhekou(val){
                 val = val.target.value;
+                if(!val){
+                    return
+                }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';
                     this.disabled = true;
                     return
                 }
-                if(val<this.maxDiscount){
-                    this.discountError = '折扣不得小于'+this.maxDiscount;
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
                     this.$Notice.error({
-                        title:'折扣不得小于'+this.maxDiscount
+                        title:'折扣不得小于'+this.minDiscount
                     })
                     return;
                 }
@@ -978,6 +977,7 @@ import utils from '~/plugins/utils';
                 })
                 //检查手否有未填写完整的折扣项
                 let complete = true;
+                let zhekou = true;
                 saleList.map(item=>{
                     if(!item.tacticsType){
                         complete = false
@@ -989,10 +989,12 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false
 
+                    }else{
+                       zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
@@ -1001,6 +1003,9 @@ import utils from '~/plugins/utils';
                 }
                 if(!complete && !show){
                     return ;
+                }
+                if(!zhekou && !show){
+                    return;
                 }
 
                 saleList = saleList.map(item=>{
@@ -1015,18 +1020,47 @@ import utils from '~/plugins/utils';
                 })
                 this.getSaleAmount(saleList)
             },
+            dealzhekou(val){
+                if(!val){
+                    return false;
+                }
+                if(isNaN(val)){
+                    this.discountError = '折扣必须是数字';
+                    this.disabled = true;
+                    return false
+                }
+                if(val<this.minDiscount){
+                    this.discountError = '折扣不得小于'+this.minDiscount;
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣不得小于'+this.minDiscount
+                    })
+                    return false;
+                }
+                if(val>9.9){
+                    this.discountError = '折扣不得大于9.9'
+                    this.disabled = true;
+                    this.$Notice.error({
+                        title:'折扣不得大于9.9'
+                    })
+                    return false;
+                }
+                return true;
+            },
              getSaleAmount(list){
                 this.config()
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.startDate)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
+                     // _this.renewForm.items = r.data.saleList
                     _this.discountError = false;
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;
@@ -1049,3 +1083,33 @@ import utils from '~/plugins/utils';
         }
     }
 </script>
+<style lang="less"> 
+.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+    .required-label{
+    // padding:10px 0;
+    font-size: 14px;
+    position: relative;
+    margin-left: 5px;
+    &&:before{
+        content:'*';
+        color: red;
+        position: absolute;
+        font-size: 18px;
+        left:-7px;
+        top:14px;
+    }
+   } 
+   .pay-error{
+    color:#ed3f14;
+   }
+   
+   
+</style>

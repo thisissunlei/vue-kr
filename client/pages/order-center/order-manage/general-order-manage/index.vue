@@ -3,7 +3,7 @@
             <SectionTitle label = "通用订单列表"/>
             <div  class='list-banner'>
                     <div class='list-btn'>
-                        <Button type="primary" @click="showOrder">新建订单</Button>
+                        <Button type="primary" @click="jumpAdd">新建订单</Button>
                     </div>
 
                     <div class='list-search'>
@@ -13,10 +13,10 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
-                                @keyup.enter.native="showKey($event)"
+                                @keyup.enter.native="onKeyEnter($event)"
                             />
                         </div>
-                        <div class='m-search' @click="lowerSubmit">搜索</div>
+                        <div class='m-search' @click="submitLower">搜索</div>
                         <div class="m-bill-search" @click="showSearch">
                           <span/>   
                         </div> 
@@ -26,7 +26,7 @@
             <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
             <div class='list-footer'>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='20' @on-change="changePage" show-total show-elevator/>
+                        <Page :total="totalCount" :page-size='20' show-total show-elevator @on-change="onPageChange"/>
                     </div>
             </div>
 
@@ -35,9 +35,9 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch @bindData="upperChange"/>
+                <HeightSearch @bindData="onUpperChange"/>
                 <div slot="footer">
-                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="primary" @click="submitUpper">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
@@ -45,8 +45,8 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
+                @on-ok="submitNullify"  
             >
                 <Nullify/>
             </Modal>
@@ -55,12 +55,10 @@
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                @changeOpen="onChangeOpen"
+                @changeOpen="onMessageChange"
             />
-
     </div>
 </template>
-
 
 <script>
     import HeightSearch from './heightSearch';
@@ -83,30 +81,21 @@
         },
         data () {    
             return {     
-                upperData:{},
-
-                id:'',
-                
-                totalCount:1,
-
                 params:{
                     page:1,
                     pageSize:20,
                     customerName:"",
                 },
 
+                id:'',          
+                totalCount:1,
                 openSearch:false,
-
                 openNullify:false,
-
                 openMessage:false,
-
                 warn:'',
-
                 MessageType:'',
-
+                upperData:{},
                 upperError:false,
-
                 joinData:[],
 
                 joinOrder: [
@@ -165,7 +154,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 },'查看')];
@@ -195,7 +184,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showEdit(params)
+                                            this.jumpEdit(params)
                                         }
                                     }
                                 }, '编辑'))
@@ -213,40 +202,14 @@
           this.params=params;
         },
 
-        methods:{
-            showKey: function (ev) {
-                this.lowerSubmit();
-            },
-
-            showSearch () {
-                this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
-            },
-
-            showOrder(){
-                window.open('/order-center/order-manage/general-order-manage/create/addOrder','order');
-            },
-
-            showView(params){
-                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
-            },
-
-            showNullify(params){
-                this.id=params.row.id;
-                this.openNullify=true;
-            },
-
-            showEdit(params){
-                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/editOrder`,params.row.id)
-            },
-
-            nullifySubmit (){
+        methods:{ 
+            submitNullify (){
                 let params={
                     id:this.id
                 };   
                  this.$http.post('general-order-nullify', params,r => {
                     this.openMessage=true;
-                    this.MessageType=r.message=='ok'?"success":"error";
+                    this.MessageType="success";
                     this.warn='作废成功';
                     this.getListData(this.params);
                 }, e => {
@@ -254,6 +217,42 @@
                     this.MessageType="error";
                     this.warn=e.message;
                 })
+            },
+
+            submitLower(){
+                this.params.page=1;
+                utils.addParams(this.params);
+            },
+
+            submitUpper(){
+                if(this.upperError){
+                    return ;
+                }
+                this.params=Object.assign({},this.params,this.upperData);
+                this.params.page=1;
+                this.params.pageSize=20;
+                this.params.cTimeBegin=this.params.cTimeBegin?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeBegin)):'';
+                this.params.cTimeEnd=this.params.cTimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeEnd)):'';
+                utils.addParams(this.params);
+            },
+
+            onKeyEnter: function (ev) {
+                this.submitLower();
+            },
+
+            onUpperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
+            },
+
+            onPageChange (index) {
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
+            },
+
+            onMessageChange(data){
+                this.openMessage=data;
             },
 
             getListData(params){
@@ -269,37 +268,27 @@
                 })   
             },
 
-            changePage (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
+            jumpAdd(){
+                window.open('/order-center/order-manage/general-order-manage/create/addOrder','order');
             },
 
-            lowerSubmit(){
-                this.params.page=1;
-                utils.addParams(this.params);
+            jumpView(params){
+                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/joinView`,params.row.id);
             },
 
-            upperChange(params,error){
-                this.upperError=error;
-                this.upperData=params;
+            jumpEdit(params){
+                window.open(`/order-center/order-manage/general-order-manage/${params.row.id}/editOrder`,params.row.id)
+            },  
+
+            showSearch () {
+                this.openSearch=!this.openSearch;
+                utils.clearForm(this.upperData);
             },
 
-            upperSubmit(){
-                if(this.upperError){
-                    return ;
-                }
-                this.params=Object.assign({},this.params,this.upperData);
-                this.params.page=1;
-                this.params.pageSize=20;
-                this.params.cTimeBegin=this.params.cTimeBegin?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeBegin)):'';
-                this.params.cTimeEnd=this.params.cTimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cTimeEnd)):'';
-                utils.addParams(this.params);
-            },
-
-            onChangeOpen(data){
-                this.openMessage=data;
-            }
+            showNullify(params){
+                this.id=params.row.id;
+                this.openNullify=true;
+            }   
         }
     }
 </script>

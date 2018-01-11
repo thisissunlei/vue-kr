@@ -6,23 +6,24 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName"/>
+                      <selectCustomers name="formItem.customerId" :value="customerName" disabled/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test='formItem' :onchange="changeCommunity" :value="communityName"/>
+                      <selectCommunities test='formItem' :value="communityName" disabled/>
                     </FormItem>
                 </Col>
 
                  <Col class="col">
-                   <FormItem label="订单类型" style="width:252px" prop='type'>
+                   <FormItem label="订单类型" style="width:252px" prop='orderType'>
                     <Select 
-                        v-model="formItem.type" 
+                        v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        disabled
                     >
                         <Option 
                             v-for="item in typeList" 
@@ -33,6 +34,26 @@
                         </Option>
                    </Select> 
                  </FormItem>
+                </Col>
+
+                <Col class="col">
+                    <FormItem label="费用明细类型" style="width:252px" prop='feeType'>
+                    <Select 
+                        v-model="formItem.feeType" 
+                        placeholder="请输入费用明细类型" 
+                        style="width: 252px"
+                        clearable
+                        disabled
+                    >
+                        <Option 
+                            v-for="item in freeList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                     </Select> 
+                    </FormItem>
                 </Col>
 
                 <Col class="col">
@@ -47,22 +68,21 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salespersonName"/>
+                    <SelectSaler name="formItem.salesperson"  :value="salespersonName" disabled/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
                     <FormItem label="销售日期" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
                     </FormItem>
                 </Col>
 
-                <Col  class="col">
-                    <FormItem label="备注信息" prop="remark" style="width:702px">
-                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
-                      <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
-                    </FormItem>
-                </Col>
+                <FormItem label="备注信息" prop="remark" style="width:702px">
+                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..." disabled/>
+                    <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                </FormItem>
+            
             </Row>
 
             <FormItem>
@@ -89,6 +109,12 @@ import utils from '~/plugins/utils';
 
 
 export default {
+       head() {
+            return {
+                title: '编辑订单'
+            }
+        },
+
         data() {
 
            const validateMoney = (rule, value, callback) => {
@@ -105,59 +131,28 @@ export default {
            return {
                
                 disabled:false,
-
-                typeList:[
-                   {value:'REGISTER',label:'注册订单'},
-                   {value:'INCONSUME',label:'场内消费订单'},
-                   {value:'ACTIVITY',label:'活动订单'},
-                   {value:'ADVERT',label:'广告订单'},
-                   {value:'APPRECIATION6',label:'增值服务订单'},
-                   {value:'TRAIN',label:'培训订单'},  
-                   {value:'OTHER',label:'其他服务订单'}
-                ],
-
+                typeList:[],
+                freeList:[],
                 customerName:'',
-
                 communityName:'',
-
                 salespersonName:'请选择',
 
                 formItem: {
                     customerId: '',
                     communityId: '',
                     saleDate:'',
-                    type:'',
+                    orderType:'',
                     remark:'',
                     salesperson:'',
-                    money:''
+                    money:'',
+                    feeType:''
                 },
 
                 ruleCustom:{
-                    saleDate: [
-                        { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
-                    ],
                     money: [
                         { required: true,trigger: 'change' ,validator: validateMoney}
-                    ],
-                    communityId:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    salesperson:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
-                    ],
-                    type:[
-                        { required: true, message: '请选择订单类型', trigger: 'change' }
                     ]
                 }
-            }
-        },
-
-        head() {
-            return {
-                title: '编辑订单'
             }
         },
 
@@ -171,6 +166,7 @@ export default {
 
          mounted(){
             this.getDetailData();
+            this.getCommonData();
             GLOBALSIDESWITCH("false");
         },
 
@@ -197,7 +193,18 @@ export default {
                 })
             },
 
-            joinFormSubmit(){
+            getCommonData(){
+               this.$http.get('general-common-list','', r => {
+                     this.typeList=r.data.ERP_BizType;
+                     this.freeList=r.data.ERP_FeeType;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })    
+            },
+
+            submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
@@ -223,7 +230,7 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.disabled = true;
-                        this.joinFormSubmit()
+                        this.submitForm();
                     } else {
                         _this.disabled = false;
                         this.$Notice.error({
@@ -231,26 +238,6 @@ export default {
                         });
                     }
                 })
-            },
-
-            changeCommunity:function(value){
-                if(value){
-                    this.formItem.communityId = value;
-                }else{
-                    this.formItem.communityId = '';
-                }       
-            },
-
-            changeCustomer:function(value){
-                if(value){
-                    this.formItem.customerId = value;
-                }else{
-                    this.formItem.customerId = '';
-                }
-            },
-
-            changeSaler:function(value){
-                this.formItem.salesperson = value;
             }
         }
     }

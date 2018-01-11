@@ -286,7 +286,6 @@
 
             showSearch () {
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
             },
             
             showJoin(){

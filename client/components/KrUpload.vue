@@ -52,6 +52,7 @@ export default{
 				left:0,
 				top:0,
 			},
+			newWin:'',
 			params:{},
 			defaultList:!this.file.length?[]:this.file,
 			serverUrl:'',
@@ -224,16 +225,13 @@ export default{
 		},
 		downFille(params){
 			var that=this;
+			this.newWin = window.open();
 			this.$http.post('get-station-contract-pdf-url', {
 				id:params.fileId,
 				
 			}, (response) => {
+				 that.newWin.location = response.data;
 			
-				//this.serverUrl = response.data.serverUrl;
-				//var url = `/api/krspace-op-web/sys/down-file?fileId=${params.fileId}`
-				// window.location.href = url;
-				// window.open(response.data,"_blank");
-				  window.location.href = response.data;
 			}, (error) => {
 				that.$Notice.error({
                     title:error.message

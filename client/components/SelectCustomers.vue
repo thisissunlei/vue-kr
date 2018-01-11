@@ -12,18 +12,16 @@
 <template>
     <div class="com-select-customers">
          <Select
-            v-model="customer"
+            :v-model="customer"
             filterable
             remote
             :placeholder="value"
             :remote-method="remoteCustomer"
             :loading="loading1"
+            :disabled="disabled"
             @on-change="changeContent"
-
-
-
             >
-            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -33,7 +31,11 @@
 import http from '~/plugins/http.js';
 
     export default {
-        props:['onchange','value'],
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean
+        },
         data () {
             
             return {

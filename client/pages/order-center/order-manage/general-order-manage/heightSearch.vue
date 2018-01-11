@@ -81,8 +81,8 @@
              </Form-item>
          </Form>
 </template>
-<script>
 
+<script>
 
     export default{
         data (){
@@ -102,21 +102,14 @@
                    {value:'FINISH',label:'已完成'},
                    {value:'CANCEL',label:'已作废'},
                 ],
-                typeList:[
-                   {value:'REGISTER',label:'注册订单'},
-                   {value:'INCONSUME',label:'场内消费订单'},
-                   {value:'ACTIVITY',label:'活动订单'},
-                   {value:'ADVERT',label:'广告订单'},
-                   {value:'APPRECIATION6',label:'增值服务订单'},
-                   {value:'TRAIN',label:'培训订单'},  
-                   {value:'OTHER',label:'其他服务订单'}
-                ],
+                typeList:[],
                 communityList:[]
             }
         },
 
         mounted:function(){
-            this.getCommunity();
+            this.getCommunityData();
+            this.getCommonData();
         },
 
         updated:function(){
@@ -133,15 +126,24 @@
         },
 
         methods:{
-             getCommunity(){
-                var _this=this;
+             getCommunityData(){
                 this.$http.get('join-bill-community','', r => {    
-                    _this.communityList=r.data.items 
+                    this.communityList=r.data.items 
                     }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })
+            },
+
+             getCommonData(){
+               this.$http.get('general-common-list','', r => {
+                     this.typeList=r.data.ERP_BizType;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })    
             }
         }
     }

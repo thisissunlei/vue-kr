@@ -35,11 +35,13 @@
 			</LabelText>
          </DetailStyle>
 		 <DetailStyle info="相关账单">
-			<Table :columns="contract" :data="contractData"></Table>
+			<Table :columns="contract" :data="contractData"/>
 		 </DetailStyle>
 	</div>
 </div>	
 </template>
+
+
 <script>
 
 import DetailStyle from '~/components/DetailStyle';
@@ -55,7 +57,7 @@ export default {
 
 	head() {
         return {
-            title: '订单详情'
+            title:'订单详情'
         }
 	},
 	
@@ -107,21 +109,27 @@ export default {
 
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
-		let {params}=this.$route;
-		let from={
-			id:params.watchView
-		};
-		var _this=this;
-	     this.$http.get('general-order-watch', from, r => {
-				   _this.basicInfo=r.data;
-				      
-				   _this.saleDate=r.data.saleDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.saleDate)):'';
-				   _this.contractData=r.data.bill[0].contractNum?r.data.bill:[];
-           	}, e => {
-                _this.$Notice.error({
-                    title:e.message
-                });
-        })
+		this.getDetailData();
+	},
+
+	methods: {
+		getDetailData(){
+			let {params}=this.$route;
+			let from={
+				id:params.watchView
+			};
+			var _this=this;
+			this.$http.get('general-order-watch', from, r => {
+					_this.basicInfo=r.data;
+						
+					_this.saleDate=r.data.saleDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.saleDate)):'';
+					_this.contractData=r.data.bill?r.data.bill:[];
+				}, e => {
+					_this.$Notice.error({
+						title:e.message
+				});
+			})
+		}
 	}
 }
 </script>

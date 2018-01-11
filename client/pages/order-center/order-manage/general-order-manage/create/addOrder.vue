@@ -6,26 +6,45 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer"/>
+                      <selectCustomers name="formItem.customerId" :onchange="onCustomerChange"/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test="formItem" :onchange="changeCommunity"/>
+                      <selectCommunities test="formItem" :onchange="onCommunityChange"/>
                     </FormItem>
                 </Col>
 
                  <Col class="col">
-                    <FormItem label="订单类型" style="width:252px" prop='type'>
+                    <FormItem label="订单类型" style="width:252px" prop='orderType'>
                     <Select 
-                        v-model="formItem.type" 
+                        v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
                     >
                         <Option 
                             v-for="item in typeList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                     </Select> 
+                    </FormItem>
+                </Col>
+
+                <Col class="col">
+                    <FormItem label="费用明细类型" style="width:252px" prop='feeType'>
+                    <Select 
+                        v-model="formItem.feeType" 
+                        placeholder="请输入费用明细类型" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in freeList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -47,7 +66,7 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salerName"/>
+                    <SelectSaler name="formItem.salesperson" :onchange="onSalerChange" :value="salerName"/>
                     </FormItem>
                 </Col>
 
@@ -57,12 +76,12 @@
                     </FormItem>
                 </Col>
 
-                <Col  class="col">
-                    <FormItem label="备注信息" prop="remark" style="width:702px">
-                      <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
-                      <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
-                    </FormItem>
-                </Col>
+                
+                <FormItem label="备注信息" prop="remark" style="width:702px">
+                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
+                    <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                </FormItem>
+                
             </Row>
 
             <FormItem>
@@ -89,6 +108,12 @@ import utils from '~/plugins/utils';
 
 
 export default {
+        head() {
+            return {
+                title: '新建订单'
+            }
+        },
+
         data() {
             
            const validateMoney = (rule, value, callback) => {
@@ -105,25 +130,18 @@ export default {
            return {
 
                 disabled:false,
-
-                typeList:[
-                   {value:'REGISTER',label:'注册订单'},
-                   {value:'INCONSUME',label:'场内消费订单'},
-                   {value:'ACTIVITY',label:'活动订单'},
-                   {value:'ADVERT',label:'广告订单'},
-                   {value:'APPRECIATION6',label:'增值服务订单'},
-                   {value:'TRAIN',label:'培训订单'},  
-                   {value:'OTHER',label:'其他服务订单'}
-                ],
+                typeList:[],
+                freeList:[],
 
                 formItem: {
                     customerId: 1,
                     communityId: 1,
                     saleDate:'',
-                    type:'',
+                    orderType:'',
                     remark:'',
                     salesperson:1,
-                    money:''
+                    money:'',
+                    feeType:''
                 },
 
                 ruleCustom:{
@@ -142,18 +160,15 @@ export default {
                     salesperson:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    type:[
+                    orderType:[
                         { required: true, message: '请选择订单类型', trigger: 'change' }
+                    ],
+                    feeType:[
+                        { required: true, message: '请选择费用明细类型', trigger: 'change' }
                     ]
                 },
 
                 salerName:'请选择',
-            }
-        },
-
-        head() {
-            return {
-                title: '新建订单'
             }
         },
 
@@ -167,11 +182,11 @@ export default {
 
          mounted(){
             GLOBALSIDESWITCH("false");
+            this.getCommonData();
         },
-
-        methods: {
-
-            joinFormSubmit(){
+        
+         methods: {
+            submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
@@ -197,7 +212,7 @@ export default {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.disabled = true;
-                        this.joinFormSubmit()
+                        this.submitForm();
                     } else {
                         _this.disabled = false;
                         this.$Notice.error({
@@ -207,7 +222,18 @@ export default {
                 })
             },
 
-            changeCommunity:function(value){
+            getCommonData(){
+               this.$http.get('general-common-list','', r => {
+                     this.typeList=r.data.ERP_BizType;
+                     this.freeList=r.data.ERP_FeeType;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })    
+            },
+
+            onCommunityChange:function(value){
                 if(value){
                     this.formItem.communityId = value;
                 }else{
@@ -215,7 +241,7 @@ export default {
                 }       
             },
 
-            changeCustomer:function(value){
+            onCustomerChange:function(value){
                 if(value){
                     this.formItem.customerId = value;
                 }else{
@@ -223,7 +249,7 @@ export default {
                 }
             },
             
-            changeSaler:function(value){
+            onSalerChange:function(value){
                 this.formItem.salesperson = value;
             }
         }

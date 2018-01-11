@@ -6,23 +6,24 @@
             <Row>  
                 <Col class="col">
                     <FormItem label="客户名称" style="width:252px" prop="customerId">
-                      <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :value="customerName"/>
+                      <selectCustomers name="formItem.customerId" :value="customerName"/>
                     </FormItem>
                 </Col>
                 
                 <Col class="col">
                     <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                      <selectCommunities test='formItem' :onchange="changeCommunity" :value="communityName"/>
+                      <selectCommunities test='formItem' :value="communityName"/>
                     </FormItem>
                 </Col>
 
                  <Col class="col">
-                   <FormItem label="订单类型" style="width:252px" prop='type'>
+                   <FormItem label="订单类型" style="width:252px" prop='orderType'>
                     <Select 
-                        v-model="formItem.type" 
+                        v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        disabled
                     >
                         <Option 
                             v-for="item in typeList" 
@@ -42,6 +43,7 @@
                         placeholder="请输入费用明细类型" 
                         style="width: 252px"
                         clearable
+                        disabled
                     >
                         <Option 
                             v-for="item in freeList" 
@@ -66,18 +68,18 @@
                 
                 <Col class="col">
                     <FormItem label="销售员" style="width:252px" prop="salesperson">
-                    <SelectSaler name="formItem.salesperson" :onchange="changeSaler" :value="salespersonName"/>
+                    <SelectSaler name="formItem.salesperson"  :value="salespersonName"/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col">
                     <FormItem label="销售日期" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
                     </FormItem>
                 </Col>
 
                 <FormItem label="备注信息" prop="remark" style="width:702px">
-                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
+                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..." disabled/>
                     <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
                 </FormItem>
             
@@ -138,7 +140,7 @@ export default {
                     customerId: '',
                     communityId: '',
                     saleDate:'',
-                    type:'',
+                    orderType:'',
                     remark:'',
                     salesperson:'',
                     money:'',
@@ -146,26 +148,8 @@ export default {
                 },
 
                 ruleCustom:{
-                    saleDate: [
-                        { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
-                    ],
                     money: [
                         { required: true,trigger: 'change' ,validator: validateMoney}
-                    ],
-                    communityId:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    salesperson:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
-                    ],
-                    type:[
-                        { required: true, message: '请选择订单类型', trigger: 'change' }
-                    ],
-                    feeType:[
-                        { required: true, message: '请选择费用明细类型', trigger: 'change' }
                     ]
                 }
             }
@@ -259,26 +243,6 @@ export default {
                         });
                     }
                 })
-            },
-
-            changeCommunity:function(value){
-                if(value){
-                    this.formItem.communityId = value;
-                }else{
-                    this.formItem.communityId = '';
-                }       
-            },
-
-            changeCustomer:function(value){
-                if(value){
-                    this.formItem.customerId = value;
-                }else{
-                    this.formItem.customerId = '';
-                }
-            },
-
-            changeSaler:function(value){
-                this.formItem.salesperson = value;
             }
         }
     }

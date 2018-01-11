@@ -8,7 +8,6 @@
     "dev": "cross-env NODE_ENV=development node  server/index.js",
     "build": "nuxt build",
     "start": "cross-env NODE_ENV=production node  server/index.js",
-    "commitmsg": "validate-commit-msg",
     "template": "cross-env NODE_ENV=producation node task/loadTemplate.js",
     "template:test": "cross-env NODE_ENV=test  node task/loadTemplate.js",
     "template:test01": "cross-env NODE_ENV=test01  node task/loadTemplate.js",

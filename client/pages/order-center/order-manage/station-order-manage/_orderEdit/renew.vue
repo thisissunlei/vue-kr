@@ -868,8 +868,8 @@ import utils from '~/plugins/utils';
                         _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
                             money+=item.amount;
-                            item.start = value.startDate
-                            item.end = value.endDate
+                            obj.start = item.startDate
+                            obj.end = item.endDate
                             return obj;
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;

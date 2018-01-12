@@ -1,6 +1,6 @@
 <template>
 <div class="g-setting-manager">
-        <SectionTitle :label='"全部企业（"+totalCount+"）"' ></SectionTitle>
+        <SectionTitle :title='"全部企业（"+totalCount+"）"' ></SectionTitle>
         <div class="u-search" >
             <span class="u-high-search" @click="showSearch"></span>  
             <div style='display:inline-block;float:right;padding-right:20px;'>

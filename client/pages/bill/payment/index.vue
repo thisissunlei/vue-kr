@@ -66,7 +66,7 @@
 <template>
 
 <div class="g-order">
-    <SectionTitle label="回款管理"></SectionTitle>
+    <SectionTitle title="回款管理"></SectionTitle>
     <div class="u-search" >
          <Button type="primary" @click="importDetail">导入回款明细</Button>
         <span class="u-high-search" @click="showSearch"></span>

@@ -38,7 +38,7 @@
 
 <div class="g-order">
 
-    <SectionTitle label="交易流水"></SectionTitle>
+    <SectionTitle title="交易流水"></SectionTitle>
 
     <div class="u-search" >
         <div style='display:inline-block;float:right;padding-right:20px;'>

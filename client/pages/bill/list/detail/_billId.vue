@@ -64,7 +64,7 @@
 </style>
 <template>
 <div class="g-bill-detail">
-	<SectionTitle label="账单详情"></SectionTitle>
+	<SectionTitle title="账单详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="账单编号：">

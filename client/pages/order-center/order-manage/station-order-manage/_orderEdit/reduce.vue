@@ -1,6 +1,6 @@
 <template>
     <div class="create-new-order">
-       <sectionTitle label="编辑减租服务订单管理"></sectionTitle>
+       <SectionTitle title="编辑减租服务订单管理"></SectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form" style="padding:30px 24px">
             <Row style="margin-bottom:20px">  
                 <Col class="col">
@@ -64,7 +64,7 @@
 
 
 <script>
-import sectionTitle from '~/components/SectionTitle.vue'
+import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
@@ -168,7 +168,7 @@ import utils from '~/plugins/utils';
             }
         },
         components: {
-            sectionTitle,
+            SectionTitle,
             selectCommunities,
             selectCustomers,
             SelectSaler,

@@ -11,7 +11,7 @@
 <template>
 
 <div class="g-income-detail">
-	<SectionTitle label="收入详情"></SectionTitle>
+	<SectionTitle title="收入详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="收入编号：">

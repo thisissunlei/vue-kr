@@ -27,7 +27,7 @@
 
 <div class="g-order-detail">
 
-	<SectionTitle label="回款详情"></SectionTitle>
+	<SectionTitle title="回款详情"></SectionTitle>
 
 	<div class="m-detail-content">
 

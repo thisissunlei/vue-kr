@@ -34,7 +34,7 @@
 </style>
 <template>
 <div class="g-order">
-    <SectionTitle label="会议室订单管理"></SectionTitle>
+    <SectionTitle title="会议室订单管理"></SectionTitle>
     <div class="u-search" >
         <span @click="showSearch"></span> 
          <div style='display:inline-block;float:right;padding-right:20px;'>

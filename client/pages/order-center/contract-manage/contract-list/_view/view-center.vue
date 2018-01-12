@@ -1,36 +1,38 @@
 <template>
  <div>
     <div v-if="!isLoading">
-      <Modal
-        v-model="openDown"
-        title="下载pdf-"
-        width="660"
-      >
-            <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>
-            
-            <div style="height:300px;">
-              <div class="cachet-box" @click="selectCachet(false)">
-                <img src="./images/noCachet.png" />
-                <div>示例一：未加盖公章的合同</div>
-                <div :class="!this.isCachet?'select cachet':'select'" />
-              </div>
-           
-              <div class="cachet-box" @click="selectCachet(true)">
-                <img src="./images/cachet.png" />
-                <div>示例二：加盖公章的合同</div>
-                <div :class="this.isCachet?'select cachet':'select'"/>
-              </div>
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="downLoad">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
-            </div>
+        <Modal
+          v-model="openDown"
+          title="下载pdf-"
+          width="660"
+        >
+        <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>   
+        <div style="height:300px;">
+          <div class="cachet-box" @click="selectCachet(false)">
+            <img src="./images/noCachet.png" />
+            <div>示例一：未加盖公章的合同</div>
+            <div :class="!this.isCachet?'select cachet':'select'" />
+          </div>
+        
+          <div class="cachet-box" @click="selectCachet(true)">
+            <img src="./images/cachet.png" />
+            <div>示例二：加盖公章的合同</div>
+            <div :class="this.isCachet?'select cachet':'select'"/>
+          </div>
+        </div>
+
+        <div slot="footer">
+            <Button type="primary" @click="downLoad">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
+        </div>
+
       </Modal>
+
       <div class="box">
         <div style="width:100%;padding:20px;">
           <Button type="info" @click="downSwitch">下载pdf</Button>
           <div style="float:right;">
-            <Button @click="pageSub" icon="minus"/>
+            <Button @click="pageReduce" icon="minus"/>
             {{page+'/'+numPages}}
             <Button @click="pageAdd" icon="plus"/>
           </div>
@@ -68,40 +70,42 @@ export default {
   mounted:function(){
     this.openPage = true;
     GLOBALSIDESWITCH("false");
-     var that = this;
-      this.config();
-      this.getPdfId();
+    this.config();
+    this.getPdfId();
   },
   methods:{
+    
     getPdfId(){
-      var that = this;
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {  
-         that.isLoading = false; 
-          that.fileId = r.data.fileId || '';
-          that.getPdfUrl(r.data.fileId||'');
+         this.isLoading = false; 
+          this.fileId = r.data.fileId || '';
+          this.getPdfUrl(r.data.fileId||'');
       }, e => {
-        that.isLoading = true;
+        this.isLoading = true;
           setTimeout(() => {
-            that.getPdfId();
+            this.getPdfId();
           }, 500);
       })
     },
+
     selectCachet(select){
       this.isCachet = select;
-      
     },
+
     getNumPage(detail){
       this.numPages = detail||1;
     },
-    pageSub(){
+
+    pageReduce(){
       if(this.page==1){
         this.page = 1;
       }else {
         this.page -=1;
       }
     },
+
     pageAdd(){
       if(this.page==this.numPages){
         this.page = this.numPages;
@@ -109,33 +113,27 @@ export default {
         this.page +=1;
       }
     },
+
     config:function(){
-        this.$Notice.config({
-            top: 80,
-            duration: 3
-        });
+      this.$Notice.config({
+        top: 80,
+        duration: 3
+      });
     },
     getPdfUrl(id){
-      var that = this;
       var parameter = {id:id};
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
-         
-          that.src = r.data;
-          
+        this.src = r.data;
       }, e => {
-        
         if(!e.message){
           e.message = "后台出错请联系管理员"
         }
-        // console.log("loading+++++++++")
-          that.$Message.info(e);
-         
+        this.$Message.info(e);
       })
     },
+
     downLoad(){
-      var that = this;
       this.config();
-      
       var parameter = utils.getRequest()
       if(this.isCachet){
         parameter.contractType = "HAVESEAL"
@@ -144,33 +142,31 @@ export default {
       }
       this.newWin = window.open()
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          if(!r.data.fileId){
-              that.$Notice.error({
-                title:error.message||"后台出错请联系管理员"
-              });
-              return;
-          }
-          that.downLoadPdf(r.data);
-          that.downSwitch();
+        if(!r.data.fileId){
+          this.$Notice.error({
+            title:error.message||"后台出错请联系管理员"
+          });
+          return;
+        }
+        this.downLoadPdf(r.data);
+        this.downSwitch();
       }, e => {
-          that.$Message.info(e);
+        this.$Message.info(e);
       })
-     
     },
+
     downLoadPdf(params){
-                var that=this;
-               
-                this.$http.post('get-station-contract-pdf-url', {
-                    id:params.fileId,
-                    
-                }, (response) => {
-                 that.newWin.location = response.data;
-                }, (error) => {
-                    that.$Notice.error({
-                        title:error.message||"后台出错请联系管理员"
-                    });
-                })   
-            },
+        this.$http.post('get-station-contract-pdf-url', {
+          id:params.fileId,
+        }, (response) => {
+          this.newWin.location = response.data;
+        }, (error) => {
+          this.$Notice.error({
+            title:error.message||"后台出错请联系管理员"
+          });
+        })   
+    },
+
     downSwitch(){
       this.openDown = !this.openDown;
     }
@@ -178,7 +174,7 @@ export default {
 
 }
 </script>
-<style lang="less"> 
+<style lang="less" scoped> 
 .box{
   padding:20px;
   width:210mm;

@@ -12,7 +12,7 @@
                    
                 ></i-input>
             </div>
-            <div class='m-search' @click="lowerSubmit">搜索</div>
+            <div class='m-search' @click="submitLowerSearch">搜索</div>
             <div class="m-bill-search" @click="showSearch">
                 <span></span>   
             </div> 
@@ -26,9 +26,9 @@
             :height="tableHeight<200?200:tableHeight" 
         />
         <div style="margin: 10px 20px;overflow: hidden">
-            <Button type="primary" @click="outSubmit">导出</Button>
+            <Button type="primary" @click="onExport">导出</Button>
             <div style="float: right;">
-                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
+                <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
             </div>
         </div>
         <Modal
@@ -36,9 +36,9 @@
             title="高级搜索"
             width="660"
         >
-            <HeightSearch :params = "params" @bindData="upperChange" mask='join'/>
+            <HeightSearch @bindData="onUpperChange"/>
             <div slot="footer">
-                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="primary" @click="submitUpperSearch">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
             </div>
         </Modal>
@@ -50,8 +50,8 @@
         >
             <div>合同是否生效?</div>
             <div slot="footer">
-                <Button type="primary" @click="takeEffectSubmit" :disabled="effectDisabled">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="takeEffectSwitch">取消</Button>
+                <Button type="primary" @click="submitTakeEffect" :disabled="effectDisabled">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showTakeEffect">取消</Button>
             </div>
         </Modal>
         
@@ -70,8 +70,8 @@
             />
             <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div>
             <div slot="footer">
-                <Button type="primary" @click="describeSubmit" :disabled="describeDisabled">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="describeSwitch">取消</Button>
+                <Button type="primary" @click="submitDescribe" :disabled="describeDisabled">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showDescribe">取消</Button>
             </div>
         </Modal>
 
@@ -96,25 +96,21 @@
                 </div>
                 </div>
                 <div slot="footer">
-                    <Button type="primary" @click="downLoad">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
+                    <Button type="primary" @click="submitDownLoad">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showDown">取消</Button>
                 </div>
         </Modal>
         <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                @changeOpen="onChangeOpen"
+                @changeOpen="onMessageChange"
         />
-        <!-- <Loading :loading='loadingStatus'/> -->
-        
     </div>
-  
 </template>
+
+
 <script>
-
-
-   
     import SectionTitle from '~/components/SectionTitle.vue';
     import Loading from '~/components/Loading';
     import krUpload from '~/components/KrUpload.vue';
@@ -124,6 +120,13 @@
     import Message from '~/components/Message';
     var maxWidth = 170;
     export default {
+         head () {
+            return {
+                title: "合同列表"
+            }
+           
+        },
+
         components: {
             SectionTitle,
             krUpload,
@@ -131,12 +134,7 @@
             Loading,
             Message
         },
-        head () {
-            return {
-                title: "合同列表"
-            }
-           
-        },
+       
         data () {
             return {
                 params:{
@@ -168,6 +166,7 @@
                 columnDetail:{},//每一行的数据
                 totalCount:1,
                 maxWidth:170,
+
                 columns: [
                     
                     {
@@ -237,20 +236,21 @@
                                 props:{
                                     placement: 'top'
                                 }
-                            }, [h('div',{
+                            }, [
+                                h('div',{
                                 style:{
                                     width:"60px",
                                     overflow: "hidden",
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap"
                                 }
-                            },params.row.otherAgreed),h('div', {
+                            },params.row.otherAgreed),
+                                h('div', {
                                     style:{
                                         wordWrap:"break-word"
                                     },
                                     slot: 'content'
-                                },params.row.otherAgreed
-                                )]
+                                },params.row.otherAgreed)]
                             )
                         }
                     },{
@@ -302,44 +302,47 @@
                                 newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
                            var btnRender=[
-                               h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params)
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.jumpView(params)
+                                            }
                                         }
-                                    }
-                                }, '查看'), h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.downLoadClick(params)
+                                    }, '查看'), 
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                var parameter = {requestId:params.row.requestId}
+                                                this.parameter = parameter;
+                                                this.showDown()
+                                            }
                                         }
-                                    }
-                                }, '下载'), 
-                                h(krUpload, {
-                                    props: {
-                                        action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr,
-                                        columnDetail:params.row||{},
-                                        onUpUrl:this.urlUpLoad
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                },'44')
+                                    }, '下载'), 
+                                    h(krUpload, {
+                                        props: {
+                                            action:'//jsonplaceholder.typicode.com/posts/',
+                                            file: newArr,
+                                            columnDetail:params.row||{},
+                                            onUpUrl:this.postUrlUpLoad
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                    },'44')
                                 ];
                                 if(params.row.contractStatus!=="CANCELLATION"){
                                     if(!params.row.isEffect){
@@ -353,15 +356,12 @@
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.clickDescribe(params)
+                                                    this.onConvention(params)
                                                 }
                                             }
                                         }, '其他约定'))
                                     }
-                                    if(params.row.isEffect || !params.row.haveAttachment){
-                                        
-                                    
-                                    }else{
+                                    if(!(params.row.isEffect || !params.row.haveAttachment)){
                                         btnRender.push( h('Button', {
                                             props: {
                                                 type: 'text',
@@ -372,7 +372,7 @@
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.contractFor(params)
+                                                    this.onContractFor(params)
                                                 }
                                             }
                                         }, '合同生效'))
@@ -391,18 +391,21 @@
           this.getListData(params);
           this.params=params; 
         },
+
         mounted(){
             this.onWindowSize();
             this.tableHeight = document.documentElement.clientHeight-360;
-            console.log(document.documentElement.clientHeight)
         },
+        
         methods:{
+
             config:function(){
                 this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
             },
+
             onWindowSize:function(){
                 window.onresize = function () {
                     var width = document.body.clientWidth;
@@ -413,14 +416,15 @@
                     }
                 }
             },
+
             //合同生效开关
-            takeEffectSwitch(){
+            showTakeEffect(){
                 this.effectDisabled=false;
                 this.openTakeEffect = !this.openTakeEffect;
             },
+
             //生效确定
-            takeEffectSubmit(){
-                var that = this;
+            submitTakeEffect(){
                 this.config();
                 var detail = Object.assign({},this.columnDetail);
                 
@@ -428,35 +432,37 @@
                      return ;
                  }
                  this.effectDisabled=true;
-                 that.takeEffectSwitch();
+                 this.showTakeEffect();
                 this.$http.post("post-contract-take-effect", {
                     requestId:detail.requestId
                 }, (response) => {
-                    that.getListData(that.params);
-                    that.openMessage=true;
-                    that.MessageType=response.message=='ok'?"success":"error";
-                    that.warn="已合同生效！";
+                    this.getListData(this.params);
+                    this.openMessage=true;
+                    this.MessageType=response.message=='ok'?"success":"error";
+                    this.warn="已合同生效！";
                 }, (error) => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:error.message
                     });
                 })   
             },
+
             //其他约定页面开关
-            describeSwitch(){
+            showDescribe(){
                 this.describeDisabled=false;
                 this.openDescribe = !this.openDescribe;
             },
+
             //其他约定按钮点击
-            clickDescribe(detail){
+            onConvention(detail){
                 this.otherAgreed = detail.row.otherAgreed;
                 this.columnDetail = detail.row;
-                this.describeSwitch();
+                this.showDescribe();
                 this.getOtherConvention({requestId:detail.row.requestId});
             },
+
             //描述确定
-            describeSubmit(){
-                var that = this;
+            submitDescribe(){
                 this.config();
                 var colDetail = Object.assign({},this.columnDetail);
                 var describeData = Object.assign({},this.describeData);
@@ -465,36 +471,39 @@
                      return ;
                  }
                  this.describeDisabled=true;
-                 that.describeSwitch();
+                 this.showDescribe();
                 this.$http.post("post-contract-other-convention", {
                     requestId:colDetail.requestId,
                     otherAgreed:this.otherAgreed||''
                     
                 }, (response) => {
-                    that.getListData(this.params);
-                     that.$Notice.success({
+                    this.getListData(this.params);
+                     this.$Notice.success({
                         title:"提交成功！"
                     });
                 }, (error) => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:error.message
                     });
                 })   
             },
+
             //合同生效
-            contractFor(detail){
+            onContractFor(detail){
                 this.columnDetail = detail.row;
-                this.takeEffectSwitch()
+                this.showTakeEffect()
             },
+
             showSearch (params) {    
                 this.openSearch=!this.openSearch; 
             },
-            openView(params){
+
+            jumpView(params){
                 window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
             },
-            //下载
-            downLoad(params){
-                var that = this;
+
+            //下载确定按钮被点击
+            submitDownLoad(params){
                 this.config()
                 var parameter = Object.assign({},this.parameter)
                 if(this.isCachet){
@@ -506,88 +515,84 @@
 
                 this.$http.get('get-station-contract-pdf-id',parameter, r => {    
                     if(!r.data.fileId){
-                        that.$Notice.error({
+                        this.$Notice.error({
                                 title:"fileId不能为空！"
                         });
                         return;
                     }
-                    
-                  
-                    that.downLoadPdf(r.data);
-                    that.downSwitch();
+
+                    this.downLoadPdf(r.data);
+                    this.showDown();
                 }, e => {
-                    that.$Message.info(e);
+                    this.$Message.info(e);
                 })
             },
+            //下载接口调用
             downLoadPdf(params){
-                var that=this;
                 this.$http.post('get-station-contract-pdf-url', {
                     id:params.fileId,
                     
                 }, (response) => {
                   
-                    that.newWin.location = response.data;
+                    this.newWin.location = response.data;
                 }, (error) => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:error.message
                     });
                 })   
             },
-            describeDataChange(params,error){
-
-                this.describeError=error;
-                this.describeData=params;
-            },
-            outSubmit (){
-                var _this=this;
+            
+            onExport (){
                 var params = Object.assign({},this.params);
-                
                 utils.commonExport(params,'/api/krspace-erp-web/wf/station/contract/enter/export');
             },
+
             getListData(params){
-                var _this=this;
                  this.config()
                  this.$http.get('get-center-list-contract', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.detail=r.data.items;
-                    _this.openSearch=false;
-                   _this.loadingStatus=false;
+                    this.totalCount=r.data.totalCount;
+                    this.detail=r.data.items;
+                    this.openSearch=false;
+                   this.loadingStatus=false;
                 }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })   
             },
+
             //分页事件
-            changePage (index) {
+            onPageChange (index) {
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
             },
+
             //获取其他约定的信息
             getOtherConvention(params){
-                var _this=this;
                 this.config()
                 this.$http.get('get-contract-other-convention-data', params, r => {
-                    _this.describeData.otherAgreed=r.data.otherAgreed;
+                    this.describeData.otherAgreed=r.data.otherAgreed;
                 }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })   
             },
       
             //搜索框
-            lowerSubmit(){
+            submitLowerSearch(){
                 utils.addParams(this.params);
             },
+
             // 高级查询修改
-            upperChange(params,error){
+            onUpperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
             },
+
              //高级查询确定
-            upperSubmit(){
+            submitUpperSearch(){
                 if(this.upperError){
                     return ;
                 }
@@ -597,45 +602,34 @@
                 utils.addParams(this.params);
 
             },
+
+            //选择
             selectCachet(select){
              this.isCachet = select;
-            
             },
-            downSwitch(){
+
+            showDown(){
                 this.openDown = !this.openDown;
             },
-            downLoadClick(params){
-                var parameter = {requestId:params.row.requestId}
-                this.parameter = parameter;
-               this.downSwitch(); 
-            },
-            urlUpLoad(detail,col){
-                console.log("---------")
-                var _this = this;
+
+            //保存上传文件的地址   
+            postUrlUpLoad(detail,col){
                 this.$http.post("post-list-upload-url", {
                     fileList:JSON.stringify(detail),
                     requestId:col.requestId,
                 }, (response) => {
-                    // _this.$Notice.success({
+                    // this.$Notice.success({
                     //     title:"合同已生效"
                     // });
-                     _this.getListData(_this.params);
+                     this.getListData(this.params);
                 }, (error) => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:error.message
                     });
                 })   
             },
-            allAttachmentChagne(requestId){
-                this.detail = this.detail.map((item,index)=>{
-                    if(item.requestId == requestId){
-                        item.haveAttachment = true;
-                        item.haveAttachmentName = "有";
-                    }
-                    return item;
-                })
-            },
-            onChangeOpen(data){
+
+            onMessageChange(data){
                 this.openMessage=data;
             },
             
@@ -643,7 +637,7 @@
         
     }
 </script>
-<style lang="less"> 
+<style lang="less" scoped> 
     .page {
         margin-top:20px;
     }

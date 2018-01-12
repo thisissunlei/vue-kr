@@ -24,7 +24,7 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.id" 
+                            :value="''+item.id" 
                             :key="item.id"
                         >
                             {{ item.name }}
@@ -105,6 +105,10 @@
                 typeList:[],
                 communityList:[]
             }
+        },
+
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
         },
 
         mounted:function(){

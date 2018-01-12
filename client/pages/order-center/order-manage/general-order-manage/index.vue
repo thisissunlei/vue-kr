@@ -291,7 +291,6 @@
 
             showSearch () {
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
             },
 
             showNullify(params){

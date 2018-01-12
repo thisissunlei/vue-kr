@@ -612,7 +612,7 @@
                this.downSwitch(); 
             },
             urlUpLoad(detail,col){
-               
+                console.log("---------")
                 var _this = this;
                 this.$http.post("post-list-upload-url", {
                     fileList:JSON.stringify(detail),

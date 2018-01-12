@@ -41,23 +41,23 @@
                     </Col>
                 </Row>
                 <FormItem
-                v-for="(item, index) in formItem.list"
+                v-for="(item, index) in formItem.details"
                 :key="index"
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none"
                 >
             <Row v-show="item.show">
                 <Col span="3" class="discount-table-content" style="padding:0">
-                    <Checkbox v-model="item.select" :disabled="!item.edit"></Checkbox>
+                    <Checkbox v-model="item.select" :disabled="item.billId"></Checkbox>
                 </Col>
                 <Col span="11"  class="discount-table-content">
-                   	<span v-if="item.edit == false"> {{item.name}}</span>
-                  	<Select v-model="item.value" label-in-value @on-change="changeType" v-if="item.edit != false" style="width:200px">
+                   	<span v-if="item.billId"> {{item.billName}}</span>
+                  	<Select v-model="item.feeType" label-in-value @on-change="changeType" v-if="!item.billId" style="width:200px">
                             <Option v-for="(types,i) in settlementOption" :value="types.value" :key="types.value" >{{ types.label }}</Option>
                     </Select>
                 </Col>
                 <Col span="10"  class="discount-table-content" >
-                     <span v-if="item.edit == false">{{item.amount}}</span>
-                    <Input v-model="item.amount" placeholder="金额" @on-blur="changeAmount" v-if="item.edit != false" style="width:200px" number></Input>
+                     <span v-if="item.billId">{{item.payableAmount}}</span>
+                    <Input v-model="item.payableAmount" placeholder="金额" @on-blur="changeAmount" v-if="!item.billId" style="width:200px" number></Input>
                 </Col>
                       
             </Row>
@@ -110,45 +110,28 @@ export default {
 			basicInfo:{},
 			validatePass:validatePass,
 			formItem:{
-				list:[
-					{
-						name:'客户余额',
-						amount:30000,
-						edit:false,
-						show:true
-					},
-					{
-						name:'客户余额',
-						amount:30000,
-						edit:false,
-						show:true
-					},
-					{
-						name:'客户余额',
-						amount:30000,
-						show:true,
-						edit:false,
-					},
+				details:[
+					// {
+					// 	name:'客户余额',
+					// 	amount:30000,
+					// 	edit:false,
+					// 	show:true
+					// },
+					// {
+					// 	name:'客户余额',
+					// 	amount:30000,
+					// 	edit:false,
+					// 	show:true
+					// },
+					// {
+					// 	name:'客户余额',
+					// 	amount:30000,
+					// 	show:true,
+					// 	edit:false,
+					// },
 				]
 			},
-			settlementOption:[
-				{
-					value:'zhuozo',
-					label:'桌子'
-				},
-				{
-					value:'zhuozo1',
-					label:'桌子1'
-				},
-				{
-					value:'zhuozo2',
-					label:'桌子2'
-				},
-				{
-					value:'zhuozo3',
-					label:'桌子3'
-				},
-			],
+			settlementOption:[],
 			selectAll:false,
 			errorMessage:'ssssss',
 			error:false,
@@ -164,7 +147,13 @@ export default {
 		var _this=this;
 	     this.$http.get('get-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
-				   _this.details = r.data.details
+
+				   _this.formItem.details = r.data.details.map((item)=>{
+				   	let obj = item;
+				   	obj.show = true;
+				   	return obj;
+				   })
+				   _this.getAmountName()
            	}, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -172,9 +161,24 @@ export default {
         })
 	},
 	methods:{
+		getAmountName(){
+			let _this = this;
+			let settlementOption = []
+			this.$http.get('get-amount-name-data', {}).then(
+				r=>{
+					console.log('======', r.data.FeeType)
+					_this.settlementOption = r.data.FeeType.map(item=>{
+						let obj = item;
+						obj.label = item.desc;
+						return obj
+					})
+				}).catch(err=>{
+					console.log('err',err)
+				})
+		},
 		handleAdd(){
 		//添加结算信息
-			this.formItem.list.push({
+			this.formItem.details.push({
 				name:'',
 				amount:'',
 				show:true,
@@ -194,7 +198,7 @@ export default {
 		},
 		deleteDiscount(){
 			// 删除选中的优惠信息
-                let items = this.formItem.list;
+                let items = this.formItem.details;
                 let select = []
                 select = items.map((item)=>{
                 	console.log('item.select',item)
@@ -207,14 +211,14 @@ export default {
                     }
                     return item;
                 });
-                this.formItem.list = items;
+                this.formItem.details = items;
                 this.checkList()
                 this.selectDiscount(false)
 
 		},
 		selectDiscount(value){
 			// checkbox的全选事件
-                let items = this.formItem.list;
+                let items = this.formItem.checkList;
                 items = items.map((item)=>{
                     let obj = item;
                     if(item.edit){
@@ -223,7 +227,7 @@ export default {
                     return obj;
                 })
                 this.selectAll = value;
-                this.formItem.list = items;
+                this.formItem.checkList = items;
 
 		},
 		submitForm(name){
@@ -246,8 +250,8 @@ export default {
 		checkList(){
 			//处理结算信息的费用名称是否选
 			let _this = this;
-			let items = this.formItem.list.filter((item,index)=>{
-				if(item.edit && item.show){
+			let items = this.formItem.details.filter((item,index)=>{
+				if(item.billId && item.show){
 					return true
 					
 				}
@@ -274,6 +278,7 @@ export default {
 <style lang="less" scoped>  
    .g-order-detail{
 		margin:-10px;
+		height: 100%;
 		.m-detail-header{
 			height:50px;
 			border-bottom: 1px solid #E8E9E9;
@@ -295,7 +300,8 @@ export default {
 		}
 		.m-detail-buttons{
 			margin-left: 40px;
-			margin-bottom: 40px;
+			margin-top: 30px;
+			margin-bottom: 60px;
 		}
 		.amount-list{
 			font-weight:bold;

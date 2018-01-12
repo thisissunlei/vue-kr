@@ -32,9 +32,7 @@
 
 <script>
     export default {
-        props:{
-            label:String
-        },
+        props:['label'],
         data () {
             return {
                 

@@ -35,4 +35,9 @@ export default  {
       url: '/api/krspace-finance-web/csr/checklist/list/type/attachment?',
       method: 'post'
   },
+  //获取编辑页结算单费用项目列表
+  'get-amount-name-data':{
+      url: '/api/krspace-finance-web//dict/common?',
+      method: 'get'
+  },
 }

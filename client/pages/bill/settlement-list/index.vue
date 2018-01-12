@@ -1,6 +1,6 @@
 <template>
     <div class='m-settlement-list'>
-            <sectionTitle label="结算单管理"></sectionTitle>
+            <!-- <sectionTitle label="结算单管理"></sectionTitle> -->
             <div class='list-banner'>
                     <div class='list-search'>
                          <div class='lower-search'>

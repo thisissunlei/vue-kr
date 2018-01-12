@@ -183,8 +183,8 @@ export default {
         },
 
          mounted(){
-            this.getDetailData();
             this.getTypeData();
+            this.getDetailData();
             GLOBALSIDESWITCH("false");
         },
 
@@ -196,8 +196,9 @@ export default {
                     id:params.orderEdit
                 };
                 this.$http.get('general-order-watch', from, r => {
+                       this.getCostData(r.data.orderType);
                        this.formItem=Object.assign({},r.data);
-                       this.getCostData(this.formItem.orderType);
+
                        this.formItem.customerId=JSON.stringify(this.formItem.customerId);
                        this.formItem.communityId=JSON.stringify(this.formItem.communityId);
                        this.formItem.salesperson=JSON.stringify(this.formItem.salesperson);
@@ -223,7 +224,10 @@ export default {
             },
 
             getCostData(value){
-                this.$http.get('general-common-list','', r => {
+                let param={
+                    bizType:value
+                }
+                this.$http.get('general-cost-list',param, r => {
                      this.freeList=r.data.items;
                 }, e => {
                      this.$Notice.error({

@@ -162,7 +162,7 @@
                                         }
                                     }
                                 },'查看')];
-                           if(params.row.status=='FINISH'){
+                           if(params.row.status=='EFFECT'){
                                btnRender.push(
                                 tag('Button', {
                                     props: {

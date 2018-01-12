@@ -33,7 +33,7 @@
                 </Form-item>
                 <Form-item label="订单类型" class='bill-search-class'>
                     <Select 
-                        v-model="formItem.type" 
+                        v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
@@ -43,7 +43,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                    </Select> 
                 </Form-item>
@@ -92,7 +92,7 @@
                    orderNum:'',
                    customerName:'',
                    status:'',
-                   type:'',
+                   orderType:'',
                    communityId:'',
                    cTimeBegin:'',
                    cTimeEnd:''
@@ -142,7 +142,7 @@
 
              getCommonData(){
                this.$http.get('general-common-list','', r => {
-                     this.typeList=r.data.ERP_BizType;
+                     this.typeList=r.data.items;
                 }, e => {
                      this.$Notice.error({
                         title:e.message

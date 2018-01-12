@@ -3,8 +3,8 @@
             
             <div class='list-banner'>
                     <div class='list-btn'>
-                        <Button type="primary" @click="showJoin" class='join-btn'>入驻</Button>
-                        <Button type="primary" @click="showRenew">续租</Button>
+                        <Button type="primary" @click="jumpJoin" class='join-btn'>入驻</Button>
+                        <Button type="primary" @click="jumpRenew">续租</Button>
                     </div>
 
                     <div class='list-search'>
@@ -14,10 +14,10 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
-                                @keyup.enter.native="showKey($event)"
+                                @keyup.enter.native="onKeyEnter($event)"
                             />
                          </div>
-                         <div class='m-search' @click="lowerSubmit">搜索</div>
+                         <div class='m-search' @click="submitLowerSearch">搜索</div>
                          <div class="m-bill-search" @click="showSearch">
                            <span/>
                          </div> 
@@ -26,9 +26,9 @@
 
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
-                    <Buttons label='导出'  type='primary' @click='outSubmit' checkAction='order_seat_export'/>
+                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='order_seat_export'/>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
+                        <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>
             </div>
 
@@ -37,9 +37,9 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch @bindData="upperChange" mask='join'/>
+                <HeightSearch mask='join' @bindData="onUpperChange"/>
                 <div slot="footer">
-                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="primary" @click="submitUpperSearch">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
@@ -47,26 +47,32 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                @changeOpen="onChangeOpen"
+                @changeOpen="onMessageChange"
             />
 
             <Modal
                 v-model="openApply"
                 title="提示信息"
-                @on-ok="applySubmit"
                 width="500"
             >
                 <ApplyContract/>
+                <div slot="footer">
+                    <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
+                </div>
             </Modal>
 
     </div>
@@ -74,6 +80,7 @@
 
 
 <script>
+
     import HeightSearch from './heightSearch';
     import Nullify from './nullify';
     import ApplyContract from './applyContract';
@@ -95,34 +102,25 @@
         data () {
             
             return {
-                openMessage:false,
-
-                warn:'',
-
-                MessageType:'',
-
-                upperData:{},
-
-                upperError:false,
-
-                id:'',
-
-                props:{},
-
-                totalCount:1,
-
                 params:{
                     page:1,
                     pageSize:15,
                     customerName:"",
                 },
 
+                openMessage:false,
+                nullDisabled:false,
+                applyDisabled:false,
+                warn:'',
+                MessageType:'',
+                upperData:{},
+                upperError:false,
+                id:'',
+                props:{},
+                totalCount:1,
                 openSearch:false,
-
                 openNullify:false,
-
                 openApply:false,
-
                 joinData:[],
 
                 joinOrder: [
@@ -216,7 +214,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 })];
@@ -260,7 +258,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showEdit(params)
+                                            this.jumpEdit(params)
                                         }
                                     }
                                 }, '编辑'))
@@ -278,45 +276,124 @@
           this.params=params;
         },
 
-        methods:{
-
-            showKey: function (ev) {
-                this.lowerSubmit();
+        methods:{   
+            submitNullify (){
+                let params={
+                    id:this.id
+                };
+                 if(this.nullDisabled){
+                     return ;
+                 }
+                 this.nullDisabled=true;
+                 this.closeNullify();
+                 this.$http.post('join-nullify', params,r => {
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='作废成功';
+                    this.getListData(this.params);
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })
             },
 
-            showSearch () {
-                this.openSearch=!this.openSearch;
+            submitApply(){
+                let params={
+                    id:this.id
+                };
+                if(this.applyDisabled){
+                    return ;
+                }
+                 this.applyDisabled=true;
+                 this.closeApply();
+                 this.$http.post('apply-contract', params, r => {
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='申请成功';
+                    this.getListData(this.params);
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })  
+            },
+
+            submitExport (){
+                this.props=Object.assign({},this.props,this.params);
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+            },
+
+            submitUpperSearch(){
+                if(this.upperError){
+                    return ;
+                }
+                this.params=Object.assign({},this.params,this.upperData);
+                this.params.page=1;
+                this.params.pageSize=15;
+                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                utils.addParams(this.params);
+            },
+
+            submitLowerSearch(){
+                utils.addParams(this.params);
+            },
+
+            getListData(params){
+                var _this=this;
+                 this.$http.get('join-bill-list', params, r => {
+                    _this.totalCount=r.data.totalCount;
+                    _this.joinData=r.data.items;
+                    _this.openSearch=false;
+                }, e => {
+                    _this.openMessage=true;
+                    _this.MessageType="error";
+                    _this.warn=e.message;
+                })   
             },
             
-            showJoin(){
-                window.open('/order-center/order-manage/station-order-manage/create/join','join');
+            onPageChange (index) {
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
             },
 
-            showRenew(){
-                window.open('/order-center/order-manage/station-order-manage/create/renew','renew');
+            onUpperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
             },
 
-            showApply(params){
-                this.id=params.row.id;
-                this.openApply=true;
+            onMessageChange(data){
+                this.openMessage=data;
             },
 
-            showView(params){
+            onKeyEnter: function (ev) {
+                this.submitLowerSearch();
+            },
+
+            jumpJoin(){
+                utils.addParams({mask:''});
+                window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
+            },
+
+            jumpRenew(){
+                utils.addParams({mask:''});
+                window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
+            },
+
+            jumpView(params){
                 var viewName='';
                 if(params.row.orderType=='CONTINUE'){
                     viewName='renewView';  
                 }else{
                     viewName='joinView';   
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,params.row.id);
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
             },
 
-            showNullify(params){
-                this.id=params.row.id;
-                this.openNullify=true;
-            },
-
-            showEdit(params){
+            jumpEdit(params){
+                utils.addParams({mask:''});
                 let type = '';
                 switch (params.row.orderType){
                     case 'IN':
@@ -332,89 +409,31 @@
                         type = 'join';
                         break;
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,'_blank')
             },
 
-            nullifySubmit (){
-                let params={
-                    id:this.id
-                };
-                 
-                 this.$http.post('join-nullify', params,r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='作废成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })
+            showNullify(params){
+                this.id=params.row.id;
+                this.closeNullify();
             },
 
-            applySubmit(){
-                let params={
-                    id:this.id
-                };
-                 this.$http.post('apply-contract', params, r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='申请成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })  
+            closeNullify(){
+                this.openNullify=!this.openNullify;
+                this.nullDisabled=false;
             },
 
-            outSubmit (){
-                this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+            closeApply(){
+                this.openApply=!this.openApply;
+                this.applyDisabled=false;
             },
 
-            getListData(params){
-                var _this=this;
-                 this.$http.get('join-bill-list', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.joinData=r.data.items;
-                    _this.openSearch=false;
-                }, e => {
-                    _this.openMessage=true;
-                    _this.MessageType="error";
-                    _this.warn=e.message;
-                })   
+            showSearch () {
+                this.openSearch=!this.openSearch;
             },
 
-            changePage (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
-            },
-
-            lowerSubmit(){
-                utils.addParams(this.params);
-            },
-
-            upperChange(params,error){
-                this.upperError=error;
-                this.upperData=params;
-            },
-
-            upperSubmit(){
-                if(this.upperError){
-                    return ;
-                }
-                this.params=Object.assign({},this.params,this.upperData);
-                this.params.page=1;
-                this.params.pageSize=15;
-                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
-                utils.addParams(this.params);
-            },
-
-            onChangeOpen(data){
-                this.openMessage=data;
+            showApply(params){
+                this.id=params.row.id;
+                this.closeApply();
             }
         }
     }

@@ -1,47 +1,51 @@
 <template>
-<div class="g-order-detail">
-	<div class="m-detail-header">
-		<span class="u-border-left"/>
-		减租订单详情
-	</div>
-	<div class="m-detail-content">
-		<DetailStyle info="基本信息">
-			<LabelText label="客户名称：">
-				{{basicInfo.customerName}}
-			</LabelText>
-			<LabelText label="社区名称：">
-				{{basicInfo.communityName}}
-			</LabelText>
-			<LabelText label="操作人员：">
-				{{basicInfo.operationName}}
-			</LabelText>
-			<LabelText label="操作时间：">
-				{{ctime}}
-			</LabelText>
-         </DetailStyle>
-         <DetailStyle info="减租信息">
-			<LabelText label="减租开始时间：">
-				{{startDate}}
-			</LabelText>
-            <LabelText label="减租服务费：">
-				{{basicInfo.rentAmount}}
-			</LabelText>
-            <div class="m-reduce-room">
-				<div>减租工位/房间：</div>
-				<div style='width:50%;'>
-					<span v-for="item in reduceStation" :key="item.id" 
-					style='padding-right:20px;padding-top:15px;display:inline-block;'>
+	<div class="g-order-detail">
+		<div class="m-detail-header">
+			<span class="u-border-left"/>
+			减租订单详情
+		</div>
+		<div class="m-detail-content">
+			<DetailStyle info="基本信息">
+				<LabelText label="客户名称：">
+					{{basicInfo.customerName}}
+				</LabelText>
+				<LabelText label="社区名称：">
+					{{basicInfo.communityName}}
+				</LabelText>
+				<LabelText label="操作人员：">
+					{{basicInfo.operationName}}
+				</LabelText>
+				<LabelText label="操作时间：">
+					{{ctime}}
+				</LabelText>
+			</DetailStyle>
+			<DetailStyle info="减租信息">
+				<LabelText label="减租开始时间：">
+					{{startDate}}
+				</LabelText>
+				<LabelText label="减租服务费：">
+					{{basicInfo.rentAmount}}
+				</LabelText>
+				<div class="m-reduce-room">
+					<div>减租工位/房间：</div>
+					<div style="width:50%;">
+						<span 
+						v-for="item in reduceStation" 
+						:key="item.id" 
+						style="padding-right:20px;padding-top:15px;display:inline-block;">
 						{{ item.seatName}}{{'('+item.type+')'}}
-					</span>
+						</span>
+					</div>
 				</div>
-			</div>
-		</DetailStyle>
-		<DetailStyle info="相关合同">
-			<Table :columns="contract" :data="contractData"></Table>
-		</DetailStyle>
-	</div>
-</div>	
+			</DetailStyle>
+			<DetailStyle info="相关合同">
+				<Table :columns="contract" :data="contractData"/>
+			</DetailStyle>
+		</div>
+	</div>	
 </template>
+
+
 <script>
 
 import DetailStyle from '~/components/DetailStyle';
@@ -49,15 +53,16 @@ import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
 
 export default {
-	components:{
-		DetailStyle,
-		LabelText
-	},
+	name:'ReduceView',
 	head() {
         return {
             title: '减租详情'
         }
     },
+	components:{
+		DetailStyle,
+		LabelText
+	},
 	data(){
 		return{
 			basicInfo:{},
@@ -86,37 +91,44 @@ export default {
 	},
 	
 	mounted:function(){
-		GLOBALSIDESWITCH("false");
-		let {params}=this.$route;
-		let from={
-			id:params.watchView
-		};
-		var _this=this;
-	     this.$http.get('reduce-bill-detail', from, r => {
-				   _this.basicInfo=r.data;
+		GLOBALSIDESWITCH('false');
+		this.getDetailData();
+	},
+
+	methods:{
+		getDetailData(){
+			let {params}=this.$route;
+			let from={
+				id:params.watchView
+			};
+			var _this=this;
+			this.$http.get('reduce-bill-detail', from, r => {
+					_this.basicInfo=r.data;
 
 
-				   _this.ctime=r.data.ctime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(r.data.ctime)):'';
-				   _this.startDate=r.data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(r.data.startDate)):'';
-				   r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
-					    var stationType='';
-					    if(item.seatType=='OPEN'){
-							stationType='工位';
-						}else if(item.seatType=='SPACE'){
-							stationType='房间';
-						}
-						item.type=stationType;
-				   })
-				   _this.reduceStation=r.data.orderSeatDetailVo||[];
-				   _this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
-           	}, e => {
-                _this.$Notice.error({
-                     title:e.message
-                });
-        })
+					_this.ctime=r.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(r.data.ctime)):'';
+					_this.startDate=r.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(r.data.startDate)):'';
+					r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
+							var stationType='';
+							if(item.seatType=='OPEN'){
+								stationType='工位';
+							}else if(item.seatType=='SPACE'){
+								stationType='房间';
+							}
+							item.type=stationType;
+					})
+					_this.reduceStation=r.data.orderSeatDetailVo||[];
+					_this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
+				}, e => {
+					_this.$Notice.error({
+						title:e.message
+					});
+			})
+		}
 	}
 }
 </script>
+
 
 <style lang="less" scoped> 
    .g-order-detail{

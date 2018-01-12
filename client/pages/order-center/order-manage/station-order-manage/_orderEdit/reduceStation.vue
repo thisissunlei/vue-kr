@@ -3,14 +3,21 @@
        <div class="station-type">{{label}}</div>
        <div>
             <div style="padding-bottom:6px;margin-bottom:6px;">
-                <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;">
-                    <Checkbox
+                <div class="title" style="border-bottom: 1px solid #e9e9e9">
+                    <span class="title-name" style="width:20px"><Checkbox
                         :indeterminate="indeterminate"
                         :value="checkAll"
-                        @click.prevent.native="handleCheckAll">全选</Checkbox>
+                        @click.prevent.native="handleCheckAll"></Checkbox></span>
+                    <span class="title-name" style="width:100px">工位名称</span>
+                    <span class="title-name" style="width:140px">开始时间</span>
+                    <span class="title-name" style="width:140px">结束时间</span>
                 </div>
                 <CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
-                    <Checkbox  v-for="(item, index) in stationList" :label="item.name" :key="item.seatId"></Checkbox>
+                    <Checkbox  v-for="(item, index) in stationList" :label="item.name+'/'+item.orderSeatId" class="list-select" :key="item.seatId+'/'+item.orderSeatId">
+                    <span class="title-name" style="width:100px">{{item.name}}</span>
+                    <span class="title-name" style="width:140px">{{item.startDate |dateFormat('YYYY-MM-dd') }}</span>
+                    <span class="title-name" style="width:140px">{{item.endDate|dateFormat('YYYY-MM-dd') }}</span>
+                    </Checkbox>
                 </CheckboxGroup>
              </div>  
        </div>
@@ -47,8 +54,8 @@ import dateUtils from 'vue-dateutils';
             checkAllGroup(val){
                 console.log('checkAllGroup',val,this.stationList)
                 let list = this.stationList.filter(function(item, index) {
-                    console.log('filter',item.name)
-                    if (val.indexOf(item.name) != -1) {
+                    let value = item.name +'/'+item.orderSeatId;
+                    if (val.indexOf(value) != -1) {
                         return true;
                     }
                     return false;
@@ -71,13 +78,14 @@ import dateUtils from 'vue-dateutils';
 
                 if (this.checkAll) {
                     this.checkAllGroup = this.stationList.map(item=>{
-                        return item.name
+                        return item.name+'/'+item.orderSeatId
                     })
                 } else {
                     this.checkAllGroup = [];
                 }
             },
             checkAllGroupChange (data) {
+                console.log('checkAllGroupChange',data)
                 if (data.length === this.stationList.length) {
                     this.indeterminate = false;
                     this.checkAll = true;
@@ -98,6 +106,19 @@ import dateUtils from 'vue-dateutils';
     border:1px solid #e9eaec;
     padding:10px;
    }
+   .title{
+    width: 100%;
+    text-align: center;
+    height:40px;
+    line-height: 40px;
+    font-size: 13px;
+    background-color: #e6e6e4;
+   }
+   .title-name{
+    display: inline-block;
+    text-align: center;
+
+   }
    .station-type{
     padding:10px 0;
     font-size: 14px;
@@ -112,8 +133,17 @@ import dateUtils from 'vue-dateutils';
 
     }
    }
+   .list-select{
+    width: 100%;
+    .ivu-checkbox{
+        width: 20px;
+        text-align: right;
+        margin-left: 3px;
+    }
+   }
    .station-list{
     max-height: 400px;
     overflow: auto;
    }
 </style>
+

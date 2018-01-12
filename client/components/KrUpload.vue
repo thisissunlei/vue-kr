@@ -44,7 +44,7 @@
  
 export default{
 	name:'krUpload',
-	props:["upUrl","columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:["onUpUrl","columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
 	data(){
 		return {
 			isOpenList:false,
@@ -88,11 +88,11 @@ export default{
 			if(!this.isOpenList){
 				// this.submitUpload()
 			}
-			// this.getUpUrl();
+			
 		},
 		submitUpload(detail){
 			this.config();
-			this.upUrl && this.upUrl(detail,this.columnDetail);
+			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
 			
 		},
 		//获取上传图片

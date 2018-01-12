@@ -484,6 +484,7 @@ import utils from '~/plugins/utils';
                      }
                     if(!item.tacticsType){
                         complete = false
+                        
                     }
                     if(item.tacticsType=='3' && (!item.startDate || !item.validEnd)){
 
@@ -502,6 +503,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
 
@@ -541,6 +543,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
+                    _this.formItem.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -667,6 +670,7 @@ import utils from '~/plugins/utils';
                     return item;
                 });
                 this.formItem.items = items;
+                this.discount = ''
                 this.selectDiscount(false);
                 this.dealSaleInfo(true)
 
@@ -727,17 +731,16 @@ import utils from '~/plugins/utils';
                 this.formItem.items[itemIndex].tacticsName = itemName;
                 this.formItem.items[itemIndex].tacticsId = itemId;
                 let items = [];
-
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart= item.startDate || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = item.tacticsId || itemId;
                         item.discount = '';
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = item.discount|| ''
@@ -903,6 +906,7 @@ import utils from '~/plugins/utils';
                     index: this.index,
                     status: 1,
                     show:true,
+                    discount:''
                 });
             },
             selectDeposit:function(value){

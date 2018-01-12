@@ -1308,6 +1308,13 @@
                             menuCode: 'order_seat_list'
                             // menuCode: 'iot_door_open_log',
                         },
+                        {
+                            primaryText: "结算单管理",
+                            router: 'bill/settlement-list',
+                            type:'vue',
+                            menuCode: 'order_seat_list'
+                            // menuCode: 'iot_door_open_log',
+                        },
                         
                         {
                             primaryText: "交易流水",

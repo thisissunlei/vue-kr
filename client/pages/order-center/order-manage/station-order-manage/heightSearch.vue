@@ -1,20 +1,20 @@
  <template>         
             <Form ref="formItem" :model="formItem" label-position="top">
-                <Form-item label="订单编号"  class='bill-search-class'>
+                <Form-item label="订单编号"  class="bill-search-class">
                     <i-input 
                         v-model="formItem.orderNum" 
                         placeholder="请输入订单编号"
                         style="width: 252px"
                     />
                 </Form-item>
-                <Form-item label="客户名称" class='bill-search-class'>
+                <Form-item label="客户名称" class="bill-search-class">
                     <i-input 
                         v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     />
                 </Form-item>
-                <Form-item label="社区名称" class='bill-search-class'> 
+                <Form-item label="社区名称" class="bill-search-class"> 
                     <Select 
                         v-model="formItem.communityId" 
                         placeholder="请输入社区名称" 
@@ -31,7 +31,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="订单类型" class='bill-search-class' v-show='type'>
+                <Form-item label="订单类型" class="bill-search-class" v-show="type">
                     <Select 
                         v-model="formItem.orderType" 
                         placeholder="请输入订单类型" 
@@ -77,12 +77,13 @@
                         placeholder="创建结束日期" 
                         style="width: 252px"
                     />
-                    <div style='color:red;' v-show='dateError'>开始日期不能大于结束日期</div>  
+                    <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
              </Form-item>
          </Form>
 </template>
-<script>
 
+
+<script>
     export default{
         name:'HeighSearch',
         props: {
@@ -132,25 +133,22 @@
         },
 
         methods:{
-
              getCommunity(){
-                var _this=this;
                 this.$http.get('join-bill-community','', r => {    
-                    _this.communityList=r.data.items 
+                    this.communityList=r.data.items 
                     }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })
             },
 
             getOrderList(){
-                var _this=this;
                 this.$http.get('order-pay-list','',r => {
-                    _this.orderList=r.data.orderTypeVos;
-                    _this.typeList=r.data.seatOrderTypeVos;
+                    this.orderList=r.data.orderTypeVos;
+                    this.typeList=r.data.seatOrderTypeVos;
                 }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })   

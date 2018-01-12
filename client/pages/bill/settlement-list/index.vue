@@ -188,9 +188,9 @@
                                tag(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr,
+                                        file: newArr,//数据
                                         columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad
+                                        upUrl:this.urlUpLoad//成功后方法
                                     },
                                     style: {
                                         color:'#2b85e4'

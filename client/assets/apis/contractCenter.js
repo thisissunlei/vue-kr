@@ -1,5 +1,5 @@
 //订单管理-合同管理api
-module.exports = {
+export default {
     //获取合同列表
     'get-center-list-contract': {
         url: '/api/krspace-erp-web/wf/station/contract/enter/search',

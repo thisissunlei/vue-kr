@@ -243,10 +243,6 @@
                                 }
                             },params.row.otherAgreed),h('div', {
                                     style:{
-                                       
-                                      
-                                        // height:300+"px",
-                                        // background:"red"
                                         wordWrap:"break-word"
                                     },
                                     slot: 'content'

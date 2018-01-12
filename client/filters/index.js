@@ -6,12 +6,11 @@ function name(params) {
 }
 function dateFormat(time,fmt) {
 	if(!time){
-		return;
+		return
 	}
+	let format = fmt || 'YYYY-MM-dd HH:mm:ss'
 
-	let format = fmt || 'YYYY-MM-dd HH:mm:ss';
-	 return dateUtils.dateToStr(format, new Date(time))
-
+    return dateUtils.dateToStr(format, new Date(time))
 }
 
 export default {

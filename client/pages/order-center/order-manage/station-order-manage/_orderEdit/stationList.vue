@@ -33,30 +33,32 @@ import dateUtils from 'vue-dateutils';
                 type:Array,
                 required: true
             },
-            selecedStation:{
-                type:Array
-            }
+            // selecedStation:{
+            //     type:Array
+            // }
         },
         data() {
             let selecedStation = []
-            if(this.selecedStation.length){
-                selecedStation = this.selecedStation.map(item=>{
-                    return item.name
-                })
-            }
+            // if(this.selecedStation.length){
+            //     selecedStation = this.selecedStation.map(item=>{
+            //         return item.name
+            //     })
+            // }
             let checkAll = {};
             let selectSeat = {};
             this.stationList.map((item,index)=>{
                 checkAll['seat'+index] = false;
-                item.value.map(value=>{
+                item.value.map(value=>{ 
+                    value.begin = value.begin || value.endDate;  
                     selectSeat['seat'+index+value.name] = false;
                 })
-                
+                return item;
             })
+            console.log('this.stationList=======',this.stationList)
            return{
             checkAll: checkAll,
             selectSeat:selectSeat,
-            selecedStations: selecedStation,
+            // selecedStations: selecedStation,
             selectionIndex:[]
            }
         },
@@ -93,8 +95,26 @@ import dateUtils from 'vue-dateutils';
 
         },
         methods: {
+              checkAllSelect(){
+                let result = false;
+                for(let i in this.checkAll){
+                    if(this.checkAll[i]){
+                       result = true
+                    }
+                }
+                return result
+            },
               handleCheckAll (index) {
                 if(!this.checkAll['seat'+index]){
+                    let result = this.checkAllSelect()
+                    if(result){
+                       this.$Notice.error({
+                            title:'工位原结束时间不同，不可同时进行续租'
+                        });
+                        this.clearAllCheck()
+                        return false; 
+                    }
+                    console.log('checkAllSelect',result)
                     this.clearAllCheck();
                     this.checkAll['seat'+index] = true;
                 }else{
@@ -162,7 +182,7 @@ import dateUtils from 'vue-dateutils';
                 let num = list.join(",").split(demo).length-1;
                 if(num != list.length){
                     this.$Notice.error({
-                        title:'不同选择不同时间段的工位'
+                        title:'工位原结束时间不同，不可同时进行续租'
                     });
                     this.clearAllCheck()
                     return false;
@@ -203,3 +223,4 @@ import dateUtils from 'vue-dateutils';
     overflow: auto;
    }
 </style>
+

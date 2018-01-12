@@ -714,8 +714,20 @@
                                  router: 'operation/customerManage/agreementtrim',
                                  menuCode: 'contract_edit',
                              },
+                             {
+                                 primaryText: '撤场记录管理',
+                                 type: 'vue',
+                                 router: 'operations-center/from-field',
+                                 menuCode: 'contract_edit',
+                             },
                          ]
                      },
+
+
+                     
+
+
+
                      {
                          primaryText: '会员管理',
                          iconName: 'icon-vip',
@@ -1252,7 +1264,7 @@
                     menuItems: [
                         {
                             primaryText: "合同列表",
-                            router: 'contract-center/list',
+                            router: 'order-center/contract-manage/contract-list/list',
                             type:'vue',
                             menuCode: 'iot_door_open_log',
                             //menuCode: 'fina_meeting_order_page'

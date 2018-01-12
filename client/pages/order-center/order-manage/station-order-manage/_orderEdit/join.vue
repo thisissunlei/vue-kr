@@ -1,6 +1,6 @@
 <template>
     <div class="create-new-order">
-        <sectionTitle label="编辑入驻服务订单管理"></sectionTitle>
+        <sectionTitle :label="'编辑'+orderType+'服务订单管理'"></sectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
             <Row>  
@@ -259,6 +259,7 @@ import utils from '~/plugins/utils';
                     submitData:[],
                     deleteData:[],
                 },
+                orderType:'',
                 stationAll:{},
                 payList:[
                     {value:'ONE',label:'月付'},
@@ -355,7 +356,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '编辑入驻订单'
+                title: '编辑订单'
             }
         },
         components: {
@@ -401,6 +402,7 @@ import utils from '~/plugins/utils';
                 };
                 this.$http.get('join-bill-detail', from, r => {
                     let data = r.data;
+                    _this.orderType = data.orderType=='INCREASE'?'增租':'入驻';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
                         obj.belongType = item.seatType;
@@ -553,15 +555,16 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        zhekou = this.dealzhekou(item.discount)
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
                 if(!complete && !show){
@@ -598,6 +601,8 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
+                    _this.formItem.items = list;
+                    _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
@@ -721,6 +726,7 @@ import utils from '~/plugins/utils';
                 return item;
                 });
                 this.formItem.items = items;
+                this.discount = ''
                 this.selectDiscount(false);
                 this.dealSaleInfo(true)
 
@@ -787,12 +793,12 @@ import utils from '~/plugins/utils';
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
                         item.name = label;
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart=item.validStart || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = '';
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = item.discount || '';
@@ -829,7 +835,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
-                this.minDiscount = this.maxDiscount[label]
+                if(itemValue == 1){
+                    this.minDiscount = this.maxDiscount[label]
+                }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },

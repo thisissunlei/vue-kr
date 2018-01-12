@@ -41,7 +41,7 @@
 }
 </style>
 <template lang="html">
-  <div v-if="loading">
+  <div>
     <Spin fix style='background:#fff;'>
         <div class="spinner">
           <div class="double-bounce1"></div>
@@ -53,6 +53,6 @@
 
 <script>
 export default {
-  props:['loading']
+ 
 }
 </script>

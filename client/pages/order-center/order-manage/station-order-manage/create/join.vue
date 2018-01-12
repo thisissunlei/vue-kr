@@ -484,6 +484,7 @@ import utils from '~/plugins/utils';
                      }
                     if(!item.tacticsType){
                         complete = false
+                        
                     }
                     if(item.tacticsType=='3' && (!item.startDate || !item.validEnd)){
 
@@ -492,15 +493,17 @@ import utils from '~/plugins/utils';
                     if(item.tacticsType == '1' && !item.discount){
                         complete = false;
                     }else{
-                        zhekou = this.dealzhekou(item.discount)
+                        
+                        zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
-                this.saleAmount = 0;
-                this.saleAmounts = utils.smalltoBIG(0)
+                // this.saleAmount = 0;
+                // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
 
@@ -540,6 +543,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
+                    _this.formItem.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -554,8 +558,9 @@ import utils from '~/plugins/utils';
                 })
 
             },
-            changezhekou(val){
-                val = val.target.value;
+            changezhekou(value){
+
+                let val = value.target.value;
                 if(!val){
                     return
                 }
@@ -565,7 +570,6 @@ import utils from '~/plugins/utils';
                     return
                 }
                 if(val<this.minDiscount){
-                    console.log('val',val,this.minDiscount)
                     this.discountError = '折扣不得小于'+this.minDiscount;
                     this.disabled = true;
 
@@ -666,6 +670,7 @@ import utils from '~/plugins/utils';
                     return item;
                 });
                 this.formItem.items = items;
+                this.discount = ''
                 this.selectDiscount(false);
                 this.dealSaleInfo(true)
 
@@ -711,7 +716,6 @@ import utils from '~/plugins/utils';
             },
             
             changeType:function(val){
-                console.log('val',val)
                 //优惠类型选择
                 if(!val){
                     return;
@@ -727,17 +731,16 @@ import utils from '~/plugins/utils';
                 this.formItem.items[itemIndex].tacticsName = itemName;
                 this.formItem.items[itemIndex].tacticsId = itemId;
                 let items = [];
-
                 items = this.formItem.items.map((item)=>{
                     if(item.value == 'qianmian'){
                         item.validStart = this.formItem.startDate;
                         item.discount = '';
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3 && item.show){
                         item.validStart= item.startDate || ''
                         item.validEnd = this.formItem.endDate
                         item.tacticsId = item.tacticsId || itemId;
                         item.discount = '';
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1 && item.show){
                         item.validStart=this.formItem.startDate
                         item.tacticsId = item.tacticsId || itemId
                         item.discount = item.discount|| ''
@@ -774,7 +777,9 @@ import utils from '~/plugins/utils';
                     this.formItem.items = items;
                     return;
                 }
+                if(itemValue == 1){
                  this.minDiscount = this.maxDiscount[label]
+                }
                 this.formItem.items = items;
                 this.dealSaleInfo(false)
             },
@@ -901,6 +906,7 @@ import utils from '~/plugins/utils';
                     index: this.index,
                     status: 1,
                     show:true,
+                    discount:''
                 });
             },
             selectDeposit:function(value){
@@ -1062,7 +1068,6 @@ import utils from '~/plugins/utils';
                     }else{
                         list = []
                     }
-                    console.log('maxDiscount',maxDiscount)
                     _this.youhui = list;
                     _this.maxDiscount = maxDiscount;
 
@@ -1093,7 +1098,6 @@ import utils from '~/plugins/utils';
                 if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
-                        console.log('get-station-amount',r)
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             money += item.originalAmount;

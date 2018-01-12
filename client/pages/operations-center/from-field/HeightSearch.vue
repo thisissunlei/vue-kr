@@ -1,6 +1,6 @@
 
     <template>         
-            <Form ref="formItem" :model="formItem" label-position="top">
+            <Form ref="formItem" style="text-align: left;" :model="formItem" label-position="top">
                 <Form-item label="撤场编号"  class='bill-search-class'>
                     <i-input 
                         v-model="formItem.withdrawalNum" 
@@ -25,7 +25,7 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.name" 
+                            :value="''+item.id" 
                             :key="item.id"
                         >
                             {{ item.name }}
@@ -89,6 +89,9 @@
                 statusList:[],
                 communityList:[]
             }
+        },
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
         },
         mounted:function(){
             var _this = this;

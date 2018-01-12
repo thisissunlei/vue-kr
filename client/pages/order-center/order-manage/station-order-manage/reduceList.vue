@@ -2,7 +2,7 @@
     <div class='m-reduce-list'>
             <div class='list-banner'>
                     <div class='list-btn'>
-                        <Button type="primary" @click="showReduce">减租</Button>
+                        <Button type="primary" @click="jumpReduce">减租</Button>
                     </div>
 
                     <div class='list-search'>
@@ -12,10 +12,10 @@
                                 v-model="params.customerName" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
-                                @keyup.enter.native="showKey($event)"
+                                @keyup.enter.native="onKeyEnter($event)"
                             />
                         </div>
-                        <div class='m-search' @click="lowerSubmit">搜索</div>
+                        <div class='m-search' @click="submitLowerSearch">搜索</div>
                         <div class="m-bill-search" @click="showSearch">
                           <span/>  
                         </div> 
@@ -25,9 +25,9 @@
 
             <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
             <div style="margin: 10px 20px;overflow: hidden">
-                    <Buttons label='导出'  type='primary' @click='outSubmit' checkAction='order_seat_export'/>
+                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='order_seat_export'/>
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
+                        <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
                     </div>
             </div>
 
@@ -36,9 +36,9 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch @bindData="upperChange" mask='reduce'/>
+                <HeightSearch @bindData="onUpperChange" mask='reduce'/>
                 <div slot="footer">
-                    <Button type="primary" @click="upperSubmit">确定</Button>
+                    <Button type="primary" @click="submitUpperSearch">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
@@ -46,26 +46,32 @@
             <Modal
                 v-model="openNullify"
                 title="提示信息"
-                @on-ok="nullifySubmit"
                 width="500"
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
                 :type="MessageType" 
                 :openMessage="openMessage"
                 :warn="warn"
-                @changeOpen="onChangeOpen"
-            ></Message>
+                @changeOpen="onMessageChange"
+            />
 
             <Modal
                 v-model="openApply"
                 title="提示信息"
-                @on-ok="applySubmit"
                 width="500"
             >
                 <ApplyContract/>
+                <div slot="footer">
+                    <Button type="primary" @click="submitApply" :disabled="applyDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
+                </div>
             </Modal>
 
     </div>
@@ -93,34 +99,25 @@
         data () {
             
             return {
-                openMessage:false,
-
-                warn:'',
-
-                MessageType:'',
-
-                upperData:{},
-
-                upperError:false,
-
-                totalCount:1,
-
-                id:'',
-
-                props:{},
-
                 params:{
                     page:1,
                     pageSize:15,
                     customerName:"",
                 },
 
+                openMessage:false,
+                nullDisabled:false,
+                applyDisabled:false,
+                warn:'',
+                MessageType:'',
+                upperData:{},
+                upperError:false,
+                totalCount:1,
+                id:'',
+                props:{},
                 openSearch:false,
-
                 openNullify:false,
-
                 openApply:false,
-
                 joinData:[],
 
                 joinOrder: [
@@ -201,7 +198,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 })];
@@ -245,7 +242,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showEdit(params)
+                                            this.jumpEdit(params)
                                         }
                                     }
                                 }, '编辑'))
@@ -264,77 +261,6 @@
         },
 
         methods:{
-
-            showKey: function (ev) {
-                this.lowerSubmit();
-            },
-
-            showSearch () {
-                this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
-            },
-
-            showNullify(params){
-                this.id=params.row.id;
-                this.openNullify=true;
-            },
-
-            showReduce(){
-                window.open('/order-center/order-manage/station-order-manage/create/reduce','reduce')
-            },
-
-            showEdit(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,params.row.id)
-            },
-
-            showApply(params){
-                this.id=params.row.id;
-                this.openApply=true;
-            },
-
-            showView(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,params.row.id);
-            },
-
-            nullifySubmit (){
-                var _this=this;
-                let params={
-                    id:this.id
-                };
-                 
-                 this.$http.post('join-nullify', params, r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='作废成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                }) 
-            },
-
-            applySubmit(){
-                let params={
-                    id:this.id
-                };     
-                 this.$http.post('apply-contract', params, r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='申请成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })   
-            },
-
-            outSubmit (){
-                this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
-            },
-
             getListData(params){
                 var _this=this;
                  this.$http.get('reduce-bill-list', params, r => {
@@ -348,22 +274,54 @@
                 })   
             },
 
-            changePage (index) {
-                let params=this.params;
-                params.page=index;
-                this.getListData(params);
+            submitNullify (){
+                var _this=this;
+                let params={
+                    id:this.id
+                };
+                 if(this.nullDisabled){
+                     return ;
+                 }
+                 this.nullDisabled=true;
+                 this.closeNullify();
+                 this.$http.post('join-nullify', params, r => {
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='作废成功';
+                    this.getListData(this.params);
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                }) 
+            },
+            
+            submitApply(){
+                let params={
+                    id:this.id
+                };   
+                if(this.applyDisabled){
+                    return ;
+                }  
+                 this.applyDisabled=true;
+                 this.closeApply();
+                 this.$http.post('apply-contract', params, r => {
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='申请成功';
+                    this.getListData(this.params);
+                }, e => {
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })   
             },
 
-            lowerSubmit(){
+            submitLowerSearch(){
                  utils.addParams(this.params);
             },
 
-            upperChange(params,error){
-                this.upperError=error;
-                this.upperData=params;
-            },
-
-            upperSubmit(){
+            submitUpperSearch(){
                 if(this.upperError){
                     return ;
                 }
@@ -372,11 +330,70 @@
                 this.params.pageSize=15;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                this.params.mask='reduce';
                 utils.addParams(this.params);
             },
 
-            onChangeOpen(data){
+            submitExport (){
+                this.props=Object.assign({},this.props,this.params);
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
+            },
+
+            onPageChange (index) {
+                let params=this.params;
+                params.page=index;
+                this.getListData(params);
+            },
+
+            onUpperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
+            },
+
+            onKeyEnter: function (ev) {
+                this.submitLowerSearch();
+            },
+
+            onMessageChange(data){
                 this.openMessage=data;
+            },
+
+            showSearch () {
+                this.openSearch=!this.openSearch;
+            },
+
+            showNullify(params){
+                this.id=params.row.id;
+                this.closeNullify();
+            },
+
+            jumpReduce(){
+                utils.addParams({mask:'reduce'});
+                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
+            },
+
+            jumpEdit(params){
+                utils.addParams({mask:'reduce'});
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,'_blank')
+            },
+
+            showApply(params){
+                this.id=params.row.id;
+                this.closeApply();
+            },
+
+            jumpView(params){
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,'_blank');
+            },
+
+            closeNullify(){
+                this.openNullify=!this.openNullify;
+                this.nullDisabled=false;
+            },
+
+            closeApply(){
+                this.openApply=!this.openApply;
+                this.applyDisabled=false;
             }
         }
     }

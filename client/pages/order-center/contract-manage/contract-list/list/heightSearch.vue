@@ -92,22 +92,25 @@
         data (){
             return{
                 dateError:false,
-                formItem:{
-                   orderNum:'',
-                   customerName:'',
-                   payStatus:'',
-                   orderStatus:'',
-                   orderType:'',
-                   communityId:'',
-                   cEndDate:'',
-                   cStartDate:''
-                },
+                formItem:Object.assign({
+                   communityName:'',
+                   contractType:'',
+                   customName:'',
+                   maxCTime:'',
+                   minCTime:'',
+                   serialNumber:'',
+                 },this.params),
+               
                 type:this.mask=='join'?true:false,
                 orderList:[],
                 payList:[],
                 typeList:[],
                 communityList:[]
             }
+        },
+
+        created(){
+          this.formItem=Object.assign({},this.$route.query);
         },
 
         mounted:function(){

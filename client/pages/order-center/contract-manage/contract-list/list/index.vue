@@ -4,7 +4,7 @@
 <template>
 
     <div class="contract-center-list">
-        <sectionTitle label = "合同"></sectionTitle>
+        <SectionTitle title = "合同列表"></SectionTitle>
        <div style='text-align:right;margin-bottom:10px'>
           
             <div style='display:inline-block;margin:10px 20px;'>
@@ -112,7 +112,7 @@
 
 
    
-    import sectionTitle from '~/components/SectionTitle.vue';
+    import SectionTitle from '~/components/SectionTitle.vue';
     import Loading from '~/components/Loading';
     import krUpload from '~/components/KrUpload.vue';
     import HeightSearch from './heightSearch';
@@ -122,7 +122,7 @@
     var maxWidth = 170;
     export default {
         components: {
-            sectionTitle,
+            SectionTitle,
             krUpload,
             HeightSearch,
             Loading,

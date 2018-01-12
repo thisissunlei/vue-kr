@@ -19,7 +19,7 @@
 </style>
 <template>
 <div class="g-order-detail">
-	<SectionTitle label="会议室订单详情"></SectionTitle>
+	<SectionTitle title="会议室订单详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="订单编号：">

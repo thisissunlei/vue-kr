@@ -6,12 +6,12 @@
 
 <script>
     export default {
-        props:[
-            'label',
-            'type',
-            'checkAction',
-            'styles'
-        ],
+        props:{
+            label:String,
+            type:String,
+            checkAction:String,
+            styles:Object
+        },
         data() {
         	return{
         	   data:[]

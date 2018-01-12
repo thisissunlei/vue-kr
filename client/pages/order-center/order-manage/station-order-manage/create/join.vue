@@ -1,6 +1,6 @@
 <template>
     <div class="create-new-order">
-        <sectionTitle label="新建入驻服务订单管理"></sectionTitle>
+        <SectionTitle title="新建入驻服务订单管理"></SectionTitle>
          <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
             <Row style="margin-bottom:30px">  
@@ -205,7 +205,7 @@
 <script>
 
 
-import sectionTitle from '~/components/SectionTitle.vue'
+import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
@@ -358,7 +358,7 @@ import utils from '~/plugins/utils';
             }
         },
         components: {
-            sectionTitle,
+            SectionTitle,
             selectCommunities,
             DetailStyle,
             selectCustomers,

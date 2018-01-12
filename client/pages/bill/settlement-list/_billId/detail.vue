@@ -50,8 +50,8 @@
 
 		<DetailStyle info="附件信息">
 			<div class="none-list" v-if="!attachmentList.length" style="margin-left:12px">暂无附件</div>
-			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" @click="downFille(item)" >
-				{{item.fileName}}
+			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" >
+				<span  @click="downFille(item)" style="cursor:pointer">{{item.fileName}}</span>
 			</div>
 			<div style="width:200px;margin-left:12px" >
 			<Progress :percent="progress" v-if="isUploading"  :stroke-width="5"></Progress>
@@ -183,10 +183,22 @@ export default {
 		},
 		takeEffectSubmit(){
 			
+			this.$http.get('post-effective', {checklistId:this.$route.params.billId}).then( r => {
+				   this.becomeEffective()
+				   
+				   this.$Notice.success({
+                    	title:'生效成功'
+                	});
+				   location.reload() 
+           	}).catch( e => {
+                this.$Notice.error({
+                    title:e.message
+                });
+            })
 		},
 		edit(){
 			let {params}=this.$route;
-            window.open(`/bill/settlement-list/${params.billId}/edit/`,params.billId);
+            window.open(`/bill/settlement-list/${params.billId}/edit/`);
 
 		},
 		download(){
@@ -382,7 +394,7 @@ export default {
 			font-weight: 600;
 			height: 30px;
 			line-height: 30px;
-			cursor: pointer;
+			// cursor: pointer;
 		}
 		.file-button{
 

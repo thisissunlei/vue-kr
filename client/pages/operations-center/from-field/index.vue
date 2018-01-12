@@ -1,6 +1,6 @@
 <template>
     <div class="from-field-list">
-        <sectionTitle label = "撤场记录管理"></sectionTitle>
+        <SectionTitle title = "撤场记录管理"></SectionTitle>
         <div style="padding:20px;padding-right:0;">
             <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
             <div style="float:right;">
@@ -64,7 +64,7 @@
     </div>
 </template>
 <script>
-    import sectionTitle from '~/components/SectionTitle.vue';
+    import SectionTitle from '~/components/SectionTitle.vue';
     import Loading from '~/components/Loading';
     import krUpload from '~/components/KrUpload.vue';
     import dateUtils from 'vue-dateutils';
@@ -74,7 +74,7 @@
     import NewPage from './NewPage'
     export default {
         components: {
-            sectionTitle,
+            SectionTitle,
             krUpload,
             Loading,
             Message,

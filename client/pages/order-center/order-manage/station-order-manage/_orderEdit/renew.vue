@@ -1,6 +1,6 @@
 <template>
     <div class="create-new-order">
-       <SectionTitle label="编辑续租服务订单管理"></SectionTitle>
+       <SectionTitle title="编辑续租服务订单管理"></SectionTitle>
         <Form ref="renewForm" :model="renewForm" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="续租信息">
             <Row style="margin-bottom:20px">  

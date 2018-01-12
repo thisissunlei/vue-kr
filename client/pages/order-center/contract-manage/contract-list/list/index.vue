@@ -335,7 +335,7 @@
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,
                                         columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad
+                                        onUpUrl:this.urlUpLoad
                                     },
                                     style: {
                                         color:'#2b85e4'

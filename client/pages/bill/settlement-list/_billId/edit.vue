@@ -71,7 +71,7 @@
 	<div class="m-detail-buttons">
 		
 		<Button type="primary" @click="submitForm('formItem')">确定</Button>
-        <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
+        <Button type="ghost" style="margin-left: 8px" @click="cancel">取消</Button>
 	</div>
 </div>	
 </template>
@@ -190,10 +190,9 @@ export default {
 		becomeEffective(){
 
 		},
-		downSwitch(){
-
-		},
-		upload(){
+		cancel(){
+			window.close();
+            window.opener.location.reload();
 
 		},
 		deleteDiscount(){
@@ -233,8 +232,12 @@ export default {
 		submitForm(name){
 			this.checkList()
 			if(this.error){
+				this.$Notice.error({
+                    title:this.errorMessage
+                });
 				console.log('不能提交')
 			}else{
+				this.postChecklist()
 				console.log('提交')
 			}
 		
@@ -251,7 +254,7 @@ export default {
 			//处理结算信息的费用名称是否选
 			let _this = this;
 			let items = this.formItem.details.filter((item,index)=>{
-				if(item.billId && item.show){
+				if(!item.billId && item.show){
 					return true
 					
 				}
@@ -260,7 +263,11 @@ export default {
 			console.log('items',items)
 			if(items.length){
 				items.map(item=>{
-					if(!item.value || !item.amount){
+					if(isNaN(item.payableAmount)){
+						_this.error = true;
+						_this.errorMessage = "金额请填写数字"
+					}
+					if(!item.feeType || !item.payableAmount){
 						_this.error = true;
 						_this.errorMessage = "结算表单未填写完整"
 					}					
@@ -270,6 +277,20 @@ export default {
 			}
 
 					
+		},
+		postChecklist(){
+			let form = {
+				checklistId:this.$route.params.billId,
+				detailsStr:JSON.stringify(this.formItem.details)
+			}
+			this.$http.post('post-edit-settlement-detail', form).then(
+				r=>{
+					console.log('提交成功')
+					window.close();
+                      window.opener.location.reload();
+				}).catch(err=>{
+					console.log('err',err)
+				})
 		}
 	}
 }

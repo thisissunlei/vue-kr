@@ -1,6 +1,6 @@
 <template>
     <div class='m-settlement-list'>
-            <!-- <sectionTitle label="结算单管理"></sectionTitle> -->
+            <SectionTitle label="结算单管理"></SectionTitle>
             <div class='list-banner'>
                     <div class='list-search'>
                          <div class='lower-search'>
@@ -69,7 +69,7 @@
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
-    import sectionTitle from '~/components/sectionTitle';
+    import SectionTitle from '~/components/sectionTitle';
 
     export default {
         name:'settlement',
@@ -326,7 +326,7 @@
             },
             // 编辑
             showEdit(params){
-
+                window.open(`/bill/settlement-list/${params.row.id}/edit/`,params.row.id);
             },
             // 提示信息
             nullifySubmit (){

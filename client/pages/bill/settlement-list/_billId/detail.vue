@@ -75,6 +75,17 @@
 			
 		</div>
 	</div>
+	<Modal
+            v-model="openTakeEffect"
+            title="账单生效"
+            width="660"
+        >
+            <div>账单是否生效?</div>
+            <div slot="footer">
+                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="becomeEffective">取消</Button>
+            </div>
+        </Modal>
 </div>	
 </template>
 <script>
@@ -97,19 +108,9 @@ export default {
 	data(){
 		return{
 			disabled:false,
+			// 生效显示
+			openTakeEffect:false,
 			basicInfo:{},
-
-			capitalService:'',
-
-			capitalTreatment:'',
-
-			ctime:'',
-
-			startDate:'',
-
-			endDate:'',
-
-			payDate:'',
 
 			service:[
 				{
@@ -151,9 +152,6 @@ export default {
 			],
 
 			details:[],
-
-			treatmentData:[],
-
 			contractData:[],
 			progress:0,
 			isUploading:false,
@@ -181,7 +179,10 @@ export default {
 	},
 	methods:{
 		becomeEffective(){
-
+			this.openTakeEffect = !this.openTakeEffect
+		},
+		takeEffectSubmit(){
+			
 		},
 		edit(){
 			let {params}=this.$route;

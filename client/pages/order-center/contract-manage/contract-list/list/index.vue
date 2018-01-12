@@ -1,11 +1,7 @@
-
-
-
 <template>
-
     <div class="contract-center-list">
-        <SectionTitle title = "合同列表"></SectionTitle>
-       <div style='text-align:right;margin-bottom:10px'>
+        <SectionTitle title = "合同列表" />
+        <div style='text-align:right;margin-bottom:10px'>
           
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
@@ -28,11 +24,11 @@
             :data="detail" 
             style="margin:20px"
             :height="tableHeight<200?200:tableHeight" 
-        ></Table>
+        />
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="outSubmit">导出</Button>
             <div style="float: right;">
-                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
             </div>
         </div>
         <Modal
@@ -40,7 +36,7 @@
             title="高级搜索"
             width="660"
         >
-            <HeightSearch :params = "params" @bindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" @bindData="upperChange" mask='join'/>
             <div slot="footer">
                     <Button type="primary" @click="upperSubmit">确定</Button>
                     <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -64,7 +60,14 @@
             title="其他约定"
             width="660"
         >
-            <Input v-model="otherAgreed" :maxlength="999" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入描述..."></Input>
+            <Input 
+                v-model="otherAgreed" 
+                :maxlength="999" 
+                type="textarea" 
+                :autosize="{minRows: 5,maxRows: 5}" 
+                style="width:100%;" 
+                placeholder="写入描述..." 
+            />
             <div style="text-align:right">{{otherAgreed?otherAgreed.length+"/999":0+"/999"}}</div>
             <div slot="footer">
                 <Button type="primary" @click="describeSubmit" :disabled="describeDisabled">确定</Button>
@@ -83,13 +86,13 @@
                 <div class="cachet-box" @click="selectCachet(false)">
                     <img src="./images/noCachet.png" />
                     <div>示例一：未加盖公章的合同</div>
-                    <div :class="!this.isCachet?'select cachet':'select'" ></div>
+                    <div :class="!this.isCachet?'select cachet':'select'" />
                 </div>
             
                 <div class="cachet-box" @click="selectCachet(true)">
                     <img src="./images/cachet.png" />
                     <div>示例二：加盖公章的合同</div>
-                    <div :class="this.isCachet?'select cachet':'select'"></div>
+                    <div :class="this.isCachet?'select cachet':'select'"/>
                 </div>
                 </div>
                 <div slot="footer">
@@ -102,7 +105,7 @@
                 :openMessage="openMessage"
                 :warn="warn"
                 @changeOpen="onChangeOpen"
-        ></Message>
+        />
         <!-- <Loading :loading='loadingStatus'/> -->
         
     </div>

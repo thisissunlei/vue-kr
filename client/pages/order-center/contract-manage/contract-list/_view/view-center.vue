@@ -12,13 +12,13 @@
               <div class="cachet-box" @click="selectCachet(false)">
                 <img src="./images/noCachet.png" />
                 <div>示例一：未加盖公章的合同</div>
-                <div :class="!this.isCachet?'select cachet':'select'" ></div>
+                <div :class="!this.isCachet?'select cachet':'select'" />
               </div>
            
               <div class="cachet-box" @click="selectCachet(true)">
                 <img src="./images/cachet.png" />
                 <div>示例二：加盖公章的合同</div>
-                <div :class="this.isCachet?'select cachet':'select'"></div>
+                <div :class="this.isCachet?'select cachet':'select'"/>
               </div>
             </div>
             <div slot="footer">
@@ -30,13 +30,13 @@
         <div style="width:100%;padding:20px;">
           <Button type="info" @click="downSwitch">下载pdf</Button>
           <div style="float:right;">
-            <Button @click="pageSub" icon="minus"></Button>
+            <Button @click="pageSub" icon="minus"/>
             {{page+'/'+numPages}}
-            <Button @click="pageAdd" icon="plus"></Button>
+            <Button @click="pageAdd" icon="plus"/>
           </div>
         </div>
         <div class="pdf-box" v-if="openPage"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10"></pdf> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10" />
         </div>
     </div>
     </div>

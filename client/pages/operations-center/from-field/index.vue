@@ -1,6 +1,6 @@
 <template>
     <div class="from-field-list">
-        <SectionTitle title = "撤场记录管理"></SectionTitle>
+        <SectionTitle title = "撤场记录管理"/>
         <div style="padding:20px;padding-right:0;">
             <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
             <div style="float:right;">
@@ -11,11 +11,11 @@
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     
-                    ></i-input>
+                    />
                 </div>
                 <div style="display:inline-block;color: #2b85e4;cursor: pointer;" @click="lowerSubmit">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
-                    <span></span>   
+                    <span />
                 </div> 
             </div>
          </div>
@@ -28,7 +28,7 @@
         ></Table>
         <div style="margin: 10px 20px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
             </div>
         </div>
         <Modal
@@ -36,7 +36,7 @@
             title="高级查询"
             width="660"
         >
-            <HeightSearch :params = "params" @fromFieldBindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch :params = "params" @fromFieldBindData="upperChange" mask='join'/>
 
             <div slot="footer">
                 <Button type="primary" @click="submitSearch">确定</Button>
@@ -48,7 +48,7 @@
             title="新建离场"
             width="660"
         >
-            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" ></NewPage>
+            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" />
            <div slot="footer">
                 <Button v-if="!newPageIsSubmit" disabled>确定</Button>
                 <Button v-if="newPageIsSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
@@ -60,7 +60,7 @@
             :openMessage="openMessage"
             :warn="warn"
             @changeOpen="onChangeOpen"
-        ></Message>
+        />
     </div>
 </template>
 <script>

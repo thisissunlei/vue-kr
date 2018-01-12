@@ -48,9 +48,16 @@
             </div>
 		</DetailStyle>
 
-		<!-- <DetailStyle info="附件信息">
-			
-         </DetailStyle> -->
+		<DetailStyle info="附件信息">
+			<div class="none-list" v-if="!attachmentList.length">暂无附件</div>
+			<div class="file-list" v-for="item in attachmentList" @click="downFille(item)" >
+				{{item.fileName}}
+			</div>
+			<div style="width:200px">
+			<Progress :percent="progress" v-if="isUploading"  :stroke-width="5"></Progress>
+			</div>
+			<div class="bottom" style="height:20px"></div>
+        </DetailStyle>
 
 		<DetailStyle info="操作记录">
             <Table :columns="contract" :data="contractData" border></Table>
@@ -59,11 +66,14 @@
 	<div class="m-detail-buttons">
 		
 		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
-		<Button type="primary" @click="upload" style="margin-left:8px">上传附件</Button>
 		<!-- //未生效时才可编辑 -->
 		<Button type="primary" @click="edit" style="margin-left:8px">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
 		<Button type="primary" @click="becomeEffective" :v-show="disabled" style="margin-left:8px">生效</Button>
+		<div class="file-button">
+			<input type="file" name="file" @change="onChange" >上传附件</input>
+			
+		</div>
 	</div>
 </div>	
 </template>
@@ -106,7 +116,6 @@ export default {
 				 title: '费用名称',
                  key: 'feeTypeName',
                  align:'center'	,
-                 // width: 200,
 				},
                 {
 				 title: '费用金额(元)',
@@ -137,7 +146,10 @@ export default {
 
 			treatmentData:[],
 
-			contractData:[]
+			contractData:[],
+			progress:0,
+			isUploading:false,
+			attachmentList:[]
 		}
 	},
 	
@@ -147,10 +159,12 @@ export default {
 		let from={
 			checklistId:params.billId
 		};
+		console.log('checklistId',from)
 		var _this=this;
 	     this.$http.get('get-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
-				   _this.details = r.data.details
+				   _this.details = r.data.details;
+				   _this.attachmentList = r.data.attachments;
            	}, e => {
                 _this.$Notice.error({
                     title:e.message
@@ -170,8 +184,159 @@ export default {
 
 		},
 		upload(){
+			console.log('========')
+		},
+		onChange(event){
+			console.log('onChange=====>',event)
+			
+			let that = this;
+			let file = event.target.files[0];
+			var fileName= file.name;
+			if (!file) {
+				return;
+			}
 
-		}
+			let category = 'op/upload';
+			if (file) {
+				this.progress = 0;
+				this.isUploading = true;
+				var timer = window.setInterval(function() {
+						if (that.progress >= 100) {
+							this.isUploading = false;
+							window.clearInterval(timer);
+						}
+						that.progress += 10;
+					
+				}, 300);
+			}
+			var form = new FormData();
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						var response = xhr.response.data;
+						form.append('OSSAccessKeyId', response.ossAccessKeyId);
+						form.append('policy', response.policy);
+						form.append('Signature', response.sign);
+						form.append('key', response.pathPrefix+'/'+file.name);
+						form.append('uid', response.uid);
+						form.append('callback', response.callback);
+						form.append('x:original_name', file.name);
+						form.append('file', file);
+						
+						var xhrfile = new XMLHttpRequest();
+						xhrfile.onreadystatechange = function() {
+							if (xhrfile.readyState === 4) {
+								var fileResponse = xhrfile.response;
+								if (xhrfile.status === 200) {
+									if (fileResponse && fileResponse.code > 0) {
+										var params = {};
+										that.isShowProgress = "none";
+										that.progress = 100;
+										params.name = fileName;
+										params.url = fileResponse.data.url;
+										params.fileId = ""+fileResponse.data.id;
+										params.fileName = fileName;
+										params.fileUrl = fileResponse.data.url;
+										params.type = "ATTACHMENT"
+										that.onSuccess(params)
+
+									} else {
+										//报错
+										that.isShowProgress = "none";
+										that.progress = 100;
+										console.log(fileResponse.msg)
+										that.$Notice.error({
+												title:fileResponse.msg
+										});
+										that.onError(fileResponse.msg);
+									}
+								} else if (xhrfile.status == 413) {
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:"您上传的文件过大！"
+									});
+									that.onError('您上传的文件过大！');
+								} else {
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:'后台报错请联系管理员！'
+									});
+								
+								}
+							}
+						};
+						xhrfile.open('POST', response.serverUrl, true);
+						xhrfile.responseType = 'json';
+						xhrfile.send(form);
+					} else {
+						that.onTokenError();
+					}
+				}
+				
+			};
+
+			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
+			xhr.responseType = 'json';
+			xhr.send();
+		},
+		onSuccess(response){
+			let _this = this;
+			this.$http.post("post-checklist-list", {
+                    checklistId:this.$route.params.billId,
+                    fileId:response.fileId,
+                    fileName:response.fileName
+                }).then((response) => {
+                    _this.getAttachmentList()
+                }).catch((error) => {
+                    _this.$Notice.error({
+                        title:error.message
+                    });
+                })
+		},
+		onError(message) {
+			message = message || '上传文件失败';
+			this.progress = 0;
+			this.isUploading = false
+			alert(message)
+		},
+		onTokenError() {
+			alert('初始化上传文件失败')
+		},
+		getAttachmentList(){
+			let _this = this;
+			this.$http.get("get-checklist-list", {
+                    checklistId:this.$route.params.billId,
+                }).then((response) => {
+                	console.log('getAttachmentList',response.data.attachments)
+                    _this.attachmentList = response.data.attachments;
+                    _this.isUploading = false
+                }).catch((error) => {
+                    _this.$Notice.error({
+                        title:error.message
+                    });
+                })
+		},
+		downFille(params){
+			var that=this;
+			this.newWin = window.open();
+			this.$http.post('get-station-contract-pdf-url', {
+				id:params.fileId,
+				
+			}, (response) => {
+				 that.newWin.location = response.data;
+			
+			}, (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})   
+			// var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
+		},
 	}
 }
 </script>
@@ -208,5 +373,50 @@ export default {
 			width:200px;
 			margin-left:auto;
 		}
+		.file-list{
+			color: #499df1;
+			font-size: 15px;
+			font-weight: 600;
+			height: 30px;
+			line-height: 30px;
+			cursor: pointer;
+		}
+		.file-button{
+
+			height:32px;
+			width:100px;
+			color:#fff;
+			background-color: #2d8cf0;
+			border:none;
+			line-height:35px;
+			position:relative;
+			text-align:center;
+			overflow:hidden;
+			display: inline-block;
+			border-radius: 4px;
+			vertical-align: bottom;
+			margin-left: 8px;
+
+			input[type=file]{
+				opacity:0;
+				position:absolute;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+			}
+
+			.progress{
+				// background-color:#328ECC;
+				display:block;
+				top:0;
+				left:0;
+				right:0;
+				bottom:0;
+				position:absolute;
+				background:rgba(43,141,205,.7);
+			}
+		}
+
 	}
 </style>

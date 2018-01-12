@@ -71,7 +71,7 @@
 		
 		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
 		<!-- //未生效时才可编辑 -->
-		<Button type="primary" @click="edit" style="margin-left:8px">编辑</Button>
+		<Button type="primary" @click="edit" style="margin-left:8px" v-show="basicInfo.checklistStatus=='UNEFFECTIVE'">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
 		<Button type="primary" @click="becomeEffective" v-show="basicInfo.checklistStatus=='UNEFFECTIVE' && attachmentList.length" style="margin-left:8px">生效</Button>
 		<div class="file-button" >

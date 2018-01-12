@@ -1,3 +1,9 @@
+<template>         
+    <div class='m-nullify'>
+        确定要作废此订单吗？
+    </div>       
+</template>
+
 <style lang='less'>
    .m-nullify{
        padding: 30px;
@@ -5,19 +11,5 @@
        text-align: center;
    }
 </style>  
-<template>         
-    <div class='m-nullify'>
-        确定要作废此订单吗？
-    </div>       
-</template>
-<script>
-    export default{
-        name:'nullify',
-        data (){
-            return{
-               
-            }
-        }
-    }
-</script>
+
 

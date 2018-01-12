@@ -331,7 +331,7 @@
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,
                                         columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad
+                                        onUpUrl:this.urlUpLoad
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -412,6 +412,7 @@
             },
             //合同生效开关
             takeEffectSwitch(){
+                this.effectDisabled=false;
                 this.openTakeEffect = !this.openTakeEffect;
             },
             //生效确定
@@ -440,6 +441,7 @@
             },
             //其他约定页面开关
             describeSwitch(){
+                this.describeDisabled=false;
                 this.openDescribe = !this.openDescribe;
             },
             //其他约定按钮点击
@@ -605,7 +607,7 @@
                this.downSwitch(); 
             },
             urlUpLoad(detail,col){
-               
+                console.log("---------")
                 var _this = this;
                 this.$http.post("post-list-upload-url", {
                     fileList:JSON.stringify(detail),

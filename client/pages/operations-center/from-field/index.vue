@@ -127,6 +127,10 @@
                         title: '服务尾日',
                         key: 'lastDay',
                         align:'center',
+                        render(h, obj){
+                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.lastDay));
+                            return time;
+                        }
                     },
                     {
                         title: '状态',
@@ -195,7 +199,7 @@
             showSearch(params) {
 
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
+                // utils.clearForm(this.upperData);
             },
             showNewPage(){
                 this.openNewPage = !this.openNewPage;
@@ -261,7 +265,6 @@
             },
             submitNewPage(name){
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
-                console.log(newPageRefs[name],"PPPP")
                 newPageRefs[name].validate((valid,data) => {
                     if (!valid) {
                       return;
@@ -275,6 +278,7 @@
                     that.openMessage=true;
                     that.MessageType="success";
                     that.warn="新建成功";
+                    utils.addParams(that.params);
                     that.showNewPage();
                 }, e => {
                     that.newPageIsSubmit = false;

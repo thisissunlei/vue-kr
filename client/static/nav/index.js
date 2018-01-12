@@ -714,8 +714,20 @@
                                  router: 'operation/customerManage/agreementtrim',
                                  menuCode: 'contract_edit',
                              },
+                             {
+                                 primaryText: '撤场记录管理',
+                                 type: 'vue',
+                                 router: 'operations-center/from-field',
+                                 menuCode: 'contract_edit',
+                             },
                          ]
                      },
+
+
+                     
+
+
+
                      {
                          primaryText: '会员管理',
                          iconName: 'icon-vip',

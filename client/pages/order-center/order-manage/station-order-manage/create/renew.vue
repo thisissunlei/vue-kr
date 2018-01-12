@@ -483,7 +483,8 @@ import utils from '~/plugins/utils';
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    id:null
                 };
                 let _this = this;
                this.$http.get('get-renew-station', params, r => {
@@ -991,6 +992,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
                 if(!complete && !show){

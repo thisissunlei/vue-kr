@@ -97,6 +97,9 @@
         methods:{
             getCustomer(){
                 var that = this;
+                if(!this.validate.cmtId){
+                    return;
+                }
                 var params = {
                     communityId:this.validate.cmtId
                 }

@@ -49,11 +49,11 @@
 		</DetailStyle>
 
 		<DetailStyle info="附件信息">
-			<div class="none-list" v-if="!attachmentList.length">暂无附件</div>
-			<div class="file-list" v-for="item in attachmentList" @click="downFille(item)" >
+			<div class="none-list" v-if="!attachmentList.length" style="margin-left:12px">暂无附件</div>
+			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" @click="downFille(item)" >
 				{{item.fileName}}
 			</div>
-			<div style="width:200px">
+			<div style="width:200px;margin-left:12px" >
 			<Progress :percent="progress" v-if="isUploading"  :stroke-width="5"></Progress>
 			</div>
 			<div class="bottom" style="height:20px"></div>
@@ -69,8 +69,8 @@
 		<!-- //未生效时才可编辑 -->
 		<Button type="primary" @click="edit" style="margin-left:8px">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
-		<Button type="primary" @click="becomeEffective" :v-show="disabled" style="margin-left:8px">生效</Button>
-		<div class="file-button">
+		<Button type="primary" @click="becomeEffective" v-show="basicInfo.checklistStatus=='UNEFFECTIVE' && attachmentList.length" style="margin-left:8px">生效</Button>
+		<div class="file-button" >
 			<input type="file" name="file" @change="onChange" >上传附件</input>
 			
 		</div>
@@ -116,6 +116,14 @@ export default {
 				 title: '费用名称',
                  key: 'feeTypeName',
                  align:'center'	,
+                 render:(h,params)=>{
+                 	if(params.row.billId){
+                 		return params.row.billName
+                 	}else{
+                 		return params.row.feeTypeName
+                 	}
+                 }
+                            
 				},
                 {
 				 title: '费用金额(元)',
@@ -183,12 +191,7 @@ export default {
 		download(){
 
 		},
-		upload(){
-			console.log('========')
-		},
 		onChange(event){
-			console.log('onChange=====>',event)
-			
 			let that = this;
 			let file = event.target.files[0];
 			var fileName= file.name;
@@ -335,7 +338,6 @@ export default {
                     title:error.message
                 });
 			})   
-			// var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
 		},
 	}
 }

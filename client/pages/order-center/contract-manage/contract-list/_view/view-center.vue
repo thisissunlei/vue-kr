@@ -1,5 +1,6 @@
 <template>
  <div>
+    <div v-if="!isLoading">
       <Modal
         v-model="openDown"
         title="下载pdf-"
@@ -38,14 +39,19 @@
           <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10"></pdf> 
         </div>
     </div>
+    </div>
+    <Loading v-if="isLoading" />
     
  </div>
 </template>
 
 <script>
 import utils from '~/plugins/utils';
-
+import Loading from '~/components/Loading'
 export default {
+  components:{
+    Loading
+  },
   data(){
     return {
       isCachet:false,
@@ -55,7 +61,8 @@ export default {
       numPages:1,
       page:1,
       openPage:false,
-      newWin:''
+      newWin:'',
+      isLoading:false
     }
   },
   mounted:function(){
@@ -63,18 +70,24 @@ export default {
     GLOBALSIDESWITCH("false");
      var that = this;
       this.config();
+      this.getPdfId();
+  },
+  methods:{
+    getPdfId(){
+      var that = this;
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
-      this.$http.get('get-station-contract-pdf-id',parameter, r => {    
+      this.$http.get('get-station-contract-pdf-id',parameter, r => {  
+         that.isLoading = false; 
           that.fileId = r.data.fileId || '';
           that.getPdfUrl(r.data.fileId||'');
       }, e => {
-           that.$Notice.error({
-              title:error.message||"后台出错请联系管理员"
-            });
+        that.isLoading = true;
+          setTimeout(() => {
+            that.getPdfId();
+          }, 500);
       })
-  },
-  methods:{
+    },
     selectCachet(select){
       this.isCachet = select;
       
@@ -106,11 +119,15 @@ export default {
       var that = this;
       var parameter = {id:id};
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
+         
           that.src = r.data;
+          
       }, e => {
+        
         if(!e.message){
           e.message = "后台出错请联系管理员"
         }
+        // console.log("loading+++++++++")
           that.$Message.info(e);
          
       })

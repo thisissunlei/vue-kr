@@ -5,7 +5,7 @@
             <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="结算单编号"  class='bill-search-class'>
                     <i-input 
-                        v-model="formItem.serialNumber" 
+                        v-model="formItem.checklistNum" 
                         placeholder="请输入结算单编号"
                         style="width: 252px"
                     ></i-input>
@@ -19,7 +19,7 @@
                 </Form-item>
                 <Form-item label="社区名称" class='bill-search-class'> 
                    <Select 
-                        v-model="formItem.communityName" 
+                        v-model="formItem.communityId" 
                         placeholder="请输入社区名称" 
                         style="width: 252px"
                         filterable
@@ -36,7 +36,7 @@
                 </Form-item>
                 <Form-item label="状态" class='bill-search-class'>
                     <Select 
-                        v-model="formItem.contractStatus" 
+                        v-model="formItem.checklistStatus" 
                         placeholder="请输入状态" 
                         style="width: 252px"
                         clearable
@@ -52,11 +52,19 @@
                 </Form-item>
                 <Form-item label="生成日期" class="bill-search">
                     <DatePicker 
-                        v-model="formItem.minCTime"
+                        v-model="formItem.ctimeStart"
                         type="date" 
-                        placeholder="生成日期" 
+                        placeholder="创建开始日期" 
                         style="width: 252px"
-                    ></DatePicker>
+                    />
+                   <span class="u-date-txt">至</span>
+                    <DatePicker 
+                        v-model="formItem.ctimeEnd"
+                        type="date" 
+                        placeholder="创建结束日期" 
+                        style="width: 252px"
+                    />
+                    <div style='color:red;' v-show='dateError'>开始日期不能大于结束日期</div>
              </Form-item>
             
          </Form>
@@ -70,33 +78,33 @@
             return{
                 dateError:false,
                 formItem:Object.assign({
-                   communityName:'',
-                   contractType:'',
-                   customName:'',
-                   maxCTime:'',
-                   minCTime:'',
-                   serialNumber:'',
+                   communityId:'',
+                   customerName:'',
+                   checklistNum:'',
+                   checklistStatus:'',
+                   ctimeEnd:'',
+                   ctimeStart:'',
                 },this.params),
-               
-                type:this.mask=='join'?true:false,
-                //合同状态
-                orderList:[
-                    
+                //状态
+                orderList:[ 
                     {
-                        value:'UNENFORCED',
+                        value:'UNEFFECTIVE',
                         label:'未生效'
                     },
                     {
-                        value:'EXECUTED',
+                        value:'EFFECTIVE',
                         label:'已生效'
                     },
                     {
-                        value:'CANCELLATION',
+                        value:'ABANDONED',
                         label:'已作废'
+                    },
+                    {
+                        value:'FINISHED',
+                        label:'已完成'
                     }
                 ],
-                //合同类型
-                typeList:[],
+                //社区列表
                 communityList:[]
             }
         },
@@ -109,17 +117,10 @@
                      title:e.message
                 });
             })
-            this.$http.get('get-center-prepare-data','',r => {
-                _this.typeList = r.data.items;
-            }, e => {
-                _this.$Notice.error({
-                    title:e.message
-                });
-            })
         },
         updated:function(){
-            if(this.formItem.minCTime&&this.formItem.maxCTime){
-                if(this.formItem.minCTime>this.formItem.maxCTime){
+            if(this.formItem.ctimeStart&&this.formItem.ctimeEnd){
+                if(this.formItem.ctimeStart>this.formItem.ctimeEnd){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 

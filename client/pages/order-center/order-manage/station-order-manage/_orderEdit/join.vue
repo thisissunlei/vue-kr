@@ -351,7 +351,8 @@ import utils from '~/plugins/utils';
                 ssoId:'',
                 ssoName:'',
                 changeSale:+new Date(),
-                originStationList:[]
+                originStationList:[],
+                orderType:''
             }
         },
         head() {
@@ -520,6 +521,7 @@ import utils from '~/plugins/utils';
                 formItem.endDate =end;
                 console.log('handleSubmit',formItem)
                 let _this = this;
+                return
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();

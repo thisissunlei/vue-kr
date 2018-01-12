@@ -21,7 +21,6 @@
 
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
-                    <Buttons label='导出'  type='primary' @click='outSubmit' checkAction='order_seat_export'/>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator/>
                     </div>
@@ -73,7 +72,7 @@
     import SectionTitle from '~/components/SectionTitle';
 
     export default {
-        name:'Join',
+        name:'settlement',
         components:{
             HeightSearch,
             // Nullify,
@@ -81,6 +80,11 @@
             Buttons,
             SectionTitle,
             // ApplyContract
+        },
+         head() {
+            return {
+                title: '结算单管理'
+            }
         },
         data () {
             
@@ -118,22 +122,22 @@
                 joinOrder: [
                     {
                         title: '结算单编号',
-                        key: 'orderNum',
+                        key: 'checklistNum',
                         align:'center'
                     },
                     {
                         title: '客户名称',
-                        key: 'customerName',
+                        key: 'csrName',
                         align:'center'
                     },
                     {
                         title: '社区名称',
-                        key: 'communityName',
+                        key: 'cmtName',
                         align:'center'
                     },
                     {
                         title: '退费金额',
-                        key: 'rentAmount',
+                        key: 'totalRefunds',
                         align:'center'
                     },
                     {
@@ -147,35 +151,8 @@
                     },
                     {
                         title: '状态',
-                        key: 'orderStatus',
+                        key: 'statusName',
                         align:'center',
-                        render(h, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废',
-                               'INVALID':'已完成'
-                            }
-                            var style='';
-                            let status = ''
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    status = orderStatus[item] 
-                                }
-                            }
-                            return h('div', [
-                                h('span', {
-                                class:`u-txt ${style}`,                                    
-                                }, status)
-                            ]);
-                        }
                     },
                    
                     {
@@ -183,6 +160,12 @@
                         key: 'action',
                         align:'center',
                         render:(tag,params)=>{
+                            var orderStatus={
+                               'UNEFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'FINISHED':'已完成',
+                               'ABANDONED':'已作废'
+                            }
                              let arr = params.row.file||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
@@ -201,10 +184,19 @@
                                             this.showView(params)
                                         }
                                     }
-                                })];
-                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push(
-                                tag('Button', {
+                                }),
+                               tag(krUpload, {
+                                    props: {
+                                        action:'//jsonplaceholder.typicode.com/posts/',
+                                        file: newArr,//数据
+                                        columnDetail:params.row||{},
+                                        upUrl:this.urlUpLoad//成功后方法
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                },'44'),
+                               tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -217,18 +209,10 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同'),
-                                tag(krUpload, {
-                                    props: {
-                                        action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr,
-                                        columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                },'44'),
+                                }, '下载PDF文件'),
+                               ];
+                           if(params.row.checklistStatus=='UNEFFECTIVE'){
+                               btnRender.push(
                                 tag('Button', {
                                     props: {
                                         type: 'text',
@@ -244,10 +228,7 @@
                                     }
                                 }, '编辑'))
                            }
-                           if(params.row.isEffect || !params.row.haveAttachment){
-                                        
-                                    
-                            // }else{
+                           if(params.row.checklistStatus=='UNEFFECTIVE'  ){
                                 btnRender.push( tag('Button', {
                                     props: {
                                         type: 'text',
@@ -261,7 +242,7 @@
                                             this.contractFor(params)
                                         }
                                     }
-                                }, '合同生效'))
+                                }, '生效'))
                             }
                            return tag('div',btnRender);  
                         }
@@ -345,22 +326,7 @@
             },
             // 编辑
             showEdit(params){
-                let type = '';
-                switch (params.row.orderType){
-                    case 'IN':
-                        type = 'join';
-                        break;
-                    case 'INCREASE':
-                        type = 'join';
-                        break;
-                    case 'CONTINUE':
-                        type = 'renew';
-                        break;
-                    default:
-                        type = 'join';
-                        break;
-                }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,params.row.id)
+
             },
             // 提示信息
             nullifySubmit (){
@@ -376,16 +342,10 @@
                     this.warn=e.message;
                 })
             },
-
-            // 导出
-            outSubmit (){
-                this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
-            },
             // 列表基础数据
             getListData(params){
                 var _this=this;
-                 this.$http.get('join-bill-list', params, r => {
+                 this.$http.get('get-settlements-list', params, r => {
                     _this.totalCount=r.data.totalCount;
                     _this.joinData=r.data.items;
                     _this.openSearch=false;
@@ -418,8 +378,8 @@
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.page=1;
                 this.params.pageSize=15;
-                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                this.params.ctimeStart=this.params.ctimeStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.ctimeStart)):'';
+                this.params.ctimeEnd=this.params.ctimeEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.ctimeEnd)):'';
                 utils.addParams(this.params);
             },
 

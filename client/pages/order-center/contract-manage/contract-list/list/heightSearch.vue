@@ -100,7 +100,6 @@
                    minCTime:'',
                    serialNumber:'',
                  },this.params),
-               
                 type:this.mask=='join'?true:false,
                 orderList:[],
                 payList:[],

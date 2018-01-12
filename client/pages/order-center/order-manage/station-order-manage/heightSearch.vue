@@ -87,9 +87,7 @@
     export default{
         name:'HeighSearch',
         props: {
-             mask: {
-                type: String
-             }
+             mask:String
         },
         data (){
             return{

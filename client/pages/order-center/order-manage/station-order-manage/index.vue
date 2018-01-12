@@ -1,12 +1,12 @@
 <template>
     <div class='m-bill-wrap'>
-        <Tabs :value="activeKey" @on-click='tabsClick' :animated="false">
+        <Tabs :value="activeKey" :animated="false" @on-click='tabsClick'>
             <Tab-pane label="入驻订单" name="join">   
-                <JoinList></JoinList>
+                <JoinList/>
             </Tab-pane>
 
             <Tab-pane label="减租订单" name="reduce">
-                <ReduceList></ReduceList>
+                <ReduceList/>
             </Tab-pane>
         </Tabs>    
     </div>
@@ -18,6 +18,11 @@ import ReduceList from './reduceList';
 
 export default {
    name:'List',
+   head() {
+        return {
+            title: '订单管理'
+        }
+    },
    data(){
        return {
            activeKey:'join',
@@ -27,20 +32,15 @@ export default {
        JoinList,
        ReduceList
    },
-   head() {
-        return {
-            title: '订单管理'
-        }
-    },
-    methods:{
-        tabsClick(key){
-           sessionStorage.setItem('orderMask',key);
-        }
-    },
-    mounted(){
+   mounted(){
        if(this.$route.query.mask=='reduce'){
             this.activeKey=sessionStorage.getItem('orderMask');
        }
+   },
+   methods:{
+        tabsClick(key){
+           sessionStorage.setItem('orderMask',key);
+        }
     }
  }
 </script>

@@ -19,7 +19,6 @@
 							:on-remove="listMove"
 						>
 							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>
-							<!-- <Icon type="ios-plus-outline"></Icon> -->
 							<div v-bind:style="{display:isShowProgress}">
 								<Progress  :percent="progress" :stroke-width="5"></Progress>	
 							</div>
@@ -44,7 +43,13 @@
  
 export default{
 	name:'krUpload',
-	props:["upUrl","columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:{
+		upUrl:String,
+		action:String,
+		file:Array,
+		onUpUrl:Function,
+		columnDetail:Object
+	},
 	data(){
 		return {
 			isOpenList:false,
@@ -85,10 +90,6 @@ export default{
 				top:detail.top+detail.height+5+"px",
 				transform:"translateX(-50%)"
 			}
-			if(!this.isOpenList){
-				// this.submitUpload()
-			}
-			// this.getUpUrl();
 		},
 		submitUpload(detail){
 			this.config();

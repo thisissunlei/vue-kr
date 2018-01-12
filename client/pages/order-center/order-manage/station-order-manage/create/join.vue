@@ -484,6 +484,7 @@ import utils from '~/plugins/utils';
                      }
                     if(!item.tacticsType){
                         complete = false
+                        
                     }
                     if(item.tacticsType=='3' && (!item.startDate || !item.validEnd)){
 
@@ -502,6 +503,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
 

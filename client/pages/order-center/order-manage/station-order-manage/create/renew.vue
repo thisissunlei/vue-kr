@@ -992,6 +992,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
                 if(!complete && !show){

@@ -151,35 +151,8 @@
                     },
                     {
                         title: '状态',
-                        key: 'checklistStatus',
+                        key: 'statusName',
                         align:'center',
-                        render(h, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废',
-                               'INVALID':'已完成'
-                            }
-                            var style='';
-                            let status = ''
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    status = orderStatus[item] 
-                                }
-                            }
-                            return h('div', [
-                                h('span', {
-                                class:`u-txt ${style}`,                                    
-                                }, status)
-                            ]);
-                        }
                     },
                    
                     {
@@ -187,6 +160,12 @@
                         key: 'action',
                         align:'center',
                         render:(tag,params)=>{
+                            var orderStatus={
+                               'UNEFFECTIVE':'未生效',
+                               'EFFECTIVE':'已生效',
+                               'FINISHED':'已完成',
+                               'ABANDONED':'已作废'
+                            }
                              let arr = params.row.file||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
@@ -205,10 +184,19 @@
                                             this.showView(params)
                                         }
                                     }
-                                })];
-                           if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push(
-                                tag('Button', {
+                                }),
+                               tag(krUpload, {
+                                    props: {
+                                        action:'//jsonplaceholder.typicode.com/posts/',
+                                        file: newArr,
+                                        columnDetail:params.row||{},
+                                        upUrl:this.urlUpLoad
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                },'44'),
+                               tag('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -221,18 +209,10 @@
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同'),
-                                tag(krUpload, {
-                                    props: {
-                                        action:'//jsonplaceholder.typicode.com/posts/',
-                                        file: newArr,
-                                        columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                },'44'),
+                                }, '下载PDF文件'),
+                               ];
+                           if(params.row.checklistStatus=='UNEFFECTIVE'){
+                               btnRender.push(
                                 tag('Button', {
                                     props: {
                                         type: 'text',
@@ -248,10 +228,7 @@
                                     }
                                 }, '编辑'))
                            }
-                           if(params.row.isEffect || !params.row.haveAttachment){
-                                        
-                                    
-                            // }else{
+                           if(params.row.checklistStatus=='UNEFFECTIVE'  ){
                                 btnRender.push( tag('Button', {
                                     props: {
                                         type: 'text',
@@ -265,7 +242,7 @@
                                             this.contractFor(params)
                                         }
                                     }
-                                }, '合同生效'))
+                                }, '生效'))
                             }
                            return tag('div',btnRender);  
                         }

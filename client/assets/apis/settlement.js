@@ -2,38 +2,37 @@
 export default  {
   //列表
   'get-settlements-list': {
-      // url: '/api/krspace-finance-web/csr/checklist/list/type/search?',
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/list/type/search?',
+      url: '/api/krspace-finance-web/csr/checklist/list/type/search?',
       method: 'get'
   },
   // 表单详情
   'get-settlement-detail':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/info/type/view?',
+      url: '/api/krspace-finance-web/csr/checklist/info/type/view?',
       method: 'get'
   },
   // 编辑获取数据
   'get-edit-settlement-detail':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/info/type/edit?',
+      url: '/api/krspace-finance-web/csr/checklist/info/type/edit?',
       method: 'get'
   },
   // 提交编辑数据
   'post-edit-settlement-detail':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/edit?',
+      url: '/api/krspace-finance-web/csr/checklist/edit?',
       method: 'post'
   },
   //获取附件列表接口
   'get-checklist-list':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/list/type/attachment?',
+      url: '/api/krspace-finance-web/csr/checklist/list/type/attachment?',
       method: 'get'
   },
   //上传附件
   'post-checklist-list':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/upload/type/attachment?',
+      url: '/api/krspace-finance-web/csr/checklist/upload/type/attachment?',
       method: 'post'
   },
   // 生效
   'post-effective':{
-      url: '/mockjs/66/api/krspace-finance-web/csr/checklist/list/type/attachment?',
+      url: '/api/krspace-finance-web/csr/checklist/list/type/attachment?',
       method: 'post'
   },
 }

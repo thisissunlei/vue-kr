@@ -67,7 +67,7 @@ export default {
   },
   //通用订单类型枚举列表
   'general-common-list': {
-    url: '/api/krspace-finance-web/dict/common',
+    url: '/api/krspace-finance-web/order/common/getBizTypeListAllBy',
     method: 'get'
   },
   //通用订单费用明细枚举列表

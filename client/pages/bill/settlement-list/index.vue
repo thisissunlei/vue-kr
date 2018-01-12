@@ -166,7 +166,7 @@
                                'FINISHED':'已完成',
                                'ABANDONED':'已作废'
                             }
-                             let arr = params.row.file||[];
+                             let arr = params.row.attachments||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
                                 newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
@@ -229,7 +229,7 @@
                                     }
                                 }, '编辑'))
                            }
-                           if(params.row.checklistStatus=='UNEFFECTIVE' && params.row.attachments  ){
+                           if(params.row.checklistStatus=='UNEFFECTIVE' && params.row.attachments.length  ){
                                 btnRender.push( tag('Button', {
                                     props: {
                                         type: 'text',

@@ -419,8 +419,10 @@
                  item.menuItems = lastMenus(item.menuItems);
              }
              if (item.menuItems && item.menuItems.length) {
+               
                  arr.push(item);
              }
+             
          })
  
          return arr;
@@ -636,11 +638,11 @@
                     iconName: 'icon-newthing',
                     router: 'office',
                     iconColor: '#79859a',
-                    menuCode: 'myCard',
+                    menuCode: 'public',
                     menuItems: [
                         {
                             primaryText: '发起合同',
-                            menuCode: 'myCard',
+                            menuCode: 'public',
                             router: 'office/officeBackground/newOffice',
                         },
                     ]	
@@ -650,11 +652,11 @@
                     iconName: 'icon-donething',
                     router: 'office',
                     iconColor: '#79859a',
-                    menuCode: 'myCard',
+                    menuCode: 'public',
                     menuItems: [
                         {
                             primaryText: '我发起的',
-                            menuCode: 'myCard',
+                            menuCode: 'public',
                             router: 'office/officeBackground/ownAdd',
                         },
                     ]	

@@ -650,7 +650,7 @@
                         {
                             primaryText: '发起合同',
                             menuCode: 'myCard',
-                            router: '/office/officeBackground/newOffice',
+                            router: 'office/officeBackground/newOffice',
                         },
                     ]	
                 }, 
@@ -683,7 +683,7 @@
                         {
                             primaryText: '我发起的',
                             menuCode: 'myCard',
-                            router: '/office/officeBackground/ownAdd',
+                            router: 'office/officeBackground/ownAdd',
                         },
                     ]	
                 }, 
@@ -702,13 +702,13 @@
                         {
                             primaryText: '合同列表',
                             menuCode: 'wf_contract_list',
-                            router: '/office/officeBackground/contractMonitor',
+                            router: 'office/officeBackground/contractMonitor',
                         },
                         {
                             primaryText: '合同扫码',
                             menuCode: 'wf_contract_list',
                             type:'vue',
-                            originUrl: '/order-center/contract-manage/contract-yard',
+                            originUrl: 'order-center/contract-manage/contract-yard',
                         }
                     ]	
                 }, 

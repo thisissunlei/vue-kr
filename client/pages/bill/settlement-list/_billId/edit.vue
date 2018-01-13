@@ -166,7 +166,6 @@ export default {
 			let settlementOption = []
 			this.$http.get('get-amount-name-data', {}).then(
 				r=>{
-					console.log('======', r.data.FeeType)
 					_this.settlementOption = r.data.FeeType.map(item=>{
 						let obj = item;
 						obj.label = item.desc;
@@ -217,7 +216,7 @@ export default {
 		},
 		selectDiscount(value){
 			// checkbox的全选事件
-                let items = this.formItem.checkList;
+                let items = this.formItem.details;
                 items = items.map((item)=>{
                     let obj = item;
                     if(item.edit){
@@ -226,7 +225,7 @@ export default {
                     return obj;
                 })
                 this.selectAll = value;
-                this.formItem.checkList = items;
+                this.formItem.details = items;
 
 		},
 		submitForm(name){
@@ -279,9 +278,15 @@ export default {
 					
 		},
 		postChecklist(){
+			let content = this.formItem.details.filter(item=>{
+				if(item.show){
+					return true
+				}
+				return false
+			})
 			let form = {
 				checklistId:this.$route.params.billId,
-				detailsStr:JSON.stringify(this.formItem.details)
+				detailsStr:JSON.stringify(content)
 			}
 			this.$http.post('post-edit-settlement-detail', form).then(
 				r=>{

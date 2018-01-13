@@ -9,14 +9,8 @@
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
-							:headers="this.headers" 
-							:type="this.type" 
 							action="//jsonplaceholder/"
-							:multiple="this.multiple"
-							:name="this.name"
-							:format="this.format"
 							:before-upload= "onChange"
-							:on-remove="listMove"
 						>
 							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>
 							<!-- <Icon type="ios-plus-outline"></Icon> -->
@@ -26,7 +20,7 @@
 							
 						</Upload>
 						<div class="item-box">
-							<div class="file-list" v-for="item in defaultList" @click="downFille(item)" >
+							<div class="file-list" :key="item.id" v-for="item in defaultList" @click="downFille(item)" >
 								{{item.fileName}}
 							</div>
 						</div>
@@ -37,14 +31,19 @@
 		</div>
 	</div>
 </template>
+
+
 <script>
-
-
- import http from '~/plugins/http.js';
+import http from '~/plugins/http.js';
  
 export default{
 	name:'krUpload',
-	props:["onUpUrl","columnDetail","file","type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	props:{
+		columnDetail:Object,
+		file:Array,
+		action:String,
+		onUpUrl:Function
+		},
 	data(){
 		return {
 			isOpenList:false,
@@ -66,10 +65,10 @@ export default{
 	methods:{
 		//错误提示
 		config:function(){
-                this.$Notice.config({
-                    top: 80,
-                    duration: 3
-                });
+			this.$Notice.config({
+				top: 80,
+				duration: 3
+			});
         },
 		//上传列表的开关
 		switchList:function(event){
@@ -85,18 +84,16 @@ export default{
 				top:detail.top+detail.height+5+"px",
 				transform:"translateX(-50%)"
 			}
-			if(!this.isOpenList){
-				// this.submitUpload()
-			}
-			
 		},
 		submitUpload(detail){
 			this.config();
+			console.log('submitUpload=======',detail)
 			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
 			
 		},
 		//获取上传图片
 		getUpUrl(){
+
 			var that=this;
 			var category="op/upload";
 			this.config();
@@ -114,8 +111,11 @@ export default{
 		onChange(event){
 			
 			let that = this;
+			// let file = event.target.files[0];
+			// var fileName= file.name;
 			let file = event;
 			var fileName= event.name;
+			console.log('onChange',file,'fileName',fileName)
 			if (!file) {
 				return;
 			}
@@ -124,11 +124,10 @@ export default{
 				this.isShowProgress = "block";
 				this.progress = 0;
 				var timer = window.setInterval(function() {
-						if (that.progress >= 100) {
-								window.clearInterval(timer);
-						}
-						that.progress += 10;
-					
+					if (that.progress >= 100) {
+							window.clearInterval(timer);
+					}
+					that.progress += 10;
 				}, 300);
 			}
 			var form = new FormData();
@@ -237,7 +236,6 @@ export default{
                     title:error.message
                 });
 			})   
-			// var url = `/api/krspace-op-web/sys/downFile?fileId=${params.fileId}`
 		},
 		listMove(file,fileList){
 			this.defaultList = [].concat(fileList);
@@ -248,7 +246,7 @@ export default{
 	
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .list-box{
 	position: fixed;
 	width: 100%;

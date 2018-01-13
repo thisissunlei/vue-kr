@@ -1,4 +1,4 @@
-
+import thousand from './thousand.js' 
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -9,8 +9,14 @@
 
         var s = '';
 
+        let strL =(n+'').split('.').length;
+        let xiaoshu = '00';
+        if(strL>1){
+            xiaoshu = (n+'').split('.')[1]
+        }
+
         for (var i = 0; i < fraction.length; i++) {
-            s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+            s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
         }
         s = s || '整';
         n = Math.floor(n);
@@ -73,12 +79,13 @@
         url = url + "?" + where.join('&');
         location.href = url;
     }
-    
+   
    
     export default{
         smalltoBIG,
         clearForm,
         commonExport,
         getRequest,
-        addParams
+        addParams,
+        thousand
     }

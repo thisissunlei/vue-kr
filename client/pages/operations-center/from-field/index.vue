@@ -1,6 +1,6 @@
 <template>
     <div class="from-field-list">
-        <SectionTitle title = "撤场记录管理"></SectionTitle>
+        <SectionTitle title = "撤场记录管理"/>
         <div style="padding:20px;padding-right:0;">
             <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
             <div style="float:right;">
@@ -10,15 +10,15 @@
                         v-model="params.csrName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
-                    
-                    ></i-input>
+                    />
                 </div>
-                <div style="display:inline-block;color: #2b85e4;cursor: pointer;" @click="lowerSubmit">搜索</div>
+                <div style="display:inline-block;color: #2b85e4;cursor: pointer;" @click="submitLowerSearch">搜索</div>
                 <div class="m-bill-search" @click="showSearch">
-                    <span></span>   
+                    <span />
                 </div> 
             </div>
-         </div>
+        </div>
+
         <Table 
             border 
             ref="selection" 
@@ -26,43 +26,50 @@
             :data="detail" 
             style="margin:20px"
         ></Table>
+
         <div style="margin: 10px 20px;overflow: hidden">
             <div style="float: right;">
-                <Page :total="totalCount" :page-size='15' @on-change="changePage" show-total show-elevator></Page>
+                <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
             </div>
         </div>
+
         <Modal
             v-model="openSearch"
             title="高级查询"
             width="660"
         >
-            <HeightSearch :params = "params" @fromFieldBindData="upperChange" mask='join'></HeightSearch>
+            <HeightSearch @fromFieldBindData="onUpperChange" />
 
             <div slot="footer">
-                <Button type="primary" @click="submitSearch">确定</Button>
+                <Button type="primary" @click="submitUpperSearch">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
             </div>
         </Modal>
+
          <Modal
             v-model="openNewPage"
             title="新建离场"
             width="660"
         >
-            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" ></NewPage>
+            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" />
            <div slot="footer">
-                <Button v-if="!newPageIsSubmit" disabled>确定</Button>
-                <Button v-if="newPageIsSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
+                <Button v-if="!isNewPageSubmit" disabled>确定</Button>
+                <Button v-if="isNewPageSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="showNewPage">取消</Button>
             </div>
         </Modal>
+
         <Message 
             :type="MessageType" 
             :openMessage="openMessage"
             :warn="warn"
-            @changeOpen="onChangeOpen"
-        ></Message>
+            @changeOpen="onMessageChange"
+        />
+
     </div>
 </template>
+
+
 <script>
     import SectionTitle from '~/components/SectionTitle.vue';
     import Loading from '~/components/Loading';
@@ -105,7 +112,7 @@
                 detail:[],
                 totalCount:1,
                 newPageData:{},
-                newPageIsSubmit:true,
+                isNewPageSubmit:true,
                 columns: [
                     
                     {
@@ -145,7 +152,6 @@
                       
                         render:(h,params)=>{
                             var status = params.row.withdrawalStatus;
-
                             var btnRender=[
                                h('Button', {
                                     props: {
@@ -157,7 +163,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 }, '查看')];
@@ -172,7 +178,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.invalidClick(params)
+                                            this.onInvalid(params)
                                         }
                                     }
                                 }, '作废'));
@@ -184,61 +190,69 @@
                 detail:[]
             }
         },
+
+
        created(){
           var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
           this.getListData(params);
           this.params=params; 
         },
+
+
         methods:{
+
             config:function(){
                 this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
             },
-            showSearch(params) {
 
+            showSearch(params) {
                 this.openSearch=!this.openSearch;
-                // utils.clearForm(this.upperData);
             },
+
             showNewPage(){
                 this.openNewPage = !this.openNewPage;
             },
-            openView(params){
+
+            jumpView(params){
                 window.open(`./from-field/${params.row.id}/view`,'_blank')  
             },
+
             getListData(params){
-                var _this=this;
                  this.config()
                  this.$http.get('get-from-field-list', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.detail=r.data.items;
+                    this.totalCount=r.data.totalCount;
+                    this.detail=r.data.items;
                    
                 }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })   
             },
+
             //分页事件
-            changePage (index) {
+            onPageChange (index) {
                 let params=this.params;
                 params.page=index;
                 this.getListData(params);
             },
            
             // 高级查询修改
-            upperChange(params,error){
-                
+            onUpperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
             },
-            lowerSubmit(){
+
+            //输入框内容提交
+            submitLowerSearch(){
                  utils.addParams(this.params);
             },
+
              //高级查询确定
-            submitSearch(){
-                
+            submitUpperSearch(){
                 if(this.upperError){
                     return ;
                 }
@@ -246,23 +260,24 @@
                 this.params.StartLastDay=this.params.StartLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.StartLastDay)):'';
                 this.params.EndLastDay=this.params.EndLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.EndLastDay)):'';
                 utils.addParams(this.params);
-
             },
-            onChangeOpen(data){
+
+            onMessageChange(data){
                 this.openMessage=data;
             },
-            invalidClick(data){
+            
+            //作废点击
+            onInvalid(data){
                 var id = data.row.id;
-                var that = this;
                 this.$http.post('post-from-field-invalid', {id,id}, r => {
-                    utils.addParams(that.params);
-                   
+                    utils.addParams(this.params);
                 }, e => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })   
             },
+
             submitNewPage(name){
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 newPageRefs[name].validate((valid,data) => {
@@ -270,39 +285,35 @@
                       return;
                     }
                 })
-                var that = this;
                 var params =Object.assign({},this.newPageData);
                 this.$http.post('post-from-field-newpage',params, r => {
-                       
-                    that.newPageIsSubmit = false;
-                    that.openMessage=true;
-                    that.MessageType="success";
-                    that.warn="新建成功";
-                    utils.addParams(that.params);
-                    that.showNewPage();
+                    this.newPageIsSubmit = false;
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn="新建成功";
+                    utils.addParams(this.params);
+                    this.showNewPage();
                 }, e => {
-                    that.newPageIsSubmit = false;
-                    that.openMessage=true;
-                    that.MessageType="error";
-                    that.warn=e.message;
+                    this.newPageIsSubmit = false;
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
                 })   
                 
             },
+
             newPageDataChange(data){
                 if(data){
-                    var that = this;
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
-                    
                     this.newPageData = Object.assign({},data);
                     var params = Object.assign({},data)
                     this.$http.post('post-create-from-field',params, r => {
-                        that.newPageIsSubmit = true;
-                    
+                        this.newPageIsSubmit = true;
                     }, e => {
-                        that.newPageIsSubmit = false;
-                        that.openMessage=true;
-                        that.MessageType="error";
-                        that.warn=e.message;
+                        this.newPageIsSubmit = false;
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=e.message;
                     })   
                 }
             }
@@ -310,7 +321,9 @@
         
     }
 </script>
-<style lang="less"> 
+
+
+<style lang="less" scoped> 
    .from-field-list{
        .m-bill-search{
             display:inline-block;

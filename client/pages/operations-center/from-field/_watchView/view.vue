@@ -25,23 +25,25 @@
 	</div>
 </div>	
 </template>
-<script>
 
+
+<script>
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 
 export default {
-	components:{
-		DetailStyle,
-		LabelText
-	},
 	head() {
         return {
             title: '入驻详情'
         }
     },
+	components:{
+		DetailStyle,
+		LabelText
+	},
+
 	data(){
 		return{
 			detailData:{},
@@ -50,19 +52,26 @@ export default {
 	
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
-		let {params}=this.$route;
-		let from={
-			id:params.watchView
-		};
-		var that=this;
-	    this.$http.get('get-from-field-view', from, r => {
-			that.detailData = r.data;	   
-    	}, e => {
-                _this.$Notice.error({
-                    title:e.message
-                });
-        })
+		this.getViewDetail()
+	},
+	
+	methods:{
+		getViewDetail(){
+			let {params}=this.$route;
+			let from={
+				id:params.watchView
+			};
+			
+			this.$http.get('get-from-field-view', from, r => {
+				this.detailData = r.data;	   
+			}, e => {
+					this.$Notice.error({
+						title:e.message
+					});
+			})
+		}
 	}
+	
 }
 </script>
 

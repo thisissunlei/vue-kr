@@ -2,13 +2,13 @@ Arguments:
   /usr/local/bin/node /usr/local/bin/yarn
 
 PATH: 
-  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/liuyihao/kr-dev:/Users/liuyihao/kr-dev/bin:/Users/liuyihao/.fzf/bin
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/smile/kr-dev:/Users/smile/kr-dev/bin
 
 Yarn version: 
-  0.21.3
+  0.20.3
 
 Node version: 
-  8.0.0
+  9.2.1
 
 Platform: 
   darwin x64
@@ -6397,14 +6397,7 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: http://npm.corp.krspace.cn/@nuxtjs%2fyouch: no such package available
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/lib/util/request-manager.js:313:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:186:22)
-      at emitTwo (events.js:125:13)
-      at Request.emit (events.js:213:7)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:1081:10)
-      at emitOne (events.js:115:13)
-      at Request.emit (events.js:210:7)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:1001:12)
-      at Object.onceWrapper (events.js:312:19)
-      at emitNone (events.js:110:20)
+  Error: connect ETIMEDOUT 104.16.59.173:443
+      at Object._errnoException (util.js:1031:13)
+      at _exceptionWithHostPort (util.js:1052:20)
+      at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1195:14)

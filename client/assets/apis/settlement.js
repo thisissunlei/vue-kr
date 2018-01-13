@@ -32,7 +32,7 @@ export default  {
   },
   // 生效
   'post-effective':{
-      url: '/api/krspace-finance-web/csr/checklist/list/type/attachment?',
+      url: '/api/krspace-finance-web/csr/checklist/effective?',
       method: 'post'
   },
   //获取编辑页结算单费用项目列表

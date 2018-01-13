@@ -68,7 +68,7 @@
                     <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
-                        <span class="money">{{formItem.stationAmount}} </span>
+                        <span class="money">{{formItem.stationAmount | thousand}} </span>
                         <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
@@ -137,7 +137,7 @@
                 <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length">
                         <span>优惠金额总计</span>
-                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
                     </div>
                 </Col>
@@ -292,7 +292,10 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'originalAmount'
+                        key: 'originalAmount',
+                        render:function(h,params){
+                            return utils.thousand(params.row.originalAmount)
+                         }
                     }
                 ],
                 stationList: [
@@ -1097,17 +1100,15 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
-                        let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.formItem.rentAmount =  Math.round(money*100)/100;
-                        _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        _this.formItem.rentAmount =  r.data.totalrent;
+                        _this.formItem.stationAmount = r.data.totalrent;
+                        _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
 
                     }).catch( e => {
                         _this.$Notice.error({

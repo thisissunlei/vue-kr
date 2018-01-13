@@ -379,7 +379,7 @@ import utils from '~/plugins/utils';
 
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.renewForm.stationAmount = data.seatRentAmount;
-                    _this.stationAmount = 
+                    _this.stationAmount = utils.smalltoBIG(data.seatRentAmount)
 
                     _this.renewForm.start = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;

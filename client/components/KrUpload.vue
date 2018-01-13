@@ -9,12 +9,7 @@
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
-							:headers="this.headers" 
-							:type="this.type" 
 							action="//jsonplaceholder/"
-							:multiple="this.multiple"
-							:name="this.name"
-							:format="this.format"
 							:before-upload= "onChange"
 						>
 							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>

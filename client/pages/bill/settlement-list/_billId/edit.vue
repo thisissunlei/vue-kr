@@ -231,6 +231,7 @@ export default {
 		},
 		submitForm(name){
 			this.checkList()
+			console.log('submitForm',this.error)
 			if(this.error){
 				this.$Notice.error({
                     title:this.errorMessage
@@ -260,21 +261,23 @@ export default {
 				}
 				return false
 			})
-			console.log('items',items)
 			if(items.length){
 				items.map(item=>{
+					_this.error = false;
+
 					if(isNaN(item.payableAmount)){
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
-					}
-					if(!item.feeType || !item.payableAmount){
+					}if(!item.feeType || !item.payableAmount){
 						_this.error = true;
 						_this.errorMessage = "结算表单未填写完整"
-					}					
+					}	
+
 				})
 			}else{
 				this.error = false
 			}
+
 
 					
 		},

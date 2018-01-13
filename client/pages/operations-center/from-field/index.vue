@@ -280,11 +280,16 @@
 
             submitNewPage(name){
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
+                var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
                     if (!valid) {
-                      return;
+
+                        isSubmit = false
                     }
                 })
+                if(!isSubmit){
+                    return;
+                }
                 var params =Object.assign({},this.newPageData);
                 this.$http.post('post-from-field-newpage',params, r => {
                     this.newPageIsSubmit = false;

@@ -196,6 +196,9 @@
             getListData(params){
                 this.$http.get('contract-yard-list', params, r => {
                     let item=r.data;
+                    if(!item.id){
+                        return;
+                    }
                     if(!item.pigeonholed){
                         item._checked=true;
                         this.selectUseId.push(item.id);

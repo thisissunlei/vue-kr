@@ -8,8 +8,6 @@
 
  const env = process.env.NODE_ENV;
  
- 
-
 
 const hostname = envs[env]['test']||  "" ;
 

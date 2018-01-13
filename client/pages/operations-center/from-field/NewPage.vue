@@ -1,72 +1,73 @@
 
-    <template>         
-            <Form ref="fromFieldValidate" :model="validate" :rules="ruleValidate" label-position="top">
-                <FormItem label="社区名称" prop="cmtId" class='bill-search-class'> 
-                   <Select 
-                        v-model="validate.cmtId" 
-                        placeholder="请输入社区名称" 
-                        style="width: 252px"
-                        filterable
-                        clearable
-                        @on-change="getCustomer"
-                    >
-                        <Option 
-                            v-for="item in communityList" 
-                            :value="item.id" 
-                            :key="item.id"
-                        >
-                            {{ item.name }}
-                        </Option>
-                   </Select> 
-                </FormItem>
-                <FormItem label="客户名称" prop="csrId" class='bill-search-class'>
-                    <Select 
-                        v-model="validate.csrId" 
-                        placeholder="请输入客户名称" 
-                        style="width: 252px"
-                        filterable
-                        clearable
-                    >
-                        <Option 
-                            v-for="item in customerList" 
-                            :value="item.id" 
-                            :key="item.id"
-                        >
-                            {{ item.name }}
-                        </Option>
-                   </Select> 
-                </FormItem>
-               
-              
-               
-                <FormItem label="服务尾日" prop="leaveDate" class="bill-search">
-                    <DatePicker 
-                        v-model="validate.leaveDate"
-                        type="date" 
-                        placeholder="请选择尾款日期" 
-                        style="width: 252px"
-                    ></DatePicker>
-                  
-             </FormItem>
-          
-         </Form>
+<template>         
+    <Form ref="fromFieldValidate" :model="validate" :rules="ruleValidate" label-position="top">
+        <FormItem label="社区名称" prop="cmtId" class='bill-search-class'> 
+            <Select 
+                v-model="validate.cmtId" 
+                placeholder="请输入社区名称" 
+                style="width: 252px"
+                filterable
+                clearable
+                @on-change="getCustomerList"
+            >
+                <Option 
+                    v-for="item in communityList" 
+                    :value="item.id" 
+                    :key="item.id"
+                >
+                    {{ item.name }}
+                </Option>
+            </Select> 
+        </FormItem>
+
+        <FormItem label="客户名称" prop="csrId" class='bill-search-class'>
+            <Select 
+                v-model="validate.csrId" 
+                placeholder="请输入客户名称" 
+                style="width: 252px"
+                filterable
+                clearable
+            >
+                <Option 
+                    v-for="item in customerList" 
+                    :value="item.id" 
+                    :key="item.id"
+                >
+                    {{ item.name }}
+                </Option>
+            </Select> 
+        </FormItem>
+        
+        <FormItem label="服务尾日" prop="leaveDate" class="bill-search">
+            <DatePicker 
+                v-model="validate.leaveDate"
+                type="date" 
+                placeholder="请选择尾款日期" 
+                style="width: 252px"
+            />
+            
+        </FormItem>
+    </Form>
 </template>
+
+
+
 <script>
     import Vue from 'vue';
     export default{
         props:{
             close:Function
-            },
+        },
         data (){
-            
             return{
                 dateError:false,
-                updatedNum:1,
+
                 validate:{
                    cmtId:'',
                    csrId:'',
                    leaveDate:'',
                 },
+
                 ruleValidate:{
                     cmtId:[
                         { required: true, message: '社区名称为必填项'}
@@ -78,25 +79,26 @@
                         { required: true, message: '尾款日期为必填项'}
                         
                     ]
-                    
                 },
                 customerList:[],
                 communityList:[]
             }
         },
         mounted:function(){
-            var _this = this;
-            this.$http.get('join-bill-community','', r => {    
-                _this.communityList=r.data.items 
-            }, e => {
-                _this.$Notice.error({
-                     title:e.message
-                });
-            })
+           this.getCommunityList();
         },
         methods:{
-            getCustomer(){
-                var that = this;
+            getCommunityList(){
+                this.$http.get('join-bill-community','', r => {    
+                    this.communityList=r.data.items 
+                }, e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+                })
+            },
+
+            getCustomerList(){
                 if(!this.validate.cmtId){
                     return;
                 }
@@ -104,23 +106,15 @@
                     communityId:this.validate.cmtId
                 }
                 this.$http.get('get-from-field-customer',params, r => {    
-                    that.customerList=r.data 
+                    this.customerList=r.data 
                 }, e => {
-                    that.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
                 })  
             },
-            handleSubmit(name){
-                 this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
-            }
         },
+        
         updated:function(){
             var data = false;
             var haveNull = false;
@@ -138,7 +132,7 @@
     }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
     .bill-search-class{
         display:inline-block;
         width:50%;

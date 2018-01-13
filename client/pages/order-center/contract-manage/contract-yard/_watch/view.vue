@@ -1,51 +1,59 @@
 <template>
  <div>
-      <Modal
-        v-model="openDown"
-        title="下载pdf-"
-        width="660"
-      >
-            <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>
-            
-            <div style="height:300px;">
-              <div class="cachet-box" @click="selectCachet(false)">
-                <img src="./images/noCachet.png" />
-                <div>示例一：未加盖公章的合同</div>
-                <div :class="!this.isCachet?'select cachet':'select'" ></div>
-              </div>
-           
-              <div class="cachet-box" @click="selectCachet(true)">
-                <img src="./images/cachet.png" />
-                <div>示例二：加盖公章的合同</div>
-                <div :class="this.isCachet?'select cachet':'select'"></div>
-              </div>
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="downLoad">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
-            </div>
+    <div v-if="!isLoading">
+        <Modal
+          v-model="openDown"
+          title="下载pdf-"
+          width="660"
+        >
+        <div style="text-align:center;font-size: 16px;color: #333;">请选择您打印的合同是否需要盖公章？</div>   
+        <div style="height:300px;">
+          <div class="cachet-box" @click="selectCachet(false)">
+            <img src="./images/noCachet.png" />
+            <div>示例一：未加盖公章的合同</div>
+            <div :class="!this.isCachet?'select cachet':'select'" />
+          </div>
+        
+          <div class="cachet-box" @click="selectCachet(true)">
+            <img src="./images/cachet.png" />
+            <div>示例二：加盖公章的合同</div>
+            <div :class="this.isCachet?'select cachet':'select'"/>
+          </div>
+        </div>
+
+        <div slot="footer">
+            <Button type="primary" @click="downLoad">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
+        </div>
+
       </Modal>
+
       <div class="box">
         <div style="width:100%;padding:20px;">
           <Button type="info" @click="downSwitch">下载pdf</Button>
           <div style="float:right;">
-            <Button @click="pageSub" icon="minus"></Button>
+            <Button @click="pageReduce" icon="minus"/>
             {{page+'/'+numPages}}
-            <Button @click="pageAdd" icon="plus"></Button>
+            <Button @click="pageAdd" icon="plus"/>
           </div>
         </div>
         <div class="pdf-box" v-if="openPage"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10"></pdf> 
+          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10" />
         </div>
     </div>
+    </div>
+    <Loading v-if="isLoading" />
     
  </div>
 </template>
 
 <script>
 import utils from '~/plugins/utils';
-
+import Loading from '~/components/Loading'
 export default {
+  components:{
+    Loading
+  },
   data(){
     return {
       isCachet:false,
@@ -55,40 +63,49 @@ export default {
       numPages:1,
       page:1,
       openPage:false,
-      newWin:''
+      newWin:'',
+      isLoading:false
     }
   },
   mounted:function(){
     this.openPage = true;
     GLOBALSIDESWITCH("false");
-     var that = this;
-      this.config();
-      var parameter = utils.getRequest()
-      parameter.contractType = "NOSEAL"
-      this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          that.fileId = r.data.fileId || '';
-          that.getPdfUrl(r.data.fileId||'');
-      }, e => {
-           that.$Notice.error({
-              title:error.message||"后台出错请联系管理员"
-            });
-      })
+    this.config();
+    this.getPdfId();
   },
   methods:{
+    
+    getPdfId(){
+      var parameter = utils.getRequest()
+      parameter.contractType = "NOSEAL"
+      this.$http.get('get-station-contract-pdf-id',parameter, r => {  
+         this.isLoading = false; 
+          this.fileId = r.data.fileId || '';
+          this.getPdfUrl(r.data.fileId||'');
+      }, e => {
+        this.isLoading = true;
+          setTimeout(() => {
+            this.getPdfId();
+          }, 500);
+      })
+    },
+
     selectCachet(select){
       this.isCachet = select;
-      
     },
+
     getNumPage(detail){
       this.numPages = detail||1;
     },
-    pageSub(){
+
+    pageReduce(){
       if(this.page==1){
         this.page = 1;
       }else {
         this.page -=1;
       }
     },
+
     pageAdd(){
       if(this.page==this.numPages){
         this.page = this.numPages;
@@ -96,29 +113,27 @@ export default {
         this.page +=1;
       }
     },
+
     config:function(){
-        this.$Notice.config({
-            top: 80,
-            duration: 3
-        });
+      this.$Notice.config({
+        top: 80,
+        duration: 3
+      });
     },
     getPdfUrl(id){
-      var that = this;
       var parameter = {id:id};
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
-          that.src = r.data;
+        this.src = r.data;
       }, e => {
         if(!e.message){
           e.message = "后台出错请联系管理员"
         }
-          that.$Message.info(e);
-         
+        this.$Message.info(e);
       })
     },
+
     downLoad(){
-      var that = this;
       this.config();
-      
       var parameter = utils.getRequest()
       if(this.isCachet){
         parameter.contractType = "HAVESEAL"
@@ -127,33 +142,31 @@ export default {
       }
       this.newWin = window.open()
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-          if(!r.data.fileId){
-              that.$Notice.error({
-                title:error.message||"后台出错请联系管理员"
-              });
-              return;
-          }
-          that.downLoadPdf(r.data);
-          that.downSwitch();
+        if(!r.data.fileId){
+          this.$Notice.error({
+            title:error.message||"后台出错请联系管理员"
+          });
+          return;
+        }
+        this.downLoadPdf(r.data);
+        this.downSwitch();
       }, e => {
-          that.$Message.info(e);
+        this.$Message.info(e);
       })
-     
     },
+
     downLoadPdf(params){
-                var that=this;
-               
-                this.$http.post('get-station-contract-pdf-url', {
-                    id:params.fileId,
-                    
-                }, (response) => {
-                 that.newWin.location = response.data;
-                }, (error) => {
-                    that.$Notice.error({
-                        title:error.message||"后台出错请联系管理员"
-                    });
-                })   
-            },
+        this.$http.post('get-station-contract-pdf-url', {
+          id:params.fileId,
+        }, (response) => {
+          this.newWin.location = response.data;
+        }, (error) => {
+          this.$Notice.error({
+            title:error.message||"后台出错请联系管理员"
+          });
+        })   
+    },
+
     downSwitch(){
       this.openDown = !this.openDown;
     }
@@ -161,7 +174,7 @@ export default {
 
 }
 </script>
-<style lang="less"> 
+<style lang="less" scoped> 
 .box{
   padding:20px;
   width:210mm;

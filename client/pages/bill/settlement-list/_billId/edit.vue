@@ -47,7 +47,7 @@
                 >
             <Row v-show="item.show">
                 <Col span="3" class="discount-table-content" style="padding:0">
-                    <Checkbox v-model="item.select" :disabled="item.billId"></Checkbox>
+                    <Checkbox v-model="item.select" :disabled="!!item.billId"></Checkbox>
                 </Col>
                 <Col span="11"  class="discount-table-content">
                    	<span v-if="item.billId"> {{item.billName}}</span>
@@ -88,7 +88,7 @@ export default {
 	},
 	head() {
         return {
-            title: '结算单详情'
+            title: '结算单编辑'
         }
     },
 	data(){
@@ -216,10 +216,11 @@ export default {
 		},
 		selectDiscount(value){
 			// checkbox的全选事件
+			console.log(value)
                 let items = this.formItem.details;
                 items = items.map((item)=>{
                     let obj = item;
-                    if(item.edit){
+                    if(!item.billId){
                     	obj.select = value;
                     }
                     return obj;
@@ -230,6 +231,7 @@ export default {
 		},
 		submitForm(name){
 			this.checkList()
+			console.log('submitForm',this.error)
 			if(this.error){
 				this.$Notice.error({
                     title:this.errorMessage
@@ -259,21 +261,23 @@ export default {
 				}
 				return false
 			})
-			console.log('items',items)
 			if(items.length){
 				items.map(item=>{
+					_this.error = false;
+
 					if(isNaN(item.payableAmount)){
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
-					}
-					if(!item.feeType || !item.payableAmount){
+					}if(!item.feeType || !item.payableAmount){
 						_this.error = true;
 						_this.errorMessage = "结算表单未填写完整"
-					}					
+					}	
+
 				})
 			}else{
 				this.error = false
 			}
+
 
 					
 		},

@@ -200,7 +200,7 @@ export default {
 		},
 		takeEffectSubmit(){
 			
-			this.$http.get('post-effective', {checklistId:this.$route.params.billId}).then( r => {
+			this.$http.post('post-effective', {checklistId:this.$route.params.billId}).then( r => {
 				   this.becomeEffective()
 				   
 				   this.$Notice.success({

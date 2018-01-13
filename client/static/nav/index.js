@@ -632,15 +632,6 @@
             router: 'office',
             menuItems: [
                 {
-                    primaryText: "办公主页",
-                    router: 'office',
-                    iconName: 'icon-money',
-                    iconColor: '#79859a',
-                    menuItems: [
-                        
-                    ]
-                },
-                {
                     primaryText: '新办事宜',
                     iconName: 'icon-newthing',
                     router: 'office',
@@ -654,20 +645,6 @@
                         },
                     ]	
                 }, 
-                // {
-                // 	primaryText: '待办事宜',
-                // 	iconName: 'icon-schema',
-                // 	router: 'office',
-                // 	iconColor: '#79859a',
-                // 	menuCode: 'hrm_resourcesList_incumbency',
-                // 	menuItems: [
-                // 		{
-                // 			primaryText: '待办列表',
-                // 			menuCode: 'hrm_resourcesList_incumbency',
-                // 			router: '/office/officeBackground/todo',
-                // 		},
-                // 	]	
-                // }, 
                 {
                     primaryText: '已办事宜',
                     iconName: 'icon-donething',
@@ -675,11 +652,6 @@
                     iconColor: '#79859a',
                     menuCode: 'myCard',
                     menuItems: [
-                        // {
-                        // 	primaryText: '已办列表',
-                        // 	menuCode: 'hrm_resourcesList_incumbency',
-                        // 	router: '/office/officeBackground/downOffice',
-                        // },
                         {
                             primaryText: '我发起的',
                             menuCode: 'myCard',
@@ -694,11 +666,6 @@
                     iconColor: '#79859a',
                     menuCode: 'wf_contract_list',
                     menuItems: [
-                        // {
-                        // 	primaryText: '已办列表',
-                        // 	menuCode: 'hrm_resourcesList_incumbency',
-                        // 	router: '/office/officeBackground/downOffice',
-                        // },
                         {
                             primaryText: '合同列表',
                             menuCode: 'wf_contract_list',
@@ -706,9 +673,9 @@
                         },
                         {
                             primaryText: '合同扫码',
-                            menuCode: 'wf_contract_list',
+                            menuCode: 'public',
                             type:'vue',
-                            originUrl: 'order-center/contract-manage/contract-yard',
+                            router: 'order-center/contract-manage/contract-yard',
                         }
                     ]	
                 }, 

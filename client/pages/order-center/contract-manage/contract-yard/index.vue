@@ -5,7 +5,7 @@
                         <span style='padding-right:10px'>合同编号</span>
                         <Input 
                             v-model="params.serialNumber" 
-                            autofocus
+                            :autofocus="autofocus"
                             placeholder="请输入合同编号"
                             size="large"
                             style="width:400px;"
@@ -62,11 +62,12 @@
         data () {    
             return {   
                 selectId:[],
+                selectUseId:[],
 
                 params:{
                     serialNumber:''
                 },
-
+                autofocus:false,
                 openYard:false,
                 openMessage:false,
                 warn:'',
@@ -142,10 +143,14 @@
             }
         },
 
+        mounted(){
+          this.autofocus = true;  
+        },
+
         methods:{
             submitYard (){
                let params=Object.assign({},this.yardData);
-               let ids=this.selectId.join(',');
+               let ids=this.selectUseId.join(',');
                params.requestIds=ids;
                this.$http.post('contract-batch-file', params, r => {
                     this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
@@ -166,6 +171,7 @@
                 if(this.params.serialNumber){
                     this.joinData.map((item,index)=>{
                         if(item.serialNumber==this.params.serialNumber){
+                            this.params.serialNumber='';
                             mask=true;
                         }
                     })
@@ -184,6 +190,7 @@
                     this.joinOldData.push(r.data);
                     let data=utils.arrayNoRepeat(this.joinOldData);
                     this.joinData=data.reverse();
+                    this.params.serialNumber='';
                 }, e => {
                     this.openMessage=true;
                     this.MessageType="error";
@@ -197,10 +204,12 @@
 
             onBoxSelect(params){
                 this.selectId=[];
+                this.selectUseId=[];
                 if(params.length!=0){
                      params.map((item,index)=>{
+                        this.selectId.push(item.id);
                         if(!item.pigeonholed){
-                            this.selectId.push(item.id);
+                            this.selectUseId.push(item.id);
                         }
                      })
                 }
@@ -216,7 +225,7 @@
             
             showYard(){
                 utils.clearForm(this.yardData);
-                if(this.selectId.length==0){
+                if(this.selectUseId.length==0){
                     this.$Notice.error({
                         title:'请勾选未归档的合同'
                     });

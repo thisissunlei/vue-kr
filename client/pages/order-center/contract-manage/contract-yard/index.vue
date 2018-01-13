@@ -154,6 +154,14 @@
                params.requestIds=ids;
                this.$http.post('contract-batch-file', params, r => {
                     this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
+                    this.selectUseId=[];
+                    this.selectId=[];
+                    this.joinData.map((item,index)=>{
+                        if(item._checked){
+                            this.selectUseId.push(item.id);
+                            this.selectId.push(item.id);
+                        }
+                    })
                     this.params.serialNumber='';
                     this.joinOldData=this.joinData;
                     this.openMessage=true;
@@ -187,7 +195,13 @@
             
             getListData(params){
                 this.$http.get('contract-yard-list', params, r => {
-                    this.joinOldData.push(r.data);
+                    let item=r.data;
+                    if(!item.pigeonholed){
+                        item._checked=true;
+                        this.selectUseId.push(item.id);
+                        this.selectId.push(item.id);
+                    }
+                    this.joinOldData.push(item);
                     let data=utils.arrayNoRepeat(this.joinOldData);
                     this.joinData=data.reverse();
                     this.params.serialNumber='';
@@ -225,9 +239,15 @@
             
             showYard(){
                 utils.clearForm(this.yardData);
+                if(this.selectId.length==0){
+                    this.$Notice.error({
+                        title:'请勾选合同'
+                    });
+                    return;
+                }
                 if(this.selectUseId.length==0){
                     this.$Notice.error({
-                        title:'请勾选未归档的合同'
+                        title:'不能全部为已归档合同'
                     });
                     return;
                 }

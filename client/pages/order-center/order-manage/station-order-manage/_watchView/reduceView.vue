@@ -19,6 +19,7 @@
 					{{ctime}}
 				</LabelText>
 			</DetailStyle>
+
 			<DetailStyle info="减租信息">
 				<LabelText label="减租开始时间：">
 					{{startDate}}
@@ -29,15 +30,23 @@
 				<div class="m-reduce-room">
 					<div>减租工位/房间：</div>
 					<div style="width:50%;">
-						<span 
-						v-for="item in reduceStation" 
-						:key="item.id" 
-						style="padding-right:20px;padding-top:15px;display:inline-block;">
-						{{ item.seatName}}{{'('+item.type+')'}}
-						</span>
+						<ul 
+						  class="room-list"
+						>
+							<li 
+							  v-for="item in reduceStation" 
+							  :key="item.id"
+							  style="margin:15px 0;" 
+							>
+							   <span style="padding-right:20px;">{{ item.seatName}}{{'('+item.type+')'}}</span>
+							   <span style="padding-right:20px;">{{ item.startDate}}</span>
+							   <span>{{ item.endDate}}</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</DetailStyle>
+
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData"/>
 			</DetailStyle>
@@ -109,6 +118,8 @@ export default {
 					_this.ctime=r.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(r.data.ctime)):'';
 					_this.startDate=r.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(r.data.startDate)):'';
 					r.data.orderSeatDetailVo&&r.data.orderSeatDetailVo.map((item,index)=>{
+							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
+							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';
 							var stationType='';
 							if(item.seatType=='OPEN'){
 								stationType='工位';
@@ -155,6 +166,12 @@ export default {
 		.m-reduce-room{
 			padding-left:15px;
 			margin-bottom:20px;
+			.room-list{
+				padding-right:20px;
+				padding-top:15px;
+				display:inline-block;
+
+			}
 		}
 	}
 </style>

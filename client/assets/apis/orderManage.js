@@ -7,7 +7,7 @@ export default {
   },
   //入驻减租订单列表-获取社区
   'join-bill-community': {
-    url: '/api/krspace-op-web/cmt/community/select/use/type/list',
+    url: '/api/krspace-finance-web/cmt/community/select/use/type/list',
     method: 'get'
    },
    //减租订单列表
@@ -39,5 +39,41 @@ export default {
   'apply-contract': {
     url: '/api/krspace-op-web/order-seat/contractApply',
     method: 'get'
+  },
+  //通用订单列表
+  'general-order-list': {
+    url: '/api/krspace-finance-web/order/common/search',
+    method: 'get'
+  },
+  //新建通用订单
+  'general-order-add': {
+    url: '/api/krspace-finance-web/order/common/add',
+    method: 'post'
+  },
+  //编辑通用订单
+  'general-order-edit': {
+    url: '/api/krspace-finance-web/order/common/update',
+    method: 'post'
+  },
+  //查看通用订单
+  'general-order-watch': {
+    url: '/api/krspace-finance-web/order/common/getDetails',
+    method: 'get'
+  },
+  //作废通用订单
+  'general-order-nullify': {
+    url: '/api/krspace-finance-web/order/common/cancel',
+    method: 'post'
+  },
+  //通用订单类型枚举列表
+  'general-common-list': {
+    url: '/api/krspace-finance-web/order/common/getBizTypeListAllBy',
+    method: 'get'
+  },
+  //通用订单费用明细枚举列表
+  'general-cost-list': {
+    url: '/api/krspace-finance-web/order/common/getFeeTypeListBy',
+    method: 'get'
   }
+  
 } 

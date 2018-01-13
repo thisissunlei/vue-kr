@@ -76,10 +76,15 @@
     
     //数组去重
     function arrayNoRepeat(array){
-            var res = array.filter(function(item, index, array){
-                return array.indexOf(item) === index;
-            })
-            return res;    
+        for(var i=0, temp={}, result=[], ci; ci=array[i++];){
+            var id = ci.id;
+            if(temp[id]){
+              continue;
+            }
+            temp[id] = true;
+            result.push(ci);
+          }
+          return result;
     }
 
     //两个数组比较去重

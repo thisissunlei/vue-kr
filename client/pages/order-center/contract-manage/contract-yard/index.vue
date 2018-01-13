@@ -1,22 +1,23 @@
 <template>
     <div class='m-order-list'>
-            <SectionTitle label = "合同扫码"/>
-            <div  class='list-banner'>
-                <div class='list-btn'>
-                    <Button type="primary" @click="showYard">批量归档</Button>
-                </div>
-
-                <div class='list-search'>
+            <div class='list-search'>
                     <div class='lower-search'>
                         <span style='padding-right:10px'>合同编号</span>
-                        <i-input 
+                        <Input 
                             v-model="params.serialNumber" 
-                            placeholder="请输入客户名称"
-                            style="width: 252px"
+                            autofocus
+                            placeholder="请输入合同编号"
+                            size="large"
+                            style="width:400px;"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
                     </div>
                     <div class='m-search' @click="submitLower">查询</div>
+            </div>
+
+            <div  class='list-banner'>
+                <div class='list-btn'>
+                    <Button type="primary" @click="showYard">批量归档</Button>
                 </div>
             </div>
 
@@ -63,7 +64,7 @@
                 selectId:[],
 
                 params:{
-                    serialNumber:""
+                    serialNumber:''
                 },
 
                 openYard:false,
@@ -130,7 +131,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showView(params)
+                                            this.jumpView(params)
                                         }
                                     }
                                 },'查看')];
@@ -144,9 +145,12 @@
         methods:{
             submitYard (){
                let params=Object.assign({},this.yardData);
-               params.requestId=this.selectId;
+               let ids=this.selectId.join(',');
+               params.requestIds=ids;
                this.$http.post('contract-batch-file', params, r => {
                     this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
+                    this.params.serialNumber='';
+                    this.joinOldData=this.joinData;
                     this.openMessage=true;
                     this.MessageType="success";
                     this.warn='归档成功';
@@ -158,16 +162,26 @@
             },
 
             submitLower(){
-               this.getListData(this.params); 
+                var mask=false;
+                if(this.params.serialNumber){
+                    this.joinData.map((item,index)=>{
+                        if(item.serialNumber==this.params.serialNumber){
+                            mask=true;
+                        }
+                    })
+                    if(!mask){
+                        this.getListData(this.params);
+                    }
+                }
             },
 
             jumpView(params){
-                window.open(`./${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,params.row.id);
+                window.open(`./${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,'_blank');
             },
             
             getListData(params){
                 this.$http.get('contract-yard-list', params, r => {
-                    this.joinOldData.push(r.data.items);
+                    this.joinOldData.push(r.data);
                     let data=utils.arrayNoRepeat(this.joinOldData);
                     this.joinData=data.reverse();
                 }, e => {
@@ -182,14 +196,13 @@
             },
 
             onBoxSelect(params){
+                this.selectId=[];
                 if(params.length!=0){
-                     let id=[];
                      params.map((item,index)=>{
-                       id.push(item.id);
+                        if(!item.pigeonholed){
+                            this.selectId.push(item.id);
+                        }
                      })
-                    this.selectId=id;
-                }else{
-                    this.selectId=[]; 
                 }
             },
 
@@ -202,9 +215,10 @@
             },
             
             showYard(){
+                utils.clearForm(this.yardData);
                 if(this.selectId.length==0){
                     this.$Notice.error({
-                        title:'请勾选归档合同'
+                        title:'请勾选未归档的合同'
                     });
                     return;
                 }
@@ -218,22 +232,19 @@
    .m-order-list{
         .list-banner{
             width:100%;
-            padding:0 0 0 20px;
+            padding:0 0 20px 20px;
             .list-btn{
                 display:inline-block;
                 width:20%;
-            }
-            .list-search{
-                margin:10px 0;
-                display:inline-block;
-                width:80%;
-                text-align:right;
-                padding-right: 20px;
+            }    
+        }
+        .list-search{
+                font-size:18px;
+                text-align: center;
                 .lower-search{
                     display:inline-block;
-                    margin:10px 20px;
+                    margin: 40px 20px 20px 0;
                 }
-            }
         }
         .list-table{
             margin:20px;

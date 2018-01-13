@@ -198,6 +198,9 @@
                     let item=r.data;
                     this.params.serialNumber='';
                     if(!item.id){
+                        this.$Notice.error({
+                           title:'合同编号不正确'
+                        });
                         return;
                     }
                     if(!item.pigeonholed){

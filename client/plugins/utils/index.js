@@ -79,14 +79,43 @@ import thousand from './thousand.js'
         url=url+"?"+where.join('&');
         location.href=url;
     }
-   
-   
-    export default{
-        smalltoBIG,
-        clearForm,
-        commonExport,
-        getRequest,
-        addParams,
-        thousand
+    
+    //数组去重
+    function arrayNoRepeat(array){
+        for(var i=0, temp={}, result=[], ci; ci=array[i++];){
+            var id = ci.id;
+            if(temp[id]){
+              continue;
+            }
+            temp[id] = true;
+            result.push(ci);
+          }
+          return result;
     }
+
+    //两个数组比较去重
+    function arrayCompare(array1,array2,param1,param2){
+          for(var i=0;i<array2.length;i++){
+            for(var j=0;j<array1.length;j++){
+                var middle1=param1?array1[j][param1]:array1[j];
+                var middle2=param2?array2[i][param2]:array2[i];
+                if(middle1==middle2){
+                    array1.splice(j,1);
+                }
+            }
+          }   
+          return  array1
+    }
+   
+   export default{
+      smalltoBIG,
+      clearForm,
+      commonExport,
+      getRequest,
+      addParams,
+      arrayNoRepeat,
+      arrayCompare,
+      thousand
+   }
+
 

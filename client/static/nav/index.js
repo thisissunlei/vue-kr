@@ -90,6 +90,9 @@
                              '<div class="header-nav" id="j_header">${header}</div>' +
  
                                  '<div class = "j_header_other">' +
+
+                                    // '<div id = "j_msg_btn"></div>' +
+
                                      '<div id = "j_account_btn"></div>' +
                                      '<div id="j_account_box" style = "display:none">' +
                                          '<div id = "j_account_detail">' +
@@ -272,6 +275,7 @@
                 var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
                 xhr.open('GET', "/api/krspace-sso-web/sso/sysOwn/logout", true);
                 xhr.responseType = 'json';
+                xhr.withCredentials = true;
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                         // window.location.href = "/new/login.html";
@@ -353,6 +357,7 @@
         var xhr = new XMLHttpRequest();  // XMLHttpRequest对象用于在后台与服务器交换数据
         xhr.open(type, url, true);
         xhr.responseType = 'json';
+        xhr.withCredentials = true;
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {
@@ -1250,6 +1255,12 @@
                         {
                             primaryText: "工位订单列表",
                             router: 'order-center/order-manage/station-order-manage',
+                            type:'vue',
+                            menuCode: 'order_seat_list',
+                        },
+                        {
+                            primaryText: "通用订单列表",
+                            router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
                             menuCode: 'order_seat_list',
                         },

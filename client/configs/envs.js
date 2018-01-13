@@ -1,7 +1,7 @@
 const envs = {
     'development':{
         'op':'http://optest.krspace.cn',
-        'i':'http://itest.krspace.cn',
+        'local':'http://local.krspace.cn',
         'app':'http://apptest.krspace.cn',
     },
     'test':{
@@ -25,7 +25,6 @@ const envs = {
         'app':'https://app.krspace.cn',
     },
 }
-
 
 module.exports = envs;
 

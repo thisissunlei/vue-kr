@@ -10,14 +10,6 @@
 
 export default {
 
-
-  data(){
-    return {
-      src:'https://cdn.mozilla.net/pdfjs/tracemonkey.pdf'
-    }
-  },
-
-
   asyncData ({ req }) {
 
     return {

@@ -98,14 +98,15 @@ export default{
         
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', r => {    
-                this.communityList=r.data.items 
-            }, e => {
-                this.$Notice.error({
-                        title:e.message
-                });
-        })
-
+    
+        this.$http.get('join-bill-community','', res => {    
+                this.communityList = res.data.items 
+        }, err => {
+              this.$Notice.error({
+                title:err.message
+            });
+        });
+        
     },
     updated:function(){
     

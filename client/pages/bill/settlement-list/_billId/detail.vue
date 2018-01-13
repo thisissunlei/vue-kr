@@ -35,19 +35,19 @@
             <div >
             	<div class="amount-list">
             		<span class="amount-name">用户余额：</span>
-            		<span class="amount-content">{{basicInfo.balance}} </span>
+            		<span class="amount-content">{{basicInfo.balance | thousand}} </span>
             	</div>
             	<div class="amount-list">
             		<span class="amount-name">在押履约保证金：</span>
-            		<span class="amount-content">{{basicInfo.deposit}}  </span>
+            		<span class="amount-content">{{basicInfo.deposit | thousand}}  </span>
             	</div>
             	<div class="amount-list">
             		<span class="amount-name">未结算总额：</span>
-            		<span class="amount-content">{{ownAmount}} </span>
+            		<span class="amount-content">{{ownAmount | thousand}} </span>
             	</div>
             	<div class="amount-list" style="color:red">
             		<span class="amount-name">应退款金额：</span>
-            		<span class="amount-content">{{totalRefunds}} </span>
+            		<span class="amount-content">{{totalRefunds | thousand}} </span>
             	</div>
             </div>
 		</DetailStyle>

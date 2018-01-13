@@ -69,7 +69,7 @@
                     <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
-                        <span class="money">{{formItem.stationAmount}} </span>
+                        <span class="money">{{formItem.stationAmount| thousand}} </span>
                         <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
@@ -1162,14 +1162,14 @@ import utils from '~/plugins/utils';
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            money += item.originalAmount;
+                            // money += item.originalAmount;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
-                        _this.formItem.rentAmount =  Math.round(money*100)/100;
-                        _this.formItem.stationAmount = Math.round(money*100)/100;
-                        _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        _this.formItem.rentAmount =  r.data.totalrent
+                        _this.formItem.stationAmount =r.data.totalrent;
+                        _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
 
                     }, e => {
                         _this.$Notice.error({

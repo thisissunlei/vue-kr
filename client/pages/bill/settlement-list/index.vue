@@ -40,10 +40,10 @@
             
             <Modal
             v-model="openTakeEffect"
-            title="合同生效"
+            title="结算单生效"
             width="660"
         >
-            <div>合同是否生效?</div>
+            <div>结算单是否生效?</div>
             <div slot="footer">
                 <Button type="primary" @click="takeEffectSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="takeEffectSwitch">取消</Button>
@@ -166,31 +166,32 @@
                                'FINISHED':'已完成',
                                'ABANDONED':'已作废'
                             }
-                             let arr = params.row.file||[];
+                             let arr = params.row.attachments||[];
                             let newArr = []
                             for(let i=0;i<arr.length;i++){
                                 newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
                            var btnRender=[
-                               tag(Buttons, {
-                                   props: {
+                                tag('Button', {
+                                    props: {
                                         type: 'text',
-                                        checkAction:'order_seat_show',
-                                        label:'查看',
-                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
                                     },
                                     on: {
                                         click: () => {
                                             this.showView(params)
                                         }
                                     }
-                                }),
+                                }, '查看'),
                                tag(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,//数据
                                         columnDetail:params.row||{},
-                                        upUrl:this.urlUpLoad//成功后方法
+                                        onUpUrl:this.urlUpLoad//成功后方法
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -228,7 +229,7 @@
                                     }
                                 }, '编辑'))
                            }
-                           if(params.row.checklistStatus=='UNEFFECTIVE'  ){
+                           if(params.row.checklistStatus=='UNEFFECTIVE' && params.row.attachments.length  ){
                                 btnRender.push( tag('Button', {
                                     props: {
                                         type: 'text',
@@ -259,21 +260,38 @@
 
         methods:{
             urlUpLoad(detail,col){
+                console.log('urlUpLoad',detail,'col',col)
+                // return
                
                 var _this = this;
-                this.$http.post("post-list-upload-url", {
-                    fileList:JSON.stringify(detail),
-                    requestId:col.requestId,
-                }, (response) => {
-                    // _this.$Notice.success({
-                    //     title:"合同已生效"
-                    // });
+                // this.$http.post("post-list-upload-url", {
+                //     fileList:JSON.stringify(detail),
+                //     requestId:col.requestId,
+                // }, (response) => {
+                //     // _this.$Notice.success({
+                //     //     title:"合同已生效"
+                //     // });
+                //      _this.getListData(_this.params);
+                // }, (error) => {
+                //     that.$Notice.error({
+                //         title:error.message
+                //     });
+                // })  
+
+
+                this.$http.post("post-checklist-list", {
+                    checklistId:col.id,
+                    fileId:detail[0].fileId,
+                    fileName:detail[0].fileName
+                }).then((response) => {
+                    // col.attachments = []
                      _this.getListData(_this.params);
-                }, (error) => {
-                    that.$Notice.error({
+                    // col.attachments.push(detail)
+                }).catch((error) => {
+                    _this.$Notice.error({
                         title:error.message
                     });
-                })   
+                }) 
             },
             //合同生效
             contractFor(detail){
@@ -287,22 +305,20 @@
             //生效确定
             takeEffectSubmit(){
                 var that = this;
-                this.config();
+                // this.config();
                 var detail = Object.assign({},this.columnDetail);
-               
-                this.$http.post("post-contract-take-effect", {
-                    requestId:detail.requestId
-                }, (response) => {
-                    that.takeEffectSwitch();
-                    that.getListData(that.params);
-                    that.openMessage=true;
-                    that.MessageType=response.message=='ok'?"success":"error";
-                    that.warn="已合同生效！";
-                }, (error) => {
-                    that.$Notice.error({
-                        title:error.message
+                this.$http.post('post-effective', {checklistId:detail.id}).then( r => {
+                       this.takeEffectSwitch()
+                       this.getListData(this.params);
+                       
+                       this.$Notice.success({
+                            title:'生效成功'
+                        });
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
                     });
-                })   
+                }) 
             },
 
             showKey: function (ev) {
@@ -326,7 +342,7 @@
             },
             // 编辑
             showEdit(params){
-
+                window.open(`/bill/settlement-list/${params.row.id}/edit/`,params.row.id);
             },
             // 提示信息
             nullifySubmit (){

@@ -33,25 +33,29 @@
 			<Table :columns="service" :data="details" border></Table>
             
             <div >
-            	<LabelText label="用户余额：" class="amount-list">
-					{{basicInfo.balance}} 
-				</LabelText>
-	            <LabelText label="在押履约保证金："class="amount-list">
-					{{basicInfo.deposit}} 
-				</LabelText>
-                <LabelText label="未结算总额：" class="amount-list">
-                    {{basicInfo.rentAmount}}
-                </LabelText>
-                <LabelText label="应退款金额：" class="amount-list" style="color:red">
-                    {{basicInfo.totalRefunds}}
-                </LabelText>
+            	<div class="amount-list">
+            		<span class="amount-name">用户余额：</span>
+            		<span class="amount-content">{{basicInfo.balance}} </span>
+            	</div>
+            	<div class="amount-list">
+            		<span class="amount-name">在押履约保证金：</span>
+            		<span class="amount-content">{{basicInfo.deposit}}  </span>
+            	</div>
+            	<div class="amount-list">
+            		<span class="amount-name">未结算总额：</span>
+            		<span class="amount-content">{{ownAmount}} </span>
+            	</div>
+            	<div class="amount-list" style="color:red">
+            		<span class="amount-name">应退款金额：</span>
+            		<span class="amount-content">{{totalRefunds}} </span>
+            	</div>
             </div>
 		</DetailStyle>
 
 		<DetailStyle info="附件信息">
 			<div class="none-list" v-if="!attachmentList.length" style="margin-left:12px">暂无附件</div>
-			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" @click="downFille(item)" >
-				{{item.fileName}}
+			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" >
+				<span  @click="downFille(item)" style="cursor:pointer">{{item.fileName}}</span>
 			</div>
 			<div style="width:200px;margin-left:12px" >
 			<Progress :percent="progress" v-if="isUploading"  :stroke-width="5"></Progress>
@@ -59,15 +63,15 @@
 			<div class="bottom" style="height:20px"></div>
         </DetailStyle>
 
-		<DetailStyle info="操作记录">
+		<!-- <DetailStyle info="操作记录">
             <Table :columns="contract" :data="contractData" border></Table>
-		</DetailStyle>
+		</DetailStyle> -->
 	</div>
 	<div class="m-detail-buttons">
 		
 		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
 		<!-- //未生效时才可编辑 -->
-		<Button type="primary" @click="edit" style="margin-left:8px">编辑</Button>
+		<Button type="primary" @click="edit" style="margin-left:8px" v-show="basicInfo.checklistStatus=='UNEFFECTIVE'">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
 		<Button type="primary" @click="becomeEffective" v-show="basicInfo.checklistStatus=='UNEFFECTIVE' && attachmentList.length" style="margin-left:8px">生效</Button>
 		<div class="file-button" >
@@ -75,6 +79,17 @@
 			
 		</div>
 	</div>
+	<Modal
+            v-model="openTakeEffect"
+            title="账单生效"
+            width="660"
+        >
+            <div>账单是否生效?</div>
+            <div slot="footer">
+                <Button type="primary" @click="takeEffectSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="becomeEffective">取消</Button>
+            </div>
+        </Modal>
 </div>	
 </template>
 <script>
@@ -97,19 +112,11 @@ export default {
 	data(){
 		return{
 			disabled:false,
+			ownAmount:0,
+			totalRefunds:0,
+			// 生效显示
+			openTakeEffect:false,
 			basicInfo:{},
-
-			capitalService:'',
-
-			capitalTreatment:'',
-
-			ctime:'',
-
-			startDate:'',
-
-			endDate:'',
-
-			payDate:'',
 
 			service:[
 				{
@@ -151,9 +158,6 @@ export default {
 			],
 
 			details:[],
-
-			treatmentData:[],
-
 			contractData:[],
 			progress:0,
 			isUploading:false,
@@ -170,6 +174,14 @@ export default {
 		console.log('checklistId',from)
 		var _this=this;
 	     this.$http.get('get-settlement-detail', from, r => {
+	     	// 未结算总额
+	     	let ownAmount = 0;
+	     	r.data.details.map(item=>{
+	     		ownAmount += item.payableAmount;
+	     	})
+	     	_this.ownAmount = ownAmount;
+	     	//计算应退款金额（余额+保证金-未结算）
+	     	_this.totalRefunds = r.data.deposit+r.data.balance-ownAmount;
 				   _this.basicInfo=r.data;
 				   _this.details = r.data.details;
 				   _this.attachmentList = r.data.attachments;
@@ -181,11 +193,26 @@ export default {
 	},
 	methods:{
 		becomeEffective(){
-
+			this.openTakeEffect = !this.openTakeEffect
+		},
+		takeEffectSubmit(){
+			
+			this.$http.get('post-effective', {checklistId:this.$route.params.billId}).then( r => {
+				   this.becomeEffective()
+				   
+				   this.$Notice.success({
+                    	title:'生效成功'
+                	});
+				   location.reload() 
+           	}).catch( e => {
+                this.$Notice.error({
+                    title:e.message
+                });
+            })
 		},
 		edit(){
 			let {params}=this.$route;
-            window.open(`/bill/settlement-list/${params.billId}/edit/`,params.billId);
+            window.open(`/bill/settlement-list/${params.billId}/edit/`);
 
 		},
 		download(){
@@ -372,8 +399,20 @@ export default {
 		.amount-list{
 			font-weight:bold;
 			display:block;
-			width:200px;
+			width:230px;
+			height: 30px;
+			line-height: 30px;
+			text-align: right;
 			margin-left:auto;
+			.amount-name{
+				width: 120px;
+				display: inline-block;
+			}
+			.amount-content{
+				width:100px;
+				display: inline-block;
+
+			}
 		}
 		.file-list{
 			color: #499df1;
@@ -381,7 +420,6 @@ export default {
 			font-weight: 600;
 			height: 30px;
 			line-height: 30px;
-			cursor: pointer;
 		}
 		.file-button{
 

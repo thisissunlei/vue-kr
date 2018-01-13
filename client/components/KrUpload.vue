@@ -92,6 +92,7 @@ export default{
 		},
 		submitUpload(detail){
 			this.config();
+			console.log('submitUpload=======',detail)
 			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
 			
 		},
@@ -115,8 +116,11 @@ export default{
 		onChange(event){
 			
 			let that = this;
+			// let file = event.target.files[0];
+			// var fileName= file.name;
 			let file = event;
 			var fileName= event.name;
+			console.log('onChange',file,'fileName',fileName)
 			if (!file) {
 				return;
 			}

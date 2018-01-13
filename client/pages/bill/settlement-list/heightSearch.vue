@@ -12,7 +12,7 @@
                 </Form-item>
                 <Form-item label="客户名称" class='bill-search-class'>
                     <i-input 
-                        v-model="formItem.customName" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     ></i-input>

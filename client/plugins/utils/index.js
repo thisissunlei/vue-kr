@@ -9,8 +9,14 @@ import thousand from './thousand.js'
 
         var s = '';
 
+        let strL =(n+'').split('.').length;
+        let xiaoshu = '00';
+        if(strL>1){
+            xiaoshu = (n+'').split('.')[1]
+        }
+
         for (var i = 0; i < fraction.length; i++) {
-            s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+            s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
         }
         s = s || '整';
         n = Math.floor(n);

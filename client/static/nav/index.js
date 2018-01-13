@@ -766,7 +766,7 @@
                                  primaryText: '撤场记录管理',
                                  type: 'vue',
                                  router: 'operations-center/from-field',
-                                 menuCode: 'contract_edit',
+                                 menuCode: 'csr_withdrawal_list',
                              },
                          ]
                      },

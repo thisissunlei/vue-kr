@@ -1,106 +1,122 @@
  <template>         
-    <Form ref="formItem" :model="formItem" label-position="top">
-        <Form-item label="订单编号"  class='bill-search-class'>
-            <i-input 
-                v-model="formItem.orderNum" 
-                placeholder="请输入订单编号"
-                style="width: 252px"
-            />
-        </Form-item>
-        <Form-item label="客户名称" class='bill-search-class'>
-            <i-input 
-                v-model="formItem.customerName" 
-                placeholder="请输入客户名称"
-                style="width: 252px"
-            />
-        </Form-item>
-        <Form-item label="社区名称" class='bill-search-class'> 
-            <Select 
-                v-model="formItem.communityId" 
-                placeholder="请输入社区名称" 
-                style="width: 252px"
-                filterable
-                clearable
-            >
-                <Option 
-                    v-for="item in communityList" 
-                    :value="item.id" 
-                    :key="item.id"
-                >
-                    {{ item.name }}
-                </Option>
-            </Select> 
-        </Form-item>
-        <Form-item label="订单类型" class='bill-search-class' v-show='type'>
-            <Select 
-                v-model="formItem.orderType" 
-                placeholder="请输入订单类型" 
-                style="width: 252px"
-                clearable
-            >
-                <Option 
-                    v-for="item in typeList" 
-                    :value="item.value" 
-                    :key="item.value"
-                >
-                    {{ item.label }}
-                </Option>
-            </Select> 
-        </Form-item>
-        <Form-item label="订单状态" class='bill-search-class'>
-            <Select 
-                v-model="formItem.orderStatus" 
-                placeholder="请输入订单状态" 
-                style="width: 252px"
-                clearable
-            >
-                <Option 
-                    v-for="item in orderList" 
-                    :value="item.value" 
-                    :key="item.value"
+            <Form ref="formItem" :model="formItem" label-position="top">
+                <Form-item label="合同编号"  class='bill-search-class'>
+                    <i-input 
+                        v-model="formItem.serialNumber" 
+                        placeholder="请输入合同编号"
+                        style="width: 252px"
+                    ></i-input>
+                </Form-item>
+                <Form-item label="客户名称" class='bill-search-class'>
+                    <i-input 
+                        v-model="formItem.customName" 
+                        placeholder="请输入客户名称"
+                        style="width: 252px"
+                    ></i-input>
+                </Form-item>
+                <Form-item label="社区名称" class='bill-search-class'> 
+                   <Select 
+                        v-model="formItem.communityName" 
+                        placeholder="请输入社区名称" 
+                        style="width: 252px"
+                        filterable
+                        clearable
                     >
-                    {{ item.label }}
-                </Option>
-            </Select> 
-        </Form-item>
-        <Form-item label="创建日期" class="bill-search">
-            <DatePicker 
-                v-model="formItem.cStartDate"
-                type="date" 
-                placeholder="创建开始日期" 
-                style="width: 252px"
-            />
-            <span class="u-date-txt">至</span>
-            <DatePicker 
-                v-model="formItem.cEndDate"
-                type="date" 
-                placeholder="创建结束日期" 
-                style="width: 252px"
-            />
-            <div style='color:red;' v-show='dateError'>开始日期不能大于结束日期</div>  
-        </Form-item>
-    </Form>
+                        <Option 
+                            v-for="item in communityList" 
+                            :value="item.name" 
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                   </Select> 
+                </Form-item>
+                <Form-item label="合同类型" class='bill-search-class' v-show='type'>
+                    <Select 
+                        v-model="formItem.contractType" 
+                        placeholder="请输入合同类型" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in typeList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
+                </Form-item>
+                <Form-item label="合同状态" class='bill-search-class'>
+                    <Select 
+                        v-model="formItem.contractStatus" 
+                        placeholder="请输入合同状态" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in orderList" 
+                            :value="item.value" 
+                            :key="item.value"
+                         >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
+                </Form-item>
+                <Form-item label="创建日期" class="bill-search">
+                    <DatePicker 
+                        v-model="formItem.minCTime"
+                        type="date" 
+                        placeholder="创建开始日期" 
+                        style="width: 252px"
+                    ></DatePicker>
+                   <span class="u-date-txt">至</span>
+                    <DatePicker 
+                        v-model="formItem.maxCTime"
+                        type="date" 
+                        placeholder="创建结束日期" 
+                        style="width: 252px"
+                    ></DatePicker>   
+                    <div style='color:red;padding-left:32px;' v-show='dateError'>开始日期不能大于结束日期</div>
+             </Form-item>
+            
+         </Form>
 </template>
-
-
 <script>
+    import Vue from 'vue';
     export default{
+        props:['mask','params'],
         data (){
+            
             return{
                 dateError:false,
-
-                formItem:{
+                formItem:Object.assign({
                    communityName:'',
                    contractType:'',
                    customName:'',
                    maxCTime:'',
                    minCTime:'',
                    serialNumber:'',
-                },
-
+                 },this.params),
+               
                 type:this.mask=='join'?true:false,
-                orderList:[],
-                payList:[],
+                //合同状态
+                orderList:[
+                    
+                    {
+                        value:'UNENFORCED',
+                        label:'未生效'
+                    },
+                    {
+                        value:'EXECUTED',
+                        label:'已生效'
+                    },
+                    {
+                        value:'CANCELLATION',
+                        label:'已作废'
+                    }
+                ],
+                //合同类型
                 typeList:[],
                 communityList:[]
             }
@@ -111,13 +127,25 @@
         },
 
         mounted:function(){
-            this.getCommunityList();
-            this.getOrderList();
+            var _this = this;
+            this.$http.get('join-bill-community','', r => {    
+                _this.communityList=r.data.items 
+            }, e => {
+                _this.$Notice.error({
+                     title:e.message
+                });
+            })
+            this.$http.get('get-center-prepare-data','',r => {
+                _this.typeList = r.data.items;
+            }, e => {
+                _this.$Notice.error({
+                    title:e.message
+                });
+            })
         },
-
         updated:function(){
-            if(this.formItem.cStartDate&&this.formItem.cEndDate){
-                if(this.formItem.cStartDate>this.formItem.cEndDate){
+            if(this.formItem.minCTime&&this.formItem.maxCTime){
+                if(this.formItem.minCTime>this.formItem.maxCTime){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 
@@ -126,36 +154,11 @@
                 this.dateError=false; 
             }
             this.$emit('bindData', this.formItem,this.dateError);
-        },
-
-        methods:{
-
-             getCommunityList(){
-                this.$http.get('join-bill-community','', r => {    
-                    this.communityList=r.data.items 
-                    }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })
-            },
-
-            getOrderList(){
-                this.$http.get('order-pay-list','',r => {
-                    this.orderList=r.data.orderTypeVos;
-                    this.payList=r.data.payStatusVos;
-                    this.typeList=r.data.seatOrderTypeVos;
-                }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })   
-            }
         }
     }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
     .bill-search-class{
         display:inline-block;
         width:50%;
@@ -171,4 +174,4 @@
         }
     }
 
-</style>  
+</style> 

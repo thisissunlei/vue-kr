@@ -68,7 +68,7 @@
                     <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
-                        <span class="money">{{formItem.stationAmount}} </span>
+                        <span class="money">{{formItem.stationAmount | thousand}} </span>
                         <span class="money">{{stationAmount}}</span>
                     </div>
                 </Col>
@@ -137,7 +137,7 @@
                 <Col sapn="24">
                     <div class="total-money" v-if="formItem.items.length">
                         <span>优惠金额总计</span>
-                        <span class="money">{{saleAmount}} </span>
+                        <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
                     </div>
                 </Col>
@@ -292,7 +292,10 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '小计',
-                        key: 'originalAmount'
+                        key: 'originalAmount',
+                        render:function(h,params){
+                            return utils.thousand(params.row.originalAmount)
+                         }
                     }
                 ],
                 stationList: [

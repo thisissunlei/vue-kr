@@ -135,7 +135,10 @@ export default {
                 {
 				 title: '费用金额(元)',
                  key: 'payableAmount',
-                 align:'right'	
+                 align:'right',
+                 render:function(h,params){
+                 	return utils.thousand(params.row.payableAmount)
+                 }	
 				}
 			],
             contract:[

@@ -138,7 +138,10 @@
                     {
                         title: '退费金额',
                         key: 'totalRefunds',
-                        align:'center'
+                        align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.totalRefunds)
+                         }
                     },
                     {
                         title: '生成日期',

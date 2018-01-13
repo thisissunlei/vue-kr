@@ -1,4 +1,4 @@
-
+import thousand from './thousand.js' 
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -73,12 +73,13 @@
         url = url + "?" + where.join('&');
         location.href = url;
     }
-    
+   
    
     export default{
         smalltoBIG,
         clearForm,
         commonExport,
         getRequest,
-        addParams
+        addParams,
+        thousand
     }

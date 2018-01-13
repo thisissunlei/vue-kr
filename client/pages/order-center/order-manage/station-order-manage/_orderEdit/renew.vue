@@ -379,7 +379,7 @@ import utils from '~/plugins/utils';
 
                     _this.renewForm.rentAmount = data.rentAmount;
                     _this.renewForm.stationAmount = data.seatRentAmount;
-                    _this.stationAmount = utils.smalltoBIG(data.seatRentAmount)
+                    _this.stationAmount = 
 
                     _this.renewForm.start = data.startDate;
                     _this.selecedStation = data.orderSeatDetailVo;
@@ -389,7 +389,8 @@ import utils from '~/plugins/utils';
                     _this.depositAmount = data.deposit;
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     // _this.getStationAmount()
-                    
+                    _this.saleAmount = data.tactiscAmount
+                    _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount)
 
                      setTimeout(function(){
                         

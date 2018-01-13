@@ -25,7 +25,7 @@
             >
             <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select> -->
-        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value">
+        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
             <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>

@@ -206,6 +206,7 @@
                     this.joinData=data.reverse();
                     this.params.serialNumber='';
                 }, e => {
+                    this.params.serialNumber='';
                     this.openMessage=true;
                     this.MessageType="error";
                     this.warn=e.message;

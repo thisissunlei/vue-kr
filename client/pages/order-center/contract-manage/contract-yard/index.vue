@@ -182,7 +182,7 @@
             },
 
             jumpView(params){
-                window.open(`./${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,'_blank');
+                window.open(`/order-center/contract-manage/contract-yard/${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,'_blank');
             },
             
             getListData(params){

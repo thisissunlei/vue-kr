@@ -516,14 +516,16 @@ import utils from '~/plugins/utils';
                 })
             },
             getRenewStation(){
-                let params = {
+                let {params} = this.$route;
+                let paramsform = {
                     //假数据
                     customerId:this.renewForm.customerId,
                     communityId:this.renewForm.communityId,
-                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate))
+                    continueDate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
+                    id:params.orderEdit
                 };
                 let _this = this;
-               this.$http.get('get-renew-station', params, r => {
+               this.$http.get('get-renew-station', paramsform, r => {
                     let station = []
                     for(let i in r.data){
                         let obj = {};
@@ -701,6 +703,7 @@ import utils from '~/plugins/utils';
                 return item;
                 });
                 this.renewForm.items = items;
+                this.discount = ''
                 this.selectDiscount(false)
                 this.dealSaleInfo(true)
 
@@ -774,12 +777,12 @@ import utils from '~/plugins/utils';
                         item.discount = '';
                         item.name = label
                         item.tacticsId = this.getTacticsId()
-                    }else if(item.tacticsType == 3){
+                    }else if(item.tacticsType == 3&& item.show){
                         item.validStart=item.startDate || ''
                         item.validEnd = this.renewForm.endDate
                         item.tacticsId = item.tacticsId || itemId;
                         item.discount = ''; 
-                    }else if(item.tacticsType == 1){
+                    }else if(item.tacticsType == 1&& item.show){
                         item.validStart=this.renewForm.start
                         item.tacticsId = item.tacticsId || itemId;
                          item.discount = item.discount|| ''
@@ -847,7 +850,7 @@ import utils from '~/plugins/utils';
                
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    // obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
@@ -867,8 +870,8 @@ import utils from '~/plugins/utils';
                         _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
                             money+=item.amount;
-                            item.start = value.startDate
-                            item.end = value.endDate
+                            obj.start = item.startDate
+                            obj.end = item.endDate
                             return obj;
                         });
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
@@ -999,6 +1002,7 @@ import utils from '~/plugins/utils';
                     this.$Notice.error({
                         title:'请填写完整优惠信息'
                     });
+                    this.discountError = '请填写完整优惠信息'
                     return 'complete';
                 }
                 if(!complete && !show){
@@ -1060,7 +1064,7 @@ import utils from '~/plugins/utils';
                 };
                  this.$http.post('count-sale', params, r => {
                      _this.disabled = false;
-                     // _this.renewForm.items = r.data.saleList
+                     _this.renewForm.items =list
                     _this.discountError = false;
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;

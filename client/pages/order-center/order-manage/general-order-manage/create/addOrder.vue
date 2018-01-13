@@ -23,19 +23,20 @@
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        @on-change="onTypeChange"
                     >
                         <Option 
                             v-for="item in typeList" 
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                      </Select> 
                     </FormItem>
                 </Col>
 
-                <Col class="col">
+                <Col class="col" v-show="type">
                     <FormItem label="费用明细类型" style="width:252px" prop='feeType'>
                     <Select 
                         v-model="formItem.feeType" 
@@ -48,7 +49,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                      </Select> 
                     </FormItem>
@@ -132,6 +133,7 @@ export default {
                 disabled:false,
                 typeList:[],
                 freeList:[],
+                type:false,
 
                 formItem: {
                     customerId: 1,
@@ -182,7 +184,7 @@ export default {
 
          mounted(){
             GLOBALSIDESWITCH("false");
-            this.getCommonData();
+            this.getTypeData();
         },
         
          methods: {
@@ -222,10 +224,9 @@ export default {
                 })
             },
 
-            getCommonData(){
+            getTypeData(){
                this.$http.get('general-common-list','', r => {
-                     this.typeList=r.data.ERP_BizType;
-                     this.freeList=r.data.ERP_FeeType;
+                     this.typeList=r.data.items;
                 }, e => {
                      this.$Notice.error({
                         title:e.message
@@ -233,7 +234,27 @@ export default {
                 })    
             },
 
-            onCommunityChange:function(value){
+            getCostData(value){
+                let param={
+                    bizType:value
+                }
+                this.$http.get('general-cost-list',param, r => {
+                     this.freeList=r.data.items;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })   
+            },
+
+            onTypeChange(value){
+                this.type=value?true:false;
+                if(value){
+                    this.getCostData(value);
+                }
+            },
+
+            onCommunityChange(value){
                 if(value){
                     this.formItem.communityId = value;
                 }else{
@@ -241,7 +262,7 @@ export default {
                 }       
             },
 
-            onCustomerChange:function(value){
+            onCustomerChange(value){
                 if(value){
                     this.formItem.customerId = value;
                 }else{
@@ -249,7 +270,7 @@ export default {
                 }
             },
             
-            onSalerChange:function(value){
+            onSalerChange(value){
                 this.formItem.salesperson = value;
             }
         }

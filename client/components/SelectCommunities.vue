@@ -14,18 +14,19 @@
 
 <template>
     <div class="com-select-community">
-         <Select
+        <!-- <Select
             :v-model="test.communityId"
-
             filterable
             remote
-             :placeholder="value"
-
+            :placeholder="value"
             :remote-method="remoteMethod1"
             :loading="loading1"
-            :disabled="disabled"
-            @on-change="changeContent">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+            @on-change="changeContent"
+            >
+            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+        </Select> -->
+        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value">
+            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>

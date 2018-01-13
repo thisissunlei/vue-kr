@@ -46,9 +46,12 @@
                 v-model="openNullify"
                 title="提示信息"
                 width="500"
-                @on-ok="submitNullify"  
             >
                 <Nullify/>
+                <div slot="footer">
+                    <Button type="primary" @click="submitNullify" :disabled="nullifyDisabled">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                </div>
             </Modal>
 
             <Message 
@@ -87,6 +90,7 @@
                     customerName:"",
                 },
 
+                nullifyDisabled:false,
                 id:'',          
                 totalCount:1,
                 openSearch:false,
@@ -158,7 +162,7 @@
                                         }
                                     }
                                 },'查看')];
-                           if(params.row.status=='FINISH'){
+                           if(params.row.status=='EFFECT'){
                                btnRender.push(
                                 tag('Button', {
                                     props: {
@@ -207,6 +211,11 @@
                 let params={
                     id:this.id
                 };   
+                 if( this.nullifyDisabled){
+                     return ;
+                 }
+                 this.nullifyDisabled=true;
+                 this.closeNullify();
                  this.$http.post('general-order-nullify', params,r => {
                     this.openMessage=true;
                     this.MessageType="success";
@@ -282,13 +291,17 @@
 
             showSearch () {
                 this.openSearch=!this.openSearch;
-                utils.clearForm(this.upperData);
             },
 
             showNullify(params){
                 this.id=params.row.id;
-                this.openNullify=true;
-            }   
+                this.nullifyDisabled=false;
+                this.closeNullify();
+            },
+            
+            closeNullify(){
+                 this.openNullify=!this.openNullify;
+            }
         }
     }
 </script>

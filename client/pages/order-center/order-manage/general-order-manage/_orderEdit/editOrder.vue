@@ -30,7 +30,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                    </Select> 
                  </FormItem>
@@ -50,7 +50,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                      </Select> 
                     </FormItem>
@@ -149,8 +149,26 @@ export default {
                 },
 
                 ruleCustom:{
+                    saleDate: [
+                        { required: true, type: 'date',message: '请选择销售日期', trigger: 'change' }
+                    ],
                     money: [
-                        { required: true,trigger: 'change' ,validator: validateMoney}
+                        { required: true, trigger: 'change' ,validator: validateMoney}
+                    ],
+                    communityId:[
+                        { required: true, message: '请选择社区', trigger: 'change' }
+                    ],
+                    customerId:[
+                        { required: true, message: '请选择客户', trigger: 'change' }
+                    ],
+                    salesperson:[
+                        { required: true, message: '请选择销售员', trigger: 'change' }
+                    ],
+                    orderType:[
+                        { required: true, message: '请选择订单类型', trigger: 'change' }
+                    ],
+                    feeType:[
+                        { required: true, message: '请选择费用明细类型', trigger: 'change' }
                     ]
                 }
             }
@@ -165,8 +183,8 @@ export default {
         },
 
          mounted(){
+            this.getTypeData();
             this.getDetailData();
-            this.getCommonData();
             GLOBALSIDESWITCH("false");
         },
 
@@ -178,7 +196,9 @@ export default {
                     id:params.orderEdit
                 };
                 this.$http.get('general-order-watch', from, r => {
+                       this.getCostData(r.data.orderType);
                        this.formItem=Object.assign({},r.data);
+
                        this.formItem.customerId=JSON.stringify(this.formItem.customerId);
                        this.formItem.communityId=JSON.stringify(this.formItem.communityId);
                        this.formItem.salesperson=JSON.stringify(this.formItem.salesperson);
@@ -193,15 +213,27 @@ export default {
                 })
             },
 
-            getCommonData(){
+            getTypeData(){
                this.$http.get('general-common-list','', r => {
-                     this.typeList=r.data.ERP_BizType;
-                     this.freeList=r.data.ERP_FeeType;
+                     this.typeList=r.data.items;
                 }, e => {
                      this.$Notice.error({
                         title:e.message
                     })
                 })    
+            },
+
+            getCostData(value){
+                let param={
+                    bizType:value
+                }
+                this.$http.get('general-cost-list',param, r => {
+                     this.freeList=r.data.items;
+                }, e => {
+                     this.$Notice.error({
+                        title:e.message
+                    })
+                })   
             },
 
             submitForm(){

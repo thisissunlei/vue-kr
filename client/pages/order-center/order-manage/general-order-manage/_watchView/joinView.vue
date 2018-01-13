@@ -83,7 +83,7 @@ export default {
                  key: 'billCreateDate',
 				 align:'center',
 				 render(tag,params){
-					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime));
+					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.billCreateDate));
 					return time;
                   }	
 				},
@@ -92,7 +92,7 @@ export default {
                  key: 'billPayDate',
                  align:'center',
 				 render(tag, params){
-					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime));
+					let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.billPayDate));
 					return time;
                   }		
 				},

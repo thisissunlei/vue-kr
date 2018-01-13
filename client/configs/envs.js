@@ -1,6 +1,6 @@
 const envs = {
     'development':{
-        'op':'http://optest02.krspace.cn',
+        'op':'http://optest.krspace.cn',
         'local':'http://local.krspace.cn',
         'test':'http://optest.krspace.cn',
         'rap':'http://rap.krspace.cn'
@@ -28,3 +28,4 @@ const envs = {
 }
 
 module.exports = envs;
+

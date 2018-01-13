@@ -49,9 +49,11 @@ import http from '~/plugins/http.js';
         },
         methods: {
             changeContent:function(value){
+                console.log('value',value)
                 this.onchange(value)
             },
             remoteCustomer (query) {
+                console.log('remoteCustomer-->',query)
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {

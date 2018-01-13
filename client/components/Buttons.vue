@@ -1,17 +1,17 @@
 <template>
-	<div class='v-button' v-if="data.indexOf(checkAction)>-1" style='display:inline-block;'>
-        <Button  :type='type' @click="buttonClick"  :style='styles'>{{label}}</Button>
+	<div class="v-button" v-if="data.indexOf(checkAction)>-1" style="display:inline-block;">
+        <Button  :type="type" @click="buttonClick"  :style="styles">{{label}}</Button>
     </div>
 </template>
 
 <script>
     export default {
-        props:{
-            label:String,
-            type:String,
-            checkAction:String,
-            styles:Object
-        },
+        props:[
+            "label",
+            "type",
+            "checkAction",
+            "styles"
+        ],
         data() {
         	return{
         	   data:[]

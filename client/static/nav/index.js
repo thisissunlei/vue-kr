@@ -1281,7 +1281,7 @@
                             //menuCode: 'fina_meeting_order_page'
                         },
                     ]
-                },
+                }
             ]
         }
     }

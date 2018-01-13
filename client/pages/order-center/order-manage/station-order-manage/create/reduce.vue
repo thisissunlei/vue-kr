@@ -136,7 +136,9 @@ import utils from '~/plugins/utils';
                         title: '减租期限',
                         key: 'address',
                         render: (h, params) => {
-                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(this.renewForm.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
+                            let start = new Date(this.renewForm.startDate).getTime()
+                            let begin = new Date(params.row.startDate).getTime()
+                            return h('strong', dateUtils.dateToStr("YYYY-MM-dd",new Date(start<begin?begin:start))+'至'+dateUtils.dateToStr("YYYY-MM-dd",new Date(params.row.endDate)))
                         }
                     },
                 ],

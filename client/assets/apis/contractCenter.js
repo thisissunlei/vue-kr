@@ -42,17 +42,12 @@ export default {
 
     //合同扫码列表
     'contract-yard-list': {
-        url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',
-        method: 'get'
-    },
-    //合同扫码列表
-    'contract-yard-list': {
-        url: '/mockjsdata/60/api/krspace-erp-web/wf/station/contract/pigeonhole/search',
+        url: '/api/krspace-erp-web/wf/station/contract/pigeonhole/search',
         method: 'get'
     },
     //合同扫码-批量归档
     'contract-batch-file': {
-        url: '/mockjsdata/60/api/krspace-erp-web/wf/station/contract/pigeonhole/update',
+        url: '/api/krspace-erp-web/wf/station/contract/pigeonhole/update',
         method: 'post'
     }
 }

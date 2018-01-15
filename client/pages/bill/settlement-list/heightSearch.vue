@@ -27,7 +27,7 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.name" 
+                            :value="item.id" 
                             :key="item.id"
                         >
                             {{ item.name }}

@@ -56,7 +56,8 @@
     import Vue from 'vue';
     export default{
         props:{
-            close:Function
+            close:Function,
+            params:Object,
         },
         data (){
             return{

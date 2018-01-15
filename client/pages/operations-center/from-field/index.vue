@@ -51,7 +51,7 @@
             title="新建离场"
             width="660"
         >
-            <NewPage ref="fromFieldNewPage" @newPageData="newPageDataChange" :close="showNewPage" />
+            <NewPage ref="fromFieldNewPage" v-if="openNewPage" @newPageData="newPageDataChange" :close="showNewPage" />
            <div slot="footer">
                 <Button v-if="!isNewPageSubmit" disabled>确定</Button>
                 <Button v-if="isNewPageSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
@@ -308,7 +308,10 @@
             },
 
             newPageDataChange(data){
+                // this.newPageData = Object.assign({},data);
                 if(data){
+                    data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
+                    this.newPageData = Object.assign({},data);
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
                     this.newPageData = Object.assign({},data);
                     var params = Object.assign({},data)

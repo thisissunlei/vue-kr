@@ -196,7 +196,11 @@
             getListData(params){
                 this.$http.get('contract-yard-list', params, r => {
                     let item=r.data;
+                    this.params.serialNumber='';
                     if(!item.id){
+                        this.$Notice.error({
+                           title:'合同编号不正确'
+                        });
                         return;
                     }
                     if(!item.pigeonholed){
@@ -207,7 +211,6 @@
                     this.joinOldData.push(item);
                     let data=utils.arrayNoRepeat(this.joinOldData);
                     this.joinData=data.reverse();
-                    this.params.serialNumber='';
                 }, e => {
                     this.params.serialNumber='';
                     this.openMessage=true;

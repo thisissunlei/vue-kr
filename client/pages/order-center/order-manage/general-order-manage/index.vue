@@ -1,6 +1,6 @@
 <template>
     <div class='m-order-list'>
-            <SectionTitle label = "通用订单列表"/>
+            <SectionTitle title="通用订单列表"/>
             <div  class='list-banner'>
                     <div class='list-btn'>
                         <Button type="primary" @click="jumpAdd">新建订单</Button>

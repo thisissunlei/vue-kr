@@ -55,7 +55,7 @@
 		<DetailStyle info="附件信息">
 			<div class="none-list" v-if="!attachmentList.length" style="margin-left:12px">暂无附件</div>
 			<div class="file-list" style="margin-left:12px" v-for="item in attachmentList" >
-				<span  @click="downFille(item)" style="cursor:pointer">{{item.fileName}}</span>
+				<span  @click="downFile(item)" style="cursor:pointer">{{item.fileName}}</span>
 			</div>
 			<div style="width:200px;margin-left:12px" >
 			<Progress :percent="progress" v-if="isUploading"  :stroke-width="5"></Progress>
@@ -354,7 +354,7 @@ export default {
                     });
                 })
 		},
-		downFille(params){
+		downFile(params){
 			var that=this;
 			this.newWin = window.open();
 			this.$http.post('get-station-contract-pdf-url', {

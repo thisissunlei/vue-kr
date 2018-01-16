@@ -219,7 +219,14 @@ export default {
 
 		},
 		download(){
-
+			let {params}=this.$route;
+				this.$http.get('get-settlement-pdf-id', {checklistId:params.billId}).then( r => {
+                    this.downloadContent(r.data.pdfId)
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+                })
 		},
 		onChange(event){
 			let that = this;
@@ -369,6 +376,19 @@ export default {
                 });
 			})   
 		},
+		downloadContent(id){
+			var newWin = window.open();
+			this.$http.post('get-station-contract-pdf-url', {
+				id:id,
+				
+			}).then( (response) => {
+				newWin.location = response.data;
+			}).catch( (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})
+		}
 	}
 }
 </script>

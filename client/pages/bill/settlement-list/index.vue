@@ -93,6 +93,7 @@
                 openTakeEffect:false,
 
                 warn:'',
+                location:'',
 
                 MessageType:'',
 
@@ -254,6 +255,11 @@
                 ]
             }
         },
+        watch:{
+            location(){
+                window.open(this.location)
+            }
+        },
         
         created(){
           var params=Object.assign({},this.$route.query,{page:1,pageSize:15});
@@ -344,12 +350,11 @@
                 })
             },
             downloadContent(id){
-                var newWin = window.open();
                 this.$http.post('get-station-contract-pdf-url', {
                     id:id,
                     
                 }).then((response) => {
-                    newWin.location = response.data;
+                    this.location = response.data;
                 }).catch( (error) => {
                     this.$Notice.error({
                         title:error.message

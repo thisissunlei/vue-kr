@@ -197,22 +197,22 @@ export default {
 				id:params.watchView
 			};
 			var _this=this;
-			this.$http.get('join-bill-detail', from, r => {
-					_this.basicInfo=r.data;
+			this.$http.get('join-bill-detail', from).then((response)=>{  
+					_this.basicInfo=response.data;
 					
 					
-					_this.ctime=r.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(r.data.ctime)):'';
-					_this.startDate=r.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(r.data.startDate)):'';
-					_this.endDate=r.data.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(r.data.endDate)):'';
-					_this.payDate=r.data.firstPayTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(r.data.firstPayTime)):'';
-					_this.capitalTreatment=r.data.tactiscAmount?utils.smalltoBIG(r.data.tactiscAmount):'';
-					_this.capitalService=r.data.seatRentAmount?utils.smalltoBIG(r.data.seatRentAmount):'';
-					_this.serviceData=r.data.orderSeatDetailVo||[];
-					_this.treatmentData=r.data.contractTactics||[];
-					_this.contractData=r.data.orderContractInfo[0].contractNum?r.data.orderContractInfo:[];
-				}, e => {
+					_this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
+					_this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
+					_this.endDate=response.data.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.endDate)):'';
+					_this.payDate=response.data.firstPayTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.firstPayTime)):'';
+					_this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
+					_this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
+					_this.serviceData=response.data.orderSeatDetailVo||[];
+					_this.treatmentData=response.data.contractTactics||[];
+					_this.contractData=response.data.orderContractInfo[0].contractNum?response.data.orderContractInfo:[];
+				}).catch((error)=>{
 					_this.$Notice.error({
-						title:e.message
+						title:error.message
 					});
 			})
 		}

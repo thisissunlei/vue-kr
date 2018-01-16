@@ -247,21 +247,24 @@
                                             this.showNullify(params)
                                         }
                                     }
-                                }, '作废'),
-                                tag('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpEdit(params)
+                                }, '作废'))
+                                if(params.row.versionType!=1){
+                                 btnRender.push(
+                                    tag('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.jumpEdit(params)
+                                            }
                                         }
-                                    }
-                                }, '编辑'))
+                                    }, '编辑'))
+                                }
                            }
                            return tag('div',btnRender);  
                         }
@@ -286,15 +289,15 @@
                  }
                  this.nullDisabled=true;
                  this.closeNullify();
-                 this.$http.post('join-nullify', params,r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='作废成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
+                 this.$http.post('join-nullify', params).then((response) => {
+                     this.openMessage=true;
+                     this.MessageType="success";
+                     this.warn='作废成功';
+                     this.getListData(this.params);
+                }).catch( (error) => {
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
                 })
             },
 
@@ -307,16 +310,16 @@
                 }
                  this.applyDisabled=true;
                  this.closeApply();
-                 this.$http.post('apply-contract', params, r => {
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='申请成功';
-                    this.getListData(this.params);
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })  
+                 this.$http.post('apply-contract', params).then((response)=>{
+                     this.openMessage=true;
+                     this.MessageType="success";
+                     this.warn='申请成功';
+                     this.getListData(this.params);
+                 }).catch((error)=>{
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
             },
 
             submitExport (){
@@ -341,16 +344,15 @@
             },
 
             getListData(params){
-                var _this=this;
-                 this.$http.get('join-bill-list', params, r => {
-                    _this.totalCount=r.data.totalCount;
-                    _this.joinData=r.data.items;
-                    _this.openSearch=false;
-                }, e => {
-                    _this.openMessage=true;
-                    _this.MessageType="error";
-                    _this.warn=e.message;
-                })   
+                 this.$http.get('join-bill-list', params).then((response)=>{
+                     this.totalCount=response.data.totalCount;
+                     this.joinData=response.data.items;
+                     this.openSearch=false;
+                 }).catch((error)=>{
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
             },
             
             onPageChange (index) {

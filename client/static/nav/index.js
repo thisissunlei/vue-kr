@@ -1265,6 +1265,12 @@
                     type:'vue',
                     menuItems: [
                         {
+                            primaryText: "会议室订单管理",
+                            router: 'order/list',
+                            type:'vue',
+                            menuCode: 'fina_meeting_order_page'
+                        },
+                        {
                             primaryText: "工位订单列表",
                             router: 'order-center/order-manage/station-order-manage',
                             type:'vue',
@@ -1275,7 +1281,7 @@
                             router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
                             menuCode: 'order_seat_list',
-                        },
+                        }
                     ]
                 },
                 {

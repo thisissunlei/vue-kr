@@ -502,7 +502,7 @@
                 window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
             },
 
-            //下载确定按钮被点击
+            //下定按钮被点击载确
             submitDownLoad(params){
                 this.config()
                 var parameter = Object.assign({},this.parameter)

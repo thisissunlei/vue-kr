@@ -91,8 +91,10 @@
             return {
                 openMessage:false,
                 openTakeEffect:false,
+                newWin:'',
 
                 warn:'',
+                location:'',
 
                 MessageType:'',
 
@@ -210,7 +212,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showApply(params)
+                                            this.downLoadPDF(params)
                                         }
                                     }
                                 }, '下载PDF文件'),
@@ -252,6 +254,11 @@
                         }
                     }
                 ]
+            }
+        },
+        watch:{
+            location(){
+                window.open(this.location)
             }
         },
         
@@ -333,10 +340,31 @@
                 utils.clearForm(this.upperData);
             },
             
-            //申请合同
-            showApply(params){
-                this.id=params.row.id;
-                this.openApply=true;
+            //下载PDF
+            downLoadPDF(params){
+               
+                this.newWin = window.open(),
+                this.$http.get('get-settlement-pdf-id', {checklistId:params.row.id}).then( r => {
+                    this.downloadContent(r.data.pdfId)
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+                })
+            },
+            downloadContent(id){
+
+                this.$http.post('get-station-contract-pdf-url', {
+                    id:id,
+                    
+                }).then((response) => {
+                    // this.location = response.data;
+                    this.newWin.location = response.data;
+                }).catch( (error) => {
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
             },
             // 查看
             showView(params){

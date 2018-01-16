@@ -114,6 +114,7 @@ export default {
 			disabled:false,
 			ownAmount:0,
 			totalRefunds:0,
+			location:'',
 			// 生效显示
 			openTakeEffect:false,
 			basicInfo:{},
@@ -179,6 +180,7 @@ export default {
 	     this.$http.get('get-settlement-detail', from, r => {
 	     	// 未结算总额
 	     	let ownAmount = 0;
+	     	this.downloadUrl()
 	     	r.data.details.map(item=>{
 	     		ownAmount += item.payableAmount;
 	     	})
@@ -219,7 +221,17 @@ export default {
 
 		},
 		download(){
-
+			window.open(this.location);
+		},
+		downloadUrl(){
+			let {params}=this.$route;
+				this.$http.get('get-settlement-pdf-id', {checklistId:params.billId}).then( r => {
+                    this.downloadContent(r.data.pdfId)
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+                })
 		},
 		onChange(event){
 			let that = this;
@@ -369,6 +381,18 @@ export default {
                 });
 			})   
 		},
+		downloadContent(id){
+			this.$http.post('get-station-contract-pdf-url', {
+				id:id,
+				
+			}).then( (response) => {
+				this.location = response.data;
+			}).catch( (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})
+		}
 	}
 }
 </script>

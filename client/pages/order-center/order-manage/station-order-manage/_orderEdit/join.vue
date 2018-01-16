@@ -116,7 +116,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" label-in-value  @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+types.id+types.name" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -625,7 +625,9 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
+                console.log('====1',val)
                 val = val.target.value;
+                console.log('====2',val)
                 if(!val){
                     return
                 }

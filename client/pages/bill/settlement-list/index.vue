@@ -350,7 +350,8 @@
                     id:id,
                     
                 }).then((response) => {
-                    newWin.location = response.data;
+                    window.open(response.data,'pdf');
+                    // newWin.location = response.data;
                 }).catch( (error) => {
                     this.$Notice.error({
                         title:error.message

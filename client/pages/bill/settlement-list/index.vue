@@ -345,12 +345,12 @@
             },
             downloadContent(id){
                var that=this;
-                this.newWin = window.open();
+                var newWin = window.open();
                 this.$http.post('get-station-contract-pdf-url', {
                     id:id,
                     
                 }).then((response) => {
-                    that.newWin.location = response.data;
+                    newWin.location = response.data;
                 }).catch( (error) => {
                     this.$Notice.error({
                         title:error.message

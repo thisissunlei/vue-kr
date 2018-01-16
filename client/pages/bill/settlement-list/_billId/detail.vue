@@ -377,12 +377,12 @@ export default {
 			})   
 		},
 		downloadContent(id){
-			this.newWin = window.open();
+			var newWin = window.open();
 			this.$http.post('get-station-contract-pdf-url', {
 				id:id,
 				
 			}).then( (response) => {
-				this.newWin.location = response.data;
+				newWin.location = response.data;
 			}).catch( (error) => {
 				that.$Notice.error({
                     title:error.message

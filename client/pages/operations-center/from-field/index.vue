@@ -200,7 +200,6 @@
 
 
         methods:{
-
             config:function(){
                 this.$Notice.config({
                     top: 80,

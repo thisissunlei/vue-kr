@@ -166,9 +166,6 @@ export default {
 			})
 
 		},
-		becomeEffective(){
-
-		},
 		cancel(){
 			window.close();
             window.opener.location.reload();

@@ -247,21 +247,24 @@
                                             this.showNullify(params)
                                         }
                                     }
-                                }, '作废'),
-                                tag('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.jumpEdit(params)
+                                }, '作废'))
+                                if(params.row.versionType!=1){
+                                 btnRender.push(
+                                    tag('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.jumpEdit(params)
+                                            }
                                         }
-                                    }
-                                }, '编辑'))
+                                    }, '编辑'))
+                                }
                            }
                            return tag('div',btnRender);  
                         }

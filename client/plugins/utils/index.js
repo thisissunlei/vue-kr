@@ -16,7 +16,11 @@ import thousand from './thousand.js'
         }
 
         for (var i = 0; i < fraction.length; i++) {
-            s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
+            console.log('===>',digit[xiaoshu[i]])
+            if(digit[xiaoshu[i]]){
+                s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
+
+            }
         }
         s = s || '整';
         n = Math.floor(n);

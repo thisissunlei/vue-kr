@@ -108,7 +108,7 @@
                 </Row>
                     <FormItem
                 v-for="(item, index) in formItem.items"
-                :key="index"
+                :key="index+new Date()"
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none">
             <Row v-show="item.show">
                  <Col span="3" class="discount-table-content" style="padding:0">
@@ -116,7 +116,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" label-in-value  @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+types.id+types.name" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -162,7 +162,7 @@
                  <Col class="col">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">付款方式</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
+                            <span v-for="types in payList" :key="types.value+new Date()" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                         </div>
                         <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 

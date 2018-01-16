@@ -132,22 +132,22 @@
 
         methods:{
              getCommunity(){
-                this.$http.get('join-bill-community','', r => {    
-                    this.communityList=r.data.items 
-                    }, e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })
+                this.$http.get('join-bill-community','').then((response)=>{    
+                        this.communityList=response.data.items 
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
             },
 
             getOrderList(){
-                this.$http.get('order-pay-list','',r => {
-                    this.orderList=r.data.orderTypeVos;
-                    this.typeList=r.data.seatOrderTypeVos;
-                }, e => {
+                this.$http.get('order-pay-list','').then((response)=>{   
+                    this.orderList=response.data.orderTypeVos;
+                    this.typeList=response.data.seatOrderTypeVos;
+                }).catch((error)=>{
                     this.$Notice.error({
-                        title:e.message
+                        title:error.message
                     });
                 })   
             }

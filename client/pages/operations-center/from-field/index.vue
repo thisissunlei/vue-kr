@@ -292,14 +292,14 @@
                 }
                 var params =Object.assign({},this.newPageData);
                 this.$http.post('post-from-field-newpage',params, r => {
-                    this.newPageIsSubmit = false;
+                    this.isNewPageSubmit = false;
                     this.openMessage=true;
                     this.MessageType="success";
                     this.warn="新建成功";
                     utils.addParams(this.params);
                     this.showNewPage();
                 }, e => {
-                    this.newPageIsSubmit = false;
+                    this.isNewPageSubmit = false;
                     this.openMessage=true;
                     this.MessageType="error";
                     this.warn=e.message;
@@ -308,17 +308,15 @@
             },
 
             newPageDataChange(data){
-                // this.newPageData = Object.assign({},data);
                 if(data){
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
-                    this.newPageData = Object.assign({},data);
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
                     this.newPageData = Object.assign({},data);
                     var params = Object.assign({},data)
                     this.$http.post('post-create-from-field',params, r => {
-                        this.newPageIsSubmit = true;
+                        this.isNewPageSubmit = true;
                     }, e => {
-                        this.newPageIsSubmit = false;
+                        this.isNewPageSubmit = false;
                         this.openMessage=true;
                         this.MessageType="error";
                         this.warn=e.message;

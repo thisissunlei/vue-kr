@@ -23,7 +23,7 @@
             :columns="columns" 
             :data="detail" 
             style="margin:20px"
-            :height="tableHeight<200?200:tableHeight" 
+           
         />
         <div style="margin: 10px 20px;overflow: hidden">
             <Button type="primary" @click="onExport">导出</Button>
@@ -187,7 +187,7 @@
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',
-                        width: 100,
+                        width: 200,
                     },
                     {
                         title: '合同类型',
@@ -205,13 +205,13 @@
                         title: '创建人',
                         key: 'creatorName',
                         align:'center',
-                        width: 80,
+                        width: 150,
                     },
                     {
                         title: '服务费',
                         key: 'serviceCharges',
                         align:'center',
-                        width: 150,
+                        width: 300,
                     }, {
                         title: '销售员',
                         key: 'salerName',
@@ -637,7 +637,7 @@
         
     }
 </script>
-<style lang="less" scoped> 
+<style lang="less" > 
     .page {
         margin-top:20px;
     }
@@ -695,8 +695,8 @@
         .ivu-tooltip-inner{
             white-space: normal;
         }
-        .ivu-table-fixed-right{
-            
-        }
+       .ivu-table-fixed-right{
+           width: 150px !important;
+       }
      }
 </style>

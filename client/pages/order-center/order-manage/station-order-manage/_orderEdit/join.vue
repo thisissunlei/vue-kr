@@ -128,7 +128,7 @@
                     </Col>
                     <Col span="5" class="discount-table-content">
                         <!-- <InputNumber v-model="item.discount" placeholder="折扣" v-if="item.tacticsType == '1'" :max="maxDiscount" :min="1" :step="1.2" @on-change="changezhekou"></InputNumber> -->
-                        <Input v-model="item.discount" placeholder="折扣" @blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
+                        <Input v-model="item.discount" placeholder="折扣" @on-blur="changezhekou" v-if="item.tacticsType == '1'"></Input>
                         <Input v-model="item.zhekou" v-if="item.tacticsType !== '1'"  disabled></Input>
 
                         

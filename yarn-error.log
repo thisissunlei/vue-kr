@@ -55,7 +55,7 @@ npm manifest:
       "vue-template-compiler": "^2.5.13"
     },
     "dependencies": {
-      "@nuxtjs/axios": "4.5.0",
+      "@nuxtjs/axios": "^4.5.0",
       "husky": "^0.14.3",
       "iview": "2.8.0",
       "nuxt": "^1.0.0-rc11",
@@ -6398,14 +6398,4 @@ Lockfile:
       window-size "0.1.0"
 
 Trace: 
-  Error: http://npm.corp.krspace.cn/@nuxtjs%2fyouch: no such package available
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/lib/util/request-manager.js:313:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:186:22)
-      at emitTwo (events.js:125:13)
-      at Request.emit (events.js:213:7)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:1081:10)
-      at emitOne (events.js:115:13)
-      at Request.emit (events.js:210:7)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/0.21.3/libexec/lib/node_modules/yarn/node_modules/request/request.js:1001:12)
-      at Object.onceWrapper (events.js:312:19)
-      at emitNone (events.js:110:20)
+  Error: EEXIST: file already exists, mkdir '/Users/liuyihao/kr-dev/Code/kr-vue/node_modules/@nuxtjs/axios'

@@ -344,14 +344,12 @@
                 })
             },
             downloadContent(id){
-               var that=this;
                 var newWin = window.open();
                 this.$http.post('get-station-contract-pdf-url', {
                     id:id,
                     
                 }).then((response) => {
-                    window.open(response.data,'pdf');
-                    // newWin.location = response.data;
+                    newWin.location = response.data;
                 }).catch( (error) => {
                     this.$Notice.error({
                         title:error.message

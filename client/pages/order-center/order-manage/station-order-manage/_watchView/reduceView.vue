@@ -129,7 +129,7 @@ export default {
 							item.type=stationType;
 					})
 					_this.reduceStation=response.data.orderSeatDetailVo||[];
-					_this.contractData=response.data.orderContractInfo[0].contractNum?response.data.orderContractInfo:[];
+					_this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
 				}).catch((error)=>{
 					_this.$Notice.error({
 						title:error.message

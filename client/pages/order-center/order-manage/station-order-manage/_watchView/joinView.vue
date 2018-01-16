@@ -209,7 +209,7 @@ export default {
 					_this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					_this.serviceData=response.data.orderSeatDetailVo||[];
 					_this.treatmentData=response.data.contractTactics||[];
-					_this.contractData=response.data.orderContractInfo[0].contractNum?response.data.orderContractInfo:[];
+					_this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
 				}).catch((error)=>{
 					_this.$Notice.error({
 						title:error.message

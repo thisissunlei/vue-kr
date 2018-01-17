@@ -422,15 +422,16 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
-                this.$http.get('get-bill-list', params, res => {
+                this.$http.get('get-bill-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
+                
             },
             onBillPay(){
                 
@@ -442,8 +443,8 @@ import utils from '~/plugins/utils';
                 let params={
                     billIds:this.billIds.join(',')
                 }
-                this.$http.post('batch-pay',params, res => {
-                    if(res.code==-1){
+                this.$http.post('batch-pay',params).then((res)=>{
+                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
                         this.openMessage=true;
@@ -454,12 +455,11 @@ import utils from '~/plugins/utils';
                     this.openMessage=true;
                     this.billIds=""
                     this.getTableData(this.tabParams);
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
-
+                })
             },
             
             getAntiSettleData(form){
@@ -472,7 +472,7 @@ import utils from '~/plugins/utils';
                 let params={
                     billId:this.itemDetail.billId
                 }
-                this.$http.post('bill-pay',params, res => {
+                this.$http.post('bill-pay',params).then((res)=>{
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
@@ -484,11 +484,12 @@ import utils from '~/plugins/utils';
                     this.warn="结算成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
+                
             },
             // antiSettleSubmit(){
             //     let params={

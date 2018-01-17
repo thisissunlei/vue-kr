@@ -1321,21 +1321,21 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                             //menuCode: 'pay_cerated_bill_page',
+                             //menuCode: 'pay_created_bill_page',
                         },
                         {
                             primaryText: "回款管理",
                             router: 'bill/payment',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                            // menuCode: 'iot_door_open_log',
+                            // menuCode: 'pay_payment_page',
                         },
                         {
                             primaryText: "应收管理",
                             router: 'bill/income',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                            // menuCode: 'iot_door_open_log',
+                            // menuCode: 'pay_income_page',
                         },
                         {
                             primaryText: "结算单管理",
@@ -1350,7 +1350,6 @@
                             router: 'bill/payrecord',
                             type:'vue',
                             menuCode: 'pay_deal_flow_page'
-                            // menuCode: 'iot_door_open_log',
                         },
                     ]
                 },

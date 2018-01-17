@@ -89,22 +89,19 @@ export default {
 					'RENT':'工位租金'
 			}
 			
-			this.$http.get('get-income-detail', from, res => {
-			
+			this.$http.get('get-income-detail', from).then((res)=>{
 				let data = res.data;
 				this.basicInfo = data;
 				this.dealDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
 				this.ctime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
-
 				this.incomeType = incomeType[data.incomeType];
 
-				}, err => {
-					this.$Notice.error({
-						title:err.message
+			}).catch((error)=>{
+				this.$Notice.error({
+						title:error.message
 					});
-        		});
-				
-
+			});
+			
 		},
 	},
 

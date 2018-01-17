@@ -70,7 +70,7 @@
 	</div>
 	<div class="m-detail-buttons">
 		
-		<Button type="primary" @click="submitForm('formItem')">确定</Button>
+		<Button type="primary" @click="submitForm('formItem')" :disabled="disabled">确定</Button>
         <Button type="ghost" style="margin-left: 8px" @click="cancel">取消</Button>
 	</div>
 </div>	
@@ -93,8 +93,6 @@ export default {
     },
 	data(){
 		const validatePass = (rule, value, callback) => {
-			console.log('validatePass-rule',rule)
-			console.log('validatePass-value',value)
 			return;
             if (value === '') {
                 callback(new Error('Please enter your password'));
@@ -110,31 +108,13 @@ export default {
 			basicInfo:{},
 			validatePass:validatePass,
 			formItem:{
-				details:[
-					// {
-					// 	name:'客户余额',
-					// 	amount:30000,
-					// 	edit:false,
-					// 	show:true
-					// },
-					// {
-					// 	name:'客户余额',
-					// 	amount:30000,
-					// 	edit:false,
-					// 	show:true
-					// },
-					// {
-					// 	name:'客户余额',
-					// 	amount:30000,
-					// 	show:true,
-					// 	edit:false,
-					// },
-				]
+				details:[]
 			},
 			settlementOption:[],
 			selectAll:false,
 			errorMessage:'ssssss',
 			error:false,
+			disabled:false,
 		}
 	},
 	
@@ -166,7 +146,7 @@ export default {
 			let settlementOption = []
 			this.$http.get('get-amount-name-data', {}).then(
 				r=>{
-					_this.settlementOption = r.data.FeeType.map(item=>{
+					_this.settlementOption = r.data.feeTypes.map(item=>{
 						let obj = item;
 						obj.label = item.desc;
 						return obj
@@ -264,7 +244,6 @@ export default {
 			if(items.length){
 				items.map(item=>{
 					_this.error = false;
-
 					if(isNaN(item.payableAmount)){
 						_this.error = true;
 						_this.errorMessage = "金额请填写数字"
@@ -277,6 +256,7 @@ export default {
 			}else{
 				this.error = false
 			}
+
 
 
 					
@@ -294,9 +274,12 @@ export default {
 			}
 			this.$http.post('post-edit-settlement-detail', form).then(
 				r=>{
-					console.log('提交成功')
-					window.close();
-                      window.opener.location.reload();
+					this.disabled = true
+					setTimeout(function(){
+						window.close();
+                    	window.opener.location.reload();
+					})
+					
 				}).catch(err=>{
 					console.log('err',err)
 				})

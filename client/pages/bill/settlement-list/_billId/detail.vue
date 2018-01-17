@@ -180,13 +180,16 @@ export default {
 	     this.$http.get('get-settlement-detail', from, r => {
 	     	// 未结算总额
 	     	let ownAmount = 0;
-	     	this.downloadUrl()
+	     	
 	     	r.data.details.map(item=>{
 	     		ownAmount += (item.payableAmount*100);
 	     	})
 	     	_this.ownAmount = ownAmount/100;
 	     	let deposit = r.data.deposit*100;
 	     	let balance = r.data.balance*100;
+	     	setTimeout(function(){
+	     		_this.downloadUrl()
+	     	},200)
 	     	//计算应退款金额（余额+保证金-未结算）
 	     	_this.totalRefunds = (deposit+balance-ownAmount)/100;
 				   _this.basicInfo=r.data;

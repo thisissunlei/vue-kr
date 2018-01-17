@@ -237,15 +237,15 @@ import utils from '~/plugins/utils';
                this.cancelCallback && this.cancelCallback();
             },
             getTableData(params){
-                this.$http.get('get-income-list', params, res => {
+                this.$http.get('get-income-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
-						title:err.message
-					});
-        		})
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+			    });
             },
             getAddData(form,callback,cancel){
                 this.addData=form;
@@ -261,7 +261,7 @@ import utils from '~/plugins/utils';
             },
             add(){
                 let params=this.addData;
-                this.$http.post('add-income', params, res => {
+                this.$http.post('add-income', params).then((res)=>{
                     this.openIncome=false;
                     if(res.code==-1){
                         this.MessageType="error";
@@ -273,11 +273,11 @@ import utils from '~/plugins/utils';
                     this.warn="挂收入成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, err => {
-					this.$Notice.error({
-						title:err.message
-					});
-        		})
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+			    });
             },
             onChangeOpen(data){
                 this.openMessage=data;

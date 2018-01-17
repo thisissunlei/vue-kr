@@ -196,22 +196,21 @@ export default {
 			let from={
 				id:params.watchView
 			};
-			var _this=this;
 			this.$http.get('join-bill-detail', from).then((response)=>{  
-					_this.basicInfo=response.data;
+					this.basicInfo=response.data;
 					
 					
-					_this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
-					_this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
-					_this.endDate=response.data.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.endDate)):'';
-					_this.payDate=response.data.firstPayTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.firstPayTime)):'';
-					_this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
-					_this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
-					_this.serviceData=response.data.orderSeatDetailVo||[];
-					_this.treatmentData=response.data.contractTactics||[];
-					_this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
+					this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
+					this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
+					this.endDate=response.data.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.endDate)):'';
+					this.payDate=response.data.firstPayTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.firstPayTime)):'';
+					this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
+					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
+					this.serviceData=response.data.orderSeatDetailVo||[];
+					this.treatmentData=response.data.contractTactics||[];
+					this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
 				}).catch((error)=>{
-					_this.$Notice.error({
+					this.$Notice.error({
 						title:error.message
 				});
 			})

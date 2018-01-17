@@ -171,8 +171,7 @@ export default {
 				'CANCEL':'已作废',
 				'REFUND':'已退订',
 			}
-			this.$http.get('order-detail', from, res => {
-				
+			this.$http.get('order-detail', from).then((res)=>{
 				let data=res.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
@@ -197,8 +196,7 @@ export default {
 
 					}
 				]
-					
-           	}, err => {
+			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
 				});

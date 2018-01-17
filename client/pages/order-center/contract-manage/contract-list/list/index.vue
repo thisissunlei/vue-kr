@@ -301,84 +301,82 @@
                             for(let i=0;i<arr.length;i++){
                                 newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
-                           var btnRender=[
-                                    h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.jumpView(params)
-                                            }
+                            var btnRender=[
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params)
                                         }
-                                    }, '查看'), 
-                                    h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                var parameter = {requestId:params.row.requestId}
-                                                this.parameter = parameter;
-                                                this.showDown()
-                                            }
+                                    }
+                                }, '查看'), 
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            var parameter = {requestId:params.row.requestId}
+                                            this.parameter = parameter;
+                                            this.showDown()
                                         }
-                                    }, '下载'), 
-                                    h(krUpload, {
-                                        props: {
-                                            action:'//jsonplaceholder.typicode.com/posts/',
-                                            file: newArr,
-                                            columnDetail:params.row||{},
-                                            onUpUrl:this.postUrlUpLoad
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                    },'44')
-                                ];
-                                if(params.row.contractStatus!=="CANCELLATION"){
-                                    if(!params.row.isEffect){
-                                        btnRender.push(h('Button', {
-                                            props: {
-                                                type: 'text',
-                                                size: 'small'
-                                            },
-                                            style: {
-                                                color:'#2b85e4'
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.onConvention(params)
-                                                }
-                                            }
-                                        }, '其他约定'))
                                     }
-                                    if(!(params.row.isEffect || !params.row.haveAttachment)){
-                                        btnRender.push( h('Button', {
-                                            props: {
-                                                type: 'text',
-                                                size: 'small'
-                                            },
-                                            style: {
-                                                color:'#2b85e4'
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.onContractFor(params)
-                                                }
-                                            }
-                                        }, '合同生效'))
+                                }, '下载'), 
+                                h(krUpload, {
+                                    props: {
+                                        action:'//jsonplaceholder.typicode.com/posts/',
+                                        file: newArr,
+                                        columnDetail:params.row||{},
+                                        onUpUrl:this.postUrlUpLoad
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                },'44')
+                            ];
+                               
+                            if(params.row.otherAgreedButton){
+                                btnRender.push(h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.onConvention(params)
+                                        }
                                     }
-                                }
-                        
+                                }, '其他约定'))
+                            }
+                            if(params.row.effectButton){
+                                btnRender.push( h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.onContractFor(params)
+                                        }
+                                    }
+                                }, '合同生效'))
+                            }
                            return h('div',btnRender);  
                         }
                     }

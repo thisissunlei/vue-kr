@@ -143,15 +143,15 @@ export default {
     },
     methods:{
         getTableData(params){
-                this.$http.get('customer-manager-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('customer-manager-list', params).then((res)=>{
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                });
         },
         changePage(page){
                 this.Params.page=page;

@@ -14,6 +14,7 @@ const hostname = envs[env]['test']||  "" ;
  axios.defaults.withCredentials = true;
  
  axios.defaults.mode = 'cors';
+var requestUrl = [] ,saveTime = 1000;
 
 axios.interceptors.request.use(config => {
   if(config.method  == 'post'){
@@ -25,7 +26,6 @@ axios.interceptors.request.use(config => {
   }else{
     config.baseURL = '/';
   } 
-  
 
   return config
 }, error => {
@@ -98,8 +98,24 @@ export default {
       params = filterNull(params)
     }
     if(!APIS[url].url){
-      return
+      return;
     }
+
+    let nowTime = new Date().getTime();
+    requestUrl = requestUrl.filter((item) => {
+      return (item.setTime + saveTime) > nowTime;
+    });
+    let sessionUrl = requestUrl.filter((item) => {
+      return item.url === APIS[url].url;
+    });
+    if (sessionUrl.length > 0) {
+      // console.log(obj.url + '请求重复 中断请求!');
+      return;
+    }
+    let item = { url: APIS[url].url, setTime: new Date().getTime() };
+
+
+    requestUrl.push(item);
     axios.post(hostname+APIS[url].url, params)
     .then(check401)
     .then(function (response) {

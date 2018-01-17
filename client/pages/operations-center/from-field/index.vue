@@ -151,7 +151,6 @@
                         align:'center',
                       
                         render:(h,params)=>{
-                            var status = params.row.withdrawalStatus;
                             var btnRender=[
                                h('Button', {
                                     props: {
@@ -167,7 +166,7 @@
                                         }
                                     }
                                 }, '查看')];
-                            if(status === "HAS_INITATE"){
+                            if(params.row.showButton){
                                 btnRender.push( h('Button', {
                                     props: {
                                         type: 'text',

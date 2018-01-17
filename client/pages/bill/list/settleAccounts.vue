@@ -55,13 +55,14 @@
 				let params={
 					customerId:customerId
 				};
-				this.$http.get('get-balance', params, res => {
-                    this.amount=res.data.balance;
-                }, err => {
+				this.$http.get('get-balance', params).then((res)=>{
+					this.amount=res.data.balance;
+				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
 					});
-        		})
+				})
+				
 			},
 
 		},

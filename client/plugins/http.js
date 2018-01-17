@@ -26,7 +26,6 @@ axios.interceptors.request.use(config => {
   }else{
     config.baseURL = '/';
   } 
-  console.log(config.baseURL,"ppppppp")
 
   return config
 }, error => {

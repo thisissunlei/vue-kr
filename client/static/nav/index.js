@@ -4,8 +4,6 @@
      var menuCode = [];
      var navUtils = {
          activeData:[],
-         activeHander:'',
-         activeSide:'',
          isHome:false,
          closeRoutrs : [''],
          strDelNum:function (str) {
@@ -152,9 +150,10 @@
      };
  
  
-     //生成头部
+     //侧边栏
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
+         console.log(sidebarNavs,"------0000-----")
          var html = '';
          var router = getRouter();
          if (!sidebarNavs) {
@@ -171,12 +170,7 @@
                 item.menuItems.map(function (child) {
                     var href = ""
                     href = setHref(child.type, child.router)
-                    // if (child.type && child.type == "vue") {
-                    //     href = location.protocol+"//"+ location.hostname + "/" + child.router;
-                    // } else {
-                    //     href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
-                    // }
-                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
+                    html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
             }
@@ -205,6 +199,7 @@
          if (navUtils.activeData){
             router = navUtils.activeData.router;
          }
+
          navs.map(function (item,index) {
              var href ="";
             
@@ -213,12 +208,6 @@
                  href = item.menuItems[0].menuItems[0].router;
              }
              href = setHref(item.type, href)
-            //  if (item.type && item.type == "vue") {
-            //      href = location.protocol+"//" + location.hostname + "/" + href;
-            //  } else {
-            //      href =location.protocol+"//"+ location.hostname + "/new/#/" + href;
-            //  }
- 
              if(index > navUtils.navNum-1){
                  more+='<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
                  return ;
@@ -303,7 +292,7 @@
                 xhr.withCredentials = true;
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                        // window.location.href = "/new/login.html";
+                        window.location.href = "/new/login.html";
                         if (j_account_box.style.display == 'block') {
                             j_account_box.style.display = 'none';
                         }
@@ -386,7 +375,7 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {
-                    // window.location = '/new/login.html';
+                    window.location = '/new/login.html';
                     return;
                 }
                 callback(xhr.response)
@@ -400,7 +389,6 @@
       * ===================数据部分=======================
       */
     var globalNav = new GlobalNav();
-     // console.log("GLOBALSIDESWITCH",GLOBALSIDESWITCH)
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
     

@@ -38,7 +38,7 @@
             </Select> 
         </FormItem>
         
-        <FormItem label="服务尾日" prop="leaveDate" class="bill-search">
+        <FormItem label="离场日期" prop="leaveDate" class="bill-search">
             <DatePicker 
                 v-model="validate.leaveDate"
                 type="date" 

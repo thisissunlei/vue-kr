@@ -13,16 +13,39 @@
          },
          navNum:8
      }
+     function getRouter() {
+         var router = location.href.split('?')[0];
+        //  var portReg = new RegExp(/:\d+/,'g');
+        //  router = router.replace(portReg,'');
+         return router;
+     }
+    function setHref(type, router) {
+        var href = '';
+        var alias = '/new/#/';
+        var port = location.port||'';
+        if (port){
+            port = ":" + port;
+        }
+        if (type && type == "vue"){
+            alias = '/';
+        }
+        href = location.protocol + "//" + location.hostname + port + alias + router;
+        return href;
+     }
     //获取侧边栏里的数据
      function getClickNav(arr,str) {
          for(var i=0;i<arr.length;i++){
              var every = arr[i];
              var href = "";
+             var port = location.port || '';
+             if (port) {
+                 port = ":" + port;
+             }
              if (location.hash.indexOf("#/") != -1) {
                  str = location.hash.split("#/")[1]
                  href = every.router;
              } else {
-                 href = location.protocol+"//" + location.hostname + "/" + every.router;
+                 href = location.protocol + "//" + location.hostname + port+ "/" + every.router;
              }
              if (href === str){
                  return every;
@@ -46,7 +69,7 @@
      }
      //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){
-         var router = location.href.split('?')[0];
+         var router = getRouter();
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
          }
@@ -54,7 +77,7 @@
      }
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-        var router = location.href.split('?')[0];
+        var router = getRouter();
         var activeData = getClickNav([].concat(NavItems), router);
         if (activeData){
             navUtils.activeData = Object.assign({}, activeData);
@@ -133,7 +156,7 @@
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
          var html = '';
-         var router = location.href.split('?')[0];;
+         var router = getRouter();
          if (!sidebarNavs) {
              return html;
          }   
@@ -147,11 +170,12 @@
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
-                    if (child.type && child.type == "vue") {
-                        href = location.protocol+"//"+ location.hostname + "/" + child.router;
-                    } else {
-                        href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
-                    }
+                    href = setHref(child.type, child.router)
+                    // if (child.type && child.type == "vue") {
+                    //     href = location.protocol+"//"+ location.hostname + "/" + child.router;
+                    // } else {
+                    //     href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
+                    // }
                      html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
@@ -188,11 +212,12 @@
              if(item.menuItems && item.menuItems.length){
                  href = item.menuItems[0].menuItems[0].router;
              }
-             if (item.type && item.type == "vue") {
-                 href = location.protocol+"//" + location.hostname + "/" + href;
-             } else {
-                 href =location.protocol+"//"+ location.hostname + "/new/#/" + href;
-             }
+             href = setHref(item.type, href)
+            //  if (item.type && item.type == "vue") {
+            //      href = location.protocol+"//" + location.hostname + "/" + href;
+            //  } else {
+            //      href =location.protocol+"//"+ location.hostname + "/new/#/" + href;
+            //  }
  
              if(index > navUtils.navNum-1){
                  more+='<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
@@ -222,7 +247,7 @@
          var j_sidebar = document.getElementById('j_sidebar');
          var j_header = document.getElementById('j_header');
          var j_menu_btn = document.getElementById('j_menu_btn');
-         var router = location.href.split('?')[0];    
+         var router = getRouter();    
          var docBody = document.body;
          if (navUtils.closeRoutrs.indexOf(router) != -1) {
              j_sidebar.style.display = 'none';

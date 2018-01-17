@@ -26,7 +26,7 @@ axios.interceptors.request.use(config => {
   }else{
     config.baseURL = '/';
   } 
-  
+  console.log(config.baseURL,"ppppppp")
 
   return config
 }, error => {
@@ -115,7 +115,7 @@ export default {
     }
     let item = { url: APIS[url].url, setTime: new Date().getTime() };
 
-    
+
     requestUrl.push(item);
     axios.post(hostname+APIS[url].url, params)
     .then(check401)

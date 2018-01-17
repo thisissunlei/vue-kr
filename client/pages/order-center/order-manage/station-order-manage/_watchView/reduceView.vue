@@ -110,13 +110,12 @@ export default {
 			let from={
 				id:params.watchView
 			};
-			var _this=this;
 			this.$http.get('reduce-bill-detail', from).then((response)=>{  
-					_this.basicInfo=response.data;
+					this.basicInfo=response.data;
 
 
-					_this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
-					_this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
+					this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
+					this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
 							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';
@@ -128,10 +127,10 @@ export default {
 							}
 							item.type=stationType;
 					})
-					_this.reduceStation=response.data.orderSeatDetailVo||[];
-					_this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
+					this.reduceStation=response.data.orderSeatDetailVo||[];
+					this.contractData=response.data.orderContractInfo?response.data.orderContractInfo:[];
 				}).catch((error)=>{
-					_this.$Notice.error({
+					this.$Notice.error({
 						title:error.message
 					});
 			})

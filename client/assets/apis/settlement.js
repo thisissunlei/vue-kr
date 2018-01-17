@@ -37,7 +37,7 @@ export default  {
   },
   //获取编辑页结算单费用项目列表
   'get-amount-name-data':{
-      url: '/api/krspace-finance-web/dict/common?',
+      url: '/api/krspace-finance-web/csr/checklist/list/type/fee?',
       method: 'get'
   },
   //获取结算单PDF的id

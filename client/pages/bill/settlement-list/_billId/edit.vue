@@ -152,6 +152,9 @@ export default {
 						return obj
 					})
 				}).catch(err=>{
+					this.$Notice.error({
+                        title:err.message
+                    });
 					console.log('err',err)
 				})
 		},
@@ -164,9 +167,6 @@ export default {
 				edit:true
 
 			})
-
-		},
-		becomeEffective(){
 
 		},
 		cancel(){
@@ -261,7 +261,14 @@ export default {
 
 					
 		},
+		 config:function(){
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+            },
 		postChecklist(){
+			this.config()
 			let content = this.formItem.details.filter(item=>{
 				if(item.show){
 					return true
@@ -282,6 +289,9 @@ export default {
 					
 				}).catch(err=>{
 					console.log('err',err)
+					this.$Notice.error({
+                        title:err.message
+                    });
 				})
 		}
 	}

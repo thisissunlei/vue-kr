@@ -198,7 +198,7 @@ import utils from '~/plugins/utils';
                         width:100
                     },
                     {
-                        title: '账单总额',
+                        title: '消费总额',
                         key: 'totalAmount',
                         align:'center',
                         width:80,
@@ -210,8 +210,14 @@ import utils from '~/plugins/utils';
                         width:80,
                     },
                     {
-                        title: '应付金额',
+                        title: '账单金额',
                         key: 'payableAmount',
+                        align:'center',
+                        width:80,
+                    },
+                    {
+                        title: '已付金额',
+                        key: 'paidAmount',
                         align:'center',
                         width:80,
                     },

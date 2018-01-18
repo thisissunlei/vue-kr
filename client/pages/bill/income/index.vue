@@ -136,6 +136,7 @@ import utils from '~/plugins/utils';
                 addData:{},
                 callback:null,
                 cancelCallback:null,
+                incomeType:{},
                 columns1: [
                     {
                         title: '收入编号',
@@ -170,20 +171,7 @@ import utils from '~/plugins/utils';
                             return time;
                         }
                     },
-                     {
-                        title: '收入类型',
-                        key: 'incomeType',
-                        align:'center',
-                        width:120,
-                        render(h, obj){
-                             let incomeType={
-                              'MEETING':'会议室',
-                              'PRINT':'打印服务',
-                              'RENT':'工位服务'
-                            }
-                            return incomeType[obj.row.incomeType]
-                        }
-                    },
+                    
                     {
                         title: '操作',
                         key: 'operation',
@@ -220,6 +208,31 @@ import utils from '~/plugins/utils';
              this.tabParams=this.$route.query;
         },
         methods:{
+            renderList(){
+                this.getIncomeType();
+                let incomeType=this.incomeType;
+                let billtype= {
+                        title: '收入类型',
+                        key: 'incomeType',
+                        align:'center',
+                        width:120,
+                        render(h, obj){
+                            return incomeType[obj.row.incomeType]
+                        }
+                    };
+                this.columns1.splice(5, 0, billtype)
+            },
+            getIncomeType(){
+                this.$http.get('get-fee-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.incomeType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+            },
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
@@ -237,6 +250,7 @@ import utils from '~/plugins/utils';
                this.cancelCallback && this.cancelCallback();
             },
             getTableData(params){
+                this.renderList();
                 this.$http.get('get-income-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;

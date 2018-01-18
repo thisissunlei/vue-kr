@@ -143,6 +143,7 @@ export default {
 			basicInfo:{},
 			costInfo:[],
 			settleInfo:[],
+			billType:{},
 			cost:[
 				{
 				 title: '订单编号',
@@ -208,17 +209,25 @@ export default {
 		
 	},
 	methods:{
+		getBillType(){
+                this.$http.get('get-bill-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.billType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+        },
 		getInfo(){
+			this.getBillType();
 			var _this=this;
 			let {params}=this.$route;
 			let from={
 				billId:params.billId
 			};
-			let bizType={
-				'MEETING':'会议室账单',
-				'PRINT':'打印服务账单',
-				'CONTRACT':'工位服务订单',
-			}
+			
 			let payStatus={
 				'WAIT':'待付款',
 				'PAID':'已付清',
@@ -226,7 +235,7 @@ export default {
 			}
 			this.$http.get('get-bill-detail', from).then((res)=>{
 				let data=res.data;
-				data.bizType=bizType[data.bizType];
+				data.bizType=this.billType[data.bizType];
 				data.payStatus=payStatus[data.payStatus];
 				this.basicInfo=data;
 				this.costInfo=data.feeList;

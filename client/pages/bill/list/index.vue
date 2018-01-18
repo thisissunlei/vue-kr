@@ -174,6 +174,7 @@ import utils from '~/plugins/utils';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                billType:{},
                 columns1: [
                     {
                         type: 'selection',
@@ -197,22 +198,7 @@ import utils from '~/plugins/utils';
                         width:100
                     },
                     {
-                        title: '账单类型',
-                        key: 'bizType',
-                        align:'center',
-                        width:90,
-                        render(h, obj){
-                          let bizType={
-                            'MEETING':'会议室账单',
-                            'PRINT':'打印服务账单',
-                            'CONTRACT':'工位服务订单',
-                            
-                          }
-                          return bizType[obj.row.bizType];
-                        }
-                    },
-                    {
-                        title: '账单总额',
+                        title: '消费总额',
                         key: 'totalAmount',
                         align:'center',
                         width:80,
@@ -224,8 +210,14 @@ import utils from '~/plugins/utils';
                         width:80,
                     },
                     {
-                        title: '应付金额',
+                        title: '账单金额',
                         key: 'payableAmount',
+                        align:'center',
+                        width:80,
+                    },
+                    {
+                        title: '已付金额',
+                        key: 'paidAmount',
                         align:'center',
                         width:80,
                     },
@@ -394,8 +386,34 @@ import utils from '~/plugins/utils';
                  this.$route.query.customerName=""
              }
              this.tabParams=this.$route.query;
+             
         },
         methods:{
+            renderList(){
+                this.getBillType();
+                let bizType=this.billType;
+                let billtype={
+                        title: '账单类型',
+                        key: 'bizType',
+                        align:'center',
+                        width:90,
+                        render(h, obj){
+                          return bizType[obj.row.bizType];
+                        }
+                    }
+                this.columns1.splice(4, 0, billtype)
+            },
+            getBillType(){
+                this.$http.get('get-bill-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.billType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+            },
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
@@ -422,6 +440,7 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
+                this.renderList()
                 this.$http.get('get-bill-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;

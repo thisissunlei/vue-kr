@@ -31,7 +31,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="合同类型" class='bill-search-class' v-show='type'>
+                <Form-item label="合同类型" class='bill-search-class'>
                     <Select 
                         v-model="formItem.contractType" 
                         placeholder="请输入合同类型" 
@@ -63,6 +63,22 @@
                         </Option>
                    </Select> 
                 </Form-item>
+                <Form-item label="归档状态" class='bill-search-class'>
+                    <Select 
+                        v-model="formItem.pigeonholed" 
+                        placeholder="请输入归档状态" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in archiveList" 
+                            :value="item.value" 
+                            :key="item.value"
+                         >
+                            {{ item.label }}
+                        </Option>
+                   </Select> 
+                </Form-item>
                 <Form-item label="创建日期" class="bill-search">
                     <DatePicker 
                         v-model="formItem.minCTime"
@@ -85,21 +101,33 @@
 <script>
     import Vue from 'vue';
     export default{
-        props:['mask','params'],
+        props:['params'],
         data (){
             
             return{
                 dateError:false,
+
                 formItem:Object.assign({
                    communityName:'',
+                   pigeonholed:'',
                    contractType:'',
                    customName:'',
                    maxCTime:'',
                    minCTime:'',
                    serialNumber:'',
                  },this.params),
-               
-                type:this.mask=='join'?true:false,
+
+                archiveList:[
+                    {
+                        value:'true',
+                        label:'已归档'
+                    },
+                    {
+                        value:'false',
+                        label:'未归档'
+                    }
+                ],
+
                 //合同状态
                 orderList:[
                     
@@ -143,6 +171,7 @@
                 });
             })
         },
+
         updated:function(){
             if(this.formItem.minCTime&&this.formItem.maxCTime){
                 if(this.formItem.minCTime>this.formItem.maxCTime){

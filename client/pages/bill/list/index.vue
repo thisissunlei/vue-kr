@@ -174,6 +174,7 @@ import utils from '~/plugins/utils';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                billType:{},
                 columns1: [
                     {
                         type: 'selection',
@@ -195,21 +196,6 @@ import utils from '~/plugins/utils';
                         key: 'communityName',
                         align:'center',
                         width:100
-                    },
-                    {
-                        title: '账单类型',
-                        key: 'bizType',
-                        align:'center',
-                        width:90,
-                        render(h, obj){
-                          let bizType={
-                            'MEETING':'会议室账单',
-                            'PRINT':'打印服务账单',
-                            'CONTRACT':'工位服务订单',
-                            
-                          }
-                          return bizType[obj.row.bizType];
-                        }
                     },
                     {
                         title: '账单总额',
@@ -394,8 +380,34 @@ import utils from '~/plugins/utils';
                  this.$route.query.customerName=""
              }
              this.tabParams=this.$route.query;
+             
         },
         methods:{
+            renderList(){
+                this.getBillType();
+                let bizType=this.billType;
+                let billtype={
+                        title: '账单类型',
+                        key: 'bizType',
+                        align:'center',
+                        width:90,
+                        render(h, obj){
+                          return bizType[obj.row.bizType];
+                        }
+                    }
+                this.columns1.splice(4, 0, billtype)
+            },
+            getBillType(){
+                this.$http.get('get-bill-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.billType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+            },
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
@@ -422,6 +434,7 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
+                this.renderList()
                 this.$http.get('get-bill-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;

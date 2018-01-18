@@ -362,7 +362,6 @@ export default {
 			this.$http.get("get-checklist-list", {
                     checklistId:this.$route.params.billId,
                 }).then((response) => {
-                	console.log('getAttachmentList',response.data.attachments)
                     _this.attachmentList = response.data.attachments;
                     _this.isUploading = false
                 }).catch((error) => {
@@ -373,12 +372,12 @@ export default {
 		},
 		downFile(params){
 			var that=this;
-			this.newWin = window.open();
+			
 			this.$http.post('get-station-contract-pdf-url', {
 				id:params.fileId,
 				
 			}, (response) => {
-				 that.newWin.location = response.data;
+				utils.downFile(response.data);
 			
 			}, (error) => {
 				that.$Notice.error({

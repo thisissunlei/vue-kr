@@ -509,7 +509,7 @@
                 }else{
                     parameter.contractType = "NOSEAL"
                 }
-                this.newWin = window.open()
+                // this.newWin = window.open()
 
                 this.$http.get('get-station-contract-pdf-id',parameter, r => {    
                     if(!r.data.fileId){
@@ -531,8 +531,8 @@
                     id:params.fileId,
                     
                 }, (response) => {
-                  
-                    this.newWin.location = response.data;
+                    utils.downFile(response.data,'hetong.pdf')
+                   
                 }, (error) => {
                     this.$Notice.error({
                         title:error.message

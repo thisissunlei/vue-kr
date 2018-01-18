@@ -323,7 +323,7 @@
             //下载PDF
             downLoadPDF(params){
                
-                this.newWin = window.open(),
+                // this.newWin = window.open(),
                 this.$http.get('get-settlement-pdf-id', {checklistId:params.row.id}).then( r => {
                     this.downloadContent(r.data.pdfId)
                 }).catch( e => {
@@ -338,7 +338,8 @@
                     id:id,
                     
                 }).then((response) => {
-                    this.newWin.location = response.data;
+                   utils.downFile(response.data);
+
                 }).catch( (error) => {
                     this.$Notice.error({
                         title:error.message

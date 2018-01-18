@@ -35,7 +35,8 @@
 
 <script>
 import http from '~/plugins/http.js';
- 
+import utils from '~/plugins/utils';
+
 export default{
 	name:'krUpload',
 	props:{
@@ -87,7 +88,6 @@ export default{
 		},
 		submitUpload(detail){
 			this.config();
-			console.log('submitUpload=======',detail)
 			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
 			
 		},
@@ -115,7 +115,7 @@ export default{
 			// var fileName= file.name;
 			let file = event;
 			var fileName= event.name;
-			console.log('onChange',file,'fileName',fileName)
+		
 			if (!file) {
 				return;
 			}
@@ -224,12 +224,12 @@ export default{
 		},
 		downFille(params){
 			var that=this;
-			this.newWin = window.open();
+			
 			this.$http.post('get-station-contract-pdf-url', {
 				id:params.fileId,
 				
 			}, (response) => {
-				 that.newWin.location = response.data;
+				utils.downFile(response.data)
 			
 			}, (error) => {
 				that.$Notice.error({

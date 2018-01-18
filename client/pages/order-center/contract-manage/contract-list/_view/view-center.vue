@@ -37,6 +37,10 @@
             <Button @click="pageAdd" icon="plus"/>
           </div>
         </div>
+        <!-- <ShowPdf
+          v-show="true"
+          :pdfurl="src"
+        /> -->
         <div class="pdf-box" v-if="openPage"> 
           <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10" />
         </div>
@@ -50,9 +54,10 @@
 <script>
 import utils from '~/plugins/utils';
 import Loading from '~/components/Loading'
+// import ShowPdf from '~/components/ShowPdf'
 export default {
   components:{
-    Loading
+    Loading,
   },
   data(){
     return {

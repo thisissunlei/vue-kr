@@ -4,8 +4,6 @@
      var menuCode = [];
      var navUtils = {
          activeData:[],
-         activeHander:'',
-         activeSide:'',
          isHome:false,
          closeRoutrs : [''],
          strDelNum:function (str) {
@@ -13,16 +11,39 @@
          },
          navNum:8
      }
+     function getRouter() {
+         var router = location.href.split('?')[0];
+        //  var portReg = new RegExp(/:\d+/,'g');
+        //  router = router.replace(portReg,'');
+         return router;
+     }
+    function setHref(type, router) {
+        var href = '';
+        var alias = '/new/#/';
+        var port = location.port||'';
+        if (port){
+            port = ":" + port;
+        }
+        if (type && type == "vue"){
+            alias = '/';
+        }
+        href = location.protocol + "//" + location.hostname + port + alias + router;
+        return href;
+     }
     //获取侧边栏里的数据
      function getClickNav(arr,str) {
          for(var i=0;i<arr.length;i++){
              var every = arr[i];
              var href = "";
+             var port = location.port || '';
+             if (port) {
+                 port = ":" + port;
+             }
              if (location.hash.indexOf("#/") != -1) {
                  str = location.hash.split("#/")[1]
                  href = every.router;
              } else {
-                 href = location.protocol+"//" + location.hostname + "/" + every.router;
+                 href = location.protocol + "//" + location.hostname + port+ "/" + every.router;
              }
              if (href === str){
                  return every;
@@ -46,7 +67,7 @@
      }
      //将所有侧边栏需要关闭的数组存入侧边栏
      GlobalRouter.prototype.pushCloseRoutrs = function(){
-         var router = location.href.split('?')[0];
+         var router = getRouter();
          if (navUtils.closeRoutrs.indexOf(router)==-1){
              navUtils.closeRoutrs.push(router)
          }
@@ -54,7 +75,7 @@
      }
      //路由发生变化
      GlobalRouter.prototype.refresh = function () {
-        var router = location.href.split('?')[0];
+        var router = getRouter();
         var activeData = getClickNav([].concat(NavItems), router);
         if (activeData){
             navUtils.activeData = Object.assign({}, activeData);
@@ -129,11 +150,12 @@
      };
  
  
-     //生成头部
+     //侧边栏
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
+         console.log(sidebarNavs,"------0000-----")
          var html = '';
-         var router = location.href.split('?')[0];;
+         var router = getRouter();
          if (!sidebarNavs) {
              return html;
          }   
@@ -147,12 +169,8 @@
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
-                    if (child.type && child.type == "vue") {
-                        href = location.protocol+"//"+ location.hostname + "/" + child.router;
-                    } else {
-                        href =location.protocol+"//"+ location.hostname +"/new/#/" + child.router;
-                    }
-                     html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
+                    href = setHref(child.type, child.router)
+                    html += '<li class=' + (href == router ? 'active' : 'default') + '><a href="' + href + '">' + child.primaryText + '</a></li>';
                 })
                 html += '</ul>';
             }
@@ -181,6 +199,7 @@
          if (navUtils.activeData){
             router = navUtils.activeData.router;
          }
+
          navs.map(function (item,index) {
              var href ="";
             
@@ -188,12 +207,7 @@
              if(item.menuItems && item.menuItems.length){
                  href = item.menuItems[0].menuItems[0].router;
              }
-             if (item.type && item.type == "vue") {
-                 href = location.protocol+"//" + location.hostname + "/" + href;
-             } else {
-                 href =location.protocol+"//"+ location.hostname + "/new/#/" + href;
-             }
- 
+             href = setHref(item.type, href)
              if(index > navUtils.navNum-1){
                  more+='<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
                  return ;
@@ -222,7 +236,7 @@
          var j_sidebar = document.getElementById('j_sidebar');
          var j_header = document.getElementById('j_header');
          var j_menu_btn = document.getElementById('j_menu_btn');
-         var router = location.href.split('?')[0];    
+         var router = getRouter();    
          var docBody = document.body;
          if (navUtils.closeRoutrs.indexOf(router) != -1) {
              j_sidebar.style.display = 'none';
@@ -278,7 +292,7 @@
                 xhr.withCredentials = true;
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
-                        // window.location.href = "/new/login.html";
+                        window.location.href = "/new/login.html";
                         if (j_account_box.style.display == 'block') {
                             j_account_box.style.display = 'none';
                         }
@@ -361,7 +375,7 @@
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) { // readyState == 4说明请求已完成
                 if (xhr.response.code<0) {
-                    // window.location = '/new/login.html';
+                    window.location = '/new/login.html';
                     return;
                 }
                 callback(xhr.response)
@@ -375,7 +389,6 @@
       * ===================数据部分=======================
       */
     var globalNav = new GlobalNav();
-     // console.log("GLOBALSIDESWITCH",GLOBALSIDESWITCH)
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
     
@@ -1321,21 +1334,21 @@
                             router: 'bill/list',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                             //menuCode: 'pay_cerated_bill_page',
+                             //menuCode: 'pay_created_bill_page',
                         },
                         {
                             primaryText: "回款管理",
                             router: 'bill/payment',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                            // menuCode: 'iot_door_open_log',
+                            // menuCode: 'pay_payment_page',
                         },
                         {
                             primaryText: "应收管理",
                             router: 'bill/income',
                             type:'vue',
                             menuCode: 'order_seat_list'
-                            // menuCode: 'iot_door_open_log',
+                            // menuCode: 'pay_income_page',
                         },
                         {
                             primaryText: "结算单管理",
@@ -1350,7 +1363,6 @@
                             router: 'bill/payrecord',
                             type:'vue',
                             menuCode: 'pay_deal_flow_page'
-                            // menuCode: 'iot_door_open_log',
                         },
                     ]
                 },

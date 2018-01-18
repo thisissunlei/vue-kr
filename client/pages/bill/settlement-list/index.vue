@@ -270,33 +270,13 @@
 
         methods:{
             urlUpLoad(detail,col){
-                console.log('urlUpLoad',detail,'col',col)
-                // return
-               
                 var _this = this;
-                // this.$http.post("post-list-upload-url", {
-                //     fileList:JSON.stringify(detail),
-                //     requestId:col.requestId,
-                // }, (response) => {
-                //     // _this.$Notice.success({
-                //     //     title:"合同已生效"
-                //     // });
-                //      _this.getListData(_this.params);
-                // }, (error) => {
-                //     that.$Notice.error({
-                //         title:error.message
-                //     });
-                // })  
-
-
                 this.$http.post("post-checklist-list", {
                     checklistId:col.id,
                     fileId:detail[0].fileId,
                     fileName:detail[0].fileName
                 }).then((response) => {
-                    // col.attachments = []
                      _this.getListData(_this.params);
-                    // col.attachments.push(detail)
                 }).catch((error) => {
                     _this.$Notice.error({
                         title:error.message
@@ -358,7 +338,6 @@
                     id:id,
                     
                 }).then((response) => {
-                    // this.location = response.data;
                     this.newWin.location = response.data;
                 }).catch( (error) => {
                     this.$Notice.error({

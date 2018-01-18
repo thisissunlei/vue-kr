@@ -69,7 +69,7 @@
 	</div>
 	<div class="m-detail-buttons">
 		
-		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
+		<Button type="primary" @click="download" style="margin-left:8px" >下载PDF文件</Button>
 		<!-- //未生效时才可编辑 -->
 		<Button type="primary" @click="edit" style="margin-left:8px" v-show="basicInfo.checklistStatus=='UNEFFECTIVE'">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
@@ -226,7 +226,8 @@ export default {
 
 		},
 		download(){
-			window.open(this.location);
+			utils.downFile(this.location)
+			// window.open(this.location);
 		},
 		downloadUrl(){
 			let {params}=this.$route;

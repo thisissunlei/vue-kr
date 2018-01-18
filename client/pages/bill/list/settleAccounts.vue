@@ -71,7 +71,10 @@
 			$props: {
 				deep: true,
 				handler(nextProps) {
-					this.getAmount(this.detail.customerId)
+					
+					this.detail.customerId && this.getAmount(this.detail.customerId)
+				
+					
 				}
 			}
 

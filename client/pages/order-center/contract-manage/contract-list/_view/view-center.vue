@@ -29,22 +29,13 @@
       </Modal>
 
       <div class="box">
-        <div style="width:100%;padding:20px;">
-          <Button type="info" @click="downSwitch">下载pdf</Button>
-          <div style="float:right;">
-            <Button @click="pageReduce" icon="minus"/>
-            {{page+'/'+numPages}}
-            <Button @click="pageAdd" icon="plus"/>
-          </div>
-        </div>
-        <!-- <ShowPdf
-          v-show="true"
+        <KrPdf
+          v-if="openPage"
           :pdfurl="src"
-        /> -->
-        <div class="pdf-box" v-if="openPage"> 
-          <pdf  :src="src" page="10" :height="'100mm'" style="height:300px" @num-pages="getNumPage" :page = "page" dpi="10" />
-        </div>
-    </div>
+          :downSwitch="downSwitch"
+        />
+
+      </div>
     </div>
     <Loading v-if="isLoading" />
     
@@ -54,10 +45,11 @@
 <script>
 import utils from '~/plugins/utils';
 import Loading from '~/components/Loading'
-// import ShowPdf from '~/components/ShowPdf'
+import KrPdf from '~/components/KrPdf'
 export default {
   components:{
     Loading,
+    KrPdf
   },
   data(){
     return {
@@ -73,7 +65,7 @@ export default {
     }
   },
   mounted:function(){
-    this.openPage = true;
+    
     GLOBALSIDESWITCH("false");
     this.config();
     this.getPdfId();
@@ -129,6 +121,7 @@ export default {
       var parameter = {id:id};
       this.$http.post('get-station-contract-pdf-url',parameter, r => {    
         this.src = r.data;
+        this.openPage = true;
       }, e => {
         if(!e.message){
           e.message = "后台出错请联系管理员"
@@ -145,7 +138,7 @@ export default {
       }else{
         parameter.contractType = "NOSEAL"
       }
-      this.newWin = window.open()
+      // this.newWin = window.open()
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
         if(!r.data.fileId){
           this.$Notice.error({
@@ -164,7 +157,8 @@ export default {
         this.$http.post('get-station-contract-pdf-url', {
           id:params.fileId,
         }, (response) => {
-          this.newWin.location = response.data;
+          // this.newWin.location = response.data;
+          utils.downFile(response.data)
         }, (error) => {
           this.$Notice.error({
             title:error.message||"后台出错请联系管理员"

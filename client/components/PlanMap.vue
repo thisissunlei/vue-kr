@@ -283,7 +283,8 @@ import http from '~/plugins/http.js';
 								scale: this.scaleNumber/100,
 								contextMenuEnable: true
 							},
-							// backgroundImageUrl: "http://" + window.location.host + data[i].graphFilePath
+							backgroundImageUrl: "http://" + window.location.host + data[i].graphFilePath
+							// backgroundImageUrl: "http://optest.krspace.cn/"  + data[i].graphFilePath
 						}
 					}
 

@@ -45,7 +45,7 @@ import http from '~/plugins/http.js';
             };
         },
          mounted:function(){
-            this.getCusomerList(' ');
+            this.remoteCustomer()
         },
         methods: {
             changeContent:function(value){
@@ -54,19 +54,14 @@ import http from '~/plugins/http.js';
             },
             remoteCustomer (query) {
                 console.log('remoteCustomer-->',query)
-                if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
                         this.getCusomerList(query)
                     }, 200);
-                } else {
-                    this.getCusomerList(' ')
-
-                }
             },
             getCusomerList:function(name){
                 let params = {
-                    company:name
+                    company:name || ''
                 }
                 let list = [];
                 let _this = this;

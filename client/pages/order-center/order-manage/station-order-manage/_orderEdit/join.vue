@@ -605,7 +605,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
-                    _this.formItem.items = list;
+                    // _this.formItem.items = list;
                     _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;

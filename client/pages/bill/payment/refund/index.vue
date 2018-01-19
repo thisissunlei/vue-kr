@@ -2,13 +2,13 @@
     <div class="g-refund">
         <SectionTitle title="退款"></SectionTitle>
         <div class="m-detail-content">
-            <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
+            <Form ref="formItem" :model="formItem" :rules="ruleCustom">
                 <DetailStyle info="基本信息">
                 <Row style="margin-bottom:30px">  
                     <Col class="col">
                         <FormItem label="客户名称" style="width:252px" prop="customerId">
                             <SearchCompany
-                                    :test="formItem" 
+                                    test="formItem"
                                     style="width: 250px"
                                     :onchange="onchange"
                             ></SearchCompany>
@@ -16,19 +16,7 @@
                     </Col>
                     <Col class="col">
                         <FormItem label="所属社区" style="width:252px"  prop="communityId">
-                            <Select
-                            v-model="formItem.communityId"
-                            style="width:250px"
-                            placeholder="请选择社区"
-                        >
-                            <Option
-                                v-for="item in communityList"
-                                :value="item.id"
-                                :key="item.id"
-                            >
-                                {{ item.name }}
-                            </Option>
-                        </Select>
+                           <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
                         </FormItem>
                     </Col>
                     <Col class="col">
@@ -42,22 +30,35 @@
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="交易流水号" style="width:252px" prop="communityId">
+                        <FormItem label="交易流水号" style="width:252px" prop="tradeNo">
                             <Input v-model="formItem.tradeNo" placeholder="请输入交易流水号" />
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="支付方式" style="width:252px" prop="communityId">
-                            <Input v-model="formItem.payWay" placeholder="请选择支付方式" />
+                        <FormItem label="支付方式" style="width:252px" prop="payWay">
+                             <Select
+                                    v-model="formItem.payWay"
+                                    style="width:250px"
+                                    placeholder="请选择支付方式"
+                                >
+                                    <Option
+                                        v-for="item in payWay"
+                                        :value="item.value"
+                                        :key="item.value"
+                                    >
+                                        {{ item.label }}
+                                    </Option>
+                                </Select>
+                            
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="付款账户" style="width:252px" prop="communityId">
+                        <FormItem label="付款账户" style="width:252px" prop="payAccount">
                             <Input v-model="formItem.payAccount" placeholder="请输入付款账户" />
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="收款账户" style="width:252px" prop="communityId">
+                        <FormItem label="收款账户" style="width:252px" prop="receiveAccount">
                             <Input v-model="formItem.receiveAccount" placeholder="请输入收款账户" />
                         </FormItem>
                     </Col>
@@ -76,7 +77,6 @@
 
             <FormItem style="padding-left:24px;margin-top:40px" >
                 <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
-                <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
 
         </Form>
@@ -88,18 +88,17 @@
 <script>
 
 import SectionTitle from '~/components/SectionTitle';
+import selectCommunities from '~/components/SelectCommunities';
 import SearchCompany from '~/components/SearchCompany';
 import DetailStyle from '~/components/DetailStyle';
 import dateUtils from 'vue-dateutils';
-import utils from '~/plugins/utils';
-
-//payment-refund
 
     export default {
         components: {
             SectionTitle,
             DetailStyle,
             SearchCompany,
+            selectCommunities
         },
         data() {
             return {
@@ -114,13 +113,36 @@ import utils from '~/plugins/utils';
                     receiveAccount:'',
                     remark:'',
                 },
+                disabled:false,
                 communityList:[],
+                payWay:[
+                    {
+                        label:'支付宝app',
+                        value:'ALIAPPPAY'
+                    },
+                    {
+                        label:'支付宝网银',
+                        value:'ALIWEBPAY'
+                    },
+                    {
+                        label:'微信',
+                        value:'WXPAY'
+                    },
+                    {
+                        label:'网银',
+                        value:'银行转账'
+                    },
+                    {
+                        label:'支付宝网银',
+                        value:'BANKTRANSFER'
+                    }
+                ],
                 ruleCustom:{
                     communityId:[
                         { required: true, message: '请选择社区', trigger: 'change' }
                     ],
                     customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
+                        { required: true, message: '请选择客户',  }
                     ],
                     value: [
                         { required: true, message: '请输入退款金额', trigger: 'change' }
@@ -156,35 +178,6 @@ import utils from '~/plugins/utils';
             })
          
         },
-        watch:{
-           getFloor(){
-            let _this = this;
-            this.config()
-            if(this.formItem.communityId && this.formItem.customerId){
-                let params = {
-                    communityId:this.formItem.communityId,
-                    customerId:this.formItem.customerId
-                }
-                 this.$http.get('get-community-floor', params, r => {
-                    _this.floors = r.data.floor;
-                    _this.ssoId = r.data.ssoId;
-                    _this.ssoName = r.data.ssoName;
-                    if(!_this.formItem.salerId){
-                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
-                        _this.salerName = r.data.ssoName
-
-                    }
-
-                }, e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
-
-                        console.log('error',e)
-                })
-            }
-           },
-        },
         methods: {
             config:function(){
                 this.$Notice.config({
@@ -192,8 +185,19 @@ import utils from '~/plugins/utils';
                     duration: 3
                 });
             },
-             onchange(data){
-                this.formItem.customerId=data;
+            changeCommunity:function(value){
+                if(value){
+                    this.formItem.communityId = value;
+                }else{
+                    this.formItem.communityId = '';
+                }  
+            },
+            onchange(value){
+                if(value){
+                    this.formItem.customerId = value;
+                }else{
+                    this.formItem.customerId = '';
+                } 
             },
             back(){
                 window.history.go(-1);
@@ -205,40 +209,12 @@ import utils from '~/plugins/utils';
                     duration: 3
                 });
                 let _this = this;
-                if(!this.installmentType){
-                    this.errorPayType = true
-                }
-                if(!this.depositAmount){
-                    this.errorAmount = true;
-                }
-                if(this.timeError){
-                    this.$Notice.error({
-                        title:'租赁开始时间不得大于结束时间'
-                    });
-                    return
-                }
-
-                
-
                 
                 this.$refs[name].validate((valid) => {
+                   
                     if (valid) {
-                        
-                        if(this.errorPayType || this.errorAmount){
-                            this.$Notice.error({
-                                title:'请填写完表单'
-                            });
-                            return;
-                        }
-                        if(!_this.stationList.length){
-                            _this.$Notice.error({
-                                title:'请选择入驻工位'
-                            });
-                            _this.disabled = false;
-                            return
-                        }
                         this.disabled = true;
-                        this.joinFormSubmit()
+                        this.onRefundSubmit();
                     } else {
                         _this.disabled = false;
 
@@ -248,51 +224,20 @@ import utils from '~/plugins/utils';
                     }
                 })
             },
-            
-            
-            changeBeginTime:function(val){//租赁开始时间的触发事件，判断时间大小
-                this.clearStation()
-                if(!val || !this.formItem.endDate){
-                    return;
-                }
-                let error = false;
-                this.config();
-                val = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(val))
-                let params = {
-                    end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
-                    start:val
-                }
-                if(new Date(val)>new Date(this.formItem.endDate)){
-                    error = true;
-                    this.$Notice.error({
-                        title:'租赁开始时间不得大于结束时间'
-                    })
-                }else{
-                    this.contractDateRange(params)
-                }
-                this.timeError = error;
+            onRefundSubmit(){
+                this.formItem.occurDate = dateUtils.dateToStr("YYYY-MM-dd",new Date(this.formItem.occurDate));
                 
-            },
-            
-            
-            
-            contractDateRange:function(params){//获取租赁范围
-                let _this = this;
-                this.config();
-                 this.$http.get('contract-date-range', params).then( r => {
-                    _this.formItem.timeRange = r.data;
+                this.$http.get('payment-refund', this.formItem).then( res => {
+                     this.back()
                 }).catch( e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
 
                     console.log('error',e)
                 })
-            },
-            
+            }
              
-                    
-               
         }
     }
 </script>

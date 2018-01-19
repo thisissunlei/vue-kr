@@ -17,7 +17,7 @@
             <Option 
                 v-for="(option, index) in companyOptions" 
                 :value="option.value" 
-                :key="index"
+                :key="option.value"
             >{{option.label}}</Option>
         </Select>
     </div>
@@ -28,7 +28,8 @@
 
 
     export default {
-        props:['name','onchange','test'],
+        props:['test','onchange'],
+       
         data () {
             return {
                 loading1:false,

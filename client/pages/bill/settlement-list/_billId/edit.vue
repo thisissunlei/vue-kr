@@ -179,7 +179,6 @@ export default {
                 let items = this.formItem.details;
                 let select = []
                 select = items.map((item)=>{
-                	console.log('item.select',item)
                     return item.select;
                 })
                 console.log('deleteDiscount',select)

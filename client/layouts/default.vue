@@ -43,6 +43,10 @@
         mounted(){
            
             this.bodyStyle.minHeight = document.documentElement.clientHeight-135 + "px";
+            var that = this;
+            window.onresize = function (params) {
+                that.bodyStyle.minHeight = document.documentElement.clientHeight-135 + "px";
+            }
         },
         
     }

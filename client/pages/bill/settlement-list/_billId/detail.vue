@@ -69,7 +69,7 @@
 	</div>
 	<div class="m-detail-buttons">
 		
-		<Button type="primary" @click="download"style="margin-left:8px" >下载PDF文件</Button>
+		<Button type="primary" @click="download" style="margin-left:8px" >下载PDF文件</Button>
 		<!-- //未生效时才可编辑 -->
 		<Button type="primary" @click="edit" style="margin-left:8px" v-show="basicInfo.checklistStatus=='UNEFFECTIVE'">编辑</Button>
 		<!-- 未生效并且有PDF才可显示 -->
@@ -226,7 +226,8 @@ export default {
 
 		},
 		download(){
-			window.open(this.location);
+			utils.downFile(this.location)
+			// window.open(this.location);
 		},
 		downloadUrl(){
 			let {params}=this.$route;
@@ -362,7 +363,6 @@ export default {
 			this.$http.get("get-checklist-list", {
                     checklistId:this.$route.params.billId,
                 }).then((response) => {
-                	console.log('getAttachmentList',response.data.attachments)
                     _this.attachmentList = response.data.attachments;
                     _this.isUploading = false
                 }).catch((error) => {
@@ -373,12 +373,12 @@ export default {
 		},
 		downFile(params){
 			var that=this;
-			this.newWin = window.open();
+			
 			this.$http.post('get-station-contract-pdf-url', {
 				id:params.fileId,
 				
 			}, (response) => {
-				 that.newWin.location = response.data;
+				utils.downFile(response.data);
 			
 			}, (error) => {
 				that.$Notice.error({

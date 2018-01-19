@@ -263,6 +263,20 @@
                         key: 'stationAndBoard',
                         align:'center',
                         width: 150,
+                    },{
+                        title: '归档状态',
+                        key: 'pigeonholedName',
+                        align:'center',
+                        width: 100,
+                    },{
+                        title: '放置位置',
+                        key: 'placeLocation',
+                        align:'center',
+                        width: 150,
+                        render(h, obj){
+                            let location=obj.row.placeLocation?obj.row.placeLocation:'-';
+                            return location;
+                        }
                     },
                    
                     {
@@ -509,7 +523,7 @@
                 }else{
                     parameter.contractType = "NOSEAL"
                 }
-                this.newWin = window.open()
+                // this.newWin = window.open()
 
                 this.$http.get('get-station-contract-pdf-id',parameter, r => {    
                     if(!r.data.fileId){
@@ -531,8 +545,8 @@
                     id:params.fileId,
                     
                 }, (response) => {
-                  
-                    this.newWin.location = response.data;
+                    utils.downFile(response.data,'hetong.pdf')
+                   
                 }, (error) => {
                     this.$Notice.error({
                         title:error.message
@@ -595,6 +609,7 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.pigeonholed=this.params.pigeonholed?(this.params.pigeonholed=='true'?true:false):'';
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';
                 this.params.maxCTime=this.params.maxCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.maxCTime)):'';
                 utils.addParams(this.params);

@@ -30,7 +30,7 @@ export default {
         url: '/api/krspace-op-web/sys/down-file',
         method: 'post'
     },
-    'get-station-contract-ivew-show': {
+    'get-station-contract-pdf-down': {
         url: '/api/krspace-op-web/sys/downFile',
         method: 'get'
     },

@@ -110,16 +110,24 @@ import thousand from './thousand.js'
           }   
           return  array1
     }
+    function downFile(href, filename) {
+        console.log(filename, "PPPPPP", href)
+        var a = document.createElement('a');
+        a.href = href;
+        a.download = filename;
+        a.click();
+    }
    
    export default{
-      smalltoBIG,
-      clearForm,
-      commonExport,
-      getRequest,
-      addParams,
-      arrayNoRepeat,
-      arrayCompare,
-      thousand
+    smalltoBIG,
+    clearForm,
+    commonExport,
+    getRequest,
+    addParams,
+    arrayNoRepeat,
+    arrayCompare,
+    thousand,
+    downFile
    }
 
 

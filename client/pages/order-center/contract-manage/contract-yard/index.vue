@@ -153,13 +153,13 @@
                let ids=this.selectUseId.join(',');
                params.requestIds=ids;
                this.$http.post('contract-batch-file', params, r => {
-                    this.joinData=utils.arrayCompare(this.joinData,this.selectId,'id');
+                    this.joinData=utils.arrayCompare(this.joinData,this.selectId,'requestId');
                     this.selectUseId=[];
                     this.selectId=[];
                     this.joinData.map((item,index)=>{
                         if(item._checked){
-                            this.selectUseId.push(item.id);
-                            this.selectId.push(item.id);
+                            this.selectUseId.push(item.requestId);
+                            this.selectId.push(item.requestId);
                         }
                     })
                     this.params.serialNumber='';
@@ -197,7 +197,7 @@
                 this.$http.get('contract-yard-list', params, r => {
                     let item=r.data;
                     this.params.serialNumber='';
-                    if(!item.id){
+                    if(!item.requestId){
                         this.$Notice.error({
                            title:'合同编号不正确'
                         });
@@ -205,8 +205,8 @@
                     }
                     if(!item.pigeonholed){
                         item._checked=true;
-                        this.selectUseId.push(item.id);
-                        this.selectId.push(item.id);
+                        this.selectUseId.push(item.requestId);
+                        this.selectId.push(item.requestId);
                     }
                     this.joinOldData.push(item);
                     let data=utils.arrayNoRepeat(this.joinOldData);
@@ -228,9 +228,9 @@
                 this.selectUseId=[];
                 if(params.length!=0){
                      params.map((item,index)=>{
-                        this.selectId.push(item.id);
+                        this.selectId.push(item.requestId);
                         if(!item.pigeonholed){
-                            this.selectUseId.push(item.id);
+                            this.selectUseId.push(item.requestId);
                         }
                      })
                 }

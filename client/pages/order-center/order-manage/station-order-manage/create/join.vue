@@ -114,7 +114,7 @@
                     </Col>
                     <Col span="6" class="discount-table-content">
                          <Select v-model="item.type" label-in-value @on-change="changeType">
-                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value" >{{ types.label }}</Option>
+                            <Option v-for="(types,i) in youhui" :value="types.value+'/'+index+'/'+types.name+'/'+types.id" :key="types.value+index+types.name+types.id" >{{ types.label }}</Option>
                         </Select>
                     </Col>
                     <Col span="5" class="discount-table-content" ></DatePicker>
@@ -546,7 +546,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
-                    _this.formItem.items = list;
+                    // _this.formItem.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -730,6 +730,7 @@ import utils from '~/plugins/utils';
                 let itemIndex = value.split('/')[1];
                 let itemName = value.split('/')[2]
                 let itemId = value.split('/')[3]
+                console.log('======>',this.formItem.items)
                 this.formItem.items[itemIndex].tacticsType = itemValue;
                 this.formItem.items[itemIndex].tacticsName = itemName;
                 this.formItem.items[itemIndex].tacticsId = itemId;

@@ -2,21 +2,18 @@
 <template>
   <div class="cpdf">
    <div class="center">
-     <div class="contor">
+   
       <Button type="info" @click="downSwitch">下载pdf</Button>
       <div style="float:right;padding:0px 0px 0px 20px">
-         <Button @click="prev" icon="minus"/>
-            {{page_num+'/'+page_count}}
-          <Button @click="next" icon="plus"/>  
+         <!-- <Button @click="prev" icon="minus"/> -->
+            <!-- {{page_num+'/'+page_count}} -->
+          <!-- <Button @click="next" icon="plus"/>   -->
       </div>
       <!-- <Button @click="addscale" icon="plus"></Button>
       
       <Button @click="minus" icon="minus"></Button> -->
      </div>
-     <div class="pdf-box">
-        <canvas class="canvasstyle" id="the-canvas"></canvas>
-     </div>
-   </div>
+     <div class="pdf-box"  ref="krPdfViewBox"  />
   </div>
 </template>
 
@@ -27,7 +24,10 @@
   props: {
     pdfurl:String,
     downSwitch:Function,
-    height:Number,
+    height:{
+      type:[String, Number],
+      default:"auto"
+    },
     isScroll:{
       type:Boolean,
       default:true,
@@ -48,34 +48,40 @@
   },
   methods: {
     renderPage(num) { //渲染pdf
-      let vm = this
-      this.pageRendering = true;
-      let canvas = document.getElementById('the-canvas')
-      // Using promise to fetch the page
-      this.pdfDoc.getPage(num).then(function(page) {
-        var viewport = page.getViewport(vm.scale);
-        //alert(vm.canvas.height)
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        // Render PDF page into canvas context
-        var renderContext = {
-        canvasContext: vm.ctx,
-        viewport: viewport
-      };
-      var renderTask = page.render(renderContext);
- 
-      //Wait for rendering to finish
-       renderTask.promise.then(function() {
-        vm.pageRendering = false;
-        if(vm.pageNumPending !== null) {
-          // New page rendering is pending
-          vm.renderPage(vm.pageNumPending);
-          vm.pageNumPending = null;
-        }
-       });
+        let vm = this
+        this.pageRendering = true;
+        let tagCanvas = document.createElement("canvas");
+        tagCanvas.id = "pdf-view"+num;
+        tagCanvas.className = "kr-pdf-page";
+        vm.$refs.krPdfViewBox.appendChild(tagCanvas);
+        // appendChild
+        
+        let canvas = document.getElementById('pdf-view'+num)
+        let ctx = canvas.getContext('2d');
+        // Using promise to fetch the page
+        this.pdfDoc.getPage(num).then(function(page) {
+          var viewport = page.getViewport(vm.scale);
+          //alert(vm.canvas.height)
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          // Render PDF page into canvas context
+          var renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        var renderTask = page.render(renderContext);
+  
+        //Wait for rendering to finish
+        renderTask.promise.then(function() {
+          vm.pageRendering = false;
+          if(vm.pageNumPending !== null) {
+            // New page rendering is pending
+            vm.renderPage(vm.pageNumPending);
+            vm.pageNumPending = null;
+          }
+        });
      });
      vm.page_num = vm.pageNum;
- 
     },
     addscale() {//放大
      if(this.scale >= this.maxscale) {
@@ -129,27 +135,41 @@
       PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
       vm.pdfDoc = pdfDoc_;
       vm.page_count = vm.pdfDoc.numPages
-      vm.renderPage(vm.pageNum);
+      
+      for(let i=1;i<=vm.page_count;i++){
+        vm.renderPage(i);
+      }
     });
+
   }
  }
 </script>
 
 <style lang="less">
 .cpdf {
-  width: 714px;    
-  .contor{
+  // width: 714px;
+  // padding: 20px;    
+  .center{
     
     height: 40px;
     line-height: 40px;
+    margin: 10px 0px;
+  }
+  .kr-pdf-page{
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   }
   .pdf-box{
-    height:250mm;
-    margin: auto;
-    margin-top:20px;
+    // height:250mm;
+    // margin: auto;
+    // margin-top:20px;
     overflow:auto;
+    width: 100%;
   
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+    // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   }
  }
 </style>

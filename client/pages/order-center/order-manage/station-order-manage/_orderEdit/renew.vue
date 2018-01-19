@@ -273,7 +273,20 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'originalPrice',
+                        render: (h, params) => {
+                            return h('InputNumber', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(e)=>{
+                                            this.changePrice(params.index,e)
+                                        },
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -312,6 +325,7 @@ import utils from '~/plugins/utils';
                 stationAmount:'',
                 orderSeatId:'',
                 corporationName:'',
+                change:{}
 
            }
         },
@@ -347,6 +361,18 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
+            changePrice(index,e){
+                let _this = this;
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                        _this.selecedArr[index].originalPrice = e;
+                        _this.getStationAmount()
+                    },1000)
+                
+                
+            },
             getDetailData(){
                 let _this = this;
                 let {params}=this.$route;
@@ -359,6 +385,7 @@ import utils from '~/plugins/utils';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
                         money += item.amount;
+                        obj.guidePrice = item.guidePrice || item.price;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
                         obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));

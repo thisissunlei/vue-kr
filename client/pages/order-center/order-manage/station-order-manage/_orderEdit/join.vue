@@ -290,7 +290,21 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'originalPrice',
+                        render: (h, params) => {
+                            console.log('标准单价（元/月）--->>>>',params.row.guidePrice)
+                            return h('InputNumber', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(e)=>{
+                                            this.changePrice(params.index,e)
+                                        },
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -355,7 +369,8 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 changeSale:+new Date(),
                 originStationList:[],
-                orderType:''
+                orderType:'',
+                change:{}
             }
         },
         head() {
@@ -397,6 +412,21 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            changePrice(index,e){
+                let _this = this;
+                console.log('changePrice========>',!!this.change);
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                        console.log('--->',_this.stationList[index])
+                        _this.stationList[index].originalPrice = e;
+                        console.log('=====>','time'+index,'e',e)
+                        _this.getStationAmount()
+                    },1000)
+                
+                
+            },
 
              getDetailData(){
                 let _this = this;
@@ -409,6 +439,7 @@ import utils from '~/plugins/utils';
                     _this.orderType = data.orderType=='INCREASE'?'增租':'入驻';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        obj.guidePrice = item.guidePrice || item.originalPrice;
                         obj.belongType = item.seatType;
                         obj.id = item.seatId;
                         obj.name = item.seatName;
@@ -437,8 +468,10 @@ import utils from '~/plugins/utils';
                     _this.selectDeposit(data.deposit)
                     _this.selectPayType(data.installmentType);
                     _this.saleAmount = data.tactiscAmount;
+                    _this.stationAmount =  utils.smalltoBIG(data.seatRentAmount);
+                    _this.formItem.stationAmount = data.seatRentAmount;
                     _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
-                      _this.getStationAmount()
+                    _this.formItem.rentAmount = data.rentAmount;
 
                     setTimeout(function(){
                       
@@ -463,7 +496,6 @@ import utils from '~/plugins/utils';
                         })
 
                         _this.formItem.items = data.contractTactics;
-                        _this.dealSaleInfo(true)
                     },700)
                     _this.getFloor = +new Date()
                     
@@ -912,7 +944,6 @@ import utils from '~/plugins/utils';
             showStation:function(){
                 // 选择工位的按钮
                 this.config()
-                console.log('originStationList----',this.originStationList)
 
                 if(!this.formItem.communityId){
                     this.$Notice.error({
@@ -1166,7 +1197,8 @@ import utils from '~/plugins/utils';
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            // money += item.originalAmount;
+                            //TODO 
+                            obj.guidePrice = item.price;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
@@ -1174,6 +1206,7 @@ import utils from '~/plugins/utils';
                         _this.formItem.rentAmount =  r.data.totalrent
                         _this.formItem.stationAmount =r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+
 
                     }, e => {
                         _this.$Notice.error({

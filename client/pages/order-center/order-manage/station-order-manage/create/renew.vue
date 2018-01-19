@@ -121,7 +121,7 @@
         </FormItem>
         <Row style="margin-bottom:10px">
                 <Col sapn="24">
-                    <div class="total-money" v-if="renewForm.items.length">
+                    <div class="total-money" v-if="renewForm.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
@@ -330,7 +330,8 @@ import utils from '~/plugins/utils';
                 salerName:'请选择',
                 saleAmount:0,
                 saleAmounts:utils.smalltoBIG(0),
-                change:{}
+                change:{},
+                showSaleDiv:true
 
            }
         },
@@ -364,7 +365,7 @@ import utils from '~/plugins/utils';
                 }
             },
             selecedStation(){
-                this.renewForm.items = []
+                // this.renewForm.items = []
             }
         },
         methods: {
@@ -668,12 +669,13 @@ import utils from '~/plugins/utils';
                     });
                     return
                 }
-                // if(!this.selecedStation.length){
-                //     this.$Notice.error({
-                //         title:'请先选择续租工位'
-                //     });
-                //     return
-                // }
+                this.showSaleDiv = true;
+                if(!this.selecedStation.length){
+                    this.$Notice.error({
+                        title:'请先选择续租工位'
+                    });
+                    return
+                }
                 this.index++;
                 this.renewForm.items.push({
                     value: '',
@@ -831,7 +833,13 @@ import utils from '~/plugins/utils';
                 this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
                
                 this.getStationAmount()
+                this.clearStation()
                 
+            },
+            clearStation(){
+                this.renewForm.items = [];
+                this.renewForm.saleAmount = 0;
+                this.saleAmount = utils.smalltoBIG(0)
             },
             getStationAmount(){
                
@@ -874,6 +882,9 @@ import utils from '~/plugins/utils';
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)
+                        if(_this.showSaleDiv){
+                            _this.dealSaleInfo(false)
+                        }
 
 
                     }, e => {
@@ -997,6 +1008,11 @@ import utils from '~/plugins/utils';
                         zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
+                if(saleList.length){
+                    this.showSaleDiv = true
+                }else{
+                    this.showSaleDiv = false
+                }
                 // this.saleAmount = 0;
                 // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){

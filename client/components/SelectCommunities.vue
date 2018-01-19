@@ -76,21 +76,22 @@ import http from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-                
-                http.get('get-mainbill-community', params, r => {
-                    list = r.data;
+
+                this.$http.get('join-bill-community','').then((response)=>{    
+                       list = response.data.items;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.communityname;
+                        obj.label = item.name;
                         obj.value = item.id+'';
                         return obj;
                     });
                      _this.loading1 = false;
                     _this.options1 = list;
-                }, e => {
-                    console.log('error',e)
-                })
-                return list;
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
 
             }
                     

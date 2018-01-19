@@ -135,7 +135,7 @@
         </FormItem>
             <Row style="margin-bottom:10px">
                 <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length">
+                    <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
@@ -365,7 +365,8 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 discount:0,
                 minDiscount:'',
-                change:{}
+                change:{},
+                showSaleDiv:true,
 
             }
         },
@@ -417,14 +418,12 @@ import utils from '~/plugins/utils';
         methods: {
             changePrice(index,e){
                 let _this = this;
-                console.log('changePrice========>',!!this.change);
                 if(!!this.change['time'+index]){
                     clearTimeout(this.change['time'+index])
                 }
                     this.change['time'+index] = setTimeout(function(){
-                        console.log('--->',_this.stationList[index])
                         _this.stationList[index].originalPrice = e;
-                        console.log('=====>','time'+index,'e',e)
+                        // _this.clearSale()
                         _this.getStationAmount()
                     },1000)
                 
@@ -545,6 +544,11 @@ import utils from '~/plugins/utils';
                 }
                 if(!zhekou && !show ){
                     return;
+                }
+                if(!saleList.length){
+                    this.showSaleDiv = false;
+                }else{
+                   this.showSaleDiv = true 
                 }
                 
                 saleList = saleList.map(item=>{
@@ -927,6 +931,7 @@ import utils from '~/plugins/utils';
             handleAdd () {
                 // 优惠信息的添加按钮
                 this.config()
+                this.showSaleDiv = true;
                 if(!this.stationList.length){
                     this.$Notice.error({
                         title:'请先选择工位'
@@ -956,9 +961,15 @@ import utils from '~/plugins/utils';
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
                 this.getStationAmount()
-                this.openStation = false
+                this.openStation = false;
+                this.clearSale()
                 
 
+            },
+            clearSale(){
+                this.formItem.items= [];
+                this.saleAmounts = utils.smalltoBIG(0);
+                this.formItem.saleAmount = 0;
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
@@ -1142,6 +1153,9 @@ import utils from '~/plugins/utils';
                         _this.formItem.rentAmount =  r.data.totalrent;
                         _this.formItem.stationAmount = r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+                        if(_this.showSaleDiv){
+                            _this.dealSaleInfo(false)
+                        }
 
                     }).catch( e => {
                         _this.$Notice.error({

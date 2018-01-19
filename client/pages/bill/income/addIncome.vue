@@ -166,13 +166,12 @@ export default{
 		});
     },
     methods:{
-    
         onchange(data){
             this.formItem.customerId=data;
         },
         dateChange(date){
             this.formItem.dealDate=date;
-        }
+        },
         
     },
     updated:function(){

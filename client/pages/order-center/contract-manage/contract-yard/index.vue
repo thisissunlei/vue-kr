@@ -190,7 +190,7 @@
             },
 
             jumpView(params){
-                window.open(`/order-center/contract-manage/contract-yard/${params.row.id}/view?contractType=&requestId=${params.row.requestId}`,'_blank');
+                window.open(`../../../publicPage/${params.row.id}/pdf-view?contractType=&requestId=${params.row.requestId}`,'_blank');
             },
             
             getListData(params){

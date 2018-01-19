@@ -21,8 +21,8 @@
                     </Col>
                     <Col class="col">
                         <div class="u-txt-label">账户余额</div>
-                        <div class="u-txt-value">80</div>
-                        <!-- {{basicInfo.tradeNo}} -->
+                        <div class="u-txt-value">{{amount}}</div>
+                       
                     </Col>
                     <Col class="col">
                         <FormItem label="退款金额" style="width:252px" prop="value">
@@ -113,6 +113,7 @@ import dateUtils from 'vue-dateutils';
                     receiveAccount:'',
                     remark:'',
                 },
+                amount:'-',
                 disabled:false,
                 communityList:[],
                 payWay:[
@@ -176,6 +177,7 @@ import dateUtils from 'vue-dateutils';
                     title:error.message
                 });
             })
+            
          
         },
         methods: {
@@ -185,6 +187,19 @@ import dateUtils from 'vue-dateutils';
                     duration: 3
                 });
             },
+            getAmount(customerId){
+				let params={
+					customerId:customerId
+				};
+				this.$http.get('get-balance', params).then((res)=>{
+					this.amount=res.data.balance;
+				}).catch((err)=>{
+					this.$Notice.error({
+						title:err.message
+					});
+				})
+				
+			},
             changeCommunity:function(value){
                 if(value){
                     this.formItem.communityId = value;
@@ -193,14 +208,16 @@ import dateUtils from 'vue-dateutils';
                 }  
             },
             onchange(value){
+                
                 if(value){
                     this.formItem.customerId = value;
+                    this.getAmount(value)
                 }else{
                     this.formItem.customerId = '';
+                    this.amount='-';
                 } 
-            },
-            back(){
-                window.history.go(-1);
+                
+
             },
             handleSubmit:function(name) {
                 let message = '请填写完表单';
@@ -228,13 +245,18 @@ import dateUtils from 'vue-dateutils';
                 this.formItem.occurDate = dateUtils.dateToStr("YYYY-MM-dd",new Date(this.formItem.occurDate));
                 
                 this.$http.get('payment-refund', this.formItem).then( res => {
-                     this.back()
+                    this.$Notice.success({
+                        title:'退款成功'
+                    });
+                    setTimeout(function(){
+                         window.close();
+                    },1000)    
                 }).catch( e => {
                     this.$Notice.error({
                         title:e.message
                     });
 
-                    console.log('error',e)
+                   
                 })
             }
              

@@ -10,11 +10,11 @@
                     placeholder="请输入客户名称"
                     style="width: 252px"
                    
-                ></i-input>
+                />
             </div>
             <div class='m-search' @click="submitLowerSearch">搜索</div>
             <div class="m-bill-search" @click="showSearch">
-                <span></span>   
+                <span/> 
             </div> 
         </div>
         <Table 

@@ -276,7 +276,20 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'guidePrice',
+                        render: (h, params) => {
+                            return h('InputNumber', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(e)=>{
+                                            this.changePrice(params.index,e)
+                                        },
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -317,6 +330,7 @@ import utils from '~/plugins/utils';
                 salerName:'请选择',
                 saleAmount:0,
                 saleAmounts:utils.smalltoBIG(0),
+                change:{}
 
            }
         },
@@ -354,6 +368,18 @@ import utils from '~/plugins/utils';
             }
         },
         methods: {
+            changePrice(index,e){
+                let _this = this;
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                        _this.selecedArr[index].originalPrice = e;
+                        _this.getStationAmount()
+                    },1000)
+                
+                
+            },
             back(){
                 window.history.go(-1);
             },
@@ -817,7 +843,6 @@ import utils from '~/plugins/utils';
                
                 let station = val.map(item=>{
                     let obj = item;
-                    // obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
@@ -840,29 +865,12 @@ import utils from '~/plugins/utils';
                         _this.selecedStation = r.data.seats.map(item=>{
                             let obj = item;
                             money+=item.amount;
+                            //TODO
+                            obj.guidePrice = item.price;
                             obj.start = item.startDate
                             obj.end = item.endDate
                             return obj;
                         })
-                        // list = r.data.seats.map(item=>{
-                        //     let obj = item;
-                        //     money+=item.amount;
-                        //     return obj;
-                        // });
-                        // _this.selecedStation = _this.selecedArr.map(item=>{
-                        //     list.map((value)=>{
-                        //         if(value.id == item.id){
-                        //             item.originalAmount = value.originalAmount
-                        //             item.start = value.startDate
-                        //             item.end = _this.renewForm.endDate
-                        //             item.endDate = startDate
-                        //             item.amount = value.amount
-                        //             item.originalAmount = value.originalAmount
-                        //         }
-                        //     })
-                            
-                        //     return item
-                        // })
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;
                         _this.stationAmount = utils.smalltoBIG(Math.round(money*100)/100)

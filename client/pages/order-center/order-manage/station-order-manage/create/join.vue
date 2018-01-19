@@ -65,7 +65,7 @@
                 </Row>
                 <Row style="margin-bottom:10px">
                     <Col sapn="24">
-                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
+                    <Table border ref="selection" :columns="columns4" :data.sync="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
                         <span class="money">{{formItem.stationAmount | thousand}} </span>
@@ -281,7 +281,20 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'guidePrice',
+                        render: (h, params) => {
+                            return h('InputNumber', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(e)=>{
+                                            this.changePrice(params.index,e)
+                                        },
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -352,6 +365,7 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 discount:0,
                 minDiscount:'',
+                change:{}
 
             }
         },
@@ -401,6 +415,21 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            changePrice(index,e){
+                let _this = this;
+                console.log('changePrice========>',!!this.change);
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                        console.log('--->',_this.stationList[index])
+                        _this.stationList[index].originalPrice = e;
+                        console.log('=====>','time'+index,'e',e)
+                        _this.getStationAmount()
+                    },1000)
+                
+                
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -1085,7 +1114,8 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    obj.guidePrice = item.price;
+                    obj.originalPrice = item.originalPrice || item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
@@ -1103,6 +1133,8 @@ import utils from '~/plugins/utils';
                      this.$http.post('get-station-amount', params).then( r => {
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
+                            //TODO 周一联调删除
+                            obj.guidePrice = obj.originalPrice;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;

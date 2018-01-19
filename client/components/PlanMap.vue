@@ -9,7 +9,7 @@
 			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
-			<Slider :v-model="scaleNumber"  :min="40" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
+			<Slider :v-model="scaleNumber"  :min="50" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
             <output style="margin-left:15px" >{{scaleNumber}}</output>%
 		</div>
 		<div id = "plan-map-content"  :style='stylePlan'>
@@ -45,7 +45,7 @@ import http from '~/plugins/http.js';
                 // otherData:{},
                 newfloor:'3',//当前算选择的楼层
                 submitData:[],//已选择工位
-                scaleNumber:40,//比例
+                scaleNumber:60,//比例
                 Map:'',
                 inputEnd:'',//开始工位
                 inputStart:'',//结束工位

@@ -511,7 +511,7 @@
             },
 
             jumpView(params){
-                window.open(`./${params.row.id}/view-center?contractType=&requestId=${params.row.requestId}`,'_blank')  
+                window.open(`../../../../publicPage/${params.row.id}/pdf-view?contractType=&requestId=${params.row.requestId}`,'_blank')  
             },
 
             //下定按钮被点击载确

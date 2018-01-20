@@ -354,6 +354,35 @@
                      this.warn=error.message;
                  })
             },
+
+            getPayedData(values){
+                let params={
+                    orderId:values.row.id
+                }
+                this.$http.get('order-first-payed', params).then((response)=>{
+                    utils.addParams({mask:''});
+                    let type = '';
+                    switch (values.row.orderType){
+                        case 'IN':
+                            type = 'join';
+                            break;
+                        case 'INCREASE':
+                            type = 'join';
+                            break;
+                        case 'CONTINUE':
+                            type = 'renew';
+                            break;
+                        default:
+                            type = 'join';
+                            break;
+                    }
+                   window.open(`/order-center/order-manage/station-order-manage/${values.row.id}/${type}`,'_blank')
+                 }).catch((error)=>{
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
+            },
             
             onPageChange (index) {
                 let params=this.params;
@@ -395,23 +424,7 @@
             },
 
             jumpEdit(params){
-                utils.addParams({mask:''});
-                let type = '';
-                switch (params.row.orderType){
-                    case 'IN':
-                        type = 'join';
-                        break;
-                    case 'INCREASE':
-                        type = 'join';
-                        break;
-                    case 'CONTINUE':
-                        type = 'renew';
-                        break;
-                    default:
-                        type = 'join';
-                        break;
-                }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,'_blank')
+                this.getPayedData(params);
             },
 
             showNullify(params){

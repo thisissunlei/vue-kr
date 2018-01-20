@@ -74,6 +74,11 @@ export default {
   'general-cost-list': {
     url: '/api/krspace-finance-web/order/common/getFeeTypeListBy',
     method: 'get'
+  },
+  //订单合同是否首付款
+  'order-first-payed': {
+    url: '/api/krspace-finance-web/order-seat/check-order-payed',
+    method: 'get'
   }
   
 } 

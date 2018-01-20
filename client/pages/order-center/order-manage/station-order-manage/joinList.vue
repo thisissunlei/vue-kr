@@ -395,6 +395,7 @@
             },
 
             jumpEdit(values){
+                var popup = window.open();
                 let params={
                     orderId:values.row.id
                 }
@@ -415,11 +416,9 @@
                             type = 'join';
                             break;
                     }
-                    var a = document.createElement('a');
-                    a.setAttribute('href', `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`);
-                    a.setAttribute('target', '_blank');
-                    a.click();
+                    popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
                  }).catch((error)=>{
+                     popup.close();
                      this.openMessage=true;
                      this.MessageType="error";
                      this.warn=error.message;

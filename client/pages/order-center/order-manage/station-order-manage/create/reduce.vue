@@ -404,10 +404,8 @@ import utils from '~/plugins/utils';
 
                     }, e => {
                         _this.$Notice.error({
-                        title:e.message
-                    })
-
-                        console.log('error',e)
+                           title:e.message
+                        })
                     })
                 }
             },
@@ -434,10 +432,12 @@ import utils from '~/plugins/utils';
                 };
                 let _this = this;
                  this.$http.get('get-reduce-station', params, r => {
-                    _this.stationList = r.data;
+                     _this.stationList = r.data;
                 }, e => {
-
-                    console.log('error',e)
+                     _this.stationList=[];
+                     _this.$Notice.error({
+                        title:e.message
+                    })
                 })
 
             },

@@ -355,35 +355,6 @@
                  })
             },
 
-            getPayedData(values){
-                let params={
-                    orderId:values.row.id
-                }
-                this.$http.get('order-first-payed', params).then((response)=>{
-                    utils.addParams({mask:''});
-                    let type = '';
-                    switch (values.row.orderType){
-                        case 'IN':
-                            type = 'join';
-                            break;
-                        case 'INCREASE':
-                            type = 'join';
-                            break;
-                        case 'CONTINUE':
-                            type = 'renew';
-                            break;
-                        default:
-                            type = 'join';
-                            break;
-                    }
-                   window.open(`/order-center/order-manage/station-order-manage/${values.row.id}/${type}`,'_blank')
-                 }).catch((error)=>{
-                     this.openMessage=true;
-                     this.MessageType="error";
-                     this.warn=error.message;
-                 })
-            },
-            
             onPageChange (index) {
                 let params=this.params;
                 params.page=index;
@@ -423,8 +394,36 @@
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
             },
 
-            jumpEdit(params){
-                this.getPayedData(params);
+            jumpEdit(values){
+                let params={
+                    orderId:values.row.id
+                }
+                this.$http.get('order-first-payed', params).then((response)=>{
+                    utils.addParams({mask:''});
+                    let type = '';
+                    switch (values.row.orderType){
+                        case 'IN':
+                            type = 'join';
+                            break;
+                        case 'INCREASE':
+                            type = 'join';
+                            break;
+                        case 'CONTINUE':
+                            type = 'renew';
+                            break;
+                        default:
+                            type = 'join';
+                            break;
+                    }
+                    var a = document.createElement('a');
+                    a.setAttribute('href', `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`);
+                    a.setAttribute('target', '_blank');
+                    a.click();
+                 }).catch((error)=>{
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
             },
 
             showNullify(params){

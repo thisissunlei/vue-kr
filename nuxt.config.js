@@ -27,12 +27,11 @@ module.exports = {
 
   plugins: [
     { src: '~plugins/iview', ssr: true },
-    { src: '~plugins/vue-pdf', ssr: false }
   ],
   css: ['~assets/css/main.css'],
   loading: { color: '#000000' },
   build: {
-    vendor: ['iview', 'vue-pdf'],
+    vendor: ['iview'],
     publicPath: '/',
     extend(webpackConfig, { isDev, isClient, isServer }) {
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');

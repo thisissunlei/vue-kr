@@ -88,7 +88,7 @@ export default {
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {  
-         this.isLoading = false; 
+         
           this.fileId = r.data.fileId || '';
           this.getPdfUrl(r.data.fileId||'');
       },e  => {
@@ -104,7 +104,7 @@ export default {
         this.isLoading = true;
           setTimeout(() => {
             this.getPdfId();
-          }, 500);
+          }, 1000);
       })
     },
 

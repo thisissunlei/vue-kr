@@ -536,7 +536,9 @@
                     this.downLoadPdf(r.data);
                     this.showDown();
                 }, e => {
-                    this.$Message.info(e);
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
                 })
             },
             //下载接口调用
@@ -548,9 +550,10 @@
                     utils.downFile(response.data,'hetong.pdf')
                    
                 }, (error) => {
-                    this.$Notice.error({
-                        title:error.message
-                    });
+                    console.log(error,"?????")
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn="已合同生效！";
                 })   
             },
             

@@ -19,7 +19,7 @@
 
 
 <script>
-
+import {PDFJS}from'pdfjs-dist';
  export default {
   props: {
     pdfurl:String,

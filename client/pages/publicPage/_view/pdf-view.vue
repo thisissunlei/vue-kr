@@ -22,7 +22,7 @@
         </div>
 
         <div slot="footer">
-            <Button type="primary" @click="downLoad">确定</Button>
+            <Button type="primary" @click="downLoadBtn">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="downSwitch">取消</Button>
         </div>
 
@@ -38,18 +38,26 @@
       </div>
     </div>
     <Loading v-if="isLoading" />
+     <Message 
+          :type="MessageType" 
+          :openMessage="openMessage"
+          :warn="warn"
+          @changeOpen="onMessageChange"
+      />
     
  </div>
 </template>
 
 <script>
 import utils from '~/plugins/utils';
-import Loading from '~/components/Loading'
-import KrPdf from '~/components/KrPdf'
+import Loading from '~/components/Loading';
+import KrPdf from '~/components/KrPdf';
+import Message from '~/components/Message';
 export default {
   components:{
     Loading,
-    KrPdf
+    KrPdf,
+    Message
   },
   data(){
     return {
@@ -61,7 +69,11 @@ export default {
       page:1,
       openPage:false,
       newWin:'',
-      isLoading:false
+      isLoading:false,
+      MessageType:'error',
+      openMessage:false,
+      warn:'',
+      time : new Date()
     }
   },
   mounted:function(){
@@ -71,7 +83,7 @@ export default {
     this.getPdfId();
   },
   methods:{
-    
+   
     getPdfId(){
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
@@ -79,7 +91,16 @@ export default {
          this.isLoading = false; 
           this.fileId = r.data.fileId || '';
           this.getPdfUrl(r.data.fileId||'');
-      }, e => {
+      },e  => {
+
+        var newTime=new Date();
+        var difference = newTime.getTime() - this.time.getTime();
+        if(difference>30*1000){
+          this.openMessage=true;
+          this.warn=e.message;
+          this.isLoading = false;
+          return;
+        }
         this.isLoading = true;
           setTimeout(() => {
             this.getPdfId();
@@ -130,7 +151,7 @@ export default {
       })
     },
 
-    downLoad(){
+    downLoadBtn(){
       this.config();
       var parameter = utils.getRequest()
       if(this.isCachet){
@@ -142,7 +163,7 @@ export default {
       this.$http.get('get-station-contract-pdf-id',parameter, r => {    
         if(!r.data.fileId){
           this.$Notice.error({
-            title:error.message||"后台出错请联系管理员"
+            title:"后台出错请联系管理员"
           });
           return;
         }
@@ -165,7 +186,9 @@ export default {
           });
         })   
     },
-
+    onMessageChange(data){
+        this.openMessage=data;
+    },
     downSwitch(){
       this.openDown = !this.openDown;
     }

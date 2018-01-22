@@ -21,6 +21,9 @@
             <LabelText label="服务尾日：">
 				{{detailData.lastDay| dateFormat('YYYY-MM-dd')}}
 			</LabelText>
+			 <LabelText label="离场日期：">
+				{{detailData.leaveDate| dateFormat('YYYY-MM-dd')}}
+			</LabelText>
          </DetailStyle>
 	</div>
 </div>	

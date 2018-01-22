@@ -4698,6 +4698,13 @@ pdfjs-dist@^2.0.250:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"
 
+pdfjs-dist@^2.0.281:
+  version "2.0.281"
+  resolved "http://registry.npm.taobao.org/pdfjs-dist/download/pdfjs-dist-2.0.281.tgz#9a196829b51ae4d92996750beaae77d2019aa5b2"
+  dependencies:
+    node-ensure "^0.0.0"
+    worker-loader "^1.1.0"
+
 performance-now@^0.2.0:
   version "0.2.0"
   resolved "http://registry.npm.taobao.org/performance-now/download/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"

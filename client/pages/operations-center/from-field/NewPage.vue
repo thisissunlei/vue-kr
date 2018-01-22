@@ -42,7 +42,7 @@
             <DatePicker 
                 v-model="validate.leaveDate"
                 type="date" 
-                placeholder="请选择尾款日期" 
+                placeholder="请选择离场日期" 
                 style="width: 252px"
             />
             
@@ -77,7 +77,7 @@
                         { required: true, message: '客户名称为必填项'}
                     ],
                     leaveDate:[
-                        { required: true, message: '尾款日期为必填项'}
+                        { required: true, message: '离场日期为必填项'}
                         
                     ]
                 },

@@ -354,7 +354,7 @@
                      this.warn=error.message;
                  })
             },
-            
+
             onPageChange (index) {
                 let params=this.params;
                 params.page=index;
@@ -394,24 +394,35 @@
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
             },
 
-            jumpEdit(params){
-                utils.addParams({mask:''});
-                let type = '';
-                switch (params.row.orderType){
-                    case 'IN':
-                        type = 'join';
-                        break;
-                    case 'INCREASE':
-                        type = 'join';
-                        break;
-                    case 'CONTINUE':
-                        type = 'renew';
-                        break;
-                    default:
-                        type = 'join';
-                        break;
+            jumpEdit(values){
+                var popup = window.open();
+                let params={
+                    orderId:values.row.id
                 }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${type}`,'_blank')
+                this.$http.get('order-first-payed', params).then((response)=>{
+                    utils.addParams({mask:''});
+                    let type = '';
+                    switch (values.row.orderType){
+                        case 'IN':
+                            type = 'join';
+                            break;
+                        case 'INCREASE':
+                            type = 'join';
+                            break;
+                        case 'CONTINUE':
+                            type = 'renew';
+                            break;
+                        default:
+                            type = 'join';
+                            break;
+                    }
+                    popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
+                 }).catch((error)=>{
+                     popup.close();
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
             },
 
             showNullify(params){

@@ -425,9 +425,7 @@ import utils from '~/plugins/utils';
                     }, e => {
                         _this.$Notice.error({
                         title:e.message
-                    })
-
-                        console.log('error',e)
+                      })
                     })
                 }
             },
@@ -457,8 +455,10 @@ import utils from '~/plugins/utils';
                  this.$http.get('get-reduce-station', paramsForm, r => {
                     _this.stationList = r.data;
                 }, e => {
-
-                    console.log('error',e)
+                    _this.stationList=[];
+                    _this.$Notice.error({
+                        title:e.message
+                    })
                 })
 
             },

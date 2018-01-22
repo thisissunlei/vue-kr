@@ -4691,13 +4691,6 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfjs-dist@^2.0.250:
-  version "2.0.252"
-  resolved "http://registry.npm.taobao.org/pdfjs-dist/download/pdfjs-dist-2.0.252.tgz#9f2cadca412897ba3c375464e293038c772ba743"
-  dependencies:
-    node-ensure "^0.0.0"
-    worker-loader "^1.1.0"
-
 pdfjs-dist@^2.0.281:
   version "2.0.281"
   resolved "http://registry.npm.taobao.org/pdfjs-dist/download/pdfjs-dist-2.0.281.tgz#9a196829b51ae4d92996750beaae77d2019aa5b2"
@@ -6775,17 +6768,6 @@ vue-meta@^1.4.2:
     lodash.isplainobject "^4.0.6"
     object-assign "^4.1.1"
 
-vue-pdf@3.1.0:
-  version "3.1.0"
-  resolved "http://registry.npm.taobao.org/vue-pdf/download/vue-pdf-3.1.0.tgz#aa13273c001195361ceb44364450167c02b4fd28"
-  dependencies:
-    pdfjs-dist "^2.0.250"
-    vue-resize-sensor "^2.0.0"
-
-vue-resize-sensor@^2.0.0:
-  version "2.0.0"
-  resolved "http://registry.npm.taobao.org/vue-resize-sensor/download/vue-resize-sensor-2.0.0.tgz#3a587fd6802e1688709cf2c5aadae7a0075952bf"
-
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
@@ -6823,6 +6805,13 @@ vue-style-loader@^3.0.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
+vue-template-compiler@2.3.4:
+  version "2.3.4"
+  resolved "http://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.3.4.tgz#5a88ac2c5e4d5d6218e6aa80e7e221fb7e67894c"
+  dependencies:
+    de-indent "^1.0.2"
+    he "^1.1.0"
+
 vue-template-compiler@^2.5.13:
   version "2.5.13"
   resolved "http://registry.npm.taobao.org/vue-template-compiler/download/vue-template-compiler-2.5.13.tgz#12a2aa0ecd6158ac5e5f14d294b0993f399c3d38"
@@ -6833,6 +6822,10 @@ vue-template-compiler@^2.5.13:
 vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
+
+vue@2.3.4:
+  version "2.3.4"
+  resolved "http://registry.npm.taobao.org/vue/download/vue-2.3.4.tgz#5ec3b87a191da8090bbef56b7cfabd4158038171"
 
 vue@^2.5.13:
   version "2.5.13"

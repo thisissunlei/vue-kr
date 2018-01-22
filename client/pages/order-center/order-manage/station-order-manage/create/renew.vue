@@ -298,15 +298,29 @@ import utils from '~/plugins/utils';
                         title: '标准单价（元/月）',
                         key: 'guidePrice',
                         render: (h, params) => {
-                            return h('InputNumber', {
+                            let price = 0;
+                            return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
                                         value:params.row.originalPrice,
                                     },
                                     on:{
-                                        'on-change':(e)=>{
-                                            this.changePrice(params.index,e)
+                                        'on-change':(event)=>{
+                                            let e = event.target.value;
+                                            if(isNaN(e)){
+                                                e = params.row.guidePrice
+                                            }
+                                            price = e;
                                         },
+                                        'on-blur':()=>{
+                                            if(price<params.row.guidePrice){
+                                                price = params.row.guidePrice
+                                                this.$Notice.error({
+                                                    title:'单价不得小于'+params.row.guidePrice
+                                                })
+                                            }
+                                            this.changePrice(params.index,price)
+                                        }
                                     }
                                 },'44')
                         }

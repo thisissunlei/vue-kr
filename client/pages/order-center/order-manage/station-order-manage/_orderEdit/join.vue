@@ -504,16 +504,8 @@ import utils from '~/plugins/utils';
                 this.price = ''
             },
             changePrice(index,e){
-                let _this = this;
-                if(!!this.change['time'+index]){
-                    clearTimeout(this.change['time'+index])
-                }
-                    this.change['time'+index] = setTimeout(function(){
-                        _this.stationList[index].originalPrice = e;
-                        _this.getStationAmount()
-                    },1000)
-                
-                
+                this.stationList[index].originalPrice = e;
+                this.getStationAmount()
             },
 
              getDetailData(){

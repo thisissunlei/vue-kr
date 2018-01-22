@@ -483,7 +483,6 @@ import utils from '~/plugins/utils';
                 let stationVos = this.stationList;
                 //选中的工位
                 let selectedStation = this.selectedStation;
-                console.log('====>',selectedStation)
                 if(!selectedStation.length){
                      this.$Notice.error({
                         title:'请先选择录入单价的工位'
@@ -494,6 +493,8 @@ import utils from '~/plugins/utils';
             },
             cancelPrice(){
                 this.openPrice = !this.openPrice;
+                this.priceError = false;
+                this.price = ''
             },
             changePrice(index,e){
                 let _this = this;
@@ -658,7 +659,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
-                    // _this.formItem.items = list;
+                    _this.stationList = r.data.seats;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -1204,7 +1205,7 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.price;
+                    obj.guidePrice = item.guidePrice || item.price;
                     obj.originalPrice = item.originalPrice || item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
@@ -1224,7 +1225,7 @@ import utils from '~/plugins/utils';
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             //TODO 周一联调删除
-                            obj.guidePrice = obj.originalPrice;
+                            obj.guidePrice = item.guidePrice;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
@@ -1232,6 +1233,7 @@ import utils from '~/plugins/utils';
                         _this.formItem.rentAmount =  r.data.totalrent;
                         _this.formItem.stationAmount = r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+                        _this.selectedStation = []
                         if(_this.showSaleDiv){
                             _this.dealSaleInfo(false)
                         }

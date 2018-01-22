@@ -41,7 +41,8 @@
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
+                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
                 
                 </Row>
@@ -177,6 +178,24 @@
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
+    </Modal>
+    <Modal
+        v-model="openPrice"
+        title="填写单价"
+        ok-text="保存"
+        cancel-text="取消"
+         class-name="vertical-center-modal"
+     >  
+        <div v-if="openPrice">
+            <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+            <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+            <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
+                
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="submitPrice">确定</Button>
+            <Button  @click="cancelPrice">取消</Button>
         </div>
     </Modal>
     </div>
@@ -326,7 +345,10 @@ import utils from '~/plugins/utils';
                 orderSeatId:'',
                 corporationName:'',
                 change:{},
-                showSaleDiv:true
+                showSaleDiv:true,
+                openPrice:false,
+                price:'',
+                priceError:false,
 
            }
         },
@@ -359,6 +381,59 @@ import utils from '~/plugins/utils';
             },
         },
         methods: {
+            submitPrice(){
+                let price = false;
+                let _this = this;
+                let stationVos = this.selecedStation;
+                // 选中的工位selectedDel
+                let selectedStation = this.selectedDel;
+                stationVos = stationVos.filter(function(item, index) {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        return true;
+                    }
+                return false;
+                });
+                stationVos.map((item)=>{
+                    if(item.guidePrice>this.price){
+                        price = '工位单价不得小于'+item.guidePrice;
+                    }
+                })
+                if(price){
+                    this.priceError = price;
+                }else{
+                    this.priceError = false;
+                    this.openPrice = !this.openPrice;
+                    this.selecedArr = this.selecedArr.map((item)=>{
+                        if (selectedStation.indexOf(item.seatId) != -1) {
+                            item.originalPrice = Number(_this.price);
+                        }
+                        
+                        return item
+                    })
+                    this.selectedDel = [];
+                    this.getStationAmount()
+                }
+
+
+
+            },
+            openPriceButton(){
+                
+                let stationVos = this.selecedStation;
+                //选中的工位
+                let selectedStation = this.selectedDel;
+                console.log('====>',selectedStation)
+                if(!selectedStation.length){
+                     this.$Notice.error({
+                        title:'请先选择录入单价的工位'
+                    })
+                     return;
+                }
+                this.openPrice = !this.openPrice;
+            },
+            cancelPrice(){
+                this.openPrice = !this.openPrice;
+            },
             changePrice(index,e){
                 let _this = this;
                 if(!!this.change['time'+index]){

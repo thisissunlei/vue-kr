@@ -487,6 +487,8 @@ import utils from '~/plugins/utils';
             },
             cancelPrice(){
                 this.openPrice = !this.openPrice;
+                this.priceError = false;
+                this.price = ''
             },
             changePrice(index,e){
                 let _this = this;
@@ -1283,11 +1285,12 @@ import utils from '~/plugins/utils';
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
                             //TODO 
-                            obj.guidePrice = item.price;
+                            obj.guidePrice = item.guidePrice || 1800;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
+                        _this.selectedStation = []
                         _this.formItem.rentAmount =  r.data.totalrent
                         _this.formItem.stationAmount =r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)

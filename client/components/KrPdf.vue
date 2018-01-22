@@ -19,7 +19,8 @@
 
 
 <script>
-import {PDFJS}from'pdfjs-dist';
+// import {PDFJS}from'pdfjs-dist';
+// import {addEvent} from '~/plugins/utils';
  export default {
   props: {
     pdfurl:String,
@@ -132,13 +133,16 @@ import {PDFJS}from'pdfjs-dist';
   },
   mounted() {
       let vm = this
-      PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
+      PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_,demo) { //初始化pdf
+      console.log(pdfDoc_,"ooooooo",demo)
       vm.pdfDoc = pdfDoc_;
       vm.page_count = vm.pdfDoc.numPages
       
       for(let i=1;i<=vm.page_count;i++){
         vm.renderPage(i);
       }
+      // addEvent()
+      
     });
 
   }
@@ -168,7 +172,7 @@ import {PDFJS}from'pdfjs-dist';
     // margin-top:20px;
     overflow:auto;
     width: 100%;
-  
+    
     // box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   }
  }

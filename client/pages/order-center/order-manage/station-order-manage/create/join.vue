@@ -59,13 +59,14 @@
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
                 
                 </Row>
                 <Row style="margin-bottom:10px">
                     <Col sapn="24">
-                    <Table border ref="selection" :columns="columns4" :data="stationList" @on-selection-change="selectRow"></Table>
+                    <Table border ref="selection" :columns="columns4" :data.sync="stationList" @on-selection-change="selectRow"></Table>
                     <div class="total-money" v-if="stationList.length">
                         <span>服务费总计</span>
                         <span class="money">{{formItem.stationAmount | thousand}} </span>
@@ -81,6 +82,7 @@
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="handleAdd">添加</Button>
                     <Button type="ghost" style="font-size:14px" @click="deleteDiscount">删除</Button>
+                     
                     <span class="pay-error" v-show="discountError">{{discountError}}</span>
                 </Col>
 
@@ -135,7 +137,7 @@
         </FormItem>
             <Row style="margin-bottom:10px">
                 <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length">
+                    <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
@@ -194,6 +196,25 @@
         <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
+        </div>
+    </Modal>
+
+    <Modal
+        v-model="openPrice"
+        title="填写单价"
+        ok-text="保存"
+        cancel-text="取消"
+         class-name="vertical-center-modal"
+     >  
+        <div v-if="openPrice">
+            <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+            <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+            <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
+                
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="submitPrice">确定</Button>
+            <Button  @click="cancelPrice">取消</Button>
         </div>
     </Modal>
 
@@ -281,7 +302,34 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'guidePrice',
+                        render: (h, params) => {
+                            let price = 0;
+                            return h('Input', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(event)=>{
+                                            let e = event.target.value;
+                                            if(isNaN(e)){
+                                                e = params.row.guidePrice
+                                            }
+                                            price = e;
+                                        },
+                                        'on-blur':()=>{
+                                            if(price<params.row.guidePrice){
+                                                price = params.row.guidePrice
+                                                this.$Notice.error({
+                                                    title:'单价不得小于'+params.row.guidePrice
+                                                })
+                                            }
+                                            this.changePrice(params.index,price)
+                                        }
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -352,6 +400,13 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 discount:0,
                 minDiscount:'',
+                change:{},
+                showSaleDiv:true,
+                openPrice:false,
+                price:'',
+                priceError:false,
+                //录入单价的数组
+                priceToStation:[]
 
             }
         },
@@ -401,6 +456,74 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            submitPrice(){
+                let price = false;
+                let _this = this;
+                let stationVos = this.stationList;
+                // 选中的工位
+                let selectedStation = this.selectedStation;
+                stationVos = stationVos.filter(function(item, index) {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        return true;
+                    }
+                return false;
+                });
+                stationVos.map((item)=>{
+                    if(item.guidePrice>this.price){
+                        price = '工位单价不得小于'+item.guidePrice;
+                    }
+                })
+                if(price){
+                    this.priceError = price;
+                }else{
+                    this.priceError = false;
+                    this.openPrice = !this.openPrice;
+                    this.stationList = this.stationList.map((item)=>{
+                        if (selectedStation.indexOf(item.seatId) != -1) {
+                            item.originalPrice = Number(_this.price);
+                        }
+                        
+                        return item
+                    })
+                    this.selectedStation = [];
+                    this.getStationAmount()
+                }
+
+
+
+            },
+            openPriceButton(){
+                
+                let stationVos = this.stationList;
+                //选中的工位
+                let selectedStation = this.selectedStation;
+                if(!selectedStation.length){
+                     this.$Notice.error({
+                        title:'请先选择录入单价的工位'
+                    })
+                     return;
+                }
+                this.openPrice = !this.openPrice;
+            },
+            cancelPrice(){
+                this.openPrice = !this.openPrice;
+                this.priceError = false;
+                this.price = ''
+            },
+            changePrice(index,e,guidePrice){
+                let _this = this;
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                            _this.stationList[index].originalPrice = e;
+                            // _this.clearSale()
+                            _this.getStationAmount()
+                        
+                    },1000)
+                
+                
+            },
             config:function(){
                 this.$Notice.config({
                     top: 80,
@@ -517,6 +640,11 @@ import utils from '~/plugins/utils';
                 if(!zhekou && !show ){
                     return;
                 }
+                if(!saleList.length){
+                    this.showSaleDiv = false;
+                }else{
+                   this.showSaleDiv = true 
+                }
                 
                 saleList = saleList.map(item=>{
                     let obj =Object.assign({},item);
@@ -546,7 +674,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     _this.disabled = false;
                     _this.discountError = false;
-                    // _this.formItem.items = list;
+                    _this.stationList = r.data.seats;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
@@ -879,7 +1007,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:3162,
+                    mainBillId:null,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
@@ -898,6 +1026,7 @@ import utils from '~/plugins/utils';
             handleAdd () {
                 // 优惠信息的添加按钮
                 this.config()
+                this.showSaleDiv = true;
                 if(!this.stationList.length){
                     this.$Notice.error({
                         title:'请先选择工位'
@@ -927,9 +1056,15 @@ import utils from '~/plugins/utils';
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
                 this.getStationAmount()
-                this.openStation = false
+                this.openStation = false;
+                this.clearSale()
                 
 
+            },
+            clearSale(){
+                this.formItem.items= [];
+                this.saleAmounts = utils.smalltoBIG(0);
+                this.formItem.saleAmount = 0;
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
@@ -1085,7 +1220,8 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.price;
+                    obj.guidePrice = item.guidePrice || item.price;
+                    obj.originalPrice = item.originalPrice || item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
@@ -1103,6 +1239,8 @@ import utils from '~/plugins/utils';
                      this.$http.post('get-station-amount', params).then( r => {
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
+                            //TODO 周一联调删除
+                            obj.guidePrice = item.guidePrice;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
@@ -1110,6 +1248,10 @@ import utils from '~/plugins/utils';
                         _this.formItem.rentAmount =  r.data.totalrent;
                         _this.formItem.stationAmount = r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+                        _this.selectedStation = []
+                        if(_this.showSaleDiv){
+                            _this.dealSaleInfo(false)
+                        }
 
                     }).catch( e => {
                         _this.$Notice.error({

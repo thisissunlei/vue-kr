@@ -1,4 +1,5 @@
-import thousand from './thousand.js' 
+import thousand from './thousand' 
+import addEvent from './addEvent';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -16,7 +17,6 @@ import thousand from './thousand.js'
         }
 
         for (var i = 0; i < fraction.length; i++) {
-            console.log('===>',digit[xiaoshu[i]])
             if(digit[xiaoshu[i]]){
                 s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
 
@@ -110,8 +110,9 @@ import thousand from './thousand.js'
           }   
           return  array1
     }
+
+    //文件下载的流式下载
     function downFile(href, filename) {
-        console.log(filename, "PPPPPP", href)
         var a = document.createElement('a');
         a.href = href;
         a.download = filename;
@@ -127,7 +128,8 @@ import thousand from './thousand.js'
     arrayNoRepeat,
     arrayCompare,
     thousand,
-    downFile
+    downFile,
+    addEvent
    }
 
 

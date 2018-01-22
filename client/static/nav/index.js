@@ -13,8 +13,6 @@
      }
      function getRouter() {
          var router = location.href.split('?')[0];
-        //  var portReg = new RegExp(/:\d+/,'g');
-        //  router = router.replace(portReg,'');
          return router;
      }
     function setHref(type, router) {
@@ -153,7 +151,6 @@
      //侧边栏
      GlobalNav.prototype.getCreateSidebarHtmlStr = function () {
          var sidebarNavs = Object.assign({},navUtils.activeData);
-         console.log(sidebarNavs,"------0000-----")
          var html = '';
          var router = getRouter();
          if (!sidebarNavs) {

@@ -60,7 +60,8 @@
                 <Row style="margin-bottom:10px">  
                 <Col class="col">
                     <Button type="primary" style="margin-right:20px;font-size:14px" @click="showStation">选择工位</Button>
-                    <Button type="ghost" style="font-size:14px" @click="deleteStation">删除</Button>
+                    <Button type="ghost" style="margin-right:20px;font-size:14px" @click="deleteStation">删除</Button>
+                     <Button type="primary" style="font-size:14px" @click="openPriceButton">录入单价</Button>
                 </Col>
                 
                 </Row>
@@ -137,7 +138,7 @@
         </FormItem>
         <Row style="margin-bottom:10px">
                 <Col sapn="24">
-                    <div class="total-money" v-if="formItem.items.length">
+                    <div class="total-money" v-if="formItem.items.length && showSaleDiv">
                         <span>优惠金额总计</span>
                         <span class="money">{{saleAmount | thousand}} </span>
                         <span class="money">{{saleAmounts}}</span>
@@ -197,6 +198,24 @@
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelStation">取消</Button>
+        </div>
+    </Modal>
+    <Modal
+        v-model="openPrice"
+        title="填写单价"
+        ok-text="保存"
+        cancel-text="取消"
+         class-name="vertical-center-modal"
+     >  
+        <div v-if="openPrice">
+            <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+            <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+            <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
+                
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="submitPrice">确定</Button>
+            <Button  @click="cancelPrice">取消</Button>
         </div>
     </Modal>
 
@@ -290,7 +309,34 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '标准单价（元/月）',
-                        key: 'originalPrice'
+                        key: 'originalPrice',
+                        render: (h, params) => {
+                            let price = 0;
+                            return h('Input', {
+                                    props: {
+                                        min:params.row.guidePrice,
+                                        value:params.row.originalPrice,
+                                    },
+                                    on:{
+                                        'on-change':(event)=>{
+                                            let e = event.target.value;
+                                            if(isNaN(e)){
+                                                e = params.row.guidePrice
+                                            }
+                                            price = e;
+                                        },
+                                        'on-blur':()=>{
+                                            if(price<params.row.guidePrice){
+                                                price = params.row.guidePrice
+                                                this.$Notice.error({
+                                                    title:'单价不得小于'+params.row.guidePrice
+                                                })
+                                            }
+                                            this.changePrice(params.index,price)
+                                        }
+                                    }
+                                },'44')
+                        }
                     },
                     {
                         title: '租赁期限',
@@ -355,7 +401,12 @@ import utils from '~/plugins/utils';
                 ssoName:'',
                 changeSale:+new Date(),
                 originStationList:[],
-                orderType:''
+                orderType:'',
+                change:{},
+                showSaleDiv:true,
+                openPrice:false,
+                price:'',
+                priceError:false,
             }
         },
         head() {
@@ -397,6 +448,73 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            submitPrice(){
+                let price = false;
+                let _this = this;
+                let stationVos = this.stationList;
+                // 选中的工位
+                let selectedStation = this.selectedStation;
+                stationVos = stationVos.filter(function(item, index) {
+                    if (selectedStation.indexOf(item.seatId) != -1) {
+                        return true;
+                    }
+                return false;
+                });
+                stationVos.map((item)=>{
+                    if(item.guidePrice>this.price){
+                        price = '工位单价不得小于'+item.guidePrice;
+                    }
+                })
+                if(price){
+                    this.priceError = price;
+                }else{
+                    this.priceError = false;
+                    this.openPrice = !this.openPrice;
+                    this.stationList = this.stationList.map((item)=>{
+                        if (selectedStation.indexOf(item.seatId) != -1) {
+                            item.originalPrice = Number(_this.price);
+                        }
+                        
+                        return item
+                    })
+                    this.selectedStation = [];
+                    this.getStationAmount()
+                }
+
+
+
+            },
+            openPriceButton(){
+                
+                let stationVos = this.stationList;
+                //选中的工位
+                let selectedStation = this.selectedStation;
+                console.log('====>',selectedStation)
+                if(!selectedStation.length){
+                     this.$Notice.error({
+                        title:'请先选择录入单价的工位'
+                    })
+                     return;
+                }
+                this.openPrice = !this.openPrice;
+            },
+            cancelPrice(){
+                this.openPrice = !this.openPrice;
+                this.priceError = false;
+                this.price = ''
+            },
+            changePrice(index,e){
+                let _this = this;
+                if(!!this.change['time'+index]){
+                    clearTimeout(this.change['time'+index])
+                }
+                    this.change['time'+index] = setTimeout(function(){
+                        _this.stationList[index].originalPrice = e;
+                        _this.getStationAmount()
+                    },1000)
+                
+                
+            },
 
              getDetailData(){
                 let _this = this;
@@ -409,6 +527,7 @@ import utils from '~/plugins/utils';
                     _this.orderType = data.orderType=='INCREASE'?'增租':'入驻';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
+                        obj.guidePrice = item.guidePrice || item.originalPrice;
                         obj.belongType = item.seatType;
                         obj.id = item.seatId;
                         obj.name = item.seatName;
@@ -437,8 +556,10 @@ import utils from '~/plugins/utils';
                     _this.selectDeposit(data.deposit)
                     _this.selectPayType(data.installmentType);
                     _this.saleAmount = data.tactiscAmount;
+                    _this.stationAmount =  utils.smalltoBIG(data.seatRentAmount);
+                    _this.formItem.stationAmount = data.seatRentAmount;
                     _this.saleAmounts = utils.smalltoBIG(data.tactiscAmount);
-                      _this.getStationAmount()
+                    _this.formItem.rentAmount = data.rentAmount;
 
                     setTimeout(function(){
                       
@@ -463,7 +584,6 @@ import utils from '~/plugins/utils';
                         })
 
                         _this.formItem.items = data.contractTactics;
-                        _this.dealSaleInfo(true)
                     },700)
                     _this.getFloor = +new Date()
                     
@@ -562,6 +682,11 @@ import utils from '~/plugins/utils';
                         zhekou = this.dealzhekou(item.discount || this.discount)
                     }
                 });
+                if(saleList.length){
+                    this.showSaleDiv = true
+                }else{
+                    this.showSaleDiv = false;
+                }
                 // this.saleAmount = 0;
                 // this.saleAmounts = utils.smalltoBIG(0)
                 if(!complete && show){
@@ -912,7 +1037,6 @@ import utils from '~/plugins/utils';
             showStation:function(){
                 // 选择工位的按钮
                 this.config()
-                console.log('originStationList----',this.originStationList)
 
                 if(!this.formItem.communityId){
                     this.$Notice.error({
@@ -938,7 +1062,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:3162,
+                    mainBillId:this.$route.params.orderEdit,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
@@ -964,6 +1088,7 @@ import utils from '~/plugins/utils';
                     return;
                 }
                 this.index++;
+                this.showSaleDiv = true;
                 this.formItem.items.push({
                     value: '',
                     index: this.index,
@@ -988,7 +1113,13 @@ import utils from '~/plugins/utils';
                  console.log('submitStation',this.stationData)
                 this.getStationAmount()
                 this.openStation = false
+                this.clearSale()
 
+            },
+            clearSale(){
+                this.formItem.items = [];
+                this.formItem.saleAmount = 0;
+                this.saleAmounts = utils.smalltoBIG(0)
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 this.stationData = val;
@@ -1166,14 +1297,20 @@ import utils from '~/plugins/utils';
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
-                            // money += item.originalAmount;
+                            //TODO 
+                            obj.guidePrice = item.guidePrice || 1800;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                             return obj;
                         });
+                        _this.selectedStation = []
                         _this.formItem.rentAmount =  r.data.totalrent
                         _this.formItem.stationAmount =r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
+                        if(_this.showSaleDiv){
+                            _this.dealSaleInfo(false)
+                        }
+
 
                     }, e => {
                         _this.$Notice.error({

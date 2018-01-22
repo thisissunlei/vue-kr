@@ -1007,7 +1007,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:3162,
+                    mainBillId:null,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))

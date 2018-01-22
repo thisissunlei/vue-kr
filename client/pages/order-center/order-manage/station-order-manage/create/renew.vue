@@ -935,7 +935,7 @@ import utils from '~/plugins/utils';
                
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.guidePrice || item.originalPrice;
+                    obj.guidePrice = item.guidePrice || 0;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
@@ -959,7 +959,7 @@ import utils from '~/plugins/utils';
                             let obj = item;
                             money+=item.amount;
                             //TODO
-                            obj.guidePrice = item.guidePrice || 2000;
+                            obj.guidePrice = item.guidePrice || 0;
                             obj.start = item.startDate
                             obj.end = item.endDate
                             return obj;

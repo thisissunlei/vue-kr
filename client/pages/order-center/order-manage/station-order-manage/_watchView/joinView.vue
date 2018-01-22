@@ -16,21 +16,21 @@
 					{{basicInfo.salerName}}
 				</LabelText>
 				<LabelText label="创建时间：">
-					{{ctime}}
+					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="租赁信息">
 				<LabelText label="租赁开始日期：">
-					{{startDate}}
+					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="租赁结束日期：">
-					{{endDate}}
+					{{basicInfo.endDate| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="分期方式：">
 					{{basicInfo.installmentTypeName}}
 				</LabelText>
 				<LabelText label="首付款日期：">
-					{{payDate}}
+					{{basicInfo.firstPayTime| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="金额信息">
@@ -82,10 +82,6 @@ export default {
 			basicInfo:{},
 			capitalService:'',
 			capitalTreatment:'',
-			ctime:'',
-			startDate:'',
-			endDate:'',
-			payDate:'',
 
 			service:[
 				{
@@ -200,10 +196,6 @@ export default {
 					this.basicInfo=response.data;
 					
 					
-					this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
-					this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
-					this.endDate=response.data.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.endDate)):'';
-					this.payDate=response.data.firstPayTime?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.firstPayTime)):'';
 					this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
 					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					this.serviceData=response.data.orderSeatDetailVo||[];

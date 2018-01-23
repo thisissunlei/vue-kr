@@ -304,7 +304,7 @@ import utils from '~/plugins/utils';
                         title: '标准单价（元/月）',
                         key: 'guidePrice',
                         render: (h, params) => {
-                            let price = 0;
+                            let price = params.row.originalPrice;
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
@@ -1210,7 +1210,7 @@ import utils from '~/plugins/utils';
                 let val = this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.guidePrice || item.price;
+                    obj.guidePrice = item.guidePrice || 0;
                     obj.originalPrice = item.originalPrice || item.price;
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;

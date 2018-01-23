@@ -294,7 +294,7 @@ import utils from '~/plugins/utils';
                         title: '标准单价（元/月）',
                         key: 'originalPrice',
                         render: (h, params) => {
-                            let price = 0;
+                            let price = params.row.originalPrice;
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
@@ -464,7 +464,7 @@ import utils from '~/plugins/utils';
                     data.orderSeatDetailVo = data.orderSeatDetailVo.map(item=>{
                         let obj = item;
                         money += item.amount;
-                        obj.guidePrice = item.guidePrice || item.price;
+                        obj.guidePrice = item.guidePrice || 0;
                         obj.name = item.seatName;
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));
                         obj.start = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(item.startDate));

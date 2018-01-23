@@ -15,6 +15,7 @@ export default  {
       url: '/api/krspace-finance-web/csr/checklist/info/type/edit?',
       method: 'get'
   },
+  
   // 提交编辑数据
   'post-edit-settlement-detail':{
       url: '/api/krspace-finance-web/csr/checklist/edit?',

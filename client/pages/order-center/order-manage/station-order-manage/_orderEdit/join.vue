@@ -742,11 +742,19 @@ import utils from '~/plugins/utils';
 
             },
             changezhekou(val){
-                console.log('====1',val)
                 val = val.target.value;
-                console.log('====2',val)
                 if(!val){
                     return
+                }
+                val = val.replace(/\s/g,'');
+                if(!(/^(\d|[0-9])(\.\d)?$/.test(val)) ){
+                    this.discountError = '折扣只能为一位小数或整数';
+                    this.disabled = true;
+
+                    this.$Notice.error({
+                        title:'折扣只能为一位小数或整数'
+                    })
+                    return;
                 }
                 if(isNaN(val)){
                     this.discountError = '折扣必须是数字';

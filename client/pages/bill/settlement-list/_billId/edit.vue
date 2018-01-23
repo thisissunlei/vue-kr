@@ -125,7 +125,7 @@ export default {
 			checklistId:params.billId
 		};
 		var _this=this;
-	     this.$http.get('get-settlement-detail', from, r => {
+	     this.$http.get('get-edit-settlement-detail', from, r => {
 				   _this.basicInfo=r.data;
 
 				   _this.formItem.details = r.data.details.map((item)=>{

@@ -91,6 +91,7 @@ export default {
          
           this.fileId = r.data.fileId || '';
           this.getPdfUrl(r.data.fileId||'');
+          this.isLoading = false;
       },e  => {
 
         var newTime=new Date();

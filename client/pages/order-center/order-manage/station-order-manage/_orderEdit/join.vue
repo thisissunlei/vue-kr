@@ -504,16 +504,8 @@ import utils from '~/plugins/utils';
                 this.price = ''
             },
             changePrice(index,e){
-                let _this = this;
-                if(!!this.change['time'+index]){
-                    clearTimeout(this.change['time'+index])
-                }
-                    this.change['time'+index] = setTimeout(function(){
-                        _this.stationList[index].originalPrice = e;
-                        _this.getStationAmount()
-                    },1000)
-                
-                
+                this.stationList[index].originalPrice = e;
+                this.getStationAmount()
             },
 
              getDetailData(){
@@ -1062,7 +1054,7 @@ import utils from '~/plugins/utils';
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:3162,
+                    mainBillId:this.$route.params.orderEdit,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))

@@ -16,13 +16,13 @@
 					{{basicInfo.operationName}}
 				</LabelText>
 				<LabelText label="操作时间：">
-					{{ctime}}
+					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 			</DetailStyle>
 
 			<DetailStyle info="减租信息">
 				<LabelText label="减租开始时间：">
-					{{startDate}}
+					{{basicInfo.startDate| dateFormat('YYYY-MM-dd')}}
 				</LabelText>
 				<LabelText label="减租服务费：">
 					{{basicInfo.rentAmount}}
@@ -75,8 +75,6 @@ export default {
 	data(){
 		return{
 			basicInfo:{},
-			ctime:'',
-			startDate:'',
 			reduceStation:[],
             contract:[
                {
@@ -114,8 +112,6 @@ export default {
 					this.basicInfo=response.data;
 
 
-					this.ctime=response.data.ctime?dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS',new Date(response.data.ctime)):'';
-					this.startDate=response.data.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(response.data.startDate)):'';
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
 							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';

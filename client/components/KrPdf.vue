@@ -134,14 +134,17 @@
   mounted() {
       let vm = this
       PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_,demo) { //初始化pdf
-      console.log(pdfDoc_,"ooooooo",demo)
-      vm.pdfDoc = pdfDoc_;
-      vm.page_count = vm.pdfDoc.numPages
-      
-      for(let i=1;i<=vm.page_count;i++){
-        vm.renderPage(i);
-      }
-      // addEvent()
+    
+        vm.pdfDoc = pdfDoc_;
+        vm.page_count = vm.pdfDoc.numPages
+        
+        for(let i=1;i<=vm.page_count;i++){
+          vm.renderPage(i);
+        }
+        // var node = document.querySelector('.cpdf');
+        // addEvent(node,"mousewheel",function () {
+        //   console.log("==============")
+        // })
       
     });
 

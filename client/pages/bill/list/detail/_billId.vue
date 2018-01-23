@@ -96,6 +96,9 @@
 			<LabelText label="账单日：">
 				{{basicInfo.billingDate}}
 			</LabelText>
+			<LabelText label="收款账号：">
+				{{basicInfo.bankAccount}}
+			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<div v-bind:class="[ISshow?showClass:hideClass]" >

@@ -219,11 +219,8 @@ import http from '~/plugins/http.js';
 							obj.type = obj.belongType;
 							obj.price = item.price;
 							obj.checked = false;
-							if (item.status) {
-								obj.status = item.status;
-							}
+							obj.status = item.status || 4;
 							for (let j = 0; j < originStationList.length; j++) {
-
 								let belongType = "STATION";
 								if (originStationList[j].belongType == 2 || originStationList[j].belongType == 'SPACE') {
 									belongType = "SPACE";
@@ -236,13 +233,14 @@ import http from '~/plugins/http.js';
 
 							}
 							for (let j = 0; j < selectedObjs.length; j++) {
-
 								let belongType = "STATION";
 								if (selectedObjs[j].belongType == 2 || selectedObjs[j].belongType == 'SPACE') {
 									belongType = "SPACE";
 								}
-								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
+								if (item.belongId == selectedObjs[j].id && item.belongType == belongType && item.status != 2) {
+									// 将工位标记为已选中
 									obj.checked = true;
+									//将status改为可选状态
 									obj.status = 3;
 
 								}

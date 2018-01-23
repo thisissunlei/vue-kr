@@ -298,7 +298,7 @@ import utils from '~/plugins/utils';
                         title: '标准单价（元/月）',
                         key: 'guidePrice',
                         render: (h, params) => {
-                            let price = 0;
+                            let price = params.row.originalPrice;
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,

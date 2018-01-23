@@ -162,8 +162,10 @@ var Map = function (elementId, configs) {
             '2': {
                 status: 'admit',
                 mark: '不可选工位',
-                textColor: '#666',
-                backgroundColor: '#eee',
+                textColor: '#fff',
+                backgroundColor: '#499df1',
+                // textColor: '#666',
+                // backgroundColor: '#eee',
             },
             '3':{
                 status: 'default',

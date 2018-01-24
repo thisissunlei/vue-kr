@@ -12,6 +12,7 @@
                         v-model="params.csrName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
+                        @keyup.enter.native="onKeyEnter($event)"
                     />
                 </div>
                 <div style="display:inline-block;color: #2b85e4;cursor: pointer;" @click="submitLowerSearch">搜索</div>
@@ -249,6 +250,10 @@
             onUpperChange(params,error){
                 this.upperError=error;
                 this.upperData=params;
+            },
+
+             onKeyEnter: function (ev) {
+                this.submitLowerSearch();
             },
 
             //输入框内容提交

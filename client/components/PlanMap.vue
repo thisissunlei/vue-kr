@@ -229,7 +229,6 @@ import http from '~/plugins/http.js';
 								if (item.belongId == originStationList[j].id && item.belongType == belongType && item.status != 2) {
 									obj.checked = false;
 									obj.status = 3;
-
 								}
 
 							}

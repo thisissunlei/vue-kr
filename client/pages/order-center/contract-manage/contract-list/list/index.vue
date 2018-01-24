@@ -9,7 +9,7 @@
                     v-model="params.customName" 
                     placeholder="请输入客户名称"
                     style="width: 252px"
-                   
+                    @keyup.enter.native="onKeyEnter($event)"
                 />
             </div>
             <div class='m-search' @click="submitLowerSearch">搜索</div>
@@ -416,6 +416,10 @@
                     top: 80,
                     duration: 3
                 });
+            },
+
+            onKeyEnter: function (ev) {
+                this.submitLowerSearch();
             },
 
             onWindowSize:function(){

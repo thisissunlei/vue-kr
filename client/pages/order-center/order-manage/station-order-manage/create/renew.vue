@@ -607,7 +607,11 @@ import utils from '~/plugins/utils';
                         let obj = {};
                         obj.name = dateUtils.dateToStr("YYYY-MM-dd",new Date(i));
 
-                        obj.value =  r.data[i];
+                        obj.value =  r.data[i].map(item=>{
+                            let obj = item;
+                            obj.oldPrice = item.originalPrice;
+                            return obj;
+                        });
                         station.push(obj)
                     }
                     _this.stationListData = station;
@@ -909,6 +913,11 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
+                this.selecedArr = this.selecedArr.map(item=>{
+                    let obj = item;
+                    obj.originalPrice = item.oldPrice;
+                    return obj;
+                })
                 var date = val[0].begin;
                 date = new Date(date).getTime();
                

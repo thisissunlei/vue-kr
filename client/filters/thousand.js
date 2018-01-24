@@ -3,7 +3,7 @@ export default function thousandSep (params) {
   if (params === null || params === undefined) {
     return null
   } else if (isNaN(params)) {
-    return 'NaN'
+    return '0'
   } else {
     let num = params.toString()
     if (/^-?\d+\.?\d+$/.test(num)) {

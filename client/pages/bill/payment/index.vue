@@ -395,12 +395,12 @@ export default {
             },
 
             lowerSubmit(){
-                let customerName=this.params.customerName;
+              
                 this.page=1;
                 this.params={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    customerName:this.params.customerName || ''
                 }
                 utils.addParams(this.params);
             },

@@ -130,7 +130,7 @@ import dateUtils from 'vue-dateutils';
                     },
                     {
                         label:'网银',
-                        value:'银行转账'
+                        value:'BANKONLINE'
                     },
                     {
                         label:'支付宝网银',

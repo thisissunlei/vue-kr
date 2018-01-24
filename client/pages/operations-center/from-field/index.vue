@@ -2,7 +2,9 @@
     <div class="from-field-list">
         <SectionTitle title = "撤场记录管理"/>
         <div style="padding:20px;padding-right:0;">
-            <Button type="primary" @click="showNewPage" class='join-btn'>新建撤场</Button>
+            <Buttons label="新建撤场" type="primary" @click="showNewPage" class='join-btn' checkAction='csr_withdrawal_save'/>
+
+           
             <div style="float:right;">
                 <div style='display:inline-block;margin:10px 20px;'>
                     <span style='padding-right:10px'>客户名称</span>
@@ -78,8 +80,9 @@
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
-    import HeightSearch from './HeightSearch'
-    import NewPage from './NewPage'
+    import HeightSearch from './HeightSearch';
+    import NewPage from './NewPage';
+    import Buttons from '~/components/Buttons';
     export default {
         components: {
             SectionTitle,
@@ -88,7 +91,7 @@
             Message,
             HeightSearch,
             NewPage,
-           
+            Buttons
         },
         head () {
             return {
@@ -153,10 +156,12 @@
                       
                         render:(h,params)=>{
                             var btnRender=[
-                               h('Button', {
+                               h(Buttons, {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        checkAction:'csr_withdrawal_show',
+                                        label:'查看',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -166,12 +171,14 @@
                                             this.jumpView(params)
                                         }
                                     }
-                                }, '查看')];
+                                })];
                             if(params.row.showButton){
-                                btnRender.push( h('Button', {
+                                btnRender.push( h(Buttons, {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        checkAction:'csr_withdrawal_invalid',
+                                        label:'作废',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -181,7 +188,7 @@
                                             this.onInvalid(params)
                                         }
                                     }
-                                }, '作废'));
+                                }));
                             }
                            return h('div',btnRender);  
                         }
@@ -337,7 +344,7 @@
        .m-bill-search{
             display:inline-block;
             height:22px;
-            margin:16px 20px;
+            margin:14px 20px;
             vertical-align: bottom;
             float: right;
             span{

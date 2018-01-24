@@ -740,13 +740,7 @@
                                  primaryText: '合同调整',
                                  router: 'operation/customerManage/agreementtrim',
                                  menuCode: 'contract_edit',
-                             },
-                             {
-                                 primaryText: '撤场记录管理',
-                                 type: 'vue',
-                                 router: 'operations-center/from-field',
-                                 menuCode: 'csr_withdrawal_list',
-                             },
+                             }
                          ]
                      },
 
@@ -1284,13 +1278,19 @@
                             primaryText: "工位订单列表",
                             router: 'order-center/order-manage/station-order-manage',
                             type:'vue',
-                            menuCode: 'order_seat_list',
+                            menuCode: 'seat_order_list',
                         },
                         {
                             primaryText: "通用订单列表",
                             router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
-                            menuCode: 'order_seat_list',
+                            menuCode: 'seat_order_list',
+                        },
+                        {
+                            primaryText: '撤场记录管理',
+                            type: 'vue',
+                            router: 'operations-center/from-field',
+                            menuCode: 'seat_order_list',
                         }
                     ]
                 },

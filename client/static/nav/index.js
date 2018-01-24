@@ -1269,17 +1269,17 @@
                     type:'vue',
                     menuItems: [
                         {
-                            primaryText: "会议室订单管理",
-                            router: 'order/list',
-                            type:'vue',
-                            menuCode: 'fina_meeting_order_page'
-                        },
-                        {
                             primaryText: "工位订单列表",
                             router: 'order-center/order-manage/station-order-manage',
                             type:'vue',
                             menuCode: 'seat_order_list',
                         },
+                        {
+                            primaryText: "会议室订单管理",
+                            router: 'order/list',
+                            type:'vue',
+                            menuCode: 'fina_meeting_order_page'
+                        },               
                         {
                             primaryText: "通用订单列表",
                             router: 'order-center/order-manage/general-order-manage',
@@ -1290,7 +1290,7 @@
                             primaryText: '撤场记录管理',
                             type: 'vue',
                             router: 'operations-center/from-field',
-                            menuCode: 'seat_order_list',
+                            menuCode: 'csr_withdrawal_list',
                         }
                     ]
                 },

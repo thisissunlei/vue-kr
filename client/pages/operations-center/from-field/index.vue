@@ -48,7 +48,7 @@
 
          <Modal
             v-model="openNewPage"
-            title="新建离场"
+            title="新建撤场"
             width="660"
         >
             <NewPage ref="fromFieldNewPage" v-if="openNewPage" @newPageData="newPageDataChange" :close="showNewPage" />

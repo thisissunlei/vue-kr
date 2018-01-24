@@ -854,7 +854,7 @@
                                 primaryText: '管家设置',
                                 menuCode: 'oper_steward_base',
                                 type:'vue',
-                                originUrl: '/app-manage/steward-setting'
+                                router: 'app-manage/steward-setting'
 
                             },
                          ]

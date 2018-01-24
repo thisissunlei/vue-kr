@@ -850,6 +850,13 @@
                                  menuCode: 'oper_opinion_base',
                                  router: 'operation/communityAllocation/opinion'
                              },
+                             {
+                                primaryText: '管家设置',
+                                menuCode: 'oper_steward_base',
+                                type:'vue',
+                                originUrl: '/app-manage/steward-setting'
+
+                            },
                          ]
                      },
                      {

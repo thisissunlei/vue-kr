@@ -5,6 +5,7 @@ import ContractCenter from './contractCenter'
 import apiPublic from './apiPublic';
 import BillApi from './bill.js';
 import MemberApi from './member.js';
+import OperationApi from './operation.js';
 
 export default {
   ...OrderApi,
@@ -12,5 +13,6 @@ export default {
   ...ContractCenter,
   ...apiPublic,
   ...BillApi,
-  ...MemberApi
+  ...MemberApi,
+  ...OperationApi
 }

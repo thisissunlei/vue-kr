@@ -1,0 +1,187 @@
+<template>
+  <div class="g-steward-manage">
+      <SectionTitle label="管家管理"></SectionTitle>
+       <div class="u-search" >
+            <Button type="primary" @click="onCreate">新建</Button>
+            <div style='display:inline-block;float:right;padding-right:20px;'>
+                    <Input 
+                        v-model="Params.customerName" 
+                        placeholder="请输入客户名称"
+                        style="width: 252px"
+                    />
+                    <div class='m-search' @click="lowerSubmit">搜索</div>
+            </div>
+        </div>
+         <div class="u-table">
+            <Table  border :columns="columns" :data="tableList"></Table>
+            <div style="margin: 10px;overflow: hidden">
+                <!-- <Button type="primary" @click="onExport">导出</Button> -->
+                <div style="float: right;">
+                    <Page 
+                        :current="page"
+                        :total="totalCount"
+                        :page-size="pageSize" 
+                        show-total 
+                        show-elevator
+                        @on-change="changePage"
+                    ></Page>
+                </div>
+            </div>
+        </div>
+          
+    </div>
+
+  </div>
+</template>
+
+<script>
+import SectionTitle from '~/components/SectionTitle';
+import utils from '~/plugins/utils';
+
+export default {
+    name:'steward',
+    components:{
+        SectionTitle,
+    },
+    data () {
+        return{
+            Params:{
+                customerName:''
+            },
+            page:1,
+            totalCount:1,
+            pageSize:15,
+            columns:[
+                {
+                    title: '姓名',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '所属社区',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '职位',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '留言',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '状态',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '最后编辑时间',
+                    key: 'billNo',
+                    align:'center'
+                },
+                {
+                    title: '操作',
+                    key: 'operation',
+                    align:'center',
+                    render:(h,params)=>{
+                           return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openView(params.row)
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openView(params.row)
+                                        }
+                                    }
+                                }, '删除')
+                            ]);  
+                        }
+                },
+            ],
+            tableList:[],
+        }
+    },
+    created(){
+        
+    },
+    methods:{
+        getTableData(params){
+            this.$http.get('get-bill-list', params, res => {
+                this.billList=res.data.items;
+                this.totalCount=res.data.totalCount;
+            }, err => {
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
+        onCreate(){
+             window.open('./steward-setting/create','_blank');
+        },
+        lowerSubmit(){
+                let customerName=this.Params.customerName;
+                this.page=1;
+                this.Params={
+                    page:1,
+                    pageSize:15,
+                    customerName:customerName
+                }
+                utils.addParams(this.Params);
+        },
+        changePage(page){
+            this.Params.page=page;
+            this.page=page;
+            this.getTableData(this.Params);
+        }
+    },
+
+}
+</script>
+
+<style lang="less">
+.g-steward-manage{
+
+.u-search{
+    height:32px;
+    margin:16px 0;
+    padding:0 20px;
+}
+
+.u-table{
+    padding:0 20px;
+} 
+
+.m-search{
+    color:#2b85e4; 
+    display:inline-block;
+    margin-left:10px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+}
+</style>
+
+

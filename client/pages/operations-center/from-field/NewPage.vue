@@ -10,13 +10,7 @@
                 clearable
                 @on-change="getCustomerList"
             >
-                <Option 
-                    v-for="item in communityList" 
-                    :value="item.id" 
-                    :key="item.id"
-                >
-                    {{ item.name }}
-                </Option>
+                <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select> 
         </FormItem>
 
@@ -28,21 +22,15 @@
                 filterable
                 clearable
             >
-                <Option 
-                    v-for="item in customerList" 
-                    :value="item.id" 
-                    :key="item.id"
-                >
-                    {{ item.name }}
-                </Option>
+                <Option v-for="item in customerList" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select> 
         </FormItem>
         
-        <FormItem label="离场日期" prop="leaveDate" class="bill-search">
+        <FormItem label="撤场日期" prop="leaveDate" class="bill-search">
             <DatePicker 
                 v-model="validate.leaveDate"
                 type="date" 
-                placeholder="请选择离场日期" 
+                placeholder="请选择撤场日期" 
                 style="width: 252px"
             />
             
@@ -77,7 +65,7 @@
                         { required: true, message: '客户名称为必填项'}
                     ],
                     leaveDate:[
-                        { required: true, message: '离场日期为必填项'}
+                        { required: true, message: '撤场日期为必填项'}
                         
                     ]
                 },

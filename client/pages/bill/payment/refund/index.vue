@@ -76,7 +76,7 @@
                 </DetailStyle>
 
             <FormItem style="padding-left:24px;margin-top:40px" >
-                <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+                <Button type="primary" @click="handleSubmit('formItem')" >提交</Button>
             </FormItem>
 
         </Form>
@@ -114,7 +114,6 @@ import dateUtils from 'vue-dateutils';
                     remark:'',
                 },
                 amount:'-',
-                disabled:false,
                 communityList:[],
                 payWay:[
                     {
@@ -131,7 +130,7 @@ import dateUtils from 'vue-dateutils';
                     },
                     {
                         label:'网银',
-                        value:'银行转账'
+                        value:'BANKONLINE'
                     },
                     {
                         label:'支付宝网银',
@@ -230,11 +229,8 @@ import dateUtils from 'vue-dateutils';
                 this.$refs[name].validate((valid) => {
                    
                     if (valid) {
-                        this.disabled = true;
                         this.onRefundSubmit();
                     } else {
-                        _this.disabled = false;
-
                         this.$Notice.error({
                             title:message
                         });

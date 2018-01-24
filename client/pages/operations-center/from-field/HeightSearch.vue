@@ -18,20 +18,8 @@
         </Form-item>
 
         <Form-item label="社区名称" class='bill-search-class'> 
-            <Select 
-                v-model="formItem.cmtId" 
-                placeholder="请输入社区名称" 
-                style="width: 252px"
-                filterable
-                clearable
-            >
-                <Option 
-                    v-for="item in communityList" 
-                    :value="''+item.id" 
-                    :key="item.id"
-                >
-                    {{ item.name }}
-                </Option>
+            <Select v-model="formItem.cmtId" placeholder="请输入社区名称" style="width: 252px" filterable clearable>
+                <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
             </Select> 
         </Form-item>
         

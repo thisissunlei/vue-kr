@@ -1284,17 +1284,13 @@
                             primaryText: "通用订单列表",
                             router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
-<<<<<<< HEAD
                             menuCode: 'orderCurrency_list',
-=======
-                            menuCode: 'seat_order_list',
                         },
                         {
                             primaryText: '撤场记录管理',
                             type: 'vue',
                             router: 'operations-center/from-field',
-                            menuCode: 'csr_withdrawal_list',
->>>>>>> 65fa92d2a912b85c60728f0056df9f2b87871479
+                            menuCode: 'checklist_list',
                         }
                     ]
                 },

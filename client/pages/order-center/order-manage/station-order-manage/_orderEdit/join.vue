@@ -442,7 +442,6 @@ import utils from '~/plugins/utils';
                         title:e.message
                     });
 
-                        console.log('error',e)
                 })
             }
            },
@@ -489,7 +488,6 @@ import utils from '~/plugins/utils';
                 let stationVos = this.stationList;
                 //选中的工位
                 let selectedStation = this.selectedStation;
-                console.log('====>',selectedStation)
                 if(!selectedStation.length){
                      this.$Notice.error({
                         title:'请先选择录入单价的工位'
@@ -634,7 +632,6 @@ import utils from '~/plugins/utils';
 
                 formItem.startDate = start;
                 formItem.endDate =end;
-                console.log('handleSubmit',formItem)
                 let _this = this;
                  this.$http.post('save-join', formItem, r => {
                       window.close();
@@ -645,7 +642,6 @@ import utils from '~/plugins/utils';
                     })
                      _this.disabled = false
 
-                        console.log('error',e)
                 })
                 
             },
@@ -737,7 +733,6 @@ import utils from '~/plugins/utils';
                         title:e.message
                     })
 
-                        console.log('error',e)
                 })
 
             },
@@ -1110,7 +1105,6 @@ import utils from '~/plugins/utils';
 
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
-                 console.log('submitStation',this.stationData)
                 this.getStationAmount()
                 this.openStation = false
                 this.clearSale()
@@ -1243,7 +1237,6 @@ import utils from '~/plugins/utils';
                     _this.formItem.timeRange = r.data;
                 }, e => {
 
-                    console.log('error',e)
                 })
             },
             getSaleTactics:function(params){//获取优惠信息
@@ -1270,7 +1263,6 @@ import utils from '~/plugins/utils';
                 }, e => {
                     _this.youhui = []
 
-                    console.log('error',e)
                 })
             },
              getStationAmount(){
@@ -1301,6 +1293,7 @@ import utils from '~/plugins/utils';
                             obj.guidePrice = item.guidePrice || 0;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            obj.belongType = item.seatType
                             return obj;
                         });
                         _this.selectedStation = []
@@ -1317,7 +1310,6 @@ import utils from '~/plugins/utils';
                             title:e.message
                         })
 
-                        console.log('error',e)
                     })
                 }
             }

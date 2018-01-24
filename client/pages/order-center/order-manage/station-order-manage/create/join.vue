@@ -1244,6 +1244,7 @@ import utils from '~/plugins/utils';
                             obj.guidePrice = item.guidePrice;
                             obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                             obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                            obj.belongType = item.seatType;
                             return obj;
                         });
                         _this.formItem.rentAmount =  r.data.totalrent;

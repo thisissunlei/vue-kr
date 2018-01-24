@@ -26,7 +26,7 @@
 
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
-                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='order_seat_export'/>
+                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>
@@ -208,7 +208,7 @@
                                tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'order_seat_show',
+                                        checkAction:'seat_order_view',
                                         label:'查看',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
@@ -220,50 +220,47 @@
                                 })];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
                                btnRender.push(
-                                tag('Button', {
-                                    props: {
+                                tag(Buttons,{
+                                   props: {
                                         type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
+                                        checkAction:'seat_order_contract_apply',
+                                        label:'申请合同',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     on: {
                                         click: () => {
                                             this.showApply(params)
                                         }
                                     }
-                                }, '申请合同'),
-                                tag('Button', {
+                                }),
+                                tag(Buttons, {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
+                                        checkAction:'seat_order_release',
+                                        label:'作废',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     on: {
                                         click: () => {
                                             this.showNullify(params)
                                         }
                                     }
-                                }, '作废'))
+                                }))
                                 if(params.row.versionType!=1){
                                  btnRender.push(
-                                    tag('Button', {
+                                    tag(Buttons, {
                                         props: {
                                             type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
+                                            checkAction:params.row.orderType=='CONTINUE'?'seat_order_continue_edit':'seat_order_in_edit',
+                                            label:'编辑',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
                                             click: () => {
                                                 this.jumpEdit(params)
                                             }
                                         }
-                                    }, '编辑'))
+                                    }))
                                 }
                            }
                            return tag('div',btnRender);  

@@ -685,7 +685,6 @@ import utils from '~/plugins/utils';
                 if(!val){
                     return
                 }
-                console.log('changezhekou',val)
                 val = val.replace(/\s/g,'');
                 if(!(/^(\d|[0-9])(\.\d)?$/.test(val)) ){
                     this.discountError = '折扣只能为一位小数或整数';
@@ -859,7 +858,6 @@ import utils from '~/plugins/utils';
                 let itemIndex = value.split('/')[1];
                 let itemName = value.split('/')[2]
                 let itemId = value.split('/')[3]
-                console.log('======>',this.formItem.items)
                 this.formItem.items[itemIndex].tacticsType = itemValue;
                 this.formItem.items[itemIndex].tacticsName = itemName;
                 this.formItem.items[itemIndex].tacticsId = itemId;
@@ -975,10 +973,8 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                this.stationList = stationVos;
-                this.getStationAmount();
+                this.getStationAmount(stationVos);
                 this.formItem.items = []
-                this.stationData.submitData = stationVos;
             },
             showStation:function(){
                 // 选择工位的按钮
@@ -1216,9 +1212,9 @@ import utils from '~/plugins/utils';
                     console.log('error',e)
                 })
             },
-             getStationAmount(){
+             getStationAmount(list){
                 this.config()
-                let val = this.stationList;
+                let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
                     obj.guidePrice = item.guidePrice || 0;
@@ -1236,7 +1232,6 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
-                if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
@@ -1247,6 +1242,7 @@ import utils from '~/plugins/utils';
                             obj.belongType = item.seatType;
                             return obj;
                         });
+                        _this.stationData.submitData = _this.stationList
                         _this.formItem.rentAmount =  r.data.totalrent;
                         _this.formItem.stationAmount = r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)
@@ -1260,9 +1256,7 @@ import utils from '~/plugins/utils';
                             title:e.message
                         })
 
-                        console.log('error',e)
                     })
-                }
             },
                     
                

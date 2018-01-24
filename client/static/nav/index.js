@@ -740,13 +740,7 @@
                                  primaryText: '合同调整',
                                  router: 'operation/customerManage/agreementtrim',
                                  menuCode: 'contract_edit',
-                             },
-                             {
-                                 primaryText: '撤场记录管理',
-                                 type: 'vue',
-                                 router: 'operations-center/from-field',
-                                 menuCode: 'csr_withdrawal_list',
-                             },
+                             }
                          ]
                      },
 
@@ -1275,22 +1269,32 @@
                     type:'vue',
                     menuItems: [
                         {
+                            primaryText: "工位订单列表",
+                            router: 'order-center/order-manage/station-order-manage',
+                            type:'vue',
+                            menuCode: 'seat_order_list',
+                        },
+                        {
                             primaryText: "会议室订单管理",
                             router: 'order/list',
                             type:'vue',
                             menuCode: 'fina_meeting_order_page'
-                        },
-                        {
-                            primaryText: "工位订单列表",
-                            router: 'order-center/order-manage/station-order-manage',
-                            type:'vue',
-                            menuCode: 'order_seat_list',
-                        },
+                        },               
                         {
                             primaryText: "通用订单列表",
                             router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
+<<<<<<< HEAD
                             menuCode: 'orderCurrency_list',
+=======
+                            menuCode: 'seat_order_list',
+                        },
+                        {
+                            primaryText: '撤场记录管理',
+                            type: 'vue',
+                            router: 'operations-center/from-field',
+                            menuCode: 'csr_withdrawal_list',
+>>>>>>> 65fa92d2a912b85c60728f0056df9f2b87871479
                         }
                     ]
                 },

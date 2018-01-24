@@ -22,13 +22,7 @@
                         filterable
                         clearable
                     >
-                        <Option 
-                            v-for="item in communityList" 
-                            :value="''+item.id" 
-                            :key="item.id"
-                        >
-                            {{ item.name }}
-                        </Option>
+                        <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
                 <Form-item label="订单类型" class='bill-search-class'>

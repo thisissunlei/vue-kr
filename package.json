@@ -38,6 +38,7 @@
     "vue-server-renderer": "2.3.4",
     "vue-template-compiler": "^2.5.13"
   },
+  
   "dependencies": {
     "@nuxtjs/axios": "4.5.0",
     "husky": "^0.14.3",

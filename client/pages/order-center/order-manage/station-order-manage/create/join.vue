@@ -975,10 +975,8 @@ import utils from '~/plugins/utils';
                     }
                 return true;
                 });
-                this.stationList = stationVos;
-                this.getStationAmount();
+                this.getStationAmount(stationVos);
                 this.formItem.items = []
-                this.stationData.submitData = stationVos;
             },
             showStation:function(){
                 // 选择工位的按钮
@@ -1216,9 +1214,9 @@ import utils from '~/plugins/utils';
                     console.log('error',e)
                 })
             },
-             getStationAmount(){
+             getStationAmount(list){
                 this.config()
-                let val = this.stationList;
+                let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
                     obj.guidePrice = item.guidePrice || 0;
@@ -1247,6 +1245,7 @@ import utils from '~/plugins/utils';
                             obj.belongType = item.seatType;
                             return obj;
                         });
+                        _this.stationData.submitData = _this.stationList
                         _this.formItem.rentAmount =  r.data.totalrent;
                         _this.formItem.stationAmount = r.data.totalrent;
                         _this.stationAmount = utils.smalltoBIG(r.data.totalrent)

@@ -1284,7 +1284,6 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
-                if(val.length){
                      this.$http.post('get-station-amount', params, r => {
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
@@ -1312,7 +1311,6 @@ import utils from '~/plugins/utils';
                         })
 
                     })
-                }
             }
                     
                

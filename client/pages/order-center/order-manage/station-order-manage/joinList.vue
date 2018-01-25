@@ -142,12 +142,20 @@
                     {
                         title: '服务费总额',
                         key: 'rentAmount',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
+                          return <span class="u-txt">{money}</span>;
+                        }
                     },
                     {
                         title: '履约保证金',
                         key: 'depositAmount',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):'';                  
+                          return <span class="u-txt">{money}</span>;
+                        }
                     },
                     {
                         title: '订单类型',

@@ -148,7 +148,11 @@
                     {
                         title: '减租金额',
                         key: 'rentAmount',
-                        align:'center'
+                        align:'center',
+                        render(tag,params){ 
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
+                          return <span class="u-txt">{money}</span>;
+                        }
                     },
                     {
                         title: '订单状态',

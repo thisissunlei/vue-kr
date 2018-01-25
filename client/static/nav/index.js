@@ -685,7 +685,7 @@
                         },
                         {
                             primaryText: '合同扫码',
-                            menuCode: 'public',
+                            menuCode: 'pigeonhole',
                             type:'vue',
                             router: 'order-center/contract-manage/contract-yard',
                         }
@@ -1284,13 +1284,14 @@
                             primaryText: "通用订单列表",
                             router: 'order-center/order-manage/general-order-manage',
                             type:'vue',
-                            menuCode: 'seat_order_list',
+                            menuCode: 'orderCurrency_list',
                         },
+                        
                         {
                             primaryText: '撤场记录管理',
                             type: 'vue',
                             router: 'operations-center/from-field',
-                            menuCode: 'csr_withdrawal_list',
+                            menuCode: 'checklist_list',
                         }
                     ]
                 },
@@ -1305,7 +1306,7 @@
                             primaryText: "合同列表",
                             router: 'order-center/contract-manage/contract-list/list',
                             type:'vue',
-                            menuCode: 'iot_door_open_log',
+                            menuCode: 'stationContract_list',
                             //menuCode: 'fina_meeting_order_page'
                         },
                     ]

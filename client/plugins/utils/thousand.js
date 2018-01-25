@@ -1,6 +1,5 @@
 // 千分位分隔符
 export default function thousand (params) {
-  console.log('thousandSep',params)
   if (params === null || params === undefined) {
     return null
   } else if (isNaN(params)) {

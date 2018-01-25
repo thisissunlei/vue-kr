@@ -309,6 +309,14 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
+                                            var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                                            if(!pattern.test(price)){
+                                                this.$Notice.error({
+                                                    title:'单价不得多余小数点后两位'
+                                                })
+                                                var num2=Number(price).toFixed(3);
+                                                price = num2.substring(0,num2.lastIndexOf('.')+3) 
+                                            }
                                             if(price<params.row.guidePrice){
                                                 price = params.row.guidePrice
                                                 this.$Notice.error({
@@ -399,6 +407,9 @@ import utils from '~/plugins/utils';
                 let price = false;
                 let _this = this;
                 let stationVos = this.selecedStation;
+                if(!pattern.test(this.price)){
+                    price = '工位单价不得多于三位小数'
+                }
                 // 选中的工位selectedDel
                 let selectedStation = this.selectedDel;
                 stationVos = stationVos.filter(function(item, index) {
@@ -583,6 +594,7 @@ import utils from '~/plugins/utils';
                 renewForm.firstPayTime=dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.firstPayTime));
                 renewForm.endDate =end;
                 let _this = this;
+                this.disabled = true;
                  this.$http.post('save-renew', renewForm, r => {
                       window.close();
                       window.opener.location.reload();
@@ -1202,15 +1214,15 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
+                    leaseBegqindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
-                 this.$http.post('count-sale', params, r => {
-                     _this.disabled = false;
-                     // _this.renewForm.items =list
+                _this.disabled = false;
                     _this.discountError = false;
+                 this.$http.post('count-sale', params, r => {
+                     
                     _this.renewForm.rentAmount =  Math.round(r.data.totalrent*100)/100;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;

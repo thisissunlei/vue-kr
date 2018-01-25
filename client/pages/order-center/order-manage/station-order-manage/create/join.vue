@@ -179,7 +179,8 @@
                 
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
-            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">提交</Button>
+            <Button  disabled v-if="disabled">提交</Button>
             <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
         </FormItem>
 
@@ -319,6 +320,14 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
+                                            var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                                            if(!pattern.test(price)){
+                                                this.$Notice.error({
+                                                    title:'单价不得多余小数点后两位'
+                                                })
+                                                var num2=Number(price).toFixed(3);
+                                                price = num2.substring(0,num2.lastIndexOf('.')+3) 
+                                            }
                                             if(price<params.row.guidePrice){
                                                 price = params.row.guidePrice
                                                 this.$Notice.error({
@@ -454,12 +463,19 @@ import utils from '~/plugins/utils';
                 })
             }
            },
+           disabled(val){
+            console.log('disabled-->',val)
+           }
         },
         methods: {
             submitPrice(){
                 let price = false;
                 let _this = this;
                 let stationVos = this.stationList;
+                var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                if(!pattern.test(this.price)){
+                    price = '工位单价不得多于三位小数'
+                }
                 // 选中的工位
                 let selectedStation = this.selectedStation;
                 stationVos = stationVos.filter(function(item, index) {
@@ -570,6 +586,7 @@ import utils from '~/plugins/utils';
                 formItem.ssoId = this.ssoId;
                 formItem.ssoName = this.ssoName;
                 let _this = this;
+                this.disabled = true;
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();
@@ -661,9 +678,10 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                 this.$http.post('count-sale', params, r => {
-                    _this.disabled = false;
+                _this.disabled = false;
                     _this.discountError = false;
+                 this.$http.post('count-sale', params, r => {
+                    
                     _this.stationList = r.data.seats;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
@@ -685,7 +703,6 @@ import utils from '~/plugins/utils';
                 if(!val){
                     return
                 }
-                console.log('changezhekou',val)
                 val = val.replace(/\s/g,'');
                 if(!(/^(\d|[0-9])(\.\d)?$/.test(val)) ){
                     this.discountError = '折扣只能为一位小数或整数';
@@ -766,7 +783,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return
                         }
-                        this.disabled = true;
+                        // this.disabled = true;
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;
@@ -859,7 +876,6 @@ import utils from '~/plugins/utils';
                 let itemIndex = value.split('/')[1];
                 let itemName = value.split('/')[2]
                 let itemId = value.split('/')[3]
-                console.log('======>',this.formItem.items)
                 this.formItem.items[itemIndex].tacticsType = itemValue;
                 this.formItem.items[itemIndex].tacticsName = itemName;
                 this.formItem.items[itemIndex].tacticsId = itemId;
@@ -1234,7 +1250,6 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
-                if(val.length){
                      this.$http.post('get-station-amount', params).then( r => {
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
@@ -1259,9 +1274,7 @@ import utils from '~/plugins/utils';
                             title:e.message
                         })
 
-                        console.log('error',e)
                     })
-                }
             },
                     
                

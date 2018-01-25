@@ -730,6 +730,7 @@ import utils from '~/plugins/utils';
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
                  _this.selecedStation = []
+                 _this.discountError = false;
                  _this.renewForm.items = _this.renewForm.items.map(item=>{
                   let obj = item;
                   obj.show = false;

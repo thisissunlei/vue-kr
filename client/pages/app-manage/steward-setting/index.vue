@@ -37,6 +37,7 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
 
 export default {
     name:'steward',
@@ -46,7 +47,10 @@ export default {
     data () {
         return{
             Params:{
-                customerName:''
+                page:1,
+                pageSize:15,
+                stewardName:'',
+                cmtId:''
             },
             page:1,
             totalCount:1,
@@ -54,33 +58,43 @@ export default {
             columns:[
                 {
                     title: '姓名',
-                    key: 'billNo',
+                    key: 'mbrName',
                     align:'center'
                 },
                 {
                     title: '所属社区',
-                    key: 'billNo',
+                    key: 'cmtName',
                     align:'center'
                 },
                 {
                     title: '职位',
-                    key: 'billNo',
+                    key: 'typeDescr',
                     align:'center'
                 },
                 {
                     title: '留言',
-                    key: 'billNo',
-                    align:'center'
+                    key: 'introduce',
+                    align:'center',
+                    width:380,
+
                 },
                 {
                     title: '状态',
-                    key: 'billNo',
-                    align:'center'
+                    key: 'statusDescr',
+                    align:'center',
+                    width:80,
                 },
                 {
                     title: '最后编辑时间',
-                    key: 'billNo',
-                    align:'center'
+                    key: 'updateTime',
+                    align:'center',
+                    render(h, obj){
+                            if(!obj.row.updateTime){
+                                return '-'
+                            }
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.updateTime));
+                            return time;
+                    }
                 },
                 {
                     title: '操作',
@@ -124,12 +138,12 @@ export default {
         }
     },
     created(){
-        
+        this.getTableData(this.Params)
     },
     methods:{
         getTableData(params){
-            this.$http.get('get-bill-list', params, res => {
-                this.billList=res.data.items;
+            this.$http.get('get-steward-list', params, res => {
+                this.tableList=res.data.items;
                 this.totalCount=res.data.totalCount;
             }, err => {
                 this.$Notice.error({
@@ -172,6 +186,13 @@ export default {
 .u-table{
     padding:0 20px;
 } 
+.ivu-checkbox-wrapper{
+    margin-right:0;
+}
+
+.ivu-table-cell{
+    padding:0;
+}
 
 .m-search{
     color:#2b85e4; 

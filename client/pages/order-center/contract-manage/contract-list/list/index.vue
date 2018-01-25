@@ -50,7 +50,7 @@
         >
             <div>合同是否生效?</div>
             <div slot="footer">
-                <Button type="primary" @click="submitTakeEffect" :disabled="effectDisabled">确定</Button>
+                <Button type="primary" @click="submitTakeEffect" :disabled="effectDisabled" >确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="showTakeEffect">取消</Button>
             </div>
         </Modal>
@@ -442,21 +442,22 @@
             //生效确定
             submitTakeEffect(){
                 this.config();
+                this.effectDisabled=true;
                 var detail = Object.assign({},this.columnDetail);
                 
-                 if(this.effectDisabled){
-                     return ;
-                 }
-                 this.effectDisabled=true;
-                 this.showTakeEffect();
+                //  if(this.effectDisabled){
+                //      return ;
+                //  }
+                
                 this.$http.post("post-contract-take-effect", {
                     requestId:detail.requestId
                 }, (response) => {
+                    this.showTakeEffect();
                     this.getListData(this.params);
-                    this.openMessage=true;
                     this.MessageType=response.message=='ok'?"success":"error";
                     this.warn="已合同生效！";
                 }, (error) => {
+                    this.effectDisabled=false;
                     this.$Notice.error({
                         title:error.message
                     });

@@ -71,6 +71,7 @@
                         :test="formItem"
                         style="width: 250px"
                         :onchange="onchange"
+                        v-if="openBind"
                     ></SearchCompany>
                 </FormItem>
 
@@ -79,6 +80,7 @@
                         :test="formItem"
                         style="width: 250px"
                         :onchange="onCommunityChange"
+                        v-if="openBind"
                     ></SelectCommunities>
                 </FormItem>
 

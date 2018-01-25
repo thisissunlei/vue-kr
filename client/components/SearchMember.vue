@@ -1,12 +1,14 @@
-<style lang="less"> 
-   
-</style>
-
-
-
 <template>
-    <div class="com-select-customers">
-         <Select :v-model="test.mbrId" remote filterable :remote-method="remoteCustomer" :loading="loading1" @on-change="changeContent">
+    <div class="ui-select-member">
+         <Select 
+            :v-model="test.mbrId" 
+            remote 
+            filterable 
+            :remote-method="remoteCustomer" 
+            :loading="loading1" 
+            @on-change="changeContent"
+            :placeholder="value"
+        >
             <Option v-for="(option) in customerOptions" :value="''+option.value+''" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
@@ -18,7 +20,7 @@
         props:{
             onchange:Function,
             test:Object,
-            info:Object
+            value:String,
         },
         data () {
             return {
@@ -50,7 +52,6 @@
                 let params = {
                     searchName:name || ''
                 }
-                let flag=[];
                 let list = [];
                 let _this = this;
                 this.$http.get('search-mbr-list', params, r => {
@@ -59,16 +60,9 @@
                         let obj = item;
                         obj.label = item.name;
                         obj.value = item.uid;
-                        if(_this.info.value){
-                            if(item.uid==_this.info.value){
-                                flag.push('0');
-                            }
-                        }
                         return obj;
                     });
-                    if (flag.indexOf('0')== -1){
-                            list.push(_this.info);
-                    }
+                    
                     _this.customerOptions = list;
                 }, e => {
                     console.log('error',e)
@@ -80,3 +74,13 @@
         }
     }
 </script>
+
+<style lang="less"> 
+.ui-select-member{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+}
+
+</style>

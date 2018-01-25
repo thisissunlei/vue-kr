@@ -225,7 +225,7 @@ import utils from '~/plugins/utils';
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                 location.href=`./income/detail/${params.id}`;
+                 window.open(`./income/detail/${params.id}`,'_blank');
             },
             onExport(){
                  console.log('导出')

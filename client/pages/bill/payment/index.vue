@@ -380,7 +380,7 @@ export default {
             },
 
             openView(params){
-                location.href=`./payment/detail/${params.id}`;
+                window.open(`./payment/detail/${params.id}`,'_blank');
             },
 
             bindPerson (params) {

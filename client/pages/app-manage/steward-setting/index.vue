@@ -16,7 +16,7 @@
                 <SelectCommunities
                     :test="formItem"
                     :onchange="onChangeCommunity"
-                   
+                    :value="Params.label"
                 ></SelectCommunities>
             </div>
         </div>
@@ -71,7 +71,8 @@ export default {
                 page:1,
                 pageSize:15,
                 stewardName:'',
-                cmtId:''
+                cmtId:'',
+                label:'请选择'
             },
             formItem:{
                 communityId:''
@@ -220,8 +221,9 @@ export default {
                     });
                 })
         },
-        onChangeCommunity(value){
-            this.Params.cmtId=value;
+        onChangeCommunity(form){
+            this.Params.cmtId=form.value;
+            this.Params.label=form.label
             utils.addParams(this.Params);
             this.getTableData(this.Params)
         }

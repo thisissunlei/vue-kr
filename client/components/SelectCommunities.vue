@@ -1,9 +1,3 @@
-<style lang="less"> 
-   
-</style>
-
-
-
 <template>
     <div class="com-select-community">
          <Select
@@ -12,7 +6,11 @@
             remote
             :remote-method="remoteMethod1"
             :loading="loading1"
-            @on-change="changeContent">
+            @on-change="changeContent"
+            :placeholder="value"
+            :label-in-value="labelInValue"
+            
+            >
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
     </div>
@@ -21,11 +19,17 @@
 
 <script>
     export default {
-        props:['name','onchange','test'],
+        props:{
+            onchange:Function,
+            test:Object,
+            value:String,
+        },
         data () {
             return {
                 loading1:false,
                 options1:[],
+                labelInValue:true,
+                clearable:true
             };
         },
         mounted:function(){
@@ -76,3 +80,13 @@
         }
     }
 </script>
+
+<style lang="less"> 
+   .com-select-community{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+
+   }
+</style>

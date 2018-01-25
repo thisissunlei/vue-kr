@@ -1,9 +1,15 @@
 <template>
 	<div>
 		<div>
-			<div @click = "switchList" style="cursor: pointer;">
-				上传附件
-			</div>
+			<Buttons 
+				type='text'  
+				checkAction='contract_file_upload'
+				label='上传附件'
+				styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
+				@click = "switchList" 
+			
+			/>
+			
 			<div class = "list-box" v-show = "isOpenList">
 				<div class="mask" @click = "switchList" ></div>
 				<div class="list" :style ="listStyle" >

@@ -28,7 +28,10 @@
 
 
     export default {
-        props:['test','onchange'],
+        props:{
+            test:Object,
+            onchange:Function
+        },
        
         data () {
             return {

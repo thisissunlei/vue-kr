@@ -729,6 +729,13 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 setTimeout(function(){
                  _this.getStationFn = +new Date()
+                 _this.selecedStation = []
+                 _this.discountError = false;
+                 _this.renewForm.items = _this.renewForm.items.map(item=>{
+                  let obj = item;
+                  obj.show = false;
+                  return obj;
+               })
 
                 },200)
             },
@@ -1214,7 +1221,7 @@ import utils from '~/plugins/utils';
                 let _this = this;
                 let params = {
                     communityId:this.renewForm.communityId,
-                    leaseBegqindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
+                    leaseBegindate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.start)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.renewForm.endDate)),
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)

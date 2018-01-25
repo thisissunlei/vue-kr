@@ -7,9 +7,17 @@
                     <Input 
                         v-model="Params.stewardName" 
                         placeholder="请输入客户名称"
-                        style="width: 252px"
+                        style="width: 240px"
                     />
                     <div class='m-search' @click="lowerSubmit">搜索</div>
+            </div>
+             <div style='display:inline-block;float:right;padding-right:20px;'>
+                <div class='u-community-label'>社区</div>
+                <SelectCommunities
+                    :test="formItem"
+                    :onchange="onChangeCommunity"
+                   
+                ></SelectCommunities>
             </div>
         </div>
          <div class="u-table">
@@ -50,11 +58,12 @@
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-
+import SelectCommunities from '~/components/SelectCommunities';
 export default {
     name:'steward',
     components:{
         SectionTitle,
+        SelectCommunities
     },
     data () {
         return{
@@ -63,6 +72,9 @@ export default {
                 pageSize:15,
                 stewardName:'',
                 cmtId:''
+            },
+            formItem:{
+                communityId:''
             },
             page:1,
             totalCount:1,
@@ -177,13 +189,8 @@ export default {
              window.open('./steward-setting/create','_blank');
         },
         lowerSubmit(){
-                let stewardName=this.Params.stewardName;
                 this.page=1;
-                this.Params={
-                    page:1,
-                    pageSize:15,
-                    stewardName:stewardName
-                }
+                this.Params.page=1;
                 utils.addParams(this.Params);
         },
         changePage(page){
@@ -212,7 +219,14 @@ export default {
                         title:err.message
                     });
                 })
+        },
+        onChangeCommunity(value){
+            this.Params.cmtId=value;
+            utils.addParams(this.Params);
+            this.getTableData(this.Params)
         }
+
+
     }
     
 
@@ -251,6 +265,15 @@ export default {
     text-align: center;
     margin:40px auto 35px;
     font-size:14px;
+}
+.u-community-label{
+    float:left;
+    line-height:32px;
+    margin-right:10px;
+    font-size:14px;
+}
+.com-select-community{
+    float:left;
 }
 
 }

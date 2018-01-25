@@ -6,6 +6,7 @@
         <FormItem label="姓名：" style="width:352px" prop="mbrId">
              <SearchMember
                     :test="formItem"
+                    :info="info"
                     style="width: 250px"
                     :onchange="onchange"
              ></SearchMember>
@@ -93,6 +94,7 @@ export default {
               cmtName:'-',
               mbrNick:'-'
           },
+          info:null,
           maxLength:60,
           stewardType:[
             {
@@ -138,6 +140,10 @@ export default {
           this.$http.get('get-steward-detail', {manageId:params.manageId}, res=> {
                 this.formItem = res.data;  
                 this.memberInfo=res.data;
+                this.info={
+                    label:`${res.data.mbrName}|${res.data.phone}`,
+                    value:res.data.mbrId
+                }
           }, err => {
                 console.log('error',err)
           })

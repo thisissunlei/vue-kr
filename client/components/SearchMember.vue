@@ -17,7 +17,8 @@
     export default {
         props:{
             onchange:Function,
-            test:Object
+            test:Object,
+            info:Object
         },
         data () {
             return {
@@ -49,6 +50,7 @@
                 let params = {
                     searchName:name || ''
                 }
+                let flag=[];
                 let list = [];
                 let _this = this;
                 this.$http.get('search-mbr-list', params, r => {
@@ -57,8 +59,16 @@
                         let obj = item;
                         obj.label = item.name;
                         obj.value = item.uid;
+                        if(_this.info.value){
+                            if(item.uid==_this.info.value){
+                                flag.push('0');
+                            }
+                        }
                         return obj;
                     });
+                    if (flag.indexOf('0')== -1){
+                            list.push(_this.info);
+                    }
                     _this.customerOptions = list;
                 }, e => {
                     console.log('error',e)

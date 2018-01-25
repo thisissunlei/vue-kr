@@ -173,7 +173,7 @@ export default {
       onEditSubmit(){
         this.$http.post('edit-steward', this.formItem, res=> {
                 this.$Notice.success({
-                    title:'新建成功'
+                    title:'编辑成功'
                 });
                 setTimeout(function(){
                     window.close();

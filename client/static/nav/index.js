@@ -1286,6 +1286,7 @@
                             type:'vue',
                             menuCode: 'orderCurrency_list',
                         },
+                        
                         {
                             primaryText: '撤场记录管理',
                             type: 'vue',

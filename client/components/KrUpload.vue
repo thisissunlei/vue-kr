@@ -36,9 +36,13 @@
 <script>
 import http from '~/plugins/http.js';
 import utils from '~/plugins/utils';
+import Buttons from './Buttons';
 
 export default{
 	name:'krUpload',
+	components: {
+		Buttons,
+	},
 	props:{
 		columnDetail:Object,
 		file:Array,

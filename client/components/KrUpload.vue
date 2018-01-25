@@ -2,11 +2,11 @@
 	<div>
 		<div>
 			<Buttons 
-			type='text'  
-			checkAction=' contract_flie_upload'
-            label='上传附件'
-			styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
-			@click = "switchList" 
+				type='text'  
+				checkAction='contract_file_upload'
+				label='上传附件'
+				styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
+				@click = "switchList" 
 			
 			/>
 			

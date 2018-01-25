@@ -6,14 +6,8 @@
 
 <template>
     <div class="com-select-customers">
-         <Select
-            :v-model="name"
-            filterable
-            remote
-            @on-query-change="remoteCustomer"
-            :loading="loading1"
-            @on-change="changeContent">
-            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+         <Select :v-model="test.mbrId" remote filterable :remote-method="remoteCustomer" :loading="loading1" @on-change="changeContent">
+            <Option v-for="(option) in customerOptions" :value="''+option.value+''" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -21,11 +15,15 @@
 
 <script>
     export default {
-        props:['name','onchange'],
+        props:{
+            onchange:Function,
+            test:Object
+        },
         data () {
             return {
                 loading1:false,
                 customerOptions:[],
+                labelInValue:true
             };
         },
         mounted:function(){
@@ -33,12 +31,9 @@
         },
         methods: {
             changeContent:function(value){
-                console.log('changeContent')
                 this.onchange(value)
             },
             remoteCustomer (query) {
-                console.log('remoteCustomer',query)
-
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -52,17 +47,16 @@
             },
             getCusomerList:function(name){
                 let params = {
-                    company:name
+                    searchName:name || ''
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('get-customer', params, r => {
-                    console.log('r---->', r);
-                    list = r.data.customerList;
+                this.$http.get('search-mbr-list', params, r => {
+                    list = r.data.mbrList;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.company;
-                        obj.value = item.id+'';
+                        obj.label = item.name;
+                        obj.value = item.uid;
                         return obj;
                     });
                     _this.customerOptions = list;

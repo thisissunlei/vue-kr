@@ -5,7 +5,7 @@
             <Button type="primary" @click="onCreate">新建</Button>
             <div style='display:inline-block;float:right;padding-right:20px;'>
                     <Input 
-                        v-model="Params.customerName" 
+                        v-model="Params.stewardName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     />
@@ -138,7 +138,11 @@ export default {
         }
     },
     created(){
-        this.getTableData(this.Params)
+        this.getTableData(this.$route.query);
+        if(!this.$route.query.stewardName){
+            this.$route.query.stewardName=""
+        }
+        this.Params=this.$route.query;
     },
     methods:{
         getTableData(params){
@@ -155,12 +159,12 @@ export default {
              window.open('./steward-setting/create','_blank');
         },
         lowerSubmit(){
-                let customerName=this.Params.customerName;
+                let stewardName=this.Params.stewardName;
                 this.page=1;
                 this.Params={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    stewardName:stewardName
                 }
                 utils.addParams(this.Params);
         },

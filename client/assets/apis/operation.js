@@ -25,10 +25,17 @@ export default  {
         url: '/api/krspace-finance-web/cmt/steward/detail',
         method: 'get'
     },
-     //app管理--管家设置--编辑管家
+    //app管理--管家设置--编辑管家
    'edit-steward': {
         url: '/api/krspace-finance-web/cmt/steward/edit',
         method: 'post'
+    },
+    //app管理--管家设置--根据会员ID查询会员信息
+   'search-mbr': {
+        url: '/api/krspace-finance-web/cmt/steward/search-mbr',
+        method: 'get'
     }
+
+
   }
   

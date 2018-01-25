@@ -459,6 +459,8 @@ import utils from '~/plugins/utils';
                 let price = false;
                 let _this = this;
                 let stationVos = this.stationList;
+                
+                var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
                 if(!pattern.test(this.price)){
                     price = '工位单价不得多于三位小数'
                 }
@@ -603,7 +605,22 @@ import utils from '~/plugins/utils';
             joinFormSubmit(){
                 this.config();
                  let {params}=this.$route;
-                // let saleList = this.formItem.items
+
+                 let station = this.stationList;
+                let priceError = false;
+                station.map((item)=>{
+                    if(item.originalPrice<item.guidePrice){
+                        priceError = true
+                    }
+                })
+                if(priceError){
+                   this.$Notice.error({
+                        title:'工位单价不得小于最低定价'
+                    }) 
+                   return
+                }
+
+
                 let saleList = this.formItem.items.filter(item=>{
                     if(!item.show){
                         return false;

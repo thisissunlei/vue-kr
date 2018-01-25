@@ -196,7 +196,9 @@ import http from '~/plugins/http.js';
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
-				let originStationList = this.origin || []
+				let originStationList = this.origin || [];
+				// console.log('selectedObjs',selectedObjs)
+				// console.log('originStationList',originStationList)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];

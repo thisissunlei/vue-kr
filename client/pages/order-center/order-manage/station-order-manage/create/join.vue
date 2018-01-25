@@ -540,7 +540,26 @@ import utils from '~/plugins/utils';
                 window.history.go(-1);
             },
             joinFormSubmit(){
+                
+                
                 this.config()
+
+                let station = this.stationList;
+                let priceError = false;
+                station.map((item)=>{
+                    if(item.originalPrice<item.guidePrice){
+                        priceError = true
+                    }
+                })
+                if(priceError){
+                   this.$Notice.error({
+                        title:'工位单价不得小于最低定价'
+                    }) 
+                   return
+                }
+
+
+                
                 //处理已删除的数据
                 let saleList = this.formItem.items.filter(item=>{
                     if(!item.show){

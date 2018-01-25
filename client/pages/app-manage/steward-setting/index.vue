@@ -15,7 +15,6 @@
          <div class="u-table">
             <Table  border :columns="columns" :data="tableList"></Table>
             <div style="margin: 10px;overflow: hidden">
-                <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
                     <Page 
                         :current="page"
@@ -28,10 +27,23 @@
                 </div>
             </div>
         </div>
+    <Modal
+        v-model="openCancel"
+        title="提示信息"
+        ok-text="确定"
+        cancel-text="取消"
+        width="490"
+     >
+        <div class="u-cancel-title">
+            确认要删除该管家吗？
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="onDeleteSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+        </div>
+    </Modal>
           
-    </div>
-
-  </div>
+</div>
 </template>
 
 <script>
@@ -55,6 +67,8 @@ export default {
             page:1,
             totalCount:1,
             pageSize:15,
+            openCancel:false,
+            manageId:'',
             columns:[
                 {
                     title: '姓名',
@@ -126,7 +140,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params.row)
+                                            this.openDelete(params.row)
                                         }
                                     }
                                 }, '删除')
@@ -172,8 +186,31 @@ export default {
             this.Params.page=page;
             this.page=page;
             this.getTableData(this.Params);
+        },
+        openDelete(value){
+            this.openCancel=!this.openCancel;
+            if(value){
+                this.manageId=value.manageId
+            }
+        },
+        onDeleteSubmit(){
+            let params={
+                    manageId: this.manageId
+                }
+                this.$http.post('delete-steward', params, res => {
+                    this.$Notice.success({
+                        title:'删除成功'
+                    });  
+                    this.openDelete();
+                    this.getTableData(this.Params);
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
         }
-    },
+    }
+    
 
 }
 </script>
@@ -204,6 +241,12 @@ export default {
     margin-left:10px;
     font-size:14px;
     cursor:pointer;
+}
+.u-cancel-title{
+    width:334px;
+    text-align: center;
+    margin:40px auto 35px;
+    font-size:14px;
 }
 
 }

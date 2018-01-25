@@ -166,6 +166,7 @@ export default {
                 });
                 setTimeout(function(){
                     window.close();
+                    window.opener.location.reload();
                 },1000) 
             }, err => {
                 this.$Notice.error({

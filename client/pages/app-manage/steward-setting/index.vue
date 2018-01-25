@@ -126,7 +126,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openView(params.row)
+                                            this.openEdit(params.row)
                                         }
                                     }
                                 }, '编辑'),
@@ -168,6 +168,10 @@ export default {
                     title:err.message
                 });
             })
+        },
+        openEdit(params){
+            let manageId=params.manageId;
+             window.open(`./steward-setting/edit/${manageId}`,'_blank');
         },
         onCreate(){
              window.open('./steward-setting/create','_blank');

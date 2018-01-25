@@ -1,6 +1,6 @@
 <template>
 <div class="g-steward-created">
-<SectionTitle label="新增管家"></SectionTitle>
+<SectionTitle label="编辑管家"></SectionTitle>
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
         <FormItem label="姓名：" style="width:352px" prop="mbrId">
@@ -19,7 +19,7 @@
         </div>
         <div class="u-label-list">
             <div class="u-label">昵称：</div>
-            <div class="u-label-content">{{memberInfo.mbrNike}}</div>
+            <div class="u-label-content">{{memberInfo.mbrNick}}</div>
         </div>
         <div class="u-label-list">
             <div class="u-label">所属社区：</div>
@@ -88,10 +88,10 @@ export default {
               stewardType:'',
               stewardStatus:''
           },
-          memberInfo:{
+           memberInfo:{
               avatar:'',
               cmtName:'-',
-              mbrName:'-'
+              mbrNick:'-'
           },
           maxLength:60,
           stewardType:[
@@ -129,10 +129,21 @@ export default {
   },
   mounted:function(){
 		GLOBALSIDESWITCH("false");
-		
+		this.getInfo();
 		
   },
   methods:{
+      getInfo(){
+          let {params}=this.$route;
+          this.$http.get('get-steward-detail', {manageId:params.manageId}, res=> {
+                this.formItem = res.data;  
+                this.memberInfo=res.data;
+          }, err => {
+                console.log('error',err)
+          })
+
+        
+      },
       onchange(value){
           this.formItem.mbrId=value;
           this.$http.get('search-mbr', {mbrId:value}, res=> {
@@ -151,7 +162,7 @@ export default {
                
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        _this.onCreateSubmit();
+                        _this.onEditSubmit();
                     } else {
                         _this.$Notice.error({
                             title:message
@@ -159,8 +170,8 @@ export default {
                     }
                 })
       },
-      onCreateSubmit(){
-        this.$http.post('create-steward', this.formItem, res=> {
+      onEditSubmit(){
+        this.$http.post('edit-steward', this.formItem, res=> {
                 this.$Notice.success({
                     title:'新建成功'
                 });

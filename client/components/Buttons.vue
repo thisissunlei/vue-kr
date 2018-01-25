@@ -18,8 +18,8 @@
         	}
         },
         methods:{
-            buttonClick(){
-                this.$emit('click');
+            buttonClick(event){
+                this.$emit('click',event);
             }
         },
         mounted:function(){

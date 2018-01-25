@@ -536,6 +536,7 @@ import utils from '~/plugins/utils';
                 renewForm.startDate = start;
                 renewForm.endDate =end;
                 let _this = this;
+                this.disabled = true;
                  this.$http.post('save-renew', renewForm, r => {
                       window.close();
                       window.opener.location.reload();
@@ -1186,9 +1187,10 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(this.selecedStation),
                     saleList:JSON.stringify(list)
                 };
-                 this.$http.post('count-sale', params, r => {
-                     _this.disabled = false;
+                 _this.disabled = false;
                     _this.discountError = false;
+                 this.$http.post('count-sale', params, r => {
+                    
                     // _this.renewForm.items = list;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;

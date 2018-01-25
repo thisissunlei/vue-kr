@@ -633,6 +633,7 @@ import utils from '~/plugins/utils';
                 formItem.startDate = start;
                 formItem.endDate =end;
                 let _this = this;
+                this.disabled = true;
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();
@@ -714,11 +715,10 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
+                 _this.disabled = false;
+                    _this.discountError = false;
 
                  this.$http.post('count-sale', params, r => {
-                    _this.disabled = false;
-                    _this.discountError = false;
-                    // _this.formItem.items = list;
                     _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;

@@ -179,7 +179,8 @@
                 
          </div>   
         <FormItem style="padding-left:24px;margin-top:40px" >
-            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled">提交</Button>
+            <Button type="primary" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">提交</Button>
+            <Button  disabled v-if="disabled">提交</Button>
             <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
         </FormItem>
 
@@ -454,6 +455,9 @@ import utils from '~/plugins/utils';
                 })
             }
            },
+           disabled(val){
+            console.log('disabled-->',val)
+           }
         },
         methods: {
             submitPrice(){
@@ -570,6 +574,7 @@ import utils from '~/plugins/utils';
                 formItem.ssoId = this.ssoId;
                 formItem.ssoName = this.ssoName;
                 let _this = this;
+                this.disabled = true;
                  this.$http.post('save-join', formItem, r => {
                       window.close();
                       window.opener.location.reload();
@@ -661,9 +666,10 @@ import utils from '~/plugins/utils';
                     saleList:JSON.stringify(list)
                 };
                 let _this = this;
-                 this.$http.post('count-sale', params, r => {
-                    _this.disabled = false;
+                _this.disabled = false;
                     _this.discountError = false;
+                 this.$http.post('count-sale', params, r => {
+                    
                     _this.stationList = r.data.seats;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
@@ -765,7 +771,7 @@ import utils from '~/plugins/utils';
                             _this.disabled = false;
                             return
                         }
-                        this.disabled = true;
+                        // this.disabled = true;
                         this.joinFormSubmit()
                     } else {
                         _this.disabled = false;

@@ -78,6 +78,7 @@
                     <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
+                        v-if="openBind"
                     ></SelectCommunitiy>
                 </FormItem>
 

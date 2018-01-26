@@ -37,11 +37,10 @@
         },
         methods: {
             changeContent:function(value){
-                
-                this.onchange(value)
-            },
+               this.onchange(value);
+             },
             remoteMethod1 (query) {
-                console.log('remoteMethod1',query)
+                
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {

@@ -78,8 +78,6 @@
                     <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
-                        :onchange="onCommunityChange"
-                        v-if="openBind"
                     ></SelectCommunitiy>
                 </FormItem>
 
@@ -346,11 +344,6 @@ export default {
             onchange(data){
                 this.formItem.customerId=data;
             },
-
-            onCommunityChange(data){
-                this.formItem.communityId=data;
-            },
-
             bindSubmit(){
 
                 this.$refs[this.form].validate((valid)=>{

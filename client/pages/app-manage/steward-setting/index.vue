@@ -13,11 +13,10 @@
             </div>
              <div style='display:inline-block;float:right;padding-right:20px;'>
                 <div class='u-community-label'>社区</div>
-                <SelectCommunitiy
+                <!-- <SelectCommunitiy
                     :test="formItem"
-                    :value="Params.label"
                     :onchange="onCommunitiychange"
-                />
+                /> -->
             </div>
         </div>
          <div class="u-table">

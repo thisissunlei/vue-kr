@@ -103,7 +103,10 @@
         },
 
         created(){
-          this.formItem=Object.assign({},this.$route.query);
+          let mask=this.$route.query.mask;
+          if(this.mask==mask){
+              this.formItem=Object.assign({},this.$route.query);
+          }
         },
         
         mounted:function(){

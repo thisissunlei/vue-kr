@@ -259,7 +259,13 @@
         },
 
         created:function(){
-            var params=Object.assign({},this.$route.query,{page:1,pageSize:15});
+            let mask=this.$route.query.mask;
+            let params={};
+            if(mask=='reduce'){
+                params=Object.assign({},this.$route.query,{page:1,pageSize:15});
+            }else{
+                params=Object.assign({},{page:1,pageSize:15});
+            }
             this.getListData(params);
             this.params=params;
         },
@@ -321,6 +327,7 @@
             },
 
             submitLowerSearch(){
+                 this.params.mask='reduce';
                  utils.addParams(this.params);
             },
 
@@ -329,11 +336,11 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.mask='reduce';
                 this.params.page=1;
                 this.params.pageSize=15;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
-                this.params.mask='reduce';
                 utils.addParams(this.params);
             },
 
@@ -371,12 +378,10 @@
             },
 
             jumpReduce(){
-                utils.addParams({mask:'reduce'});
                 window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
             },
 
             jumpEdit(params){
-                utils.addParams({mask:'reduce'});
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,'_blank')
             },
 

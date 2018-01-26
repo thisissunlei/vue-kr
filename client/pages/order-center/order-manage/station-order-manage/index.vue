@@ -33,9 +33,7 @@ export default {
        ReduceList
    },
    mounted(){
-       if(this.$route.query.mask=='reduce'){
-            this.activeKey=sessionStorage.getItem('orderMask');
-       }
+      this.activeKey=sessionStorage.getItem('orderMask');
    },
    methods:{
         tabsClick(key){

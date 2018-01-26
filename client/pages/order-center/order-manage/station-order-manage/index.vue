@@ -33,7 +33,7 @@ export default {
        ReduceList
    },
    mounted(){
-      this.activeKey=sessionStorage.getItem('orderMask');
+      this.activeKey=sessionStorage.getItem('orderMask')||'join';
    },
    methods:{
         tabsClick(key){

@@ -33,6 +33,11 @@
     "less-loader": "^4.0.5",
     "nodemon": "^1.12.5",
     "scmp": "^2.0.0",
-    "vue-dateutils": "^1.0.8"
+    "vue": "2.5.13",
+    "vue-dateutils": "1.0.8",
+    "vue-loader": "^13.7.0",
+    "vue-server-renderer": "2.5.13",
+    "vue-template-compiler": "2.5.13"
+
   }
 }

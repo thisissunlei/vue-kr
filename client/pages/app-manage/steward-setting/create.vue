@@ -1,20 +1,20 @@
 <template>
 <div class="g-steward-created">
-<SectionTitle label="新增管家"></SectionTitle>
+<SectionTitle label="新增管家" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
         <FormItem label="姓名：" style="width:352px" prop="mbrId">
              <SearchMember
                     :test="formItem"
                     style="width: 250px"
-                    :onchange="onchange"
-             ></SearchMember>
+                    :onchange="onMemberchange"
+             />
         </FormItem>
         <div class="u-label-list">
             <div class="u-label">头像：</div>
             <div class="u-label-content">
                 <span v-if="!memberInfo.avatar">-</span>
-                <img v-if="memberInfo.avatar" :src="memberInfo.avatar" alt="">
+                <img v-if="memberInfo.avatar" :src="memberInfo.avatar"  />
             </div>
         </div>
         <div class="u-label-list">
@@ -127,13 +127,13 @@ export default {
           }
       }
   },
+
   mounted:function(){
-		GLOBALSIDESWITCH("false");
-		
-		
+	GLOBALSIDESWITCH("false");	
   },
+
   methods:{
-      onchange(value){
+      onMemberchange(value){
           this.formItem.mbrId=value;
           this.$http.get('search-mbr', {mbrId:value}, res=> {
                this.memberInfo = res.data;   
@@ -141,6 +141,7 @@ export default {
                     console.log('error',err)
             })
       },
+
       handleSubmit(name){
           let message = '请填写完表单';
                 this.$Notice.config({
@@ -151,7 +152,7 @@ export default {
                
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        _this.onCreateSubmit();
+                        _this.submitCreate();
                     } else {
                         _this.$Notice.error({
                             title:message
@@ -159,7 +160,8 @@ export default {
                     }
                 })
       },
-      onCreateSubmit(){
+
+      submitCreate(){
         this.$http.post('create-steward', this.formItem, res=> {
                 this.$Notice.success({
                     title:'新建成功'
@@ -176,8 +178,6 @@ export default {
     }
 
   }
-  
-  
 
 }
 </script>

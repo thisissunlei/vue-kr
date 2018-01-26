@@ -1,27 +1,27 @@
 <template>
   <div class="g-steward-manage">
-      <SectionTitle label="管家管理"></SectionTitle>
+      <SectionTitle label="管家管理" />
        <div class="u-search" >
-            <Button type="primary" @click="onCreate">新建</Button>
+            <Button type="primary" @click="jumpCreate">新建</Button>
             <div style='display:inline-block;float:right;padding-right:20px;'>
                     <Input 
                         v-model="Params.stewardName" 
                         placeholder="请输入客户名称"
                         style="width: 240px"
                     />
-                    <div class='m-search' @click="lowerSubmit">搜索</div>
+                    <div class='m-search' @click="submitLower">搜索</div>
             </div>
              <div style='display:inline-block;float:right;padding-right:20px;'>
                 <div class='u-community-label'>社区</div>
                 <SelectCommunitiy
                     :test="formItem"
-                    :onchange="onChangeCommunity"
                     :value="Params.label"
-                ></SelectCommunitiy>
+                    :onchange="onCommunitiychange"
+                />
             </div>
         </div>
          <div class="u-table">
-            <Table  border :columns="columns" :data="tableList"></Table>
+            <Table  border :columns="columns" :data="tableList"/>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
                     <Page 
@@ -30,8 +30,8 @@
                         :page-size="pageSize" 
                         show-total 
                         show-elevator
-                        @on-change="changePage"
-                    ></Page>
+                        @on-change="onPageChange"
+                    />
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
             确认要删除该管家吗？
         </div>
         <div slot="footer">
-            <Button type="primary" @click="onDeleteSubmit">确定</Button>
+            <Button type="primary" @click="submitDelete">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
         </div>
     </Modal>
@@ -60,7 +60,7 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import SelectCommunitiy from '~/components/SelectCommunitiy';
 export default {
-    name:'steward',
+    name:'Steward',
     components:{
         SectionTitle,
         SelectCommunitiy
@@ -81,6 +81,7 @@ export default {
             pageSize:15,
             openCancel:false,
             manageId:'',
+
             columns:[
                 {
                     title: '姓名',
@@ -138,7 +139,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openEdit(params.row)
+                                            this.jumpEdit(params.row)
                                         }
                                     }
                                 }, '编辑'),
@@ -163,6 +164,7 @@ export default {
             tableList:[],
         }
     },
+
     created(){
         this.getTableData(this.$route.query);
         if(!this.$route.query.stewardName){
@@ -172,6 +174,7 @@ export default {
         this.formItem.communityId=this.$route.query.cmtId;
         this.formItem.label=this.$route.query.label;
     },
+
     methods:{
         getTableData(params){
             this.$http.get('get-steward-list', params, res => {
@@ -183,30 +186,36 @@ export default {
                 });
             })
         },
-        openEdit(params){
+
+        jumpEdit(params){
             let manageId=params.manageId;
              window.open(`./steward-setting/edit/${manageId}`,'_blank');
         },
-        onCreate(){
+
+        jumpCreate(){
              window.open('./steward-setting/create','_blank');
         },
-        lowerSubmit(){
+
+        submitLower(){
                 this.page=1;
                 this.Params.page=1;
                 utils.addParams(this.Params);
         },
-        changePage(page){
+
+        onPageChange(page){
             this.Params.page=page;
             this.page=page;
             this.getTableData(this.Params);
         },
+        
         openDelete(value){
             this.openCancel=!this.openCancel;
             if(value){
                 this.manageId=value.manageId
             }
         },
-        onDeleteSubmit(){
+
+        submitDelete(){
             let params={
                     manageId: this.manageId
                 }
@@ -222,7 +231,8 @@ export default {
                     });
                 })
         },
-        onChangeCommunity(form){
+
+        onCommunitiychange(form){
             this.Params.cmtId=form.value;
             this.Params.label=form.label
             utils.addParams(this.Params);
@@ -236,7 +246,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" >
 .g-steward-manage{
 
 .u-search{

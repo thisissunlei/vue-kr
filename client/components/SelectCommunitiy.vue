@@ -36,8 +36,9 @@
             this.getCusomerList(' ')
         },
         methods: {
-            changeContent:function(test){
-                this.onchange(test.communityId)
+            changeContent:function(value){
+                
+                this.onchange(value)
             },
             remoteMethod1 (query) {
                 console.log('remoteMethod1',query)

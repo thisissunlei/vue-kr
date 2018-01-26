@@ -1,6 +1,6 @@
 <template>
 <div class="g-steward-created">
-<SectionTitle label="编辑管家"></SectionTitle>
+<SectionTitle label="编辑管家" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
         <FormItem label="姓名：" style="width:352px" prop="mbrId">
@@ -8,8 +8,8 @@
                     :test="formItem"
                     :value="mbrName"
                     style="width: 250px"
-                    :onchange="onchange"
-             ></SearchMember>
+                    :onchange="onMemberChange"
+             />
         </FormItem>
         <div class="u-label-list">
             <div class="u-label">头像：</div>
@@ -82,6 +82,7 @@ export default {
      SectionTitle,
      SearchMember
   },
+
   data(){
       return{
           formItem:{
@@ -129,13 +130,14 @@ export default {
           }
       }
   },
+
   mounted:function(){
 		GLOBALSIDESWITCH("false");
-		this.getInfo();
-		
+		this.getInfoData();
   },
+
   methods:{
-      getInfo(){
+      getInfoData(){
           let {params}=this.$route;
           this.$http.get('get-steward-detail', {manageId:params.manageId}, res=> {
                 this.formItem = res.data;  
@@ -144,10 +146,9 @@ export default {
           }, err => {
                 console.log('error',err)
           })
-
-        
       },
-      onchange(value){
+
+      onMemberChange(value){
           this.formItem.mbrId=value;
           this.$http.get('search-mbr', {mbrId:value}, res=> {
                this.memberInfo = res.data;   
@@ -155,6 +156,7 @@ export default {
                     console.log('error',err)
             })
       },
+
       handleSubmit(name){
           let message = '请填写完表单';
                 this.$Notice.config({
@@ -167,7 +169,7 @@ export default {
                
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        _this.onEditSubmit();
+                        _this.submitEdit();
                     } else {
                         _this.$Notice.error({
                             title:message
@@ -175,7 +177,8 @@ export default {
                     }
                 })
       },
-      onEditSubmit(){
+
+      submitEdit(){
         this.$http.post('edit-steward', this.formItem, res=> {
                 this.$Notice.success({
                     title:'编辑成功'

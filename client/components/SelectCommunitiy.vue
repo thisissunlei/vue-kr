@@ -23,14 +23,12 @@
         props:{
             onchange:Function,
             test:Object,
-            value:String,
         },
         data () {
             return {
                 loading1:false,
                 options1:[],
                 labelInValue:true,
-                clearable:true
             };
         },
         mounted:function(){
@@ -38,8 +36,8 @@
             this.getCusomerList(' ')
         },
         methods: {
-            changeContent:function(value){
-                this.onchange(value)
+            changeContent:function(test){
+                this.onchange(test.communityId)
             },
             remoteMethod1 (query) {
                 console.log('remoteMethod1',query)
@@ -81,13 +79,3 @@
         }
     }
 </script>
-
-<style lang="less"> 
-   .com-select-community{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-
-   }
-</style>

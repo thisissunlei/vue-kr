@@ -6,7 +6,7 @@
             <div style='display:inline-block;float:right;padding-right:20px;'>
                     <Input 
                         v-model="Params.stewardName" 
-                        placeholder="请输入客户名称"
+                        placeholder="请输入管家名称"
                         style="width: 240px"
                     />
                     <div class='m-search' @click="submitLower">搜索</div>

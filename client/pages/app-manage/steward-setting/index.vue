@@ -170,6 +170,8 @@ export default {
             this.$route.query.stewardName=""
         }
         this.Params=this.$route.query;
+        this.formItem.communityId=this.$route.query.cmtId;
+        this.formItem.label=this.$route.query.label;
     },
     methods:{
         getTableData(params){

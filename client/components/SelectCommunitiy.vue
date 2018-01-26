@@ -8,8 +8,9 @@
             :loading="loading1"
             @on-change="changeContent"
             :placeholder="value"
+            :label="test.label"
             :label-in-value="labelInValue"
-            
+            clearable
             >
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>

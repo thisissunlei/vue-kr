@@ -45,7 +45,7 @@ import http from '~/plugins/http.js';
                 // otherData:{},
                 newfloor:'3',//当前算选择的楼层
                 submitData:[],//已选择工位
-                scaleNumber:60,//比例
+                scaleNumber:40,//比例
                 Map:'',
                 inputEnd:'',//开始工位
                 inputStart:'',//结束工位
@@ -197,8 +197,8 @@ import http from '~/plugins/http.js';
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
 				let originStationList = this.origin || [];
-				// console.log('selectedObjs',selectedObjs)
-				// console.log('originStationList',originStationList)
+				console.log('selectedObjs',selectedObjs)
+				console.log('originStationList',originStationList)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];
@@ -321,11 +321,31 @@ import http from '~/plugins/http.js';
 					submitData,
 					deleteArr,
 				} = this;
-				let del = [].concat(selectedObjs);
-				var allDataObj = Object.assign({}, submitData);
-				var delDataObj = Object.assign({}, deleteArr);
-				allData = [].concat(allData);
+				let floors = [];
+				let selectedObj = {};
+				if(selectedObjs.length){
+					selectedObjs.map(item=>{
+						let floor = item.floor || item.whereFloor;
+						if(floors.indexOf(floor) == -1){
+							floors.push(floor);
+							selectedObj['a'+floor] = []
+						}
+						
+					})
 
+					selectedObjs.map((item,index)=>{
+						let floor = item.floor || item.whereFloor;
+						selectedObj['a'+floor].push(item)
+					})
+				}
+				
+				
+				
+				
+				let del = [].concat(selectedObjs);
+				var delDataObj = Object.assign({}, deleteArr);
+				var allDataObj = Object.assign({}, submitData);
+				allData = [].concat(allData);
 				for (let i = 0; i < allData.length; i++) {
 					for (let j = 0; j < del.length; j++) {
 						let belongType = "STATION"
@@ -346,28 +366,41 @@ import http from '~/plugins/http.js';
 				let submitDataAll = [];
 				let deleteDataArr = [];
 				for (let i in allDataObj) {
+					if(selectedObj[i]){
+						selectedObj[i] = []
+					}
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
+
+				for (let i in selectedObj) {
+					submitDataAll = submitDataAll.concat(selectedObj[i]);
+				}
+
 				for (let i in delDataObj) {
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
 				}
 				submitDataAll = submitDataAll.map(function(item, index) {
+					console.log('submitDataAll--map',item)
 					var obj1 = {};
 					let belongType = 1;
-					if (item.belongType == "SPACE") {
+					let type = 'OPEN'
+					if (item.belongType == "SPACE" || item.belongType == 2) {
 						belongType = 2;
+						type = 'SPACE'
+
 					}
-					obj1.id = item.belongId;
+					obj1.id = item.belongId || item.id;
 					obj1.type = belongType;
-					obj1.seatType = item.type == 'STATION'?'OPEN':item.type;
+					obj1.seatType = type;
 					obj1.belongType = belongType;
-					obj1.whereFloor = item.whereFloor;
+					obj1.whereFloor = item.whereFloor || item.floor;
 					obj1.name = item.name;
 					obj1.price = item.price;
 					obj1.capacity = item.capacity;
 					return obj1
 
 				})
+				console.log('submitDataAll',submitDataAll)
 				let station = {
 					submitData: submitDataAll,
 					deleteData: deleteDataArr,

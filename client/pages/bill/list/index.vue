@@ -179,53 +179,52 @@ import utils from '~/plugins/utils';
                     {
                         type: 'selection',
                         width: 35,
-                        align: 'center'
+                        align: 'center',
+                        fixed:'left'
                     },
                     {
                         title: '账单编号',
                         key: 'billNo',
-                        align:'center'
+                        align:'center',
+                        width:160,
+                        fixed:'left'
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
+                        width:160,
+                        fixed:'left'
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',
-                        width:100
                     },
                     {
                         title: '消费总额',
                         key: 'totalAmount',
                         align:'center',
-                        width:80,
                     },
                     {
                         title: '减免金额',
                         key: 'freeAmount',
                         align:'center',
-                        width:80,
                     },
                     {
                         title: '账单金额',
                         key: 'payableAmount',
                         align:'center',
-                        width:80,
                     },
                     {
                         title: '已付金额',
                         key: 'paidAmount',
                         align:'center',
-                        width:80,
                     },
                     {
                         title: '账单日',
                         key: 'billingDate',
                         align:'center',
-                        width:90,
                         render(h, obj){
                             if(!obj.row.billingDate){
                                 return '-'
@@ -238,7 +237,6 @@ import utils from '~/plugins/utils';
                         title: '付款截止日期',
                         key: 'billEndTime',
                         align:'center',
-                        width:90,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
                             return time;
@@ -248,7 +246,6 @@ import utils from '~/plugins/utils';
                         title: '支付状态',
                         key: 'payStatus',
                         align:'center',
-                        width:90,
                         render(h, obj){
                              switch (obj.row.payStatus){
                                 case 'WAIT':

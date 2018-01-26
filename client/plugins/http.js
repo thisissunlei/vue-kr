@@ -75,7 +75,6 @@ export default {
     if(!APIS[url].url){
       return
     }
-    console.log("=============")
     axios.get(hostname+APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {

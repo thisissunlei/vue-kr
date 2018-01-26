@@ -279,7 +279,13 @@
         },
         
         created(){
-          var params=Object.assign({},this.$route.query,{page:1,pageSize:15});
+          let mask=this.$route.query.mask;
+          let params={};
+          if(mask=='join'){
+              params=Object.assign({},this.$route.query,{page:1,pageSize:15});
+          }else{
+              params=Object.assign({},{page:1,pageSize:15});
+          }
           this.getListData(params);
           this.params=params;
         },
@@ -337,6 +343,7 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
+                this.params.mask='join';
                 this.params.page=1;
                 this.params.pageSize=15;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
@@ -345,6 +352,7 @@
             },
 
             submitLowerSearch(){
+                this.params.mask='join';
                 utils.addParams(this.params);
             },
 
@@ -380,12 +388,10 @@
             },
 
             jumpJoin(){
-                utils.addParams({mask:''});
                 window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
             },
 
             jumpRenew(){
-                utils.addParams({mask:''});
                 window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
             },
 
@@ -405,7 +411,6 @@
                     orderId:values.row.id
                 }
                 this.$http.get('order-first-payed', params).then((response)=>{
-                    utils.addParams({mask:''});
                     let type = '';
                     switch (values.row.orderType){
                         case 'IN':

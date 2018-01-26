@@ -139,11 +139,11 @@
                 </FormItem>
 
                  <FormItem label="所在社区" prop="communityId">
-                    <SelectCommunities
+                    <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
                         :onchange="onCommunityChange"
-                    ></SelectCommunities>
+                    ></SelectCommunitiy>
                 </FormItem>
 
             </Form>
@@ -204,7 +204,7 @@ import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
-import SelectCommunities from '~/components/SelectCommunities';
+import SelectCommunitiy from '~/components/SelectCommunitiy';
 
 export default {
         name: 'receive',
@@ -213,7 +213,7 @@ export default {
             HighSearch,
             SearchCompany,
             Message,
-            SelectCommunities
+            SelectCommunitiy
         },
         data () {
             return {

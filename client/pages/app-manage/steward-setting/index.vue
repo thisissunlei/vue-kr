@@ -13,11 +13,11 @@
             </div>
              <div style='display:inline-block;float:right;padding-right:20px;'>
                 <div class='u-community-label'>社区</div>
-                <SelectCommunities
+                <SelectCommunitiy
                     :test="formItem"
                     :onchange="onChangeCommunity"
                     :value="Params.label"
-                ></SelectCommunities>
+                ></SelectCommunitiy>
             </div>
         </div>
          <div class="u-table">
@@ -58,12 +58,12 @@
 import SectionTitle from '~/components/SectionTitle';
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import SelectCommunities from '~/components/SelectCommunities';
+import SelectCommunitiy from '~/components/SelectCommunitiy';
 export default {
     name:'steward',
     components:{
         SectionTitle,
-        SelectCommunities
+        SelectCommunitiy
     },
     data () {
         return{

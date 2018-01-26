@@ -1,0 +1,92 @@
+<template>
+    <div class="com-select-community">
+         <Select
+            v-model="test.communityId"
+            filterable
+            remote
+            :remote-method="remoteMethod1"
+            :loading="loading1"
+            @on-change="changeContent"
+            :placeholder="value"
+            :label-in-value="labelInValue"
+            
+            >
+            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+        </Select>
+    </div>
+</template>
+
+
+<script>
+    export default {
+        props:{
+            onchange:Function,
+            test:Object,
+            value:String,
+        },
+        data () {
+            return {
+                loading1:false,
+                options1:[],
+                labelInValue:true,
+                clearable:true
+            };
+        },
+        mounted:function(){
+           
+            this.getCusomerList(' ')
+        },
+        methods: {
+            changeContent:function(value){
+                this.onchange(value)
+            },
+            remoteMethod1 (query) {
+                console.log('remoteMethod1',query)
+                if (query !== '') {
+                    this.loading1 = true;
+                    setTimeout(() => {
+                        this.loading1 = false;
+                        this.getCusomerList(query)
+                    }, 200);
+                } else {
+                    this.getCusomerList(' ')
+
+                }
+            },
+            getCusomerList:function(name){
+                let params = {
+                    communityName:name
+                }
+                let list = [];
+                let _this = this;
+                this.$http.get('get-mainbill-community', params, r => {
+                    console.log('r', r);
+                    list = r.data;
+                    list.map((item)=>{
+                        let obj = item;
+                        obj.label = item.communityname;
+                        obj.value = item.id+'';
+                        return obj;
+                    });
+                    _this.options1 = list;
+                }, e => {
+                    console.log('error',e)
+                })
+                return list;
+
+            }
+                    
+               
+        }
+    }
+</script>
+
+<style lang="less"> 
+   .com-select-community{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+
+   }
+</style>

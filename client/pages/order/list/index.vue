@@ -39,7 +39,7 @@
         <span @click="showSearch"></span> 
          <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
-                v-model="customerName" 
+                v-model="params.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
             ></Input>
@@ -52,6 +52,7 @@
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
+                    :current="page" 
                     :total="totalCount" 
                     :page-size="pageSize" 
                     @on-change="changePage" 
@@ -107,7 +108,9 @@ import HighSearch from './highSearch';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
-import CommonFuc from '~/components/CommonFuc';
+import utils from '~/plugins/utils';
+
+
 export default {
         name: 'Meeting',
         components:{
@@ -122,14 +125,15 @@ export default {
                 totalCount:1,
                 tableData:[],
                 pageSize:15,
+                page:1,
                 params:{
                     page:1,
-                    pageSize:15
+                    pageSize:15,
+                    customerName:''
                 },
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                customerName:'',
                 msg:'',
                 ifCancel:true,
                 columns: [
@@ -167,29 +171,34 @@ export default {
                     },
                     {
                         title: '订单状态',
-                        key: 'orderstatus',
+                        key: 'orderStatus',
                         align:'center',
                         width:100,
                         render(h, obj){
-                            if(obj.row.orderStatus==='VALID'){
-                                 return h('span', { 
-										style: {
-											color:'#666666'
-										}       
-                                    }, '已生效');
-                            }else if(obj.row.orderStatus==='CANCEL'){
+                            switch (obj.row.orderStatus){
+                                case 'VALID':
                                 return h('span', { 
-										style: {
-											color:'#F5A623'
-										}       
-                                }, '已作废');
-                            }else if(obj.row.orderStatus==='REFUND'){
+                                            style: {
+                                                color:'#666666'
+                                            }       
+                                        }, '已生效');
+                                break;
+                                case 'CANCEL':
                                 return h('span', { 
-										style: {
-											color:'#FF6868'
-										}       
-                                }, '已退订');
+                                            style: {
+                                                color:'#F5A623'
+                                            }       
+                                        }, '已作废');
+                                break;
+                                case 'REFUND':
+                                return h('span', { 
+                                            style: {
+                                                color:'#FF6868'
+                                            }       
+                                    }, '已退订');
+                                break;
                             }
+                           
                         }
                     },
                     {
@@ -257,12 +266,17 @@ export default {
                 
             }
         },
-        mounted:function(){
-            this.getTableData(this.params);
+        created(){
+             this.getTableData(this.$route.query);
+             if(!this.$route.query.customerName){
+                 this.$route.query.customerName=""
+             }
+             this.params=this.$route.query;
+           
         },
         methods:{
             showSearch (params) {
-                CommonFuc.clearForm(this.searchData);
+                utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
             openView(params){
@@ -270,31 +284,35 @@ export default {
             },
             cancel (params) {
 
-                this.$http.get('get-cancel-msg', {orderId:params.orderId}, r => {
-                    this.msg=r.data.msg;
-                    if(r.code=='2'){
+                this.$http.get('get-cancel-msg', {orderId:params.orderId}, res => {
+                    this.msg=res.data.msg;
+                    if(res.code=='2'){
                         this.ifCancel=false
                     }else{
                         this.ifCancel=true;
                     }
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
                 this.openCancel=!this.openCancel;
                 this.itemDetail=params;
             },
             orderCancel(){
+               
                 if(!this.ifCancel){
+                     this.openCancel=false;
                     return;
                 }
             let itemDetail=this.itemDetail;
             let  params={
                     orderId:itemDetail.orderId
                 }
-                this.$http.post('cancel-order', params, r => {
-                    if(r.code==-1){
+                this.$http.post('cancel-order', params, res => {
+                    if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -303,42 +321,52 @@ export default {
                     this.warn="作废成功!"
                     this.openMessage=true;
                     this.getTableData(this.params);
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
             },
             onExport(){
                  console.log('导出')
             },
             getTableData(params){
-
-                this.$http.get('order-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('order-list', params, res => {
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, e => {
-                    console.log('error',e)
+                }, err => {
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
             },
             changePage(page){
-               let Params={
-                    page:page,
-                    pageSize:this.pageSize
-                }
-                this.getTableData(Params);
+                this.params.page=page;
+                this.page=page;
+                this.getTableData(this.params);
             },
              getSearchData(form){
                 this.searchData=form;
             },
              searchSubmit(){
-                this.getTableData(this.searchData)
+                this.params=this.searchData;
+                this.page=1;
+                this.params.page=1;
+                utils.addParams(this.params);
             },
             onChangeOpen(data){
                 this.openMessage=data;
             },
             lowerSubmit(){
-                this.params.customerName=this.customerName;
-                this.getTableData(this.params);
+                let customerName=this.params.customerName;
+                this.page=1;
+                this.params={
+                    page:1,
+                    pageSize:15,
+                    customerName:customerName
+                }
+                utils.addParams(this.params);
             },
 
         }

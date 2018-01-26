@@ -71,8 +71,7 @@ export default {
                 page:1,
                 pageSize:15,
                 stewardName:'',
-                cmtId:'',
-                label:'请选择'
+                cmtId:''
             },
             formItem:{
                 communityId:''

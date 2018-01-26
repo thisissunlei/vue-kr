@@ -7,7 +7,7 @@
             :remote-method="remoteMethod1"
             :loading="loading1"
             @on-change="changeContent"
-            :placeholder="value"
+            placeholder="请选择"
             :label="test.label"
             :label-in-value="labelInValue"
             clearable

@@ -1012,6 +1012,7 @@ import utils from '~/plugins/utils';
                             obj.end = item.endDate
                             return obj;
                         })
+                        _this.disabled = false;
                         _this.selectedDel = [];
                         _this.renewForm.rentAmount =  Math.round(money*100)/100;
                         _this.renewForm.stationAmount = Math.round(money*100)/100;

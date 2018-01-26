@@ -308,6 +308,10 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
+                        title: '定价',
+                        key: 'guidePrice'
+                    },
+                    {
                         title: '标准单价（元/月）',
                         key: 'originalPrice',
                         render: (h, params) => {

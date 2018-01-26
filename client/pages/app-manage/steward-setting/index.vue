@@ -165,13 +165,20 @@ export default {
     },
 
     created(){
-        this.getTableData(this.$route.query);
-        if(!this.$route.query.stewardName){
-            this.$route.query.stewardName=""
+        let query=this.$route.query;
+        if (Object.keys(query).length !== 0) {
+            this.getTableData(query);
+            if(!query.stewardName){
+                query.stewardName=""
+            }
+            this.Params=query;
+            this.formItem.communityId=query.cmtId;
+            this.formItem.label=query.label;
+        }else{
+            this.getTableData(this.Params);
         }
-        this.Params=this.$route.query;
-        this.formItem.communityId=this.$route.query.cmtId;
-        this.formItem.label=this.$route.query.label;
+        
+        
     },
 
     methods:{

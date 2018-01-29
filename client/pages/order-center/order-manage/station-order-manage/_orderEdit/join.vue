@@ -1137,6 +1137,9 @@ import utils from '~/plugins/utils';
 
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
+                if(this.stationList.length){
+                    this.disabled = false
+                }
                 this.getStationAmount()
                 this.openStation = false
                 this.clearSale()

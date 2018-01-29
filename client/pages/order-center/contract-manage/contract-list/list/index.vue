@@ -458,6 +458,7 @@
                 }, (response) => {
                     this.showTakeEffect();
                     this.getListData(this.params);
+                    this.openMessage=true;
                     this.MessageType=response.message=='ok'?"success":"error";
                     this.warn="已合同生效！";
                 }, (error) => {
@@ -559,10 +560,9 @@
                     utils.downFile(response.data,'hetong.pdf')
                    
                 }, (error) => {
-                    console.log(error,"?????")
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn="已合同生效！";
+                    this.warn="下载失败";
                 })   
             },
             

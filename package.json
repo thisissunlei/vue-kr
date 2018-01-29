@@ -45,6 +45,7 @@
     "nuxt": "^1.0.0-rc11",
     "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
-    "validate-commit-msg": "^2.14.0"
+    "validate-commit-msg": "^2.14.0",
+    "source-map-support": "^0.4.15"
   }
 }

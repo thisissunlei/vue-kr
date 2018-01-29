@@ -416,7 +416,7 @@ import utils from '~/plugins/utils';
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                location.href=`./list/detail/${params.billId}`;
+                window.open(`./list/detail/${params.billId}`,'_blank');
             },
             showSettle (params) {
                 this.itemDetail=params;

@@ -1,55 +1,46 @@
 <template>
     <div class="com-select-community">
-        <!-- <Select
-            :v-model="test.communityId"
+         <Select
+            v-model="test.communityId"
             filterable
             remote
-            :placeholder="value"
             :remote-method="remoteMethod1"
             :loading="loading1"
             @on-change="changeContent"
+            placeholder="请选择"
+            :label="test.label"
+            :label-in-value="labelInValue"
+            clearable
             >
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
-        </Select> -->
-        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
     </div>
 </template>
 
 
 <script>
-
-
-import http from '~/plugins/http.js';
-
     export default {
-
         props:{
             onchange:Function,
             test:Object,
-            value:String,
         },
         data () {
             return {
-                community:'',
                 loading1:false,
                 options1:[],
                 labelInValue:true,
-                clearable:true
             };
         },
-
         mounted:function(){
+           
             this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
-                this.onchange(value)
-            },
-
+               this.onchange(value);
+             },
             remoteMethod1 (query) {
-
+                
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -67,33 +58,24 @@ import http from '~/plugins/http.js';
                 }
                 let list = [];
                 let _this = this;
-
-                this.$http.get('join-bill-community','').then((response)=>{    
-                    list = response.data.items;
+                this.$http.get('get-mainbill-community', params, r => {
+                    console.log('r', r);
+                    list = r.data;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.name;
+                        obj.label = item.communityname;
                         obj.value = item.id+'';
                         return obj;
                     });
-                    _this.loading1 = false;
                     _this.options1 = list;
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-            }    
+                }, e => {
+                    console.log('error',e)
+                })
+                return list;
+
+            }
+                    
+               
         }
     }
 </script>
-
-<style lang="less"> 
-   .com-select-community{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-
-   }
-</style>

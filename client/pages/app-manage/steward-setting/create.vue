@@ -1,6 +1,6 @@
 <template>
 <div class="g-steward-created">
-<SectionTitle label="新增管家" />
+<SectionTitle title="新增管家" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
         <FormItem label="姓名：" style="width:352px" prop="mbrId">

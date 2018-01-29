@@ -392,10 +392,6 @@ export default {
             },
 
             lowerSubmit(){
-<<<<<<< HEAD
-              
-=======
->>>>>>> master
                 this.page=1;
                 this.params={
                     page:1,

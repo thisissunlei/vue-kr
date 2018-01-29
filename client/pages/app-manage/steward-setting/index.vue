@@ -1,6 +1,6 @@
 <template>
   <div class="g-steward-manage">
-      <SectionTitle label="管家管理" />
+      <SectionTitle title="管家管理" />
        <div class="u-search" >
             <Button type="primary" @click="jumpCreate">新建</Button>
             <div style='display:inline-block;float:right;padding-right:20px;'>

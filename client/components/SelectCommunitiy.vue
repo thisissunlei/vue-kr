@@ -58,9 +58,8 @@
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('get-mainbill-community', params, r => {
-                    console.log('r', r);
-                    list = r.data;
+                this.$http.get('get-mainbill-community', params).then((res)=>{
+                    list = res.data;
                     list.map((item)=>{
                         let obj = item;
                         obj.label = item.communityname;
@@ -68,8 +67,10 @@
                         return obj;
                     });
                     _this.options1 = list;
-                }, e => {
-                    console.log('error',e)
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
                 })
                 return list;
 

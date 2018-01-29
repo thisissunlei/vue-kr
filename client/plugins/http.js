@@ -123,14 +123,27 @@ export default {
         success && success(response)
         resolve(response)
       }else{
-        failure && failure(response)
-        reject(response);
+
+        
+        if(failure){
+          failure && failure(response)
+        }else{
+          return Promise.reject(response)
+        }
+        
+        
       }
     })
     .catch(function (error) {
-      error = error.response.data
-      failure && failure(error)
-      reject(error)
+      
+      if(error.response){
+        error = error.response.data;
+        failure && failure(error);
+         reject && reject(error)
+      }else{
+        reject(error)
+      }
+
     });
   }),
   put:  (url, params, success, failure) => new Promise((resolve, reject) => {

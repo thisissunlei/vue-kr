@@ -750,20 +750,24 @@ import utils from '~/plugins/utils';
                  _this.disabled = false;
                     _this.discountError = false;
 
-                 this.$http.post('count-sale', params, r => {
+                 this.$http.post('count-sale', params).then( r => {
                     _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
                     let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     
-                }, e => {
+                }).catch( e => {
+                    if(_this.stationList.length){
+
                      _this.disabled = true;
+                    
                     _this.discountError = e.message;
 
                      _this.$Notice.error({
                         title:e.message
                     })
+                 }
 
                 })
 
@@ -1137,6 +1141,9 @@ import utils from '~/plugins/utils';
 
                 this.stationList = this.stationData.submitData || [];
                 this.delStation = this.stationData.deleteData|| [];
+                if(this.stationList.length){
+                    this.disabled = false
+                }
                 this.getStationAmount()
                 this.openStation = false
                 this.clearSale()
@@ -1316,7 +1323,7 @@ import utils from '~/plugins/utils';
                     seats:JSON.stringify(station)
                 }
                 let _this = this;
-                     this.$http.post('get-station-amount', params, r => {
+                     this.$http.post('get-station-amount', params).then( r => {
                         let money = 0;
                         _this.stationList = r.data.seats.map(item=>{
                             let obj = item;
@@ -1337,7 +1344,9 @@ import utils from '~/plugins/utils';
                         }
 
 
-                    }, e => {
+                    }).catch( e => {
+                        console.log('====>',e)
+                        _this.disabled = false;
                         _this.$Notice.error({
                             title:e.message
                         })

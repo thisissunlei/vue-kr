@@ -135,11 +135,13 @@ export default {
   methods:{
       onMemberchange(value){
           this.formItem.mbrId=value;
-          this.$http.get('search-mbr', {mbrId:value}, res=> {
+          this.$http.get('search-mbr', {mbrId:value}).then((res)=>{
                this.memberInfo = res.data;   
-            }, err => {
-                    console.log('error',err)
-            })
+          }).catch((err)=>{
+               this.$Notice.error({
+                    title:err.message
+                });
+          })
       },
 
       handleSubmit(name){
@@ -162,19 +164,19 @@ export default {
       },
 
       submitCreate(){
-        this.$http.post('create-steward', this.formItem, res=> {
-                this.$Notice.success({
+        this.$http.post('create-steward', this.formItem).then((res)=>{
+            this.$Notice.success({
                     title:'新建成功'
                 });
                 setTimeout(function(){
                     window.close();
                     window.opener.location.reload();
                 },1000) 
-            }, err => {
-                this.$Notice.error({
+        }).catch((err)=>{
+             this.$Notice.error({
                     title:err.message
                 });
-            })
+        })
     }
 
   }

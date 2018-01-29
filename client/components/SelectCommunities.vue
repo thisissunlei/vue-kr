@@ -25,6 +25,7 @@ import http from '~/plugins/http.js';
 
     export default {
         props:["onchange","test","value","disabled"],
+
         // props:{
         //     onchange:Function,
         //     test:Object,

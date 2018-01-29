@@ -362,10 +362,12 @@
                             ];
                                
                             if(params.row.otherAgreedButton){
-                                btnRender.push(h('Button', {
+                                btnRender.push(h(Buttons, {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        checkAction:'contract_otheragreed',
+                                        label:'其他约定',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -375,7 +377,7 @@
                                             this.onConvention(params)
                                         }
                                     }
-                                }, '其他约定'))
+                                }))
                             }
                             if(params.row.effectButton){
                                 btnRender.push( h(Buttons, {

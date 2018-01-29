@@ -460,7 +460,7 @@
                     this.getListData(this.params);
                     this.openMessage=true;
                     this.MessageType=response.message=='ok'?"success":"error";
-                    this.warn="已合同生效！";
+                    this.warn="合同已生效！";
                 }, (error) => {
                     this.effectDisabled=false;
                     this.$Notice.error({

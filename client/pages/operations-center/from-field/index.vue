@@ -57,7 +57,7 @@
             <NewPage ref="fromFieldNewPage" v-if="openNewPage" @newPageData="newPageDataChange" :close="showNewPage" />
            <div slot="footer">
                 <Button v-if="!isNewPageSubmit" disabled>确定</Button>
-                <Button v-if="isNewPageSubmit"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
+                <Button v-if="isNewPageSubmit" :disabled="isDisabled"  type="primary" @click="submitNewPage('fromFieldValidate')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="showNewPage">取消</Button>
             </div>
         </Modal>
@@ -91,7 +91,8 @@
             Message,
             HeightSearch,
             NewPage,
-            Buttons
+            Buttons,
+            
         },
         head () {
             return {
@@ -117,6 +118,7 @@
                 totalCount:1,
                 newPageData:{},
                 isNewPageSubmit:true,
+                isDisabled:false,
                 columns: [
                     
                     {
@@ -289,6 +291,7 @@
             },
 
             submitNewPage(name){
+                this.isDisabled = true;
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
@@ -308,7 +311,9 @@
                     this.warn="新建成功";
                     utils.addParams(this.params);
                     this.showNewPage();
+                    this.isDisabled = false;
                 }, e => {
+                    this.isDisabled = false;
                     this.isNewPageSubmit = false;
                     this.openMessage=true;
                     this.MessageType="error";

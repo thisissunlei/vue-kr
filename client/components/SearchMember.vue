@@ -1,30 +1,22 @@
 <template>
-    <div class="com-select-community">
-        <!-- <Select
-            :v-model="test.communityId"
-            filterable
-            remote
-            :placeholder="value"
-            :remote-method="remoteMethod1"
-            :loading="loading1"
+    <div class="ui-select-member">
+         <Select 
+            :v-model="test.mbrId" 
+            remote 
+            filterable 
+            :remote-method="remoteCustomer" 
+            :loading="loading1" 
             @on-change="changeContent"
-            >
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
-        </Select> -->
-        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+            :placeholder="value"
+        >
+            <Option v-for="(option) in customerOptions" :value="''+option.value+''" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
 
 
 <script>
-
-
-import http from '~/plugins/http.js';
-
     export default {
-
         props:{
             onchange:Function,
             test:Object,
@@ -32,14 +24,11 @@ import http from '~/plugins/http.js';
         },
         data () {
             return {
-                community:'',
                 loading1:false,
-                options1:[],
-                labelInValue:true,
-                clearable:true
+                customerOptions:[],
+                labelInValue:true
             };
         },
-
         mounted:function(){
             this.getCusomerList(' ')
         },
@@ -47,9 +36,7 @@ import http from '~/plugins/http.js';
             changeContent:function(value){
                 this.onchange(value)
             },
-
-            remoteMethod1 (query) {
-
+            remoteCustomer (query) {
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -63,37 +50,37 @@ import http from '~/plugins/http.js';
             },
             getCusomerList:function(name){
                 let params = {
-                    communityName:name
+                    searchName:name || ''
                 }
                 let list = [];
                 let _this = this;
-
-                this.$http.get('join-bill-community','').then((response)=>{    
-                    list = response.data.items;
+                this.$http.get('search-mbr-list', params, r => {
+                    list = r.data.mbrList;
                     list.map((item)=>{
                         let obj = item;
                         obj.label = item.name;
-                        obj.value = item.id+'';
+                        obj.value = item.uid;
                         return obj;
                     });
-                    _this.loading1 = false;
-                    _this.options1 = list;
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-            }    
+                    
+                    _this.customerOptions = list;
+                }, e => {
+                    console.log('error',e)
+                })
+
+            }
+                    
+               
         }
     }
 </script>
 
 <style lang="less"> 
-   .com-select-community{
+.ui-select-member{
     ::-webkit-input-placeholder { color:#666; }
     ::-moz-placeholder { color:#666; } /* firefox 19+ */
     :-ms-input-placeholder { color:#666; } /* ie */
     input:-moz-placeholder { color:#666; }
+}
 
-   }
 </style>

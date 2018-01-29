@@ -11,6 +11,7 @@
             filterable
             remote
             :loading="loading1"
+             clearable
             @on-change="changeContent"
             :remote-method="remoteCustomer"
             >

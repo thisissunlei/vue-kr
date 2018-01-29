@@ -118,6 +118,7 @@
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
+    import Buttons from '~/components/Buttons';
     var maxWidth = 170;
     export default {
          head () {
@@ -132,7 +133,8 @@
             krUpload,
             HeightSearch,
             Loading,
-            Message
+            Message,
+            Buttons
         },
        
         data () {
@@ -376,10 +378,12 @@
                                 }, '其他约定'))
                             }
                             if(params.row.effectButton){
-                                btnRender.push( h('Button', {
+                                btnRender.push( h(Buttons, {
                                     props: {
                                         type: 'text',
-                                        size: 'small'
+                                        checkAction:'contract_effective',
+                                        label:'合同生效',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
                                     style: {
                                         color:'#2b85e4'
@@ -389,7 +393,7 @@
                                             this.onContractFor(params)
                                         }
                                     }
-                                }, '合同生效'))
+                                }))
                             }
                            return h('div',btnRender);  
                         }
@@ -454,8 +458,9 @@
                 }, (response) => {
                     this.showTakeEffect();
                     this.getListData(this.params);
+                    this.openMessage=true;
                     this.MessageType=response.message=='ok'?"success":"error";
-                    this.warn="已合同生效！";
+                    this.warn="合同已生效！";
                 }, (error) => {
                     this.effectDisabled=false;
                     this.$Notice.error({
@@ -555,10 +560,9 @@
                     utils.downFile(response.data,'hetong.pdf')
                    
                 }, (error) => {
-                    console.log(error,"?????")
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn="已合同生效！";
+                    this.warn="下载失败";
                 })   
             },
             

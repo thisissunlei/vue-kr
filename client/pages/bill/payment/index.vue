@@ -76,12 +76,12 @@
                 </FormItem>
 
                  <FormItem label="所在社区" prop="communityId">
-                    <SelectCommunities
+                    <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
-                        :onchange="onCommunityChange"
+
                         v-if="openBind"
-                    ></SelectCommunities>
+                    ></SelectCommunitiy>
                 </FormItem>
 
             </Form>
@@ -142,7 +142,7 @@ import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
-import SelectCommunities from '~/components/SelectCommunities';
+import SelectCommunitiy from '~/components/SelectCommunitiy';
 
 export default {
         name: 'receive',
@@ -151,7 +151,7 @@ export default {
             HighSearch,
             SearchCompany,
             Message,
-            SelectCommunities
+            SelectCommunitiy
         },
         data () {
             return {
@@ -320,7 +320,7 @@ export default {
             },
 
             openView(params){
-                location.href=`./payment/detail/${params.id}`;
+                window.open(`./payment/detail/${params.id}`,'_blank');
             },
 
             bindPerson (params) {
@@ -349,11 +349,6 @@ export default {
             onchange(data){
                 this.formItem.customerId=data;
             },
-
-            onCommunityChange(data){
-                this.formItem.communityId=data;
-            },
-
             bindSubmit(){
 
                 this.$refs[this.form].validate((valid)=>{
@@ -371,7 +366,7 @@ export default {
                             this.warn="客户绑定成功！"
                             this.openMessage=true;
                             this.getTableData(this.params);
-                        }).catch(()=>{
+                        }).catch((err)=>{
                              this.$Notice.error({
                                 title:err.message
                             });
@@ -397,7 +392,6 @@ export default {
             },
 
             lowerSubmit(){
-              
                 this.page=1;
                 this.params={
                     page:1,
@@ -453,6 +447,10 @@ export default {
 
     }
 </script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 <style lang="less">
 
 .g-order{

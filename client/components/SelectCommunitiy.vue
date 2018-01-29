@@ -7,9 +7,10 @@
             :remote-method="remoteMethod1"
             :loading="loading1"
             @on-change="changeContent"
-            :placeholder="value"
+            placeholder="请选择"
+            :label="test.label"
             :label-in-value="labelInValue"
-            
+            clearable
             >
             <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
@@ -22,14 +23,12 @@
         props:{
             onchange:Function,
             test:Object,
-            value:String,
         },
         data () {
             return {
                 loading1:false,
                 options1:[],
                 labelInValue:true,
-                clearable:true
             };
         },
         mounted:function(){
@@ -38,10 +37,10 @@
         },
         methods: {
             changeContent:function(value){
-                this.onchange(value)
-            },
+               this.onchange(value);
+             },
             remoteMethod1 (query) {
-                console.log('remoteMethod1',query)
+                
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -80,13 +79,3 @@
         }
     }
 </script>
-
-<style lang="less"> 
-   .com-select-community{
-    ::-webkit-input-placeholder { color:#666; }
-    ::-moz-placeholder { color:#666; } /* firefox 19+ */
-    :-ms-input-placeholder { color:#666; } /* ie */
-    input:-moz-placeholder { color:#666; }
-
-   }
-</style>

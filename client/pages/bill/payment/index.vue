@@ -1,68 +1,3 @@
-<style lang="less">
-
-.g-order{
-   .u-search{
-        height:32px;
-        margin:16px 0;
-        padding:0 20px;
-        .u-high-search{
-            width:22px;
-            height:22px;
-            background:url('~/assets/images/upperSearch.png') no-repeat center;
-            background-size: contain;
-            float:right;
-
-        }
-        .m-search{
-            color:#2b85e4;
-            display:inline-block;
-            margin-left:10px;
-            font-size:14px;
-            cursor:pointer;
-        }
-    }
-    .ivu-table-cell{
-        padding:0;
-    }
-    .u-table{
-        padding:0 20px;
-    }
-    .u-cancel-title{
-        width:85%;
-        margin:10px auto;
-        font-size:14px;
-        text-indent: 28px;
-    }
-    .u-clearfix { zoom:1; }
-    .u-clearfix:after {
-        clear: both;
-        content: '.';
-        height: 0;
-        display: block;
-        visibility: hidden;
-    }
-
-}
-.u-bind{
-  width:330px;
-  margin:25px auto 0;
-}
-.u-upload-title{
-    width:500px;
-    div{
-        width:97%;
-    }
-    .u-upload-content{
-        width:94px;
-        height:110px;
-        margin:25px auto 0;
-        i{
-            text-indent: 19px;
-        }
-    }
-}
-</style>
-
 <template>
 
 <div class="g-order">
@@ -135,15 +70,16 @@
                         :test="formItem"
                         style="width: 250px"
                         :onchange="onchange"
+                        v-if="openBind"
                     ></SearchCompany>
                 </FormItem>
 
                  <FormItem label="所在社区" prop="communityId">
-                    <SelectCommunities
+                    <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
-                        :onchange="onCommunityChange"
-                    ></SelectCommunities>
+                        v-if="openBind"
+                    ></SelectCommunitiy>
                 </FormItem>
 
             </Form>
@@ -204,7 +140,7 @@ import HighSearch from './highSearch';
 import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
-import SelectCommunities from '~/components/SelectCommunities';
+import SelectCommunitiy from '~/components/SelectCommunitiy';
 
 export default {
         name: 'receive',
@@ -213,7 +149,7 @@ export default {
             HighSearch,
             SearchCompany,
             Message,
-            SelectCommunities
+            SelectCommunitiy
         },
         data () {
             return {
@@ -380,7 +316,7 @@ export default {
             },
 
             openView(params){
-                location.href=`./payment/detail/${params.id}`;
+                window.open(`./payment/detail/${params.id}`,'_blank');
             },
 
             bindPerson (params) {
@@ -409,11 +345,6 @@ export default {
             onchange(data){
                 this.formItem.customerId=data;
             },
-
-            onCommunityChange(data){
-                this.formItem.communityId=data;
-            },
-
             bindSubmit(){
 
                 this.$refs[this.form].validate((valid)=>{
@@ -457,12 +388,11 @@ export default {
             },
 
             lowerSubmit(){
-                let customerName=this.params.customerName;
                 this.page=1;
                 this.params={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    customerName:this.params.customerName || ''
                 }
                 utils.addParams(this.params);
             },
@@ -514,3 +444,68 @@ export default {
 
     }
 </script>
+
+<style lang="less">
+
+.g-order{
+   .u-search{
+        height:32px;
+        margin:16px 0;
+        padding:0 20px;
+        .u-high-search{
+            width:22px;
+            height:22px;
+            background:url('~/assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;
+            float:right;
+
+        }
+        .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+        }
+    }
+    .ivu-table-cell{
+        padding:0;
+    }
+    .u-table{
+        padding:0 20px;
+    }
+    .u-cancel-title{
+        width:85%;
+        margin:10px auto;
+        font-size:14px;
+        text-indent: 28px;
+    }
+    .u-clearfix { zoom:1; }
+    .u-clearfix:after {
+        clear: both;
+        content: '.';
+        height: 0;
+        display: block;
+        visibility: hidden;
+    }
+
+}
+.u-bind{
+  width:330px;
+  margin:25px auto 0;
+}
+.u-upload-title{
+    width:500px;
+    div{
+        width:97%;
+    }
+    .u-upload-content{
+        width:94px;
+        height:110px;
+        margin:25px auto 0;
+        i{
+            text-indent: 19px;
+        }
+    }
+}
+</style>

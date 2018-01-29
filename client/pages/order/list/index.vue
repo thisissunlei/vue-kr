@@ -280,7 +280,8 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                location.href=`./list/detail/${params.orderId}`;
+                window.open(`./list/detail/${params.orderId}`,'_blank');
+               
             },
             cancel (params) {
 

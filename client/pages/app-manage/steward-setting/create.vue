@@ -19,7 +19,7 @@
         </div>
         <div class="u-label-list">
             <div class="u-label">昵称：</div>
-            <div class="u-label-content">{{memberInfo.mbrNike}}</div>
+            <div class="u-label-content">{{memberInfo.mbrNick}}</div>
         </div>
         <div class="u-label-list">
             <div class="u-label">所属社区：</div>

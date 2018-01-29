@@ -3,7 +3,7 @@ export default  {
   
   //获取平面图信息
   'getplanmap': {
-      url: '/api/krspace-op-web/cmt/floor-graph/select-info?',
+      url: '/api/krspace-op-web/cmt/floor-graph/vue/select-info?',
       method: 'get'
   },
   //获取社区List组件

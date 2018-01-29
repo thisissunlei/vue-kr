@@ -714,12 +714,14 @@ import utils from '~/plugins/utils';
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     _this.formItem.rentAmount = r.data.totalrent;
                 }, e => {
-                    _this.disabled = true;
-                    _this.discountError = e.message;
+                    if(_this.stationList.length){
+                        _this.disabled = true;
+                        _this.discountError = e.message;
 
-                     _this.$Notice.error({
-                        title:e.message
-                    })
+                         _this.$Notice.error({
+                            title:e.message
+                        })
+                    }
                 })
 
             },

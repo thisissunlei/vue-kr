@@ -24,12 +24,12 @@
 import http from '~/plugins/http.js';
 
     export default {
-
-        props:{
-            onchange:Function,
-            test:Object,
-            value:String,
-        },
+        props:['onchange','test','value','disabled'],
+        // props:{
+        //     onchange:Function,
+        //     test:Object,
+        //     value:String,
+        // },
         data () {
             return {
                 community:'',

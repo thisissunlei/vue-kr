@@ -1338,12 +1338,11 @@ import utils from '~/plugins/utils';
 
 
                     }, e => {
+                        console.log('----',e)
+                        _this.disabled = false;
                         _this.$Notice.error({
                             title:e.message
                         })
-                        setTimeout(function(){
-                            _this.disabled = false;
-                        },500)
 
                     })
             }

@@ -366,7 +366,7 @@ export default {
                             this.warn="客户绑定成功！"
                             this.openMessage=true;
                             this.getTableData(this.params);
-                        }).catch(()=>{
+                        }).catch((err)=>{
                              this.$Notice.error({
                                 title:err.message
                             });

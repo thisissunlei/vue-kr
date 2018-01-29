@@ -183,11 +183,11 @@ export default {
 
     methods:{
         getTableData(params){
-            this.$http.get('get-steward-list', params, res => {
+            this.$http.get('get-steward-list', params).then((res)=>{
                 this.tableList=res.data.items;
                 this.totalCount=res.data.totalCount;
-            }, err => {
-                this.$Notice.error({
+            }).catch((err)=>{
+                 this.$Notice.error({
                     title:err.message
                 });
             })
@@ -225,17 +225,18 @@ export default {
             let params={
                     manageId: this.manageId
                 }
-                this.$http.post('delete-steward', params, res => {
+                this.$http.post('delete-steward', params).then((res)=>{
                     this.$Notice.success({
                         title:'删除成功'
                     });  
                     this.openDelete();
                     this.getTableData(this.Params);
-                }, err => {
+                }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
+                 
         },
 
         onCommunitiychange(form){

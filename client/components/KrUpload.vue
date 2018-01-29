@@ -218,7 +218,7 @@ export default{
 				
 			};
 
-			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
+			xhr.open('GET', 'http://'+window.location.host+'/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
 			xhr.responseType = 'json';
 			xhr.send();
 		},

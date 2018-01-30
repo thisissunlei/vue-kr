@@ -574,27 +574,18 @@
                         value: 'renew'
                     }];
                     var type = "join";
-                    // console.log(this.parameter,"pppppp")
-                    // return;
-
-
                     var href = '';
                     var port = location.port || '';
                     if (port) {
                         port = ":" + port;
                     }
-                   
-                    // href = location.protocol + "//" + location.hostname + port + alias + router;
-
-
-
-
                     for(let i=0;i<typeList.length;i++){
                         if(typeList[i].name==this.columnDetail.contractType){
                             type = typeList[i].value;
                         }
                     }
                     window.open(location.protocol + "//"+location.hostname+port+`/new/#/operation/customerManage/1/order/1/agreement/${type}/${this.columnDetail.orderId}/print?print=${this.isCachet}`,'_blank')  
+                    this.showDown();
                     return ;
                 }
                 this.config()

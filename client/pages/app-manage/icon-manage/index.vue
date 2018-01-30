@@ -36,10 +36,10 @@ export default {
         return{
             Params:{
                 page:1,
-                pageSize:15,
+                pageSize:4,
             },
             page:1,
-            pageSize:15,
+            pageSize:4,
             totalCount:0,
             tableList:[],
             columns:[
@@ -154,10 +154,16 @@ export default {
             })
         },
         jumpCreate(){
-
+             window.open('./icon-manage/create','_blank');
         },
-        onPageChange(){
-
+        jumpEdit(params){
+            let iconId=params.iconId;
+             window.open(`./icon-manage/edit/${iconId}`,'_blank');
+        },
+        onPageChange(page){
+            this.Params.page=page;
+            this.page=page;
+            this.getTableData(this.Params);
         },
     },
 }

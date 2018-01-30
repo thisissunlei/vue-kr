@@ -40,7 +40,31 @@ export default  {
         url: '/api/krspace-finance-web/app/icon/list',
         method: 'get'
     },
-
+    //app管理--Icon管理--删除
+   'delete-icon': {
+        url: '/api/krspace-finance-web/app/icon/delete',
+        method: 'post'
+    },
+    //app管理--Icon管理--新增
+   'create-icon': {
+        url: '/api/krspace-finance-web/app/icon/create',
+        method: 'post'
+    },
+    //app管理--Icon管理--编辑
+   'edit-icon': {
+        url: '/api/krspace-finance-web/app/icon/edit',
+        method: 'post'
+    },
+    //app管理--Icon管理--详情
+   'get-icon-detail': {
+        url: '/api/krspace-finance-web/app/icon/detail',
+        method: 'get'
+    },
+    //app管理--Icon管理--icon位置
+   'get-icon-location': {
+        url: '/api/krspace-finance-web/app/icon/location/list',
+        method: 'get'
+    },
 
 
 

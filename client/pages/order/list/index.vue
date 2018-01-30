@@ -34,7 +34,7 @@
 </style>
 <template>
 <div class="g-order">
-    <SectionTitle label="会议室订单管理"></SectionTitle>
+    <SectionTitle title="会议室订单管理"></SectionTitle>
     <div class="u-search" >
         <span @click="showSearch"></span> 
          <div style='display:inline-block;float:right;padding-right:20px;'>
@@ -285,14 +285,14 @@ export default {
             },
             cancel (params) {
 
-                this.$http.get('get-cancel-msg', {orderId:params.orderId}, res => {
+                this.$http.get('get-cancel-msg', {orderId:params.orderId}).then((res)=>{
                     this.msg=res.data.msg;
                     if(res.code=='2'){
                         this.ifCancel=false
                     }else{
                         this.ifCancel=true;
                     }
-                }, err => {
+                }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
@@ -310,7 +310,7 @@ export default {
             let  params={
                     orderId:itemDetail.orderId
                 }
-                this.$http.post('cancel-order', params, res => {
+                this.$http.post('cancel-order', params).then((res)=>{
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
@@ -322,7 +322,7 @@ export default {
                     this.warn="作废成功!"
                     this.openMessage=true;
                     this.getTableData(this.params);
-                }, err => {
+                }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
@@ -332,15 +332,16 @@ export default {
                  console.log('导出')
             },
             getTableData(params){
-                this.$http.get('order-list', params, res => {
+                this.$http.get('order-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
+                }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
+                 
             },
             changePage(page){
                 this.params.page=page;

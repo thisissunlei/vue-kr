@@ -1,19 +1,12 @@
 <template>
   <section class="container">
-    <h1 class="title">
-      This page is loaded from the {{ name }}
-    </h1>
-    <h2 class="info" v-if="name === 'client'">
-      Please refresh the page
-    </h2>
-    <nuxt-link class="button" to="/">
-      Home page
-    </nuxt-link>
+     <pdf  :src="src" ></pdf>
   </section>
 </template>
 
 
 <script>
+
 
 export default {
 

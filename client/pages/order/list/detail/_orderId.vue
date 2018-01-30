@@ -19,7 +19,7 @@
 </style>
 <template>
 <div class="g-order-detail">
-	<SectionTitle label="会议室订单详情"></SectionTitle>
+	<SectionTitle title="会议室订单详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="订单编号：">
@@ -171,8 +171,7 @@ export default {
 				'CANCEL':'已作废',
 				'REFUND':'已退订',
 			}
-			this.$http.get('order-detail', from, res => {
-				
+			this.$http.get('order-detail', from).then((res)=>{
 				let data=res.data;
 				this.basicInfo=data;
 				this.orderStartTime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.orderStartTime));
@@ -197,8 +196,7 @@ export default {
 
 					}
 				]
-					
-           	}, err => {
+			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
 				});

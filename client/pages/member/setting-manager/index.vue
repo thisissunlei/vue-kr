@@ -1,6 +1,6 @@
 <template>
 <div class="g-setting-manager">
-        <SectionTitle :label='"全部企业（"+totalCount+"）"' ></SectionTitle>
+        <SectionTitle :title='"全部企业（"+totalCount+"）"' ></SectionTitle>
         <div class="u-search" >
             <span class="u-high-search" @click="showSearch"></span>  
             <div style='display:inline-block;float:right;padding-right:20px;'>
@@ -143,15 +143,15 @@ export default {
     },
     methods:{
         getTableData(params){
-                this.$http.get('customer-manager-list', params, r => {
-                    this.tableData=r.data.items;
-                    this.totalCount=r.data.totalCount;
+                this.$http.get('customer-manager-list', params).then((res)=>{
+                    this.tableData=res.data.items;
+                    this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                });
         },
         changePage(page){
                 this.Params.page=page;

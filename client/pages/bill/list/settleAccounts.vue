@@ -32,7 +32,7 @@
 
 	<div class="u-wrap">
 		<div class="u-text">
-			应结账金额为<span class="u-txt-red"> ￥{{detail.payableAmount}}	</span>，您确定要结账吗？
+			应结账金额为<span class="u-txt-red"> ￥{{account}}	</span>，您确定要结账吗？
 			<p>（账户余额为 ¥{{amount}}）</p>
 		</div>
 	</div>
@@ -40,14 +40,18 @@
 </template>
 
 <script>
-
+	
 	export default {
 		name:'settleAccounts',
 		props:['detail'],
 		data (){
 			return{
-				amount:'200',
+				amount:200,
+				account:0
 			}
+		},
+		computed:{
+
 		},
 		methods:{
 
@@ -55,13 +59,15 @@
 				let params={
 					customerId:customerId
 				};
-				this.$http.get('get-balance', params, res => {
-                    this.amount=res.data.balance;
-                }, err => {
+				this.$http.get('get-balance', params).then((res)=>{
+					this.amount=res.data.balance;
+					this.account=(this.detail.payableAmount*100-this.detail.paidAmount*100)/100
+				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
 					});
-        		})
+				})
+				
 			},
 
 		},
@@ -70,7 +76,10 @@
 			$props: {
 				deep: true,
 				handler(nextProps) {
-					this.getAmount(this.detail.customerId)
+					
+					this.detail.customerId && this.getAmount(this.detail.customerId)
+				
+					
 				}
 			}
 

@@ -11,14 +11,14 @@
 <template>
 
 <div class="g-income-detail">
-	<SectionTitle label="收入详情"></SectionTitle>
+	<SectionTitle title="收入详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="收入编号：">
 				{{basicInfo.id}}
 			</LabelText>
 			<LabelText label="收入类型：">
-				{{incomeType}}
+				{{basicInfo.incomeType}}
 			</LabelText>
 			<LabelText label="社区名称：">
 				{{basicInfo.communityName}}
@@ -72,9 +72,19 @@ export default {
 		GLOBALSIDESWITCH("false")
 	},
 	methods:{
-	
+		getIncomeType(){
+                this.$http.get('get-fee-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.incomeType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+        },
 		getInfo(){
-		
+			this.getIncomeType();
 			var _this=this;
 			
 			let {params}=this.$route;
@@ -83,28 +93,21 @@ export default {
 				id:params.id
 			};
 
-			var incomeType = {
-					'MEETING':'会议室服务',
-					'PRINT':'打印服务',
-					'RENT':'工位租金'
-			}
 			
-			this.$http.get('get-income-detail', from, res => {
 			
+			this.$http.get('get-income-detail', from).then((res)=>{
 				let data = res.data;
 				this.basicInfo = data;
 				this.dealDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(data.dealDate));
 				this.ctime = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
+				this.basicInfo.incomeType = this.incomeType[data.incomeType];
 
-				this.incomeType = incomeType[data.incomeType];
-
-				}, err => {
-					this.$Notice.error({
-						title:err.message
+			}).catch((error)=>{
+				this.$Notice.error({
+						title:error.message
 					});
-        		});
-				
-
+			});
+			
 		},
 	},
 

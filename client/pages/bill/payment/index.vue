@@ -1,9 +1,10 @@
 <template>
 
 <div class="g-order">
-    <SectionTitle label="回款管理"></SectionTitle>
+    <SectionTitle title="回款管理"></SectionTitle>
     <div class="u-search" >
          <Button type="primary" @click="importDetail">导入回款明细</Button>
+          <Button type="primary" @click="onRefund" style="margin-left:20px;">退款</Button>
         <span class="u-high-search" @click="showSearch"></span>
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
@@ -78,6 +79,7 @@
                     <SelectCommunitiy
                         :test="formItem"
                         style="width: 250px"
+
                         v-if="openBind"
                     ></SelectCommunitiy>
                 </FormItem>
@@ -309,7 +311,9 @@ export default {
              this.params=this.$route.query;
         },
         methods:{
-
+            onRefund(){
+                window.open('./payment/refund','_blank');
+            },
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
@@ -331,15 +335,15 @@ export default {
             },
 
             getTableData(params){
-                this.$http.get('get-payment-list', params, res => {
+                this.$http.get('get-payment-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
             },
 
             onchange(data){
@@ -350,7 +354,7 @@ export default {
                 this.$refs[this.form].validate((valid)=>{
                     if(valid){
                         this.formItem.paymentId=this.itemDetail.id;
-                        this.$http.post('payment-bind', this.formItem, res => {
+                        this.$http.post('payment-bind', this.formItem).then((res)=>{
                             if(res.code==-1){
                                 this.MessageType="error";
                                 this.warn=res.message;
@@ -362,8 +366,8 @@ export default {
                             this.warn="客户绑定成功！"
                             this.openMessage=true;
                             this.getTableData(this.params);
-                        }, err => {
-                            this.$Notice.error({
+                        }).catch((err)=>{
+                             this.$Notice.error({
                                 title:err.message
                             });
                         })
@@ -417,7 +421,7 @@ export default {
              importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
-                this.$http.put('import-bank-flow', data, res => {
+                this.$http.put('import-bank-flow', data).then((res)=>{
                     this.openMessage=true;
                     if(res.code==-1){
                         this.MessageType="error";
@@ -432,19 +436,21 @@ export default {
                     this.warn=`已成功导入交易流水<span class="u-txt-green">${res.data.successNum}</span>条,失败<span class="u-txt-red">${res.data.errorNum}</span>条`;
                     this.openImport=false;
                     this.getTableData(this.params);
-                   
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
 
             },
         }
 
     }
 </script>
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
 <style lang="less">
 
 .g-order{

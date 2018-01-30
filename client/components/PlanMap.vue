@@ -1,34 +1,42 @@
 <template>
-	<div class = "plan-map-content">
-		<div class="num-type">
-			<Select v-model="newfloor" style="width:100px" @on-change="floorsChange" placeholder="floor">
+	<div class = "plan-map-content" :style="{height:page.height}">
+		<div class="num-type" style="margin-bottom:15px">
+			<Select v-model="newfloor" style="width:100px;margin-right:15px;" @on-change="floorsChange" placeholder="floor">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
 		    </Select>
-		    <Input v-model="inputStart" placeholder="inputStart" style="width: 50px"></Input>至
-		    <Input v-model="inputEnd" placeholder="inputEnd" style="width: 50px"></Input>
-			<Button @click="submitStation">确定</Button>
+		    <Input v-model="inputStart" placeholder="开始工位" style="width: 80px;margin-right:5px"></Input>至
+		    <Input v-model="inputEnd" placeholder="结束工位" style="width: 80px;margin-right:5px"></Input>
+			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>
-            <input type="range" :value="scaleNumber/100" min="0.1" max="2" step="0.1" @click="rangeSelect" style="vertical-align:middle"/>
-            <output>{{scaleNumber}}</output>%
+			<Slider :v-model="scaleNumber"  :min="50" :max="200" :step="10" @on-change="rangeSelect" style="width:150px;display:inline-block;vertical-align:middle"></Slider>
+            <output style="margin-left:15px" >{{scaleNumber}}</output>%
 		</div>
-		<div id = "plan-map-content"  style ='width:700px;height:350px;border:1px solid #000'>
+		<div id = "plan-map-content"  :style='stylePlan'>
 
 		</div>
 	</div>
 </template>
 <style>
 	.plan-map-content{
-		width: 700px;
-		height: 400px;
+		width: 100%;
 	}
 </style>
 <script>
-import Map from '~/plugins/Map.js';
-import axios from '~/plugins/http.js';
-    export default {
-        props:['stationsubmit','params','floors','stationData'],
 
+
+import Map from '~/plugins/Map.js';
+import http from '~/plugins/http.js';
+
+
+    export default {
+        // props:['stationsubmit','params','floors','stationData','originStationList'],
+		props:{
+			params:Object,
+			floors:Array,
+			stationData:Object,
+			originStationList:Array
+		},
         data () {
             return {
                 data:'',//平面图基础数据
@@ -44,7 +52,12 @@ import axios from '~/plugins/http.js';
                 originData:[],//预备删除
                 floor:'',
                 startToEnd:[],
+                origin:this.originStationList,
+                showSlider:true,
                 stationArr:this.stationData,//提交父组件字段
+                page:{},//显示器的宽高
+                stylePlan:{
+                }
                 // stationAll:this.stationData//①创建props属性result的副本--myResult
 
             }
@@ -52,26 +65,20 @@ import axios from '~/plugins/http.js';
         destroyed(){
         },
         mounted:function(){
-        	console.log('mounted')
+        	this.getData();
+        	this.getPageWidthOrHeight()
         },
         updated:function(){
         },
         beforeUpdate:function(){
-        	console.log('beforeUpdate')
+        	
         },
         watch:{
-        	params:function(){
-        		if(this.params.floor){
-        			if(!!this.Map){
-        				this.Map.destory();
-        			}
-        			this.selectedObjs = this.stationData.submitData;
-        			this.getData()
-        		}
-        	},
         	stationData:function(val){
-        		console.log('stationData',this.stationData.submitData)
         		this.selectedObjs = this.stationData.submitData;
+        	},
+        	originStationList(val){
+        		this.origin = val;
         	},
         	stationArr:function(val){
 				
@@ -88,13 +95,33 @@ import axios from '~/plugins/http.js';
         		}
         	},
         },
-        props:['stationsubmit','params','floors','stationData'],
         methods: {
+        	//获取屏幕的高度
+        	getPageWidthOrHeight(){
+
+				var page = {};
+				page.width = window.innerWidth;
+				page.height = window.innerHeight;
+				if(document.compatMode == 'CSS1Compat'){
+					page.width = document.documentElement.clientWidth;
+					page.height = document.documentElement.clientHeight;
+				}else{
+					page.width = document.body.clientWidth;
+					page.height = document.body.clientHeight;
+				}
+				this.page = Object.assign({},page)
+				this.stylePlan = {
+					width:'100%',
+					height:page.height-200+"px",
+					border:'1px solid #000'
+				}
+			},
 			//获取平面图基础数据
 			getData:function(){
 				let params = this.params;
 				let selectedObjs = []
-				axios.get('getplanmap', params, r => {
+				let _this = this;
+				http.get('getplanmap', params, r => {
 					let response = r.data;
 					let floors = [];
 					let name = "";
@@ -141,6 +168,9 @@ import axios from '~/plugins/http.js';
 						allDataObj["a" + item.floor] = [].concat(allData);
 				
 				}, e => {
+					_this.$Notice.error({
+                        title:e.message
+                    });
 				
 
 				})
@@ -153,7 +183,6 @@ import axios from '~/plugins/http.js';
 				this.newfloor=floors[0].value;
 				// this.submitData=allDataObj;
 				this.canvasEles()
-				console.log('getData',this.stationData)
 
 				})
 			},
@@ -167,6 +196,9 @@ import axios from '~/plugins/http.js';
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
+				let originStationList = this.origin || [];
+				console.log('selectedObjs',selectedObjs)
+				console.log('originStationList',originStationList)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];
@@ -185,25 +217,40 @@ import axios from '~/plugins/http.js';
 							obj.belongId = Number(item.belongId);
 							obj.id = Number(item.id);
 							obj.canFigureId = item.canFigureId;
+							obj.capacity = item.capacity;
 							obj.type = obj.belongType;
 							obj.price = item.price;
 							obj.checked = false;
-							if (item.status) {
-								obj.status = item.status;
-							}
-							// obj.checked = true;
-							for (let j = 0; j < selectedObjs.length; j++) {
+							obj.status = item.status || 4;
+							// 编辑带回的数据
+							for (let j = 0; j < originStationList.length; j++) {
 								let belongType = "STATION";
-								if (selectedObjs[j].belongType == 2) {
+								if (originStationList[j].belongType == 2 || originStationList[j].belongType == 'SPACE') {
 									belongType = "SPACE";
 								}
-								// console.log('渲染',selectedObjs[j].belongType,belongType,selectedObjs[j])
-								if (item.belongId == selectedObjs[j].id && item.belongType == belongType) {
+								if (item.belongId == originStationList[j].id && item.belongType == belongType && item.status != 2) {
+									obj.checked = false;
+									obj.status = 3;
+								}
+
+							}
+							//订单现在已选工位
+							for (let j = 0; j < selectedObjs.length; j++) {
+								let belongType = "STATION";
+								if (selectedObjs[j].belongType == 2 || selectedObjs[j].belongType == 'SPACE') {
+									belongType = "SPACE";
+								}
+								if (item.belongId == selectedObjs[j].id && item.belongType == belongType ) {
+									// 将工位标记为已选中
 									obj.checked = true;
+									//将status改为可选状态
+									obj.status = 3;
 
 								}
+
 							}
-							if (cellName >= start && cellName <= end && !item.status) {
+
+							if (cellName >= start && cellName <= end && item.status!=1) {
 								obj.checked = true;
 								let select = {};
 								select.name = item.cellName;
@@ -213,6 +260,8 @@ import axios from '~/plugins/http.js';
 								select.id = Number(item.belongId);
 								select.canFigureId = item.canFigureId;
 								select.type = obj.belongType;
+								select.capacity = item.capacity;
+
 								select.price = item.price;
 
 								startToEnd.push(select)
@@ -221,7 +270,7 @@ import axios from '~/plugins/http.js';
 							return obj;
 						})
 						dainitializeConfigs = {
-							stations: arr,
+							stations: arr ||[],
 
 							isMode: 'select',
 							plugin: {
@@ -235,12 +284,12 @@ import axios from '~/plugins/http.js';
 								scale: this.scaleNumber/100,
 								contextMenuEnable: true
 							},
-							// backgroundImageUrl: "http://" + window.location.host + data[i].graphFilePath
+							backgroundImageUrl: "http://" + window.location.host + data[i].graphFilePath
+							// backgroundImageUrl: "http://optest.krspace.cn/"  + data[i].graphFilePath
 						}
 					}
 
 				}
-				console.log('渲染',this.stationData)
 
 				this.Map = Map("plan-map-content", dainitializeConfigs);
 				if(startToEnd.length){
@@ -249,17 +298,15 @@ import axios from '~/plugins/http.js';
 				
 			},
 			//放大比例
-			rangeSelect :function(event){
-				var scaleSize = Number(event.target.value);
-				var scaleNumber = parseInt(event.target.value * 100);
+			rangeSelect :function(value){
+				var scaleNumber = parseInt(value);
 				this.scaleNumber = scaleNumber
-		        this.Map.setScale(scaleSize);
+		        this.Map.setScale(scaleNumber/100);
 			},
 			//更换楼层
 			floorsChange:function (value) {
 				if(this.Map){
 					this.Map.destory();
-					this.scaleNumber = 50;
 					this.canvasEles();
 				}
 			},
@@ -268,18 +315,37 @@ import axios from '~/plugins/http.js';
 				this.canvasEles();
 			},
 			dataChange: function(data, allData) {
-				console.log('dataChange')
 				const {
 					selectedObjs,
 					newfloor,
 					submitData,
 					deleteArr,
 				} = this;
-				let del = [].concat(selectedObjs);
-				var allDataObj = Object.assign({}, submitData);
-				var delDataObj = Object.assign({}, deleteArr);
-				allData = [].concat(allData);
+				let floors = [];
+				let selectedObj = {};
+				if(selectedObjs.length){
+					selectedObjs.map(item=>{
+						let floor = item.floor || item.whereFloor;
+						if(floors.indexOf(floor) == -1){
+							floors.push(floor);
+							selectedObj['a'+floor] = []
+						}
+						
+					})
 
+					selectedObjs.map((item,index)=>{
+						let floor = item.floor || item.whereFloor;
+						selectedObj['a'+floor].push(item)
+					})
+				}
+				
+				
+				
+				
+				let del = [].concat(selectedObjs);
+				var delDataObj = Object.assign({}, deleteArr);
+				var allDataObj = Object.assign({}, submitData);
+				allData = [].concat(allData);
 				for (let i = 0; i < allData.length; i++) {
 					for (let j = 0; j < del.length; j++) {
 						let belongType = "STATION"
@@ -300,26 +366,41 @@ import axios from '~/plugins/http.js';
 				let submitDataAll = [];
 				let deleteDataArr = [];
 				for (let i in allDataObj) {
+					if(selectedObj[i]){
+						selectedObj[i] = []
+					}
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
+
+				for (let i in selectedObj) {
+					submitDataAll = submitDataAll.concat(selectedObj[i]);
+				}
+
 				for (let i in delDataObj) {
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
 				}
 				submitDataAll = submitDataAll.map(function(item, index) {
+					console.log('submitDataAll--map',item)
 					var obj1 = {};
 					let belongType = 1;
-					if (item.belongType == "SPACE") {
+					let type = 'OPEN'
+					if (item.belongType == "SPACE" || item.belongType == 2) {
 						belongType = 2;
+						type = 'SPACE'
+
 					}
-					obj1.id = item.belongId;
+					obj1.id = item.belongId || item.id;
 					obj1.type = belongType;
+					obj1.seatType = type;
 					obj1.belongType = belongType;
-					obj1.whereFloor = item.whereFloor;
+					obj1.whereFloor = item.whereFloor || item.floor;
 					obj1.name = item.name;
 					obj1.price = item.price;
+					obj1.capacity = item.capacity;
 					return obj1
 
 				})
+				console.log('submitDataAll',submitDataAll)
 				let station = {
 					submitData: submitDataAll,
 					deleteData: deleteDataArr,

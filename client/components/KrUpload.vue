@@ -1,28 +1,35 @@
-
 <template>
 	<div>
 		<div>
-			<div @click = "switchList">
-				合同附件
-			</div>
+			<Buttons 
+				type='text'  
+				checkAction='contract_file_upload'
+				label='上传附件'
+				styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
+				@click = "switchList" 
+			
+			/>
+			
 			<div class = "list-box" v-show = "isOpenList">
 				<div class="mask" @click = "switchList" ></div>
 				<div class="list" :style ="listStyle" >
 					<div>
 						<Upload 
-							:headers="this.headers" 
-							:type="this.type" 
-							:action="this.action"
-							:multiple="this.multiple"
-							:name="this.name"
-							:format="this.format"
-							:on-error="this.onError"
-							:on-success="this.onSuccess"
-							:on-format-error="this.onFormatError"
+							action="//jsonplaceholder/"
+							:before-upload= "onChange"
 						>
-							<Button type="ghost" icon="ios-plus-outline">上传附件</Button>
+							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>
 							<!-- <Icon type="ios-plus-outline"></Icon> -->
+							<div v-bind:style="{display:isShowProgress}">
+								<Progress  :percent="progress" :stroke-width="5"></Progress>	
+							</div>
+							
 						</Upload>
+						<div class="item-box">
+							<div class="file-list" :key="item.id" v-for="item in defaultList" @click="downFille(item)" >
+								{{item.fileName}}
+							</div>
+						</div>
 					</div>
 				</div>
 				
@@ -30,58 +37,226 @@
 		</div>
 	</div>
 </template>
+
+
 <script>
- import axios from 'kr/axios';
+import http from '~/plugins/http.js';
+import utils from '~/plugins/utils';
+import Buttons from './Buttons';
+
 export default{
 	name:'krUpload',
-	props:["type","action","headers","multiple","data","name","with-credentials","show-upload-list","accept","format","max-size","before-upload","on-progress","onSuccess","onError","on-preview","on-remove","onFormatError","on-exceeded-size","default-file-list"],
+	components: {
+		Buttons,
+	},
+	props:{
+		columnDetail:Object,
+		file:Array,
+		action:String,
+		onUpUrl:Function
+		},
 	data(){
 		return {
-			
 			isOpenList:false,
 			listStyle:{
 				left:0,
 				top:0,
-			}
+			},
+			newWin:'',
+			params:{},
+			defaultList:!this.file.length?[]:this.file,
+			serverUrl:'',
+			nowFile:{},
+			fileDetail:{},
+			progress:0,
+			isShowProgress:"none"
 		}
 		
 	},
 	methods:{
+		//错误提示
+		config:function(){
+			this.$Notice.config({
+				top: 80,
+				duration: 3
+			});
+        },
 		//上传列表的开关
 		switchList:function(event){
 			var detail = event.target.getBoundingClientRect();
 			this.isOpenList = !this.isOpenList;
+			if(this.isOpenList){
+				document.body.style.overflow = "hidden";
+			}else{
+				document.body.style.overflow = "auto";
+			}
 			this.listStyle = {
 				left:detail.left+Math.ceil(detail.width/2)+"px",
 				top:detail.top+detail.height+5+"px",
 				transform:"translateX(-50%)"
 			}
-			this.getUpUrl();
+		},
+		submitUpload(detail){
+			this.config();
+			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
+			
 		},
 		//获取上传图片
 		getUpUrl(){
+
 			var that=this;
 			var category="op/upload";
-			console.log("8888888");
-			axios.get('get-vue-upload-url', {
+			this.config();
+			http.get('get-vue-upload-url', {
 				isPublic:true,
 				category,
 			}, (response) => {
-				console.log(response,"LLLLLLL")
+				this.serverUrl = response.data.serverUrl;
 			}, (error) => {
-				_this.$Message.info(error);
+				that.$Notice.error({
+                        title:error.message
+                });
 			})   
 		},
+		onChange(event){
+			
+			let that = this;
+			// let file = event.target.files[0];
+			// var fileName= file.name;
+			let file = event;
+			var fileName= event.name;
 		
-	},
-	mounted(){
+			if (!file) {
+				return;
+			}
+			let category = 'op/upload';
+			if (file) {
+				this.isShowProgress = "block";
+				this.progress = 0;
+				var timer = window.setInterval(function() {
+					if (that.progress >= 100) {
+							window.clearInterval(timer);
+					}
+					that.progress += 10;
+				}, 300);
+			}
+			var form = new FormData();
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						var response = xhr.response.data;
+						form.append('OSSAccessKeyId', response.ossAccessKeyId);
+						form.append('policy', response.policy);
+						form.append('Signature', response.sign);
+						form.append('key', response.pathPrefix+'/'+file.name);
+						form.append('uid', response.uid);
+						form.append('callback', response.callback);
+						form.append('x:original_name', file.name);
+						form.append('file', file);
+
+						that.onTokenSuccess({
+							sourceservicetoken: response.token,
+							docTypeCode: response.docTypeCode,
+							operater: response.operater
+						});
+						
+						var xhrfile = new XMLHttpRequest();
+						xhrfile.onreadystatechange = function() {
+							if (xhrfile.readyState === 4) {
+								var fileResponse = xhrfile.response;
+								if (xhrfile.status === 200) {
+									if (fileResponse && fileResponse.code > 0) {
+										//  that.onSuccess(fileResponse.data,file);
+										var params = {};
+										that.isShowProgress = "none";
+										that.progress = 100;
+										params.name = fileName;
+										params.url = fileResponse.data.url;
+										params.fileId = ""+fileResponse.data.id;
+										params.fileName = fileName;
+										params.fileUrl = fileResponse.data.url;
+										params.type = "ATTACHMENT"
+										that.onSuccess(params)
+
+									} else {
+										//报错
+										that.isShowProgress = "none";
+										that.progress = 100;
+										console.log(fileResponse.msg)
+										that.$Notice.error({
+												title:fileResponse.msg
+										});
+										// that.onError(fileResponse.msg);
+									}
+								} else if (xhrfile.status == 413) {
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:"您上传的文件过大！"
+									});
+									// that.onError('您上传的文件过大！');
+								} else {
+									that.isShowProgress = "none";
+									that.progress = 100;
+									
+									that.$Notice.error({
+										title:'后台报错请联系管理员！'
+									});
+								
+								}
+							}
+						};
+						xhrfile.open('POST', response.serverUrl, true);
+						xhrfile.responseType = 'json';
+						xhrfile.send(form);
+					} else {
+						that.onTokenError();
+					}
+				}
+				
+			};
+
+			xhr.open('GET', 'http://'+window.location.host+'/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
+			xhr.responseType = 'json';
+			xhr.send();
+		},
+		//上传成功
+		onSuccess(params){
+			var detail = Object.assign({},params);
+			this.defaultList.push(detail)
+			this.submitUpload([detail]);
+			
+		},
+		onTokenSuccess(){
+
+		},
+		downFille(params){
+			var that=this;
+			
+			this.$http.post('get-station-contract-pdf-url', {
+				id:params.fileId,
+				
+			}, (response) => {
+				utils.downFile(response.data)
+			
+			}, (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})   
+		},
+		listMove(file,fileList){
+			this.defaultList = [].concat(fileList);
 		
-	},
+		},
+	}
 }
 	
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .list-box{
 	position: fixed;
 	width: 100%;
@@ -108,6 +283,19 @@ export default{
 		right: 0px;
 		// background: red;
 
+	}
+	.item-box{
+		max-height: 200px;
+		overflow: auto;
+	}
+	.file-list{
+		padding: 5px;
+		color: #333;
+
+	}
+	.file-list:hover{
+		color: rgb(43, 133, 228);
+		cursor: pointer;
 	}
 }
 

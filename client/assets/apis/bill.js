@@ -80,5 +80,21 @@ export default  {
       url: '/api/krspace-pay/pay-record/importBankFlow',
       method: 'post'
     },
+    //账单中心--账单类型
+    'get-bill-type': {
+      url: '/api/krspace-pay/bill/bill-type',
+      method: 'get'
+    },
+    //账单中心--收入类型
+    'get-fee-type': {
+      url: '/api/krspace-pay/income/fee-type',
+      method: 'get'
+    },
+    //账单中心--回款--退款
+    'payment-refund': {
+      url: '/api/krspace-pay/payment/refund',
+      method: 'post'
+    },
+    
   }
   

@@ -27,7 +27,7 @@
 
 <div class="g-order-detail">
 
-	<SectionTitle label="回款详情"></SectionTitle>
+	<SectionTitle title="回款详情"></SectionTitle>
 
 	<div class="m-detail-content">
 
@@ -140,18 +140,16 @@ export default {
 				'BANKONLINE':'网银',
 				'BANKTRANSFER':'银行转账',
 			}
-			this.$http.get('get-payment-detail', from, res => {
-
+			this.$http.get('get-payment-detail', from).then((res)=>{
 				let data=res.data;
 				this.basicInfo=data;
 				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 				data.payWay=payType[data.payWay];
-
-           	}, err => {
+			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
 				});
-        	})
+			})
 		},
 	},
 

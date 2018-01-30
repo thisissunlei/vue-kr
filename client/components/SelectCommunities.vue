@@ -1,47 +1,56 @@
 <template>
     <div class="com-select-community">
-         <Select
-            v-model="test.communityId"
+        <!-- <Select
+            :v-model="test.communityId"
             filterable
             remote
+            :placeholder="value"
             :remote-method="remoteMethod1"
             :loading="loading1"
             @on-change="changeContent"
-            :placeholder="value"
-            :label-in-value="labelInValue"
-            
             >
-            <Option v-for="(option, index) in options1" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+        </Select> -->
+        <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
+            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
 
 
 <script>
+
+
+import http from '~/plugins/http.js';
+
     export default {
-        props:{
-            onchange:Function,
-            test:Object,
-            value:String,
-        },
+        props:["onchange","test","value","disabled"],
+
+        // props:{
+        //     onchange:Function,
+        //     test:Object,
+        //     value:String,
+        // },
         data () {
             return {
+                community:'',
                 loading1:false,
                 options1:[],
                 labelInValue:true,
                 clearable:true
             };
         },
+
         mounted:function(){
-           
             this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
                 this.onchange(value)
             },
+
             remoteMethod1 (query) {
-                console.log('remoteMethod1',query)
+
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
@@ -59,24 +68,23 @@
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('get-mainbill-community', params, r => {
-                    console.log('r', r);
-                    list = r.data;
+
+                this.$http.get('join-bill-community','').then((response)=>{    
+                    list = response.data.items;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.communityname;
+                        obj.label = item.name;
                         obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
                     _this.options1 = list;
-                }, e => {
-                    console.log('error',e)
-                })
-                return list;
-
-            }
-                    
-               
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
+            }    
         }
     }
 </script>

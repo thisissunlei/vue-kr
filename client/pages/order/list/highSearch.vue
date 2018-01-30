@@ -127,13 +127,16 @@ export default{
 		}
     },
     mounted:function(){
-        this.$http.get('join-bill-community','', res => {    
-                this.communityList=res.data.items 
-            }, err => {
-				this.$Notice.error({
-					title:err.message
-				});
-			})
+
+
+        this.$http.get('join-bill-community','').then((res)=>{
+            this.communityList=res.data.items ;
+        }).catch((err)=>{
+            this.$Notice.error({
+				title:err.message
+			});
+        })
+
     },
     methods:{
         startChange(date){

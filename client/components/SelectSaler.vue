@@ -1,5 +1,10 @@
 <style lang="less"> 
-   
+   .com-select-saler{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+   }
 </style>
 
 
@@ -7,11 +12,13 @@
 <template>
     <div class="com-select-saler">
          <Select
-            :v-model="name"
+            :v-model="saler"
             filterable
             remote
-            @on-query-change="remoteSaler"
+            :placeholder="value"
+            :remote-method="remoteSaler"
             :loading="loading1"
+            :disabled="disabled"
             @on-change="changeContent">
             <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
         </Select>
@@ -20,16 +27,20 @@
 
 
 <script>
+import http from '~/plugins/http.js';
+
     export default {
-        props:['name','onchange'],
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean
+        },
         data () {
             return {
+                saler:'',
                 loading1:false,
                 salerOptions:[],
             };
-        },
-        mounted:function(){
-            // this.getCusomerList(' ')
         },
         methods: {
             changeContent:function(value){
@@ -51,11 +62,10 @@
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('get-saler', params, r => {
+                http.get('get-saler', params, r => {
                     list = r.data.slice(0,10);
                     list.map((item)=>{
                         let obj = item;
-                        console.log('======',item)
                         obj.label = item.lastname;
                         obj.value = item.id+'';
                         return obj;

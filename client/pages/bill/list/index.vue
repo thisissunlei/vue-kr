@@ -43,7 +43,7 @@
 
 <template>
 <div class="g-bill">
-    <SectionTitle label="已出账单管理"></SectionTitle>
+    <SectionTitle title="已出账单管理"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onBillPay">批量结算</Button>
         <span class="u-high-search" @click="showSearch"></span> 
@@ -174,66 +174,57 @@ import utils from '~/plugins/utils';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
+                billType:{},
                 columns1: [
                     {
                         type: 'selection',
                         width: 35,
-                        align: 'center'
+                        align: 'center',
+                        fixed:'left'
                     },
                     {
                         title: '账单编号',
                         key: 'billNo',
-                        align:'center'
+                        align:'center',
+                        width:160,
+                        fixed:'left'
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center'
+                        align:'center',
+                        width:160,
+                        fixed:'left'
                     },
                     {
                         title: '社区名称',
                         key: 'communityName',
                         align:'center',
-                        width:100
                     },
                     {
-                        title: '账单类型',
-                        key: 'bizType',
-                        align:'center',
-                        width:90,
-                        render(h, obj){
-                          let bizType={
-                            'MEETING':'会议室账单',
-                            'PRINT':'打印服务账单',
-                            'CONTRACT':'工位服务订单',
-                            
-                          }
-                          return bizType[obj.row.bizType];
-                        }
-                    },
-                    {
-                        title: '账单总额',
+                        title: '消费总额',
                         key: 'totalAmount',
                         align:'center',
-                        width:80,
                     },
                     {
                         title: '减免金额',
                         key: 'freeAmount',
                         align:'center',
-                        width:80,
                     },
                     {
-                        title: '应付金额',
+                        title: '账单金额',
                         key: 'payableAmount',
                         align:'center',
-                        width:80,
+                    },
+                    {
+                        title: '已付金额',
+                        key: 'paidAmount',
+                        align:'center',
                     },
                     {
                         title: '账单日',
                         key: 'billingDate',
                         align:'center',
-                        width:90,
                         render(h, obj){
                             if(!obj.row.billingDate){
                                 return '-'
@@ -246,7 +237,6 @@ import utils from '~/plugins/utils';
                         title: '付款截止日期',
                         key: 'billEndTime',
                         align:'center',
-                        width:90,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
                             return time;
@@ -256,7 +246,6 @@ import utils from '~/plugins/utils';
                         title: '支付状态',
                         key: 'payStatus',
                         align:'center',
-                        width:90,
                         render(h, obj){
                              switch (obj.row.payStatus){
                                 case 'WAIT':
@@ -394,8 +383,34 @@ import utils from '~/plugins/utils';
                  this.$route.query.customerName=""
              }
              this.tabParams=this.$route.query;
+             
         },
         methods:{
+            renderList(){
+                this.getBillType();
+                let bizType=this.billType;
+                let billtype={
+                        title: '账单类型',
+                        key: 'bizType',
+                        align:'center',
+                        width:90,
+                        render(h, obj){
+                          return bizType[obj.row.bizType];
+                        }
+                    }
+                this.columns1.splice(4, 0, billtype)
+            },
+            getBillType(){
+                this.$http.get('get-bill-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                         this.billType[item.code]=item.name;  
+                    })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+            },
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
@@ -422,15 +437,17 @@ import utils from '~/plugins/utils';
                 this.billIds=billIds;
             },
             getTableData(params){
-                this.$http.get('get-bill-list', params, res => {
+                this.renderList()
+                this.$http.get('get-bill-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
+                
             },
             onBillPay(){
                 
@@ -442,8 +459,8 @@ import utils from '~/plugins/utils';
                 let params={
                     billIds:this.billIds.join(',')
                 }
-                this.$http.post('batch-pay',params, res => {
-                    if(res.code==-1){
+                this.$http.post('batch-pay',params).then((res)=>{
+                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
                         this.openMessage=true;
@@ -454,12 +471,11 @@ import utils from '~/plugins/utils';
                     this.openMessage=true;
                     this.billIds=""
                     this.getTableData(this.tabParams);
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
-
+                })
             },
             
             getAntiSettleData(form){
@@ -472,7 +488,7 @@ import utils from '~/plugins/utils';
                 let params={
                     billId:this.itemDetail.billId
                 }
-                this.$http.post('bill-pay',params, res => {
+                this.$http.post('bill-pay',params).then((res)=>{
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
@@ -484,11 +500,12 @@ import utils from '~/plugins/utils';
                     this.warn="结算成功！"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, err => {
-					this.$Notice.error({
+                }).catch((err)=>{
+                    this.$Notice.error({
 						title:err.message
 					});
-        		})
+                })
+                
             },
             // antiSettleSubmit(){
             //     let params={

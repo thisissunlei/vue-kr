@@ -1,6 +1,6 @@
 <template>
 <div class="g-steward-created">
-<SectionTitle label="编辑管家" />
+<SectionTitle title="编辑管家" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
         <FormItem label="姓名：" style="width:352px" prop="mbrId">
@@ -139,22 +139,26 @@ export default {
   methods:{
       getInfoData(){
           let {params}=this.$route;
-          this.$http.get('get-steward-detail', {manageId:params.manageId}, res=> {
-                this.formItem = res.data;  
+          this.$http.get('get-steward-detail', {manageId:params.manageId}).then((res)=>{
+               this.formItem = res.data;  
                 this.memberInfo=res.data;
                 this.mbrName=`${res.data.mbrName}|${res.data.phone}`;
-          }, err => {
-                console.log('error',err)
-          })
+          }).catch((err)=>{
+             this.$Notice.error({
+                    title:err.message
+                });
+            })
       },
-
       onMemberChange(value){
           this.formItem.mbrId=value;
-          this.$http.get('search-mbr', {mbrId:value}, res=> {
-               this.memberInfo = res.data;   
-            }, err => {
-                    console.log('error',err)
-            })
+          this.$http.get('search-mbr', {mbrId:value}).then((res)=>{
+              this.memberInfo = res.data;   
+          }).catch((err)=>{
+             this.$Notice.error({
+                    title:err.message
+                });
+          })
+          
       },
 
       handleSubmit(name){
@@ -179,19 +183,20 @@ export default {
       },
 
       submitEdit(){
-        this.$http.post('edit-steward', this.formItem, res=> {
-                this.$Notice.success({
+        this.$http.post('edit-steward', this.formItem).then((res)=>{
+            this.$Notice.success({
                     title:'编辑成功'
                 });
                 setTimeout(function(){
                     window.close();
                     window.opener.location.reload();
                 },1000) 
-            }, err => {
-                this.$Notice.error({
+        }).catch((err)=>{
+             this.$Notice.error({
                     title:err.message
                 });
-            })
+        })
+         
     }
 
   }

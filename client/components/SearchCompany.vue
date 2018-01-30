@@ -7,7 +7,7 @@
 <template>
     <div class="com-select-customers">
          <Select
-            v-model="test.customerId"
+            :v-model="test.customerId"
             filterable
             remote
             :loading="loading1"
@@ -18,7 +18,7 @@
             <Option 
                 v-for="(option, index) in companyOptions" 
                 :value="option.value" 
-                :key="index"
+                :key="option.value"
             >{{option.label}}</Option>
         </Select>
     </div>
@@ -29,7 +29,11 @@
 
 
     export default {
-        props:['name','onchange','test'],
+        props:{
+            test:Object,
+            onchange:Function
+        },
+       
         data () {
             return {
                 loading1:false,
@@ -77,7 +81,5 @@
                     
                
         },
-       
-         
     }
 </script>

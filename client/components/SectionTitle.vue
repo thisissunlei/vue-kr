@@ -1,3 +1,21 @@
+
+
+
+
+<template>
+    <div class="section-title">
+        {{title}}
+    </div>
+</template>
+<script>
+    export default {
+        props:{
+            title:String
+        },
+    }
+</script>
+
+
 <style lang="less"> 
     .section-title {
         border-bottom: 1px solid #E8E9E9;
@@ -20,21 +38,3 @@
     }
    
 </style>
-
-
-
-<template>
-    <div class="section-title">
-        {{label}}
-    </div>
-</template>
-
-
-<script>
-    export default {
-        props:['label'],
-        data () {
-            return {};
-        }
-    }
-</script>

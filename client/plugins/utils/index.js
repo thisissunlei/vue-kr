@@ -1,4 +1,5 @@
-
+import thousand from './thousand' 
+import addEvent from './addEvent';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -9,8 +10,17 @@
 
         var s = '';
 
+        let strL =(n+'').split('.').length;
+        let xiaoshu = '00';
+        if(strL>1){
+            xiaoshu = (n+'').split('.')[1]
+        }
+
         for (var i = 0; i < fraction.length; i++) {
-            s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+            if(digit[xiaoshu[i]]){
+                s += (digit[xiaoshu[i]] + fraction[i]).replace(/零./, '');
+
+            }
         }
         s = s || '整';
         n = Math.floor(n);
@@ -45,6 +55,7 @@
         var url = `${url}?${where.join('&')}`
         window.location.href = url;
     }
+
     //获取url的参数
     function getRequest() {
         var url = location.search; //获取url中"?"符后的字串
@@ -58,6 +69,7 @@
         }
         return theRequest;
     }
+
     //高级搜索时url上带参数
     function addParams(params){
         let path=window.location.href;
@@ -71,11 +83,53 @@
         url=url+"?"+where.join('&');
         location.href=url;
     }
+    
+    //数组去重
+    function arrayNoRepeat(array){
+        for(var i=0, temp={}, result=[], ci; ci=array[i++];){
+            var id = ci.id;
+            if(temp[id]){
+              continue;
+            }
+            temp[id] = true;
+            result.push(ci);
+          }
+          return result;
+    }
+
+    //两个数组比较去重
+    function arrayCompare(array1,array2,param1,param2){
+          for(var i=0;i<array2.length;i++){
+            for(var j=0;j<array1.length;j++){
+                var middle1=param1?array1[j][param1]:array1[j];
+                var middle2=param2?array2[i][param2]:array2[i];
+                if(middle1==middle2){
+                    array1.splice(j,1);
+                }
+            }
+          }   
+          return  array1
+    }
+
+    //文件下载的流式下载
+    function downFile(href, filename) {
+        var a = document.createElement('a');
+        a.href = href;
+        a.download = filename;
+        a.click();
+    }
    
    export default{
-      smalltoBIG,
-      clearForm,
-      commonExport,
-      getRequest,
-      addParams
+    smalltoBIG,
+    clearForm,
+    commonExport,
+    getRequest,
+    addParams,
+    arrayNoRepeat,
+    arrayCompare,
+    thousand,
+    downFile,
+    addEvent
    }
+
+

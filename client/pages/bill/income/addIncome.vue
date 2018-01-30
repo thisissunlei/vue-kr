@@ -120,7 +120,7 @@ export default{
     
 		return{
     
-			     formItem:{
+			formItem:{
                 amount:'',
                 communityId:'',
                 customerId:'',
@@ -155,25 +155,21 @@ export default{
 		 }
     },
     mounted:function(){
-    
-        this.$http.get('join-bill-community','', res => {    
-                this.communityList = res.data.items 
-        }, err => {
-            this.$Notice.error({
-                title:err.message
+        this.$http.get('join-bill-community','').then((res)=>{
+            this.communityList = res.data.items 
+        }).catch((error)=>{
+			this.$Notice.error({
+                title:error.message
             });
-              
-        });
-        
+		});
     },
     methods:{
-    
         onchange(data){
             this.formItem.customerId=data;
         },
         dateChange(date){
             this.formItem.dealDate=date;
-        }
+        },
         
     },
     updated:function(){

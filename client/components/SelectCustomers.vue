@@ -1,5 +1,10 @@
 <style lang="less"> 
-   
+   .com-select-customers{
+    ::-webkit-input-placeholder { color:#666; }
+    ::-moz-placeholder { color:#666; } /* firefox 19+ */
+    :-ms-input-placeholder { color:#666; } /* ie */
+    input:-moz-placeholder { color:#666; }
+   }
 </style>
 
 
@@ -7,57 +12,58 @@
 <template>
     <div class="com-select-customers">
          <Select
-            :v-model="name"
+            :v-model="customer"
             filterable
             remote
-            @on-query-change="remoteCustomer"
+            :placeholder="value"
+            :remote-method="remoteCustomer"
             :loading="loading1"
-            @on-change="changeContent">
-            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            :disabled="disabled"
+            @on-change="changeContent"
+            >
+            <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
 
 
 <script>
+import http from '~/plugins/http.js';
+
     export default {
-        props:['name','onchange'],
+        props:{
+            onchange :Function,
+            value:String,
+            disabled:Boolean
+        },
         data () {
+            
             return {
+                customer:'',
                 loading1:false,
                 customerOptions:[],
             };
         },
-        mounted:function(){
-            this.getCusomerList(' ')
+         mounted:function(){
+            this.remoteCustomer()
         },
         methods: {
             changeContent:function(value){
-                console.log('changeContent')
                 this.onchange(value)
             },
             remoteCustomer (query) {
-                console.log('remoteCustomer',query)
-
-                if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
-                        this.loading1 = false;
                         this.getCusomerList(query)
                     }, 200);
-                } else {
-                    this.getCusomerList(' ')
-
-                }
             },
             getCusomerList:function(name){
                 let params = {
-                    company:name
+                    company:name || ''
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('get-customer', params, r => {
-                    console.log('r---->', r);
+                http.get('get-customer', params, r => {
                     list = r.data.customerList;
                     list.map((item)=>{
                         let obj = item;
@@ -65,10 +71,13 @@
                         obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
+
                     _this.customerOptions = list;
                 }, e => {
-                    console.log('error',e)
+                    console.log('error--->',e)
                 })
+                 return list;
 
             }
                     

@@ -3,8 +3,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 module.exports = {
+  //mode:'spa',
   srcDir: 'client/',
-  cache:true,
+  cache:{ max: 20, maxAge: 600000 },
   transition: {
     name: 'page',
     mode: 'out-in',
@@ -25,28 +26,20 @@ module.exports = {
   },
 
   plugins: [
-    {src: '~plugins/iview',ssr: true},
+    { src: '~plugins/iview', ssr: true },
   ],
-  
-  /*
-  ** Global CSS
-  */
   css: ['~assets/css/main.css'],
-  /*
-  ** Customize the progress-bar color
-  */
   loading: { color: '#000000' },
   build: {
     vendor: ['iview'],
     publicPath: '/',
-    vendor: ['axios'],
     extend(webpackConfig, { isDev, isClient, isServer }) {
-    	webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
+      //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [
-            new ExtractTextPlugin({
-                filename: 'styles.css'
-            })
-     ]
+      new ExtractTextPlugin({
+        filename: 'styles.css'
+      })
+    ]
   }
 }

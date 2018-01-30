@@ -1,15 +1,41 @@
-//引入apis
-import APIS from '../assets/apis/index';
+ import axios from 'axios'
+ import APIS from '../assets/apis/index';
+ import envs from '../configs/envs';
+ import Qs from 'qs'; 
+ // 超时时间
+ // axios.defaults.timeout = 6000
+ // http请求拦截器
 
-import Qs from 'qs';
+ const env = process.env.NODE_ENV;
+ 
 
-// 引用axios
-var axios = require('axios')
+const hostname = envs[env]['test']||  "" ;
+
+ axios.defaults.withCredentials = true;
+ 
+ axios.defaults.mode = 'cors';
+var requestUrl = [] ,saveTime = 1000;
+
+axios.interceptors.request.use(config => {
+  if(config.method  == 'post'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
+  if(config.url.indexOf('mockjs') !==-1 ){
+    config.baseURL = 'http://rap.krspace.cn';
+  }else{
+    config.baseURL = '/';
+  } 
+
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+
 
 function toType (obj) {
   return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
 }
-
 // 参数过滤函数
 function filterNull (o) {
   for (var key in o) {
@@ -27,75 +53,145 @@ function filterNull (o) {
   return o
 }
 
-
-function apiAxios (method, name, params, success, failure) {
-
-  if (params) {
-    params = filterNull(params)
-  }
-
-  let root = '';
-  let url = APIS[name].url;
-
-  if(url.indexOf('mockjs') !==-1){
-       root='http://rap.krspace.cn';
-  }
-
-  axios({
-    method: method,
-    url: url,
-    data: method === 'POST' || method === 'PUT' ? params : null,
-    params: method === 'GET' || method === 'DELETE' ? params : null,
-    baseURL: root,
-    withCredentials: false,
-  }).then(function (res) {
-    if (res.status === 200) {
-      if (success) {
-        success(res.data)
-      }
-    } else {
-      if (failure) {
-        failure(res.data)
-      } else {
-        console.log('api error, HTTP CODE: ' + JSON.stringify(res.data))
-      }
+ function check401(res) {
+  res = res.data;
+    if (res.code ===-4011) {
+      window.location.href = '/new/login.html';
+    } else if (res.code ===-4033) {
+      // console.log('您没有操作权限，请联系管理员')
     }
-  }).catch(function (err) {
-    
-    let res = err.response
-    if (err) {
-      console.log('api error, HTTP CODE: ' + res)
-    }
-  })
-}
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.interceptors.request.use((config) => {
-
-  if(config.method  == 'post'){
-    let data = Qs.stringify(config.data);
-    config.data = data;
+    return res;
   }
 
-  return config;
 
-},(error) =>{
-  return Promise.reject(error);
-});
-
-axios.defaults.headers.put['Content-Type'] = 'multipart/form-data';
 
 export default {
   
-  get: function (url, params, success, failure) {
-    return apiAxios('GET', url, params, success, failure)
-  },
-  post: function (url, params, success, failure) {
-    return apiAxios('POST', url, params, success, failure)
-  },
-  put: function (url, params, success, failure) {
-    return apiAxios('PUT', url, params, success, failure)
-  },
-  delete: function (url, params, success, failure) {
-    return apiAxios('DELETE', url, params, success, failure)
-  }
+  get: (url, params, success, failure) => new Promise((resolve, reject) => {
+
+    if (params) {
+      params = filterNull(params)
+    }
+    if(!APIS[url].url){
+      return
+    }
+    axios.get(hostname+APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      if(parseInt(data.code)>0){
+        success && success(data)
+        resolve(data)
+      }else{
+        failure && failure(data)
+        reject(data);
+      }
+      
+    })
+    .catch(function (error) {
+      error = error.response.data
+      failure && failure(error)
+      reject(error)
+    });
+  }),
+  post: (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    if(!APIS[url].url){
+      return;
+    }
+
+    let nowTime = new Date().getTime();
+    requestUrl = requestUrl.filter((item) => {
+      return (item.setTime + saveTime) > nowTime;
+    });
+    let sessionUrl = requestUrl.filter((item) => {
+      return item.url === APIS[url].url;
+    });
+    if (sessionUrl.length > 0) {
+      // console.log(obj.url + '请求重复 中断请求!');
+      return;
+    }
+    let item = { url: APIS[url].url, setTime: new Date().getTime() };
+
+
+    requestUrl.push(item);
+    axios.post(hostname+APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      if(parseInt(response.code)>0){
+        success && success(response)
+        resolve(response)
+      }else{
+
+        
+        if(failure){
+          failure && failure(response)
+        }else{
+          return Promise.reject(response)
+        }
+        
+        
+      }
+    })
+    .catch(function (error) {
+      
+      if(error.response){
+        error = error.response.data;
+        failure && failure(error);
+         reject && reject(error)
+      }else{
+        reject(error)
+      }
+
+    });
+  }),
+  put:  (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    if(!APIS[url].url){
+      return
+    }
+    axios.put(hostname+APIS[url].url, params)
+    .then(check401)
+    .then(function (response) {
+      if(parseInt(response.code)>0){
+        success && success(response)
+        resolve(response)
+      }else{
+        failure && failure(response)
+        reject(response);
+      }
+    })
+    .catch(function (error) {
+      error = error.response.data
+      failure && failure(error)
+      reject(error)
+    });
+  }),
+  delete: (url, params, success, failure) => new Promise((resolve, reject) => {
+    if (params) {
+      params = filterNull(params)
+    }
+    if(!APIS[url].url){
+      return
+    }
+    axios.delete(hostname+APIS[url].url, {params:params})
+    .then(check401)
+    .then(function (data) {
+      if(parseInt(data.code)>0){
+        success && success(data)
+        resolve(data)
+      }else{
+        failure && failure(data)
+        reject(data);
+      }
+    })
+    .catch(function (error) {
+      error = error.response.data
+      failure && failure(error)
+      reject(error)
+    });
+  }),
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="contract-center-list">
-        <SectionTitle title = "合同列表" />
+        <SectionTitle title="合同列表" />
         <div style='text-align:right;margin-bottom:10px'>
           
             <div style='display:inline-block;margin:10px 20px;'>

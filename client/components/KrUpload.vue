@@ -49,10 +49,16 @@ export default{
 	components: {
 		Buttons,
 	},
+	/**
+	 *  @columnDetail 
+	 *  @file  
+	 *  @action
+	*/
 	props:{
 		columnDetail:Object,
 		file:Array,
 		action:String,
+		
 		publicUse:{
 			default:false,
 			type:Boolean
@@ -123,7 +129,6 @@ export default{
 			})   
 		},
 		onChange(event){
-			
 			let that = this;
 			// let file = event.target.files[0];
 			// var fileName= file.name;
@@ -222,7 +227,7 @@ export default{
 				
 			};
 
-			xhr.open('GET', 'http://'+window.location.host+'/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, that.publicUse);
+			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic='+that.publicUse+'&category='+category, true);
 			xhr.responseType = 'json';
 			xhr.send();
 		},

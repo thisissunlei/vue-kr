@@ -53,8 +53,12 @@ export default{
 		columnDetail:Object,
 		file:Array,
 		action:String,
-		onUpUrl:Function
+		publicUse:{
+			default:false,
+			type:Boolean
 		},
+		onUpUrl:Function
+	},
 	data(){
 		return {
 			isOpenList:false,
@@ -218,7 +222,7 @@ export default{
 				
 			};
 
-			xhr.open('GET', 'http://'+window.location.host+'/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, true);
+			xhr.open('GET', 'http://'+window.location.host+'/api/krspace-op-web/sys/upload-policy?isPublic=true&category='+category, that.publicUse);
 			xhr.responseType = 'json';
 			xhr.send();
 		},

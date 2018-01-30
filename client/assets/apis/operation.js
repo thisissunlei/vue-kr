@@ -34,8 +34,16 @@ export default  {
    'search-mbr': {
         url: '/api/krspace-finance-web/cmt/steward/search-mbr',
         method: 'get'
-    }
+    },
+    //app管理--Icon管理--列表
+   'get-icon-list': {
+        url: '/api/krspace-finance-web/app/icon/list',
+        method: 'get'
+    },
 
 
-  }
+
+
+
+}
   

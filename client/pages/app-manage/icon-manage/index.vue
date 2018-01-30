@@ -3,7 +3,46 @@
       <SectionTitle title="Icon管理" />
       <div class="u-search" >
             <Button type="primary" @click="jumpCreate">新建</Button>
-            
+            <div class="u-search-right">
+                <div class="u-search-right-list" style="margin-right:20px;">
+                    <div class='u-icon-label'>图标位置</div>
+                    <Select
+                        v-model="Params.iconLocation"
+                        style="width:200px"
+                        placeholder="请选择"
+                        clearable
+                        label-in-value
+                        @on-change="onLocationChange"
+                    >
+                            <Option
+                                v-for="item in locationList"
+                                :value="item.code"
+                                :key="item.code"
+                            >
+                                {{ item.name }}
+                            </Option>
+                    </Select>
+                </div>
+                <div class="u-search-right-list">
+                    <div class='u-icon-label'>启用状态</div>
+                    <Select
+                        v-model="Params.enable"
+                        style="width:200px"
+                        placeholder="请选择"
+                        clearable
+                        label-in-value
+                        @on-change="onEnablenChange"
+                    >
+                            <Option
+                                v-for="item in enableType"
+                                :value="item.value"
+                                :key="item.value"
+                            >
+                                {{ item.label }}
+                            </Option>
+                    </Select>
+                </div>
+            </div>
       </div>
       <div class="u-table">
             <Table  border :columns="columns" :data="tableList"/>
@@ -41,6 +80,8 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
+
 
 export default {
     name:'Icon',
@@ -51,15 +92,28 @@ export default {
         return{
             Params:{
                 page:1,
-                pageSize:4,
+                pageSize:15,
+                iconLocation:'',
+                enable:""
             },
             page:1,
-            pageSize:4,
+            pageSize:15,
             totalCount:0,
             tableList:[],
             iconId:'',
             openCancel:false,
             IsCookie:true,
+            locationList:[],
+            enableType:[
+                {
+                    label:'启用',
+                    value:'1'
+                },
+                {
+                    label:'不启用',
+                    value:'0'
+                }
+            ],
             columns:[
                 {
                     title: '图标位置',
@@ -158,10 +212,12 @@ export default {
         }else{
             this.getTableData(this.Params)
         }
+        this.getLocationList();
+
        
     },
     methods:{
-         getTableData(params){
+        getTableData(params){
             this.$http.get('get-icon-list', params).then((res)=>{
                 this.tableList=res.data.items;
                 this.totalCount=res.data.totalCount;
@@ -206,6 +262,33 @@ export default {
                 })
                  
         },
+        getLocationList(){
+            this.$http.get('get-icon-location', '').then((res)=>{
+                  this.locationList=res.data.locations;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+        },
+        onLocationChange(form){
+            this.Params.iconLocation=form.value;
+            this.Params.locationLabel=form.label;
+            utils.addParams(this.Params);
+            this.getTableData(this.Params)
+           
+
+        },
+        onEnablenChange(form){
+            this.Params.enable=form.value;
+            this.Params.enableLabel=form.label;
+            utils.addParams(this.Params);
+            this.getTableData(this.Params)
+        }
+
+
+
+
     },
 }
 </script>
@@ -220,7 +303,19 @@ export default {
     .u-table{
         padding:0 20px;
     } 
-
+    .u-search-right{
+        float:right;
+        width:560px;
+    }
+    .u-search-right-list{
+        float:left;
+    }
+    .u-icon-label{
+        float:left;
+        line-height:32px;
+        margin-right:10px;
+        font-size:14px;
+    }
     
 
 }

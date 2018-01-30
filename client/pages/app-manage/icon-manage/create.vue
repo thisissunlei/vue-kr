@@ -73,13 +73,13 @@
           <FormItem label="Icon：" style="width:352px" prop="iconUrl">
             <Upload
                 ref="uploadImg"
-                name="iconUrl"
+                name="imgUrl"
                 :show-upload-list="false"
                 :format="['jpg','jpeg','png']"
                 with-credentials
                 :on-success="handleSuccess"
                 type="drag"
-                action="/api/krspace-finance-web/activity/upload-pic"
+                action="/api/krspace-finance-web/app/icon/upload"
                 style="display: inline-block;width:58px;">
                 <div style="width: 58px;height:58px;line-height: 58px;">
                     <Icon type="camera" size="20"></Icon>

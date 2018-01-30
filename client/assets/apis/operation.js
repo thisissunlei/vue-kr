@@ -65,8 +65,7 @@ export default  {
         url: '/api/krspace-finance-web/app/icon/location/list',
         method: 'get'
     },
-
-
+    
 
 
 }

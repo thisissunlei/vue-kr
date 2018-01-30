@@ -192,7 +192,7 @@ export default {
             let params={
                     iconId: this.iconId
                 }
-                this.$http.post('delete-steward', params).then((res)=>{
+                this.$http.post('delete-icon', params).then((res)=>{
                     this.$Notice.success({
                         title:'删除成功'
                     });  

@@ -71,18 +71,20 @@
         </FormItem>
        
           <FormItem label="Icon：" style="width:352px" prop="iconUrl">
-            <!-- <Upload
+            <Upload
                 ref="uploadImg"
-                :before-upload="handleUpload"
-                action="/api/krspace-pay/pay-record/importBankFlow"
-                :with-credentials="IsCookie"
-            >
-                <div class="u-upload-content">
-                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                    <p>请选择上传文件</p>
-                    <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div>
+                name="iconUrl"
+                :show-upload-list="false"
+                :format="['jpg','jpeg','png']"
+                with-credentials
+                :on-success="handleSuccess"
+                type="drag"
+                action="/api/krspace-finance-web/activity/upload-pic"
+                style="display: inline-block;width:58px;">
+                <div style="width: 58px;height:58px;line-height: 58px;">
+                    <Icon type="camera" size="20"></Icon>
                 </div>
-            </Upload> -->
+            </Upload>
         </FormItem>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
             <Input 
@@ -201,10 +203,18 @@ export default {
                     title:err.message
                 });
         })
+    },
+
+    handleSuccess(res,file){
+        console.log('res',res);
+        console.log('file',file)
     }
 
-  }
 
+
+
+
+  }
 }
 </script>
 

@@ -59,6 +59,7 @@ export default {
             tableList:[],
             iconId:'',
             openCancel:false,
+            IsCookie:true,
             columns:[
                 {
                     title: '图标位置',

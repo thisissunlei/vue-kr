@@ -50,15 +50,14 @@ export default{
 		Buttons,
 	},
 	/**
-	 *  @columnDetail 
-	 *  @file  
-	 *  @action
+	 *  @param {Object} columnDetail 当用在列表是的上传组件所在行的所有数据
+	 *  @param {Array} file 上传组件上传的文件列表 
+	 *  @param {Boolean} publicUse 判断文件上传到公共环境还是私有环境
+	 *  @param {Function} onUpUrl 文件上传成功的回调方法 
 	*/
 	props:{
 		columnDetail:Object,
 		file:Array,
-		action:String,
-		
 		publicUse:{
 			default:false,
 			type:Boolean

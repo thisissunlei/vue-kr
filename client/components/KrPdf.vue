@@ -139,7 +139,7 @@
  }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .cpdf {
   .center{
     height: 40px;

@@ -447,10 +447,6 @@ export default {
 
     }
 </script>
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 <style lang="less">
 
 .g-order{

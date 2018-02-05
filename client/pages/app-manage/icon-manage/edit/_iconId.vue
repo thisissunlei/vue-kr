@@ -180,6 +180,7 @@ export default {
 
            this.$http.get('get-icon-detail', {iconId:iconId}).then((res)=>{
                   this.formItem=res.data;
+                  this.formItem.enable=res.data.enable.toString();
                   this.formItem.orderNum=res.data.orderNum.toString();
                   this.imgUrl=res.data.iconUrl;
                 }).catch((err)=>{
@@ -224,7 +225,7 @@ export default {
         form.iconId=params.iconId;
         this.$http.post('edit-icon',form ).then((res)=>{
             this.$Notice.success({
-                    title:'新建成功'
+                    title:'编辑成功'
                 });
                 setTimeout(function(){
                     window.close();

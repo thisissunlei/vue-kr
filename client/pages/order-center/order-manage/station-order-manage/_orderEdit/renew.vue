@@ -295,11 +295,11 @@ import utils from '~/plugins/utils';
                         key: 'seatType',
                         render:(h, params) => {
                             let type = params.row.seatType;
-                            let typeName = '工位';
+                            let typeName = '开放工位';
                             if(type =='SPACE'){
                                 typeName = '独立办公室'
                             }else{
-                                typeName = "工位"
+                                typeName = "开放工位"
                             }
                             return typeName
                         }

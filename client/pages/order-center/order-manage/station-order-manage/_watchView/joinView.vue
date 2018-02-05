@@ -90,6 +90,11 @@ export default {
                  align:'center'	
 				},
 				{
+                    title:'工位可容纳人数',
+                    key:'capacity',
+                    align:'center'	
+                },
+				{
 				 title: '标准单价(元/月)',
                  key: 'originalPrice',
                  align:'center'	

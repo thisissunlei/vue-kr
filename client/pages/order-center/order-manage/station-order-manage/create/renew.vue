@@ -295,7 +295,7 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
-                        title:'工位可容纳认识',
+                        title:'工位可容纳人数',
                         key:'capacity'
                     },
                     {

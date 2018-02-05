@@ -65,10 +65,17 @@
             />
         </FormItem>
        
-          <FormItem label="Icon：" style="width:352px">
+          <FormItem label="Icon：" style="width:352px" class="ivu-form-item-required">
+            <div class="demo-upload-list" v-if="this.imgUrl">
+                <img :src="this.imgUrl">
+                <div class="demo-upload-list-cover">
+                    <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+                </div>
+            </div>
             <Upload
-                ref="uploadImg"
+                ref="upload"
                 name="imgUrl"
+                v-if="!this.imgUrl"
                 :show-upload-list="false"
                 :format="['jpg','jpeg','png']"
                 with-credentials
@@ -81,6 +88,7 @@
                 </div>
             </Upload>
             <div v-if="isError" class="u-error">请选择要上传的图片</div>
+            
         </FormItem>
         <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
@@ -132,6 +140,7 @@ export default {
             },
           ],
           locationList:[],
+          imgUrl:'',
           ruleCustom:{
             iconName:[
                 { required: true, message: '请输入图标名称', trigger:'change' }
@@ -161,7 +170,8 @@ export default {
 
   mounted:function(){
     GLOBALSIDESWITCH("false");	
-   this.getLocationList();
+    this.getLocationList();
+    
   },
 
   methods:{
@@ -196,7 +206,7 @@ export default {
       },
 
       submitCreate(){
-        this.$http.post('create-steward', this.formItem).then((res)=>{
+        this.$http.post('create-icon', this.formItem).then((res)=>{
             this.$Notice.success({
                     title:'新建成功'
                 });
@@ -215,8 +225,14 @@ export default {
         if(res.code==1){
             this.isError=false;
             this.formItem.iconUrl=res.data.imgUrl;
+            this.imgUrl=res.data.imgUrl
         }
+    },
+    handleRemove(){
+      this.formItem.iconUrl="";
+      this.imgUrl="" 
     }
+   
 
 
 
@@ -246,7 +262,43 @@ export default {
     font-size: 12px;
     color: #ed3f14;
 }
-
+  .demo-upload-list{
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        margin-right: 4px;
+    }
+    .demo-upload-list img{
+        width: 100%;
+        height: 100%;
+    }
+    .demo-upload-list-cover{
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,.6);
+    }
+    .demo-upload-list:hover .demo-upload-list-cover{
+        display: block;
+    }
+    .demo-upload-list-cover i{
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
+    }
+    
 
 }
 </style>

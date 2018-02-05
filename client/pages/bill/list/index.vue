@@ -164,11 +164,11 @@ import utils from '~/plugins/utils';
                 billList:[],
                 billIds:[],
                 itemDetail:{},
-                pageSize:1,
+                pageSize:15,
                 page:1,
                 tabParams:{
                     page:1,
-                    pageSize:1,
+                    pageSize:15,
                     customerName:''
                 },
                 openMessage:false,

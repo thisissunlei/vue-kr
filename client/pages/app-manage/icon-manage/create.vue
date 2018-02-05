@@ -18,19 +18,14 @@
             />
         </FormItem>
         <FormItem label="是否启用：" style="width:352px" prop="enable">
-            <Select
-                v-model="formItem.enable"
-                style="width:250px"
-                placeholder="请选择"
-            >
-                <Option
-                    v-for="item in enableType"
-                    :value="item.value"
-                    :key="item.value"
-                >
-                    {{ item.label }}
-                </Option>
-            </Select>
+            <RadioGroup v-model="formItem.enable">
+                 <Radio label="1">
+                     是
+                </Radio>
+                 <Radio label="0">
+                     否
+                </Radio>
+            </RadioGroup> 
         </FormItem>
         <FormItem label="图标类型：" style="width:352px" prop="iconType">
             <Select
@@ -55,10 +50,10 @@
             >
                 <Option
                     v-for="item in locationList"
-                    :value="item.value"
-                    :key="item.value"
+                    :value="item.code"
+                    :key="item.code"
                 >
-                    {{ item.label }}
+                    {{ item.name }}
                 </Option>
             </Select>
         </FormItem>
@@ -70,7 +65,7 @@
             />
         </FormItem>
        
-          <FormItem label="Icon：" style="width:352px" prop="iconUrl">
+          <FormItem label="Icon：" style="width:352px">
             <Upload
                 ref="uploadImg"
                 name="imgUrl"
@@ -85,7 +80,9 @@
                     <Icon type="camera" size="20"></Icon>
                 </div>
             </Upload>
+            <div v-if="isError" class="u-error">请选择要上传的图片</div>
         </FormItem>
+        <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
             <Input 
                 v-model="formItem.iconDesc" 
@@ -113,22 +110,17 @@ export default {
   data(){
       return{
           formItem:{
+              iconName:'',
               destUrl:'',
-              stewardType:'',
-              stewardStatus:''
+              enable:'0',
+              iconType:'',
+              iconLocation:'',
+              orderNum:'',
+              iconUrl:'',
+              iconDesc:''
           },
-          
+          isError:false,
           maxLength:30,
-          enableType:[
-            {
-                label:'启用',
-                value:'1'
-            },
-            {
-                label:'不启用',
-                value:'0'
-            },
-          ],
           iconType:[
             {
                 label:'原生页面',
@@ -141,35 +133,47 @@ export default {
           ],
           locationList:[],
           ruleCustom:{
-            mbrId:[
-                { required: true, message: '请选择社区', trigger:'change' }
+            iconName:[
+                { required: true, message: '请输入图标名称', trigger:'change' }
             ],
-            stewardType:[
-                { required: true, message: '请选择职位', trigger: 'change' }
+            destUrl:[
+                { required: true, message: '请输入跳转地址', trigger: 'change' }
             ],
-            stewardStatus:[
-                { required: true, message: '请选择工作状态', trigger: 'change' }
+            enable:[
+                { required: true, message: '请选择是否启用', trigger: 'change' }
+            ],
+            iconType:[
+                { required: true, message: '请选择图标类型', trigger:'change' }
+            ],
+            iconLocation:[
+                { required: true, message: '请选择Icon位置', trigger: 'change' }
+            ],
+            orderNum:[
+                { required: true, message: '请输入排序号', trigger: 'change' }
+            ],
+            
+            iconDesc:[
+                { required: true, message: '请输入图片描述', trigger: 'change' }
             ],
           }
       }
   },
 
   mounted:function(){
-	GLOBALSIDESWITCH("false");	
+    GLOBALSIDESWITCH("false");	
+   this.getLocationList();
   },
 
   methods:{
-      onMemberchange(value){
-          this.formItem.mbrId=value;
-          this.$http.get('search-mbr', {mbrId:value}).then((res)=>{
-               this.memberInfo = res.data;   
-          }).catch((err)=>{
-               this.$Notice.error({
-                    title:err.message
-                });
-          })
+      getLocationList(){
+            this.$http.get('get-icon-location', '').then((res)=>{
+                  this.locationList=res.data.locations;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
       },
-
       handleSubmit(name){
           let message = '请填写完表单';
                 this.$Notice.config({
@@ -177,9 +181,11 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               
+               if(!this.formItem.iconUrl){
+                    this.isError=true;
+               }
                 this.$refs[name].validate((valid) => {
-                    if (valid) {
+                    if (valid && this.formItem.iconUrl) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -206,8 +212,10 @@ export default {
     },
 
     handleSuccess(res,file){
-        console.log('res',res);
-        console.log('file',file)
+        if(res.code==1){
+            this.isError=false;
+            this.formItem.iconUrl=res.data.imgUrl;
+        }
     }
 
 
@@ -218,12 +226,25 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .g-Icon-created{
 
 .u-form{
     margin-top:40px;
     margin-left:40px;
+}
+.u-error{
+    color: #ed3f14;
+    font-size: 12px;
+}
+.ivu-form-item-required .ivu-form-item-label:before{
+    content: '*';
+    display: inline-block;
+    margin-right: 4px;
+    line-height: 1;
+    font-family: SimSun;
+    font-size: 12px;
+    color: #ed3f14;
 }
 
 

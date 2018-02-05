@@ -164,11 +164,11 @@ import utils from '~/plugins/utils';
                 billList:[],
                 billIds:[],
                 itemDetail:{},
-                pageSize:15,
+                pageSize:1,
                 page:1,
                 tabParams:{
                     page:1,
-                    pageSize:15,
+                    pageSize:1,
                     customerName:''
                 },
                 openMessage:false,
@@ -398,7 +398,10 @@ import utils from '~/plugins/utils';
                           return bizType[obj.row.bizType];
                         }
                     }
-                this.columns1.splice(4, 0, billtype)
+                if(this.columns1.length<13){
+                     this.columns1.splice(4, 0, billtype);
+                }
+               
             },
             getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{

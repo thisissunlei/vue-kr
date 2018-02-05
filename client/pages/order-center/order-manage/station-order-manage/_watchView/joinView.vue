@@ -97,7 +97,7 @@ export default {
                             let type = params.row.seatType;
                             let typeName = '工位';
                             if(type =='SPACE'){
-                                typeName = '房间'
+                                typeName = '独立办公室'
                             }else{
                                 typeName = "工位"
                             }

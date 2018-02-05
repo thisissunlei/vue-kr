@@ -308,6 +308,10 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
+                        title:'工位可容纳人数',
+                        key:'capacity'
+                    },
+                    {
                         title: '定价',
                         key: 'guidePrice'
                     },

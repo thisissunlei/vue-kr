@@ -295,6 +295,10 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
+                        title:'工位可容纳认识',
+                        key:'capacity'
+                    },
+                    {
                         title: '定价',
                         key: 'guidePrice'
                     },

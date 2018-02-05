@@ -220,7 +220,11 @@ import utils from '~/plugins/utils';
                             return incomeType[obj.row.incomeType]
                         }
                     };
-                this.columns1.splice(5, 0, billtype)
+                if(this.columns1.length<7){
+                   this.columns1.splice(5, 0, billtype)
+                }
+                   
+                
             },
             getIncomeType(){
                 this.$http.get('get-fee-type', '').then((res)=>{

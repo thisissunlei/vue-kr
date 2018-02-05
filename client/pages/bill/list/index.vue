@@ -58,7 +58,7 @@
           
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
+        <Table  border :columns="columns" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -175,7 +175,7 @@ import utils from '~/plugins/utils';
                 warn:'',
                 MessageType:'',
                 billType:{},
-                columns1: [
+                columns: [
                     {
                         type: 'selection',
                         width: 35,
@@ -398,8 +398,8 @@ import utils from '~/plugins/utils';
                           return bizType[obj.row.bizType];
                         }
                     }
-                if(this.columns1.length<13){
-                    this.columns1.splice(4, 0, billtype)
+                if(this.columns.length<13){
+                    this.columns.splice(4, 0, billtype)
                 }
                 
             },

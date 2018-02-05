@@ -49,7 +49,7 @@
          </div> 
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" ></Table>
+        <Table  border :columns="columns" :data="billList" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -137,7 +137,7 @@ import utils from '~/plugins/utils';
                 callback:null,
                 cancelCallback:null,
                 incomeType:{},
-                columns1: [
+                columns: [
                     {
                         title: '收入编号',
                         key: 'id',
@@ -220,8 +220,8 @@ import utils from '~/plugins/utils';
                             return incomeType[obj.row.incomeType]
                         }
                     };
-                if(this.columns1.length<7){
-                   this.columns1.splice(5, 0, billtype)
+                if(this.columns.length<7){
+                   this.columns.splice(5, 0, billtype)
                 }
                    
                 

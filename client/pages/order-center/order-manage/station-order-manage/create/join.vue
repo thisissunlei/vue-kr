@@ -302,6 +302,20 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
+                        title: '类型',
+                        key: 'seatType',
+                        render:(h, params) => {
+                            let type = params.row.seatType;
+                            let typeName = '工位';
+                            if(type =='SPACE'){
+                                typeName = '房间'
+                            }else{
+                                typeName = "工位"
+                            }
+                            return typeName
+                        }
+                    },
+                    {
                         title:'工位可容纳人数',
                         key:'capacity'
                     },

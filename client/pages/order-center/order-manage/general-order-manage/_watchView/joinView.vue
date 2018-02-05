@@ -167,6 +167,7 @@ export default {
 			line-height: 22px;
 			padding-left: 14px;
 			margin-bottom: 24px;
+			word-break: break-all;
 		}
 	}
 </style>

@@ -49,7 +49,7 @@
         title="选择工位"
         ok-text="保存"
         cancel-text="取消"
-        width="450"
+        width="468"
          class-name="vertical-center-modal"
      >
         <div v-if="openStation && !stationList.length">无可减租工位</div>

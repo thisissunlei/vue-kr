@@ -399,9 +399,9 @@ import utils from '~/plugins/utils';
                         }
                     }
                 if(this.columns1.length<13){
-                     this.columns1.splice(4, 0, billtype);
+                    this.columns1.splice(4, 0, billtype)
                 }
-               
+                
             },
             getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{

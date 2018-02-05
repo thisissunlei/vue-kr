@@ -1,6 +1,6 @@
 <template>
     <div class="contract-center-list">
-        <SectionTitle title = "合同列表" />
+        <SectionTitle title="合同列表" />
         <div style='text-align:right;margin-bottom:10px'>
           
             <div style='display:inline-block;margin:10px 20px;'>
@@ -168,6 +168,7 @@
                 columnDetail:{},//每一行的数据
                 totalCount:1,
                 maxWidth:170,
+                downType:"down",
 
                 columns: [
                     
@@ -314,11 +315,16 @@
                         render:(h,params)=>{
                             let arr = params.row.file||[];
                             let newArr = []
+                            let btnRender = [];
                             for(let i=0;i<arr.length;i++){
                                 newArr.push(Object.assign({"name":arr[i].fileName,"url":''},arr[i]))
                             }
-                            var btnRender=[
-                                h('Button', {
+                            var downText = "下载";
+                            if(params.row.isOldContract){
+                                downText = "打印"
+                            }
+                            if(!params.row.isOldContract){
+                                btnRender.push(h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -331,8 +337,26 @@
                                             this.jumpView(params)
                                         }
                                     }
-                                }, '查看'), 
-                                h('Button', {
+                                }, '查看'));
+                                btnRender.push(h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.downType = "down"
+                                            var parameter = {requestId:params.row.requestId}
+                                            this.parameter = parameter;
+                                            this.showDown()
+                                        }
+                                    }
+                                }, "下载"))
+                            }else{
+                                btnRender.push( h('Button', {
                                     props: {
                                         type: 'text',
                                         size: 'small'
@@ -343,11 +367,17 @@
                                     on: {
                                         click: () => {
                                             var parameter = {requestId:params.row.requestId}
+                                            this.downType = "print"
+                                            this.columnDetail = params.row;
                                             this.parameter = parameter;
                                             this.showDown()
                                         }
                                     }
-                                }, '下载'), 
+                                }, "打印"))
+                            }   
+                               
+                            btnRender.push(
+                        
                                 h(krUpload, {
                                     props: {
                                         action:'//jsonplaceholder.typicode.com/posts/',
@@ -359,8 +389,8 @@
                                         color:'#2b85e4'
                                     },
                                 },'44')
-                            ];
-                               
+                            );
+                            
                             if(params.row.otherAgreedButton){
                                 btnRender.push(h(Buttons, {
                                     props: {
@@ -528,7 +558,38 @@
 
             //下定按钮被点击载确
             submitDownLoad(params){
+
+                if(this.downType =="print"){
+                    var typeList = [{
+                        name: '入驻合同',
+                        value: 'join'
+                    }, {
+                        name: '增租合同',
+                        value: 'increase'
+                    }, {
+                        name: '减租合同',
+                        value: 'reduce'
+                    },{
+                        name: '续租合同',
+                        value: 'renew'
+                    }];
+                    var type = "join";
+                    var href = '';
+                    var port = location.port || '';
+                    if (port) {
+                        port = ":" + port;
+                    }
+                    for(let i=0;i<typeList.length;i++){
+                        if(typeList[i].name==this.columnDetail.contractType){
+                            type = typeList[i].value;
+                        }
+                    }
+                    window.open(location.protocol + "//"+location.hostname+port+`/new/#/operation/customerManage/1/order/1/agreement/${type}/${this.columnDetail.orderId}/print?print=${this.isCachet}`,'_blank')  
+                    this.showDown();
+                    return ;
+                }
                 this.config()
+
                 var parameter = Object.assign({},this.parameter)
                 if(this.isCachet){
                     parameter.contractType = "HAVESEAL"

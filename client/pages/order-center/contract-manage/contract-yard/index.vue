@@ -198,9 +198,9 @@
                     let item=r.data;
                     this.params.serialNumber='';
                     if(!item.requestId){
-                        this.$Notice.error({
-                           title:'合同编号不正确'
-                        });
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn='扫码错误,请尝试手动输入';
                         return;
                     }
                     if(!item.pigeonholed){

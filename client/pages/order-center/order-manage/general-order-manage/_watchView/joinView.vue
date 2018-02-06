@@ -15,6 +15,9 @@
 			<LabelText label="订单类型：">
 				{{basicInfo.typeName}}
 			</LabelText>
+			<LabelText label="费用明细类型：">
+				{{basicInfo.feeTypeName}}
+			</LabelText>
 			<LabelText label="订单金额：">
 				{{basicInfo.money}}
 			</LabelText>
@@ -30,9 +33,10 @@
 			<LabelText label="销售日期：">
 				{{saleDate}}
 			</LabelText>
-			<LabelText label=" 备注信息：">
-				{{basicInfo.remark}}
-			</LabelText>
+			<div class='remak'>
+				<span>备注信息：</span>
+				<span>{{basicInfo.remark}}</span>
+			</div>
          </DetailStyle>
 		 <DetailStyle info="相关账单">
 			<Table :columns="contract" :data="contractData"/>
@@ -155,6 +159,15 @@ export default {
 			.ivu-table-wrapper{
 				margin-bottom:30px;
 			}
+		}
+		.remak{
+			width: 50%;
+			font-size: 14px;
+			color: #333333;
+			line-height: 22px;
+			padding-left: 14px;
+			margin-bottom: 24px;
+			word-break: break-all;
 		}
 	}
 </style>

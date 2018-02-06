@@ -37,7 +37,7 @@
         },
         methods: {
             changeContent:function(value){
-              this.onchange && this.onchange(value);
+              this.onchange &&  this.onchange(value);
              },
             remoteMethod1 (query) {
                 

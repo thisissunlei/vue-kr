@@ -118,11 +118,13 @@ export default {
         data() {
 
            const validateMoney = (rule, value, callback) => {
-                var numReg=/^(([1-9][0-9]*)|([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2}))$/;
+                var numReg=/^(([1-9]{1}[0-9]{0,11})|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,11}\.\d{1,2}))$/;
                 if (value === '') {
                     callback(new Error('请填写金额'));
+                } else if(isNaN(value)){
+                    callback(new Error('金额为数字'));
                 } else if(!numReg.test(value)){
-                    callback(new Error('请填写最多两位小数的正数'));
+                    callback(new Error('请填写整数位最多12位，小数位最多两位的正数'));
                 }else{
                     callback();
                 }
@@ -246,6 +248,7 @@ export default {
                       window.close();
                       window.opener.location.reload();
                 }, e => {
+                     _this.disabled = false;
                      _this.$Notice.error({
                         title:e.message
                     })

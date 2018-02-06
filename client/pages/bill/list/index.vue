@@ -101,7 +101,7 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSettle">取消</Button>
         </div>
     </Modal>
-    <!-- <Modal
+    <Modal
         v-model="openAntiSettle"
         title="反结账提示"
         ok-text="确定"
@@ -116,7 +116,7 @@
             <Button type="primary" @click="antiSettleSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showAntiSettle">取消</Button>
         </div>
-    </Modal> -->
+    </Modal>
     <Modal
         v-model="openClose"
         title="提示"
@@ -139,7 +139,7 @@
 <script>
 import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
-//import antiSettlement from './antiSettlement';
+import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
@@ -150,7 +150,7 @@ import utils from '~/plugins/utils';
         components:{
             HighSearch,
             settleAccounts,
-            //antiSettlement,
+            antiSettlement,
             SectionTitle,
             Message
         },
@@ -308,20 +308,20 @@ import utils from '~/plugins/utils';
                                                     }
                                                 }
                                             }, '结账'),
-                                            // h('Button', {
-                                            //     props: {
-                                            //         type: 'text',
-                                            //         size: 'small'
-                                            //     },
-                                            //     style: {
-                                            //         color:'#2b85e4'
-                                            //     },
-                                            //     on: {
-                                            //         click: () => {
-                                            //             this.showAntiSettle(params.row)
-                                            //         }
-                                            //     }
-                                            // }, '反结账')
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            }, '反结账')
                                         ]);  
                             }else if(params.row.payStatus==='PAID'){
                                 return h('div', [
@@ -425,10 +425,10 @@ import utils from '~/plugins/utils';
                 this.itemDetail=params;
                 this.openSettle=!this.openSettle;
             },
-            // showAntiSettle(params){
-            //     this.itemDetail=params;
-            //     this.openAntiSettle=!this.openAntiSettle;
-            // },
+            showAntiSettle(params){
+                this.itemDetail=params;
+                this.openAntiSettle=!this.openAntiSettle;
+            },
             onExport(){
                  console.log('导出')
             },
@@ -510,27 +510,27 @@ import utils from '~/plugins/utils';
                 })
                 
             },
-            // antiSettleSubmit(){
-            //     let params={
-            //         amount:this.antiSettleData,
-            //         billId:this.itemDetail.billId
-            //     }
-            //     this.$http.post('bill-release',params, r => {
-            //         if(r.code==-1){
-            //             this.MessageType="error";
-            //             this.warn=r.message;
-            //             this.openMessage=true;
-            //             return;
-            //         }
-            //         this.openAntiSettle=false;
-            //         this.MessageType="success";
-            //         this.warn="反结算成功"
-            //         this.openMessage=true;
-            //         this.getTableData(this.tabParams);
-            //     }, e => {
-            //         console.log('11111')
-            //     })
-            // },
+            antiSettleSubmit(){
+                let params={
+                    amount:this.antiSettleData,
+                    billId:this.itemDetail.billId
+                }
+                this.$http.post('bill-release',params, r => {
+                    if(r.code==-1){
+                        this.MessageType="error";
+                        this.warn=r.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.openAntiSettle=false;
+                    this.MessageType="success";
+                    this.warn="反结算成功"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
+                }, e => {
+                    console.log('11111')
+                })
+            },
             searchSubmit(){
                 this.tabParams=this.searchData;
                 this.page=1;

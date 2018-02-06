@@ -5,6 +5,7 @@
     <div class="u-search" >
          <Button type="primary" @click="importDetail">导入回款明细</Button>
           <Button type="primary" @click="onRefund" style="margin-left:20px;">退款</Button>
+          <Button type="primary" @click="onCollection" style="margin-left:20px;">回款</Button>
         <span class="u-high-search" @click="showSearch"></span>
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
@@ -416,8 +417,7 @@ export default {
                 this.file =null;
                 this.openImport=!this.openImport;
             },
-
-             importSubmit(){
+            importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data).then((res)=>{
@@ -442,6 +442,13 @@ export default {
                 })
 
             },
+            onCollection(){
+                window.open('./payment/collection','_blank');
+            }
+
+
+
+
         }
 
     }

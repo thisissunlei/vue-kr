@@ -103,7 +103,7 @@
     </Modal>
     <Modal
         v-model="openAntiSettle"
-        title="反结账提示"
+        title="反结算提示"
         ok-text="确定"
         cancel-text="取消"
         width="443"
@@ -321,7 +321,7 @@ import utils from '~/plugins/utils';
                                                         this.showAntiSettle(params.row)
                                                     }
                                                 }
-                                            }, '反结账')
+                                            }, '反结算')
                                         ]);  
                             }else if(params.row.payStatus==='PAID'){
                                 return h('div', [
@@ -515,10 +515,10 @@ import utils from '~/plugins/utils';
                     amount:this.antiSettleData,
                     billId:this.itemDetail.billId
                 }
-                this.$http.post('bill-release',params, r => {
-                    if(r.code==-1){
+                this.$http.post('bill-release',params).then((res)=>{
+                     if(res.code==-1){
                         this.MessageType="error";
-                        this.warn=r.message;
+                        this.warn=res.message;
                         this.openMessage=true;
                         return;
                     }
@@ -527,9 +527,12 @@ import utils from '~/plugins/utils';
                     this.warn="反结算成功"
                     this.openMessage=true;
                     this.getTableData(this.tabParams);
-                }, e => {
-                    console.log('11111')
-                })
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                });
+               
             },
             searchSubmit(){
                 this.tabParams=this.searchData;

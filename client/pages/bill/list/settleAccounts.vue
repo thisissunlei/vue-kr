@@ -50,9 +50,6 @@
 				account:0
 			}
 		},
-		computed:{
-
-		},
 		methods:{
 
 			getAmount(customerId){
@@ -83,9 +80,7 @@
 				}
 			}
 
-		}
-
-
+		},
 
 	}
 </script>

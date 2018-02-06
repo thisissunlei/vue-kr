@@ -4,12 +4,7 @@
                     <div class='lower-search'>
                         <span style='padding-right:10px'>合同编号</span>
                         <div class='pass-wrap'>
-                            <div 
-                             class="pass-watch"
-                             contenteditable="true"
-                             v-html="params.serialNumber"
-                            >
-                            </div>
+                            <div class="pass-watch">{{params.serialNumber}}</div>
                             <Input 
                                 class="pass-no"
                                 v-model="params.serialNumber"
@@ -293,9 +288,8 @@
                     .pass-wrap{
                         position: relative;
                         display: inline-block;
-                        .pass-no{       
-                            
-                            background-color: transparent;
+                        .pass-no{                  
+                            opacity: 0;
                             z-index:10;
                         }
                         .pass-watch{

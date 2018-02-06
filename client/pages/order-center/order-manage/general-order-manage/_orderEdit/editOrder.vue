@@ -248,6 +248,7 @@ export default {
                       window.close();
                       window.opener.location.reload();
                 }, e => {
+                     _this.disabled = false;
                      _this.$Notice.error({
                         title:e.message
                     })

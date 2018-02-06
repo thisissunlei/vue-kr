@@ -200,6 +200,7 @@ export default {
                       window.close();
                       window.opener.location.reload();
                 }, e => {
+                     _this.disabled = false;
                      _this.$Notice.error({
                         title:e.message
                     })
@@ -207,7 +208,7 @@ export default {
             },
 
             handleSubmit:function(name) {
-                let message = '请填写完表单';
+                let message = '请正确填写完表单';
                 this.$Notice.config({
                     top: 80,
                     duration: 3

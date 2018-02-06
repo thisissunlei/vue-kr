@@ -3,14 +3,24 @@
             <div class='list-search'>
                     <div class='lower-search'>
                         <span style='padding-right:10px'>合同编号</span>
-                        <Input 
-                            v-model="params.serialNumber" 
-                            :autofocus="autofocus"
-                            placeholder="请输入合同编号"
-                            size="large"
-                            style="width:400px;"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
+                        <div class='pass-wrap'>
+                            <div 
+                             class="pass-watch"
+                             contenteditable="true"
+                             v-html="params.serialNumber"
+                            >
+                            </div>
+                            <Input 
+                                class="pass-no"
+                                v-model="params.serialNumber"
+                                type="password" 
+                                :autofocus="autofocus"
+                                placeholder="请输入合同编号"
+                                size="large"
+                                style="width:400px;"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </div>
                     </div>
                     <div class='m-search' @click="submitLower">查询</div>
             </div>
@@ -280,6 +290,30 @@
                 .lower-search{
                     display:inline-block;
                     margin: 40px 20px 20px 0;
+                    .pass-wrap{
+                        position: relative;
+                        display: inline-block;
+                        .pass-no{       
+                            
+                            background-color: transparent;
+                            z-index:10;
+                        }
+                        .pass-watch{
+                            width:100%;
+                            height:36px;
+                            width:400px;
+                            border:solid 1px #ccc;
+                            border-radius: 4px;
+                            padding:5px 10px;
+                            text-align: left;
+                            font-size:14px;
+                            line-height:22px;
+                            position:absolute;
+                            left:0;
+                            top:0;
+                            z-index:1;
+                        }
+                    }
                 }
         }
         .list-table{

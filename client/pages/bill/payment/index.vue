@@ -3,9 +3,9 @@
 <div class="g-order">
     <SectionTitle title="回款管理"></SectionTitle>
     <div class="u-search" >
-         <Button type="primary" @click="importDetail">导入回款明细</Button>
-          <Button type="primary" @click="onRefund" style="margin-left:20px;">退款</Button>
-          <Button type="primary" @click="onCollection" style="margin-left:20px;">回款</Button>
+         <Buttons  label='导入回款明细' checkAction='payment_import' type="primary" @click="importDetail" />
+          <Buttons  label='退款'  checkAction='payment_refund' type="primary" @click="onRefund" style="margin-left:20px;" />
+          <Buttons  label='回款' checkAction='payment_add' type="primary" @click="onCollection" style="margin-left:20px;" />
         <span class="u-high-search" @click="showSearch"></span>
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
@@ -143,6 +143,7 @@ import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import SelectCommunitiy from '~/components/SelectCommunitiy';
+import Buttons from '~/components/Buttons';
 
 export default {
         name: 'receive',
@@ -151,7 +152,8 @@ export default {
             HighSearch,
             SearchCompany,
             Message,
-            SelectCommunitiy
+            SelectCommunitiy,
+            Buttons
         },
         data () {
             return {
@@ -256,20 +258,20 @@ export default {
                                         }
                                     }
                                 }, '查看'),
-                                h('Button', {
-                                    props: {
+                                h(Buttons, {
+                                     props: {
                                         type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
+                                        size: 'small',
+                                        checkAction:'payment_bind',
+                                        label:'绑定客户',
+                                        styles:'color:#2b85e4;padding: 2px 7px;',
                                     },
                                     on: {
                                         click: () => {
                                             this.bindPerson(params.row);
                                         }
                                     }
-                                }, '绑定客户')
+                                })
                             ]);
                           }else {
                               return h('div', [

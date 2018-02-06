@@ -134,6 +134,10 @@ import utils from '~/plugins/utils';
                         key: 'name'
                     },
                     {
+                        title:'工位可容纳人数',
+                        key:'capacity'
+                    },
+                    {
                        title: '减租期限',
                         key: 'address',
                         render: (h, params) => {

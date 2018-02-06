@@ -90,6 +90,26 @@ export default {
                  align:'center'	
 				},
 				{
+                        title: '类型',
+                        key: 'seatType',
+                        align:'center',
+                        render:(h, params) => {
+                            let type = params.row.seatType;
+                            let typeName = '开放工位';
+                            if(type =='SPACE'){
+                                typeName = '独立办公室'
+                            }else{
+                                typeName = "开放工位"
+                            }
+                            return typeName
+                        }
+                    },
+				{
+                    title:'工位可容纳人数',
+                    key:'capacity',
+                    align:'center'	
+                },
+				{
 				 title: '标准单价(元/月)',
                  key: 'originalPrice',
                  align:'center'	

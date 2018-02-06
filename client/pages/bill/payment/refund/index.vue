@@ -8,7 +8,7 @@
                     <Col class="col">
                         <FormItem label="客户名称" style="width:252px" prop="customerId">
                             <SearchCompany
-                                    test="formItem"
+                                    :test="formItem"
                                     style="width: 250px"
                                     :onchange="onchange"
                             ></SearchCompany>
@@ -246,6 +246,7 @@ import dateUtils from 'vue-dateutils';
                     });
                     setTimeout(function(){
                          window.close();
+                         window.opener.location.reload();
                     },1000)    
                 }).catch( e => {
                     this.$Notice.error({

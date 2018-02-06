@@ -8,7 +8,7 @@
                     <Col class="col">
                         <FormItem label="客户名称" style="width:252px" prop="customerId">
                             <SearchCompany
-                                    test="formItem"
+                                    :test="formItem"
                                     style="width: 250px"
                                     :onchange="onchange"
                             ></SearchCompany>
@@ -20,13 +20,8 @@
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <div class="u-txt-label">账户余额</div>
-                        <div class="u-txt-value">{{amount}}</div>
-                       
-                    </Col>
-                    <Col class="col">
-                        <FormItem label="退款金额" style="width:252px" prop="value">
-                            <Input v-model="formItem.value" placeholder="请输入退款金额" />
+                        <FormItem label="金额" style="width:252px" prop="amount">
+                            <Input v-model="formItem.amount" placeholder="请输入回款金额" />
                         </FormItem>
                     </Col>
                     <Col class="col">
@@ -63,13 +58,8 @@
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="退款日期" style="width:252px" prop="occurDate">
+                        <FormItem label="回款日期" style="width:252px" prop="occurDate">
                             <DatePicker type="date" placeholder="请选择退款日期" format="yyyy-MM-dd" v-model="formItem.occurDate" style="display:block"></DatePicker>
-                        </FormItem>
-                    </Col>
-                    <Col class="col">
-                        <FormItem label="备注" style="width:252px">
-                        <Input v-model="formItem.remark" type="textarea" :rows="4" placeholder="备注" />
                         </FormItem>
                     </Col>
                 </Row>
@@ -105,35 +95,21 @@ import dateUtils from 'vue-dateutils';
                 formItem: {
                     customerId: '',
                     communityId: '',
-                    value: '',
+                    amount: '',
                     tradeNo:'',
                     payWay: '',
                     occurDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     payAccount:'',
                     receiveAccount:'',
-                    remark:'',
                 },
-                amount:'-',
                 communityList:[],
                 payWay:[
                     {
-                        label:'支付宝app',
+                        label:'支付宝',
                         value:'ALIAPPPAY'
                     },
                     {
-                        label:'支付宝网银',
-                        value:'ALIWEBPAY'
-                    },
-                    {
-                        label:'微信',
-                        value:'WXPAY'
-                    },
-                    {
-                        label:'网银',
-                        value:'BANKONLINE'
-                    },
-                    {
-                        label:'支付宝网银',
+                        label:'银行转账',
                         value:'BANKTRANSFER'
                     }
                 ],
@@ -144,8 +120,8 @@ import dateUtils from 'vue-dateutils';
                     customerId:[
                         { required: true, message: '请选择客户',  }
                     ],
-                    value: [
-                        { required: true, message: '请输入退款金额', trigger: 'change' }
+                    amount: [
+                        { required: true, message: '请输入回款金额', trigger: 'change' }
                     ],
                     payWay: [
                         { required: true,message: '请选择支付方式', trigger: 'change' }
@@ -157,7 +133,7 @@ import dateUtils from 'vue-dateutils';
                         { required: true, message: '请输入收款账户', trigger: 'change' }
                     ],
                     occurDate:[
-                        { required: true,type: 'date', message: '请先选择退款时间', trigger: 'change' }
+                        { required: true,type: 'date', message: '请先选择回款时间', trigger: 'change' }
                     ],
                     tradeNo:[
                         { required: true, message: '请输入交易流水号', trigger: 'change' } 
@@ -180,26 +156,14 @@ import dateUtils from 'vue-dateutils';
          
         },
         methods: {
-            config:function(){
+            config(){
                 this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
             },
-            getAmount(customerId){
-				let params={
-					customerId:customerId
-				};
-				this.$http.get('get-balance', params).then((res)=>{
-					this.amount=res.data.balance;
-				}).catch((err)=>{
-					this.$Notice.error({
-						title:err.message
-					});
-				})
-				
-			},
-            changeCommunity:function(value){
+           
+            changeCommunity(value){
                 if(value){
                     this.formItem.communityId = value;
                 }else{
@@ -210,10 +174,8 @@ import dateUtils from 'vue-dateutils';
                 
                 if(value){
                     this.formItem.customerId = value;
-                    this.getAmount(value)
                 }else{
                     this.formItem.customerId = '';
-                    this.amount='-';
                 } 
                 
 
@@ -229,7 +191,7 @@ import dateUtils from 'vue-dateutils';
                 this.$refs[name].validate((valid) => {
                    
                     if (valid) {
-                        this.onRefundSubmit();
+                        this.onCollectionSubmit();
                     } else {
                         this.$Notice.error({
                             title:message
@@ -237,15 +199,16 @@ import dateUtils from 'vue-dateutils';
                     }
                 })
             },
-            onRefundSubmit(){
+            onCollectionSubmit(){
                 this.formItem.occurDate = dateUtils.dateToStr("YYYY-MM-dd",new Date(this.formItem.occurDate));
                 
-                this.$http.get('payment-refund', this.formItem).then( res => {
+                this.$http.get('payment-add', this.formItem).then( res => {
                     this.$Notice.success({
-                        title:'退款成功'
+                        title:'回款款成功'
                     });
                     setTimeout(function(){
                          window.close();
+                         window.opener.location.reload();
                     },1000)    
                 }).catch( e => {
                     this.$Notice.error({

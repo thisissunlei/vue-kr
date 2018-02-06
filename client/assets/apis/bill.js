@@ -95,6 +95,11 @@ export default  {
       url: '/api/krspace-pay/payment/refund',
       method: 'post'
     },
+    //账单中心--回款--回款
+    'payment-add': {
+      url: '/api/krspace-pay/payment/add',
+      method: 'post'
+    },
     
   }
   

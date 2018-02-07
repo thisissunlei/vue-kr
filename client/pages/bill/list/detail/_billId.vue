@@ -177,11 +177,13 @@ export default {
                  key: 'srcType',
 				 align:'center',
 				 render(h, obj){
-						if(obj.row.srcType==='BALANCE'){
-							return '余额'
-						}else if(obj.row.srcType==='PAYONLINE'){
-							return '在线支付'
+					 let srcType={
+							'BALANCE':'余额',
+							'PAYONLINE':'在线支付',
+							'RELEASE':'反结算',
 						}
+						return srcType[obj.row.srcType]
+						
 				 	}
 				},
 				{

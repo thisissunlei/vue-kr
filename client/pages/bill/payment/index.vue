@@ -394,9 +394,9 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             invoiceSubmit(){
-                this.form.paymentId=this.paymentId;
+                this.forms.paymentId=this.paymentId;
 
-                this.$http.post('payment-invoice', this.form).then((res)=>{
+                this.$http.post('payment-invoice', this.forms).then((res)=>{
                     this.openInvoice();
                     this.$Notice.success({
                         title:'开票成功'

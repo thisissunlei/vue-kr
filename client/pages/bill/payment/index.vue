@@ -382,7 +382,7 @@ export default {
             openInvoice(params){
                 if(params){
                      this.paymentId=params.id;
-                     this.form.invoiceContent=params.invoiceContent;
+                     this.form.invoiceContent=params.invoiceContent || '';
                 }
                 this.ifInvoice=!this.ifInvoice
             },

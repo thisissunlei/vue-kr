@@ -1,7 +1,8 @@
 <template>
   <div class="joker-input" :class="{'joker-input-active':isFocus}">
-    <div class="show-text">{{this.inputText}}<span class="joker-cursor"></span></div>
+    <div class="show-text">{{this.inputText}}<span :class="[jokerCursor,isFocus?jokerWatch:jokerNo]"></span></div>
     <Input 
+        v-model="name.serialNumber"
         type="password" 
         @on-blur="inputBlur" 
         @on-change="inputChange" 
@@ -16,12 +17,35 @@
  export default {
    props:{
        autoFocus:Boolean,
+       styles:String,
+       name:Object
+   },
+   data(){
+        return {
+            inputText:'',
+            isFocus:false,
+            jokerWatch:'joker-watch',
+            jokerCursor:'joker-cursor',
+            jokerNo:'joker-no'
+        }
+   },
+   watch: {
+          $props: {
+                deep: true,
+                handler(nextProps) {
+                    this.inputText=nextProps.name.serialNumber
+                }
+          }
+    },
+   mounted(){
+       this.isFocus = true;
    },
    methods:{
      onKeyEnter(ev){
         this.$emit('onEnter',ev)
      },
-     inputChange(event){
+     inputChange(ev){
+        this.$emit('onChange',ev)
         this.inputText = event.target.value;
      },
      inputFocus(event){
@@ -33,27 +57,25 @@
      getInputClass(){
         return this.isFocus ? 'joker-input joker-input-active' : 'joker-input';
      }
-   },
-   data(){
-        return {
-            inputText:'',
-            isFocus:false
-        }
-   },
-   mounted(){
-       this.isFocus = true;
    }
  }
 </script>
 
 <style lang="less" >
 .joker-input {
+    width:400px;
+    height:36px;
+    line-height:26px;
+    overflow: hidden;
     position: relative;
     border: 1px solid #dddee1;
     border-radius: 4px;
     color: #495060;
+    display:inline-block;
+    vertical-align: middle;
     .ivu-input{
         opacity: 0;
+        height:35px;
     }
     .show-text{
             position: absolute;
@@ -62,11 +84,9 @@
             top: 0px;
             left: 0px;
             display: inline-block;
-            height: 32px;
-            line-height: 24px;
+            bottom:0;
             padding: 4px 7px;
             font-size: 12px;
-           
             background-color: #fff;
             background-image: none;
             border-radius: 4px;
@@ -78,6 +98,13 @@
             width: 1px;
             background: #000;
             vertical-align: middle;
+            opacity:1;
+        }
+        .joker-watch{
+            opacity:1;
+        }
+        .joker-no{
+            opacity:0;
         }
     }
     

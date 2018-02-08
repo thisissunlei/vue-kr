@@ -3,13 +3,9 @@
             <div class='list-search'>
                     <div class='lower-search'>
                         <span style='padding-right:10px'>合同编号</span>
-                        <Input 
-                            v-model="params.serialNumber"
-                            :autofocus="autofocus"
-                            placeholder="请输入合同编号"
-                            size="large"
-                            style="width:400px;"
-                            @keyup.enter.native="onKeyEnter($event)"
+                        <EnglishInput 
+                            :name="params"
+                            @onEnter="keyEnter"
                         />
                     </div>
                     <div class='m-search' @click="submitLower">查询</div>
@@ -49,6 +45,7 @@
     import Buttons from '~/components/Buttons';
     import SectionTitle from '~/components/SectionTitle';
     import ContractYard from './ContractYard';
+    import EnglishInput from '~/components/EnglishInput.vue'
     
 
     export default {
@@ -57,7 +54,8 @@
             Message,
             Buttons,
             SectionTitle,
-            ContractYard
+            ContractYard,
+            EnglishInput
         },
         data () {    
             return {   
@@ -219,7 +217,7 @@
                 }) 
             },
 
-            onKeyEnter: function (ev) {
+            keyEnter: function (ev) {
                 this.submitLower();
             },
 

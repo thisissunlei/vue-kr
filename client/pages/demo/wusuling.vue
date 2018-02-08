@@ -2,7 +2,9 @@
   <section class="container">
     <div>
      <krInput 
+       :name="params"
        @onEnter="keyEnter"
+       @onChange="inputChange"
      />
      
     </div>
@@ -30,6 +32,9 @@ export default {
     methods:{
       keyEnter(ev){
         console.log(';;;;',ev,this.params);
+      },
+      inputChange(ev){
+        console.log('form-22',this.params);
       }
     }
 }

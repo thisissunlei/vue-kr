@@ -890,6 +890,12 @@
                             router: 'app-manage/steward-setting'
 
                         },
+                        {
+                            primaryText: 'Icon管理',
+                            menuCode: 'app_console_common_icon',
+                            type: 'vue',
+                            router: 'app-manage/icon-manage'
+                        },
                     ]
                 },
                 {

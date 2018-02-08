@@ -53,7 +53,7 @@
         :type="MessageType" 
         :openMessage="openMessage"
         :warn="warn"
-        v-on:changeOpen="onChangeOpen"
+        @changeOpen="onChangeOpen"
     ></Message>
 </div>
 </template>

@@ -49,7 +49,7 @@
          </div> 
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" ></Table>
+        <Table  border :columns="columns" :data="billList" ></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -71,7 +71,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch v-on:formData="getSearchData"></HighSearch>
+        <HighSearch @formData="getSearchData"></HighSearch>
         <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -84,7 +84,7 @@
         cancel-text="取消"
         width="660"
      >
-        <AddIncome v-on:formData="getAddData"></AddIncome>
+        <AddIncome @formData="getAddData"></AddIncome>
         <div slot="footer">
             <Button type="primary" @click="addSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showIncome">取消</Button>
@@ -94,7 +94,7 @@
         :type="MessageType" 
         :openMessage="openMessage"
         :warn="warn"
-        v-on:changeOpen="onChangeOpen"
+        @changeOpen="onChangeOpen"
     ></Message>
 </div>
 </template>
@@ -137,7 +137,7 @@ import utils from '~/plugins/utils';
                 callback:null,
                 cancelCallback:null,
                 incomeType:{},
-                columns1: [
+                columns: [
                     {
                         title: '收入编号',
                         key: 'id',
@@ -220,8 +220,8 @@ import utils from '~/plugins/utils';
                             return incomeType[obj.row.incomeType]
                         }
                     };
-                if(this.columns1.length<7){
-                   this.columns1.splice(5, 0, billtype)
+                if(this.columns.length<7){
+                   this.columns.splice(5, 0, billtype)
                 }
                    
                 

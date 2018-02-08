@@ -71,7 +71,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch v-on:formData="getSearchData"></HighSearch>
+        <HighSearch @formData="getSearchData"></HighSearch>
         <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -96,7 +96,7 @@
         :type="MessageType" 
         :openMessage="openMessage"
         :warn="warn"
-        v-on:changeOpen="onChangeOpen"
+        @changeOpen="onChangeOpen"
     ></Message>
 </div>
 </template>

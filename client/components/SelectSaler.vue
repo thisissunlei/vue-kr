@@ -50,7 +50,6 @@ import http from '~/plugins/http.js';
                 if (query !== '') {
                     this.loading1 = true;
                     setTimeout(() => {
-                        this.loading1 = false;
                         this.getSalerList(query)
                     }, 200);
                 } 
@@ -70,6 +69,7 @@ import http from '~/plugins/http.js';
                         obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
                     _this.salerOptions = list;
                 }, e => {
 

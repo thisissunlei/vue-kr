@@ -3,8 +3,9 @@
 <div class="g-order">
     <SectionTitle title="回款管理"></SectionTitle>
     <div class="u-search" >
-         <Button type="primary" @click="importDetail">导入回款明细</Button>
-          <Button type="primary" @click="onRefund" style="margin-left:20px;">退款</Button>
+         <Buttons  label='导入回款明细' checkAction='payment_import' type="primary" @click="importDetail" />
+          <Buttons  label='退款'  checkAction='payment_refund' type="primary" @click="onRefund" style="margin-left:20px;" />
+          <Buttons  label='回款' checkAction='payment_add' type="primary" @click="onCollection" style="margin-left:20px;" />
         <span class="u-high-search" @click="showSearch"></span>
         <div style='display:inline-block;float:right;padding-right:20px;'>
 
@@ -12,7 +13,7 @@
                 v-model="params.customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
-            ></Input>
+            />
 
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>
@@ -42,7 +43,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch  v-on:formData="getSearchData"></HighSearch>
+        <HighSearch  @formData="getSearchData"></HighSearch>
         <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -98,7 +99,7 @@
         :type="MessageType"
         :openMessage="openMessage"
         :warn="warn"
-        v-on:changeOpen="onChangeOpen"
+        @changeOpen="onChangeOpen"
     ></Message>
 
     <Modal
@@ -128,6 +129,25 @@
             <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
         </div>
     </Modal>
+    <Modal
+        v-model="ifInvoice"
+        title="开票"
+        ok-text="确定"
+        cancel-text="取消"
+        width="500"
+     >
+        <div class="u-upload-title">
+             <Form ref="formItem" :model="form" :rules="rule" >
+                <FormItem label="开票内容"  prop="invoiceContent" style="width:450px;margin-left:25px;">
+                        <Input v-model="form.invoiceContent" type="textarea" :maxlength="maxlength" :rows="4" placeholder="开票内容" />
+                </FormItem>
+            </Form>
+        </div>
+         <div slot="footer">
+            <Button type="primary" @click="invoiceSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openInvoice">取消</Button>
+        </div>
+    </Modal>
 </div>
 
 </template>
@@ -142,6 +162,7 @@ import SearchCompany from '~/components/SearchCompany';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import SelectCommunitiy from '~/components/SelectCommunitiy';
+import Buttons from '~/components/Buttons';
 
 export default {
         name: 'receive',
@@ -150,7 +171,8 @@ export default {
             HighSearch,
             SearchCompany,
             Message,
-            SelectCommunitiy
+            SelectCommunitiy,
+            Buttons
         },
         data () {
             return {
@@ -158,6 +180,7 @@ export default {
                 openSearch:false,
                 openBind:false,
                 openImport:false,
+                ifInvoice:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -171,11 +194,16 @@ export default {
                     customerId:'',
                     communityId:''
                 },
+                form:{
+                    invoiceContent:''
+                },
                 openMessage:false,
                 MessageType:'',
                 warn:'',
                 file: null,
                 IsCookie:true,
+                maxlength:500,
+                paymentId:'',
                 columns: [
                     {
                         title: '交易流水号',
@@ -211,11 +239,16 @@ export default {
                         width:110,
                         render(h, obj){
                             let payWay={
-                              'ALIAPPPAY':'支付宝app',
-                              'ALIWEBPAY':'支付宝网银',
-                              'WXPAY':'微信',
-                              'BANKONLINE':'网银',
+                              'NONE':'社区变更',
                               'BANKTRANSFER':'银行转账',
+                              'ALIAPPPAY':'支付宝app',
+                              'WXPAY':'微信',
+                              'DEP_RENT':'押金转租',
+                              'TRANSFER':'转移',
+                              'RENT_DEP':'租金转押',
+                              'ALIWEBPAY':'支付宝网银',
+                              'BANKONLINE':'网银',
+                              'BANLANCE':'余额支付',
                               
                             }
                             return payWay[obj.row.payWay]
@@ -240,6 +273,54 @@ export default {
                         width:110,
                         render:(h,params)=>{
                           if(!params.row.customerId){
+                                return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openView(params.row);
+                                            }
+                                        }
+                                    }, '查看'),
+                                    h(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small',
+                                            checkAction:'payment_bind',
+                                            label:'绑定客户',
+                                            styles:'color:#2b85e4;padding: 2px 7px;',
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.bindPerson(params.row);
+                                            }
+                                        }
+                                    }),
+                                    h(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small',
+                                            checkAction:'payment_invoice',
+                                            label:'开票',
+                                            styles:'color:#2b85e4;padding: 2px 7px;',
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.onInvoice(params.row);
+                                            }
+                                        }
+                                    })
+                                    
+                                ]);
+                              
+                              
+                          }else{
                               return h('div', [
                                 h('Button', {
                                     props: {
@@ -255,37 +336,20 @@ export default {
                                         }
                                     }
                                 }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.bindPerson(params.row);
+                                h(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small',
+                                            checkAction:'payment_invoice',
+                                            label:'开票',
+                                            styles:'color:#2b85e4;padding: 2px 7px;',
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openInvoice(params.row);
+                                            }
                                         }
-                                    }
-                                }, '绑定客户')
-                            ]);
-                          }else {
-                              return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row);
-                                        }
-                                    }
-                                }, '查看')
+                                    })
                             ]);
                           }
 
@@ -301,6 +365,11 @@ export default {
                     communityId: [
                         { required: true, message: '请选择所在社区'}
                     ],
+                },
+                rule:{
+                    invoiceContent: [
+                        { required: true, message: '请填写开票内容'}
+                    ],
                 }
 
             }
@@ -310,6 +379,13 @@ export default {
              this.params=this.$route.query;
         },
         methods:{
+            openInvoice(params){
+                if(params){
+                     this.paymentId=params.id;
+                     this.form.invoiceContent=params.invoiceContent;
+                }
+                this.ifInvoice=!this.ifInvoice
+            },
             onRefund(){
                 window.open('./payment/refund','_blank');
             },
@@ -317,7 +393,22 @@ export default {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
+            invoiceSubmit(){
+                this.form.paymentId=this.paymentId;
 
+                this.$http.post('payment-invoice', this.form).then((res)=>{
+                    this.openInvoice();
+                    this.$Notice.success({
+                        title:'开票成功'
+                    });
+                    this.getTableData(this.params);
+                    
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
+            },
             openView(params){
                 window.open(`./payment/detail/${params.id}`,'_blank');
             },
@@ -416,8 +507,7 @@ export default {
                 this.file =null;
                 this.openImport=!this.openImport;
             },
-
-             importSubmit(){
+            importSubmit(){
                 var data=new FormData();
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data).then((res)=>{
@@ -442,6 +532,13 @@ export default {
                 })
 
             },
+            onCollection(){
+                window.open('./payment/collection','_blank');
+            }
+
+
+
+
         }
 
     }

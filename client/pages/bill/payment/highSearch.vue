@@ -127,26 +127,46 @@ export default{
                 customerName:'',
                 receiveAccount:''
             },
-            payWay:[
+            payWay:[    
+                {
+                    value:'NONE',
+                    label:'社区变更'
+                },
                 {
                     value:'BANKTRANSFER',
-                    label:'银行转账'
-                },
-                {
-                    value:'BANKONLINE',
-                    label:'网银 '
-                },
-                {
-                    value:'WXPAY',
-                    label:'微信'
-                },
-                {
-                    value:'ALIWEBPAY',
-                    label:'支付宝网银 '
+                    label:'银行转账 '
                 },
                 {
                     value:'ALIAPPPAY',
-                    label:'支付宝app '
+                    label:'支付宝app'
+                },
+                {
+                    value:'WXPAY',
+                    label:'微信 '
+                },
+                {
+                    value:'DEP_RENT',
+                    label:'押金转租 '
+                },
+                 {
+                    value:'TRANSFER',
+                    label:'转移'
+                },
+                {
+                    value:'RENT_DEP',
+                    label:'租金转押'
+                },
+                {
+                    value:'ALIWEBPAY',
+                    label:'支付宝网银'
+                },
+                {
+                    value:'BANKONLINE',
+                    label:'网银'
+                },
+                {
+                    value:'BANLANCE',
+                    label:'余额支付 '
                 }
             ],
 

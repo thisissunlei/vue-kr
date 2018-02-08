@@ -1,64 +1,21 @@
-<style lang="less">
-.g-bill{
-    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;
-                float:right;
-                cursor:pointer;
-
-            }
-    }
-    .ivu-checkbox-wrapper{
-        margin-right:0;
-    }
-    .ivu-table-cell{
-        padding:0;
-    }
-    .u-table{
-        padding:0 20px;
-    }  
-}
-.u-tip{
-        text-align: center;
-        font-size:14px;
-        margin-top: 34px;
-        margin-bottom: 36px;
-}
-.m-search{
-    color:#2b85e4; 
-    display:inline-block;
-    margin-left:10px;
-    font-size:14px;
-    cursor:pointer;
-}
-
-
-</style>
-
 <template>
 <div class="g-bill">
     <SectionTitle title="已出账单管理"></SectionTitle>
     <div class="u-search" >
-        <Button type="primary" @click="onBillPay">批量结算</Button>
+        <Buttons type="primary" label='批量结算' @click="onBillPay" checkAction='bill_batch_pay'/>
         <span class="u-high-search" @click="showSearch"></span> 
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
                 v-model="tabParams.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
-            ></Input>
+            />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>
           
     </div>
     <div class="u-table">
-        <Table  border :columns="columns1" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
+        <Table  border :columns="columns" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
@@ -80,7 +37,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch  v-on:formData="getSearchData"></HighSearch>
+        <HighSearch  @formData="getSearchData"></HighSearch>
          <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -101,22 +58,22 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSettle">取消</Button>
         </div>
     </Modal>
-    <!-- <Modal
+    <Modal
         v-model="openAntiSettle"
-        title="反结账提示"
+        title="反结算提示"
         ok-text="确定"
         cancel-text="取消"
         width="443"
      >
        <antiSettlement 
             :detail="itemDetail"
-            v-on:formData="getAntiSettleData"
+            @formData="getAntiSettleData"
         > </antiSettlement>
         <div slot="footer">
             <Button type="primary" @click="antiSettleSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showAntiSettle">取消</Button>
         </div>
-    </Modal> -->
+    </Modal>
     <Modal
         v-model="openClose"
         title="提示"
@@ -130,7 +87,7 @@
         :type="MessageType" 
         :openMessage="openMessage"
         :warn="warn"
-        v-on:changeOpen="onChangeOpen"
+        @changeOpen="onChangeOpen"
     ></Message>
 </div>
 </template>
@@ -139,20 +96,22 @@
 <script>
 import HighSearch from './highSearch';
 import settleAccounts from './settleAccounts';
-//import antiSettlement from './antiSettlement';
+import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
+import Buttons from '~/components/Buttons';
 
     export default {
         name: 'Bill',
         components:{
             HighSearch,
             settleAccounts,
-            //antiSettlement,
+            antiSettlement,
             SectionTitle,
-            Message
+            Message,
+            Buttons
         },
         data () {
             return {
@@ -175,7 +134,7 @@ import utils from '~/plugins/utils';
                 warn:'',
                 MessageType:'',
                 billType:{},
-                columns1: [
+                columns: [
                     {
                         type: 'selection',
                         width: 35,
@@ -294,34 +253,35 @@ import utils from '~/plugins/utils';
                                                     }
                                                 }
                                             }, '查看'),
-                                            h('Button', {
+                                            h(Buttons, {
                                                 props: {
                                                     type: 'text',
-                                                    size: 'small'
+                                                    size: 'small',
+                                                    checkAction:'bill_pay',
+                                                    label:'结账',
+                                                    styles:'color:#2b85e4;padding: 2px 7px;',
                                                 },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
+                                               
                                                 on: {
                                                     click: () => {
                                                         this.showSettle(params.row)
                                                     }
                                                 }
-                                            }, '结账'),
-                                            // h('Button', {
-                                            //     props: {
-                                            //         type: 'text',
-                                            //         size: 'small'
-                                            //     },
-                                            //     style: {
-                                            //         color:'#2b85e4'
-                                            //     },
-                                            //     on: {
-                                            //         click: () => {
-                                            //             this.showAntiSettle(params.row)
-                                            //         }
-                                            //     }
-                                            // }, '反结账')
+                                            }),
+                                            h(Buttons, {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small',
+                                                    checkAction:'bill_back_pay',
+                                                    label:'反结算',
+                                                    styles:'color:#2b85e4;padding: 2px 7px;',
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.showAntiSettle(params.row)
+                                                    }
+                                                }
+                                            })
                                         ]);  
                             }else if(params.row.payStatus==='PAID'){
                                 return h('div', [
@@ -356,19 +316,20 @@ import utils from '~/plugins/utils';
                                                     }
                                                 }
                                             }, '查看'),
-                                            h('Button', {
+                                            h(Buttons, {
                                                 props: {
                                                     type: 'text',
-                                                    size: 'small'
+                                                    size: 'small',
+                                                    checkAction:'bill_pay',
+                                                    label:'结账',
+                                                    styles:'color:#2b85e4;padding: 2px 7px;',
                                                 },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },on: {
+                                                on: {
                                                     click: () => {
                                                         this.showSettle(params.row)
                                                     }
                                                 }
-                                            }, '结账')
+                                            })
                                         ]);
                             }
                         }
@@ -398,8 +359,8 @@ import utils from '~/plugins/utils';
                           return bizType[obj.row.bizType];
                         }
                     }
-                if(this.columns1.length<13){
-                    this.columns1.splice(4, 0, billtype)
+                if(this.columns.length<13){
+                    this.columns.splice(4, 0, billtype)
                 }
                 
             },
@@ -425,10 +386,10 @@ import utils from '~/plugins/utils';
                 this.itemDetail=params;
                 this.openSettle=!this.openSettle;
             },
-            // showAntiSettle(params){
-            //     this.itemDetail=params;
-            //     this.openAntiSettle=!this.openAntiSettle;
-            // },
+            showAntiSettle(params){
+                this.itemDetail=params;
+                this.openAntiSettle=!this.openAntiSettle;
+            },
             onExport(){
                  console.log('导出')
             },
@@ -510,27 +471,30 @@ import utils from '~/plugins/utils';
                 })
                 
             },
-            // antiSettleSubmit(){
-            //     let params={
-            //         amount:this.antiSettleData,
-            //         billId:this.itemDetail.billId
-            //     }
-            //     this.$http.post('bill-release',params, r => {
-            //         if(r.code==-1){
-            //             this.MessageType="error";
-            //             this.warn=r.message;
-            //             this.openMessage=true;
-            //             return;
-            //         }
-            //         this.openAntiSettle=false;
-            //         this.MessageType="success";
-            //         this.warn="反结算成功"
-            //         this.openMessage=true;
-            //         this.getTableData(this.tabParams);
-            //     }, e => {
-            //         console.log('11111')
-            //     })
-            // },
+            antiSettleSubmit(){
+                let params={
+                    amount:this.antiSettleData,
+                    billId:this.itemDetail.billId
+                }
+                this.$http.post('bill-release',params).then((res)=>{
+                     if(res.code==-1){
+                        this.MessageType="error";
+                        this.warn=res.message;
+                        this.openMessage=true;
+                        return;
+                    }
+                    this.openAntiSettle=false;
+                    this.MessageType="success";
+                    this.warn="反结算成功"
+                    this.openMessage=true;
+                    this.getTableData(this.tabParams);
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                });
+               
+            },
             searchSubmit(){
                 this.tabParams=this.searchData;
                 this.page=1;
@@ -561,3 +525,46 @@ import utils from '~/plugins/utils';
 
     }
 </script>
+
+<style lang="less">
+.g-bill{
+    .u-search{
+            height:32px;
+            margin:16px 0;
+            padding:0 20px;
+            .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;
+                float:right;
+                cursor:pointer;
+
+            }
+    }
+    .ivu-checkbox-wrapper{
+        margin-right:0;
+    }
+    .ivu-table-cell{
+        padding:0;
+    }
+    .u-table{
+        padding:0 20px;
+    }  
+}
+.u-tip{
+        text-align: center;
+        font-size:14px;
+        margin-top: 34px;
+        margin-bottom: 36px;
+}
+.m-search{
+    color:#2b85e4; 
+    display:inline-block;
+    margin-left:10px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+
+</style>

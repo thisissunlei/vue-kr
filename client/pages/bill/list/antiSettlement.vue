@@ -1,3 +1,58 @@
+<template>
+
+	<div class="u-wrap">
+
+		<div class="u-text">
+			结算金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>
+		</div>
+
+		 <Input
+		 	v-model="value"
+		 	placeholder="请输入反结算金额"
+		 	size="large"
+		 	style="width: 252px;margin-bottom:30px;"
+		 />
+
+	</div>
+
+</template>
+
+<script>
+
+	export default {
+
+		name:'antiSettlement',
+		props:{
+			detail:Object
+		},
+		data (){
+			return{
+				value:'',
+			}
+		},
+		updated:function(){
+			
+        	this.$emit('formData', this.value);
+		},
+		watch: {
+
+			$props: {
+				deep: true,
+				handler(nextProps) {
+					if(this.detail.paidAmount){
+						this.value=this.detail.paidAmount;
+					}
+					
+				
+					
+				}
+			}
+
+		},
+		
+	}
+</script>
+
 <style lang="less">
 
 	.u-wrap{
@@ -29,39 +84,3 @@
 }
 
 </style>
-
-<template>
-
-	<div class="u-wrap">
-
-		<div class="u-text">
-			结账金额：<span class="u-txt-red">￥{{detail.paidAmount}}</span>
-		</div>
-
-		 <Input
-		 	v-model="value"
-		 	placeholder="请输入反结账金额"
-		 	size="large"
-		 	style="width: 252px;margin-bottom:30px;"
-		 ></Input>
-
-	</div>
-
-</template>
-
-<script>
-
-	export default {
-
-		name:'antiSettlement',
-		props:['detail'],
-		data (){
-			return{
-				value:'',
-			}
-		},
-		updated:function(){
-        	this.$emit('formData', this.value);
-    	}
-	}
-</script>

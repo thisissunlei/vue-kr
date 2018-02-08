@@ -137,9 +137,9 @@
         width="500"
      >
         <div class="u-upload-title">
-             <Form ref="formItem" :model="form" :rules="rule" >
+             <Form ref="formItem" :model="forms" :rules="rule" >
                 <FormItem label="开票内容"  prop="invoiceContent" style="width:450px;margin-left:25px;">
-                        <Input v-model="form.invoiceContent" type="textarea" :maxlength="maxlength" :rows="4" placeholder="开票内容" />
+                        <Input v-model="forms.invoiceContent" type="textarea" :maxlength="maxlength" :rows="4" placeholder="开票内容" />
                 </FormItem>
             </Form>
         </div>
@@ -194,7 +194,7 @@ export default {
                     customerId:'',
                     communityId:''
                 },
-                form:{
+                forms:{
                     invoiceContent:''
                 },
                 openMessage:false,
@@ -312,7 +312,7 @@ export default {
                                         },
                                         on: {
                                             click: () => {
-                                                this.onInvoice(params.row);
+                                                this.openInvoice(params.row);
                                             }
                                         }
                                     })
@@ -382,7 +382,7 @@ export default {
             openInvoice(params){
                 if(params){
                      this.paymentId=params.id;
-                     this.form.invoiceContent=params.invoiceContent;
+                     this.forms.invoiceContent=params.invoiceContent;
                 }
                 this.ifInvoice=!this.ifInvoice
             },
@@ -394,9 +394,9 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             invoiceSubmit(){
-                this.form.paymentId=this.paymentId;
+                this.forms.paymentId=this.paymentId;
 
-                this.$http.post('payment-invoice', this.form).then((res)=>{
+                this.$http.post('payment-invoice', this.forms).then((res)=>{
                     this.openInvoice();
                     this.$Notice.success({
                         title:'开票成功'

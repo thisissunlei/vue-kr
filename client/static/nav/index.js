@@ -1363,7 +1363,7 @@
                             primaryText: "结算单管理",
                             router: 'bill/settlement-list',
                             type: 'vue',
-                            menuCode: 'iot_door_open_log',
+                            menuCode: 'checklist_list',
                         },
 
                         {

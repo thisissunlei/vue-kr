@@ -239,11 +239,16 @@ export default {
                         width:110,
                         render(h, obj){
                             let payWay={
-                              'ALIAPPPAY':'支付宝app',
-                              'ALIWEBPAY':'支付宝网银',
-                              'WXPAY':'微信',
-                              'BANKONLINE':'网银',
+                              'NONE':'社区变更',
                               'BANKTRANSFER':'银行转账',
+                              'ALIAPPPAY':'支付宝app',
+                              'WXPAY':'微信',
+                              'DEP_RENT':'押金转租',
+                              'TRANSFER':'转移',
+                              'RENT_DEP':'租金转押',
+                              'ALIWEBPAY':'支付宝网银',
+                              'BANKONLINE':'网银',
+                              'BANLANCE':'余额支付',
                               
                             }
                             return payWay[obj.row.payWay]

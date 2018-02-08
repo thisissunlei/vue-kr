@@ -100,6 +100,11 @@ export default  {
       url: '/api/krspace-pay/payment/add',
       method: 'post'
     },
+     //账单中心--回款--开票
+     'payment-invoice': {
+      url: '/api/krspace-pay/payment/invoice',
+      method: 'post'
+    },
     
   }
   

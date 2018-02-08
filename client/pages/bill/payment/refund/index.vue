@@ -117,23 +117,11 @@ import dateUtils from 'vue-dateutils';
                 communityList:[],
                 payWay:[
                     {
-                        label:'支付宝app',
+                        label:'支付宝',
                         value:'ALIAPPPAY'
                     },
                     {
-                        label:'支付宝网银',
-                        value:'ALIWEBPAY'
-                    },
-                    {
-                        label:'微信',
-                        value:'WXPAY'
-                    },
-                    {
-                        label:'网银',
-                        value:'BANKONLINE'
-                    },
-                    {
-                        label:'支付宝网银',
+                        label:'银行转账',
                         value:'BANKTRANSFER'
                     }
                 ],

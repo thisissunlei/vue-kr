@@ -81,7 +81,9 @@
     export default{
         name:'HeighSearch',
         props: {
-             mask:String
+             mask:String,
+             keys:String,
+             params:{}
         },
         data (){
             return{
@@ -102,13 +104,15 @@
             }
         },
 
-        created(){
-          let mask=this.$route.query.mask;
-          if(this.mask==mask){
-              this.formItem=Object.assign({},this.$route.query);
-          }
+        watch: {
+            $props: {
+                deep: true,
+                handler(nextProps) {
+                    this.formItem=Object.assign({},nextProps.params);
+                }
+            }
         },
-        
+ 
         mounted:function(){
             this.getCommunity();
             this.getOrderList();

@@ -37,7 +37,7 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch mask='join' @bindData="onUpperChange"/>
+                <HeightSearch mask='join' @bindData="onUpperChange" :keys="mask" :params="switchParams"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitUpperSearch">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
@@ -99,6 +99,9 @@
             Buttons,
             ApplyContract
         },
+        props:{
+            mask:String
+        },
         data () {
             
             return {
@@ -108,6 +111,7 @@
                     customerName:"",
                 },
 
+                switchParams:{},
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -277,17 +281,29 @@
                 ]
             }
         },
+
+        watch: {
+            $props: {
+                deep: true,
+                handler(nextProps) {
+                    if(nextProps.mask=='join'){
+                       this.getListData(this.switchParams);
+                       this.params=this.switchParams; 
+                    }
+                }
+            }
+        },
         
-        created(){
-          let mask=this.$route.query.mask;
-          let params={};
-          if(mask=='join'){
-              params=Object.assign({},this.$route.query,{page:1,pageSize:15});
-          }else{
-              params=Object.assign({},{page:1,pageSize:15});
-          }
-          this.getListData(params);
-          this.params=params;
+        mounted(){
+            let mask=this.$route.query.mask;
+            if(!mask||mask=='join'){
+               sessionStorage.setItem('paramsJoin',JSON.stringify(this.$route.query));
+            }
+
+            let jsonJoin=JSON.parse(sessionStorage.getItem('paramsJoin'));
+            this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15});
+            this.getListData(this.switchParams);
+            this.params=this.switchParams;
         },
 
         methods:{   

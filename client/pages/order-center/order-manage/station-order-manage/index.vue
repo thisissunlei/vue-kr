@@ -2,11 +2,11 @@
     <div class="m-bill-wrap">
         <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
             <Tab-pane label="入驻订单" name="join">   
-                <JoinList/>
+                <JoinList :mask="key"/>
             </Tab-pane>
 
             <Tab-pane label="减租订单" name="reduce">
-                <ReduceList/>
+                <ReduceList :mask="key"/>
             </Tab-pane>
         </Tabs>    
     </div>
@@ -26,6 +26,7 @@ export default {
    data(){
        return {
            activeKey:'join',
+           key:''
        }
    },
    components:{
@@ -37,6 +38,7 @@ export default {
    },
    methods:{
         tabsClick(key){
+           this.key=key;
            sessionStorage.setItem('orderMask',key);
         }
     }

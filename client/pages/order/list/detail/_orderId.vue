@@ -186,7 +186,7 @@ export default {
 					totalAmount:data.totalAmount
 					}
 				]
-				this.billInfo=[
+				this.billInfo=data.billInfo?[
 					{
 						billNo:data.billInfo.billNo,
 						bizType:data.billInfo.bizType,
@@ -195,7 +195,7 @@ export default {
 						payStatus:data.billInfo.payStatus
 
 					}
-				]
+				]:[]
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

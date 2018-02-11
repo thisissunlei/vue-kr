@@ -9,6 +9,7 @@
             background:url('~/assets/images/upperSearch.png') no-repeat center;
             background-size: contain;  
             float:right;
+            margin-top: 4px;
         }
     }
     .ivu-table-cell{

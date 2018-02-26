@@ -56,7 +56,7 @@
 			</LabelText>
 
 			<LabelText label="回款时间：">
-				{{ctime}}
+				{{basicInfo.occurDate}}
 			</LabelText>
 
 			<LabelText label="社区名称：">
@@ -143,7 +143,7 @@ export default {
 			this.$http.get('get-payment-detail', from).then((res)=>{
 				let data=res.data;
 				this.basicInfo=data;
-				this.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
+				data.occurDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.occurDate));
 				data.payWay=payType[data.payWay];
 			}).catch((err)=>{
 				this.$Notice.error({

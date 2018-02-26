@@ -260,7 +260,9 @@
 
             //输入框内容提交
             submitLowerSearch(){
-                 utils.addParams(this.params);
+                this.params.page = 1;
+                utils.addParams(this.params);
+                
             },
 
              //高级查询确定
@@ -268,6 +270,7 @@
                 if(this.upperError){
                     return ;
                 }
+                this.params.page = 1;
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.StartLastDay=this.params.StartLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.StartLastDay)):'';
                 this.params.EndLastDay=this.params.EndLastDay?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.EndLastDay)):'';

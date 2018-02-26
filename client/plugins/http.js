@@ -14,7 +14,7 @@ const hostname = envs[env]['test']||  "" ;
  axios.defaults.withCredentials = true;
  
  axios.defaults.mode = 'cors';
-var requestUrl = [] ,saveTime = 1000;
+// var requestUrl = [] ,saveTime = 1000;
 
 axios.interceptors.request.use(config => {
   if(config.method  == 'post'){
@@ -101,7 +101,7 @@ export default {
       return;
     }
 
-    let nowTime = new Date().getTime();
+    /*let nowTime = new Date().getTime();
     requestUrl = requestUrl.filter((item) => {
       return (item.setTime + saveTime) > nowTime;
     });
@@ -114,8 +114,8 @@ export default {
     }
     let item = { url: APIS[url].url, setTime: new Date().getTime() };
 
-
-    requestUrl.push(item);
+    */
+    // requestUrl.push(item);
     axios.post(hostname+APIS[url].url, params)
     .then(check401)
     .then(function (response) {

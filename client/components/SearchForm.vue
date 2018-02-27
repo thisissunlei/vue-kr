@@ -34,6 +34,12 @@
 </template>
 
 <script>
+ /**
+	 *  @param {String} placeholder  提示文案
+     *  @param {String} inputName  单一搜索框的name名
+     *  @param {Array} searchFilter 下拉搜索框的options
+	 *  @param {Function} onSubmit 提交函数
+	*/
 export default {
     props:{
         placeholder:String,

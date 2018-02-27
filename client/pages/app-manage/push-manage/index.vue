@@ -7,7 +7,6 @@
                 :searchFilter="searchFilter"
                 :onSubmit="onSubmit"
             />
-             
     </div>
     <div class="u-table">
             <Table  border :columns="columns" :data="tableList"/>

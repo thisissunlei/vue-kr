@@ -47,6 +47,7 @@ import SectionTitle from '~/components/SectionTitle';
 import SearchForm from '~/components/SearchForm';
 import utils from '~/plugins/utils';
 import HighSearch from './highSearch';
+import dateUtils from 'vue-dateutils';
 
 export default {
   components:{

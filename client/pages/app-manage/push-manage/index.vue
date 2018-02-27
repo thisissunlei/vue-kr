@@ -46,6 +46,7 @@ import SectionTitle from '~/components/SectionTitle';
 import SearchForm from '~/components/SearchForm';
 import utils from '~/plugins/utils';
 import HighSearch from './highSearch';
+import dateUtils from 'vue-dateutils';
 
 export default {
   components:{
@@ -77,44 +78,78 @@ export default {
            columns:[
                 {
                     title: '推送标题',
-                    key: 'locationDesc',
+                    key: 'title',
                     align:'center'
                 },
                 {
                     title: '推送内容',
-                    key: 'locationDesc',
+                    key: 'content',
                     align:'center'
                 },
 
                 {
                     title: '推送目标用户',
-                    key: 'locationDesc',
+                    key: 'targetDesc',
                     align:'center'
                 },
                 {
                     title: '推送时间',
-                    key: 'locationDesc',
-                    align:'center'
+                    key: 'ctime',
+                    align:'center',
+                    render(h, obj){
+                        let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate));
+                        return time;
+                    }
                 },
                 {
                     title: '创建人',
-                    key: 'locationDesc',
+                    key: 'createrName',
                     align:'center'
                 },
 
                 {
                     title: '操作',
                     key: 'locationDesc',
-                    align:'center'
+                    align:'center',
+                    render:(h,params)=>{
+                           return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params.row)
+                                        }
+                                    }
+                                }, '详情')
+                            ]);  
+                        }
                 },
            ],
            tableList:[],
       }
   },
   created(){
-
+      this.tableList=[
+        {
+            content:'11',
+            createrName:'222',
+            ctime:'33',
+            targetDesc:'44',
+            title:'55'
+        }
+      ]
   },
   methods:{
+      jumpView(params){
+          window.open(`./push-manage/detail/1`,'_blank');
+          // window.open(`./push-manage/detail/${params.id}`,'_blank');
+      },
       jumpCreate(){
 
       },

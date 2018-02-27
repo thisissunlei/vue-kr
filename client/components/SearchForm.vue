@@ -37,7 +37,7 @@
  /**
 	 *  @param {String} placeholder  提示文案
      *  @param {String} inputName  单一搜索框的name名
-     *  @param {Array} searchFilter 下拉搜索框的options
+     *  @param {Array} searchFilter 下拉搜索框的options,是多选是必填
 	 *  @param {Function} onSubmit 提交函数
 	*/
 export default {

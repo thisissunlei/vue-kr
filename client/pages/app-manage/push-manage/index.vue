@@ -24,7 +24,19 @@
                 </div>
             </div>
     </div>
-
+<Modal
+        v-model="openSearch"
+        title="高级查询"
+        ok-text="确定"
+        cancel-text="取消"
+        width="660"
+     >
+        <HighSearch @formData="getSearchData"></HighSearch>
+        <div slot="footer">
+            <Button type="primary" @click="searchSubmit">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+        </div>
+</Modal>
 
 </div>
 </template>
@@ -32,16 +44,22 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import SearchForm from '~/components/SearchForm';
+import utils from '~/plugins/utils';
+import HighSearch from './highSearch';
+
 export default {
   components:{
         SectionTitle,
-        SearchForm
+        SearchForm,
+        HighSearch
   },
   data(){
       return{
            page:1,
            totalCount:0,
            pageSize:15,
+           openSearch:false,
+           searchData:'',
            searchFilter:[
                {
                    label:'推送标题',
@@ -106,9 +124,19 @@ export default {
       onSubmit(form){
           console.log('form=====',form)
       },
-      showSearch(){
-
+      showSearch (params) {
+        utils.clearForm(this.searchData);
+        this.openSearch=!this.openSearch;
       },
+      getSearchData(form){
+            this.searchData=form;
+      },
+      searchSubmit(){
+            // this.tabParams=this.searchData;
+            // this.tabParams.page=1;
+            // this.page=1;
+            // utils.addParams(this.tabParams);
+     },
       
       
   }

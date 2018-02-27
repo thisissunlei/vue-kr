@@ -51,7 +51,8 @@ export default {
         return{
            className:'',
            otherName:'',
-           flag:false,
+		   flag:false,
+		   
            ulClass:'',
            searchLabel:'',
            filterValue:'',
@@ -72,20 +73,18 @@ export default {
 				}else{
                     this.otherName='';
                     this.className = "show-form";
-                }
-                this.flag=true;
+				}
+				this.flag=true;
             }else{
                var value={};;
                 if(this.filterValue){
                     value[this.filterValue]=this.searchValue;
                 }else{
                     value=this.searchValue;
-                }
-
-               
+                }   
                 this.onSubmit && this.onSubmit(value); 
-                this.flag=false;
-            }
+               
+			}
            
         },
         getValue(item){

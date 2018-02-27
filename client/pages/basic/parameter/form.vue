@@ -1,5 +1,5 @@
 <template>
-    <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom">
+    <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent">
         <FormItem label="名称" prop="name" >
             <Input v-model="formItem.name" placeholder="名称"></Input>
         </FormItem>
@@ -49,7 +49,7 @@
                     name: '',
                     flag: 'no',
                     textarea: '',
-                    items:[{name:'111'},{name:'222'}]
+                    items:[{name:'111'}]
                 },
                 ruleCustom:{
                     // firstPayTime: [
@@ -85,6 +85,20 @@
             addValue(){
                 this.formItem.items.push({name:''})
             }
+        },
+        updated:function(){
+            var data = false;
+            var haveNull = false;
+            for(let key in this.formItem){
+                if(!this.formItem[key]){
+                    haveNull = true;
+                }
+            }
+            if(!haveNull){
+                data = Object.assign({},this.formItem);
+            }
+            this.$emit('newPageData', data);  
+        
         }
     }
 </script>

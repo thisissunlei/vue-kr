@@ -29,9 +29,9 @@
         cancel-text="取消"
         width="660"
      >  
-        <Form ></Form>
+      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" />
         <div slot="footer">
-            <Button type="primary" @click="onSubmit">确定</Button>
+            <Button type="primary" @click="onSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
         </div>
     </Modal>
@@ -64,7 +64,7 @@
 
 <script>
 
-import Form from './form';
+import newForm from './form';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
@@ -74,7 +74,7 @@ import utils from '~/plugins/utils';
 export default {
         name: 'Meeting',
         components:{
-            Form,
+            newForm,
             SectionTitle,
             Message
         },
@@ -207,10 +207,17 @@ export default {
             cancelCreate(){
                 this.openCreate = false;
             },
-            onSubmit(){
-                //数据
+            onSubmit(name){
                 //提交数据
-                this.openCreate = true;
+                var newPageRefs = this.$refs.fromFieldNewPage.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }
+                })
+                // this.openCreate = true;
             },
             editSubmit(){
                 this.openEdit = false;
@@ -229,6 +236,11 @@ export default {
             showEdit(item){
                 console.log('openEdit',item);
                 this.openEdit = true;
+            },
+            newPageDataChange(data){
+                if(data){
+                    console.log('=====',data)
+                }
             }
 
 

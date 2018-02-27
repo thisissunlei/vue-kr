@@ -28,7 +28,8 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
-     >
+     >  
+        <Form ></Form>
         <div slot="footer">
             <Button type="primary" @click="onSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
@@ -63,7 +64,7 @@
 
 <script>
 
-// import HighSearch from './highSearch';
+import Form from './form';
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import Message from '~/components/Message';
@@ -73,6 +74,7 @@ import utils from '~/plugins/utils';
 export default {
         name: 'Meeting',
         components:{
+            Form,
             SectionTitle,
             Message
         },
@@ -154,7 +156,6 @@ export default {
                         align:'center',
                         width:110,
                         render:(h,params)=>{
-                         if(params.row.ableToCancel=='1'){
                            return h('div', [
                                 h('Button', {
                                     props: {
@@ -166,31 +167,12 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.cancel(params.row)
+                                            this.showEdit(params.row)
                                                 
                                         }
                                     }
                                 }, '编辑')
                             ]);  
-                         }else if(params.row.ableToCancel=='0'){
-                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row)
-                                            
-                                        }
-                                    }
-                                }, '查看')
-                            ]);  
-                         }
                     
                     }
                     }
@@ -208,7 +190,7 @@ export default {
         },
         methods:{
             getTableData(params){
-                this.$http.get('order-list', params).then((res)=>{
+                this.$http.get('join-bill-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
@@ -244,6 +226,10 @@ export default {
                 this.page=page;
                 this.getTableData(this.params);
             },
+            showEdit(item){
+                console.log('openEdit',item);
+                this.openEdit = true;
+            }
 
 
         }

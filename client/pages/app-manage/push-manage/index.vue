@@ -64,15 +64,15 @@ export default {
            searchFilter:[
                {
                    label:'推送标题',
-                   value:'aa'
+                   value:'title'
                },
                {
                    label:'推送内容',
-                   value:'bb'
+                   value:'content'
                },
                {
                    label:'创建人',
-                   value:'cc'
+                   value:'createrName'
                }
            ],
            columns:[

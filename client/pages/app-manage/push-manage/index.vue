@@ -3,7 +3,11 @@
     <SectionTitle title="推送管理" />   
     <div class="u-search" >
             <Button type="primary" @click="jumpCreate">新建推送</Button>
-            <SearchForm />
+            <SearchForm 
+                :searchFilter="searchFilter"
+                :onSubmit="onSubmit"
+            />
+             
     </div>
     <div class="u-table">
             <Table  border :columns="columns" :data="tableList"/>
@@ -38,6 +42,20 @@ export default {
            page:1,
            totalCount:0,
            pageSize:15,
+           searchFilter:[
+               {
+                   label:'推送标题',
+                   value:'aa'
+               },
+               {
+                   label:'推送内容',
+                   value:'bb'
+               },
+               {
+                   label:'创建人',
+                   value:'cc'
+               }
+           ],
            columns:[
                 {
                     title: '推送标题',
@@ -84,7 +102,11 @@ export default {
       },
       onPageChange(){
 
+      },
+      onSubmit(form){
+          console.log('form=====',form)
       }
+      
   }
 
 }

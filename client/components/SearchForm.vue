@@ -1,18 +1,35 @@
 <template>
-<div class="ui-search-form">
-    <div :class="[flag ? className : '', 'search-content']" >
+<div :class="[otherName,'ui-search-form']">
+    <div :class="[className,'search-status']">
+        <div class="search-filter" v-show="this.searchFilter" >
+            <span class="filter-container"  @mouseenter="selectShow" @mouseleave="selectHide">
+                <span class="search-name" >{{searchLabel}}</span>
+                <em class="icon-return1"></em>
+            </span>
+            <ul :class="ulClass" @mouseenter="selectShow" @mouseleave="selectHide">
+                <li 
+                    class="" 
+                    @click="getValue(item,index)" 
+                    v-for="(item, index) in searchFilter"
+                    :key="index"
+                >
+                    {{item.label}}
+                </li>
+            </ul>
+        </div>
         <div class="search-content">
-            <input 
+            <input
+                ref="searchInput"
                 type="text" 
-                autoComplete="off"  
-                @onchange = "onChange" 
+                v-model="searchValue"
+                autoComplete="off" 
                 class="search-val" 
-                :placeholder="placeholder" 
-                :name="inputName" 
-                />
+                :placeholder="[placeholder?placeholder:'请输入搜索关键字']" 
+                :name="[inputName?inputName:'search']" 
+            />
         </div>
     </div>
-    <span class="icon-searching" @click="onSearch"></span>
+    <span :class="[flag?'click':'','icon-searching']" @click="onSearch"></span>
 </div>
 </template>
 
@@ -22,21 +39,60 @@ export default {
         placeholder:String,
         inputName:String,
         searchFilter:Array,
+        onSubmit:Function
     },
     data(){
         return{
+           className:'',
+           otherName:'',
            flag:false,
+           ulClass:'',
+           searchLabel:'',
+           filterValue:'',
+           searchValue:''
         }  
     },
+    created(){
+        if(this.searchFilter){
+            this.searchLabel=this.searchFilter[0].label
+        }
+    },
     methods:{
-        onChange(){
-
-        },
         onSearch(){
-            if(this.flag){
+            if(!this.flag){
+                if(this.searchFilter){
+                    this.otherName="renderFilter";
+					this.className = "filter-show-form";
+				}else{
+                    this.otherName='';
+                    this.className = "show-form";
+                }
+                this.flag=true;
+            }else{
+               var value={};;
+                if(this.filterValue){
+                    value[this.filterValue]=this.searchValue;
+                }else{
+                    value=this.searchValue;
+                }
 
+               
+                this.onSubmit && this.onSubmit(value); 
+                this.flag=false;
             }
-            this.flag=!this.flag;
+           
+        },
+        getValue(item){
+            this.searchLabel=item.label ;
+            this.filterValue=item.value;
+            this.ulClass="";
+            
+        },
+        selectShow(){
+            this.ulClass="show-li";
+        },
+        selectHide(){
+             this.ulClass="";
         }
     }
 }
@@ -159,7 +215,8 @@ export default {
 				&:hover{
 					background-color: #f5f5f5;
 				}
-			}
+            }
+            
 
 		}
 		.show-li{
@@ -209,7 +266,7 @@ export default {
 
 }
 .renderFilter{
-	width: 295px;
+	width: 310px;
 	.filter-show-form{
 		width: 265px;
 		visibility: visible;

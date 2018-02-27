@@ -29,7 +29,7 @@
         cancel-text="取消"
         width="660"
      >  
-      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" />
+      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"/>
         <div slot="footer">
             <Button type="primary" @click="onSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
@@ -42,11 +42,9 @@
         title="编辑参数"
         ok-text="确定"
         cancel-text="取消"
-        width="490"
+        width="660"
      >
-        <div class="u-cancel-title">
-            {{msg}}
-        </div>
+        <new-form ref="fromFieldNewPage" v-if="openEdit" @newPageData="newPageDataChange" :editData.sync="editData"/>
         <div slot="footer">
             <Button type="primary" @click="editSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>
@@ -80,6 +78,7 @@ export default {
         },
         data () {
             return {
+                editData:{},
                 openCreate:false,
                 openEdit:false,
                 totalCount:1,
@@ -95,32 +94,42 @@ export default {
                 warn:'',
                 MessageType:'',
                 msg:'',
+                //假数据
+                dataItem:[{
+                    name:'nihao',
+                    code:'COde',
+                    // value:'222',
+                    value:{'1':'aaaa','2':'bbbb','3':'333333'},
+                    flag:'yes',
+                    textarea:'3333333333'
+
+                }],
                 columns: [
                     {
                         title: '名称',
-                        key: 'orderNo',
+                        key: 'name',
                         align:'center'
                     },
                     {
                         title: '编码',
-                        key: 'customerName',
+                        key: 'code',
                         align:'center'
                     },
                     {
                         title: '值',
-                        key: 'communityName',
+                        key: 'value',
                         align:'center',
                         width:140,
                     },
                     {
                         title: '描述',
-                        key: 'totalAmount',
+                        key: 'textarea',
                         align:'center',
                         width:100,
                     },
                     {
                         title: '是否启用',
-                        key: 'orderStatus',
+                        key: 'flag',
                         align:'center',
                         width:100,
                         render(h, obj){
@@ -190,15 +199,18 @@ export default {
         },
         methods:{
             getTableData(params){
-                this.$http.get('join-bill-list', params).then((res)=>{
-                    this.tableData=res.data.items;
-                    this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
+                    this.tableData=this.dataItem;
+
+                // this.$http.get('join-bill-list', params).then((res)=>{
+                //     // this.tableData=res.data.items;
+                //     this.tableData=this.dataItem;
+                //     this.totalCount=res.data.totalCount;
+                //     this.openSearch=false;
+                // }).catch((err)=>{
+                //     this.$Notice.error({
+                //         title:err.message
+                //     });
+                // })
                  
             },
             onCreate(){
@@ -224,6 +236,7 @@ export default {
             },
             cancelEdit(){
                 this.openEdit = false;
+                this.editData = {}
             },
             onChangeOpen(){
                 console.log('changeOpen')
@@ -234,12 +247,13 @@ export default {
                 this.getTableData(this.params);
             },
             showEdit(item){
-                console.log('openEdit',item);
+
+                this.editData = item;
                 this.openEdit = true;
             },
             newPageDataChange(data){
                 if(data){
-                    console.log('=====',data)
+                    console.log('index=====',data)
                 }
             }
 

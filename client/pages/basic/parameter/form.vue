@@ -22,7 +22,7 @@
          <FormItem label="值" v-if="valueType == 'str'" prop="value">
             <Input v-model="formItem.value" placeholder="请填写..."></Input>
         </FormItem>
-        <FormItem label="值" v-if="valueType == 'json'" prop="value" >
+        <FormItem label="值" v-if="valueType == 'json'" >
         <div>
             <Row v-for="(item, index) in formItem.items"
                 :key="index"
@@ -42,33 +42,50 @@
 </template>
 <script>
     export default {
+        props:{
+                editData:Object,
+            },
         data () {
+            
+            let data = {
+                items:[{name:''}],
+                flag:'no',
+                name:'',
+                code:'',
+                textarea:'',
+                }
+                console.log('begin=====',this.editData)
+                let value = this.editData.value || '';
+                let valueType = 'str';
+                if(this.editData && typeof this.editData.value == 'object'){
+                    valueType = 'json';
+                    let arr = [];
+                    // this.editData.value = '';
+                    for(let key in value){
+                        arr.push({name:value[key]})
+                    }
+                    data.items = arr;
+                }
+            data = Object.assign({},data,this.editData)
+            console.log('=====',data)
             return {
-                valueType:'str',
-                formItem: {
-                    name: '',
-                    flag: 'no',
-                    textarea: '',
-                    items:[{name:'111'}]
-                },
+                valueType:valueType,
+                formItem: data,
                 ruleCustom:{
-                    // firstPayTime: [
-                    //     { required: true, trigger: 'change' ,validator: validateFirst},
-                    // ],
                     name: [
                         { required: true,message: '请填写名称', trigger: 'change' }
                     ],
                     code: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                        { required: true,message: '请填写编码', trigger: 'change' }
                     ],
                     flag: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                        { required: true,message: '请选择是否启用', trigger: 'change' }
                     ],
                     textarea: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                        { required: true,message: '请填写描述', trigger: 'change' }
                     ],
                     value: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                        { required: true,message: '请填写参数值', trigger: 'change' }
                     ],
                 },
             }
@@ -87,6 +104,7 @@
             }
         },
         updated:function(){
+            console.log('updated======',this.formItem)
             var data = false;
             var haveNull = false;
             for(let key in this.formItem){
@@ -94,10 +112,19 @@
                     haveNull = true;
                 }
             }
+           
+            if(this.valueType == 'json'){
+                let obj = {};
+                this.formItem.items.map((item,index)=>{
+                    obj[index] = item.name;
+                })
+                this.formItem.value = obj;
+            }
             if(!haveNull){
                 data = Object.assign({},this.formItem);
+                this.$emit('newPageData', data);  
             }
-            this.$emit('newPageData', data);  
+            
         
         }
     }

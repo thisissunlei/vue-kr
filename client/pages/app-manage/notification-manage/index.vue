@@ -3,6 +3,7 @@
     <SectionTitle title="通知管理" />   
     <div class="u-search" >
             <Button type="primary" @click="jumpCreate">新建通知</Button>
+            <span class="u-high-search" @click="showSearch"></span>  
             <SearchForm 
                 :searchFilter="searchFilter"
                 :onSubmit="onSubmit"
@@ -153,7 +154,10 @@ export default {
       },
       onSubmit(form){
           console.log('form=====',form)
-      }
+      },
+      showSearch(){
+
+      },
       
   }
 
@@ -166,6 +170,14 @@ export default {
         height:32px;
         margin:16px 0;
         padding:0 20px;
+        .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;  
+                float:right;
+                margin-left:20px;
+        }
     }
     .u-table{
         padding:0 20px;

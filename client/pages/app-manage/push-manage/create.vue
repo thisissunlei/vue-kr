@@ -31,6 +31,62 @@
                     </Radio>
                 </RadioGroup> 
             </FormItem>
+            <div class="u-community-content" v-if="formItem.targetType=='1'">
+                <div class="u-community-select">
+                    <div class="u-small-trigon"></div>
+                     <FormItem label="选择社区"  style="width:250px;" >
+                        <Select
+                            v-model="formItem.cmtId"
+                            filterable
+                            remote
+                            :loading="loading"
+                            @on-change="changeContent"
+                            placeholder="请选择"
+                            :label-in-value="labelInValue"
+                            clearable
+                            >
+                            <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
+                        </Select>
+                    </FormItem>
+                </div>
+                <div class="u-person-tip" v-if="ifPerson">
+                    所选目标用户数：{{personNum}}人
+                </div>
+            </div>
+            <div class="u-member-content" v-if="formItem.targetType=='2'">
+                <div class="u-small-trigon"></div>
+                <FormItem label="选择社区"  style="width:250px;margin-right:30px;" >
+                        <Select
+                            v-model="formItem.cmtId"
+                            filterable
+                            remote
+                            :loading="loading"
+                            @on-change="changeContent"
+                            placeholder="请选择"
+                            :label-in-value="labelInValue"
+                            clearable
+                            >
+                            <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
+                        </Select>
+                </FormItem>
+                <FormItem label="性别"  style="width:250px;" >
+                        <Select
+                            v-model="formItem.gender"
+                            placeholder="请选择"
+                            >
+                            <Option v-for="(option, index) in genderList" :value="option.value" :key="index">{{option.label}}</Option>
+                        </Select>
+                </FormItem>
+                <FormItem label="入驻时长"  style="width:250px;" >
+                        <Select
+                            v-model="formItem.enterTime"
+                            placeholder="请选择"
+                            >
+                            <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
+                        </Select>
+                </FormItem>
+            </div>
+            
         </DetailStyle>
         <DetailStyle info="用户点击推送后的后续动作">
             <FormItem label="后续动作" style="width:352px" prop="jumpType">
@@ -84,11 +140,54 @@ export default {
           formItem:{
               title:'',
               content:'',
-              targetType:'1',
-              jumpType:'HOMEPAGE'
+              targetType:'2',
+              jumpType:'HOMEPAGE',
+              cmtId:'',
+              gender:'3'
           },
           titleLength:20,
           contentLength:50,
+          personNum:'',
+          ifPerson:false,
+          communityList:[],
+          loading:false,
+          labelInValue:true,
+          genderList:[
+              {
+                  label:'不限',
+                  value:'3'
+              },
+              {
+                  label:'男',
+                  value:'1'
+              },
+              {
+                  label:'女',
+                  value:'0'
+              }
+          ],
+          enterTimeList:[
+                {
+                  label:'一个月以内',
+                  value:'1'
+                },
+                {
+                  label:'1-3个月',
+                  value:'2'
+                }, 
+                {
+                  label:'3-6个月 ',
+                  value:'3'
+                },
+                {
+                  label:'6-12个月',
+                  value:'4'
+                },
+                {
+                  label:'一年以上',
+                  value:'5'
+                },
+          ],
           ruleCustom:{
             content:[
                 { required: true, message: '请输入推送内容', trigger:'change' }
@@ -99,26 +198,50 @@ export default {
             jumpType:[
                 { required: true, message: '请选择图标类型', trigger:'change' }
             ],
-            
           }
       }
   },
 
   mounted:function(){
-    GLOBALSIDESWITCH("false");	
-    this.getLocationList();
-    
+    GLOBALSIDESWITCH("false");
+    this.getCommunityList(' ')
   },
-
   methods:{
-      getLocationList(){
-            this.$http.get('get-icon-location', '').then((res)=>{
-                  this.locationList=res.data.locations;
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
+      remoteMethod(query){
+        if (query!== '') {
+            this.loading = true;
+            setTimeout(() => {
+                this.loading = false;
+                this.getCommunityList(query)
+            }, 200);
+        } else {
+            this.getCommunityList(' ')
+
+        }
+      },
+      getCommunityList(name){
+           let params = {
+                    cmtName:name
+                }
+            let list = [];
+            let _this = this;
+            this.$http.get('get-community-new-list', params).then((res)=>{
+                list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                console.log('list===',list)
+                _this.communityList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
       },
       handleSubmit(name){
           let message = '请填写完表单';
@@ -157,17 +280,7 @@ export default {
         })
     },
 
-    handleSuccess(res,file){
-        if(res.code==1){
-            this.isError=false;
-            this.formItem.iconUrl=res.data.imgUrl;
-            this.imgUrl=res.data.imgUrl
-        }
-    },
-    handleRemove(){
-      this.formItem.iconUrl="";
-      this.imgUrl="" 
-    }
+   
    
 
 
@@ -184,6 +297,62 @@ export default {
 .u-form{
     margin-top:30px;
     display: flex;
+    .u-community-content{
+        width:284px;
+        height:134px;
+        margin-bottom: 30px;
+        margin-top: -10px;
+        .u-person-tip{
+            height:20px;
+            font-size:14px;
+            color:#999999;
+            margin-left:8px;
+        }
+    }
+    .u-community-select{
+        width:284px;
+        height:100px;
+        padding-top:20px;
+        padding-left:16px;
+        background:#F6F6F6;
+        margin-bottom:14px;
+        border-radius: 3px;
+        margin-left:8px;
+        position: relative;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:50px;
+        }
+    }
+
+    .u-member-content{
+        width:570px;
+        height:234px;
+        background:#F6F6F6;
+        border-radius: 3px;
+        position: relative;
+        margin-bottom: 30px;
+        margin-top: -10px;
+        padding-top:20px;
+        padding-left:16px;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:140px;
+        }
+        .ivu-form-item{
+            float:left;
+        }
+    }
 }
 .m-view{
     width:759px;
@@ -210,7 +379,6 @@ export default {
         background:#F6F6F6;
         border-radius: 4px;
         margin:7px;
-       
 
     }
     .u-app-title{

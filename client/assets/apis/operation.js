@@ -65,7 +65,31 @@ export default  {
         url: '/api/krspace-finance-web/app/icon/location/list',
         method: 'get'
     },
-    
+    //app管理--推送管理--推送列表
+   'get-app-push-page': {
+        url: '/api/krspace-finance-web/app/push/page',
+        method: 'get'
+    },
+    //app管理--推送管理--推送详情
+    'get-app-push-detail': {
+        url: ' /api/krspace-finance-web/app/push/detail',
+        method: 'get'
+    },
+    //app管理--推送管理--新建推送
+    'create-app-push': {
+        url: '/api/krspace-finance-web/app/push/create',
+        method: 'post'
+    },
+    //app管理--推送管理--根据活动标题查询活动
+    'get-title-list': {
+        url: '/api/krspace-finance-web/activity/management/title/list',
+        method: 'get'
+    },
+    //app管理--推送管理--社区列表
+    'get-community-new-list': {
+        url: '/api/krspace-finance-web/cmt/community/new/list',
+        method: 'get'
+    },
 
 
 }

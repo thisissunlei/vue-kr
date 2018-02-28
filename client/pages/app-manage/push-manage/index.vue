@@ -61,6 +61,10 @@ export default {
            pageSize:15,
            openSearch:false,
            searchData:'',
+           Params:{
+               page:1,
+               pageSize:15,
+           },
            searchFilter:[
                {
                    label:'推送标题',
@@ -95,11 +99,7 @@ export default {
                 {
                     title: '推送时间',
                     key: 'ctime',
-                    align:'center',
-                    render(h, obj){
-                        let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.dealDate));
-                        return time;
-                    }
+                    align:'center'
                 },
                 {
                     title: '创建人',
@@ -135,15 +135,15 @@ export default {
       }
   },
   created(){
-      this.tableList=[
-        {
-            content:'11',
-            createrName:'222',
-            ctime:'33',
-            targetDesc:'44',
-            title:'55'
+      let query=this.$route.query;
+        if (Object.keys(query).length !== 0) {
+            this.getTableData(query);
+            this.Params=query;
+          
+        }else{
+            this.getTableData(this.Params)
         }
-      ]
+         
   },
   methods:{
       jumpView(params){
@@ -151,7 +151,7 @@ export default {
           // window.open(`./push-manage/detail/${params.id}`,'_blank');
       },
       jumpCreate(){
-
+          window.open(`./push-manage/create`,'_blank');
       },
       onPageChange(){
 
@@ -172,6 +172,18 @@ export default {
             // this.page=1;
             // utils.addParams(this.tabParams);
      },
+      getTableData(params){
+            this.$http.get('get-app-push-page', params).then((res)=>{
+                this.tableList=res.data.items;
+                this.totalCount=res.data.totalCount;
+                this.openSearch=false;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        
+      },
       
       
   }

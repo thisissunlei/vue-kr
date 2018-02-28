@@ -27,7 +27,9 @@
             <Row v-for="(item, index) in formItem.items"
                 :key="index"
                 style="margin:0;border:1px solid e9eaec;border-top:none;border-bottom:none;margin-bottom:10px">
-             <Input v-model="item.name" placeholder="属性值" style="width:120px"></Input>
+                <Input v-model="item.name" placeholder="属性名" style="width:120px"></Input>
+                <span style="width:15px;display:inline-block;text-align:center">:</span>
+             <Input v-model="item.value" placeholder="属性值" style="width:120px"></Input>
              <span style="width:10px;display:inline-block"></span>
             <Button type="primary" @click="addValue" size='small'>添加</Button> 
             <span style="width:10px;display:inline-block"></span>
@@ -59,9 +61,8 @@
                 if(this.editData && typeof this.editData.value == 'object'){
                     valueType = 'json';
                     let arr = [];
-                    // this.editData.value = '';
                     for(let key in value){
-                        arr.push({name:value[key]})
+                        arr.push({value:value[key],name:key})
                     }
                     data.items = arr;
                 }
@@ -89,39 +90,35 @@
             }
         },
         watch:{
-            valueType(str){
-                console.log('valueType',str)
+            valueType(value){
+                if(value == 'json'){
+                    this.formItem.value = ''
+                }else{
+                    this.formItem.value = ''
+                    this.formItem.items = [{name:'',value:''}]
+                }
             }
         },
         methods:{
             deleteValue(index){
                 let arr = this.formItem.items.splice(index,1)
-                console.log('items',arr,'999',this.formItem.items)
             },
             addValue(){
                 this.formItem.items.push({name:''})
             }
         },
         updated:function(){
-            var data = false;
-            var haveNull = false;
-            for(let key in this.formItem){
-                if(!this.formItem[key]){
-                    haveNull = true;
-                }
-            }
-           
+            let data = {}
             if(this.valueType == 'json'){
                 let obj = {};
                 this.formItem.items.map((item,index)=>{
-                    obj[index] = item.name;
+                    obj[item.name] = item.value;
                 })
+
                 this.formItem.value = obj;
             }
-            if(!haveNull){
-                data = Object.assign({},this.formItem);
-                this.$emit('newPageData', data);  
-            }
+            data = Object.assign({},this.formItem);
+            this.$emit('newPageData', data);  
             
         
         }

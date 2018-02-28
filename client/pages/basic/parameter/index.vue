@@ -81,6 +81,7 @@ export default {
         data () {
             return {
                 editData:{},
+                parameterData:{},
                 openCreate:false,
                 openEdit:false,
                 totalCount:1,
@@ -189,6 +190,13 @@ export default {
                 
             }
         },
+        watch:{
+            openEdit(){
+                if(!this.openEdit){
+                    this.editData = {}
+                }
+            }
+        },
         created(){
              this.getTableData(this.$route.query);
              if(!this.$route.query.customerName){
@@ -220,16 +228,20 @@ export default {
                 this.openCreate = false;
             },
             onSubmit(name){
-                //提交数据
+                //校验表单
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
                     if (!valid) {
 
                         isSubmit = false
+                    }else{
+                        this.openCreate = false;
+                        // 提交数据
+                        console.log('提交数据',this.parameterData)
+
                     }
                 })
-                // this.openCreate = true;
             },
             editSubmit(name){
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
@@ -238,9 +250,13 @@ export default {
                     if (!valid) {
 
                         isSubmit = false
+                    }else{
+                        this.openEdit = false;
+                        // 提交数据
+                        console.log('提交数据',this.parameterData)
+
                     }
                 })
-                // this.openEdit = false;
             },
             cancelEdit(){
                 this.openEdit = false;
@@ -257,11 +273,12 @@ export default {
             showEdit(item){
 
                 this.editData = item;
+                this.parameterData = item;
                 this.openEdit = true;
             },
             newPageDataChange(data){
                 if(data){
-                    console.log('index=====',data)
+                    this.parameterData = data;
                 }
             }
 

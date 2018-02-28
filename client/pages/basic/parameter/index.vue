@@ -28,6 +28,7 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        :styles="{top: '20px'}"
      >  
       <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"/>
         <div slot="footer">
@@ -43,10 +44,11 @@
         ok-text="确定"
         cancel-text="取消"
         width="660"
+        :styles="{top: '20px'}"
      >
         <new-form ref="fromFieldNewPage" v-if="openEdit" @newPageData="newPageDataChange" :editData.sync="editData"/>
         <div slot="footer">
-            <Button type="primary" @click="editSubmit">确定</Button>
+            <Button type="primary" @click="editSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>
         </div>
     </Modal>
@@ -101,9 +103,14 @@ export default {
                     // value:'222',
                     value:{'1':'aaaa','2':'bbbb','3':'333333'},
                     flag:'yes',
-                    textarea:'3333333333'
-
-                }],
+                    textarea:'3333333333'},
+                    {
+                        name:'nihao2',
+                        code:'Code',
+                        value:'222---',
+                        flag:'no',
+                        textarea:'jdajdajd3333333333'  
+                    }],
                 columns: [
                     {
                         title: '名称',
@@ -133,27 +140,20 @@ export default {
                         align:'center',
                         width:100,
                         render(h, obj){
-                            switch (obj.row.orderStatus){
-                                case 'VALID':
+                            switch (obj.row.flag){
+                                case 'yes':
                                 return h('span', { 
                                            style: {
                                                 color:'#666666'
                                             }       
-                                        }, '已生效');
+                                        }, '启用');
                                 break;
-                                case 'CANCEL':
+                                case 'no':
                                 return h('span', { 
                                             style: {
                                                 color:'#F5A623'
                                             }       
-                                        }, '已作废');
-                                break;
-                                case 'REFUND':
-                                return h('span', { 
-                                            style: {
-                                                color:'#FF6868'
-                                            }       
-                                    }, '已退订');
+                                        }, '不启用');
                                 break;
                             }
                            
@@ -231,8 +231,16 @@ export default {
                 })
                 // this.openCreate = true;
             },
-            editSubmit(){
-                this.openEdit = false;
+            editSubmit(name){
+                var newPageRefs = this.$refs.fromFieldNewPage.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }
+                })
+                // this.openEdit = false;
             },
             cancelEdit(){
                 this.openEdit = false;

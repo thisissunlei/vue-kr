@@ -1121,6 +1121,12 @@
                             router: 'permission/systemManage/update-log',
                             menuCode: 'op_ver',
                         },
+                        {
+                            primaryText: '参数配置',
+                            router: 'basic/parameter',
+                            type: 'vue',
+                            menuCode: 'op_ver',
+                        },
                     ]
                 },
                 {

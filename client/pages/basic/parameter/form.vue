@@ -54,7 +54,6 @@
                 code:'',
                 textarea:'',
                 }
-                console.log('begin=====',this.editData)
                 let value = this.editData.value || '';
                 let valueType = 'str';
                 if(this.editData && typeof this.editData.value == 'object'){
@@ -67,7 +66,6 @@
                     data.items = arr;
                 }
             data = Object.assign({},data,this.editData)
-            console.log('=====',data)
             return {
                 valueType:valueType,
                 formItem: data,
@@ -97,14 +95,14 @@
         },
         methods:{
             deleteValue(index){
-                console.log('items',index)
+                let arr = this.formItem.items.splice(index,1)
+                console.log('items',arr,'999',this.formItem.items)
             },
             addValue(){
                 this.formItem.items.push({name:''})
             }
         },
         updated:function(){
-            console.log('updated======',this.formItem)
             var data = false;
             var haveNull = false;
             for(let key in this.formItem){

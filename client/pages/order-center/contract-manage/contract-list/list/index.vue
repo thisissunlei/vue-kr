@@ -669,6 +669,7 @@
       
             //搜索框
             submitLowerSearch(){
+                this.params.page = 1;
                 utils.addParams(this.params);
             },
 
@@ -683,6 +684,7 @@
                 if(this.upperError){
                     return ;
                 }
+                this.params.page = 1;
                 this.params=Object.assign({},this.params,this.upperData);
                 this.params.pigeonholed=this.params.pigeonholed?(this.params.pigeonholed=='true'?true:false):'';
                 this.params.minCTime=this.params.minCTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.minCTime)):'';

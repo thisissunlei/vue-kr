@@ -77,7 +77,7 @@
                             <Option v-for="(option, index) in genderList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
                 </FormItem>
-                <FormItem label="入驻时长"  style="width:250px;" >
+                <FormItem label="入驻时长"  style="width:250px;margin-right:200px;" >
                         <Select
                             v-model="formItem.enterTime"
                             placeholder="请选择"
@@ -85,8 +85,17 @@
                             <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
                 </FormItem>
+                <FormItem style="margin-right:116px;margin-top:-10px;">
+                    <CheckboxGroup v-model="formItem.birthMonth">
+                        <Checkbox label="当前月份为会员生日月"></Checkbox>
+                    </CheckboxGroup>
+                 </FormItem>
+                 <FormItem  style="margin-top:-10px;">
+                    <CheckboxGroup v-model="formItem.leader">
+                        <Checkbox label="企业管理员用户"></Checkbox>
+                    </CheckboxGroup>
+                 </FormItem>
             </div>
-            
         </DetailStyle>
         <DetailStyle info="用户点击推送后的后续动作">
             <FormItem label="后续动作" style="width:352px" prop="jumpType">
@@ -351,6 +360,9 @@ export default {
         }
         .ivu-form-item{
             float:left;
+        }
+        .ivu-checkbox{
+            margin-right:5px;
         }
     }
 }

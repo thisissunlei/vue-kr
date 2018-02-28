@@ -2,168 +2,104 @@
 <div class="g-push-created">
 <SectionTitle title="新建推送" />
 <div class="u-form">
-     <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100">
-         <FormItem label="图标名称：" style="width:352px" prop="iconName">
-             <Input 
-                v-model="formItem.iconName" 
-                placeholder="请输入图标名称"
-                :maxlength="maxLength"
-            />
-        </FormItem>
-        <FormItem label="跳转地址：" style="width:352px" prop="destUrl">
-             <Input 
-                v-model="formItem.destUrl" 
-                placeholder="请输入跳转地址"
-                :maxlength="maxLength"
-            />
-        </FormItem>
-        <FormItem label="是否启用：" style="width:352px" prop="enable">
-            <RadioGroup v-model="formItem.enable">
-                 <Radio label="1">
-                     是
-                </Radio>
-                 <Radio label="0">
-                     否
-                </Radio>
-            </RadioGroup> 
-        </FormItem>
-        <FormItem label="图标类型：" style="width:352px" prop="iconType">
-            <Select
-                v-model="formItem.iconType"
-                style="width:250px"
-                placeholder="请选择"
-            >
-                <Option
-                    v-for="item in iconType"
-                    :value="item.value"
-                    :key="item.value"
-                >
-                    {{ item.label }}
-                </Option>
-            </Select>
-        </FormItem>
-        <FormItem label="Icon位置：" style="width:352px" prop="iconLocation">
-            <Select
-                v-model="formItem.iconLocation"
-                style="width:250px"
-                placeholder="请选择Icon位置"
-            >
-                <Option
-                    v-for="item in locationList"
-                    :value="item.code"
-                    :key="item.code"
-                >
-                    {{ item.name }}
-                </Option>
-            </Select>
-        </FormItem>
-         <FormItem label="排序号：" style="width:352px" prop="orderNum">
-             <Input 
-                v-model="formItem.orderNum" 
-                placeholder="请输入排序号"
-                :maxlength="maxLength"
-            />
-        </FormItem>
-       
-          <FormItem label="Icon：" style="width:352px" class="ivu-form-item-required">
-            <div class="demo-upload-list" v-if="this.imgUrl">
-                <img :src="this.imgUrl">
-                <div class="demo-upload-list-cover">
-                    <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
-                </div>
-            </div>
-            <Upload
-                ref="upload"
-                name="imgUrl"
-                v-if="!this.imgUrl"
-                :show-upload-list="false"
-                :format="['jpg','jpeg','png']"
-                with-credentials
-                :on-success="handleSuccess"
-                type="drag"
-                action="/api/krspace-finance-web/app/icon/upload"
-                style="display: inline-block;width:58px;">
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                    <Icon type="camera" size="20"></Icon>
-                </div>
-            </Upload>
-            <div v-if="isError" class="u-error">请选择要上传的图片</div>
-            
-        </FormItem>
-        <div class></div>
-        <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
-            <Input 
-                v-model="formItem.iconDesc" 
-                placeholder="留言最多30字"
-                type="textarea"
-                :maxlength="maxLength"
-            />
-        </FormItem>
+     <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
+        <DetailStyle info="推送显示内容">
+            <FormItem label="推送标题"  style="width:294px" >
+                <Input 
+                    v-model="formItem.title" 
+                    placeholder="请输入推送标题"
+                    :maxlength="titleLength"
+                />
+            </FormItem>
+            <FormItem label="推送内容" style="width:516px" prop="content">
+                <Input 
+                    type="textarea"
+                    v-model="formItem.content" 
+                    placeholder="请输入推送内容"
+                    :maxlength="contentLength"
+                />
+            </FormItem>
+        </DetailStyle>
+        <DetailStyle info="推送目标用户">
+            <FormItem label="" style="width:352px;margin-top:-20px;" prop="targetType">
+                <RadioGroup v-model="formItem.targetType">
+                    <Radio label="1">
+                        社区人员
+                    </Radio>
+                    <Radio label="2">
+                        自定义会员
+                    </Radio>
+                </RadioGroup> 
+            </FormItem>
+        </DetailStyle>
+        <DetailStyle info="用户点击推送后的后续动作">
+            <FormItem label="后续动作" style="width:352px" prop="jumpType">
+                 <RadioGroup v-model="formItem.jumpType">
+                    <Radio label="HOMEPAGE">
+                        启动页APP（至首页）
+                    </Radio>
+                    <Radio label="ACITVITY">
+                        跳转活动
+                    </Radio>
+                    <Radio label="HTML">
+                        跳转外链
+                    </Radio>
+                </RadioGroup> 
+            </FormItem>
+        </DetailStyle>
         <FormItem  style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
         </FormItem>  
      </Form>   
-    
+    <div class="m-view">
+        <span class="u-view-title">预览</span>
+        <div class="u-app-view">
+            <div class="u-app-content">
+                <div class="u-app-title">
+                    <span>苹果系统</span>
+                    <span>安卓系统</span>
+                </div>
+                <div class="u-app-img">
+                    <div class="u-app-ios"></div> 
+                    <div class="u-app-android"></div>  
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 </template>
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import DetailStyle from '~/components/DetailStyle';
 
 export default {
   components:{
      SectionTitle,
+     DetailStyle
   },
   data(){
       return{
           formItem:{
-              iconName:'',
-              destUrl:'',
-              enable:'0',
-              iconType:'',
-              iconLocation:'',
-              orderNum:'',
-              iconUrl:'',
-              iconDesc:''
+              title:'',
+              content:'',
+              targetType:'1',
+              jumpType:'HOMEPAGE'
           },
-          isError:false,
-          maxLength:30,
-          iconType:[
-            {
-                label:'原生页面',
-                value:'NATIVE'
-            }, 
-            {
-                label:'html页面',
-                value:'HTML'
-            },
-          ],
-          locationList:[],
-          imgUrl:'',
+          titleLength:20,
+          contentLength:50,
           ruleCustom:{
-            iconName:[
-                { required: true, message: '请输入图标名称', trigger:'change' }
+            content:[
+                { required: true, message: '请输入推送内容', trigger:'change' }
             ],
-            destUrl:[
-                { required: true, message: '请输入跳转地址', trigger: 'change' }
-            ],
-            enable:[
+            targetType:[
                 { required: true, message: '请选择是否启用', trigger: 'change' }
             ],
-            iconType:[
+            jumpType:[
                 { required: true, message: '请选择图标类型', trigger:'change' }
             ],
-            iconLocation:[
-                { required: true, message: '请选择Icon位置', trigger: 'change' }
-            ],
-            orderNum:[
-                { required: true, message: '请输入排序号', trigger: 'change' }
-            ],
             
-            iconDesc:[
-                { required: true, message: '请输入图片描述', trigger: 'change' }
-            ],
           }
       }
   },
@@ -246,13 +182,83 @@ export default {
 .g-push-created{
 
 .u-form{
-    margin-top:40px;
-    margin-left:40px;
+    margin-top:30px;
+    display: flex;
 }
-.u-error{
-    color: #ed3f14;
-    font-size: 12px;
+.m-view{
+    width:759px;
+    height:196px;
+    margin-left:50px;
+    float:right;
+    justify-content: flex-end;
+    .u-view-title{
+        font-size:14px;
+        color:#666666;
+        float:left;
+        margin-right:16px;
+    }
+    .u-app-view{
+        width:481px;
+        height: 196px;
+        border:1px dashed #EEEEEE;
+        float:left;
+        border-radius: 4px;
+    }
+    .u-app-content{
+        width:465px;
+        height:180px;
+        background:#F6F6F6;
+        border-radius: 4px;
+        margin:7px;
+       
+
+    }
+    .u-app-title{
+        height:49px;
+        line-height: 49px;
+        color:#999999;
+        width:423px;
+        margin:0 auto;
+        span{
+            width:50%;
+            display:inline-block;
+            text-align: center;
+        }
+    }
+    .u-app-img{
+         display: flex;
+    }
+    .u-app-ios{
+         justify-content: flex-start; 
+         width:198px;
+         height:131px;
+         margin-left:28px;
+         margin-right:28px;
+         background: url('./images/ios.png') no-repeat center center;
+         background-size:contain;
+    }
+    .u-app-android{
+        justify-content: flex-end; 
+        width:197px;
+        height:131px;
+        margin-right:21px;
+        background: url('./images/android.png') no-repeat center center;
+        background-size:contain;
+    }
 }
+.ivu-form-item{
+    margin-top:-4px;
+}
+.ivu-form-item-label{
+    float:none;
+    margin-left: 13px;
+   
+}
+.ivu-form-item-content{
+    margin-left: 13px !important;
+    margin-top:10px;
+}
+
 .ivu-form-item-required .ivu-form-item-label:before{
     content: '*';
     display: inline-block;
@@ -261,44 +267,9 @@ export default {
     font-family: SimSun;
     font-size: 12px;
     color: #ed3f14;
+    margin-left:-13px;
 }
-  .demo-upload-list{
-        display: inline-block;
-        width: 60px;
-        height: 60px;
-        text-align: center;
-        line-height: 60px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        overflow: hidden;
-        background: #fff;
-        position: relative;
-        box-shadow: 0 1px 1px rgba(0,0,0,.2);
-        margin-right: 4px;
-    }
-    .demo-upload-list img{
-        width: 100%;
-        height: 100%;
-    }
-    .demo-upload-list-cover{
-        display: none;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0,0,0,.6);
-    }
-    .demo-upload-list:hover .demo-upload-list-cover{
-        display: block;
-    }
-    .demo-upload-list-cover i{
-        color: #fff;
-        font-size: 20px;
-        cursor: pointer;
-        margin: 0 2px;
-    }
-    
+  
 
 }
 </style>

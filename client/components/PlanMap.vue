@@ -197,8 +197,6 @@ import http from '~/plugins/http.js';
 				let selectedObjs = this.selectedObjs;
 				let startToEnd = []
 				let originStationList = this.origin || [];
-				console.log('selectedObjs',selectedObjs)
-				console.log('originStationList',originStationList)
 				for (let i = 0; i < data.length; i++) {
 					if (data[i].floor == newfloor) {
 						var arr = [];
@@ -261,7 +259,7 @@ import http from '~/plugins/http.js';
 								select.canFigureId = item.canFigureId;
 								select.type = obj.belongType;
 								select.capacity = item.capacity;
-
+								select.seatType = obj.belongType == 'STATION'?'OPEN':'SPACE';
 								select.price = item.price;
 
 								startToEnd.push(select)
@@ -400,7 +398,6 @@ import http from '~/plugins/http.js';
 					return obj1
 
 				})
-				console.log('submitDataAll',submitDataAll)
 				let station = {
 					submitData: submitDataAll,
 					deleteData: deleteDataArr,

@@ -90,7 +90,26 @@ export default  {
         url: '/api/krspace-finance-web/cmt/community/new/list',
         method: 'get'
     },
-
+     //app管理--通知管理--通知列表
+     'get-notification-page': {
+        url: '/api/krspace-finance-web/app/notification/page',
+        method: 'get'
+    },
+     //app管理--通知管理--详情
+     'get-notification-detail': {
+        url: '/api/krspace-finance-web/app/notification/detail',
+        method: 'get'
+    },
+     //app管理--通知管理--新建通知
+     'create-notification': {
+        url: '/api/krspace-finance-web/app/notification/create',
+        method: 'post'
+    },
+     //app管理--通知管理--编辑通知
+     'edit-notification': {
+        url: '/api/krspace-finance-web/app/notification/edit',
+        method: 'post'
+    },
 
 }
   

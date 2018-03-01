@@ -156,9 +156,7 @@ export default {
 
       },
       onSubmit(form){
-          this.Params=form;
-          this.Params.page=1;
-          this.Params.pageSize=15;
+          let params=Object.assign(form,this.Params);
           utils.addParams(this.Params);
       },
       showSearch (params) {
@@ -169,11 +167,8 @@ export default {
             this.searchData=form;
       },
       searchSubmit(){
-          console.log('this.searchData',this.searchData)
-            this.Params=this.searchData;
-            this.Params.page=1;
-            this.page=1;
-            utils.addParams(this.Params);
+            let params=Object.assign(this.Params,this.searchData);
+            utils.addParams(params);
      },
       getTableData(params){
             this.$http.get('get-app-push-page', params).then((res)=>{

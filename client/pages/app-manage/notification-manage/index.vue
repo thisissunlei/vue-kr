@@ -79,34 +79,34 @@ export default {
            columns:[
                 {
                     title: '通知标题',
-                    key: 'locationDesc',
+                    key: 'title',
                     align:'center'
                 },
                 {
                     title: '通知内容',
-                    key: 'locationDesc',
+                    key: 'content',
                     align:'center'
                 },
 
                 {
                     title: '通知目标用户',
-                    key: 'locationDesc',
+                    key: 'targetDesc',
                     align:'center'
                 },
                 {
                     title: '创建时间',
-                    key: 'locationDesc',
+                    key: 'ctime',
                     align:'center'
                 },
                 {
                     title: '创建人',
-                    key: 'locationDesc',
+                    key: 'createrName',
                     align:'center'
                 },
 
                 {
                     title: '操作',
-                    key: 'locationDesc',
+                    key: 'pushId',
                     align:'center',
                     render:(h,params)=>{
                            return h('div', [
@@ -160,7 +160,14 @@ export default {
       }
   },
   created(){
-
+      let query=this.$route.query;
+        if (Object.keys(query).length !== 0) {
+            this.getTableData(query);
+            this.Params=query;
+          
+        }else{
+            this.getTableData(this.Params)
+        }
   },
   methods:{
       jumpView(){
@@ -188,6 +195,18 @@ export default {
             // this.page=1;
             // utils.addParams(this.tabParams);
      },
+      getTableData(params){
+            this.$http.get('get-notification-page', params).then((res)=>{
+                this.tableList=res.data.items;
+                this.totalCount=res.data.totalCount;
+                this.openSearch=false;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        
+      },
       
   }
 

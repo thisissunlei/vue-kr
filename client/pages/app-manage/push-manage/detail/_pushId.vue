@@ -19,22 +19,22 @@
                     {{targetDetail.cmtName}}
                 </LabelText>
                  <LabelText label="性别：">
-                    {{basicInfo.genderDesc}}
+                    {{targetDetail.genderDesc?targetDetail.genderDesc:'-'}}
                 </LabelText>
                  <LabelText label="已入驻时长：">
-                    {{basicInfo.enterTimeDesc}}
+                    {{targetDetail.enterTimeDesc?targetDetail.enterTimeDesc:'-'}}
                 </LabelText>
                 <LabelText label="当前月份：">
-                    {{basicInfo.birthMonthDesc}}
+                    {{targetDetail.birthMonthDesc?targetDetail.birthMonthDesc:'-'}}
                 </LabelText>
                 <LabelText label="企业管理员用户：">
-                    {{basicInfo.leaderDesc}}
+                    {{targetDetail.leaderDesc?targetDetail.leaderDesc:'-'}}
                 </LabelText>
             </div>
 		</DetailStyle>
          <DetailStyle info="推送显示内容">
-             <LabelText label="推送标题：" style="width:700px">
-				{{basicInfo.title}}
+             <LabelText label="推送标题：" style="width:700px;">
+				{{basicInfo.title?basicInfo.title:'-'}}
 			</LabelText>
 			<LabelText label="推送内容：" >
 				{{basicInfo.content}}
@@ -47,6 +47,9 @@
 			</LabelText>
             <div class="u-jump-content" v-if="basicInfo.jumpType!='HOMEPAGE'">
                  <div class="u-small-trigon"></div>
+                 <div class="u-jump-desc">
+                     {{basicInfo.jumpDesc}}
+                 </div>
             </div>
             
         </DetailStyle>
@@ -94,9 +97,15 @@ export default {
 			};
 			this.$http.get('get-app-push-detail', from).then((res)=>{
                 let data = res.data;
-                data.title=data.title?data.title:'-';
                 data.jump=jumplist[data.jumpType];
                 this.targetDetail=data.targetDetail || '';
+                if(data.jumpType=='HTML'){
+                     data.jumpDesc=data.jumpUrl;
+                }else if(data.jumpType=='ACTIVITY'){
+                     data.jumpDesc=data.activityTitle;
+                }
+                
+               
                 this.basicInfo = data;
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -147,7 +156,26 @@ export default {
         }
     }
     .u-jump-content{
-
+        position: relative;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-16px;
+            left:110px;
+        }
+        .u-jump-desc{
+            background:#F6F6F6;
+            color:#666666;
+            display: inline;
+            line-height:40px;
+            font-size:14px;
+            padding:16px;
+            border-radius: 3px;
+            margin-left: 14px;
+        }
     }
 }
 

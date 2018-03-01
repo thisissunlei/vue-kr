@@ -216,6 +216,11 @@ export default {
                         align:'center',
                     },
                     {
+                        title: '社区名称',
+                        key: 'communityName',
+                        align:'center',
+                    },
+                    {
                         title: '回款日期',
                         key: 'occurDate',
                         align:'center',

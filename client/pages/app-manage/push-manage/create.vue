@@ -9,6 +9,7 @@
                     v-model="formItem.title" 
                     placeholder="请输入推送标题"
                     :maxlength="titleLength"
+                    @on-blur="titleBlur"
                 />
             </FormItem>
             <FormItem label="推送内容" style="width:516px" prop="content">
@@ -395,8 +396,10 @@ export default {
         this.formItem.enterTime="";
         this.formItem.birthMonth="";
         this.formItem.leader="";
+    },
+    titleBlur(){
 
-    }
+    },
   
 
    

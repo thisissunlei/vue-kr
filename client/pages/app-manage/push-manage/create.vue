@@ -39,8 +39,8 @@
                             v-model="formItem.cmtId"
                             filterable
                             remote
-                            :loading="loading"
-                            @on-change="changeContent"
+                            :remote-method="remoteCommunityMethod"
+                            :loading="communityLoading"
                             placeholder="请选择"
                             :label-in-value="labelInValue"
                             clearable
@@ -60,8 +60,8 @@
                             v-model="formItem.cmtId"
                             filterable
                             remote
-                            :loading="loading"
-                            @on-change="changeContent"
+                            :remote-method="remoteCommunityMethod"
+                            :loading="communityLoading"
                             placeholder="请选择"
                             :label-in-value="labelInValue"
                             clearable
@@ -98,12 +98,21 @@
             </div>
         </DetailStyle>
         <DetailStyle info="用户点击推送后的后续动作">
-            <FormItem label="后续动作" style="width:352px" prop="jumpType">
-                 <RadioGroup v-model="formItem.jumpType">
-                    <Radio label="HOMEPAGE">
+            <FormItem label="后续动作" style="width:400px" prop="jumpType">
+                 <RadioGroup 
+                    v-model="formItem.jumpType" 
+                    @on-change="onRadioChange"
+                 >
+                    <Radio 
+                        label="HOMEPAGE"
+                        style="margin-right:36px;"
+                    >
                         启动页APP（至首页）
                     </Radio>
-                    <Radio label="ACITVITY">
+                    <Radio 
+                        label="ACITVITY" 
+                        style="margin-right:36px;"
+                    >
                         跳转活动
                     </Radio>
                     <Radio label="HTML">
@@ -111,6 +120,34 @@
                     </Radio>
                 </RadioGroup> 
             </FormItem>
+            <div class="u-jump-activity"  v-if="formItem.jumpType=='ACITVITY'">
+                <div class="u-small-trigon"></div>
+                 <FormItem label="APP内活动"  style="width:250px;" >
+                        <Select
+                            v-model="formItem.jumpId"
+                            filterable
+                            remote
+                            :remote-method="remoteActiveMethod"
+                            :loading="activityLoading"
+                            @on-change="changeActive"
+                            placeholder="请选择"
+                            :label-in-value="labelInValue"
+                            clearable
+                            >
+                            <Option v-for="(option, index) in activityList" :value="option.value" :key="index">{{option.label}}</Option>
+                        </Select>
+                </FormItem>
+            </div>
+            <div class="u-jump-url"  v-if="formItem.jumpType=='HTML'">
+                <div class="u-small-trigon"></div>
+                 <FormItem label="URL"  style="width:250px;" >
+                        <Input 
+                            v-model="formItem.jumpUrl" 
+                            placeholder="请输入URL"
+                            :maxlength="titleLength"
+                        />
+                </FormItem>
+            </div>
         </DetailStyle>
         <FormItem  style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
@@ -151,6 +188,7 @@ export default {
               content:'',
               targetType:'2',
               jumpType:'HOMEPAGE',
+              //jumpType:'ACITVITY',
               cmtId:'',
               gender:'3'
           },
@@ -159,8 +197,10 @@ export default {
           personNum:'',
           ifPerson:false,
           communityList:[],
-          loading:false,
+          communityLoading:false,
+          activityLoading:false,
           labelInValue:true,
+          activityList:[],
           genderList:[
               {
                   label:'不限',
@@ -216,11 +256,12 @@ export default {
     this.getCommunityList(' ')
   },
   methods:{
-      remoteMethod(query){
+      //社区
+      remoteCommunityMethod(query){
         if (query!== '') {
-            this.loading = true;
+            this.communityLoading = true;
             setTimeout(() => {
-                this.loading = false;
+                this.communityLoading = false;
                 this.getCommunityList(query)
             }, 200);
         } else {
@@ -228,6 +269,7 @@ export default {
 
         }
       },
+       //社区
       getCommunityList(name){
            let params = {
                     cmtName:name
@@ -242,8 +284,51 @@ export default {
                     obj.value = item.cmtId;
                     return obj;
                 });
-                console.log('list===',list)
                 _this.communityList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
+      },
+       //活动
+      remoteActiveMethod(query){
+        if (query!== '') {
+            this.communityLoading = true;
+            setTimeout(() => {
+                this.communityLoading = false;
+                this.getActiveList(query)
+            }, 200);
+        } else {
+            this.getActiveList(' ')
+
+        }
+      },
+       //活动
+      getActiveList(name){
+          if(!this.formItem.cmtId){
+                this.$Notice.error({
+                    title:'请先选择接收用户'
+                });
+              return;
+          }
+           let params = {
+                    activityTitle:name,
+                    cmtId:this.formItem.cmtId
+                }
+            let list = [];
+            let _this = this;
+            this.$http.get('get-title-list', params).then((res)=>{
+                list = res.data.activities;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.title;
+                    obj.value = item.id;
+                    return obj;
+                });
+                _this.activityList = list;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -288,6 +373,17 @@ export default {
                 });
         })
     },
+    changeActive(){
+
+    },
+    onRadioChange(){
+       
+        if(this.formItem.jumpType=='ACITVITY'){
+             console.log('111---')
+            this.getActiveList('')
+        }
+    }
+  
 
    
    
@@ -365,6 +461,50 @@ export default {
             margin-right:5px;
         }
     }
+
+    .u-jump-activity{
+        width:284px;
+        height:105px;
+        padding-top:20px;
+        padding-left:16px;
+        background:#F6F6F6;
+        margin-bottom:14px;
+        border-radius: 3px;
+        margin-left:100px;
+        margin-top:-12px;
+        position: relative;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:135px;
+        }
+    }
+    .u-jump-url{
+        width:284px;
+        height:105px;
+        padding-top:20px;
+        padding-left:16px;
+        background:#F6F6F6;
+        margin-bottom:14px;
+        border-radius: 3px;
+        margin-left:210px;
+        margin-top:-12px;
+        position: relative;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:135px;
+        } 
+    }
+
 }
 .m-view{
     width:759px;

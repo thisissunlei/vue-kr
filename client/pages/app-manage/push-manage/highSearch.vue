@@ -4,27 +4,28 @@
 
     <Form  :model="formItem" label-position="left"  class="u-clearfix">
     
-            <FormItem label="客户名称" class="u-input">
-               <Input
-                    v-model="formItem.customerName"
-                    placeholder="请输入客户名称"
-                    style="width: 250px"
-               />
+            <FormItem label="推送目标用户" class="u-input">
+                <Select
+                    v-model="formItem.cmtId"
+                    filterable
+                    remote
+                    :remote-method="remoteCommunityMethod"
+                    :loading="communityLoading"
+                    placeholder="请选择"
+                    :label-in-value="labelInValue"
+                    clearable
+                    >
+                    <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
+                </Select>
             </FormItem>
             
-            <FormItem label="社区名称" class="u-input">
-                    <Select
-                        v-model="formItem.communityId"
-                        style="width:250px"
-                        placeholder="请选择社区"
-                    >
-                        <Option
-                            v-for="item in communityList"
-                            :value="item.id"
-                            :key="item.id"
+            <FormItem label="点击推送后续动作" class="u-input">
+                   <Select
+                        clearable
+                        v-model="formItem.jumpType"
+                        placeholder="请选择"
                         >
-                            {{ item.name }}
-                        </Option>
+                        <Option v-for="(option, index) in jumpTypeList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
             </FormItem>
             
@@ -39,25 +40,71 @@
 export default{
     name:'highSearch',
     data(){
-    
-		  return{
-			   formItem:{
+        return{
+            labelInValue:true,
+            formItem:{
                 customerName:'',
                 communityId:''
-          },
-          communityList:[],
-		    }
+            },
+            communityList:[],
+            jumpTypeList:[
+                {
+                    label:'启动页APP（至首页）',
+                    value:'HOMEPAGE'
+                },
+                {
+                    label:'跳转活动',
+                    value:'ACTIVITY'
+                },
+                {
+                    label:'跳转外链',
+                    value:'HTML'
+                },
+            ],
+        }
         
     },
     mounted:function(){
-    
-        this.$http.get('join-bill-community','').then((res)=>{
-             this.communityList = res.data.items;
-        }).catch((error)=>{
-            this.$Notice.error({
-                title:error.message
-            });
-		});
+         this.getCommunityList(' ')
+    },
+    methods:{
+        //社区
+        remoteCommunityMethod(query){
+            if (query!== '') {
+                this.communityLoading = true;
+                setTimeout(() => {
+                    this.communityLoading = false;
+                    this.getCommunityList(query)
+                }, 200);
+            } else {
+                this.getCommunityList(' ')
+
+            }
+        },
+         //社区
+        getCommunityList(name){
+           let params = {
+                    cmtName:name
+                }
+            let list = [];
+            let _this = this;
+            this.$http.get('get-community-new-list', params).then((res)=>{
+                list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                _this.communityList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
+        },
     },
     updated:function(){
     

@@ -45,6 +45,10 @@
             <LabelText label="后续动作：">
 				{{basicInfo.jump}}
 			</LabelText>
+            <div class="u-jump-content" v-if="basicInfo.jumpType!='HOMEPAGE'">
+                 <div class="u-small-trigon"></div>
+            </div>
+            
         </DetailStyle>
 	</div>
 </div>
@@ -141,6 +145,9 @@ export default {
             top:-12px;
             left:130px;
         }
+    }
+    .u-jump-content{
+
     }
 }
 

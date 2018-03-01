@@ -61,7 +61,8 @@ export default {
     },
     created(){
         if(this.searchFilter){
-            this.searchLabel=this.searchFilter[0].label
+			this.searchLabel=this.searchFilter[0].label;
+			this.filterValue=this.searchFilter[0].value;
         }
     },
     methods:{
@@ -78,9 +79,9 @@ export default {
             }else{
                var value={};;
                 if(this.filterValue){
-                    value[this.filterValue]=this.searchValue;
+					value[this.filterValue]=this.searchValue
                 }else{
-                    value=this.searchValue;
+                    value.content=this.searchValue;
                 }   
                 this.onSubmit && this.onSubmit(value); 
                

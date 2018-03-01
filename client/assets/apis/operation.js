@@ -110,6 +110,15 @@ export default  {
         url: '/api/krspace-finance-web/app/notification/edit',
         method: 'post'
     },
-
+    //app管理--通知管理--删除通知
+    'delete-notification': {
+        url: '/api/krspace-finance-web/app/notification/delete',
+        method: 'post'
+    },
+     //app管理--通知管理--上传图片
+     'upload-app-push': {
+        url: '/api/krspace-finance-web/app/push/upload',
+        method: 'post'
+    },
 }
   

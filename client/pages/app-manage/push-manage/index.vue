@@ -169,10 +169,11 @@ export default {
             this.searchData=form;
       },
       searchSubmit(){
-            // this.Params=this.searchData;
-            // this.Params.page=1;
-            // this.page=1;
-            // utils.addParams(this.Params);
+          console.log('this.searchData',this.searchData)
+            this.Params=this.searchData;
+            this.Params.page=1;
+            this.page=1;
+            utils.addParams(this.Params);
      },
       getTableData(params){
             this.$http.get('get-app-push-page', params).then((res)=>{

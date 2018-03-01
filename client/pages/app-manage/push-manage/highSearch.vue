@@ -28,7 +28,39 @@
                         <Option v-for="(option, index) in jumpTypeList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
             </FormItem>
-            
+             <FormItem label="推送创建时间"  class="u-input u-date">
+                <DatePicker
+                    type="date"
+                    v-model="formItem.startTime"
+                    placeholder="请选择开始日期"
+                    style="width: 150px;margin-right:4px;"
+                     @on-change="startChange"
+               ></DatePicker>
+                <TimePicker 
+                    format="HH:mm" 
+                    placeholder="请选择" 
+                    style="width: 96px" 
+                    v-model="formItem.startHour"
+                     @on-change="startHourChange"
+                     @on-clear="startHourClear"
+                />
+                <span class="u-date-txt">至</span>
+               <DatePicker
+                    type="date"
+                     v-model="formItem.endTime"
+                    placeholder="请选择截止日期"
+                    style="width: 150px;margin-right:4px;"
+                     @on-change="endChange"
+               ></DatePicker>
+               <TimePicker 
+                    format="HH:mm" 
+                    placeholder="请选择" 
+                    style="width: 96px" 
+                    v-model="formItem.endHour"
+                    @on-change="endHourChange"
+                    @on-clear="endHourClear"
+                />
+            </FormItem>
         </Form>
         
 </div>
@@ -42,6 +74,7 @@ export default{
     data(){
         return{
             labelInValue:true,
+            communityLoading:false,
             formItem:{
                 customerName:'',
                 communityId:''
@@ -61,6 +94,12 @@ export default{
                     value:'HTML'
                 },
             ],
+            startDate:'',
+            startHour:'00:00',
+            endDate:'',
+            endHour:'00:00',
+            startTime:'',
+            endTime:'',
         }
         
     },
@@ -105,10 +144,40 @@ export default{
             return list;
             
         },
+        startChange(date){
+            this.startDate=date;
+        },
+        endChange(date){
+            this.endDates=date;
+        },
+        startHourChange(date){
+            this.startHour=date;
+        },
+        endHourChange(date){
+            this.endHour=date;
+        },
+        startHourClear(){
+            this.startHour='00:00:00';
+        },
+        endHourClear(){
+            this.endHour='00:00:00';
+        }
+
     },
     updated:function(){
-    
-        this.$emit('formData', this.formItem);
+        if(this.startDate && this.startHour){
+            this.beginDate=`${this.startDate} ${this.startHour}:00`
+        }
+        if(this.endDates && this.endHour){
+            this.endDate=`${this.endDates} ${this.endHour}:00`
+        }
+        let form={
+            beginDate:this.beginDate || '',
+            endDate: this.endDate || '',
+            jumpType:this.formItem.jumpType || '',
+            cmtId:this.formItem.cmtId || ''
+        }
+        this.$emit('formData', form);
         
     }
 }

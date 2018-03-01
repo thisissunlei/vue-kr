@@ -117,7 +117,7 @@
                         启动页APP（至首页）
                     </Radio>
                     <Radio 
-                        label="ACITVITY" 
+                        label="ACTIVITY" 
                         style="margin-right:36px;"
                     >
                         跳转活动
@@ -127,7 +127,7 @@
                     </Radio>
                 </RadioGroup> 
             </FormItem>
-            <div class="u-jump-activity"  v-if="formItem.jumpType=='ACITVITY'">
+            <div class="u-jump-activity"  v-if="formItem.jumpType=='ACTIVITY'">
                 <div class="u-small-trigon"></div>
                  <FormItem label="APP内活动"  style="width:250px;" >
                         <Select
@@ -197,7 +197,7 @@ export default {
               content:'',
               targetType:'2',
               jumpType:'HOMEPAGE',
-              //jumpType:'ACITVITY',
+              //jumpType:'ACTIVITY',
               cmtId:'',
               gender:'3'
           },
@@ -386,7 +386,7 @@ export default {
 
     },
     jumpTypeChange(){
-        if(this.formItem.jumpType=='ACITVITY'){
+        if(this.formItem.jumpType=='ACTIVITY'){
             this.getActiveList('')
         }
     },

@@ -147,8 +147,7 @@ export default {
   },
   methods:{
       jumpView(params){
-          window.open(`./push-manage/detail/1`,'_blank');
-          // window.open(`./push-manage/detail/${params.id}`,'_blank');
+           window.open(`./push-manage/detail/${params.pushId}`,'_blank');
       },
       jumpCreate(){
           window.open(`./push-manage/create`,'_blank');

@@ -72,7 +72,7 @@ export default  {
     },
     //app管理--推送管理--推送详情
     'get-app-push-detail': {
-        url: ' /api/krspace-finance-web/app/push/detail',
+        url: '/api/krspace-finance-web/app/push/detail',
         method: 'get'
     },
     //app管理--推送管理--新建推送

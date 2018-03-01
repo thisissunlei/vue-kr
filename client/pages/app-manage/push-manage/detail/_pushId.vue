@@ -1,14 +1,114 @@
 <template>
-  
+
+<div class="g-push-detail">
+	<SectionTitle title="推送详情"></SectionTitle>
+	<div class="m-detail-content">
+		<DetailStyle info="基本信息">
+			<LabelText label="创建人：">
+				{{basicInfo.createrName}}
+			</LabelText>
+			<LabelText label="创建时间：">
+				{{basicInfo.ctime}}
+			</LabelText>
+			<LabelText label="推送用户目标：">
+				{{basicInfo.targetDesc}}
+			</LabelText>
+            <div class="u-merber-content">
+
+            </div>
+		</DetailStyle>
+         <DetailStyle info="推送显示内容">
+             <LabelText label="推送标题：" style="width:700px">
+				{{basicInfo.title}}
+			</LabelText>
+			<LabelText label="推送内容：" >
+				{{basicInfo.content}}
+			</LabelText>
+			
+		</DetailStyle>
+        <DetailStyle info="推送显示内容">
+            <LabelText label="后续动作：">
+				{{basicInfo.jump}}
+			</LabelText>
+        </DetailStyle>
+	</div>
+</div>
+
 </template>
 
 <script>
+
+import DetailStyle from '~/components/DetailStyle';
+import LabelText from '~/components/LabelText';
+import SectionTitle from '~/components/SectionTitle.vue';
+import dateUtils from 'vue-dateutils';
+
 export default {
-  
+	components:{
+		DetailStyle,
+		LabelText,
+		SectionTitle
+	},
+	data(){
+		return{
+			basicInfo:{},
+		}
+	},
+	mounted:function(){
+		this.getInfo();
+		GLOBALSIDESWITCH("false")
+	},
+	methods:{
+		
+		getInfo(){
+			var _this=this;
+			
+			let {params}=this.$route;
+			let jumplist={
+               'HOMEPAGE':'启动页APP（至首页）' ,
+               'ACTIVITY':'跳转活动',
+               'HTML':'跳转外链'
+            }
+			let from={
+				pushId:params.pushId
+			};
+			this.$http.get('get-app-push-detail', from).then((res)=>{
+                let data = res.data;
+                data.title=data.title?data.title:'-';
+                data.jump=jumplist[data.jumpType]
+                this.basicInfo = data;
+
+			}).catch((error)=>{
+				this.$Notice.error({
+						title:error.message
+					});
+			});
+			
+		},
+	},
+
+
+
+
 }
+
+
 </script>
 
 <style lang="less">
+
+.g-push-detail{
+	.m-detail-content{
+        padding:30px 24px;
+        .ui-label{
+            font-weight: 500;
+            color:#666666;
+        }
+    }
+    .u-merber-content{
+
+    }
+}
 
 </style>
 

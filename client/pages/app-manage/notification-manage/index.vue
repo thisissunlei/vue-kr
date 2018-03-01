@@ -170,14 +170,16 @@ export default {
         }
   },
   methods:{
-      jumpView(){
-
+      jumpView(params){
+           window.open(`./notification-manage/detail/${params.notificationId}`,'_blank');
       },
       jumpCreate(){
-
+           window.open(`./notification-manage/create`,'_blank');
       },
-      onPageChange(){
-
+      onPageChange(page){
+            this.Params.page=page;
+            this.page=page;
+            this.getTableData(this.Params);
       },
       onSubmit(form){
           console.log('form=====',form)

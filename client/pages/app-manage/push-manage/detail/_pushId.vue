@@ -10,7 +10,7 @@
 			<LabelText label="创建时间：">
 				{{basicInfo.ctime}}
 			</LabelText>
-			<LabelText label="推送用户目标：">
+			<LabelText label="推送目标用户：">
 				{{basicInfo.targetDesc}}
 			</LabelText>
             <div class="u-merber-content" v-if="basicInfo.targetType=='2'">

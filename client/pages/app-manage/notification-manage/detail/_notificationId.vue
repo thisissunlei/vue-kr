@@ -10,7 +10,7 @@
 			<LabelText label="创建时间：">
 				{{basicInfo.ctime}}
 			</LabelText>
-			<LabelText label="推送用户目标：">
+			<LabelText label="推送目标用户：">
 				{{basicInfo.targetDesc}}
 			</LabelText>
             <div class="u-merber-content" v-if="basicInfo.targetType=='2'">
@@ -32,20 +32,23 @@
                 </LabelText>
             </div>
 		</DetailStyle>
-         <DetailStyle info="推送显示内容">
+         <DetailStyle info="通知列表显示内容">
              <LabelText label="推送标题：" style="width:700px;">
 				{{basicInfo.title?basicInfo.title:'-'}}
 			</LabelText>
-			<LabelText label="推送内容：" >
+			<LabelText label="推送内容：" style="width:700px;">
 				{{basicInfo.content}}
 			</LabelText>
-			
+			<div class="u-img-content">
+                <div class="u-img-title">封面图：</div>
+                <div><img :src="basicInfo.imgUrl" class="u-img-url"></div>
+            </div>
 		</DetailStyle>
-        <DetailStyle info="推送显示内容">
+        <DetailStyle info="用户点击通知后的后续动作">
             <LabelText label="后续动作：">
 				{{basicInfo.jump}}
 			</LabelText>
-            <div class="u-jump-content" v-if="basicInfo.jumpType!='HOMEPAGE'">
+            <div class="u-jump-content" v-if="basicInfo.jumpType!='0'">
                  <div class="u-small-trigon"></div>
                  <div class="u-jump-desc">
                      {{basicInfo.jumpDesc}}
@@ -88,21 +91,18 @@ export default {
 			
 			let {params}=this.$route;
 			let jumplist={
-               'HOMEPAGE':'启动页APP（至首页）' ,
-               'ACTIVITY':'跳转活动',
-               'HTML':'跳转外链'
+               '0':'无跳转',
+               '1':'跳转外链'
             }
 			let from={
-				pushId:params.pushId
+				notificationId:params.notificationId
 			};
-			this.$http.get('get-app-push-detail', from).then((res)=>{
+			this.$http.get('get-notification-detail', from).then((res)=>{
                 let data = res.data;
                 data.jump=jumplist[data.jumpType];
                 this.targetDetail=data.targetDetail || '';
-                if(data.jumpType=='HTML'){
+                if(data.jumpType=='1'){
                      data.jumpDesc=data.jumpUrl;
-                }else if(data.jumpType=='ACTIVITY'){
-                     data.jumpDesc=data.activityTitle;
                 }
                 
                
@@ -177,6 +177,23 @@ export default {
             margin-left: 14px;
         }
     }
+    .u-img-content{
+        width:100%;
+        display: inline-block;
+        .u-img-title{
+            float:left;
+            font-weight: 500;
+            color: #666666;
+            margin-left:14px;
+        }
+        .u-img-url{
+            max-width: 132px;
+            max-width: 132px;
+            float: left;
+            margin-bottom:30px;
+        }
+    }
+    
 }
 
 </style>

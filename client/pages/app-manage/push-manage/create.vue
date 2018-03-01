@@ -157,7 +157,8 @@
             </div>
         </DetailStyle>
         <FormItem  style="padding-left:24px;margin-top:40px">
-            <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
+            <Button type="primary" @click="handleSubmit('formItems')" >确定</Button>
+            <Button type="primary" @click="cancelSubmit()" >取消</Button>
         </FormItem>  
      </Form>   
     <div class="m-view">
@@ -195,7 +196,7 @@ export default {
           formItem:{
               title:'',
               content:'',
-              targetType:'2',
+              targetType:'1',
               jumpType:'HOMEPAGE',
               cmtId:'',
               gender:'3'
@@ -367,19 +368,19 @@ export default {
       },
 
       submitCreate(){
-        this.$http.post('create-icon', this.formItem).then((res)=>{
-            this.$Notice.success({
-                    title:'新建成功'
-                });
-                setTimeout(function(){
-                    window.close();
-                    window.opener.location.reload();
-                },1000) 
-        }).catch((err)=>{
-             this.$Notice.error({
-                    title:err.message
-                });
-        })
+            this.$http.post('create-app-push', this.formItem).then((res)=>{
+                this.$Notice.success({
+                        title:'新建成功'
+                    });
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
     },
     changeActive(){
 

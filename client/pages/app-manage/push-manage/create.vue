@@ -87,7 +87,10 @@
                             >
                             <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
+                         <IconTip style="left:60px;top:-55px;">会员在氪空间所有社区的历史时长，用以筛选老用户</IconTip>
                 </FormItem>
+                
+               
                 <FormItem style="margin-right:116px;margin-top:-10px;">
                     <CheckboxGroup v-model="formItem.birthMonth">
                         <Checkbox label="当前月份为会员生日月"></Checkbox>
@@ -178,11 +181,13 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
+import IconTip from '~/components/IconTip';
 
 export default {
   components:{
      SectionTitle,
-     DetailStyle
+     DetailStyle,
+     IconTip
   },
   data(){
       return{

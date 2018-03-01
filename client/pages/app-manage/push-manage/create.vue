@@ -22,7 +22,10 @@
         </DetailStyle>
         <DetailStyle info="推送目标用户">
             <FormItem label="" style="width:352px;margin-top:-20px;" prop="targetType">
-                <RadioGroup v-model="formItem.targetType">
+                <RadioGroup 
+                    v-model="formItem.targetType"
+                    @on-change="targetTypeChange"
+                >
                     <Radio label="1">
                         社区人员
                     </Radio>
@@ -101,7 +104,7 @@
             <FormItem label="后续动作" style="width:400px" prop="jumpType">
                  <RadioGroup 
                     v-model="formItem.jumpType" 
-                    @on-change="onRadioChange"
+                    @on-change="jumpTypeChange"
                  >
                     <Radio 
                         label="HOMEPAGE"
@@ -376,12 +379,18 @@ export default {
     changeActive(){
 
     },
-    onRadioChange(){
-       
+    jumpTypeChange(){
         if(this.formItem.jumpType=='ACITVITY'){
-             console.log('111---')
             this.getActiveList('')
         }
+    },
+    targetTypeChange(){
+        this.formItem.cmtId="";
+        this.formItem.gender="3";
+        this.formItem.enterTime="";
+        this.formItem.birthMonth="";
+        this.formItem.leader="";
+
     }
   
 

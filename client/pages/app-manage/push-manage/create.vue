@@ -197,7 +197,6 @@ export default {
               content:'',
               targetType:'2',
               jumpType:'HOMEPAGE',
-              //jumpType:'ACTIVITY',
               cmtId:'',
               gender:'3'
           },

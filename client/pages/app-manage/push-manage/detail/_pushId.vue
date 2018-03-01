@@ -13,8 +13,23 @@
 			<LabelText label="推送用户目标：">
 				{{basicInfo.targetDesc}}
 			</LabelText>
-            <div class="u-merber-content">
-
+            <div class="u-merber-content" v-if="basicInfo.targetType=='2'">
+                 <div class="u-small-trigon"></div>
+                 <LabelText label="所在社区：">
+                    {{targetDetail.cmtName}}
+                </LabelText>
+                 <LabelText label="性别：">
+                    {{basicInfo.genderDesc}}
+                </LabelText>
+                 <LabelText label="已入驻时长：">
+                    {{basicInfo.enterTimeDesc}}
+                </LabelText>
+                <LabelText label="当前月份：">
+                    {{basicInfo.birthMonthDesc}}
+                </LabelText>
+                <LabelText label="企业管理员用户：">
+                    {{basicInfo.leaderDesc}}
+                </LabelText>
             </div>
 		</DetailStyle>
          <DetailStyle info="推送显示内容">
@@ -51,7 +66,8 @@ export default {
 	},
 	data(){
 		return{
-			basicInfo:{},
+            basicInfo:{},
+            targetDetail:{},
 		}
 	},
 	mounted:function(){
@@ -75,9 +91,9 @@ export default {
 			this.$http.get('get-app-push-detail', from).then((res)=>{
                 let data = res.data;
                 data.title=data.title?data.title:'-';
-                data.jump=jumplist[data.jumpType]
+                data.jump=jumplist[data.jumpType];
+                this.targetDetail=data.targetDetail || '';
                 this.basicInfo = data;
-
 			}).catch((error)=>{
 				this.$Notice.error({
 						title:error.message
@@ -106,7 +122,25 @@ export default {
         }
     }
     .u-merber-content{
-
+        width:570px;
+        height:132px;
+        padding-top:20px;
+        padding-left:16px;
+        background:#F6F6F6;
+        margin-bottom:30px;
+        border-radius: 3px;
+        margin-left:14px;
+        position: relative;
+        margin-top:-5px;
+        .u-small-trigon{
+            width:0;
+            height:0;
+            border:6px solid transparent;
+            border-bottom-color: #F6F6F6;
+            position: absolute;
+            top:-12px;
+            left:130px;
+        }
     }
 }
 

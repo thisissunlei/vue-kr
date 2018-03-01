@@ -19,7 +19,7 @@
                         :page-size="pageSize" 
                         show-total 
                         show-elevator
-                        @change="onPageChange"
+                        @on-change="onPageChange"
                     />
                 </div>
             </div>
@@ -152,8 +152,10 @@ export default {
       jumpCreate(){
           window.open(`./push-manage/create`,'_blank');
       },
-      onPageChange(){
-
+      onPageChange(page){
+            this.Params.page=page;
+            this.page=page;
+            this.getTableData(this.Params);
       },
       onSubmit(form){
           let params=Object.assign(form,this.Params);

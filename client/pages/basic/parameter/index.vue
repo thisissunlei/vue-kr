@@ -140,22 +140,20 @@ export default {
                         align:'center',
                         width:100,
                         render(h, obj){
-                            switch (obj.row.enableFlag){
-                                case 'yes':
+                            if(obj.row.enableFlag){
                                 return h('span', { 
                                            style: {
                                                 color:'#666666'
                                             }       
-                                        }, '启用');
-                                break;
-                                case 'no':
+                                        }, '启用'); 
+                            }else{
                                 return h('span', { 
                                             style: {
                                                 color:'#F5A623'
                                             }       
                                         }, '不启用');
-                                break;
                             }
+
                            
                         }
                     },
@@ -206,18 +204,17 @@ export default {
         },
         methods:{
             getTableData(params){
-                    this.tableData=this.dataItem;
+                    // this.tableData=this.dataItem;
 
-                // this.$http.get('getParamList', params).then((res)=>{
-                //     // this.tableData=res.data.items;
-                //     this.tableData=this.dataItem;
-                //     this.totalCount=res.data.totalCount;
-                //     this.openSearch=false;
-                // }).catch((err)=>{
-                //     this.$Notice.error({
-                //         title:err.message
-                //     });
-                // })
+                this.$http.get('getParamList', params).then((res)=>{
+                    this.tableData=res.data.items;
+                    // this.tableData=this.dataItem;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
                  
             },
             onCreate(){
@@ -235,8 +232,18 @@ export default {
 
                         isSubmit = false
                     }else{
-                        this.openCreate = false;
+                        
+                        this.parameterData.items = '';
+                        this.parameterData.paramVal = this.parameterData.paramType=='JSON'?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
                         // 提交数据
+                        this.$http.post('saveParamData', this.parameterData).then((res)=>{
+                            this.getTableData()
+                            this.openCreate = false;
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
                         console.log('提交数据',this.parameterData)
 
                     }
@@ -250,7 +257,16 @@ export default {
 
                         isSubmit = false
                     }else{
-                        this.openEdit = false;
+                         this.parameterData.items = '';
+                        this.parameterData.paramVal = this.parameterData.paramType=='JSON'?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
+                        this.$http.post('saveParamData', this.parameterData).then((res)=>{
+                            this.openEdit = false;
+                            this.getTableData()
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
                         // 提交数据
                         console.log('提交数据',this.parameterData)
 

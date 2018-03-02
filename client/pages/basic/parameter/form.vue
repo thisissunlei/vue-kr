@@ -7,22 +7,22 @@
             <Input v-model="formItem.paramCode" placeholder="编码"></Input>
         </FormItem>
         
-        <FormItem label="启用" prop="paramCode">
-            <RadioGroup v-model="formItem.paramCode">
-                <Radio label="yes">是</Radio>
-                <Radio label="no">否</Radio>
+        <FormItem label="启用" prop="enableFlag">
+            <RadioGroup v-model="formItem.enableFlag">
+                <Radio label="true">是</Radio>
+                <Radio label="false">否</Radio>
             </RadioGroup>
         </FormItem>
         <FormItem label="值的格式">
-            <RadioGroup v-model="valueType">
-                <Radio label="json">JSON</Radio>
-                <Radio label="str">STRING</Radio>
+            <RadioGroup v-model="formItem.paramType">
+                <Radio label="JSON">JSON</Radio>
+                <Radio label="TEXT">STRING</Radio>
             </RadioGroup>
         </FormItem>
-         <FormItem label="值" v-if="valueType == 'str'" prop="value">
+         <FormItem label="值" v-if="formItem.paramType == 'TEXT'" prop="value">
             <Input v-model="formItem.paramVal" placeholder="请填写..."></Input>
         </FormItem>
-        <FormItem label="值" v-if="valueType == 'json'" >
+        <FormItem label="值" v-if="formItem.paramType == 'JSON'" >
         <div>
             <Row v-for="(item, index) in formItem.items"
                 :key="index"
@@ -51,16 +51,19 @@
             
             let data = {
                 items:[{name:''}],
-                flag:'no',
-                name:'',
-                code:'',
-                textarea:'',
+                enableFlag:'false',
+                paramVal:'',
+                paramDesc:'',
+                paramName:'',
+                paramType:'TEXT'
                 }
                 let paramVal = this.editData.paramVal || '';
-                let valueType = 'str';
-                if(this.editData && typeof this.editData.paramVal == 'object'){
-                    valueType = 'json';
+                let valueType = 'TEXT';
+                this.editData.enableFlag = JSON.stringify(this.editData.enableFlag) || 'false';
+                if(this.editData && this.editData.paramType == 'JSON'){
+                    valueType = 'JSON';
                     let arr = [];
+                    paramVal = JSON.parse(paramVal)
                     for(let key in paramVal){
                         arr.push({value:paramVal[key],name:key})
                     }
@@ -110,7 +113,11 @@
         },
         updated:function(){
             let data = {}
-            if(this.valueType == 'json'){
+            if(this.formItem.paramType == 'TEXT' && !this.formItem.paramVal.length ){
+                this.formItem.paramVal = '';
+                this.formItem.items = [{name:'',value:''}]
+            }
+            if(this.formItem.paramType == 'JSON'){
                 let obj = {};
                 this.formItem.items.map((item,index)=>{
                     obj[item.name] = item.value;

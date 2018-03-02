@@ -183,9 +183,11 @@
                 </IconTip>
             </FormItem>
         </DetailStyle>
-        <FormItem  style="padding-left:24px;margin-top:40px">
-            <Button type="primary" @click="handleSubmit('formItems')" >确定</Button>
-            <Button type="primary" @click="onCanlce()" >取消</Button>
+        <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
+             <div class="u-btn-content">
+                <Button  style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
+                <Button type="ghost" @click="onCanlce()" >取消</Button>
+             </div>
         </FormItem>  
      </Form>   
     
@@ -435,6 +437,21 @@ export default {
 .u-form{
     margin-top:30px;
     display: flex;
+    form{
+        width:100%;
+    }
+    .u-btn-content{
+      width:138px;
+      margin:0 auto;
+  }
+    .u-upload-tip{
+        width:692px;
+        height:40px;
+        line-height:18px;
+        font-size:13px;
+        color:#999999;
+        margin:-25px 0 10px 14px;
+    }
     .u-community-content{
         width:284px;
         height:114px;

@@ -42,6 +42,8 @@
                     </div>
                 </Upload>
             </FormItem>
+            <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div>
             <FormItem label="通知详情" style="width:400px" prop="jumpType">
                  <RadioGroup 
                     v-model="formItem.jumpType" 
@@ -183,9 +185,11 @@
                 </IconTip>
             </FormItem>
         </DetailStyle>
-        <FormItem  style="padding-left:24px;margin-top:40px">
-            <Button type="primary" @click="handleSubmit('formItems')" >确定</Button>
-            <Button type="primary" @click="onCanlce()" >取消</Button>
+        <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
+            <div class="u-btn-content">
+                <Button style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
+                <Button type="ghost" @click="onCanlce()" >取消</Button>
+            </div>
         </FormItem>  
      </Form>   
     
@@ -305,17 +309,32 @@ export default {
 			this.$http.get('get-notification-detail', from).then((res)=>{
                 this.imgUrl=res.data.imgUrl;
                 this.formItem = res.data;
-                this.formItem.jumpType=res.data.jumpType.toString();
-                this.formItem.targetType=res.data.targetType.toString();
-                this.formItem.push=res.data.push.toString();
-                this.formItem.cmtId=res.data.cmtId.toString();
-                this.formItem.cmtName=res.data.cmtName;
-                 
-                if(res.data.gender && res.data.gender!=0){
-                     this.formItem.gender="3";
-                }else{
-                    this.formItem.gender=res.data.gender.toString();
+                if(res.data.jumpType){
+                     this.formItem.jumpType=res.data.jumpType.toString();
                 }
+                if(res.data.targetType){
+                    this.formItem.targetType=res.data.targetType.toString();
+                }
+                if(res.data.push){
+                    this.formItem.push=res.data.push.toString();
+                }
+                if(res.data.cmtId){
+                    this.formItem.cmtId=res.data.cmtId.toString();
+                }
+                this.formItem.cmtName=res.data.cmtName;
+
+                switch (res.data.gender){
+                    case 0:
+                    this.formItem.gender="0";
+                    break;
+                    case 1:
+                    this.formItem.gender="1"
+                    break;
+                    case 2:
+                    this.formItem.gender="2";
+                    break;
+                }
+                
 
                 if(res.data.enterTime){
                      this.formItem.enterTime=res.data.enterTime.toString();
@@ -483,6 +502,21 @@ export default {
 .u-form{
     margin-top:30px;
     display: flex;
+    form{
+        width:100%;
+    }
+    .u-btn-content{
+      width:138px;
+      margin:0 auto;
+  }
+    .u-upload-tip{
+        width:692px;
+        height:40px;
+        line-height:18px;
+        font-size:13px;
+        color:#999999;
+        margin:-25px 0 10px 14px;
+    }
     .u-community-content{
         width:284px;
         height:114px;

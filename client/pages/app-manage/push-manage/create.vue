@@ -352,11 +352,9 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               if(!this.formItem.iconUrl){
-                    this.isError=true;
-               }
+               
                 this.$refs[name].validate((valid) => {
-                    if (valid && this.formItem.iconUrl) {
+                    if (valid && this.formItem.cmtId) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({

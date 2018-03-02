@@ -196,6 +196,9 @@ export default {
       jumpCreate(){
            window.open(`./notification-manage/create`,'_blank');
       },
+      jumpEdit(params){
+         window.open(`./notification-manage/edit/${params.notificationId}`,'_blank');
+      },
       onPageChange(page){
             this.Params.page=page;
             this.page=page;

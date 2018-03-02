@@ -42,6 +42,8 @@
                     </div>
                 </Upload>
             </FormItem>
+            <div class="u-upload-tip">图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。
+（上传图片后，即为APP中用户可见效果）</div>
             <FormItem label="通知详情" style="width:400px" prop="jumpType">
                  <RadioGroup 
                     v-model="formItem.jumpType" 

@@ -1,5 +1,5 @@
 <template>
-<div class="g-push-created">
+<div class="g-notification-created">
 <SectionTitle title="新建通知" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
@@ -93,15 +93,12 @@
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
-                            :label-in-value="labelInValue"
                             clearable
+                            @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
                     </FormItem>
-                </div>
-                <div class="u-person-tip" v-if="ifPerson">
-                    所选目标用户数：{{personNum}}人
                 </div>
             </div>
             <div class="u-member-content" v-if="formItem.targetType=='2'">
@@ -114,8 +111,8 @@
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
-                            :label-in-value="labelInValue"
                             clearable
+                            @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -124,6 +121,7 @@
                         <Select
                             v-model="formItem.gender"
                             placeholder="请选择"
+                            @on-change="genderChange"
                             >
                             <Option v-for="(option, index) in genderList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -132,6 +130,7 @@
                         <Select
                             v-model="formItem.enterTime"
                             placeholder="请选择"
+                             @on-change="enterTimeChange"
                             >
                             <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -143,15 +142,19 @@
                     <Checkbox  
                         v-model="birthMonth" 
                         value="1"
-
+                         @on-change="birthMonthChange"
                     >当前月份为会员生日月</Checkbox>
                  </FormItem>
                  <FormItem  style="margin-top:-10px;">
                     <Checkbox 
                         v-model="leader"
                         value="1"
+                        @on-change="leaderChange"
                     >企业管理员用户</Checkbox>
                  </FormItem>
+            </div>
+            <div class="u-person-tip" >
+                    所选目标用户数：{{personNum}}人
             </div>
         </DetailStyle>
         <DetailStyle info="其他设置">
@@ -214,14 +217,19 @@ export default {
           },
           titleLength:20,
           contentLength:50,
-          personNum:'',
-          ifPerson:false,
+          personNum:0,
           communityList:[],
           communityLoading:false,
-          labelInValue:true,
           imgUrl:'',
           birthMonth:'',
           leader:'',
+          countParams:{
+              cmtId:'',
+              birthMonth:'',
+              enterTime:'',
+              gender:'',
+              leader:''
+          },
           genderList:[
               {
                   label:'不限',
@@ -280,6 +288,44 @@ export default {
     this.getCommunityList(' ')
   },
   methods:{
+     getTargetCount(form){
+            this.$http.get('get-target-count',form).then((res)=>{
+                this.personNum=res.data.targetCount;
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
+        },
+      communityChange(form){
+           this.countParams.cmtId=form;
+           this.getTargetCount(this.countParams);
+      },
+      genderChange(form){
+         
+           this.countParams.gender=form;
+           this.getTargetCount(this.countParams);
+      },
+      enterTimeChange(form){
+          this.countParams.enterTime=form;
+          this.getTargetCount(this.countParams);
+      },
+      birthMonthChange(form){
+          if(form){
+               this.countParams.birthMonth="1";
+               this.formItem.birthMonth="1";
+          }
+         this.getTargetCount(this.countParams);
+          
+      },
+      leaderChange(form){
+          if(form){
+              this.countParams.leader="1";
+              this.formItem.leader="1";
+          }
+         this.getTargetCount(this.countParams);
+          
+      },
       //社区
       remoteCommunityMethod(query){
         if (query!== '') {
@@ -337,12 +383,6 @@ export default {
       },
 
       submitCreate(){
-            if(this.birthMonth){
-                this.formItem.birthMonth="1"
-            }
-            if(this.leader){
-                this.formItem.leader="1"
-            }
             this.$http.post('create-notification', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
@@ -374,6 +414,7 @@ export default {
             this.imgUrl=res.data.imgUrl
         }
     },
+   
     onCanlce(){
         window.close();
         window.opener.location.reload();
@@ -388,22 +429,23 @@ export default {
 </script>
 
 <style lang="less" >
-.g-push-created{
+.g-notification-created{
 
 .u-form{
     margin-top:30px;
     display: flex;
     .u-community-content{
         width:284px;
-        height:134px;
-        margin-bottom: 30px;
+        height:114px;
         margin-top: -10px;
-        .u-person-tip{
-            height:20px;
-            font-size:14px;
-            color:#999999;
-            margin-left:8px;
-        }
+        
+    }
+    .u-person-tip{
+        height:20px;
+        font-size:14px;
+        color:#999999;
+        margin-left:8px;
+        margin-bottom: 30px;
     }
     .u-community-select{
         width:284px;
@@ -432,7 +474,7 @@ export default {
         background:#F6F6F6;
         border-radius: 3px;
         position: relative;
-        margin-bottom: 30px;
+        margin-bottom: 14px;
         margin-top: -10px;
         padding-top:20px;
         padding-left:16px;
@@ -504,8 +546,8 @@ export default {
 }
  .demo-upload-list{
         display: inline-block;
-        width: 60px;
-        height: 60px;
+        width: 148px;
+        height: 148px;
         text-align: center;
         line-height: 60px;
         border: 1px solid transparent;
@@ -534,9 +576,10 @@ export default {
     }
     .demo-upload-list-cover i{
         color: #fff;
-        font-size: 20px;
+        font-size: 40px;
         cursor: pointer;
-        margin: 0 2px;
+        line-height:148px;
+        
     }
   
 

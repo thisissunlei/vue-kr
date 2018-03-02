@@ -120,5 +120,10 @@ export default  {
         url: '/api/krspace-finance-web/app/push/upload',
         method: 'post'
     },
+    //app管理--通知管理--获取通知目标数
+    'get-target-count': {
+        url: '/api/krspace-finance-web/app/notification/target-count',
+        method: 'get'
+    },
 }
   

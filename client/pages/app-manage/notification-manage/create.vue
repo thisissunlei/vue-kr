@@ -1,25 +1,72 @@
 <template>
 <div class="g-push-created">
-<SectionTitle title="新建推送" />
+<SectionTitle title="新建通知" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
-        <DetailStyle info="推送显示内容">
-            <FormItem label="推送标题"  style="width:294px" >
+        <DetailStyle info="通知列表显示内容">
+            <FormItem label="通知标题"  style="width:294px" prop="title">
                 <Input 
                     v-model="formItem.title" 
-                    placeholder="请输入推送标题"
+                    placeholder="请输入通知标题"
                     :maxlength="titleLength"
-                    @on-blur="titleBlur"
                 />
             </FormItem>
-            <FormItem label="推送内容" style="width:516px" prop="content">
+            <FormItem label="通知内容" style="width:516px" prop="content">
                 <Input 
                     type="textarea"
                     v-model="formItem.content" 
-                    placeholder="请输入推送内容"
+                    placeholder="请输入通知内容"
                     :maxlength="contentLength"
                 />
             </FormItem>
+            <FormItem label="通知配图" style="width:516px" >
+                <div class="demo-upload-list" v-if="this.imgUrl">
+                    <img :src="this.imgUrl">
+                    <div class="demo-upload-list-cover">
+                        <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+                    </div>
+                </div>
+                <Upload
+                    ref="upload"
+                    name="imgUrl"
+                    v-if="!this.imgUrl"
+                    :show-upload-list="false"
+                    :format="['jpg','jpeg','png']"
+                    with-credentials
+                    :on-success="handleSuccess"
+                    type="drag"
+                    action="http://optest01.krspace.cn/api/krspace-finance-web/app/notification/upload"
+                    style="display: inline-block;width:148px;">
+                    <div style="width: 148px;height:148px;line-height: 158px;">
+                        <Icon type="camera" size="40"></Icon>
+                    </div>
+                </Upload>
+            </FormItem>
+            <FormItem label="通知详情" style="width:400px" prop="jumpType">
+                 <RadioGroup 
+                    v-model="formItem.jumpType" 
+                    
+                 >
+                    <Radio 
+                        label="0" 
+                        style="margin-right:120px;"
+                    >
+                        无详情页
+                    </Radio>
+                    <Radio label="1">
+                        跳转外链
+                    </Radio>
+                </RadioGroup> 
+            </FormItem>
+            <div class="u-jump-url"  v-if="formItem.jumpType=='1'">
+                <div class="u-small-trigon"></div>
+                 <FormItem label="URL"  style="width:250px;" >
+                        <Input 
+                            v-model="formItem.jumpUrl" 
+                            placeholder="请输入URL"
+                        />
+                </FormItem>
+            </div>
         </DetailStyle>
         <DetailStyle info="推送目标用户">
             <FormItem label="" style="width:352px;margin-top:-20px;" prop="targetType">
@@ -93,72 +140,47 @@
                 
                
                 <FormItem style="margin-right:116px;margin-top:-10px;">
-                    <CheckboxGroup v-model="formItem.birthMonth">
-                        <Checkbox label="当前月份为会员生日月"></Checkbox>
-                    </CheckboxGroup>
+                    <Checkbox  
+                        v-model="birthMonth" 
+                        value="1"
+
+                    >当前月份为会员生日月</Checkbox>
                  </FormItem>
                  <FormItem  style="margin-top:-10px;">
-                    <CheckboxGroup v-model="formItem.leader">
-                        <Checkbox label="企业管理员用户"></Checkbox>
-                    </CheckboxGroup>
+                    <Checkbox 
+                        v-model="leader"
+                        value="1"
+                    >企业管理员用户</Checkbox>
                  </FormItem>
             </div>
         </DetailStyle>
-        <DetailStyle info="用户点击推送后的后续动作">
-            <FormItem label="后续动作" style="width:400px" prop="jumpType">
+        <DetailStyle info="其他设置">
+            <FormItem label="同步推送" style="width:400px" prop="push">
                  <RadioGroup 
-                    v-model="formItem.jumpType" 
-                    @on-change="jumpTypeChange"
+                    v-model="formItem.push" 
                  >
                     <Radio 
-                        label="HOMEPAGE"
+                        label="0"
                         style="margin-right:36px;"
                     >
-                        启动页APP（至首页）
+                        否
                     </Radio>
                     <Radio 
-                        label="ACTIVITY" 
+                        label="1" 
                         style="margin-right:36px;"
                     >
-                        跳转活动
-                    </Radio>
-                    <Radio label="HTML">
-                        跳转外链
+                        是
                     </Radio>
                 </RadioGroup> 
+                <IconTip style="left:65px;top:-55px;">
+                    <span style="text-indent:14px">设置“同步推送”后，该社区用户会在消息通知创建成功后，手机顶部通知栏收到推送通知。</span>
+                    <span  style="text-indent:14px">建议仅重要消息通知勾选此项，避免造成用户骚扰。</span>
+                </IconTip>
             </FormItem>
-            <div class="u-jump-activity"  v-if="formItem.jumpType=='ACTIVITY'">
-                <div class="u-small-trigon"></div>
-                 <FormItem label="APP内活动"  style="width:250px;" >
-                        <Select
-                            v-model="formItem.jumpId"
-                            filterable
-                            remote
-                            :remote-method="remoteActiveMethod"
-                            :loading="activityLoading"
-                            @on-change="changeActive"
-                            placeholder="请选择"
-                            :label-in-value="labelInValue"
-                            clearable
-                            >
-                            <Option v-for="(option, index) in activityList" :value="option.value" :key="index">{{option.label}}</Option>
-                        </Select>
-                </FormItem>
-            </div>
-            <div class="u-jump-url"  v-if="formItem.jumpType=='HTML'">
-                <div class="u-small-trigon"></div>
-                 <FormItem label="URL"  style="width:250px;" >
-                        <Input 
-                            v-model="formItem.jumpUrl" 
-                            placeholder="请输入URL"
-                            :maxlength="titleLength"
-                        />
-                </FormItem>
-            </div>
         </DetailStyle>
         <FormItem  style="padding-left:24px;margin-top:40px">
             <Button type="primary" @click="handleSubmit('formItems')" >确定</Button>
-            <Button type="primary" @click="cancelSubmit()" >取消</Button>
+            <Button type="primary" @click="onCanlce()" >取消</Button>
         </FormItem>  
      </Form>   
     
@@ -183,9 +205,12 @@ export default {
               title:'',
               content:'',
               targetType:'1',
-              jumpType:'HOMEPAGE',
+              jumpType:'0',
               cmtId:'',
-              gender:'3'
+              gender:'3',
+              push:"0",
+              birthMonth:'',
+              leader:'',
           },
           titleLength:20,
           contentLength:50,
@@ -193,9 +218,10 @@ export default {
           ifPerson:false,
           communityList:[],
           communityLoading:false,
-          activityLoading:false,
           labelInValue:true,
-          activityList:[],
+          imgUrl:'',
+          birthMonth:'',
+          leader:'',
           genderList:[
               {
                   label:'不限',
@@ -233,6 +259,9 @@ export default {
                 },
           ],
           ruleCustom:{
+            title:[
+                { required: true, message: '请输入推送标题', trigger:'change' }
+            ],
             content:[
                 { required: true, message: '请输入推送内容', trigger:'change' }
             ],
@@ -288,62 +317,16 @@ export default {
             return list;
             
       },
-       //活动
-      remoteActiveMethod(query){
-        if (query!== '') {
-            this.communityLoading = true;
-            setTimeout(() => {
-                this.communityLoading = false;
-                this.getActiveList(query)
-            }, 200);
-        } else {
-            this.getActiveList(' ')
-
-        }
-      },
-       //活动
-      getActiveList(name){
-          if(!this.formItem.cmtId){
-                this.$Notice.error({
-                    title:'请先选择接收用户'
-                });
-              return;
-          }
-           let params = {
-                    activityTitle:name,
-                    cmtId:this.formItem.cmtId
-                }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-title-list', params).then((res)=>{
-                list = res.data.activities;
-                list.map((item)=>{
-                    let obj =item;
-                    obj.label = item.title;
-                    obj.value = item.id;
-                    return obj;
-                });
-                _this.activityList = list;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-            return list;
-            
-      },
       handleSubmit(name){
+          let _this = this;
           let message = '请填写完表单';
                 this.$Notice.config({
                     top: 80,
                     duration: 3
                 });
-                let _this = this;
-               if(!this.formItem.iconUrl){
-                    this.isError=true;
-               }
+
                 this.$refs[name].validate((valid) => {
-                    if (valid && this.formItem.iconUrl) {
+                    if (valid && this.formItem.cmtId) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -354,7 +337,13 @@ export default {
       },
 
       submitCreate(){
-            this.$http.post('create-app-push', this.formItem).then((res)=>{
+            if(this.birthMonth){
+                this.formItem.birthMonth="1"
+            }
+            if(this.leader){
+                this.formItem.leader="1"
+            }
+            this.$http.post('create-notification', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'
                     });
@@ -368,14 +357,6 @@ export default {
                     });
             })
     },
-    changeActive(){
-
-    },
-    jumpTypeChange(){
-        if(this.formItem.jumpType=='ACTIVITY'){
-            this.getActiveList('')
-        }
-    },
     targetTypeChange(){
         this.formItem.cmtId="";
         this.formItem.gender="3";
@@ -383,13 +364,20 @@ export default {
         this.formItem.birthMonth="";
         this.formItem.leader="";
     },
-    titleBlur(){
-
+   handleRemove(){
+      this.formItem.iconUrl="";
+      this.imgUrl="" 
     },
-  
-
-   
-   
+     handleSuccess(res,file){
+        if(res.code==1){
+            this.formItem.imgUrl=res.data.imgUrl;
+            this.imgUrl=res.data.imgUrl
+        }
+    },
+    onCanlce(){
+        window.close();
+        window.opener.location.reload();
+    },
 
 
 
@@ -464,28 +452,6 @@ export default {
             margin-right:5px;
         }
     }
-
-    .u-jump-activity{
-        width:284px;
-        height:105px;
-        padding-top:20px;
-        padding-left:16px;
-        background:#F6F6F6;
-        margin-bottom:14px;
-        border-radius: 3px;
-        margin-left:100px;
-        margin-top:-12px;
-        position: relative;
-        .u-small-trigon{
-            width:0;
-            height:0;
-            border:6px solid transparent;
-            border-bottom-color: #F6F6F6;
-            position: absolute;
-            top:-12px;
-            left:135px;
-        }
-    }
     .u-jump-url{
         width:284px;
         height:105px;
@@ -494,7 +460,7 @@ export default {
         background:#F6F6F6;
         margin-bottom:14px;
         border-radius: 3px;
-        margin-left:210px;
+        margin-left:110px;
         margin-top:-12px;
         position: relative;
         .u-small-trigon{
@@ -533,6 +499,45 @@ export default {
     color: #ed3f14;
     margin-left:-13px;
 }
+.ivu-input-wrapper textarea.ivu-input{
+    font-size:12px;
+}
+ .demo-upload-list{
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        margin-right: 4px;
+    }
+    .demo-upload-list img{
+        width: 100%;
+        height: 100%;
+    }
+    .demo-upload-list-cover{
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,.6);
+    }
+    .demo-upload-list:hover .demo-upload-list-cover{
+        display: block;
+    }
+    .demo-upload-list-cover i{
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
+    }
   
 
 }

@@ -151,7 +151,6 @@
                         <Input 
                             v-model="formItem.jumpUrl" 
                             placeholder="请输入URL"
-                            :maxlength="titleLength"
                         />
                 </FormItem>
             </div>
@@ -605,6 +604,9 @@ export default {
     font-size: 12px;
     color: #ed3f14;
     margin-left:-13px;
+}
+.ivu-input-wrapper textarea.ivu-input{
+    font-size:12px;
 }
   
 

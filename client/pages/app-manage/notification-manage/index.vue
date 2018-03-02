@@ -37,7 +37,21 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
         </div>
 </Modal>
-
+<Modal
+            v-model="openCancel"
+            title="删除"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div class="u-cancel-title">
+                确认要删除该通知吗？
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitDelete">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+            </div>
+        </Modal>
 
 </div>
 </template>
@@ -66,6 +80,8 @@ export default {
                page:1,
                pageSize:15,
            },
+           openCancel:false,
+           notificationId:'',
            searchFilter:[
                {
                    label:'推送标题',
@@ -221,6 +237,29 @@ export default {
             })
         
       },
+      openDelete(value){
+            this.openCancel=!this.openCancel;
+            if(value){
+                this.notificationId=value.notificationId
+            }
+      },
+       submitDelete(){
+            let params={
+                    notificationId: this.notificationId
+                }
+                this.$http.post('delete-notification', params).then((res)=>{
+                    this.$Notice.success({
+                        title:'删除成功'
+                    });  
+                    this.openDelete();
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+                 
+        },
       
   }
 

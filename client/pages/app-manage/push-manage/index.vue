@@ -158,8 +158,17 @@ export default {
             this.getTableData(this.Params);
       },
       onSubmit(form){
+          if(this.Params.content){
+              this.Params.content="";
+          }
+          if(this.Params.title){
+            this.Params.title="";
+          }
+          if(this.Params.createrName){
+            this.Params.createrName="";
+          }
           let params=Object.assign(form,this.Params);
-          utils.addParams(this.Params);
+          utils.addParams(params);
       },
       showSearch (params) {
         utils.clearForm(this.searchData);

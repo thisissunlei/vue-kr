@@ -62,18 +62,22 @@ export default {
            pageSize:15,
            openSearch:false,
            searchData:'',
+           Params:{
+               page:1,
+               pageSize:15,
+           },
            searchFilter:[
                {
-                   label:'通知标题',
-                   value:'aa'
+                   label:'推送标题',
+                   value:'title'
                },
                {
-                   label:'通知内容',
-                   value:'bb'
+                   label:'推送内容',
+                   value:'content'
                },
                {
                    label:'创建人',
-                   value:'cc'
+                   value:'createrName'
                }
            ],
            columns:[
@@ -181,10 +185,20 @@ export default {
             this.page=page;
             this.getTableData(this.Params);
       },
-      onSubmit(form){
-          console.log('form=====',form)
+      onSubmit(form){  
+          if(this.Params.content){
+              this.Params.content="";
+          }
+          if(this.Params.title){
+            this.Params.title="";
+          }
+          if(this.Params.createrName){
+            this.Params.createrName="";
+          }
+          let params=Object.assign(form,this.Params);
+          utils.addParams(params);
       },
-      showSearch (params) {
+     showSearch (params) {
         utils.clearForm(this.searchData);
         this.openSearch=!this.openSearch;
       },
@@ -192,11 +206,9 @@ export default {
             this.searchData=form;
       },
       searchSubmit(){
-            // this.tabParams=this.searchData;
-            // this.tabParams.page=1;
-            // this.page=1;
-            // utils.addParams(this.tabParams);
-     },
+            let params=Object.assign(this.Params,this.searchData);
+            utils.addParams(params);
+      },
       getTableData(params){
             this.$http.get('get-notification-page', params).then((res)=>{
                 this.tableList=res.data.items;

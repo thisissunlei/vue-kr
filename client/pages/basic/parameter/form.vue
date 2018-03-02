@@ -1,14 +1,14 @@
 <template>
     <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent">
-        <FormItem label="名称" prop="name" >
-            <Input v-model="formItem.name" placeholder="名称"></Input>
+        <FormItem label="名称" prop="paramName" >
+            <Input v-model="formItem.paramName" placeholder="名称"></Input>
         </FormItem>
-        <FormItem label="编码" prop="code">
-            <Input v-model="formItem.code" placeholder="编码"></Input>
+        <FormItem label="编码" prop="paramCode">
+            <Input v-model="formItem.paramCode" placeholder="编码"></Input>
         </FormItem>
         
-        <FormItem label="启用" prop="flag">
-            <RadioGroup v-model="formItem.flag">
+        <FormItem label="启用" prop="paramCode">
+            <RadioGroup v-model="formItem.paramCode">
                 <Radio label="yes">是</Radio>
                 <Radio label="no">否</Radio>
             </RadioGroup>
@@ -20,7 +20,7 @@
             </RadioGroup>
         </FormItem>
          <FormItem label="值" v-if="valueType == 'str'" prop="value">
-            <Input v-model="formItem.value" placeholder="请填写..."></Input>
+            <Input v-model="formItem.paramVal" placeholder="请填写..."></Input>
         </FormItem>
         <FormItem label="值" v-if="valueType == 'json'" >
         <div>
@@ -37,8 +37,8 @@
             </Row>
             </div>
         </FormItem>
-        <FormItem label="描述" prop="textarea">
-            <Input v-model="formItem.textarea" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="描述"></Input>
+        <FormItem label="描述" prop="paramDesc">
+            <Input v-model="formItem.paramDesc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="描述"></Input>
         </FormItem>
     </Form>
 </template>
@@ -56,13 +56,13 @@
                 code:'',
                 textarea:'',
                 }
-                let value = this.editData.value || '';
+                let paramVal = this.editData.paramVal || '';
                 let valueType = 'str';
-                if(this.editData && typeof this.editData.value == 'object'){
+                if(this.editData && typeof this.editData.paramVal == 'object'){
                     valueType = 'json';
                     let arr = [];
-                    for(let key in value){
-                        arr.push({value:value[key],name:key})
+                    for(let key in paramVal){
+                        arr.push({value:paramVal[key],name:key})
                     }
                     data.items = arr;
                 }
@@ -71,19 +71,19 @@
                 valueType:valueType,
                 formItem: data,
                 ruleCustom:{
-                    name: [
+                    paramName: [
                         { required: true,message: '请填写名称', trigger: 'change' }
                     ],
-                    code: [
+                    paramCode: [
                         { required: true,message: '请填写编码', trigger: 'change' }
                     ],
-                    flag: [
+                    enableFlag: [
                         { required: true,message: '请选择是否启用', trigger: 'change' }
                     ],
-                    textarea: [
+                    paramDesc: [
                         { required: true,message: '请填写描述', trigger: 'change' }
                     ],
-                    value: [
+                    enableFlag: [
                         { required: true,message: '请填写参数值', trigger: 'change' }
                     ],
                 },
@@ -91,10 +91,11 @@
         },
         watch:{
             valueType(value){
+                this.formItem.valueType = value;
                 if(value == 'json'){
-                    this.formItem.value = ''
+                    this.formItem.paramVal = ''
                 }else{
-                    this.formItem.value = ''
+                    this.formItem.paramVal = ''
                     this.formItem.items = [{name:'',value:''}]
                 }
             }
@@ -115,7 +116,7 @@
                     obj[item.name] = item.value;
                 })
 
-                this.formItem.value = obj;
+                this.formItem.paramVal = obj;
             }
             data = Object.assign({},this.formItem);
             this.$emit('newPageData', data);  

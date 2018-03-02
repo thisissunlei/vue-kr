@@ -99,49 +99,48 @@ export default {
                 msg:'',
                 //假数据
                 dataItem:[{
-                    name:'nihao',
-                    code:'COde',
-                    // value:'222',
-                    value:{'1':'aaaa','2':'bbbb','3':'333333'},
-                    flag:'yes',
-                    textarea:'3333333333'},
-                    {
-                        name:'nihao2',
-                        code:'Code',
-                        value:'222---',
-                        flag:'no',
-                        textarea:'jdajdajd3333333333'  
+                        paramName:'nihao',
+                        paramCode:'COde',
+                        paramVal:{'1':'aaaa','2':'bbbb','3':'333333'},
+                        enableFlag:'yes',
+                        paramDesc:'3333333333'
+                    },{
+                        paramName:'nihao1',
+                        paramCode:'Code1',
+                        paramVal:'222',
+                        enableFlag:'yes',
+                        paramDesc:'3333333333'  
                     }],
                 columns: [
                     {
                         title: '名称',
-                        key: 'name',
+                        key: 'paramName',
                         align:'center'
                     },
                     {
                         title: '编码',
-                        key: 'code',
+                        key: 'paramCode',
                         align:'center'
                     },
                     {
                         title: '值',
-                        key: 'value',
+                        key: 'paramVal',
                         align:'center',
                         width:140,
                     },
                     {
                         title: '描述',
-                        key: 'textarea',
+                        key: 'paramDesc',
                         align:'center',
                         width:100,
                     },
                     {
                         title: '是否启用',
-                        key: 'flag',
+                        key: 'enableFlag',
                         align:'center',
                         width:100,
                         render(h, obj){
-                            switch (obj.row.flag){
+                            switch (obj.row.enableFlag){
                                 case 'yes':
                                 return h('span', { 
                                            style: {
@@ -209,7 +208,7 @@ export default {
             getTableData(params){
                     this.tableData=this.dataItem;
 
-                // this.$http.get('join-bill-list', params).then((res)=>{
+                // this.$http.get('getParamList', params).then((res)=>{
                 //     // this.tableData=res.data.items;
                 //     this.tableData=this.dataItem;
                 //     this.totalCount=res.data.totalCount;

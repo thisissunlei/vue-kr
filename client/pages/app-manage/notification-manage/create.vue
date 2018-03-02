@@ -406,6 +406,7 @@ export default {
         this.formItem.enterTime="";
         this.formItem.birthMonth="";
         this.formItem.leader="";
+        this.personNum=0;
     },
    handleRemove(){
       this.formItem.iconUrl="";
@@ -433,10 +434,10 @@ export default {
 
 <style lang="less" >
 .g-notification-created{
-
+ 
 .u-form{
     margin-top:30px;
-    display: flex;
+    padding-bottom:45px;
     form{
         width:100%;
     }

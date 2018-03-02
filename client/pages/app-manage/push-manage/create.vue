@@ -18,6 +18,7 @@
                     v-model="formItem.content" 
                     placeholder="请输入推送内容"
                     :maxlength="contentLength"
+                    @on-blur="contentBlur"
                 />
             </FormItem>
         </DetailStyle>
@@ -46,15 +47,12 @@
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
-                            :label-in-value="labelInValue"
                             clearable
+                            @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
                     </FormItem>
-                </div>
-                <div class="u-person-tip" v-if="ifPerson">
-                    所选目标用户数：{{personNum}}人
                 </div>
             </div>
             <div class="u-member-content" v-if="formItem.targetType=='2'">
@@ -67,8 +65,8 @@
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
-                            :label-in-value="labelInValue"
                             clearable
+                            @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -77,6 +75,7 @@
                         <Select
                             v-model="formItem.gender"
                             placeholder="请选择"
+                            @on-change="genderChange"
                             >
                             <Option v-for="(option, index) in genderList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -85,6 +84,7 @@
                         <Select
                             v-model="formItem.enterTime"
                             placeholder="请选择"
+                            @on-change="enterTimeChange"
                             >
                             <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
@@ -93,15 +93,22 @@
                 
                
                 <FormItem style="margin-right:116px;margin-top:-10px;">
-                    <CheckboxGroup v-model="formItem.birthMonth">
-                        <Checkbox label="当前月份为会员生日月"></Checkbox>
-                    </CheckboxGroup>
+                    <Checkbox  
+                        v-model="birthMonth" 
+                        value="1"
+                        @on-change="birthMonthChange"
+                    >当前月份为会员生日月</Checkbox>
                  </FormItem>
                  <FormItem  style="margin-top:-10px;">
-                    <CheckboxGroup v-model="formItem.leader">
-                        <Checkbox label="企业管理员用户"></Checkbox>
-                    </CheckboxGroup>
+                    <Checkbox 
+                        v-model="leader"
+                        value="1"
+                        @on-change="leaderChange"
+                    >企业管理员用户</Checkbox>
                  </FormItem>
+            </div>
+             <div class="u-person-tip" >
+                    所选目标用户数：{{personNum}}人
             </div>
         </DetailStyle>
         <DetailStyle info="用户点击推送后的后续动作">
@@ -155,9 +162,11 @@
                 </FormItem>
             </div>
         </DetailStyle>
-        <FormItem  style="padding-left:24px;margin-top:40px">
-            <Button type="primary" @click="handleSubmit('formItems')" >确定</Button>
-            <Button type="primary" @click="cancelSubmit()" >取消</Button>
+        <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
+             <div class="u-btn-content">
+                <Button  style="margin-right:20px;" type="primary" @click="handleSubmit('formItems')" >确定</Button>
+                <Button type="ghost" @click="cancelSubmit()" >取消</Button>
+            </div>
         </FormItem>  
      </Form>   
     <div class="m-view">
@@ -202,12 +211,11 @@ export default {
           },
           titleLength:20,
           contentLength:50,
-          personNum:'',
+          personNum:0,
           ifPerson:false,
           communityList:[],
           communityLoading:false,
           activityLoading:false,
-          labelInValue:true,
           activityList:[],
           genderList:[
               {
@@ -255,7 +263,14 @@ export default {
             jumpType:[
                 { required: true, message: '请选择图标类型', trigger:'change' }
             ],
-          }
+          },
+          countParams:{
+              cmtId:'',
+              birthMonth:'',
+              enterTime:'',
+              gender:'',
+              leader:''
+          },
       }
   },
 
@@ -264,6 +279,43 @@ export default {
     this.getCommunityList(' ')
   },
   methods:{
+       getTargetCount(form){
+                this.$http.get('get-target-count',form).then((res)=>{
+                    this.personNum=res.data.targetCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                            title:err.message
+                        });
+                })
+        },
+      communityChange(form){
+           this.countParams.cmtId=form;
+           this.getTargetCount(this.countParams);
+      },
+       genderChange(form){
+         
+           this.countParams.gender=form;
+           this.getTargetCount(this.countParams);
+      },
+      enterTimeChange(form){
+          this.countParams.enterTime=form;
+          this.getTargetCount(this.countParams);
+      },
+      birthMonthChange(form){
+          if(form){
+               this.countParams.birthMonth="1";
+               this.formItem.birthMonth="1";
+          }
+         this.getTargetCount(this.countParams);
+      },
+      leaderChange(form){
+          if(form){
+              this.countParams.leader="1";
+              this.formItem.leader="1";
+          }
+         this.getTargetCount(this.countParams);
+          
+      },
       //社区
       remoteCommunityMethod(query){
         if (query!== '') {
@@ -393,8 +445,12 @@ export default {
         this.formItem.enterTime="";
         this.formItem.birthMonth="";
         this.formItem.leader="";
+        this.personNum=0;
     },
     titleBlur(){
+
+    },
+    contentBlur(){
 
     },
   
@@ -412,21 +468,30 @@ export default {
 
 <style lang="less" >
 .g-push-created{
-
+   
 .u-form{
+    width:100%;
     margin-top:30px;
-    display: flex;
+    padding-bottom:45px;
+    position: relative;
+     form{
+        width:100%;
+    }
+    .u-btn-content{
+      width:138px;
+      margin: 0 auto;
+    }
     .u-community-content{
         width:284px;
         height:134px;
-        margin-bottom: 30px;
         margin-top: -10px;
-        .u-person-tip{
-            height:20px;
-            font-size:14px;
-            color:#999999;
-            margin-left:8px;
-        }
+    }
+    .u-person-tip{
+        height:20px;
+        font-size:14px;
+        color:#999999;
+        margin-left:8px;
+        margin-bottom: 30px;
     }
     .u-community-select{
         width:284px;
@@ -455,7 +520,7 @@ export default {
         background:#F6F6F6;
         border-radius: 3px;
         position: relative;
-        margin-bottom: 30px;
+        margin-bottom: 14px;
         margin-top: -10px;
         padding-top:20px;
         padding-left:16px;
@@ -521,11 +586,12 @@ export default {
 
 }
 .m-view{
-    width:759px;
+    width:600px;
     height:196px;
     margin-left:50px;
-    float:right;
-    justify-content: flex-end;
+    position: absolute;
+    right:0;
+    top:-10px;
     .u-view-title{
         font-size:14px;
         color:#666666;

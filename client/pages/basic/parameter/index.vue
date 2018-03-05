@@ -286,9 +286,9 @@ export default {
                             return;
                         }
 
-
                          this.parameterData.items = '';
-                        this.parameterData.paramVal = this.parameterData.paramType=='JSON'?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
+                        this.parameterData.paramVal = (this.parameterData.paramType=='JSON' && typeof this.parameterData.paramVal != 'string')?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
+
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{
                             this.openEdit = false;
                             this.getTableData()
@@ -297,8 +297,6 @@ export default {
                                 title:err.message
                             });
                         })
-                        // 提交数据
-                        console.log('提交数据',this.parameterData)
 
                     }
                 })

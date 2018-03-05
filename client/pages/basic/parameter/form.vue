@@ -142,6 +142,8 @@
             if(this.formItem.paramType == 'JSON'){
                 let obj = {};
                 this.formItem.items.map((item,index)=>{
+                    console.log('---->',item.name)
+                    console.log('---->',item.value)
                     obj[item.name] = item.value;
                 })
 

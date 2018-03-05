@@ -90,27 +90,14 @@ export default {
                 page:1,
                 params:{
                     page:1,
-                    pageSize:15,
-                    customerName:''
+                    pageSize:15
                 },
                 openMessage:false,
                 warn:'',
                 MessageType:'',
                 msg:'',
                 //假数据
-                dataItem:[{
-                        paramName:'nihao',
-                        paramCode:'COde',
-                        paramVal:{'1':'aaaa','2':'bbbb','3':'333333'},
-                        enableFlag:'yes',
-                        paramDesc:'3333333333'
-                    },{
-                        paramName:'nihao1',
-                        paramCode:'Code1',
-                        paramVal:'222',
-                        enableFlag:'yes',
-                        paramDesc:'3333333333'  
-                    }],
+                dataItem:[],
                 columns: [
                     {
                         title: '名称',
@@ -193,20 +180,12 @@ export default {
             }
         },
         created(){
-             this.getTableData(this.$route.query);
-             if(!this.$route.query.customerName){
-                 this.$route.query.customerName=""
-             }
-             this.params=this.$route.query;
-           
+             this.getTableData(this.params);
         },
         methods:{
             getTableData(params){
-                    // this.tableData=this.dataItem;
-
                 this.$http.get('getParamList', params).then((res)=>{
                     this.tableData=res.data.items;
-                    // this.tableData=this.dataItem;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
@@ -241,6 +220,7 @@ export default {
                                 }
                             }
                         }
+                        this.parameterData.enableFlag = this.parameterData.flag;
                         if(!isSubmit){
                             this.$Notice.error({
                                 title:'请填写完 参数'
@@ -256,7 +236,6 @@ export default {
                                 title:err.message
                             });
                         })
-                        console.log('提交数据',this.parameterData)
 
                     }
                 })
@@ -269,6 +248,8 @@ export default {
 
                         isSubmit = false
                     }else{
+                        this.parameterData.enableFlag = this.parameterData.flag;
+
                         // 校验json表单
                         if(this.parameterData.paramType == 'JSON'){
                             for(let key in this.parameterData.paramVal){
@@ -289,7 +270,7 @@ export default {
 
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{
                             this.openEdit = false;
-                            this.getTableData()
+                            this.getTableData(this.params)
                         }).catch((err)=>{
                             this.$Notice.error({
                                 title:err.message

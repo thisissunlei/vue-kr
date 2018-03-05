@@ -7,8 +7,8 @@
             <Input v-model="formItem.paramCode" placeholder="编码"></Input>
         </FormItem>
         
-        <FormItem label="启用" prop="enableFlag">
-            <RadioGroup v-model="formItem.enableFlag">
+        <FormItem label="启用" prop="flag">
+            <RadioGroup v-model="formItem.flag">
                 <Radio label="true">是</Radio>
                 <Radio label="false">否</Radio>
             </RadioGroup>
@@ -51,7 +51,7 @@
             
             let data = {
                 items:[{name:''}],
-                enableFlag:'false',
+                flag:'false',
                 paramVal:'',
                 paramDesc:'',
                 paramName:'',
@@ -60,9 +60,9 @@
                 let paramVal = this.editData.paramVal || '';
                 let valueType = 'TEXT';
                 if(typeof this.editData.enableFlag == 'boolean'){
-                   this.editData.enableFlag = JSON.stringify(this.editData.enableFlag)
+                   this.editData.flag = JSON.stringify(this.editData.enableFlag)
                 }
-                this.editData.enableFlag = this.editData.enableFlag || 'false';
+                this.editData.flag = this.editData.flag || 'false';
                 if(this.editData && this.editData.paramType == 'JSON'){
                     valueType = 'JSON';
                     let arr = [];
@@ -74,17 +74,6 @@
                 }
             data = Object.assign({},data,this.editData);
 
-
-            // const validateFirst = (rule, value, callback) => {
-            //     console.log('===',value)
-            //     if (value === '') {
-            //         callback(new Error('请先选择首付款日期'));
-            //     } else if(new Date(this.formItem.startDate)<new Date(value)){
-            //         callback(new Error('首付款日期不得晚于起始日期'));
-            //     }else{
-            //          callback();
-            //     }
-            // };
 
 
             return {
@@ -142,8 +131,6 @@
             if(this.formItem.paramType == 'JSON'){
                 let obj = {};
                 this.formItem.items.map((item,index)=>{
-                    console.log('---->',item.name)
-                    console.log('---->',item.value)
                     obj[item.name] = item.value;
                 })
 

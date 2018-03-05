@@ -126,13 +126,11 @@ export default {
                         title: '值',
                         key: 'paramVal',
                         align:'center',
-                        width:140,
                     },
                     {
                         title: '描述',
                         key: 'paramDesc',
                         align:'center',
-                        width:100,
                     },
                     {
                         title: '是否启用',

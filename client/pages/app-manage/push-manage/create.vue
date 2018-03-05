@@ -174,13 +174,31 @@
         <div class="u-app-view">
             <div class="u-app-content">
                 <div class="u-app-title">
-                    <span>苹果系统</span>
-                    <span>安卓系统</span>
+                    <span>{{viewInfo.name}}</span>
+                    <span class="u-toggle" @click="toggleView">{{viewInfo.txt}}</span>
                 </div>
-                <div class="u-app-img">
-                    <div class="u-app-ios"></div> 
-                    <div class="u-app-android"></div>  
-                </div>
+                <div class="u-app-ios" v-if="iosShow">
+                    <div class="u-ios-push">
+                        <div class="u-ios-logo"></div>
+                        <div class="u-ios-logo-title">
+                            氪空间
+                            <div class="u-ios-time">现在</div>
+                        </div>
+                        <div class="u-push-title">{{title}}</div>
+                        <div class="u-push-content">{{content}}</div>
+                    </div>
+                </div> 
+                <div class="u-app-android"  v-if="!iosShow">
+                        <div class="u-android-push">
+                            <div class="u-android-logo"></div>
+                            <div class="u-push-detail">
+                                <div class="u-push-title" >{{title}}</div>
+                                <div class="u-push-content">{{content}}</div>
+                            </div>
+                             <div class="u-android-time">现在</div>
+                        </div>
+                </div>  
+               
             </div>
         </div>
     </div>
@@ -209,6 +227,8 @@ export default {
               cmtId:'',
               gender:'3'
           },
+          title:'',
+          content:'',
           titleLength:20,
           contentLength:50,
           personNum:0,
@@ -217,6 +237,7 @@ export default {
           communityLoading:false,
           activityLoading:false,
           activityList:[],
+          iosShow:true,
           genderList:[
               {
                   label:'不限',
@@ -271,6 +292,10 @@ export default {
               gender:'',
               leader:''
           },
+          viewInfo:{
+              name:'苹果系统',
+              txt:'切换安卓系统'
+          }
       }
   },
 
@@ -279,6 +304,21 @@ export default {
     this.getCommunityList(' ')
   },
   methods:{
+      toggleView(){
+          this.iosShow=!this.iosShow;
+          if(this.iosShow){
+             this.viewInfo={
+                 name:'苹果系统',
+                 txt:'切换安卓系统'
+             } 
+          }else{
+              this.viewInfo={
+                 name:'安卓系统',
+                 txt:'切换苹果系统'
+             } 
+          }
+
+      },
        getTargetCount(form){
                 this.$http.get('get-target-count',form).then((res)=>{
                     this.personNum=res.data.targetCount;
@@ -448,10 +488,10 @@ export default {
         this.personNum=0;
     },
     titleBlur(){
-
+        this.title=this.formItem.title;
     },
     contentBlur(){
-
+         this.content=this.formItem.content;
     },
   
 
@@ -600,50 +640,136 @@ export default {
     }
     .u-app-view{
         width:481px;
-        height: 196px;
+        height: 216px;
         border:1px dashed #EEEEEE;
         float:left;
         border-radius: 4px;
     }
     .u-app-content{
         width:465px;
-        height:180px;
+        height:200px;
         background:#F6F6F6;
         border-radius: 4px;
         margin:7px;
+        padding-top:20px;
+        overflow: hidden;
 
     }
     .u-app-title{
-        height:49px;
-        line-height: 49px;
-        color:#999999;
-        width:423px;
-        margin:0 auto;
+        width:96px;
+        height:100px;
+        float:right;
+        font-size:12px;
+        color:#666666;
+        line-height:17px;
+        margin-top:66px;
         span{
-            width:50%;
-            display:inline-block;
-            text-align: center;
+            width:80px;
+            margin-bottom:10px;
+            display: inline-block;
+        }
+        .u-toggle{
+            color:#779ED4;
         }
     }
-    .u-app-img{
-         display: flex;
-    }
     .u-app-ios{
-         justify-content: flex-start; 
-         width:198px;
-         height:131px;
-         margin-left:28px;
-         margin-right:28px;
+         width:341px;
+         height:188px;
+         margin-left:20px;
+         margin-right:16px;
          background: url('./images/ios.png') no-repeat center center;
-         background-size:contain;
+         background-size:100% 100%;
+         padding-top:59px;
+         .u-ios-push{
+             width:279px;
+             height:74px;
+             background:#fff;
+             border-radius: 6px;
+             box-shadow: 0 1px 1px rgba(0,0,0,.4);
+             margin:0 auto ;
+             .u-ios-logo{
+                 width:20px;
+                 height:20px;
+                 float:left;
+                 margin:3px 7px 3px 10px;
+                 background: url('./images/logo.svg') no-repeat center center;
+                 background-size:100% 100%;
+             }
+             .u-ios-logo-title{
+                 font-size:12px;
+                 color:#333333;
+                 padding-top:5px;
+                 
+             }
+             .u-ios-time{
+                font-size:12px;
+                padding:0 10px;
+                float:right;
+                
+             }
+             .u-push-title{
+                 color:#282624;
+                 line-height:17px;
+                 text-align: left;
+                 padding:0 10px;
+                 text-indent: -23px;
+             }
+             .u-push-content{
+                  padding-left:10px;
+             }
+         }
     }
     .u-app-android{
-        justify-content: flex-end; 
-        width:197px;
-        height:131px;
-        margin-right:21px;
+        width:341px;
+        height:188px; 
+        margin-left:20px;
+        margin-right:16px;
         background: url('./images/android.png') no-repeat center center;
-        background-size:contain;
+        background-size:100% 100%;
+        padding-top:52px;
+        .u-android-push{
+             width:323px;
+             height:70px;
+             background:#fff;
+             border-radius: 2px;
+             box-shadow: 0 1px 1px rgba(0,0,0,.4);
+             margin:0 auto;
+             display: flex;
+             .u-android-time{
+                 font-size:12px;
+                 color:#666666; 
+                 justify-content: flex-end;
+                 width:36px;
+                 padding-right:6px;
+                 padding-top:16px;
+             }
+             .u-android-logo{
+                 width:49px;
+                 height:49px;
+                 float:left;
+                 margin:10px;
+                 background: url('./images/logo.svg') no-repeat center center;
+                 background-size:100% 100%;
+             }
+             .u-push-detail{
+                 width:230px;
+                 height:70px;
+                 color:#282624;
+                 .u-push-title{
+                     font-size:13px;
+                     padding-top:16px;
+                     margin-bottom:4px;
+                 }
+                 .u-push-content{
+                    width:230px;
+                    font-size:12px;
+                    overflow: hidden;
+                    text-overflow:ellipsis;
+                    white-space:nowrap;
+                 }
+                 
+             }
+         }
     }
 }
 .ivu-form-item{

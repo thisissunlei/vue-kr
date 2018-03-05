@@ -42,7 +42,7 @@
     "@nuxtjs/axios": "4.5.0",
     "husky": "^0.14.3",
     "iview": "2.8.0",
-    "nuxt": "^1.0.0-rc11",
+    "nuxt": "1.0.0-rc11",
     "pdfjs-dist": "^2.0.281",
     "promise-polyfill": "7.0.0",
     "validate-commit-msg": "^2.14.0",

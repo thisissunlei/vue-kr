@@ -14,12 +14,12 @@
             </RadioGroup>
         </FormItem>
         <FormItem label="值的格式">
-            <RadioGroup v-model="formItem.paramType">
+            <RadioGroup v-model="paramType">
                 <Radio label="JSON">JSON</Radio>
                 <Radio label="TEXT">STRING</Radio>
             </RadioGroup>
         </FormItem>
-         <FormItem label="值" v-if="formItem.paramType == 'TEXT'" prop="value">
+         <FormItem label="值" v-if="formItem.paramType == 'TEXT'" >
             <Input v-model="formItem.paramVal" placeholder="请填写..."></Input>
         </FormItem>
         <FormItem label="值" v-if="formItem.paramType == 'JSON'" >
@@ -59,7 +59,10 @@
                 }
                 let paramVal = this.editData.paramVal || '';
                 let valueType = 'TEXT';
-                this.editData.enableFlag = JSON.stringify(this.editData.enableFlag) || 'false';
+                if(typeof this.editData.enableFlag == 'boolean'){
+                   this.editData.enableFlag = JSON.stringify(this.editData.enableFlag)
+                }
+                this.editData.enableFlag = this.editData.enableFlag || 'false';
                 if(this.editData && this.editData.paramType == 'JSON'){
                     valueType = 'JSON';
                     let arr = [];
@@ -69,9 +72,23 @@
                     }
                     data.items = arr;
                 }
-            data = Object.assign({},data,this.editData)
+            data = Object.assign({},data,this.editData);
+
+
+            // const validateFirst = (rule, value, callback) => {
+            //     console.log('===',value)
+            //     if (value === '') {
+            //         callback(new Error('请先选择首付款日期'));
+            //     } else if(new Date(this.formItem.startDate)<new Date(value)){
+            //         callback(new Error('首付款日期不得晚于起始日期'));
+            //     }else{
+            //          callback();
+            //     }
+            // };
+
+
             return {
-                valueType:valueType,
+                paramType:valueType,
                 formItem: data,
                 ruleCustom:{
                     paramName: [
@@ -86,15 +103,18 @@
                     paramDesc: [
                         { required: true,message: '请填写描述', trigger: 'change' }
                     ],
-                    enableFlag: [
+                    paramVal: [
                         { required: true,message: '请填写参数值', trigger: 'change' }
                     ],
+                    // name: [
+                    //     {  trigger: 'change' ,validator: validateFirst},
+                    // ],
                 },
             }
         },
         watch:{
-            valueType(value){
-                this.formItem.valueType = value;
+            paramType(value){
+                this.formItem.paramType = value;
                 if(value == 'json'){
                     this.formItem.paramVal = ''
                 }else{
@@ -113,10 +133,12 @@
         },
         updated:function(){
             let data = {}
+            let jsonTable = false;
             if(this.formItem.paramType == 'TEXT' && !this.formItem.paramVal.length ){
                 this.formItem.paramVal = '';
                 this.formItem.items = [{name:'',value:''}]
             }
+
             if(this.formItem.paramType == 'JSON'){
                 let obj = {};
                 this.formItem.items.map((item,index)=>{
@@ -126,7 +148,8 @@
                 this.formItem.paramVal = obj;
             }
             data = Object.assign({},this.formItem);
-            this.$emit('newPageData', data);  
+            this.$emit('newPageData', data);
+             
             
         
         }

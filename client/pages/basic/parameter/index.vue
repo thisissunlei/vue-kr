@@ -235,6 +235,20 @@ export default {
                         
                         this.parameterData.items = '';
                         this.parameterData.paramVal = this.parameterData.paramType=='JSON'?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
+                        // 校验json表单
+                        if(this.parameterData.paramType == 'JSON'){
+                            for(let key in this.parameterData.paramVal){
+                                if(!key || !this.parameterData.paramVal[key]){
+                                   isSubmit = false; 
+                                }
+                            }
+                        }
+                        if(!isSubmit){
+                            this.$Notice.error({
+                                title:'请填写完 参数'
+                            });
+                            return;
+                        }
                         // 提交数据
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{
                             this.getTableData()
@@ -257,6 +271,22 @@ export default {
 
                         isSubmit = false
                     }else{
+                        // 校验json表单
+                        if(this.parameterData.paramType == 'JSON'){
+                            for(let key in this.parameterData.paramVal){
+                                if(!key || !this.parameterData.paramVal[key]){
+                                   isSubmit = false; 
+                                }
+                            }
+                        }
+                        if(!isSubmit){
+                            this.$Notice.error({
+                                title:'请填写完 参数'
+                            });
+                            return;
+                        }
+
+
                          this.parameterData.items = '';
                         this.parameterData.paramVal = this.parameterData.paramType=='JSON'?JSON.stringify(this.parameterData.paramVal):this.parameterData.paramVal
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{

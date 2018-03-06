@@ -680,6 +680,7 @@ export default {
         color:#666666;
         line-height:17px;
         margin-top:66px;
+        cursor: pointer;
         span{
             width:80px;
             margin-bottom:10px;

@@ -145,7 +145,6 @@
                             :loading="activityLoading"
                             @on-change="changeActive"
                             placeholder="请选择"
-                            :label-in-value="labelInValue"
                             clearable
                             >
                             <Option v-for="(option, index) in activityList" :value="option.value" :key="index">{{option.label}}</Option>
@@ -444,7 +443,22 @@ export default {
                     duration: 3
                 });
                 let _this = this;
-               
+               if(this.formItem.jumpType=='ACTIVITY'){
+                    if(!this.formItem.jumpUrl){
+                        this.$Notice.error({
+                            title:'请输入要跳转的活动'
+                        });
+                    }
+                    return;
+               }
+               if(this.formItem.jumpType=='HTML'){
+                    if(!this.formItem.jumpUrl){
+                        this.$Notice.error({
+                            title:'请输入要跳转链接'
+                        });
+                    }
+                     return;
+               }
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.cmtId) {
                         _this.submitCreate();

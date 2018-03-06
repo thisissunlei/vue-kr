@@ -373,6 +373,15 @@ export default {
                     top: 80,
                     duration: 3
                 });
+                
+               if(this.formItem.jumpType=='1'){
+                    if(!this.formItem.jumpUrl){
+                        this.$Notice.error({
+                            title:'请输入要跳转链接'
+                        });
+                    }
+                     return;
+               }
 
                 this.$refs[name].validate((valid) => {
                     if (valid && this.formItem.cmtId) {

@@ -94,14 +94,14 @@
                
                 <FormItem style="margin-right:116px;margin-top:-10px;">
                     <Checkbox  
-                        v-model="birthMonth" 
+                        v-model="countParams.birthMonth" 
                         value="1"
                         @on-change="birthMonthChange"
                     >当前月份为会员生日月</Checkbox>
                  </FormItem>
                  <FormItem  style="margin-top:-10px;">
                     <Checkbox 
-                        v-model="leader"
+                        v-model="countParams.leader"
                         value="1"
                         @on-change="leaderChange"
                     >企业管理员用户</Checkbox>
@@ -224,7 +224,9 @@ export default {
               targetType:'1',
               jumpType:'HOMEPAGE',
               cmtId:'',
-              gender:'3'
+              gender:'3',
+              leader:'',
+              birthMonth:'',
           },
           title:'',
           content:'',

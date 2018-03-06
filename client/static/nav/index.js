@@ -1378,6 +1378,12 @@
                             type: 'vue',
                             menuCode: 'pay_deal_flow_page'
                         },
+                        {
+                            primaryText: '客户资产管理',
+                            router: 'bill/customerAssets',
+                            type:'vue',
+                            menuCode: 'pay_deal_flow_page'
+                        }
                     ]
                 },
 

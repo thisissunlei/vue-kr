@@ -4,7 +4,8 @@
             <Input v-model="formItem.paramName" placeholder="名称"></Input>
         </FormItem>
         <FormItem label="编码" prop="paramCode">
-            <Input v-model="formItem.paramCode" placeholder="编码"></Input>
+            <Input v-model="formItem.paramCode" placeholder="编码" v-if="editStatus=='create'" />
+            <span v-if="editStatus=='edit'" >{{formItem.paramCode}}</span>
         </FormItem>
         
         <FormItem label="启用" prop="flag">
@@ -46,6 +47,7 @@
     export default {
         props:{
                 editData:Object,
+                editStatus:String,
             },
         data () {
             
@@ -74,7 +76,7 @@
                 }
             data = Object.assign({},data,this.editData);
 
-
+            console.log('editStatus',this.editStatus)
 
             return {
                 paramType:valueType,

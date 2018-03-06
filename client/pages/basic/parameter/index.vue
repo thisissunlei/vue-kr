@@ -30,7 +30,7 @@
         width="660"
         :styles="{top: '20px'}"
      >  
-      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"/>
+      <new-form ref="fromFieldNewPage" v-if="openCreate" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="create"/>
         <div slot="footer">
             <Button type="primary" @click="onSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
@@ -46,7 +46,7 @@
         width="660"
         :styles="{top: '20px'}"
      >
-        <new-form ref="fromFieldNewPage" v-if="openEdit" @newPageData="newPageDataChange" :editData.sync="editData"/>
+        <new-form ref="fromFieldNewPage" v-if="openEdit" @newPageData="newPageDataChange" :editData.sync="editData"  editStatus="edit"/>
         <div slot="footer">
             <Button type="primary" @click="editSubmit('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelEdit">取消</Button>

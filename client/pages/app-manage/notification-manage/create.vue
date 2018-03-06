@@ -142,14 +142,14 @@
                
                 <FormItem style="margin-right:116px;margin-top:-10px;">
                     <Checkbox  
-                        v-model="birthMonth" 
+                        v-model="countParams.birthMonth" 
                         value="1"
                          @on-change="birthMonthChange"
                     >当前月份为会员生日月</Checkbox>
                  </FormItem>
                  <FormItem  style="margin-top:-10px;">
                     <Checkbox 
-                        v-model="leader"
+                        v-model="countParams.leader"
                         value="1"
                         @on-change="leaderChange"
                     >企业管理员用户</Checkbox>
@@ -225,8 +225,6 @@ export default {
           communityList:[],
           communityLoading:false,
           imgUrl:'',
-          birthMonth:'',
-          leader:'',
           countParams:{
               cmtId:'',
               birthMonth:'',
@@ -373,14 +371,15 @@ export default {
                     top: 80,
                     duration: 3
                 });
-                
+               
                if(this.formItem.jumpType=='1'){
                     if(!this.formItem.jumpUrl){
                         this.$Notice.error({
                             title:'请输入要跳转链接'
                         });
+                        return;
                     }
-                     return;
+                     
                }
 
                 this.$refs[name].validate((valid) => {

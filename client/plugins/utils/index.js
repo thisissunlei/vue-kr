@@ -115,7 +115,7 @@ import addEvent from './addEvent';
     function downFile(href, filename) {
         var a = document.createElement('a');
         a.href = href;
-        a.download = filename;
+        // a.download = filename;
         a.click();
     }
    

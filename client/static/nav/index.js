@@ -1125,7 +1125,7 @@
                             primaryText: '参数配置',
                             router: 'basic/parameter',
                             type: 'vue',
-                            menuCode: 'op_ver',
+                            menuCode: 'system_param',
                         },
                     ]
                 },

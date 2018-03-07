@@ -18,6 +18,7 @@
 <script>
     import SectionTitle from '~/components/SectionTitle';
     import Buttons from '~/components/Buttons';
+    import utils from '~/plugins/utils';
 
     export default {
         name: 'customerAssets',
@@ -119,18 +120,21 @@
                         }
                     }
                 ]
-                
-            
-        
-        
         }
         },
-        created(){
-            
+         created(){
+          var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
+          this.getListData(params);
+          this.params=params; 
         },
+
         methods:{
             lowerSubmit(){
-                
+                this.params.page = 1;
+                utils.addParams(this.params);
+            },
+            getListData(params){
+
             }
         }
     }

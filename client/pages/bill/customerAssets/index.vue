@@ -1,9 +1,6 @@
 <template>
 <div class="customer-assets">
    <SectionTitle title="已出账单管理"></SectionTitle>
-    <!-- <div class="u-search" >
-        <Buttons type="primary" label='批量结算' @click="onBillPay" checkAction='bill_batch_pay'/>
-        <span class="u-high-search" @click="showSearch"></span> -->
         <div style='display:inline-block;float:right;padding-right:20px;top:10px;right:0;position:absolute;'>
             <Input 
                 v-model="params.customerName" 
@@ -12,44 +9,27 @@
             />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>
-          
-    <!--</div> -->
     <div class="u-table">
         <Table  border :columns="columns" ></Table>
-        <!-- <div style="margin: 10px;overflow: hidden">
-            
-            <div style="float: right;">
-                <Page 
-                    :current="page"
-                    :total="totalCount"
-                    :page-size="pageSize" 
-                    show-total 
-                    show-elevator
-                    @on-change="changePage"
-                ></Page>
-            </div>
-        </div> -->
     </div>
 </div>
 </template>
 
-
 <script>
     import SectionTitle from '~/components/SectionTitle';
-    import utils from '~/plugins/utils';
     import Buttons from '~/components/Buttons';
 
     export default {
-        name: 'Bill',
+        name: 'customerAssets',
         components:{
-           
             SectionTitle,
             Buttons
         },
         data () {
             return {
-                
-            params:{},
+            params:{
+                customerName:''
+            },
             columns: [
                     
                     {
@@ -149,16 +129,22 @@
             
         },
         methods:{
-
+            lowerSubmit(){
+                
+            }
         }
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .customer-assets{
     position: relative;
     .m-search{
+        color: #2b85e4;
         display: inline-block;
+        margin-left: 10px;
+        font-size: 14px;
+        cursor: pointer;
     }
 }
 </style>

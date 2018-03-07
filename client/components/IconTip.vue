@@ -47,7 +47,7 @@ export default{
     .u-tip{
         display: none;
         width:210px;
-        background:#ffff;
+        background:#fff;
         font-size:12px;
         color:#999999;
         position: absolute;

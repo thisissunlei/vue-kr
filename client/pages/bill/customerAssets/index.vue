@@ -1,17 +1,18 @@
 <template>
 <div class="customer-assets">
    <SectionTitle title="已出账单管理"></SectionTitle>
-        <div style='display:inline-block;float:right;padding-right:20px;top:10px;right:0;position:absolute;'>
+        <div class="div-search">
             <Input 
                 v-model="params.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
+                @keyup.enter.native="onKeyEnter($event)"
             />
             <div class='m-search' @click="lowerSubmit">搜索</div>
-         </div>
-    <div class="u-table">
-        <Table  border :columns="columns" ></Table>
-    </div>
+        </div>
+        <div class="table-list">
+            <Table  border :columns="columns" ></Table>
+        </div>
 </div>
 </template>
 
@@ -135,7 +136,10 @@
             },
             getListData(params){
 
-            }
+            },
+            onKeyEnter: function (ev) {
+                this.lowerSubmit();
+            },
         }
     }
 </script>
@@ -143,6 +147,13 @@
 <style lang="less" scoped>
 .customer-assets{
     position: relative;
+    .div-search{
+        text-align: right;
+        padding:20px ;
+    }
+    .table-list{
+        padding:0 20px;
+    }
     .m-search{
         color: #2b85e4;
         display: inline-block;

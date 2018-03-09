@@ -8,6 +8,7 @@ import MemberApi from './member.js'
 import Settlement from './settlement.js';
 import operationsCenter from './operationsCenter'
 import OperationApi from './operation.js';
+import Basic from './basic.js';
 
 export default {
   ...OrderApi,
@@ -18,5 +19,6 @@ export default {
   ...MemberApi,
   ...Settlement,
   ...operationsCenter,
-  ...OperationApi
+  ...OperationApi,
+  ...Basic
 }

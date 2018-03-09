@@ -12,6 +12,18 @@
         </div>
         <div class="table-list">
             <Table  border :columns="columns" ></Table>
+             <div style="margin: 10px 0 ;overflow: hidden">
+                <div style="float: right;">
+                    <Page 
+                        :current="page" 
+                        :total="totalCount" 
+                        :page-size="pageSize" 
+                        @on-change="changePage" 
+                        show-total 
+                        show-elevator
+                    ></Page>
+                </div>
+            </div>
         </div>
 </div>
 </template>
@@ -29,8 +41,14 @@
         },
         data () {
             return {
+                totalCount:0,
+                page:1,
+                pageSize:15,
+
             params:{
-                customerName:''
+                customerName:'',
+                page:1,
+                pageSize:15,
             },
             columns: [
                     
@@ -140,6 +158,10 @@
             onKeyEnter: function (ev) {
                 this.lowerSubmit();
             },
+            changePage(page){
+                this.params.page = page;
+                utils.addParams(this.params);
+            }
         }
     }
 </script>

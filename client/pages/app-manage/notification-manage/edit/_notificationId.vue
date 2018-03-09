@@ -135,6 +135,7 @@
                             v-model="formItem.enterTime"
                             placeholder="请选择"
                              @on-change="enterTimeChange"
+                             clearable
                             >
                             <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>

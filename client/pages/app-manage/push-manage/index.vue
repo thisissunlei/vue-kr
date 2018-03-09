@@ -147,10 +147,10 @@ export default {
   },
   methods:{
       jumpView(params){
-           window.open(`./push-manage/detail/${params.pushId}`,'_blank');
+           window.open(`/app-manage/push-manage/detail/${params.pushId}`,'_blank');
       },
       jumpCreate(){
-          window.open(`./push-manage/create`,'_blank');
+          window.open(`/app-manage/push-manage/create`,'_blank');
       },
       onPageChange(page){
             this.Params.page=page;

@@ -191,13 +191,13 @@ export default {
   },
   methods:{
       jumpView(params){
-           window.open(`./notification-manage/detail/${params.notificationId}`,'_blank');
+           window.open(`/app-manage/notification-manage/detail/${params.notificationId}`,'_blank');
       },
       jumpCreate(){
-           window.open(`./notification-manage/create`,'_blank');
+           window.open(`/app-manage/notification-manage/create`,'_blank');
       },
       jumpEdit(params){
-         window.open(`./notification-manage/edit/${params.notificationId}`,'_blank');
+         window.open(`/app-manage/notification-manage/edit/${params.notificationId}`,'_blank');
       },
       onPageChange(page){
             this.Params.page=page;

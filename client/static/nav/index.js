@@ -1378,6 +1378,12 @@
                             type: 'vue',
                             menuCode: 'pay_deal_flow_page'
                         },
+                        {
+                            primaryText: "项目管理",
+                            router: 'bill/projectSetting',
+                            type: 'vue',
+                            menuCode: 'pay_deal_flow_page'
+                        },
                     ]
                 },
 

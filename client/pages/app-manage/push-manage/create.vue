@@ -352,6 +352,7 @@ export default {
               this.countParams.birthMonth="";
               this.formItem.birthMonth=""; 
           }
+          
          this.getTargetCount(this.countParams);
       },
       leaderChange(form){

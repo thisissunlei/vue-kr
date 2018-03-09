@@ -2,16 +2,16 @@
 
 <template>	
     <div class="give-money">
-		<div class="title-type">打款总汇表</div>
+		<div class="title-type">余额总汇表</div>
         <Table  border :columns="allColumns" class="table-style" ></Table>
 
-		<div class="title-type">打款变化明细表</div>
+		<div class="title-type">余额变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称">
                     <Input type="text" v-model="searchForm.name" placeholder="社区名称"/>
                 </FormItem>
-                <FormItem label="打款方式">
+                <FormItem label="操作类型">
                     <Input type="text" v-model="searchForm.type" placeholder="打款方式"/>
                 </FormItem>
                 <FormItem label="操作时间">
@@ -69,23 +69,33 @@
                         align:'center',
                     },
                     {
-                        title: '总额（银行转账额+支付宝打款额+转社区款额）（元）',
+                        title: '余额（元）',
                         key: 'billNo',
                         align:'center',
                     },
                     {
-                        title: '银行转账额（元）',
+                        title: '服务保证金（元）',
                         key: 'billNo',
                         align:'center',
                     },
                     {
-                        title: '转社区款额（元）',
+                        title: '冻结服务保证金（元）',
+                        key: 'billNo',
+                        align:'center',
+                    },
+                    {
+                        title: '门禁卡保证金',
+                        key: 'billNo',
+                        align:'center',
+                    },
+                    {
+                        title: '其他类保证金',
                         key: 'billNo',
                         align:'center',
                     },
                     ],
                 detailColumns:[{
-                    title: '交易流水号',
+                    title: '序号',
                     key: 'billNo',
                     width:100,
                     align:'center',
@@ -94,19 +104,15 @@
                     key: 'billNo',
                     align:'center',
                 },{
-                    title: '打款方式',
+                    title: '操作类型',
                     key: 'billNo',
                     align:'center',
                 },{
-                    title: '打款金额（元）',
+                    title: '操作金额（元）',
                     key: 'billNo',
                     align:'center',
                 },{
-                    title: '账户名称',
-                    key: 'billNo',
-                    align:'center',
-                },{
-                    title: '打款日期',
+                    title: '相关记录',
                     key: 'billNo',
                     align:'center',
                 },{

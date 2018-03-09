@@ -31,9 +31,9 @@
             </div>
             <div class="tab-content">
                 <GiveMoney v-if="selectedTab == 'play'"/>
-                <GiveMoney v-if="selectedTab == 'balance'"/>
-                <GiveMoney v-if="selectedTab == 'spending'"/>
-                <GiveMoney v-if="selectedTab == 'refunds'"/>
+                <Balance v-if="selectedTab == 'balance'"/>
+                <Spending v-if="selectedTab == 'spending'"/>
+                <Refunds v-if="selectedTab == 'refunds'"/>
             </div>
         </div>
     </div>
@@ -43,11 +43,17 @@
 
 <script>
     import GiveMoney from './giveMoney.vue'; 
+    import Balance from './balance.vue'; 
+    import Spending from './spending.vue'; 
+    import Refunds from './refunds.vue'; 
 
 	export default {
 		name:'orderManange',
 		components:{
             GiveMoney,
+            Balance,
+            Spending,
+            Refunds
 		},
 		data (){
 			return{
@@ -135,6 +141,7 @@
                     border-bottom: none;
                     color:#666;
                     font-size: 14px;
+                    cursor: pointer;
                 }
                 .tab-span:last-child{
                     border-bottom:1px solid #DFDFDF

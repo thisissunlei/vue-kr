@@ -348,6 +348,9 @@ export default {
           if(form){
                this.countParams.birthMonth="1";
                this.formItem.birthMonth="1";
+          }else{
+              this.countParams.birthMonth="";
+              this.formItem.birthMonth=""; 
           }
          this.getTargetCount(this.countParams);
       },
@@ -355,6 +358,9 @@ export default {
           if(form){
               this.countParams.leader="1";
               this.formItem.leader="1";
+          }else{
+               this.countParams.leader="";
+              this.formItem.leader="";
           }
          this.getTargetCount(this.countParams);
           

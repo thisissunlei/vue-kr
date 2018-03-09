@@ -455,7 +455,7 @@ export default {
                 });
                 let _this = this;
                if(this.formItem.jumpType=='ACTIVITY'){
-                    if(!this.formItem.jumpUrl){
+                    if(!this.formItem.jumpId){
                         this.$Notice.error({
                             title:'请输入要跳转的活动'
                         });
@@ -501,6 +501,8 @@ export default {
 
     },
     jumpTypeChange(){
+        this.formItem.jumpId="";
+        this.formItem.jumpUrl=""
         if(this.formItem.jumpType=='ACTIVITY'){
             this.getActiveList('')
         }

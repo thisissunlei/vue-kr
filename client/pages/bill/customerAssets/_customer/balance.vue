@@ -137,6 +137,8 @@
 		},
 		mounted(){
 			GLOBALSIDESWITCH('false');
+            // 获取更新数据
+            console.log('mounted=====>')
 		}
 	
 	}

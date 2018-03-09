@@ -53,64 +53,29 @@
             columns: [
                     
                     {
-                        title: '账单编号',
+                        title: '客户ID',
                         key: 'billNo',
                         align:'center',
-                        width:160,
-                        fixed:'left'
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
                         align:'center',
-                        width:160,
-                        fixed:'left'
                     },
                     {
-                        title: '社区名称',
+                        title: '账户余额',
                         key: 'communityName',
                         align:'center',
                     },
                     {
-                        title: '消费总额',
+                        title: '正常服务保证金（元）',
                         key: 'totalAmount',
                         align:'center',
                     },
                     {
-                        title: '减免金额',
+                        title: '冻结服务保证金（元）',
                         key: 'freeAmount',
                         align:'center',
-                    },
-                    {
-                        title: '账单金额',
-                        key: 'payableAmount',
-                        align:'center',
-                    },
-                    {
-                        title: '已付金额',
-                        key: 'paidAmount',
-                        align:'center',
-                    },
-                    {
-                        title: '账单日',
-                        key: 'billingDate',
-                        align:'center',
-                        render(h, obj){
-                            if(!obj.row.billingDate){
-                                return '-'
-                            }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
-                            return time;
-                        }
-                    },
-                    {
-                        title: '付款截止日期',
-                        key: 'billEndTime',
-                        align:'center',
-                        render(h, obj){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billEndTime));
-                            return time;
-                        }
                     },
                     {
                         title: '操作',
@@ -129,7 +94,7 @@
                                         },
                                         on: {
                                             click: () => {
-                                                
+                                                this.showDetail(params.row)
                                             }
                                         }
                             }, '查看'),
@@ -157,6 +122,11 @@
             },
             onKeyEnter: function (ev) {
                 this.lowerSubmit();
+            },
+            showDetail(item){
+                // let url = '/bill/customerAssets/'+item.id+'/view'
+                let url = '/bill/customerAssets/1/view'
+                window.open(url,'_blank');
             },
             changePage(page){
                 this.params.page = page;

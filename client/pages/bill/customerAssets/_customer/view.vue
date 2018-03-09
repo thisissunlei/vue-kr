@@ -12,7 +12,7 @@
 				456
 			</LabelText>
 
-			<div>
+			<div class="money-list">
 				<div class="formula">
 					<div class="text">账户余额</div>
 					<div class="money">￥1,000.00</div>
@@ -20,9 +20,11 @@
 				<span class="symbol">-</span>
 			</div>
 			<div style="margin-top:30px;">
-				<Tabs type="card">
+				<Tabs type="line">
 					<TabPane label="账户余额">标签一的内容</TabPane>
-					<TabPane label="客户打款">标签二的内容</TabPane>
+					<TabPane label="客户打款">
+						<GiveMoney />
+					</TabPane>
 					<TabPane label="客户消费">标签三的内容</TabPane>
 					<TabPane label="客户退款">标签三的内容</TabPane>
 				</Tabs>
@@ -38,11 +40,13 @@
 <script>
 	import SectionTitle from '~/components/SectionTitle';
 	import LabelText from '~/components/LabelText'; 
+	import GiveMoney from './giveMoney.vue'; 
 	export default {
 		name:'customerAssetsDetail',
 		components:{
 			SectionTitle,
-			LabelText
+			LabelText,
+			GiveMoney
 		},
 		data (){
 			return{
@@ -61,7 +65,10 @@
 <style lang="less" scoped>
     .customer-assets-detail{
 		.content{
-			padding: 20px;
+			padding: 20px 6px;
+			.money-list{
+				padding:0 14px;
+			}
 			.formula{
 				text-align: center;
 				width: 120px;

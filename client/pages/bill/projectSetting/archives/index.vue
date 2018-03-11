@@ -35,7 +35,7 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
-            <KrField @change="change" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+            <KrField type="cascader" @change="change" label="含税" value="formRight.input" placeholder="请输入含税收入" />
            
         </Form>
         <div slot="footer">

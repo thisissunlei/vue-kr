@@ -1,12 +1,15 @@
 <template>
-    <Cascader 
-        :data="data" 
+    <Cascader
+        :data="propsCity"
         v-model="value1"
         @on-change="change"
         @on-visible-change="visibleChange"
     ></Cascader>
 </template>
+
 <script>
+    import cityData from './data/cityData.json';
+    // import {dataType} from '~/plugins/utils';
     export default {
         methods:{
             change(event){
@@ -14,59 +17,30 @@
             },
             visibleChange(event){
                 this.$emit('visibleChange',event)
+            },
+            getData(){
+                if(!this.propsCity || !this.propsCity.length){
+                    this.propsCity =  cityData;
+                }
+                return cityData;
             }
         },
+        props:{
+            propsCity:{
+                default:()=>cityData,
+                type:Array
+            }
+        },
+
         data () {
             return {
                 value1: [],
-                data: [{
-                    value: 'beijing',
-                    label: '北京',
-                    children: [
-                        {
-                            value: 'gugong',
-                            label: '故宫'
-                        },
-                        {
-                            value: 'tiantan',
-                            label: '天坛'
-                        },
-                        {
-                            value: 'wangfujing',
-                            label: '王府井'
-                        }
-                    ]
-                }, {
-                    value: 'jiangsu',
-                    label: '江苏',
-                    children: [
-                        {
-                            value: 'nanjing',
-                            label: '南京',
-                            children: [
-                                {
-                                    value: 'fuzimiao',
-                                    label: '夫子庙',
-                                }
-                            ]
-                        },
-                        {
-                            value: 'suzhou',
-                            label: '苏州',
-                            children: [
-                                {
-                                    value: 'zhuozhengyuan',
-                                    label: '拙政园',
-                                },
-                                {
-                                    value: 'shizilin',
-                                    label: '狮子林',
-                                }
-                            ]
-                        }
-                    ],
-                }]
+               
             }
+        },
+        mounted(){
+            
+          
         }
     }
 </script>

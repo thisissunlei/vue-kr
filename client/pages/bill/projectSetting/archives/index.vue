@@ -35,7 +35,7 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
-            <KrField type="cascader" @change="change" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+            <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
            
         </Form>
         <div slot="footer">
@@ -95,6 +95,38 @@ import KrField from '~/components/KrField';
                 warn:'',
                 MessageType:'',
                 billType:{},
+                data:[
+                    {
+                        title: 'parent 1',
+                        expand: true,
+                        children: [
+                            {
+                                title: 'parent 1-1',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-1-1'
+                                    },
+                                    {
+                                        title: 'leaf 1-1-2'
+                                    }
+                                ]
+                            },
+                            {
+                                title: 'parent 1-2',
+                                expand: true,
+                                children: [
+                                    {
+                                        title: 'leaf 1-2-1'
+                                    },
+                                    {
+                                        title: 'leaf 1-2-1'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
                 columns: [
                     {
                         title: 'ID',

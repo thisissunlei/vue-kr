@@ -28,15 +28,24 @@
             @on-change="change"
             @visible-change="visibleChange"
         />
+        <SelectTree 
+            v-if="type==='selectTree'"
+            :data = 'data'
+            @selectChange="selectChange"
+            @checkChange="checkChange"
+            @toggleChange="toggleChange"
+        />
     </FormItem>
   </div>
 </template>
 
 <script>
 import KrCascader from './KrCascader';
+import SelectTree from './SelectTree';
 export default {
     components:{
-      KrCascader
+      KrCascader,
+      SelectTree
     },
     props:{
         label:{
@@ -115,6 +124,15 @@ export default {
         },
         visibleChange(event){
             this.$emit('visibleChange',event);
+        },
+        selectChange(event){
+            this.$emit('selectChange',event);
+        },
+        checkChange(event){
+            this.$emit('checkChange',event);
+        },
+        toggleChange(event){
+            this.$emit("toggleChange",event)
         }
     }
 }

@@ -43,7 +43,6 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择社区"
@@ -61,7 +60,6 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"

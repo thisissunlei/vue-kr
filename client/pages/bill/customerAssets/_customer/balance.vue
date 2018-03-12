@@ -3,7 +3,7 @@
 <template>	
     <div class="balance">
 		<div class="title-type">余额总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" ></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryData"></Table>
 
 		<div class="title-type">余额变化明细表</div>
         <div class="search">
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
 	export default {
 		components:{
 		},
@@ -55,88 +56,133 @@
                 searchForm:{
 
                 },
+                // 汇总数据
+                summaryData:[{
+                    balance:'143123213'
+                },{
+                    balance:'231233'
+                }],
                 page:1,
                 totalCount:1,
                 pageSize:5,
                 // 操作类型
                 operateType:[{
-                    label:'RECHARGE',
+                    label:'余额充值',
                     value:'RECHARGE'
                 },{
-                    label:'PAY_BILL',
+                    label:'余额支付账单',
                     value:'PAY_BILL'
                 },{
-                    label:'REFUND',
+                    label:'退款',
                     value:'REFUND'
                 },{
-                    label:'BACK',
+                    label:'退还',
                     value:'BACK'
                 },{
-                    label:'LOCK_DESPOINT',
+                    label:'冻结押金',
                     value:'LOCK_DESPOINT'
                 }],
 				allColumns:[
                     {
                         title: '序号',
-                        key: 'billNo',
+                        key: 'id    ',
                         width:100,
                         align:'center',
                     },
                     {
                         title: '社区名称',
-                        key: 'billNo',
+                        key: 'communityName',
                         align:'center',
                     },
                     {
                         title: '余额（元）',
-                        key: 'billNo',
+                        key: 'balance',
                         align:'center',
+                        render:function(h,params){
+                            let index = params.row._index;
+                           //  if(index == 0){
+                               return utils.thousand(params.row.balance) 
+                           // }else{
+                           //      return h('div', [
+                           //              h('strong', utils.thousand(params.row.balance)),
+                           //              h('Button', {
+                           //                  props: {
+                           //                      type: 'text',
+                           //                      size: 'small'
+                           //                  },
+                           //                  style: {
+                           //                      color:'#2b85e4'
+                           //                  },
+                           //                  on: {
+                           //                      click: () => {
+                           //                          this.showDetail(params.row)
+                           //                      }
+                           //                  }
+                           //              }, '转社区'),
+                           //              h('Button', {
+                           //                  props: {
+                           //                      type: 'text',
+                           //                      size: 'small'
+                           //                  },
+                           //                  style: {
+                           //                      color:'#2b85e4'
+                           //                  },
+                           //                  on: {
+                           //                      click: () => {
+                           //                          this.showDetail(params.row)
+                           //                      }
+                           //                  }
+                           //              }, '转营业外'),
+                           //      ]);
+                           // }
+                            
+                         }
                     },
                     {
                         title: '服务保证金（元）',
-                        key: 'billNo',
+                        key: 'deposit',
                         align:'center',
                     },
                     {
                         title: '冻结服务保证金（元）',
-                        key: 'billNo',
+                        key: 'lock_deposit',
                         align:'center',
                     },
                     {
                         title: '门禁卡保证金',
-                        key: 'billNo',
+                        key: 'guardCardDeposit',
                         align:'center',
                     },
                     {
                         title: '其他类保证金',
-                        key: 'billNo',
+                        key: 'otherDeposit',
                         align:'center',
                     },
                     ],
                 detailColumns:[{
                     title: '序号',
-                    key: 'billNo',
+                    key: 'id',
                     width:100,
                     align:'center',
                 },{
                     title: '社区名称',
-                    key: 'billNo',
+                    key: 'communityName',
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'billNo',
+                    key: 'operateType',
                     align:'center',
                 },{
                     title: '操作金额（元）',
-                    key: 'billNo',
+                    key: 'changedAmount',
                     align:'center',
                 },{
                     title: '相关记录',
-                    key: 'billNo',
+                    key: 'paramType',
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'billNo',
+                    key: 'operater',
                     align:'center',
                 },{
                     title: '操作时间',

@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
 	export default {
 		components:{
 		},
@@ -57,17 +58,35 @@
                 },
                 //打款方式
                 payment:[{
-                    label:'1',
-                    value:'1'
+                    label:'社区变更',
+                    value:'NONE'
                 },{
-                    label:'2',
-                    value:'2'
+                    label:'银行转账',
+                    value:'BANKTRANSFER'
                 },{
-                    label:'3',
-                    value:'3'
+                    value:'ALIAPPPAY',
+                    label:'支付宝'
                 },{
-                    label:'4',
-                    value:'4'
+                    value:'WXPAY',
+                    label:'微信'
+                },{
+                    value:'DEP_RENT',
+                    label:'押金转租'
+                },{
+                    value:'TRANSFER',
+                    label:'转移'
+                },{
+                    value:'RENT_DEP',
+                    label:'租金转押'
+                },{
+                    value:'ALIWEBPAY',
+                    label:'支付宝网银'
+                },{
+                    value:'BANKONLINE',
+                    label:'网银'
+                },{
+                    value:'BANLANCE',
+                    label:'余额支付'
                 }],
                 page:1,
                 totalCount:1,
@@ -75,63 +94,75 @@
 				allColumns:[
                     {
                         title: '序号',
-                        key: 'billNo',
+                        key: 'id',
                         width:100,
                         align:'center',
                     },
                     {
                         title: '社区名称',
-                        key: 'billNo',
+                        key: 'communityName',
                         align:'center',
                     },
                     {
                         title: '总额（银行转账额+支付宝打款额+转社区款额）（元）',
-                        key: 'billNo',
+                        key: 'amount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.amount)
+                         }
                     },
                     {
                         title: '银行转账额（元）',
-                        key: 'billNo',
+                        key: 'bankTransfer',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.bankTransfer)
+                         }
                     },
                     {
                         title: '转社区款额（元）',
-                        key: 'billNo',
+                        key: 'communityTransfer',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.communityTransfer)
+                         }
                     },
                     ],
                 detailColumns:[{
                     title: '交易流水号',
-                    key: 'billNo',
+                    key: 'tradeNo',
                     width:100,
                     align:'center',
                 },{
                     title: '社区名称',
-                    key: 'billNo',
+                    key: 'communityName',
                     align:'center',
                 },{
                     title: '打款方式',
-                    key: 'billNo',
+                    key: 'payWay',
                     align:'center',
                 },{
                     title: '打款金额（元）',
-                    key: 'billNo',
+                    key: 'amount',
                     align:'center',
+                    render:function(h,params){
+                            return utils.thousand(params.row.amount)
+                         }
                 },{
                     title: '账户名称',
-                    key: 'billNo',
+                    key: 'payAccount',
                     align:'center',
                 },{
                     title: '打款日期',
-                    key: 'billNo',
+                    key: 'occurDate',
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'billNo',
+                    key: 'creater',
                     align:'center',
                 },{
                     title: '操作时间',
-                    key: 'billNo',
+                    key: 'ctime',
                     align:'center',
                 }]
 			}

@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
     export default {
         components:{
         },
@@ -41,50 +42,56 @@
                 allColumns:[
                     {
                         title: '序号',
-                        key: 'billNo',
+                        key: 'id',
                         width:100,
                         align:'center',
                     },
                     {
                         title: '社区名称',
-                        key: 'billNo',
+                        key: 'communityName',
                         align:'center',
                     },
                     {
                         title: '退款金额（元）',
-                        key: 'billNo',
+                        key: 'amount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.amount)
+                         }
                     },
                     ],
                 detailColumns:[{
                     title: '编号',
-                    key: 'billNo',
+                    key: 'id',
                     width:100,
                     align:'center',
                 },{
                     title: '社区名称',
-                    key: 'billNo',
+                    key: 'communityName',
                     align:'center',
                 },{
                     title: '退款金额（元）',
-                    key: 'billNo',
+                    key: 'amount',
                     align:'center',
+                    render:function(h,params){
+                        return utils.thousand(params.row.amount)
+                    }
                 },{
                     title: '退至账户',
-                    key: 'billNo',
+                    key: 'receiveAccount',
                     align:'center',
                 },{
                     title: '退款日期',
-                    key: 'billNo',
+                    key: 'occurDate',
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'billNo',
+                    key: 'creater',
                     align:'center',
                 },{
                     title: '操作时间',
                     key: 'billNo',
-                    align:'center',
+                    align:'ctime',
                 }]
             }
         },

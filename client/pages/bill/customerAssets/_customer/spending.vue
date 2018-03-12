@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import utils from '~/plugins/utils';
     export default {
         components:{
         },
@@ -35,79 +36,110 @@
                 searchForm:{
 
                 },
+                //支付类型
+                feeType:[
+                    {
+                        label:'支付账单',
+                        value:'BILL'
+                    },{
+                        label:'支付订单',
+                        value:'ORDER'
+                    },{
+                        label:'充入余额',
+                        value:'BALANCE'
+                    }
+                ],
                 page:1,
                 totalCount:1,
                 pageSize:5,
                 allColumns:[
                     {
                         title: '序号',
-                        key: 'billNo',
+                        key: 'id',
                         width:100,
                         align:'center',
                     },
                     {
                         title: '社区名称',
-                        key: 'billNo',
+                        key: 'communityName',
                         align:'center',
                     },
                     {
                         title: '工位服务费金额（元）',
-                        key: 'billNo',
+                        key: 'rentAmount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.rentAmount)
+                         }
                     },
                     {
                         title: '会议室服务费金额（元）',
-                        key: 'billNo',
+                        key: 'mettingAmount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.mettingAmount)
+                         }
                     },
                     {
                         title: '打印服务费金额（元）',
-                        key: 'billNo',
+                        key: 'printAmount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.printAmount)
+                         }
                     },
                     {
                         title: '其他服务费金额（元）',
-                        key: 'billNo',
+                        key: 'otherAmount',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.otherAmount)
+                         }
                     },
                     {
                         title: '合计',
-                        key: 'billNo',
+                        key: 'total',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.total)
+                         }
                     },
                     ],
                 detailColumns:[{
                     title: '编号',
-                    key: 'billNo',
+                    key: 'id',
                     width:100,
                     align:'center',
                 },{
                     title: '社区名称',
-                    key: 'billNo',
+                    key: 'communityName',
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'billNo',
+                    key: 'targetType',
                     align:'center',
                 },{
                     title: '费用类型',
-                    key: 'billNo',
+                    key: 'feeType',
                     align:'center',
                 },{
                     title: '消费金额（元）',
-                    key: 'billNo',
+                    key: 'amount',
                     align:'center',
+                    render:function(h,params){
+                            return utils.thousand(params.row.amount)
+                         }
                 },{
                     title: '消费时间',
-                    key: 'billNo',
+                    key: 'occurDate',
                     align:'center',
                 },{
                     title: '相关记录',
-                    key: 'billNo',
+                    key: 'records',
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'billNo',
+                    key: 'creater',
                     align:'center',
                 }]
             }

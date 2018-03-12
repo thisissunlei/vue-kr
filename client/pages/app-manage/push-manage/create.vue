@@ -184,7 +184,7 @@
                             氪空间
                             <div class="u-ios-time">现在</div>
                         </div>
-                        <div class="u-push-title">{{title}}</div>
+                        <div class="u-push-title" v-if="title">{{title}}</div>
                         <div class="u-push-content">{{content}}</div>
                     </div>
                 </div> 
@@ -192,7 +192,7 @@
                         <div class="u-android-push">
                             <div class="u-android-logo"></div>
                             <div class="u-push-detail">
-                                <div class="u-push-title" >{{title}}</div>
+                                <div class="u-push-title"  >{{title}}</div>
                                 <div class="u-push-content">{{content}}</div>
                             </div>
                              <div class="u-android-time">现在</div>
@@ -714,40 +714,47 @@ export default {
          padding-top:59px;
          .u-ios-push{
              width:279px;
-             height:74px;
+             min-height:74px;
              background:#fff;
              border-radius: 6px;
              box-shadow: 0 1px 1px rgba(0,0,0,.4);
              margin:0 auto ;
+             position: relative;
+             padding-top:28px;
              .u-ios-logo{
                  width:20px;
                  height:20px;
-                 float:left;
-                 margin:3px 7px 3px 10px;
+                 position: absolute;
+                 top:3px;
+                 left:10px;
+                 margin-bottom:3px;
+                 margin-right:7px;
                  background: url('./images/logo.svg') no-repeat center center;
                  background-size:100% 100%;
              }
              .u-ios-logo-title{
+                 width:85%;
                  font-size:12px;
                  color:#333333;
-                 padding-top:5px;
-                 
+                 position: absolute;
+                 left:40px;
+                 top:4px;
              }
              .u-ios-time{
                 font-size:12px;
-                padding:0 10px;
+                padding-right:10px;
                 float:right;
-                
              }
              .u-push-title{
                  color:#282624;
                  line-height:17px;
                  text-align: left;
                  padding:0 10px;
-                 text-indent: -23px;
+                
              }
              .u-push-content{
                   padding-left:10px;
+                  display: inline-block;
              }
          }
     }
@@ -789,6 +796,7 @@ export default {
                  color:#282624;
                  .u-push-title{
                      font-size:13px;
+                     height:30px;
                      padding-top:16px;
                      margin-bottom:4px;
                  }

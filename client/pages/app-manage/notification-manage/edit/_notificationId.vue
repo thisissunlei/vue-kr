@@ -7,7 +7,7 @@
             <FormItem label="通知标题"  style="width:294px" prop="title">
                 <Input 
                     v-model="formItem.title" 
-                    placeholder="请输入通知标题"
+                    placeholder="20个字符以内"
                     :maxlength="titleLength"
                 />
             </FormItem>
@@ -15,7 +15,7 @@
                 <Input 
                     type="textarea"
                     v-model="formItem.content" 
-                    placeholder="请输入通知内容"
+                    placeholder="200个字符以内"
                     :maxlength="contentLength"
                 />
             </FormItem>
@@ -140,7 +140,7 @@ export default {
 
           },
           titleLength:20,
-          contentLength:50,
+          contentLength:200,
           targetDetail:{},
           imgUrl:'',
           ruleCustom:{

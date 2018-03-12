@@ -516,6 +516,7 @@ export default {
         this.formItem.birthMonth="";
         this.formItem.leader="";
         this.personNum=0;
+        this.countParams={};
     },
     titleBlur(){
         this.title=this.formItem.title;

@@ -757,6 +757,7 @@ export default {
              .u-push-content{
                   padding-left:10px;
                   display: inline-block;
+                  padding-bottom:10px;
              }
          }
     }

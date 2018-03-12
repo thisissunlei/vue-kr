@@ -43,6 +43,7 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
+                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择社区"
@@ -60,6 +61,7 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
+                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
@@ -144,6 +146,7 @@
                             @on-change="changeActive"
                             placeholder="请选择"
                             clearable
+                            remote
                             >
                             <Option v-for="(option, index) in activityList" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>

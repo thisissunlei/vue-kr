@@ -35,8 +35,9 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
+            <KrField type="select" label="含税" value="formRight.input" placeholder="请输入含税收入" @change="onSelectChange" :selectData="selectData" :filterable="true"/>
             <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
-           
+
         </Form>
         <div slot="footer">
             <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" checkAction='bill_batch_pay'/>
@@ -95,6 +96,10 @@ import KrField from '~/components/KrField';
                 warn:'',
                 MessageType:'',
                 billType:{},
+                selectData:[
+                    {label:'123',value:'1'},
+                    {label:'456',value:'2'}
+                ],
                 data:[
                     {
                         title: 'parent 1',
@@ -220,6 +225,9 @@ import KrField from '~/components/KrField';
         methods:{
             change(event){
                 // console.log(event.target.value,"llllll")
+            },
+            onSelectChange(value){
+                console.log(value,"llllll")
             },
             //跳转查看页面
             goView(params){

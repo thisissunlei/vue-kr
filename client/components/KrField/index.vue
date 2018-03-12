@@ -22,6 +22,17 @@
             @on-keydown="keydown"
             @on-keypress="keypress"
         />
+        <Select
+            v-if="type==='select'"
+            :model="value"
+            :placeholder="placeholder"
+            :disabled='disabled'
+            :clearable='clearable'
+            :filterable='filterable'
+            @on-change="selChange"
+        >
+          <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
+        </Select>
         <KrCascader
             v-if="type==='cascader'"
             :data="data"
@@ -68,6 +79,18 @@ export default {
             default:'请输入内容...',
             type:String
         },
+        disabled:{
+            default:false,
+            type:Boolean
+        },
+        clearable:{
+            default:true,
+            type:Boolean
+        },
+        filterable:{
+            default:false,
+            type:Boolean
+        },
         labelWidth:{
             type:Number
         },
@@ -77,6 +100,9 @@ export default {
         },
         data:{
           type:Array
+        },
+        selectData:{
+            type:Array
         }
     },
     data(){
@@ -104,8 +130,10 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
-            console.log(cityData,"ooooooo")
             this.$emit('change',event);
+        },
+        selChange(value){
+            this.$emit('change',value);
         },
         focus(event){
             this.$emit('focus',event);

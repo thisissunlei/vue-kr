@@ -36,7 +36,7 @@
              <LabelText label="推送标题：" style="width:700px;">
 				{{basicInfo.title?basicInfo.title:'-'}}
 			</LabelText>
-			<LabelText label="推送内容：" >
+			<LabelText label="推送内容：" style="width:1000px;" >
 				{{basicInfo.content}}
 			</LabelText>
 			

@@ -13,6 +13,9 @@
 			<LabelText label="推送目标用户：">
 				{{basicInfo.targetDesc}}
 			</LabelText>
+            <LabelText label="同步推送：">
+				{{basicInfo.push=="0"?'否':'是'}}
+			</LabelText>
             <div class="u-merber-content" v-if="basicInfo.targetType=='2'">
                  <div class="u-small-trigon"></div>
                  <LabelText label="所在社区：">

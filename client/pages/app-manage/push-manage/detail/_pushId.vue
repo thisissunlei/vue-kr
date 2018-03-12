@@ -128,7 +128,7 @@ export default {
 
 .g-push-detail{
 	.m-detail-content{
-        padding:30px 24px;
+        padding-top:30px;
         .ui-label{
             font-weight: 500;
             color:#666666;

@@ -1,7 +1,7 @@
 <template>
     <Cascader
         :data="propsCity"
-        v-model="value1"
+        v-model="value"
         @on-change="change"
         @on-visible-change="visibleChange"
     ></Cascader>
@@ -23,7 +23,7 @@
                     this.propsCity =  cityData;
                 }
                 return cityData;
-            }
+            },
         },
         props:{
             propsCity:{
@@ -34,7 +34,7 @@
 
         data () {
             return {
-                value1: [],
+                value: [],
                
             }
         },

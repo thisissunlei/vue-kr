@@ -7,7 +7,7 @@
                 show-checkbox
                 @on-select-change="selectChange"
                 @on-check-change="checkChange"
-                @on-toggle-expand="toggleChang"
+                @on-toggle-expand="toggleExpand"
             ></Tree>
         </div>
         
@@ -38,8 +38,8 @@ export default {
         checkChange(event){
             this.$emit('checkChange',event)
         },
-        toggleChange(event){
-            this.$emit('toggleChange',event)
+        toggleExpand(event){
+            this.$emit('toggleExpand',event)
         }
     }
 

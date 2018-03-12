@@ -7,12 +7,12 @@
         :label-width="labelWidth"
         :showMessage="showMessage"
     >
-        <Input
+        <KrInput
             v-if="type==='text'"
-            :model="value"
+            :value="value"
             :placeholder="placeholder"
             :type='type'
-
+            :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
             @on-change="change"
@@ -25,6 +25,7 @@
         <KrCascader
             v-if="type==='cascader'"
             :data="data"
+            :value="value"
             @on-change="change"
             @visible-change="visibleChange"
         />
@@ -33,7 +34,7 @@
             :data = 'data'
             @selectChange="selectChange"
             @checkChange="checkChange"
-            @toggleChange="toggleChange"
+            @toggleChange="toggleExpand"
         />
     </FormItem>
   </div>
@@ -42,10 +43,13 @@
 <script>
 import KrCascader from './KrCascader';
 import SelectTree from './SelectTree';
+import KrInput from './KrInput';
+
 export default {
     components:{
       KrCascader,
-      SelectTree
+      SelectTree,
+      KrInput
     },
     props:{
         label:{
@@ -77,6 +81,10 @@ export default {
         },
         data:{
           type:Array
+        },
+        readOrEdit:{
+            type:Boolean,
+            default:false
         }
     },
     data(){
@@ -97,14 +105,12 @@ export default {
 
         },
         click(event){
-
             this.$emit('click',event);
         },
         enter(event){
             this.$emit('enter',event);
         },
         change(event){
-            console.log(cityData,"ooooooo")
             this.$emit('change',event);
         },
         focus(event){
@@ -131,8 +137,12 @@ export default {
         checkChange(event){
             this.$emit('checkChange',event);
         },
-        toggleChange(event){
+        toggleExpand(event){
             this.$emit("toggleChange",event)
+        },
+        okClick(event){
+            this.$emit("okClick",event);
+
         }
     }
 }

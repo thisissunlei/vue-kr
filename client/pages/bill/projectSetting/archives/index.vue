@@ -35,7 +35,7 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
-            <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+            <KrField :readOrEdit="true" type="text" :data="data" label="含税" value="什么东西" placeholder="请输入含税收入" />
            
         </Form>
         <div slot="footer">

@@ -7,7 +7,7 @@
             <FormItem label="推送标题"  style="width:294px" >
                 <Input 
                     v-model="formItem.title" 
-                    placeholder="请输入推送标题"
+                    placeholder="20个字符以内"
                     :maxlength="titleLength"
                     @on-blur="titleBlur"
                 />
@@ -16,7 +16,7 @@
                 <Input 
                     type="textarea"
                     v-model="formItem.content" 
-                    placeholder="请输入推送内容"
+                    placeholder="50个字符以内"
                     :maxlength="contentLength"
                     @on-blur="contentBlur"
                 />
@@ -43,10 +43,9 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
-                            placeholder="请选择"
+                            placeholder="请选择社区"
                             clearable
                             @on-change="communityChange"
                             >
@@ -61,7 +60,6 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
@@ -141,7 +139,6 @@
                         <Select
                             v-model="formItem.jumpId"
                             filterable
-                            remote
                             :remote-method="remoteActiveMethod"
                             :loading="activityLoading"
                             @on-change="changeActive"
@@ -334,7 +331,12 @@ export default {
         },
       communityChange(form){
            this.countParams.cmtId=form;
-           this.formItem.jumpId=""
+           this.formItem.jumpId="";
+           
+           if(!form){
+                this.personNum=0;
+               return;
+           }
            this.getTargetCount(this.countParams);
       },
        genderChange(form){

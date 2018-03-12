@@ -95,7 +95,6 @@
                             :loading="communityLoading"
                             placeholder="请选择"
                             clearable
-                            
                             @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
@@ -303,6 +302,10 @@ export default {
         },
       communityChange(form){
            this.countParams.cmtId=form;
+            if(!form){
+                this.personNum=0;
+               return;
+           }
            this.getTargetCount(this.countParams);
       },
       genderChange(form){

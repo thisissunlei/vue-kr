@@ -1,6 +1,6 @@
 <template>
 <div class="customer-assets">
-   <SectionTitle title="已出账单管理"></SectionTitle>
+   <SectionTitle title="账户中心"></SectionTitle>
         <div class="div-search">
             <Input 
                 v-model="params.customerName" 
@@ -11,7 +11,7 @@
             <div class='m-search' @click="lowerSubmit">搜索</div>
         </div>
         <div class="table-list">
-            <Table  border :columns="columns" ></Table>
+            <Table  border :columns="columns" :data="accountList" />
              <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
@@ -50,6 +50,7 @@
                 page:1,
                 pageSize:15,
             },
+            accountList:[],
             columns: [
                     
                     {
@@ -118,7 +119,14 @@
                 utils.addParams(this.params);
             },
             getListData(params){
-
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             onKeyEnter: function (ev) {
                 this.lowerSubmit();

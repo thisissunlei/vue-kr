@@ -1,7 +1,7 @@
 
 
 <template>  
-    <div class="give-money">
+    <div class="spending">
         <div class="title-type">消费总汇表</div>
         <Table  border :columns="allColumns" class="table-style" ></Table>
 
@@ -128,7 +128,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .give-money{
+    .spending{
         .title-type{
             font-size: 14px;
             color:#666;

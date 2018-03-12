@@ -53,7 +53,7 @@
             GiveMoney,
             Balance,
             Spending,
-            Refunds
+            Refunds,
 		},
 		data (){
 			return{

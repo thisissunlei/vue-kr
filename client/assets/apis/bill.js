@@ -105,6 +105,12 @@ export default  {
       url: '/api/krspace-pay/payment/invoice',
       method: 'post'
     },
+    // 账户中心
+    'account-list': {
+      url: '/mockjs/76/krspace-pay-web/wallet/account-list?',
+      // url: '/api/krspace-pay-web/wallet/account-list?',
+      method: 'get'
+    },
     
   }
   

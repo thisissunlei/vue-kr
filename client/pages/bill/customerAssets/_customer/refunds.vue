@@ -1,7 +1,7 @@
 
 
 <template>  
-    <div class="give-money">
+    <div class="refunds">
         <div class="title-type">退款总汇表</div>
         <Table  border :columns="allColumns" class="table-style" ></Table>
 
@@ -104,7 +104,7 @@
     }
 </script>
 <style lang="less" scoped>
-    .give-money{
+    .refunds{
         .title-type{
             font-size: 14px;
             color:#666;

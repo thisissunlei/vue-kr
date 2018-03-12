@@ -154,6 +154,6 @@
             text-align: right;
             margin-top:20px;
         }
-    	padding:5px 20px;
+    	padding:5px 30px;
     }
 </style>

@@ -19,6 +19,7 @@
 		</div>
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
+            	<Waiting v-if="selectedTab!='account'"/>
         </div>
 		
     </div>
@@ -30,12 +31,15 @@
 	import SectionTitle from '~/components/SectionTitle';
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
+    import Waiting from './waiting.vue'; 
+
 	export default {
 		name:'customerAssetsDetail',
 		components:{
 			SectionTitle,
 			LabelText,
-			Assets
+			Assets,
+			Waiting
 		},
 		data (){
 			return{

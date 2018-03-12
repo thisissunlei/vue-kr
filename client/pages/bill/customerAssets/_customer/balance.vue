@@ -1,7 +1,7 @@
 
 
 <template>	
-    <div class="give-money">
+    <div class="balance">
 		<div class="title-type">余额总汇表</div>
         <Table  border :columns="allColumns" class="table-style" ></Table>
 
@@ -144,7 +144,7 @@
 	}
 </script>
 <style lang="less" scoped>
-    .give-money{
+    .balance{
         .title-type{
             font-size: 14px;
             color:#666;

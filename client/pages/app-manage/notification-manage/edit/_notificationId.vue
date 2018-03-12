@@ -488,6 +488,11 @@ export default {
         this.formItem.enterTime="";
         this.formItem.birthMonth="";
         this.formItem.leader="";
+        this.personNum=0;
+        this.countParams={};
+           
+        
+       
     },
    handleRemove(){
       this.formItem.iconUrl="";

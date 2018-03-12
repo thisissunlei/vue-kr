@@ -91,11 +91,11 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"
                             clearable
+                            
                             @on-change="communityChange"
                             >
                             <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
@@ -109,7 +109,6 @@
                         <Select
                             v-model="formItem.cmtId"
                             filterable
-                            remote
                             :remote-method="remoteCommunityMethod"
                             :loading="communityLoading"
                             placeholder="请选择"

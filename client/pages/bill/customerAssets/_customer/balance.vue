@@ -3,7 +3,7 @@
 <template>	
     <div class="balance">
 		<div class="title-type">余额总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" :data="summaryData"></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryData"/>
 
 		<div class="title-type">余额变化明细表</div>
         <div class="search">
@@ -40,7 +40,18 @@
                         show-elevator
                     ></Page>
                 </div>
+        </div>
+         <Modal
+                v-model="openBalance"
+                title="转余额"
+                width="500"
+            >
+            <div slot="footer">
+                <Button type="primary"  @click="submitBalance">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
             </div>
+        </Modal>
+
     </div>
 	
 
@@ -48,6 +59,7 @@
 
 <script>
 import utils from '~/plugins/utils';
+import Buttons from '~/components/Buttons';
 	export default {
 		components:{
 		},
@@ -98,65 +110,153 @@ import utils from '~/plugins/utils';
                         title: '余额（元）',
                         key: 'balance',
                         align:'center',
-                        render:function(h,params){
+                        render:(tag,params)=>{
                             let index = params.row._index;
-                           //  if(index == 0){
-                               return utils.thousand(params.row.balance) 
-                           // }else{
-                           //      return h('div', [
-                           //              h('strong', utils.thousand(params.row.balance)),
-                           //              h('Button', {
-                           //                  props: {
-                           //                      type: 'text',
-                           //                      size: 'small'
-                           //                  },
-                           //                  style: {
-                           //                      color:'#2b85e4'
-                           //                  },
-                           //                  on: {
-                           //                      click: () => {
-                           //                          this.showDetail(params.row)
-                           //                      }
-                           //                  }
-                           //              }, '转社区'),
-                           //              h('Button', {
-                           //                  props: {
-                           //                      type: 'text',
-                           //                      size: 'small'
-                           //                  },
-                           //                  style: {
-                           //                      color:'#2b85e4'
-                           //                  },
-                           //                  on: {
-                           //                      click: () => {
-                           //                          this.showDetail(params.row)
-                           //                      }
-                           //                  }
-                           //              }, '转营业外'),
-                           //      ]);
-                           // }
-                            
-                         }
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand(params.row.balance))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转社区',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                 this.transferCommunity(params.row)
+                                            }
+                                        }
+                                }),tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转营业外',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferOutsideBusiness(params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);  
+                        }
                     },
                     {
                         title: '服务保证金（元）',
                         key: 'deposit',
                         align:'center',
+                        render:(tag,params)=>{
+                            let index = params.row._index;
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand(params.row.deposit))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转余额',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferBalance('deposit',params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);  
+                        }
                     },
                     {
                         title: '冻结服务保证金（元）',
                         key: 'lock_deposit',
                         align:'center',
+                        render:(tag,params)=>{
+                            let index = params.row._index;
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand(params.row.lock_deposit))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转余额',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferBalance('lock_deposit',params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);  
+                        }
                     },
                     {
                         title: '门禁卡保证金',
                         key: 'guardCardDeposit',
                         align:'center',
+                        render:(tag,params)=>{
+                            let index = params.row._index;
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand(params.row.guardCardDeposit))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转余额',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferBalance('guardCardDeposit',params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);  
+                        }
                     },
                     {
                         title: '其他类保证金',
                         key: 'otherDeposit',
                         align:'center',
+                        render:(tag,params)=>{
+                            let index = params.row._index;
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand(params.row.balance))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转余额',
+                                            checkAction:'fina_detail_rerun',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferBalance('otherDeposit',params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);  
+                        }
                     },
                     ],
                 detailColumns:[{
@@ -188,7 +288,11 @@ import utils from '~/plugins/utils';
                     title: '操作时间',
                     key: 'billNo',
                     align:'center',
-                }]
+                }],
+                openBalance:false,//转余额弹窗
+                openCommunity:false,//转社区弹窗
+                openBusiness:false,//转营业外弹窗
+                balanceType:''
 			}
 		},
 		methods:{
@@ -226,6 +330,34 @@ import utils from '~/plugins/utils';
                     });
                 })
             },
+            transferCommunity(item){
+                // 转社区
+                console.log('转社区',item)
+                this.openCommunity = true;
+            },
+            transferOutsideBusiness(item){
+                // 转营业外
+                console.log('转营业外',item)
+                this.openBusiness = true;
+            },
+            transferBalance(type,item){
+                // 转余额
+                console.log('转余额-->item',item)
+                console.log('转余额-->type',type)
+                this.openBalance = true;
+                this.balanceType = type;
+                
+            },
+            //转余额提交
+            submitBalance(){
+                console.log('submitBalance')
+            },
+            closeModal(){
+                this.openBalance = false;
+                this.openBusiness = false;
+                this.openBusiness = false;
+            }
+
 
 		},
 		mounted(){

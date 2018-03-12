@@ -5,22 +5,22 @@
         <div class="money-list">
             <div class="money-div">
                 <span class="name">账户余额</span>
-                <span class="money">￥10000</span>
+                <span class="money">￥ {{balance | thousand}}</span>
             </div>
             <div class="between">=</div>
             <div class="money-div">
-                <span class="name">账户余额</span>
-                <span class="money">￥10000</span>
+                <span class="name">客户打款</span>
+                <span class="money">￥{{play|thousand}}</span>
             </div>
             <div  class="between">-</div>
             <div class="money-div">
-                <span class="name">账户余额</span>
-                <span class="money">￥10000</span>
+                <span class="name">客户消费</span>
+                <span class="money">￥{{spending|thousand}}</span>
             </div>
             <div class="between">-</div>
             <div class="money-div">
-                <span class="name">账户余额</span>
-                <span class="money">￥10000</span>
+                <span class="name">客户退款</span>
+                <span class="money">￥{{refunds|thousand}}</span>
             </div>
         </div>
 
@@ -46,6 +46,7 @@
     import Balance from './balance.vue'; 
     import Spending from './spending.vue'; 
     import Refunds from './refunds.vue'; 
+    import utils from '~/plugins/utils';
 
 	export default {
 		name:'orderManange',
@@ -72,16 +73,34 @@
                     code:'refunds'
                 },],
                 selectedTab:'balance',
-
+                balance:20012.34,//客户余额
+                refunds:3421.22,//客户退款
+                spending:22.11,//客户消费
+                play:342423423.32,//客户打款
 				
 			}
 		},
 		methods:{
             selectTab(name){
                 this.selectedTab = name;
+            },
+            getAccountInformation(){
+                //获取账户信息下公式列表
+                let {params}=this.$route;
+                 console.log('获取账户信息下公式列表',params.customer)
+                return;
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             }
 		},
 		mounted(){
+            this.getAccountInformation()
 			GLOBALSIDESWITCH('false');
 		}
 	
@@ -142,6 +161,8 @@
                     color:#666;
                     font-size: 14px;
                     cursor: pointer;
+                    transition:all .5;
+                    
                 }
                 .tab-span:last-child{
                     border-bottom:1px solid #DFDFDF
@@ -150,6 +171,7 @@
                     background-color: #fff;
                     border-right:none;
                     color:#4A90E2;
+                    transition:all .5;
                 }
             }
             .tab-content{

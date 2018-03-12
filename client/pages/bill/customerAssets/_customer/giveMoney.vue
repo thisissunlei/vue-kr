@@ -12,12 +12,14 @@
                     <Input type="text" v-model="searchForm.name" placeholder="社区名称"/>
                 </FormItem>
                 <FormItem label="打款方式">
-                    <Input type="text" v-model="searchForm.type" placeholder="打款方式"/>
+                    <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
+                        <Option v-for="item in payment" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
                 </FormItem>
                 <FormItem label="操作时间">
-                   <DatePicker type="date" v-model="searchForm.begin" placeholder="开始时间" style="width: 200px"></DatePicker>
-                   <span>至</span>
-                   <DatePicker type="date" v-model="searchForm.end" placeholder="结束时间" style="width: 200px"></DatePicker>
+                   <DatePicker type="date" v-model="searchForm.begin" placeholder="开始时间" style="width: 130px"></DatePicker>
+                   <span style="margin:0 10px">至</span>
+                   <DatePicker type="date" v-model="searchForm.end" placeholder="结束时间" style="width: 130px"></DatePicker>
 
                 </FormItem>
                 <!-- <FormItem style="width:100px"> -->
@@ -53,6 +55,20 @@
                 searchForm:{
 
                 },
+                //打款方式
+                payment:[{
+                    label:'1',
+                    value:'1'
+                },{
+                    label:'2',
+                    value:'2'
+                },{
+                    label:'3',
+                    value:'3'
+                },{
+                    label:'4',
+                    value:'4'
+                }],
                 page:1,
                 totalCount:1,
                 pageSize:5,
@@ -126,11 +142,41 @@
             },
             searchSubmit(name){
                 console.log('searchSubmit',this.searchForm)
-            }
+            },
+            getSummary(){
+                //获取账户打款的汇总信息
+                let {params}=this.$route;
+                 console.log('获取账户打款的汇总信息',params.customer)
+                return;
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            getDetail(){
+                //获取账户打款的明细表
+                let {params}=this.$route;
+                 console.log('获取账户打款的明细表',params.customer)
+                return;
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
 
 		},
 		mounted(){
 			GLOBALSIDESWITCH('false');
+            this.getSummary();
+            this.getDetail();
 		}
 	
 	}

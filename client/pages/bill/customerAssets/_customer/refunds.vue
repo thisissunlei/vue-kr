@@ -94,11 +94,41 @@
             },
             searchSubmit(name){
                 console.log('searchSubmit',this.searchForm)
-            }
+            },
+            getSummary(){
+                //获取账户退款的汇总信息
+                let {params}=this.$route;
+                 console.log('获取账户退款的汇总信息',params.customer)
+                return;
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            getDetail(){
+                //获取账户退款的明细表
+                let {params}=this.$route;
+                 console.log('获取账户退款的明细表',params.customer)
+                return;
+                this.$http.get('account-list',params).then((res)=>{
+                    this.accountList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
 
         },
         mounted(){
             GLOBALSIDESWITCH('false');
+            this.getDetail();
+            this.getSummary()
         }
     
     }

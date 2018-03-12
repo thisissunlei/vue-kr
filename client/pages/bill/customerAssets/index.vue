@@ -55,7 +55,7 @@
                     
                     {
                         title: '客户ID',
-                        key: 'billNo',
+                        key: 'customerId',
                         align:'center',
                     },
                     {
@@ -65,18 +65,27 @@
                     },
                     {
                         title: '账户余额',
-                        key: 'communityName',
+                        key: 'balance',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.balance)
+                         }
                     },
                     {
                         title: '正常服务保证金（元）',
-                        key: 'totalAmount',
+                        key: 'deposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.deposit)
+                         }
                     },
                     {
                         title: '冻结服务保证金（元）',
-                        key: 'freeAmount',
+                        key: 'lockDeposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.lockDeposit)
+                         }
                     },
                     {
                         title: '操作',
@@ -132,8 +141,8 @@
                 this.lowerSubmit();
             },
             showDetail(item){
-                // let url = '/bill/customerAssets/'+item.id+'/view'
-                let url = '/bill/customerAssets/1/view'
+                let url = '/bill/customerAssets/'+item.id+'/view'
+                // let url = '/bill/customerAssets/1/view'
                 window.open(url,'_blank');
             },
             changePage(page){

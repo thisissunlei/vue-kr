@@ -107,10 +107,44 @@ export default  {
     },
     // 账户中心
     'account-list': {
-      url: '/mockjs/76/krspace-pay-web/wallet/account-list?',
+      url: '/api/krspace-pay/wallet/account-list?',
+      method: 'get'
+    },
+    // 账户详情页--客户基本信息
+    // 'account-info': {
+    //   url: '/mockjs/76/krspace-pay/wallet/account-list?',
+    //   method: 'get'
+    // },
+    // 客户打款-总表
+    'account-info': {
+      url: '/mockjs/76/krspace-pay/wallet/account-list?',
       // url: '/api/krspace-pay-web/wallet/account-list?',
       method: 'get'
     },
+    // 客户打款-明细表
+    // 客户消费-汇总表
+    // 客户消费-明细
+    // 客户退款-汇总
+    // 客户退款-明细
+    // 账户余额-汇总
+    'balance-all': {
+      url: '/mockjs/76/krspace-pay/balance/list?',
+      method: 'get'
+    },
+    // 账户余额-明细
+    'balance-detail': {
+      url: '/mockjs/76/krspace-pay/balance-detail/list?',
+      method: 'get'
+    },
+    //余额转社区
+    'cmt-transfer': {
+      url: '/mockjs/76/krspace-pay/cmt-transfer?',
+      method: 'get'
+    },
+    // 余额转营业外
+    // 冻结服务保证金转余额
+    // 服务保证金转余额
+
     
   }
   

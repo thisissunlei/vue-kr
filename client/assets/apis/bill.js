@@ -111,37 +111,65 @@ export default  {
       method: 'get'
     },
     // 账户详情页--客户基本信息
-    // 'account-info': {
-    //   url: '/mockjs/76/krspace-pay/wallet/account-list?',
-    //   method: 'get'
-    // },
+    'customer-info': {
+      url: '/api/krspace-pay/account/customer?',
+      method: 'get'
+    },
+    // 账户详情页--公式
+    'account-detail': {
+      url: '/api/krspace-pay/account/detail?',
+      method: 'get'
+    },
     // 客户打款-总表
-    'account-info': {
-      url: '/mockjs/76/krspace-pay/wallet/account-list?',
-      // url: '/api/krspace-pay-web/wallet/account-list?',
+    'payment-list': {
+      url: '/api/krspace-pay/account/payment/list?',
       method: 'get'
     },
     // 客户打款-明细表
+    'payment-detail': {
+      url: '/api/krspace-pay/account/payment-detail/list?',
+      method: 'get'
+    },
     // 客户消费-汇总表
+    'consumption-list': {
+      url: '/api/krspace-pay/consumption/list?',
+      method: 'get'
+    },
     // 客户消费-明细
+    'consumption-detail': {
+      url: '/api/krspace-pay/consumption-detail/list?',
+      method: 'get'
+    },
     // 客户退款-汇总
+    'refund-list': {
+      url: '/api/krspace-pay/refund/list?',
+      method: 'get'
+    },
     // 客户退款-明细
+    'refund-detail': {
+      url: '/api/krspace-pay/refund-detail/list?',
+      method: 'get'
+    },
     // 账户余额-汇总
-    'balance-all': {
-      url: '/mockjs/76/krspace-pay/balance/list?',
+    'balance-list': {
+      url: '/api/krspace-pay/balance/list?',
       method: 'get'
     },
     // 账户余额-明细
     'balance-detail': {
-      url: '/mockjs/76/krspace-pay/balance-detail/list?',
+      url: '/api/krspace-pay/balance-detail/list?',
       method: 'get'
     },
     //余额转社区
     'cmt-transfer': {
-      url: '/mockjs/76/krspace-pay/cmt-transfer?',
+      url: '/api/krspace-pay/cmt-transfer?',
       method: 'get'
     },
     // 余额转营业外
+    // 'cmt-transfer': {
+    //   url: '/mockjs/76/krspace-pay/cmt-transfer?',
+    //   method: 'get'
+    // },
     // 冻结服务保证金转余额
     // 服务保证金转余额
 

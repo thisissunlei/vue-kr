@@ -87,7 +87,10 @@
             getAccountInformation(){
                 //获取账户信息下公式列表
                 let {params}=this.$route;
-                 console.log('获取账户信息下公式列表',params.customer)
+                let param = {
+                    customerId:params.customer
+                 }
+                 console.log('获取账户信息下公式列表',param)
                 return;
                 this.$http.get('account-list',params).then((res)=>{
                     this.accountList=res.data.items;

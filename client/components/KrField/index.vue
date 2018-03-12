@@ -47,6 +47,7 @@
             @checkChange="checkChange"
             @toggleChange="toggleExpand"
         />
+        <UpFiles v-if="type==='upFiles'" />
     </FormItem>
   </div>
 </template>
@@ -55,12 +56,14 @@
 import KrCascader from './KrCascader';
 import SelectTree from './SelectTree';
 import KrInput from './KrInput';
+import UpFiles from './UpFiles';
 
 export default {
     components:{
       KrCascader,
       SelectTree,
-      KrInput
+      KrInput,
+      UpFiles
     },
     props:{
         label:{

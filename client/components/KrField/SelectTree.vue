@@ -7,7 +7,7 @@
                 show-checkbox
                 @on-select-change="selectChange"
                 @on-check-change="checkChange"
-                @on-toggle-expand="toggleChang"
+                @on-toggle-expand="toggleChange"
             ></Tree>
         </div>
         

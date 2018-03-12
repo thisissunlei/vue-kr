@@ -41,7 +41,7 @@
 			</LabelText>
 			<div class="u-img-content">
                 <div class="u-img-title">封面图：</div>
-                <div><img :src="basicInfo.imgUrl" class="u-img-url"></div>
+                <div><img :src="basicInfo.imgUrl" class="u-img-url">{{basicInfo.imgUrl?'':'无'}}</div>
             </div>
 		</DetailStyle>
         <DetailStyle info="用户点击通知后的后续动作">

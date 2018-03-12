@@ -71,120 +71,33 @@
             </div>
         </DetailStyle>
         <DetailStyle info="推送目标用户">
-            <FormItem label="" style="width:352px;margin-top:-20px;" prop="targetType">
-                <RadioGroup 
-                    v-model="formItem.targetType"
-                    @on-change="targetTypeChange"
-                >
-                    <Radio label="1">
-                        社区人员
-                    </Radio>
-                    <Radio label="2">
-                        自定义会员
-                    </Radio>
-                </RadioGroup> 
-            </FormItem>
-            <div class="u-community-content" v-if="formItem.targetType=='1'">
-                <div class="u-community-select">
-                    <div class="u-small-trigon"></div>
-                     <FormItem label="选择社区"  style="width:250px;" >
-                        <Select
-                            v-model="formItem.cmtId"
-                            filterable
-                            remote
-                            :remote-method="remoteCommunityMethod"
-                            :loading="communityLoading"
-                            placeholder="请选择"
-                            clearable
-                            @on-change="communityChange"
-                            :label="formItem.cmtName"
-                            >
-                            <Option v-for="(option, index) in communityList" :value="option.cmtId" :key="index">{{option.cmtName}}</Option>
-                        </Select>
-                    </FormItem>
-                </div>
+           <LabelText label="" style="width:700px;">
+				{{formItem.targetDesc}}
+		  </LabelText>
+             <div class="u-merber-content" v-if="formItem.targetType=='2'">
+                 <div class="u-small-trigon"></div>
+                 <LabelText label="所在社区：">
+                    {{targetDetail.cmtName}}
+                </LabelText>
+                 <LabelText label="性别：">
+                    {{targetDetail.genderDesc?targetDetail.genderDesc:'-'}}
+                </LabelText>
+                 <LabelText label="已入驻时长：">
+                    {{targetDetail.enterTimeDesc?targetDetail.enterTimeDesc:'-'}}
+                </LabelText>
+                <LabelText label="当前月份：">
+                    {{targetDetail.birthMonthDesc?targetDetail.birthMonthDesc:'-'}}
+                </LabelText>
+                <LabelText label="企业管理员用户：">
+                    {{targetDetail.leaderDesc?targetDetail.leaderDesc:'-'}}
+                </LabelText>
             </div>
-            <div class="u-member-content" v-if="formItem.targetType=='2'">
-                <div class="u-small-trigon"></div>
-                <FormItem label="选择社区"  style="width:250px;margin-right:30px;" >
-                        <Select
-                            v-model="formItem.cmtId"
-                            filterable
-                            remote
-                            :remote-method="remoteCommunityMethod"
-                            :loading="communityLoading"
-                            placeholder="请选择"
-                            clearable
-                            @on-change="communityChange"
-                             :label="formItem.cmtName"
-                            >
-                            <Option v-for="(option, index) in communityList" :value="option.cmtId" :key="index">{{option.cmtName}}</Option>
-                        </Select>
-                </FormItem>
-                <FormItem label="性别"  style="width:250px;" >
-                        <Select
-                            v-model="formItem.gender"
-                            placeholder="请选择"
-                            @on-change="genderChange"
-                            >
-                            <Option v-for="(option, index) in genderList" :value="option.value" :key="index">{{option.label}}</Option>
-                        </Select>
-                </FormItem>
-                <FormItem label="入驻时长"  style="width:250px;margin-right:200px;" >
-                        <Select
-                            v-model="formItem.enterTime"
-                            placeholder="请选择"
-                             @on-change="enterTimeChange"
-                             clearable
-                            >
-                            <Option v-for="(option, index) in enterTimeList" :value="option.value" :key="index">{{option.label}}</Option>
-                        </Select>
-                         <IconTip style="left:60px;top:-55px;">会员在氪空间所有社区的历史时长，用以筛选老用户</IconTip>
-                </FormItem>
-                
-               
-                <FormItem style="margin-right:116px;margin-top:-10px;">
-                    <Checkbox  
-                        v-model="birthMonth" 
-                        value="1"
-                         @on-change="birthMonthChange"
-                    >当前月份为会员生日月</Checkbox>
-                 </FormItem>
-                 <FormItem  style="margin-top:-10px;">
-                    <Checkbox 
-                        v-model="leader"
-                        value="1"
-                        @on-change="leaderChange"
-                    >企业管理员用户</Checkbox>
-                 </FormItem>
-            </div>
-            <div class="u-person-tip" >
-                    所选目标用户数：{{personNum}}人
-            </div>
+            
         </DetailStyle>
         <DetailStyle info="其他设置">
-            <FormItem label="同步推送" style="width:400px" prop="push">
-                 <RadioGroup 
-                    v-model="formItem.push" 
-                 >
-                    <Radio 
-                        label="0"
-                        style="margin-right:36px;"
-                    >
-                        否
-                    </Radio>
-                    <Radio 
-                        label="1" 
-                        style="margin-right:36px;"
-                    >
-                        是
-                    </Radio>
-                </RadioGroup> 
-                <IconTip style="left:65px;top:-55px;">
-                    <span style="text-indent:14px">设置“同步推送”后，该社区用户会在消息通知创建成功后，手机顶部通知栏收到推送通知。</span>
-                    <span  style="text-indent:14px">建议仅重要消息通知勾选此项，避免造成用户骚扰。</span>
-                </IconTip>
-            </FormItem>
+            <LabelText label="同步推送：" style="width:700px;">
+				{{formItem.push=="0"?'否':'是'}}
+			</LabelText>
         </DetailStyle>
         <FormItem  style="margin:0 24px; background:#F5F6FA;height:60px;">
             <div class="u-btn-content">
@@ -201,13 +114,13 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
-import IconTip from '~/components/IconTip';
+import LabelText from '~/components/LabelText';
 
 export default {
   components:{
      SectionTitle,
      DetailStyle,
-     IconTip
+     LabelText
   },
   data(){
       return{
@@ -228,55 +141,8 @@ export default {
           },
           titleLength:20,
           contentLength:50,
-          personNum:0,
-          communityList:[],
-          communityLoading:false,
+          targetDetail:{},
           imgUrl:'',
-          birthMonth:'',
-          leader:'',
-          countParams:{
-              cmtId:'',
-              birthMonth:'',
-              enterTime:'',
-              gender:'',
-              leader:''
-          },
-          genderList:[
-              {
-                  label:'不限',
-                  value:'3'
-              },
-              {
-                  label:'男',
-                  value:'1'
-              },
-              {
-                  label:'女',
-                  value:'0'
-              }
-          ],
-          enterTimeList:[
-                {
-                  label:'一个月以内',
-                  value:'1'
-                },
-                {
-                  label:'1-3个月',
-                  value:'2'
-                }, 
-                {
-                  label:'3-6个月 ',
-                  value:'3'
-                },
-                {
-                  label:'6-12个月',
-                  value:'4'
-                },
-                {
-                  label:'一年以上',
-                  value:'5'
-                },
-          ],
           ruleCustom:{
             title:[
                 { required: true, message: '请输入推送标题', trigger:'change' }
@@ -297,7 +163,6 @@ export default {
   mounted:function(){
     GLOBALSIDESWITCH("false");
     this.getInfo();
-    this.getCommunityList(' ');
    
   },
   methods:{
@@ -313,17 +178,7 @@ export default {
                 if(res.data.jumpType){
                      this.formItem.jumpType=res.data.jumpType.toString();
                 }
-                if(res.data.targetType){
-                    this.formItem.targetType=res.data.targetType.toString();
-                }
-                if(res.data.push){
-                    this.formItem.push=res.data.push.toString();
-                }
-                if(res.data.cmtId){
-                    this.formItem.cmtId=res.data.cmtId.toString();
-                }
-                this.formItem.cmtName=res.data.cmtName;
-
+                this.targetDetail=res.data.targetDetail;
                 switch (res.data.gender){
                     case 0:
                     this.formItem.gender="0";
@@ -349,7 +204,7 @@ export default {
                 if(res.data.cmtId==0){
                    this.formItem.cmtId="-1"; 
                 }
-                 //this.getTargetCount(res.data.targetDetail)  
+               
 
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -358,86 +213,10 @@ export default {
 			});
 			
 		},
-     getTargetCount(form){
-            this.$http.get('get-target-count',form).then((res)=>{
-                this.personNum=res.data.targetCount;
-            }).catch((err)=>{
-                this.$Notice.error({
-                        title:err.message
-                    });
-            })
-        },
-      communityChange(form){
-           this.countParams.cmtId=form;
-           this.getTargetCount(this.countParams);
-      },
-      genderChange(form){
-         
-           this.countParams.gender=form;
-           this.getTargetCount(this.countParams);
-      },
-      enterTimeChange(form){
-          this.countParams.enterTime=form;
-          this.getTargetCount(this.countParams);
-      },
-      birthMonthChange(form){
-          if(form){
-               this.countParams.birthMonth="1";
-               this.formItem.birthMonth="1";
-          }else{
-               this.countParams.birthMonth="";
-               this.formItem.birthMonth="";
-          }
-         this.getTargetCount(this.countParams);
-      },
-      leaderChange(form){
-          if(form){
-              this.countParams.leader="1";
-              this.formItem.leader="1";
-          }else{
-               this.countParams.leader="";
-              this.formItem.leader="";
-          }
-         this.getTargetCount(this.countParams);
-          
-      },
-      //社区
-      remoteCommunityMethod(query){
-        if (query!== '') {
-            this.communityLoading = true;
-            setTimeout(() => {
-                this.communityLoading = false;
-                this.getCommunityList(query)
-            }, 200);
-        } else {
-            this.getCommunityList(' ')
-
-        }
-      },
-       //社区
-      getCommunityList(name){
-           let params = {
-                    cmtName:name
-                }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-community-new-list', params).then((res)=>{
-                list = res.data.cmts;
-                list.map((item)=>{
-                    let obj =item;
-                    obj.cmtName = item.cmtName;
-                    obj.cmtId = item.cmtId;
-                    return obj;
-                });
-                _this.communityList = list;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-            return list;
-            
-      },
+    
+     
+     
+     
       handleSubmit(name){
           let _this = this;
           let message = '请填写完表单';
@@ -457,7 +236,7 @@ export default {
                }
               
                 this.$refs[name].validate((valid) => {
-                    if (valid && this.formItem.cmtId) {
+                    if (valid) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -482,18 +261,7 @@ export default {
                     });
             })
     },
-    targetTypeChange(){
-        this.formItem.cmtId="";
-        this.formItem.gender="3";
-        this.formItem.enterTime="";
-        this.formItem.birthMonth="";
-        this.formItem.leader="";
-        this.personNum=0;
-        this.countParams={};
-           
-        
-       
-    },
+   
    handleRemove(){
       this.formItem.iconUrl="";
       this.imgUrl="" 
@@ -530,7 +298,7 @@ export default {
     .u-btn-content{
       width:138px;
       margin:0 auto;
-  }
+   }
     .u-upload-tip{
         width:692px;
         height:40px;
@@ -539,66 +307,30 @@ export default {
         color:#999999;
         margin:-25px 0 10px 14px;
     }
-    .u-community-content{
-        width:284px;
-        height:114px;
-        margin-top: -10px;
-        
-    }
-    .u-person-tip{
-        height:20px;
-        font-size:14px;
-        color:#999999;
-        margin-left:8px;
-        margin-bottom: 30px;
-    }
-    .u-community-select{
-        width:284px;
-        height:100px;
-        padding-top:20px;
-        padding-left:16px;
-        background:#F6F6F6;
-        margin-bottom:14px;
-        border-radius: 3px;
-        margin-left:8px;
-        position: relative;
-        .u-small-trigon{
-            width:0;
-            height:0;
-            border:6px solid transparent;
-            border-bottom-color: #F6F6F6;
-            position: absolute;
-            top:-12px;
-            left:50px;
-        }
-    }
+   
 
-    .u-member-content{
-        width:570px;
-        height:234px;
-        background:#F6F6F6;
-        border-radius: 3px;
-        position: relative;
-        margin-bottom: 14px;
-        margin-top: -10px;
-        padding-top:20px;
-        padding-left:16px;
-        .u-small-trigon{
-            width:0;
-            height:0;
-            border:6px solid transparent;
-            border-bottom-color: #F6F6F6;
-            position: absolute;
-            top:-12px;
-            left:140px;
+    .u-merber-content{
+            width:570px;
+            height:132px;
+            padding-top:20px;
+            padding-left:16px;
+            background:#F6F6F6;
+            margin-bottom:30px;
+            border-radius: 3px;
+            margin-left:14px;
+            position: relative;
+            margin-top:-5px;
+            .u-small-trigon{
+                width:0;
+                height:0;
+                border:6px solid transparent;
+                border-bottom-color: #F6F6F6;
+                position: absolute;
+                top:-12px;
+                left:30px;
+            }
         }
-        .ivu-form-item{
-            float:left;
-        }
-        .ivu-checkbox{
-            margin-right:5px;
-        }
-    }
+    
     .u-jump-url{
         width:284px;
         height:105px;

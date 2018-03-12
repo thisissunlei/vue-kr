@@ -308,6 +308,10 @@ export default {
     this.getCommunityList(' ')
   },
   methods:{
+      cancelSubmit(){
+        window.close();
+        window.opener.location.reload();
+      },
       toggleView(){
           this.iosShow=!this.iosShow;
           if(this.iosShow){

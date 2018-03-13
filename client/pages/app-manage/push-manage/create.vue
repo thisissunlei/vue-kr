@@ -337,7 +337,9 @@ export default {
       communityChange(form){
            this.countParams.cmtId=form;
            this.formItem.jumpId="";
-           
+           if(this.formItem.jumpType=='ACTIVITY'){
+                this.getActiveList(' ')     
+           }
            if(!form){
                 this.personNum=0;
                return;
@@ -470,7 +472,6 @@ export default {
                         });
                         return;
                     }
-                    
                }
                if(this.formItem.jumpType=='HTML'){
                     if(!this.formItem.jumpUrl){

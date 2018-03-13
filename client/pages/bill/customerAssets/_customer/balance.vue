@@ -48,6 +48,7 @@
 
 <script>
 import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
 	export default {
 		components:{
 		},
@@ -85,7 +86,7 @@ import utils from '~/plugins/utils';
 				allColumns:[
                     {
                         title: '序号',
-                        key: 'id    ',
+                        key: 'id',
                         width:100,
                         align:'center',
                     },
@@ -99,64 +100,40 @@ import utils from '~/plugins/utils';
                         key: 'balance',
                         align:'center',
                         render:function(h,params){
-                            let index = params.row._index;
-                           //  if(index == 0){
-                               return utils.thousand(params.row.balance) 
-                           // }else{
-                           //      return h('div', [
-                           //              h('strong', utils.thousand(params.row.balance)),
-                           //              h('Button', {
-                           //                  props: {
-                           //                      type: 'text',
-                           //                      size: 'small'
-                           //                  },
-                           //                  style: {
-                           //                      color:'#2b85e4'
-                           //                  },
-                           //                  on: {
-                           //                      click: () => {
-                           //                          this.showDetail(params.row)
-                           //                      }
-                           //                  }
-                           //              }, '转社区'),
-                           //              h('Button', {
-                           //                  props: {
-                           //                      type: 'text',
-                           //                      size: 'small'
-                           //                  },
-                           //                  style: {
-                           //                      color:'#2b85e4'
-                           //                  },
-                           //                  on: {
-                           //                      click: () => {
-                           //                          this.showDetail(params.row)
-                           //                      }
-                           //                  }
-                           //              }, '转营业外'),
-                           //      ]);
-                           // }
-                            
-                         }
+                            return utils.thousand(params.row.balance) ;
+                        }
                     },
                     {
                         title: '服务保证金（元）',
                         key: 'deposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.deposit) ;
+                        }
                     },
                     {
                         title: '冻结服务保证金（元）',
-                        key: 'lock_deposit',
+                        key: 'lockDeposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.lockDeposit) ;
+                        }
                     },
                     {
                         title: '门禁卡保证金',
                         key: 'guardCardDeposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.guardCardDeposit) ;
+                        }
                     },
                     {
                         title: '其他类保证金',
                         key: 'otherDeposit',
                         align:'center',
+                        render:function(h,params){
+                            return utils.thousand(params.row.otherDeposit) ;
+                        }
                     },
                     ],
                 detailColumns:[{
@@ -176,18 +153,38 @@ import utils from '~/plugins/utils';
                     title: '操作金额（元）',
                     key: 'changedAmount',
                     align:'center',
+                    render:function(h,params){
+                        return utils.thousand(params.row.changedAmount) ;
+                    }
                 },{
                     title: '相关记录',
                     key: 'paramType',
                     align:'center',
+                    render:function(h,params){
+                        // 1.操作类型为充值时，相关记录读取银行/支付宝的交易流水号；
+                        // 2.操作类型为消费时，相关记录读取支付账单的账单编号；
+                        // 3操作类型转社区/转营业外/转余额时，主动操作的数据相关记录为空，被动生成的记录则为主动操作记录的操作id；
+                        // if(params.row.operateType == 'RECHARGE'){
+                        //      return 银行/支付宝的交易流水号
+                        // }else if(params.row.operateType == '消费'){
+                        //      return 支付账单的账单编号
+                        // }else{
+                        //      return 主动操作记录的操作id || ''  
+                        // 
+                        // }
+                        return params.row.paramType
+                    }
                 },{
                     title: '操作人',
                     key: 'operater',
                     align:'center',
                 },{
                     title: '操作时间',
-                    key: 'billNo',
+                    key: 'ctime',
                     align:'center',
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                    }
                 }]
 			}
 		},
@@ -196,16 +193,18 @@ import utils from '~/plugins/utils';
 
             },
             searchSubmit(name){
+                this.getBalanceDetail()
                 console.log('searchSubmit',this.searchForm)
             },
             getBalanceList(){
                 //获取账户余额的汇总信息
                 let {params}=this.$route;
-                 console.log('获取账户余额的汇总信息',params.customer)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                let param = {
+                    customerId:params.customer
+                }
+                
+                this.$http.get('balance-list',param).then((res)=>{
+                    this.summaryData = res.data.items
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -215,11 +214,12 @@ import utils from '~/plugins/utils';
             getBalanceDetail(){
                 //获取账户余额的明细表
                 let {params}=this.$route;
-                 console.log('获取账户余额的明细表',params.customer)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                let param = {
+                    customerId:params.customer
+                }
+                param = Object.assign({},this.searchForm,param)
+                this.$http.get('balance-detail',param).then((res)=>{
+                    console.log('获取账户余额的明细表',res.data.items)
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

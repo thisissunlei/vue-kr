@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
     export default {
         components:{
@@ -133,6 +134,9 @@ import utils from '~/plugins/utils';
                     title: '消费时间',
                     key: 'occurDate',
                     align:'center',
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                    }
                 },{
                     title: '相关记录',
                     key: 'records',
@@ -154,11 +158,12 @@ import utils from '~/plugins/utils';
             getSummary(){
                 //获取账户消费的汇总信息
                 let {params}=this.$route;
-                 console.log('获取账户消费的汇总信息',params.customer)
+                let param = {
+                    customerId:params.customer
+                }
                 return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                this.$http.get('consumption-list',param).then((res)=>{
+
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -168,9 +173,11 @@ import utils from '~/plugins/utils';
             getDetail(){
                 //获取账户消费的明细表
                 let {params}=this.$route;
-                 console.log('获取账户消费的明细表',params.customer)
+                let param = {
+                    customerId:params.customer
+                }
                 return;
-                this.$http.get('account-list',params).then((res)=>{
+                this.$http.get('consumption-detail',param).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{

@@ -101,10 +101,12 @@
 				 let param = {
 				 	customerId:params.customer
 				 }
-				return;
-				this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+				this.$http.get('customer-info',param).then((res)=>{
+					this.customerBasic = {
+						status : res.data.status,
+						customerId : res.data.id,
+						customerName : res.data.customerName
+					}
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

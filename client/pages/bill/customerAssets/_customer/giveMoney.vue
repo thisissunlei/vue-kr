@@ -3,7 +3,7 @@
 <template>	
     <div class="give-money">
 		<div class="title-type">打款总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" ></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryData" ></Table>
 
 		<div class="title-type">打款变化明细表</div>
         <div class="search">
@@ -48,6 +48,8 @@
 
 <script>
 import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
+
 	export default {
 		components:{
 		},
@@ -156,6 +158,9 @@ import utils from '~/plugins/utils';
                     title: '打款日期',
                     key: 'occurDate',
                     align:'center',
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                    }
                 },{
                     title: '操作人',
                     key: 'creater',
@@ -164,7 +169,11 @@ import utils from '~/plugins/utils';
                     title: '操作时间',
                     key: 'ctime',
                     align:'center',
-                }]
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                    }
+                }],
+                summaryData:[]
 			}
 		},
 		methods:{
@@ -177,11 +186,11 @@ import utils from '~/plugins/utils';
             getSummary(){
                 //获取账户打款的汇总信息
                 let {params}=this.$route;
-                 console.log('获取账户打款的汇总信息',params.customer)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                let param = {
+                    customerId:params.customer
+                }
+                this.$http.get('payment-list',param).then((res)=>{
+                    this.summaryData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -191,11 +200,12 @@ import utils from '~/plugins/utils';
             getDetail(){
                 //获取账户打款的明细表
                 let {params}=this.$route;
-                 console.log('获取账户打款的明细表',params.customer)
+                let param = {
+                    customerId:params.customer
+                }
                 return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                this.$http.get('payment-detail',param).then((res)=>{
+                   
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

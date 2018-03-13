@@ -105,6 +105,8 @@ export default  {
       url: '/api/krspace-pay/payment/invoice',
       method: 'post'
     },
+
+    
     // 账户中心
     'account-list': {
       url: '/api/krspace-pay/wallet/account-list?',

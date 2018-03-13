@@ -3,7 +3,7 @@
 <template>  
     <div class="refunds">
         <div class="title-type">退款总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" ></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
         <div class="title-type">退款变化明细表</div>
         <Table  border :columns="detailColumns" class="table-style"></Table>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
     export default {
         components:{
@@ -84,15 +85,23 @@ import utils from '~/plugins/utils';
                     title: '退款日期',
                     key: 'occurDate',
                     align:'center',
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.occurDate))
+                    }
                 },{
                     title: '操作人',
                     key: 'creater',
                     align:'center',
                 },{
                     title: '操作时间',
-                    key: 'billNo',
+                    key: 'ctime',
                     align:'ctime',
-                }]
+                    render:function(h,params){
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                    }
+                }],
+                summaryList:[],
+                detailList:[]
             }
         },
         methods:{
@@ -105,11 +114,11 @@ import utils from '~/plugins/utils';
             getSummary(){
                 //获取账户退款的汇总信息
                 let {params}=this.$route;
-                 console.log('获取账户退款的汇总信息',params.customer)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                let param = {
+                    customerId:params.customer
+                }
+                this.$http.get('refund-list',param).then((res)=>{
+                    this.summaryList = res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -119,11 +128,11 @@ import utils from '~/plugins/utils';
             getDetail(){
                 //获取账户退款的明细表
                 let {params}=this.$route;
-                 console.log('获取账户退款的明细表',params.customer)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                let param = {
+                    customerId:params.customer
+                }
+                this.$http.get('refund-detail',param).then((res)=>{
+                    this.detailList = res.data.items
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

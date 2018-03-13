@@ -90,11 +90,11 @@
                 let param = {
                     customerId:params.customer
                  }
-                 console.log('获取账户信息下公式列表',param)
-                return;
-                this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+                this.$http.get('account-detail',param).then((res)=>{
+                    this.balance = res.data.balance;
+                    this.refunds = res.data.refund;
+                    this.spending = res.data.consumption;
+                    this.play = res.data.payment;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

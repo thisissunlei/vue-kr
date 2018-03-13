@@ -22,24 +22,66 @@
             @on-keydown="keydown"
             @on-keypress="keypress"
         />
-        <Select
+
+        <KrSelect
             v-if="type==='select'"
-            :model="value"
+            :value="value"
             :placeholder="placeholder"
+            :type='type'
+            :readOrEdit="readOrEdit"
             :disabled='disabled'
             :clearable='clearable'
             :filterable='filterable'
-            @on-change="selChange"
-        >
-          <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
-        </Select>
-        <KrCascader
-            v-if="type==='cascader'"
-            :data="data"
-            :value="value"
-            @on-change="change"
-            @visible-change="visibleChange"
+            :selectData="selectData"
+            @change="selectChange"
+            @okClick="selectClick"
         />
+
+        <KrDate
+            v-if="type==='date'"
+            :value="value"
+            :placeholder="placeholder"
+            :type='type'
+            :readOrEdit="readOrEdit"
+            :format="format"
+            @change="selectChange"
+            @okClick="selectClick"
+        />
+
+        <KrTime
+            v-if="type==='time'"
+            :value="value"
+            :placeholder="placeholder"
+            :type='type'
+            :readOrEdit="readOrEdit"
+            @change="selectChange"
+            @okClick="selectClick"
+        />
+
+        <KrTextarea
+            v-if="type==='textarea'"
+            :value="value"
+            :placeholder="placeholder"
+            :type='type'
+            :maxLength="maxLength"
+            :readOrEdit="readOrEdit"
+            @change="selectChange"
+            @okClick="selectClick"
+        />
+
+
+        <KrCascader
+            v-if="type==='city'"
+            :data="data"
+            :value="cityValue"
+            :clearable='clearable'
+            :placeholder="placeholder"
+            :readOrEdit="readOrEdit"
+            @change="change"
+            @visibleChange="visibleChange"
+        />
+
+
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
@@ -55,19 +97,34 @@
 import KrCascader from './KrCascader';
 import SelectTree from './SelectTree';
 import KrInput from './KrInput';
+import KrSelect from './KrSelect';
+import KrDate from './KrDate';
+import KrTime from './KrTime';
+import KrTextarea from './KrTextarea';
 
 export default {
     components:{
       KrCascader,
       SelectTree,
-      KrInput
+      KrInput,
+      KrSelect,
+      KrDate,
+      KrTime,
+      KrTextarea
     },
     props:{
         label:{
             default:'',
             type:String
         },
+        cityValue:{
+            type:Array
+        },
         value:{
+			type:[Number,String],
+            default:''
+        },
+        form:{
             type:String,
             default:''
         },
@@ -81,6 +138,21 @@ export default {
         },
         placeholder:{
             default:'请输入内容...',
+            type:String
+        },
+        maxLength:{
+            Number
+        },
+        format:{
+            default:'yyyy-MM-dd',
+            type:String
+        },
+        timeFormat:{
+            default:'HH:mm',
+            type:String
+        },
+        dateTimeFormat:{
+            default:'yyyy-MM-dd HH:mm',
             type:String
         },
         disabled:{
@@ -115,8 +187,16 @@ export default {
     },
     data(){
         return {
-
+           
         }
+    },
+    watch: {
+            $props: {
+                deep: true,
+                handler(nextProps) {
+                   console.log('----',nextProps);
+                }
+            }
     },
     methods:{
         showField(type){
@@ -139,9 +219,7 @@ export default {
         change(event){
             this.$emit('change',event);
         },
-        selChange(value){
-            this.$emit('change',value);
-        },
+       
         focus(event){
             this.$emit('focus',event);
         },
@@ -160,9 +238,19 @@ export default {
         visibleChange(event){
             this.$emit('visibleChange',event);
         },
+
+
         selectChange(event){
+            console.log('ev',event);
             this.$emit('selectChange',event);
         },
+        selectClick(value){
+            console.log('selectClick',value);
+            this.$emit('selectClick',value);
+        },
+
+
+
         checkChange(event){
             this.$emit('checkChange',event);
         },
@@ -171,7 +259,9 @@ export default {
         },
         okClick(event){
             this.$emit("okClick",event);
-
+        },
+        radioChange(event){
+            this.$emit("radioChange",event)
         }
     }
 }

@@ -1,8 +1,7 @@
 <template>
   <div class="photo-album">
-      <div class="mask">
-
-      </div>
+      <span class="close-btn ivu-icon ivu-icon-close-round" @click="close"></span>
+     
       <div>
             <div 
                 class="back"
@@ -74,6 +73,9 @@
                     this.urlIndex++
                 }
 
+            },
+            close(){
+                this.$emit('close')
             }
         },
         mounted(){
@@ -92,6 +94,14 @@
     right: 0px;
     bottom: 0px;
     text-align: center;
+    .close-btn{
+        position: absolute;
+        top: 30px;
+        right: 100px;
+        color: #fff;
+        font-size: 40px;
+        cursor: pointer;
+    }
     img{
         max-width: 80%;
         

@@ -32,7 +32,7 @@
 				+
 			</div>
 			</EditLabel>
-			<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex"/>
+			<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	
 	</div>
 	
@@ -74,6 +74,10 @@ export default{
 		this.fileArr = [].concat(this.value)
 	},
 	methods:{
+		close(){
+			console.log("======")
+			this.openPhotoAlbum = !this.openPhotoAlbum;
+		},
 		okClick(){
            
             this.$emit("okClick",this.labelValue)

@@ -2,7 +2,7 @@
 <template lang="html">
   <div class="select-tree">
         <Input v-model="value" :placeholder="placeholder" ></Input>
-        <div  class="select">
+        <div  class="select" v-if="false">
             <Tree :data="data" 
                 show-checkbox
                 @on-select-change="selectChange"

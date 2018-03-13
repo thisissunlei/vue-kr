@@ -89,6 +89,7 @@
             @checkChange="checkChange"
             @toggleChange="toggleExpand"
         />
+        <UpFiles v-if="type==='upFiles'" />
     </FormItem>
   </div>
 </template>
@@ -101,6 +102,7 @@ import KrSelect from './KrSelect';
 import KrDate from './KrDate';
 import KrTime from './KrTime';
 import KrTextarea from './KrTextarea';
+import UpFiles from './UpFiles';
 
 export default {
     components:{
@@ -110,7 +112,8 @@ export default {
       KrSelect,
       KrDate,
       KrTime,
-      KrTextarea
+      KrTextarea,
+      UpFiles
     },
     props:{
         label:{

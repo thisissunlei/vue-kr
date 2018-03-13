@@ -45,7 +45,7 @@
             <!--
             <KrField type="datetime" label="含税" value="formRight.input" placeholder="请输入含税收入" @dateChange="dateChange"/>
             <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />-->
-
+            <KrField type="upFiles" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
         </Form>
         <div slot="footer">
             <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" checkAction='bill_batch_pay'/>

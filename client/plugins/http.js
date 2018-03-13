@@ -23,6 +23,8 @@ axios.interceptors.request.use(config => {
   }
   if(config.url.indexOf('mockjs') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
+  }else if(config.url.indexOf("http")){
+    config.baseUR = config.url;
   }else{
     config.baseURL = '/';
   } 
@@ -63,7 +65,16 @@ function filterNull (o) {
     return res;
   }
 
-
+function getUrl(url) {
+  if(url.indexOf('http://')!=-1 || url.indexOf('https://')!=-1){
+    return url;
+  }else if(!APIS[url].url){
+    return ''
+  }else{
+    return hostname + APIS[url].url
+  }
+  
+}
 
 export default {
   
@@ -75,7 +86,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.get(hostname+APIS[url].url, {params:params})
+    axios.get(getUrl(url), {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){
@@ -97,7 +108,7 @@ export default {
     if (params) {
       params = filterNull(params)
     }
-    if(!APIS[url].url){
+    if (!getUrl(url)){
       return;
     }
 
@@ -116,7 +127,7 @@ export default {
 
     */
     // requestUrl.push(item);
-    axios.post(hostname+APIS[url].url, params)
+    axios.post(getUrl(url), params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -150,10 +161,10 @@ export default {
     if (params) {
       params = filterNull(params)
     }
-    if(!APIS[url].url){
+    if (!getUrl(url)){
       return
     }
-    axios.put(hostname+APIS[url].url, params)
+    axios.put(getUrl(url), params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -174,10 +185,10 @@ export default {
     if (params) {
       params = filterNull(params)
     }
-    if(!APIS[url].url){
+    if (!getUrl(url)){
       return
     }
-    axios.delete(hostname+APIS[url].url, {params:params})
+    axios.delete(getUrl(url), {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){

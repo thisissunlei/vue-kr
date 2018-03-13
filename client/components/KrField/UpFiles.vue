@@ -1,11 +1,50 @@
 <template>
 	<div class="up-files">
-         <input type="file" @change="fileChange">
+		<div class="view" v-for="(item, index ) in fileArr" :key="item.id">
+			<img v-if="item.url" :src="item.url" alt="">
+			<div class="view-mask">
+				<!-- <Icon 
+					type="eye" 
+					size="20" 
+					color="#fff" 
+					style="margin:5px;"
+					@click="eyePhotoAlbum"
+				></Icon> -->
+				<span 
+					class="ivu-icon ivu-icon-eye" 
+					style="font-size:20px;margin:5px;color:#fff;"
+					@click="eyePhotoAlbum(index,$event)"
+				></span>
+				<span 
+					class="ivu-icon ivu-icon-trash-a" 
+					style="font-size:20px;margin:5px;color:#fff;"
+					@click="delImg(index,$event)"
+				></span>
+				<!-- <Icon 
+					type="trash-a" 
+					size="20" 
+					color="#fff" 
+					style="margin:5px;" 
+					@click="delImg"
+				> 
+				</Icon> -->
+			</div>
+		</div>
+
+        <input :id="inputId" type="file" style="display:none;" @change="fileChange">
+		<div class="up-icon" @click="addFileClick">
+			+
+		</div>
+		<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex"/>
 	</div>
 </template>
 
 <script>
+import PhotoAlbum from '../PhotoAlbum'
 export default{
+	components:{
+		PhotoAlbum
+	},
     props:{
         publicUse:{
             default:false,
@@ -14,20 +53,66 @@ export default{
     },
     data(){
         return {
-        
+			upUrl:'',
+			fileArr:[],
+			inputId:'inputId'+this._uid,
+			openPhotoAlbum:false,
+			eyeIndex:0,
         }
     },
 	methods:{
-        fileChange(fileObj){
-            let that = this;
-			let file = event;
+		eyePhotoAlbum(index,event){
+			this.eyeIndex = index;
+			this.openPhotoAlbum = !this.openPhotoAlbum;
+		},
+		delImg(index,event){
+			
+			// this.fileArr.split(index,1);
+		},
+		addFileClick(){
+			var inputDom = document.getElementById(this.inputId);
+			inputDom.click();
+		},
+		fileChange(event){
+			
+			var that = this;
+			var file = event.target.files[0];
+			var reader = new FileReader(); 
+			reader.readAsDataURL(file);
+			// console.log("pppooooo",reader)
+				reader.onloadstart = function() { 
+					// 这个事件在读取开始时触发
+					console.log("onloadstart"); 
+				}
+				reader.onprogress = function() { 
+					// 这个事件在读取进行中定时触发
+					console.log("onprogress"); 
+				} 
+			   	reader.onload = function(e){
+					   // 这个事件在读取成功结束后触发
+			
+					that.fileArr.push({url:e.target.result})
+					// document.getElementById(divPreviewId).innerHTML="<img src='"+e.target.result+"'>";
+				}  
+				reader.onloadend = function() { 
+					if (reader.error) { 
+						console.log(reader.error); 
+					}
+				}
+				
+		},
+        upFile(event){
+			
+			let category = 'op/upload';
+			let that = this;
+			let file = event.target.files;
+			console.log(file.target)
+
+			return ;
 			var fileName= event.name;
-		
 			if (!file) {
 				return;
 			}
-			let category = 'op/upload';
-		
 			var form = new FormData();
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function() {
@@ -42,52 +127,19 @@ export default{
 						form.append('callback', response.callback);
 						form.append('x:original_name', file.name);
 						form.append('file', file);
-
-						that.onTokenSuccess({
-							sourceservicetoken: response.token,
-							docTypeCode: response.docTypeCode,
-							operater: response.operater
-						});
-						
 						var xhrfile = new XMLHttpRequest();
 						xhrfile.onreadystatechange = function() {
 							if (xhrfile.readyState === 4) {
 								var fileResponse = xhrfile.response;
 								if (xhrfile.status === 200) {
 									if (fileResponse && fileResponse.code > 0) {
-										//  that.onSuccess(fileResponse.data,file);
-										var params = {};
-										
-										params.name = fileName;
-										params.url = fileResponse.data.url;
-										params.fileId = ""+fileResponse.data.id;
-										params.fileName = fileName;
-										params.fileUrl = fileResponse.data.url;
-										params.type = "ATTACHMENT"
-										that.onSuccess(params)
-
+										var data = fileResponse.data;
+										that.fileArr.push({url:data.url});
 									} else {
-										//报错
-										
-										that.$Notice.error({
-												title:fileResponse.msg
-										});
 									
 									}
-								} else if (xhrfile.status == 413) {
-								
-									
-									
-									that.$Notice.error({
-										title:"您上传的文件过大！"
-									});
-									// that.onError('您上传的文件过大！');
-								} else {
-								
-									that.$Notice.error({
-										title:'后台报错请联系管理员！'
-									});
-								
+								} else{
+
 								}
 							}
 						};
@@ -110,13 +162,12 @@ export default{
         },
         onTokenSuccess(){
 
-        },
-        	//上传成功
+		},
+    	//上传成功
 		onSuccess(params){
 			var detail = Object.assign({},params);
 			this.defaultList.push(detail)
 			this.submitUpload([detail]);
-			
 		},
     }
 }
@@ -124,5 +175,66 @@ export default{
 </script>
 
 <style lang="less" scoped>
+.up-files{
+	.up-icon{
+		display: inline-block;
+		width: 60px;
+		height: 60px;
+		
+		text-align: center;
+		cursor: pointer;
+		vertical-align: middle;
+		line-height: 60px;
+		vertical-align: middle;
+		background: #fff;
+		border: 1px dashed #dddee1;
+		border-radius: 4px;
+		text-align: center;
+		cursor: pointer;
+		position: relative;
+		overflow: hidden;
+		transition: border-color .2s ease;
+		font-size: 40px;
 
+	}
+	.up-icon:hover{
+		border: 1px dashed #2d8cf0;
+	}
+	.view{
+		display: inline-block;
+		width: auto;
+		height: 60px;
+		text-align: center;
+		line-height: 60px;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		overflow: hidden;
+		background: #fff;
+		position: relative;
+		box-shadow: 0 1px 1px rgba(0,0,0,.2);
+		margin-right: 4px;
+		vertical-align: middle;
+		position: relative;
+		img{
+			display: inline-block;
+			height: 100%;
+		}
+		.view-mask{
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+
+			display: none;
+			background: rgba(0,0,0,.6);
+			cursor: pointer;
+		}
+	
+
+	}
+	.view:hover .view-mask{
+		display: block;
+	}
+}
 </style>

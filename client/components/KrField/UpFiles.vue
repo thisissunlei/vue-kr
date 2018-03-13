@@ -1,55 +1,65 @@
 <template>
+	
 	<div class="up-files">
-		<div class="view" v-for="(item, index ) in fileArr" :key="item.id">
-			<img v-if="item.url" :src="item.url" alt="">
-			<div class="view-mask">
-				<!-- <Icon 
-					type="eye" 
-					size="20" 
-					color="#fff" 
-					style="margin:5px;"
-					@click="eyePhotoAlbum"
-				></Icon> -->
-				<span 
-					class="ivu-icon ivu-icon-eye" 
-					style="font-size:20px;margin:5px;color:#fff;"
-					@click="eyePhotoAlbum(index,$event)"
-				></span>
-				<span 
-					class="ivu-icon ivu-icon-trash-a" 
-					style="font-size:20px;margin:5px;color:#fff;"
-					@click="delImg(index,$event)"
-				></span>
-				<!-- <Icon 
-					type="trash-a" 
-					size="20" 
-					color="#fff" 
-					style="margin:5px;" 
-					@click="delImg"
-				> 
-				</Icon> -->
+		<EditLabel 
+			:readOrEdit="readOrEdit" 
+			:value="fileArr"
+			@okClick="okClick"
+			@cancelClick="cancelClick"
+			labeType="file"
+			@eyeImg="eyeImg"
+		>
+			<div class="view" v-for="(item, index ) in fileArr" :key="item.id">
+				<img v-if="item.url" :src="item.url" alt="">
+				<div class="view-mask">
+					
+					<span 
+						class="ivu-icon ivu-icon-eye" 
+						style="font-size:20px;margin:5px;color:#fff;"
+						@click="eyePhotoAlbum(index,$event)"
+					></span>
+					<span 
+						class="ivu-icon ivu-icon-trash-a" 
+						style="font-size:20px;margin:5px;color:#fff;"
+						@click="delImg(index,$event)"
+					></span>
+				</div>
+				
 			</div>
-		</div>
 
-        <input :id="inputId" type="file" style="display:none;" @change="fileChange">
-		<div class="up-icon" @click="addFileClick">
-			+
-		</div>
-		<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex"/>
+			<input :id="inputId" type="file" style="display:none;" @change="fileChange">
+			<div class="up-icon" @click="addFileClick">
+				+
+			</div>
+			</EditLabel>
+			<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex"/>
+	
 	</div>
+	
 </template>
 
 <script>
-import PhotoAlbum from '../PhotoAlbum'
+import PhotoAlbum from '../PhotoAlbum';
+import EditLabel from './EditLabel'
 export default{
 	components:{
-		PhotoAlbum
+		PhotoAlbum,
+		EditLabel
 	},
     props:{
         publicUse:{
             default:false,
             type:Boolean
-        }
+		},
+		value:{
+			default:()=>[],
+			type:Array
+		},
+		readOrEdit:{
+			default:false,
+			type:Boolean
+		}
+		
     },
     data(){
         return {
@@ -59,8 +69,22 @@ export default{
 			openPhotoAlbum:false,
 			eyeIndex:0,
         }
-    },
+	},
+	mounted(){
+		this.fileArr = [].concat(this.value)
+	},
 	methods:{
+		okClick(){
+           
+            this.$emit("okClick",this.labelValue)
+		},
+		eyeImg(index){
+			this.eyeIndex = index;
+			this.openPhotoAlbum = !this.openPhotoAlbum;
+		},
+        cancelClick(event){
+            // this.inputValue = event
+        },
 		eyePhotoAlbum(index,event){
 			this.eyeIndex = index;
 			this.openPhotoAlbum = !this.openPhotoAlbum;

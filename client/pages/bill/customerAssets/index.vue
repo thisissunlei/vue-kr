@@ -141,8 +141,7 @@
                 this.lowerSubmit();
             },
             showDetail(item){
-                let url = '/bill/customerAssets/'+item.id+'/view'
-                // let url = '/bill/customerAssets/1/view'
+                let url = '/bill/customerAssets/'+item.customerId+'/view'
                 window.open(url,'_blank');
             },
             changePage(page){

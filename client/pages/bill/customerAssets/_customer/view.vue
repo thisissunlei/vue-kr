@@ -7,13 +7,13 @@
 
 		<div class="content">
 			<LabelText label="客户ID：" type="circle" style="width:30%">
-				456
+				{{customerBasic.customerId}}
 			</LabelText>
 			<LabelText label="客户名称："  type="circle" style="width:30%">
-				456
+				{{customerBasic.customerName}}
 			</LabelText>
 			<LabelText label="客户状态："  type="circle" style="width:30%">
-				456
+				{{customerBasic.status}}
 			</LabelText>
 		</div>
 		<div class="tab-list">
@@ -70,6 +70,21 @@
 					code:'more'
 				},],
 				selectedTab:'account',
+				customerBasic:{
+					customerId:'w',
+					customerName:'w',
+					status:'w'
+				},
+				customerStatus:[{
+					value:'CREATED',
+					status:'已创建'
+				},{
+					value:'SIGNED',
+					status:'已签约'
+				},{
+					value:'ENTERED',
+					status:'已入驻'
+				}]
 
 				
 			}
@@ -83,10 +98,15 @@
 				// 获取客户进本信息
 				let {params}=this.$route;
 				 console.log('route',params.customer)
-				return;
-				this.$http.get('account-list',params).then((res)=>{
-                    this.accountList=res.data.items;
-                    this.totalCount=res.data.totalCount;
+				 let param = {
+				 	customerId:params.customer
+				 }
+				this.$http.get('customer-info',param).then((res)=>{
+					this.customerBasic = {
+						status : res.data.status,
+						customerId : res.data.id,
+						customerName : res.data.customerName
+					}
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

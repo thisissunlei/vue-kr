@@ -139,14 +139,14 @@
                 </FormItem>
                 
                
-                <FormItem style="margin-right:116px;margin-top:-10px;">
+                <FormItem style="margin-right:116px;margin-top:-30px;">
                     <Checkbox  
                         v-model="birthMonth" 
                         value="1"
                          @on-change="birthMonthChange"
                     >当前月份为会员生日月</Checkbox>
                  </FormItem>
-                 <FormItem  style="margin-top:-10px;">
+                 <FormItem  style="margin-top:-30px;">
                     <Checkbox 
                         v-model="leader"
                         value="1"
@@ -491,7 +491,7 @@ export default {
         width:284px;
         height:100px;
         padding-top:20px;
-        padding-left:16px;
+        padding-left:10px;
         background:#F6F6F6;
         margin-bottom:14px;
         border-radius: 3px;
@@ -510,7 +510,7 @@ export default {
 
     .u-member-content{
         width:570px;
-        height:234px;
+        height:210px;
         background:#F6F6F6;
         border-radius: 3px;
         position: relative;

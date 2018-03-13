@@ -39,7 +39,7 @@
             <div class="u-community-content" v-if="formItem.targetType=='1'">
                 <div class="u-community-select">
                     <div class="u-small-trigon"></div>
-                     <FormItem label="选择社区"  style="width:250px;" >
+                     <FormItem label="选择社区"  style="width:252px;" >
                         <Select
                             v-model="formItem.cmtId"
                             filterable
@@ -91,14 +91,14 @@
                 </FormItem>
                 
                
-                <FormItem style="margin-right:116px;margin-top:-10px;">
+                <FormItem style="margin-right:116px;margin-top:-30px;">
                     <Checkbox  
                         v-model="birthMonth" 
                         value="1"
                         @on-change="birthMonthChange"
                     >当前月份为会员生日月</Checkbox>
                  </FormItem>
-                 <FormItem  style="margin-top:-10px;">
+                 <FormItem  style="margin-top:-30px;">
                     <Checkbox 
                         v-model="leader"
                         value="1"
@@ -576,7 +576,7 @@ export default {
         width:284px;
         height:100px;
         padding-top:20px;
-        padding-left:16px;
+        padding-left:10px;
         background:#F6F6F6;
         margin-bottom:14px;
         border-radius: 3px;
@@ -595,7 +595,7 @@ export default {
 
     .u-member-content{
         width:570px;
-        height:234px;
+        height:210px;
         background:#F6F6F6;
         border-radius: 3px;
         position: relative;
@@ -758,6 +758,7 @@ export default {
                  line-height:17px;
                  text-align: left;
                  padding:0 10px;
+                 font-weight: bold;
                 
              }
              .u-push-content{
@@ -808,6 +809,7 @@ export default {
                      height:30px;
                      padding-top:16px;
                      margin-bottom:4px;
+                     font-weight: bold;
                  }
                  .u-push-content{
                     width:230px;

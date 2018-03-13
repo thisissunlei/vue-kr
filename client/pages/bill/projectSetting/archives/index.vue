@@ -35,6 +35,7 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
+            <KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
             <KrField :readOrEdit="true" type="city" label="含税" :cityValue="valueCity" placeholder="请输入含税收入" />
             <KrField :readOrEdit="true" type="textarea"  label="含税" value="123er" placeholder="请输入含税收入" :maxLength="200"/>
             <KrField :readOrEdit="true" type="time"  label="含税" value="10:10" placeholder="请输入含税收入"/>

@@ -48,6 +48,17 @@
             @okClick="selectClick"
         />
 
+        <KrTimeDate
+            v-if="type==='datetime'"
+            :value="value"
+            :placeholder="placeholder"
+            :type='type'
+            :readOrEdit="readOrEdit"
+            :format="format"
+            @change="selectChange"
+            @okClick="selectClick"
+        />
+
         <KrTime
             v-if="type==='time'"
             :value="value"
@@ -101,6 +112,7 @@ import KrInput from './KrInput';
 import KrSelect from './KrSelect';
 import KrDate from './KrDate';
 import KrTime from './KrTime';
+import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
 
@@ -113,7 +125,8 @@ export default {
       KrDate,
       KrTime,
       KrTextarea,
-      UpFiles
+      UpFiles,
+      KrTimeDate
     },
     props:{
         label:{

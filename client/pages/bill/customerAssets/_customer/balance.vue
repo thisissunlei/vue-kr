@@ -46,12 +46,34 @@
                 title="转余额"
                 width="500"
             >
+                <ChangeBalance ref="changeBalance" :editData="editData" v-if="openBalance == true" :syncData="syncData" />
             <div slot="footer">
-                <Button type="primary"  @click="submitBalance">确定</Button>
+                <Button type="primary"  @click="submitBalance('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
             </div>
         </Modal>
-
+        <Modal
+                v-model="openBusiness"
+                title="转营业外"
+                width="500"
+            >
+                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" :syncData="syncData"/>
+            <div slot="footer">
+                <Button type="primary"  @click="submitBusiness('balance')">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
+            </div>
+        </Modal>
+        <Modal
+                v-model="openCommunity"
+                title="转社区"
+                width="500"
+            >
+                <ChangeCommunity ref="changeCommunity" :editData="editData" v-if="openCommunity == true" :syncData="syncData"/>
+            <div slot="footer">
+                <Button type="primary"  @click="submitChangeCommunity('community')">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
+            </div>
+        </Modal>
     </div>
 	
 
@@ -61,14 +83,18 @@
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
 import dateUtils from 'vue-dateutils';
+import ChangeCommunity from './changeCommunity.vue';
+import ChangeBalance from './changeBalance.vue';
 	export default {
 		components:{
+            ChangeCommunity,
+            ChangeBalance
 		},
 		data (){
 			return{
-                searchForm:{
-
-                },
+                // 弹窗传回的数据
+                submitData:{},
+                searchForm:{},
                 // 汇总数据
                 summaryData:[{
                     balance:'143123213'
@@ -152,27 +178,8 @@ import dateUtils from 'vue-dateutils';
                         key: 'deposit',
                         align:'center',
                         render:(tag,params)=>{
-                            let index = params.row._index;
-                            var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.deposit))];
-                            if(index != 0){
-                                btnRender.push(
-                                    tag(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            label:'转余额',
-                                            checkAction:'fina_detail_rerun',
-                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.transferBalance('deposit',params.row)
-                                            }
-                                        }
-                                }))
-                            }
                            
-                           return tag('div',btnRender);  
+                           return '￥'+utils.thousand(params.row.deposit);  
                         }
                     },
                     {
@@ -313,7 +320,8 @@ import dateUtils from 'vue-dateutils';
                 openBalance:false,//转余额弹窗
                 openCommunity:false,//转社区弹窗
                 openBusiness:false,//转营业外弹窗
-                balanceType:''
+                balanceType:'',
+                editData:{}
 			}
 		},
 		methods:{
@@ -356,7 +364,8 @@ import dateUtils from 'vue-dateutils';
             },
             transferCommunity(item){
                 // 转社区
-                console.log('转社区',item)
+                console.log('转社区',item);
+                this.editData = item;
                 this.openCommunity = true;
             },
             transferOutsideBusiness(item){
@@ -373,13 +382,81 @@ import dateUtils from 'vue-dateutils';
                 
             },
             //转余额提交
-            submitBalance(){
-                console.log('submitBalance')
+            submitBalance(name){
+                var balanceForm = this.$refs.changeBalance.$refs;
+                var isSubmit = true;
+                balanceForm[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }else{
+                        console.log('submitBalance')
+                        // 提交数据
+                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
+                        //     this.getTableData()
+                        //     this.openCreate = false;
+                        // }).catch((err)=>{
+                        //     this.$Notice.error({
+                        //         title:err.message
+                        //     });
+                        // })
+
+                    }
+                })
+                
+            },
+            submitBusiness(name){
+                var balanceForm = this.$refs.changeBusiness.$refs;
+                var isSubmit = true;
+                balanceForm[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }else{
+                        console.log('submitBusiness',this.editData)
+                        // 提交数据
+                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
+                        //     this.getTableData()
+                        //     this.openCreate = false;
+                        // }).catch((err)=>{
+                        //     this.$Notice.error({
+                        //         title:err.message
+                        //     });
+                        // })
+
+                    }
+                })
+                
+            },
+            submitChangeCommunity(name){
+                var communityForm = this.$refs.changeCommunity.$refs;
+                var isSubmit = true;
+                communityForm[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }else{
+                        console.log('更改社区提交数据')
+                        // 提交数据
+                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
+                        //     this.getTableData()
+                        //     this.openCreate = false;
+                        // }).catch((err)=>{
+                        //     this.$Notice.error({
+                        //         title:err.message
+                        //     });
+                        // })
+
+                    }
+                })
             },
             closeModal(){
                 this.openBalance = false;
                 this.openBusiness = false;
-                this.openBusiness = false;
+                this.openCommunity = false;
+            },
+            syncData(data){
+                this.submitData = data;
             }
 
 

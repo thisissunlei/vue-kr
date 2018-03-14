@@ -80,7 +80,6 @@
                 :filterable="true"
                 @okClick="okClick"
             />
-
             <KrField 
                 :readOrEdit="true" 
                 type="text" 
@@ -100,6 +99,7 @@
                 :value="imgs" 
                 @okClick="okClick"
             />
+
         </Form>
         <div slot="footer">
             <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" :data="imgs" checkAction='bill_batch_pay'/>

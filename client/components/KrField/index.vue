@@ -263,11 +263,9 @@ export default {
             this.$emit('selectChange',event);
         },
         selectClick(value){
+
             this.$emit('selectClick',value);
         },
-
-
-
         checkChange(event){
             this.$emit('checkChange',event);
         },

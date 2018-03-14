@@ -1,16 +1,25 @@
 
 <template lang="html">
   <div class="select-tree">
-        <Input v-model="value" :placeholder="placeholder" ></Input>
-        <div  class="select" v-if="false">
-            <Tree :data="data" 
+        <div style="width:200px" @click="inputClick">
+            <Input 
+                readonly 
+                v-model="timeValue" 
+                :placeholder="placeholder"     
+            />
+        </div>
+        <div  class="select" v-if="mask" style="width:200px">
+            <Tree 
+                :data="data" 
                 show-checkbox
                 @on-select-change="selectChange"
                 @on-check-change="checkChange"
-                @on-toggle-expand="toggleExpand"
-            ></Tree>
+            />
+            <div style="text-align: center;">
+                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
+                <Button type="text" size="small" @click="clearClick">取消</Button>
+            </div>
         </div>
-        
   </div>
 </template>
 
@@ -28,21 +37,47 @@ export default {
         },
         value:{
             default:'',
+            type:[Number,String],
         }
-
+    },
+    data(){
+		return {
+            timeValue:this.data[0]?this.data[0].title:'',
+            mask:false,
+            checkValue:[]
+		}
     },
     methods:{
         selectChange(event){
             this.$emit('selectChange',event)
         },
         checkChange(event){
+            this.checkValue=event;
             this.$emit('checkChange',event)
         },
-        toggleExpand(event){
-            this.$emit('toggleExpand',event)
+        inputClick(){
+            this.mask=!this.mask;
+        },
+        sureClick(){
+            this.mask=false;
+            var str='';
+            if(this.checkValue.length){
+                this.checkValue.map((item,index)=>{
+                    if(this.checkValue.length-1==index){
+                        str+=item.title;
+                    }else{
+                        str+=item.title+',';
+                    }
+                })
+            }
+            this.timeValue=str;
+        },
+        clearClick(){
+            console.log('label--',this.timeValue);
+            //this.timeValue=this.labelValue;
+            this.mask=false;
         }
     }
-
 }
 </script>
 

@@ -43,9 +43,9 @@
             <KrField :readOrEdit="true" type="select"   label="含税" value="1" placeholder="请输入含税收入" :selectData="selectData" :filterable="true"/>
 
             <KrField :readOrEdit="true" type="text" label="含税" value="什么东西" placeholder="请输入含税收入" />
-            <!--
-            <KrField type="datetime" label="含税" value="formRight.input" placeholder="请输入含税收入" @dateChange="dateChange"/>
-            <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />-->
+        
+            <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+
             <KrField type="upFiles" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
         </Form>
         <div slot="footer">

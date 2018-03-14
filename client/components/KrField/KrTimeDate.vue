@@ -78,7 +78,7 @@ export default {
             this.open = false;
         },
         okClick(){
-            this.labelValue =this.timeValue?dateUtils.dateToStr("yyyy-MM-dd HH:mm",new Date(this.timeValue)):'';
+            this.labelValue =this.timeValue?dateUtils.dateToStr("yyyy-MM-dd HH:mm:ss",new Date(this.timeValue)):'';
             this.$emit("okClick",this.labelValue)
         },
         cancelClick(event){

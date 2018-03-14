@@ -257,11 +257,11 @@ export default {
 
 
         selectChange(event){
-            console.log('ev',event);
+            //console.log('ev',event);
             this.$emit('selectChange',event);
         },
         selectClick(value){
-            console.log('selectClick',value);
+            //console.log('selectClick',value);
             this.$emit('selectClick',value);
         },
 

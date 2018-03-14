@@ -21,6 +21,7 @@
             @on-keyup="keyup"
             @on-keydown="keydown"
             @on-keypress="keypress"
+            @okClick="okClick"
         />
 
         <KrSelect
@@ -34,7 +35,7 @@
             :filterable='filterable'
             :selectData="selectData"
             @change="selectChange"
-            @okClick="selectClick"
+            @okClick="okClick"
         />
 
         <KrDate
@@ -45,7 +46,7 @@
             :readOrEdit="readOrEdit"
             :format="format"
             @change="selectChange"
-            @okClick="selectClick"
+            @okClick="okClick"
         />
 
         <KrTimeDate
@@ -56,7 +57,7 @@
             :readOrEdit="readOrEdit"
             :format="format"
             @change="selectChange"
-            @okClick="selectClick"
+            @okClick="okClick"
         />
 
         <KrTime
@@ -66,7 +67,7 @@
             :type='type'
             :readOrEdit="readOrEdit"
             @change="selectChange"
-            @okClick="selectClick"
+            @okClick="okClick"
         />
 
         <KrTextarea
@@ -77,19 +78,20 @@
             :maxLength="maxLength"
             :readOrEdit="readOrEdit"
             @change="selectChange"
-            @okClick="selectClick"
+            @okClick="okClick"
         />
 
 
         <KrCascader
-            v-if="type==='city'"
+            v-if="type==='cascader'"
             :data="data"
-            :value="cityValue"
+            :value="value"
             :clearable='clearable'
             :placeholder="placeholder"
             :readOrEdit="readOrEdit"
             @change="change"
             @visibleChange="visibleChange"
+            @okClick="okClick"
         />
 
 
@@ -100,7 +102,12 @@
             @checkChange="checkChange"
             @toggleChange="toggleExpand"
         />
-        <UpFiles :readOrEdit="readOrEdit" v-if="type==='upFiles'"  :value = 'value'/>
+        <UpFiles 
+            v-if="type==='upFiles'"  
+            :readOrEdit="readOrEdit" 
+            :value = 'value'
+            @okClick="okClick"
+        />
     </FormItem>
   </div>
 </template>
@@ -132,9 +139,6 @@ export default {
         label:{
             default:'',
             type:String
-        },
-        cityValue:{
-            type:Array
         },
         value:{
 			type:[Number,String,Array],
@@ -255,13 +259,10 @@ export default {
             this.$emit('visibleChange',event);
         },
 
-
         selectChange(event){
-            console.log('ev',event);
             this.$emit('selectChange',event);
         },
         selectClick(value){
-            console.log('selectClick',value);
             this.$emit('selectClick',value);
         },
 

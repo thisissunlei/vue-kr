@@ -75,12 +75,11 @@ export default{
 	},
 	methods:{
 		close(){
-			console.log("======")
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		okClick(){
-           
-            this.$emit("okClick",this.labelValue)
+			
+            this.$emit("okClick",this.fileArr)
 		},
 		eyeImg(index){
 			this.eyeIndex = index;
@@ -105,6 +104,8 @@ export default{
 			
 			var that = this;
 			var file = event.target.files[0];
+			that.getUpFileUrl(file);
+			return ;
 			var reader = new FileReader(); 
 			reader.readAsDataURL(file);
 			// console.log("pppooooo",reader)
@@ -118,72 +119,79 @@ export default{
 				} 
 			   	reader.onload = function(e){
 					   // 这个事件在读取成功结束后触发
-			
-					that.fileArr.push({url:e.target.result})
+					that.getUpFileUrl(e);
+					// that.fileArr.push({url:e.target.result})
 					// document.getElementById(divPreviewId).innerHTML="<img src='"+e.target.result+"'>";
 				}  
 				reader.onloadend = function() { 
 					if (reader.error) { 
 						console.log(reader.error); 
+					}else {
+						that.getUpFileUrl(event);
 					}
 				}
 				
 		},
-        upFile(event){
-			
-			let category = 'op/upload';
-			let that = this;
-			let file = event.target.files;
-			console.log(file.target)
+		upfile(form,serverUrl){
+			var that  = this;
 
-			return ;
-			var fileName= event.name;
-			if (!file) {
-				return;
-			}
-			var form = new FormData();
-			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200) {
-						var response = xhr.response.data;
-						form.append('OSSAccessKeyId', response.ossAccessKeyId);
-						form.append('policy', response.policy);
-						form.append('Signature', response.sign);
-						form.append('key', response.pathPrefix+'/'+file.name);
-						form.append('uid', response.uid);
-						form.append('callback', response.callback);
-						form.append('x:original_name', file.name);
-						form.append('file', file);
-						var xhrfile = new XMLHttpRequest();
-						xhrfile.onreadystatechange = function() {
-							if (xhrfile.readyState === 4) {
-								var fileResponse = xhrfile.response;
-								if (xhrfile.status === 200) {
-									if (fileResponse && fileResponse.code > 0) {
-										var data = fileResponse.data;
-										that.fileArr.push({url:data.url});
-									} else {
-									
-									}
-								} else{
+			// this.$http.get(serverUrl,{},form).then((res)=>{
+			// 	console.log(res,"ppppppp")
+			// 	var data = res.data;
+			// 	that.fileArr.push({url:data.url});
+			// }).catch((err)=>{
+			// 	this.$Notice.error({
+			// 		title:err.message
+			// 	});
+			// })
 
-								}
-							}
-						};
-						xhrfile.open('POST', response.serverUrl, true);
-						xhrfile.responseType = 'json';
-						xhrfile.send(form);
-					} else {
-						that.onTokenError();
+			// return;
+			var xhrfile = new XMLHttpRequest();
+			xhrfile.onreadystatechange = function() {
+				if (xhrfile.readyState === 4) {
+					var fileResponse = xhrfile.response;
+					if (xhrfile.status === 200) {
+						if (fileResponse && fileResponse.code > 0) {
+							var data = fileResponse.data;
+						
+							that.fileArr.push({url:data.url});
+						} else {
+						
+						}
+					} else{
+
 					}
 				}
-				
 			};
-
-			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic='+that.publicUse+'&category='+category, true);
-			xhr.responseType = 'json';
-			xhr.send();
+			xhrfile.open('POST', serverUrl, true);
+			xhrfile.responseType = 'json';
+			xhrfile.send(form);
+		},
+        getUpFileUrl(event){
+			let category = 'op/upload';
+			let that = this;
+			let file = event;
+			var fileName= event.name;
+			var form = new FormData();
+			this.$http.get('get-vue-upload-url', {
+				category:category,
+				isPublic:that.publicUse
+			}).then((res)=>{
+				var response = res.data;
+				form.append('OSSAccessKeyId', response.ossAccessKeyId);
+				form.append('policy', response.policy);
+				form.append('Signature', response.sign);
+				form.append('key', response.pathPrefix+'/'+file.name);
+				form.append('uid', response.uid);
+				form.append('callback', response.callback);
+				form.append('x:original_name', file.name);
+				form.append('file', file);
+				that.upfile(form,response.serverUrl)
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
         },
         onTokenError(){
 

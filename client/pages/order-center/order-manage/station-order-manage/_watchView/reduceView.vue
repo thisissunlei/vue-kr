@@ -50,6 +50,9 @@
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData"/>
 			</DetailStyle>
+			<DetailStyle info="分期计划">
+				<Table :columns="stagesColumn" :data="installments"/>
+			</DetailStyle>
 		</div>
 	</div>	
 </template>
@@ -60,6 +63,7 @@
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 
 export default {
 	name:'ReduceView',
@@ -74,6 +78,7 @@ export default {
 	},
 	data(){
 		return{
+			installments:[],
 			basicInfo:{},
 			reduceStation:[],
             contract:[
@@ -93,7 +98,57 @@ export default {
                  align:'center'	
 				}  
 			],
-			contractData:[]
+			contractData:[],
+			stagesColumn:[
+                    {
+                        title: '分期类型',
+                        key: 'installmentCategoryStr'
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.billingDate));
+							return time;
+                        }
+                    },
+                    {
+                        title:'最后付款日',
+                        key:'lastPaymentDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.lastPaymentDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期开始时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期结束时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期金额',
+                        key: 'totalAmount',
+                        render: (h, params) => {
+                        	console.log('分期金额',params.row.totalAmount,'----',utils.thousand(params.row.totalAmount));
+                            return utils.thousand(params.row.totalAmount)
+                        }
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatusStr',
+                    }
+                ],
 		}
 	},
 	
@@ -111,7 +166,7 @@ export default {
 			this.$http.get('reduce-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
 
-
+					this.installments = response.data.installments;
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
 							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';

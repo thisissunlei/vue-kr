@@ -183,7 +183,7 @@
                         key: 'ctime',
                         align:'center',
                         render(tag, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime));
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
                         }
                     },
                     {

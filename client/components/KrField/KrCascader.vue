@@ -32,7 +32,8 @@ export default {
             default:'请输入...',
 		},
 		value:{
-			type:Array
+            default:'',
+			type:[Number,String]
         },
         readOrEdit:{
             type:Boolean,
@@ -50,16 +51,21 @@ export default {
 	data(){
 		return {
             isEdit:false,
-            cityValue:this.value,
+            cityValue:[],
             labelValue:'',
-            id:this.value
+            id:this.value,
 		}
     },
     mounted(){
-        this.labelValue=(this.cityValue&&this.cityValue.length)?this.fnTreeId(this.cityValue[this.cityValue.length-1],cityData):'';
+       
+        this.labelValue=this.cityValue ? this.fnTreeId(this.value,this.data) : '';
+        // console.log(this.cityValue,"pppppppp")
+        this.cityValue = this.cityValue.reverse();
     },
 	methods:{
         change(value){
+            this.cityValue = value;
+            this.labelValue=this.cityValue ? this.fnTreeId(value[2],this.data) : '';
             this.$emit('change',value);
         },
         fnTreeId(id,data){	
@@ -67,14 +73,16 @@ export default {
             for(var i=0;i<data.length;i++){		
                 let item = data[i];
                 cityLable = item.label;
-                if(!item.children && item.value == id ){
-                        this.key = item.value;
+                if(item.t_id == id ){
                         cityLable = item.label;
+                        this.cityValue.push(item.value)
                         return cityLable;
                 }else{
                     if(item.children){
                         let text = this.fnTreeId(id,item.children);
                         if(text){
+                            this.cityValue.push(item.value)
+                            
                             return cityLable+='/'+text;
                         }
                         
@@ -84,11 +92,12 @@ export default {
             return false;
         },
         visibleChange(event){
+  
             this.$emit('visibleChange',event)
         },
         okClick(){
-            this.labelValue =this.labelValue=(this.cityValue&&this.cityValue.length)?this.fnTreeId(this.cityValue[this.cityValue.length-1],cityData):'';
-            this.$emit("okClick",this.labelValue,this.cityValue);
+           
+            this.$emit("okClick",this.value);
             this.id=this.cityValue;
         },
         cancelClick(event){

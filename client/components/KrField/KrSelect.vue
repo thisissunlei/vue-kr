@@ -87,7 +87,7 @@ export default {
         },
         okClick(){
             this.getLabel(this.selectValue);
-            this.$emit("okClick",this.labelValue,this.selectValue);
+            this.$emit("okClick",this.selectValue,{value:this.selectValue,label:this.labelValue});
             this.id=this.selectValue;
         },
         cancelClick(event){

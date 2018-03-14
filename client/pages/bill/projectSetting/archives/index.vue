@@ -46,10 +46,11 @@
         
             <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
 
-            <KrField type="upFiles" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+            <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />
+
         </Form>
         <div slot="footer">
-            <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" checkAction='bill_batch_pay'/>
+            <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" :data="imgs" checkAction='bill_batch_pay'/>
         </div>
     </Modal>
     <!-- <Message 
@@ -81,6 +82,9 @@ import KrField from '~/components/KrField';
         },
         data () {
             return {
+                imgs:[{url:'http://krspace-upload.oss-cn-qingdao.aliyuncs.com/erp_public_upload/201801/A/185423628_871.jpg'},
+                    {url:'http://krspace-upload.oss-cn-qingdao.aliyuncs.com/erp_public_upload/201712/P/152142442_752.JPG'}
+                ],
                 totalCount:0,
                 openSearch:false,
                 openSettle:false,

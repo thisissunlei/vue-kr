@@ -100,7 +100,7 @@
             @checkChange="checkChange"
             @toggleChange="toggleExpand"
         />
-        <UpFiles v-if="type==='upFiles'" />
+        <UpFiles :readOrEdit="readOrEdit" v-if="type==='upFiles'"  :value = 'value'/>
     </FormItem>
   </div>
 </template>
@@ -137,7 +137,7 @@ export default {
             type:Array
         },
         value:{
-			type:[Number,String],
+			type:[Number,String,Array],
             default:''
         },
         form:{

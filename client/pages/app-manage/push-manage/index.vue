@@ -207,8 +207,8 @@ export default {
         margin:16px 0;
         padding:0 20px;
         .u-high-search{
-                width:22px;
-                height:22px;
+                width:26px;
+                height:26px;
                 background:url('~/assets/images/upperSearch.png') no-repeat center;
                 background-size: contain;  
                 float:right;

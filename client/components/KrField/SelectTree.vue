@@ -4,28 +4,28 @@
         <div style="width:200px" @click="inputClick">
             <Input 
                 readonly 
-                v-model="timeValue" 
+                v-model="treeInput" 
                 :placeholder="placeholder"     
             />
         </div>
         <div  class="select" v-if="mask" style="width:200px">
-            <Tree 
-                :data="data" 
-                show-checkbox
-                @on-select-change="selectChange"
-                @on-check-change="checkChange"
+            <TreeBtn
+               :data="data"
+               @checkChange="checkChange"
+               @sureClick="sureClick"
+               @clearClick="clearClick"
             />
-            <div style="text-align: center;">
-                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
-                <Button type="text" size="small" @click="clearClick">取消</Button>
-            </div>
         </div>
   </div>
 </template>
 
 <script>
+import TreeBtn from './Tree';
 export default {
-    props:{
+     components:{
+        TreeBtn
+     },
+     props:{
         data:{
             default:()=>[],
             type:Array,
@@ -34,23 +34,16 @@ export default {
         placeholder:{
             default:'请选择...',
             type:String
-        },
-        value:{
-            default:'',
-            type:[Number,String],
         }
     },
     data(){
 		return {
-            timeValue:this.data[0]?this.data[0].title:'',
+            treeInput:'',
             mask:false,
-            checkValue:[]
+            checkValue:[],
 		}
     },
     methods:{
-        selectChange(event){
-            this.$emit('selectChange',event)
-        },
         checkChange(event){
             this.checkValue=event;
             this.$emit('checkChange',event)
@@ -63,6 +56,7 @@ export default {
             var str='';
             if(this.checkValue.length){
                 this.checkValue.map((item,index)=>{
+                    item.checked=true;
                     if(this.checkValue.length-1==index){
                         str+=item.title;
                     }else{
@@ -70,11 +64,9 @@ export default {
                     }
                 })
             }
-            this.timeValue=str;
+            this.treeInput=str;
         },
         clearClick(){
-            console.log('label--',this.timeValue);
-            //this.timeValue=this.labelValue;
             this.mask=false;
         }
     }

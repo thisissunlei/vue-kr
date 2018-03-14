@@ -44,7 +44,7 @@
 
             <KrField :readOrEdit="true" type="text" label="含税" value="什么东西" placeholder="请输入含税收入" />
         
-            <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" />
+            <KrField type="selectTree" :data="data" label="含税"  placeholder="请输入含税收入" />
 
             <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />
 
@@ -120,28 +120,35 @@ import KrField from '~/components/KrField';
                     {
                         title: 'parent 1',
                         expand: true,
+                        tId:1,
                         children: [
                             {
                                 title: 'parent 1-1',
                                 expand: true,
+                                tId:2,
                                 children: [
                                     {
-                                        title: 'leaf 1-1-1'
+                                        title: 'leaf 1-1-1',
+                                        tId:3,
                                     },
                                     {
-                                        title: 'leaf 1-1-2'
+                                        title: 'leaf 1-1-2',
+                                        tId:4,
                                     }
                                 ]
                             },
                             {
                                 title: 'parent 1-2',
                                 expand: true,
+                                tId:5,
                                 children: [
                                     {
-                                        title: 'leaf 1-2-1'
+                                        title: 'leaf 1-2-1',
+                                        tId:6,
                                     },
                                     {
-                                        title: 'leaf 1-2-1'
+                                        title: 'leaf 1-2-1',
+                                        tId:7,
                                     }
                                 ]
                             }
@@ -267,7 +274,7 @@ import KrField from '~/components/KrField';
             },
             //新建项目创建成功
             newArchivesSubmit(){
-
+                
             },
             //信息提示框
             onChangeOpen(data){

@@ -96,9 +96,7 @@
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
-            @selectChange="selectChange"
             @checkChange="checkChange"
-            @toggleChange="toggleExpand"
         />
         <UpFiles :readOrEdit="readOrEdit" v-if="type==='upFiles'"  :value = 'value'/>
     </FormItem>

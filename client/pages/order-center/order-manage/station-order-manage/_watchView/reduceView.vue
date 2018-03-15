@@ -50,6 +50,28 @@
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData"/>
 			</DetailStyle>
+			<DetailStyle info="分期计划">
+				<Table :columns="stagesColumn" :data="installments"/>
+			</DetailStyle>
+			<DetailStyle info="相关规则">
+				<div class="formula">
+					<h4>服务费总额计算公式</h4>
+					<div>服务费总额=月服务费*月数+日服务费*日数（除整月、拼凑整月外的零散天数）</div>
+					<div> 日服务费=月服务费/30</div>
+					<div>月服务费=系统自定义</div>
+				</div>
+				<div class="formula">
+					<h4 style="margin-top:15px">日费用的计算公式</h4>
+					<div>日费用（整月）=月服务费/日历月实际天数</div>
+					<div>日费用（拼凑整月）=月服务费/拼凑整月的实际天数</div>
+					<div>日费用（非整月）=月服务费/30</div>
+					<div>日费用（历史数据）=分期金额（历史数据）/分期总天数（历史数据）</div>
+				</div>
+				<div class="formula">
+					<h4 style="margin-top:15px">分期金额的计算公式</h4>
+					<div>首期金额=零散天（日历月中实际零散天数）日费用之和+付款方式（月付/季付等）*月服务费</div>
+				</div>
+			</DetailStyle>
 		</div>
 	</div>	
 </template>
@@ -60,6 +82,7 @@
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 
 export default {
 	name:'ReduceView',
@@ -74,6 +97,7 @@ export default {
 	},
 	data(){
 		return{
+			installments:[],
 			basicInfo:{},
 			reduceStation:[],
             contract:[
@@ -93,7 +117,57 @@ export default {
                  align:'center'	
 				}  
 			],
-			contractData:[]
+			contractData:[],
+			stagesColumn:[
+                    {
+                        title: '分期类型',
+                        key: 'installmentCategoryStr'
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.billingDate));
+							return time;
+                        }
+                    },
+                    {
+                        title:'最后付款日',
+                        key:'lastPaymentDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.lastPaymentDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期开始时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期结束时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期金额',
+                        key: 'totalAmount',
+                        render: (h, params) => {
+                        	console.log('分期金额',params.row.totalAmount,'----',utils.thousand(params.row.totalAmount));
+                            return utils.thousand(params.row.totalAmount)
+                        }
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatusStr',
+                    }
+                ],
 		}
 	},
 	
@@ -111,7 +185,7 @@ export default {
 			this.$http.get('reduce-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
 
-
+					this.installments = response.data.installments;
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
 							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';
@@ -166,6 +240,12 @@ export default {
 				padding-top:15px;
 				display:inline-block;
 
+			}
+		}
+		.formula{
+			margin-left:12px;
+			&>div{
+				margin:10px 0;
 			}
 		}
 	}

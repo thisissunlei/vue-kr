@@ -684,10 +684,11 @@ import utils from '~/plugins/utils';
                 formItem.endDate =end;
                 let _this = this;
                 this.disabled = true;
-                 this.$http.post('save-join', formItem, r => {
-                      window.close();
-                      window.opener.location.reload();
-                }, e => {
+                 this.$http.post('save-join', formItem).then( r => {
+                    window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/joinView';
+                      // window.close();
+                      // window.opener.location.reload();
+                }).catch( e => {
                      _this.$Notice.error({
                         title:e.message
                     })

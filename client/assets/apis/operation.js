@@ -65,8 +65,65 @@ export default  {
         url: '/api/krspace-finance-web/app/icon/location/list',
         method: 'get'
     },
-    
-
-
+    //app管理--推送管理--推送列表
+   'get-app-push-page': {
+        url: '/api/krspace-finance-web/app/push/page',
+        method: 'get'
+    },
+    //app管理--推送管理--推送详情
+    'get-app-push-detail': {
+        url: '/api/krspace-finance-web/app/push/detail',
+        method: 'get'
+    },
+    //app管理--推送管理--新建推送
+    'create-app-push': {
+        url: '/api/krspace-finance-web/app/push/create',
+        method: 'post'
+    },
+    //app管理--推送管理--根据活动标题查询活动
+    'get-title-list': {
+        url: '/api/krspace-finance-web/activity/management/title/list',
+        method: 'get'
+    },
+    //app管理--推送管理--社区列表
+    'get-community-new-list': {
+        url: '/api/krspace-finance-web/cmt/community/new/list',
+        method: 'get'
+    },
+     //app管理--通知管理--通知列表
+     'get-notification-page': {
+        url: '/api/krspace-finance-web/app/notification/page',
+        method: 'get'
+    },
+     //app管理--通知管理--详情
+     'get-notification-detail': {
+        url: '/api/krspace-finance-web/app/notification/detail',
+        method: 'get'
+    },
+     //app管理--通知管理--新建通知
+     'create-notification': {
+        url: '/api/krspace-finance-web/app/notification/create',
+        method: 'post'
+    },
+     //app管理--通知管理--编辑通知
+     'edit-notification': {
+        url: '/api/krspace-finance-web/app/notification/edit',
+        method: 'post'
+    },
+    //app管理--通知管理--删除通知
+    'delete-notification': {
+        url: '/api/krspace-finance-web/app/notification/delete',
+        method: 'post'
+    },
+     //app管理--通知管理--上传图片
+     'upload-app-push': {
+        url: '/api/krspace-finance-web/app/push/upload',
+        method: 'post'
+    },
+    //app管理--通知管理--获取通知目标数
+    'get-target-count': {
+        url: '/api/krspace-finance-web/app/notification/target-count',
+        method: 'get'
+    },
 }
   

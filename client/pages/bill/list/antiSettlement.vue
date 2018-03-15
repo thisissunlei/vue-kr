@@ -35,16 +35,12 @@
         	this.$emit('formData', this.value);
 		},
 		watch: {
-
-			$props: {
+			detail: {
 				deep: true,
 				handler(nextProps) {
 					if(this.detail.paidAmount){
 						this.value=this.detail.paidAmount;
 					}
-					
-				
-					
 				}
 			}
 

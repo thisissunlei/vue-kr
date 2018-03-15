@@ -4,7 +4,7 @@
             <TabPane label="项目档案管理">
                 <archives />
             </TabPane>
-            <TabPane label="项目档案管理">
+            <TabPane label="开业进度总览">
                 <ProgressView/>
             </TabPane>
         </Tabs>
@@ -25,12 +25,7 @@ export default {
         return{
 
         }
-    },
-    methods:{
-        
-    },
-
- 
+    }
 }
 
 </script>

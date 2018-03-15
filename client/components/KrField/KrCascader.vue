@@ -13,6 +13,7 @@
                 :clearable='clearable'
                 @on-change="change"
                 @on-visible-change="visibleChange"
+                style="width:252px;"
             />
         </EditLabel>
 	</div>
@@ -30,7 +31,7 @@ export default {
         placeholder:{
             type:String,
             default:'请输入...',
-		},
+        },
 		value:{
             default:'',
 			type:[Number,String]
@@ -56,17 +57,15 @@ export default {
             id:this.value,
 		}
     },
-    mounted(){
-       
+    mounted(){   
         this.labelValue=this.cityValue ? this.fnTreeId(this.value,this.data) : '';
-        // console.log(this.cityValue,"pppppppp")
         this.cityValue = this.cityValue.reverse();
     },
 	methods:{
         change(value){
-            this.cityValue = value;
-            this.labelValue=this.cityValue ? this.fnTreeId(value[2],this.data) : '';
+            this.labelValue=(value&&value.length) ? this.fnTreeId(value[2],this.data) : '';
             this.$emit('change',value);
+            this.cityValue = value;
         },
         fnTreeId(id,data){	
             var cityLable = '';
@@ -92,7 +91,6 @@ export default {
             return false;
         },
         visibleChange(event){
-  
             this.$emit('visibleChange',event)
         },
         okClick(){

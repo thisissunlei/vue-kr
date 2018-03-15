@@ -1,10 +1,10 @@
 <template>
 <div class="archives">
     <div class="u-search" >
-        <Buttons type="primary" label='新建项目' @click="newArchives" checkAction='bill_batch_pay'/>
+        <Buttons type="primary" label='新建项目' @click="newArchives" checkAction='seat_order_in_export'/>
     </div>
     <div class="u-table">
-        <Table  border :columns="columns" :data="billList"  ></Table>
+        <Table  border :columns="columns" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page 
@@ -27,15 +27,26 @@
         cancel-text="取消"
         width="443"
      >
-        <Form :model="formRight" label-position="left">
-            <!-- <FormItem label="含税收入" >
-                <Input 
-                    v-model="formRight.input"
-                    placeholder="请输入含税收入" 
-                    style="width: 250px"
-                ></Input> 
-            </FormItem> -->
-            <KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
+        <Form :model="formRight" :rules="ruleValidate" label-position="left">
+
+            <Form-item label="项目名称" class="bill-search-class" prop="name">
+                    <i-input 
+                        v-model="formRight.name" 
+                        placeholder="请输入项目名称"
+                        style="width: 252px"
+                    /> 
+            </Form-item>
+            
+            <Form-item label="所在地区" class="bill-search-class" prop="city">
+                    <KrField 
+                        type="cascader" 
+                        placeholder="请输入所在地区" 
+                        @okClick="okClick"
+                        @change="cascaderChange"
+                    />
+            </Form-item>
+
+            <!--<KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
             <KrField :readOrEdit="true" type="city" label="含税" :cityValue="valueCity" placeholder="请输入含税收入" />
             <KrField :readOrEdit="true" type="textarea"  label="含税" value="123er" placeholder="请输入含税收入" :maxLength="200"/>
             <KrField :readOrEdit="true" type="time"  label="含税" value="10:10" placeholder="请输入含税收入"/>
@@ -46,7 +57,7 @@
         
             <KrField type="selectTree" :data="data" label="含税"  placeholder="请输入含税收入" />
 
-            <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />
+            <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />-->
           
             <KrField 
                 :readOrEdit="true" 
@@ -172,8 +183,16 @@ import KrField from '~/components/KrField';
                 },
                 formRight:{
                     input:'',
-                    radio:'爪哇犀牛',
-                    rentMoney:''
+                    name:'',
+                    city:''
+                },
+                ruleValidate: {
+                    name: [
+                        { required: true, message: '项目名称必填', trigger: 'change' }
+                    ],
+                    city: [
+                        { required: true, message: '所在城市必填', trigger: 'change' }
+                    ]
                 },
                 /**
                  * 开关部分内容
@@ -323,6 +342,9 @@ import KrField from '~/components/KrField';
             change(event){
                 console.log(event.target.value,"llllll")
             },
+            cascaderChange(event){
+                 this.formRight.city=event;
+            },
             radioChange(event){
                 console.log(event,"event");
             },
@@ -348,7 +370,7 @@ import KrField from '~/components/KrField';
             },
             //新建项目创建成功
             newArchivesSubmit(){
-                
+                console.log('from--',this.formRight);
             },
             //信息提示框
             onChangeOpen(data){
@@ -372,7 +394,7 @@ import KrField from '~/components/KrField';
     }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .archives{
     padding:0 20px;
     .u-search{
@@ -389,20 +411,10 @@ import KrField from '~/components/KrField';
 
             }
     }
-    // .ivu-checkbox-wrapper{
-    //     margin-right:0;
-    // }
-    // .ivu-table-cell{
-    //     padding:0;
-    // }
-    // .u-table{
-    //     padding:0 20px;
-    // }  
+   
 }
-.u-tip{
-        text-align: center;
-        font-size:14px;
-        margin-top: 34px;
-        margin-bottom: 36px;
+.bill-search-class{
+        width:50%;
+        padding-left:32px;
 }
 </style>

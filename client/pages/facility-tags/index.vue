@@ -141,7 +141,7 @@
                      name="upfile"
                      :format="['jpg','jpeg','png']" 
                      accept="image" 
-                     action="http://optest02.krspace.cn/api/krspace-finance-web/cmtbright/upload-pic"
+                     action="/api/krspace-finance-web/cmtbright/upload-pic"
                      :on-success="uploadPicSuccess"
                      :on-format-error="uploadPicErr"
                      :before-upload="handleBeforeUpload"

@@ -3,6 +3,7 @@
     <div class="u-search" >
         <Buttons type="primary" label='新建项目' @click="newArchives" checkAction='bill_batch_pay'/>
     </div>
+    
     <div class="u-table">
         <Table  border :columns="columns" :data="billList"  ></Table>
         <div style="margin: 10px;overflow: hidden">
@@ -123,6 +124,7 @@ import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
 import KrField from '~/components/KrField';
+import KrTree from '~/components/KrTree'
 
     export default {
         name: 'Bill',
@@ -130,7 +132,8 @@ import KrField from '~/components/KrField';
             SectionTitle,
             Message,
             Buttons,
-            KrField
+            KrField,
+            KrTree
         },
         data () {
             return {
@@ -172,15 +175,19 @@ import KrField from '~/components/KrField';
                     {
                         title: 'parent 1',
                         expand: true,
+                        t_id:0,
                         children: [
                             {
                                 title: 'parent 1-1',
                                 expand: true,
+                                 t_id:1,
                                 children: [
                                     {
+                                         t_id:2,
                                         title: 'leaf 1-1-1'
                                     },
                                     {
+                                         t_id:3,
                                         title: 'leaf 1-1-2'
                                     }
                                 ]
@@ -188,11 +195,15 @@ import KrField from '~/components/KrField';
                             {
                                 title: 'parent 1-2',
                                 expand: true,
+                                 t_id:4,
                                 children: [
                                     {
+                                         t_id:5,
+
                                         title: 'leaf 1-2-1'
                                     },
                                     {
+                                         t_id:6,
                                         title: 'leaf 1-2-1'
                                     }
                                 ]
@@ -363,15 +374,7 @@ import KrField from '~/components/KrField';
 
             }
     }
-    // .ivu-checkbox-wrapper{
-    //     margin-right:0;
-    // }
-    // .ivu-table-cell{
-    //     padding:0;
-    // }
-    // .u-table{
-    //     padding:0 20px;
-    // }  
+   
 }
 .u-tip{
         text-align: center;

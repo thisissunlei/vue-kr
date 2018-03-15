@@ -9,22 +9,22 @@
             />
         </div>
         <div  class="select" v-if="mask" style="width:200px">
-            <TreeBtn
-               :data="data"
-               @checkChange="checkChange"
-               @sureClick="sureClick"
-               @clearClick="clearClick"
+            <Tree 
+                :data="data" 
+                show-checkbox
+                @on-check-change="checkChange"
             />
+            <div style="text-align: center;">
+                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
+                <Button type="text" size="small" @click="clearClick">取消</Button>
+            </div>
         </div>
   </div>
 </template>
 
 <script>
-import TreeBtn from './Tree';
+
 export default {
-     components:{
-        TreeBtn
-     },
      props:{
         data:{
             default:()=>[],

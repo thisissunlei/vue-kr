@@ -89,6 +89,19 @@
         :warn="warn"
         @changeOpen="onChangeOpen"
     ></Message>
+    <Modal
+        v-model="openDownload"
+        title="下载pdf"
+        ok-text="确定"
+        cancel-text="取消"
+        width="652"
+     >
+         <PdfDownload  @formData="getSealPrint"/>
+         <div slot="footer">
+            <Button type="primary" @click="pdfDownload">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDownloadDialog">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 
@@ -102,6 +115,7 @@ import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
+import PdfDownload from './pdfDownload';
 
     export default {
         name: 'Bill',
@@ -111,7 +125,8 @@ import Buttons from '~/components/Buttons';
             antiSettlement,
             SectionTitle,
             Message,
-            Buttons
+            Buttons,
+            PdfDownload
         },
         data () {
             return {
@@ -134,6 +149,7 @@ import Buttons from '~/components/Buttons';
                 warn:'',
                 MessageType:'',
                 billType:{},
+                openDownload:true,
                 columns: [
                     {
                         type: 'selection',
@@ -281,7 +297,21 @@ import Buttons from '~/components/Buttons';
                                                         this.showAntiSettle(params.row)
                                                     }
                                                 }
-                                            })
+                                            }),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);  
                             }else if(params.row.payStatus==='PAID'){
                                 return h('div', [
@@ -298,7 +328,21 @@ import Buttons from '~/components/Buttons';
                                                         this.openView(params.row)
                                                     }
                                                 }
-                                            }, '查看')
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);
                             }else if(params.row.payStatus==='WAIT'){
                                 return h('div', [
@@ -329,7 +373,20 @@ import Buttons from '~/components/Buttons';
                                                         this.showSettle(params.row)
                                                     }
                                                 }
-                                            })
+                                            }),h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);
                             }
                         }
@@ -347,6 +404,20 @@ import Buttons from '~/components/Buttons';
              
         },
         methods:{
+            getSealPrint(seal){
+                console.log('seal====>>>',seal)
+            },
+            //下载电子账单
+            pdfDownload(){
+
+            },
+            //下载提示框
+            openDownloadDialog(params){
+                if(params){
+                   this.itemDetail=params;
+                }
+                 this.openDownload=!this.openDownload;
+            },
             renderList(){
                 this.getBillType();
                 let bizType=this.billType;

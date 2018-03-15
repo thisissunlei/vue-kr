@@ -56,6 +56,17 @@
 			</DetailStyle>
 			<DetailStyle info="分期计划">
 				<Table :columns="stagesColumn" :data="installments"/>
+				<div class="button-list">
+					<div class="table-button" v-if="showButton == true && showAll == false" @click="showAllList">
+						<span>展开</span>
+						<img class="showAll" src="~assets/images/arrows.svg" />
+						
+					</div>
+					<div class="table-button" v-if="showButton == true && showAll == true"  @click="notAllList">
+						<span>收起</span>
+						<img class="notAll" src="~assets/images/arrows.svg" />
+					</div>
+				</div>
 			</DetailStyle>
 			<DetailStyle info="相关规则">
 				<div class="formula">
@@ -220,6 +231,8 @@ export default {
 			serviceData:[],
 			treatmentData:[],
 			contractData:[],
+			showButton:false,
+			showAll:false,
 			stagesColumn:[
                     {
                         title: '分期类型',
@@ -285,8 +298,15 @@ export default {
 			};
 			this.$http.get('join-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
+					if(response.data.installments.length>10){
+						this.showButton = true;
+						this.showAll = false;
+						this.installments = response.data.installments.slice(0,10)
+					}else{
+						this.installments = response.data.installments || [];
+					}
+					this.installmentAll = response.data.installments || []
 					
-					this.installments = response.data.installments || [];
 					this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
 					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					this.serviceData=response.data.orderSeatDetailVo||[];
@@ -297,7 +317,18 @@ export default {
 						title:error.message
 				});
 			})
-		}
+		},
+		notAllList(){
+			let list = this.installmentAll
+			this.showAll = false;
+			this.installments = list.slice(0,10)
+		},
+		showAllList(){
+			let list = this.installmentAll
+			this.showAll = true;
+			this.installments = list;
+		},
+
 	}
 }
 </script>
@@ -324,6 +355,38 @@ export default {
 			.ivu-table-wrapper{
 				margin-bottom:30px;
 			}
+		}
+		.table-button{
+			text-align: center;
+			cursor: pointer;
+			color:#499DF1;
+			display: inline-block;
+			transition:all .5s;
+			&>span{
+				font-size: 16px;
+				padding-bottom:5px;
+				padding-top:10px;
+				display: inline-block;
+			}
+		}
+		.button-list{
+			text-align: center;
+		}
+		.notAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+			transform: rotate(180deg);
+			vertical-align: middle;
+		}
+		.showAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+
+			vertical-align: middle;
 		}
 		.formula{
 			margin-left:12px;

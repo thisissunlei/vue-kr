@@ -77,7 +77,7 @@ export default {
         }
         .checked-logo{
           border: 2px solid #7ED321;
-          background: #7ED321 url('~/assets/images/check_icon.svg') no-repeat ;
+          background: #7ED321 url('~/assets/images/check.svg') no-repeat ;
           display: inline-block;
           margin-top: 95px;
           width: 55px;

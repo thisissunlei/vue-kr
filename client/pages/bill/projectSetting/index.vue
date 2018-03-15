@@ -5,7 +5,7 @@
                 <archives />
             </TabPane>
             <TabPane label="项目档案管理">
-
+                <ProgressView/>
             </TabPane>
         </Tabs>
   </div>
@@ -15,9 +15,11 @@
 <script>
 
 import archives from './archives'
+import ProgressView from './progressView';
 export default {
     components:{
-        archives
+        archives,
+        ProgressView
     },
     data(){
         return{

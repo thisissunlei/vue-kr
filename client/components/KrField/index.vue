@@ -98,9 +98,7 @@
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
-            @selectChange="selectChange"
             @checkChange="checkChange"
-            @toggleChange="toggleExpand"
         />
         <UpFiles 
             v-if="type==='upFiles'"  

@@ -149,7 +149,8 @@ import PdfDownload from './pdfDownload';
                 warn:'',
                 MessageType:'',
                 billType:{},
-                openDownload:true,
+                openDownload:false,
+                printDetail:'',
                 columns: [
                     {
                         type: 'selection',
@@ -414,7 +415,7 @@ import PdfDownload from './pdfDownload';
             //下载提示框
             openDownloadDialog(params){
                 if(params){
-                   this.itemDetail=params;
+                   this.printDetail=params;
                 }
                  this.openDownload=!this.openDownload;
             },

@@ -208,26 +208,7 @@ export default {
            
         }
     },
-    watch: {
-            $props: {
-                deep: true,
-                handler(nextProps) {
-                   console.log('----',nextProps);
-                }
-            }
-    },
     methods:{
-        showField(type){
-            switch (type) {
-                case "text":
-                    return true
-
-                default:
-                    return false
-
-            }
-
-        },
         click(event){
             this.$emit('click',event);
         },
@@ -275,7 +256,8 @@ export default {
         },
         radioChange(event){
             this.$emit("radioChange",event)
-        }
+        },
+      
     }
 }
 </script>

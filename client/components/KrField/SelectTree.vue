@@ -3,22 +3,27 @@
   <div class="select-tree">
         <div style="width:200px" @click="inputClick">
             <Input 
-                 
+                @on-change="inputSearch"  
                 v-model="treeInput" 
                 :placeholder="placeholder"     
             />
         </div>
-        <div  class="select" v-if="mask" style="width:200px">
-            <Tree 
-                :data="data" 
-                show-checkbox
-                @on-check-change="checkChange"
-            />
-            <div style="text-align: center;">
+        <div  class="select" v-if="mask" >
+            <div class="tree-content">
+                 <Tree 
+                    :data="nowData" 
+                    show-checkbox
+                    @on-check-change="checkChange"
+                    @on-toggle-expand="toggleExpand"
+                />
+            </div>
+           
+             <div class="footer">
                 <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
                 <Button type="text" size="small" @click="clearClick">取消</Button>
             </div>
         </div>
+       
   </div>
 </template>
 
@@ -41,6 +46,7 @@ export default {
             treeInput:'',
             mask:false,
             checkValue:[],
+            nowData:this.data,
 		}
     },
     methods:{
@@ -49,7 +55,18 @@ export default {
             this.$emit('checkChange',event)
         },
         inputClick(){
-            this.mask=!this.mask;
+            this.mask=true;
+        },
+        toggleExpand(event){
+            console.log()
+           this.nowData = this.changeTreeData(event,this.nowData);
+        },
+        inputSearch(event){
+            var searchKey = event.target.value;
+            this.nowData = this.searchTreeData(searchKey,this.nowData).allData;
+            // console.log(this.nowData,"ppppp")
+            // this.$emit('search',searchKey);
+            
         },
         sureClick(){
             this.mask=false;
@@ -68,6 +85,43 @@ export default {
         },
         clearClick(){
             this.mask=false;
+        },
+        changeTreeData(event,data){
+            var allData = data.map((item,index)=>{
+                if(item.t_id == event.t_id){
+                    item.expand = event.expand;
+                }
+                if(item.children && item.children.length){
+                    item.children = this.changeTreeData(event,item.children);
+                }
+                return item;
+            })
+            return allData;
+        },
+        searchTreeData(searchKey,data){
+            var isOpen = false;
+            var allData = data.map((item,index)=>{
+                if( searchKey && item.title.indexOf(searchKey) != -1 ){
+                    item.expand = true
+                    isOpen = true;
+                    console.log(item.title,"------")
+                   
+                }else{
+                     item.expand = false;
+                }   
+               
+                if(item.children && item.children.length){
+                    let obj = this.searchTreeData(searchKey,item.children);
+                    if(obj.isOpen){
+                        item.expand = true;
+                         isOpen = true;
+                    }
+                    item.children = obj.allData;
+                }
+                return item;
+            })
+         
+            return  {allData:allData,isOpen:isOpen};
         }
     }
 }
@@ -76,16 +130,25 @@ export default {
 <style lang="less" scoped>
     .select-tree{
         .select{
-                max-height: 200px;
+            .tree-content{
+                min-width: 200px;
+                max-height: 150px;
                 overflow: auto;
                 margin: 5px 0;
                 padding: 5px 0;
+               
                 background-color: #fff;
                 box-sizing: border-box;
-                border-radius: 4px;
-                box-shadow: 0 1px 6px rgba(0,0,0,.2);
-                position: absolute;
-                z-index: 900;
+            }
+            
+            border-radius: 4px;
+            box-shadow: 0 1px 6px rgba(0,0,0,.2);
+            background-color: #fff;
+            position: absolute;
+            z-index: 900;
+            .footer{
+               text-align: center;
+            }
         }
     }
 </style>

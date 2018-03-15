@@ -36,16 +36,15 @@
                     style="width: 250px"
                 ></Input> 
             </FormItem> -->
-            <KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="city" label="含税" :cityValue="valueCity" placeholder="请输入含税收入" />
-            <KrField :readOrEdit="true" type="textarea"  label="含税" value="123er" placeholder="请输入含税收入" :maxLength="200"/>
-            <KrField :readOrEdit="true" type="time"  label="含税" value="10:10" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="date"  label="含税" value="2018-01-02" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="select"   label="含税" value="1" placeholder="请输入含税收入" :selectData="selectData" :filterable="true"/>
-
-            <KrField :readOrEdit="true" type="text" label="含税" value="什么东西" placeholder="请输入含税收入" />
-        
-            <KrField type="selectTree" :data="data" label="含税"  placeholder="请输入含税收入" />
+          
+          
+            <KrField 
+                type="selectTree" 
+                :data="data" 
+                label="含税"  
+                placeholder="请输入含税收入" 
+              
+            />
 
             <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />
           
@@ -193,13 +192,13 @@ import KrTree from '~/components/KrTree'
                 data: [
                     {
                         title: 'parent 1',
-                        expand: true,
+                      
                         t_id:0,
                         isSelect:true,
                         children: [
                             {
                                 title: 'parent 1-1',
-                                expand: true,
+                               
                                  t_id:1,
                                 children: [
                                     {
@@ -214,7 +213,7 @@ import KrTree from '~/components/KrTree'
                             },
                             {
                                 title: 'parent 1-2',
-                                expand: true,
+                               
                                  t_id:4,
                                 children: [
                                     {
@@ -323,8 +322,9 @@ import KrTree from '~/components/KrTree'
         },
         methods:{
             okClick(event){
-                console.log(event,"--------------");
+              
             },
+            
             change(event){
                 console.log(event.target.value,"llllll")
             },

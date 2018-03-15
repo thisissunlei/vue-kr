@@ -151,6 +151,7 @@ import PdfDownload from './pdfDownload';
                 billType:{},
                 openDownload:false,
                 printDetail:'',
+                seal:'0',
                 columns: [
                     {
                         type: 'selection',
@@ -406,11 +407,12 @@ import PdfDownload from './pdfDownload';
         },
         methods:{
             getSealPrint(seal){
-                console.log('seal====>>>',seal)
+                this.seal=seal;
+                
             },
             //下载电子账单
             pdfDownload(){
-
+                console.log('this.seal',this.seal)
             },
             //下载提示框
             openDownloadDialog(params){

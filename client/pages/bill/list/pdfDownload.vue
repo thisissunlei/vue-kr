@@ -100,13 +100,15 @@ export default {
       justify-content:flex-start;
       margin-right:80px;
       .u-print-img{
-         background:pink;
+         background:url('./images/Noseal.png') no-repeat center center;
+         background-size:100% 100%;
       }
   }
   .u-right-img{
       justify-content:flex-end;
       .u-print-img{
-         background:#eee;
+          background:url('./images/seal.png') no-repeat center center;
+          background-size:100% 100%;
       }
       
   }

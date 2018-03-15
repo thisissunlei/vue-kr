@@ -412,7 +412,20 @@ import PdfDownload from './pdfDownload';
             },
             //下载电子账单
             pdfDownload(){
-                console.log('this.seal',this.seal)
+                let params={
+                    billId:this.printDetail.billId,
+                    seal:this.seal
+                }
+                this.$http.post('bill-down-pdf',params, (response) => {
+                    
+                    utils.downFile(response.data.pdfUrl)
+                    }, (error) => {
+                        this.$Notice.error({
+                            title:error.message||"后台出错请联系管理员"
+                        });
+                })   
+               
+                
             },
             //下载提示框
             openDownloadDialog(params){

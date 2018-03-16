@@ -54,6 +54,39 @@
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData"/>
 			</DetailStyle>
+			<DetailStyle info="分期计划">
+				<Table :columns="stagesColumn" :data="installments"/>
+				<div class="button-list">
+					<div class="table-button" v-if="showButton == true && showAll == false" @click="showAllList">
+						<span>展开</span>
+						<img class="showAll" src="~assets/images/arrows.svg" />
+						
+					</div>
+					<div class="table-button" v-if="showButton == true && showAll == true"  @click="notAllList">
+						<span>收起</span>
+						<img class="notAll" src="~assets/images/arrows.svg" />
+					</div>
+				</div>
+			</DetailStyle>
+			<DetailStyle info="相关规则">
+				<div class="formula">
+					<h4>服务费总额计算公式</h4>
+					<div>服务费总额=月服务费*月数+日服务费*日数（除整月、拼凑整月外的零散天数）</div>
+					<div> 日服务费=月服务费/30</div>
+					<div>月服务费=系统自定义</div>
+				</div>
+				<div class="formula">
+					<h4 style="margin-top:15px">日费用的计算公式</h4>
+					<div>日费用（整月）=月服务费/日历月实际天数</div>
+					<div>日费用（拼凑整月）=月服务费/拼凑整月的实际天数</div>
+					<div>日费用（非整月）=月服务费/30</div>
+					<div>日费用（历史数据）=分期金额（历史数据）/分期总天数（历史数据）</div>
+				</div>
+				<div class="formula">
+					<h4 style="margin-top:15px">分期金额的计算公式</h4>
+					<div>首期金额=零散天（日历月中实际零散天数）日费用之和+付款方式（月付/季付等）*月服务费</div>
+				</div>
+			</DetailStyle>
 		</div>
 	</div>	
 </template>
@@ -79,6 +112,9 @@ export default {
 	},
 	data(){
 		return{
+			showAll:false,
+			showButton:false,
+			installments:[],
 			basicInfo:{},
 			capitalService:'',
 			capitalTreatment:'',
@@ -197,7 +233,56 @@ export default {
 
 			serviceData:[],
 			treatmentData:[],
-			contractData:[]
+			contractData:[],
+			stagesColumn:[
+                    {
+                        title: '分期类型',
+                        key: 'installmentCategoryStr'
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.billingDate));
+							return time;
+                        }
+                    },
+                    {
+                        title:'最后付款日',
+                        key:'lastPaymentDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.lastPaymentDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期开始时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期结束时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期金额',
+                        key: 'totalAmount',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.totalAmount)
+                        }
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatusStr',
+                    }
+                ],
 		}
 	},
 
@@ -215,7 +300,7 @@ export default {
 			this.$http.get('join-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
 					
-					
+					this.installments = response.data.installments || []
 					this.capitalTreatment=response.data.tactiscAmount?utils.smalltoBIG(response.data.tactiscAmount):'';
 					this.capitalService=response.data.seatRentAmount?utils.smalltoBIG(response.data.seatRentAmount):'';
 					this.serviceData=response.data.orderSeatDetailVo||[];
@@ -226,7 +311,17 @@ export default {
 						title:error.message
 					});
 			})
-		}
+		},
+		notAllList(){
+			let list = this.installmentAll
+			this.showAll = false;
+			this.installments = list.slice(0,10)
+		},
+		showAllList(){
+			let list = this.installmentAll
+			this.showAll = true;
+			this.installments = list;
+		},
 	}
 }
 </script>
@@ -252,6 +347,44 @@ export default {
 			padding:30px 24px;
 			.ivu-table-wrapper{
 				margin-bottom:30px;
+			}
+		}
+		.table-button{
+			text-align: center;
+			cursor: pointer;
+			color:#499DF1;
+			display: inline-block;
+			transition:all .5s;
+			&>span{
+				font-size: 16px;
+				padding-bottom:5px;
+				padding-top:10px;
+				display: inline-block;
+			}
+		}
+		.button-list{
+			text-align: center;
+		}
+		.notAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+			transform: rotate(180deg);
+			vertical-align: middle;
+		}
+		.showAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+
+			vertical-align: middle;
+		}
+		.formula{
+			margin-left:12px;
+			&>div{
+				margin:10px 0;
 			}
 		}
 	}

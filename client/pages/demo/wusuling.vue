@@ -1,72 +1,193 @@
 <template>
-  <section class="container">
-    <div>
-     <krInput 
-       :name="params"
-       @onEnter="keyEnter"
-       @onChange="inputChange"
-     />
-     
+    <div class='chart-wrap'>
+       <div class='chart-title'>
+          <p>任务列表</p>
+          <p class='chart-title-right'>
+            <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
+            <span class='chart-list'>添加任务</span>
+          </p>
+       </div>
+
+       <div class='chart-detail'> 
+           <ul>
+              <li
+                v-for="item in treeData"
+                :key="item.tId"
+                class='detail-li'
+              >
+                 <div class='chart-parent' :data-box-id="item.tId">
+                      <div class='chart-left-name' @click="showClick(item.tId)">
+                        <span class='parent-icon' :id="'parent-icon'+item.tId"></span>
+                        <span class="chart-name">{{item.name}}</span>
+                      </div>
+                      <div @click="editClick(item.tId)" class='chart-edit'>
+                        <Icon type="edit" size="15" style='color:#979797;'/>
+                      </div>
+                 </div>
+                 
+                  <ul class='chart-children' style="display:none;" :id='"chart-children"+item.tId'>
+                      <li
+                        v-for="items in item.children"
+                        :key="items.tId"
+                        class='detail-li'
+                      >
+                          <div class='chart-parent' :data-box-id="items.tId">
+                              <div class='chart-left-name'>
+                                <Icon type="minus-round" size="4" style="color: #666666;"/>
+                                <span class="chart-name" style="color: #666666;">{{items.name}}</span>
+                              </div>
+                              <div @click="editClick(items.tId)" class='chart-edit'>
+                                <Icon type="edit" size="15" style='color:#979797;'/>
+                              </div>
+                          </div>
+                      </li>
+                      <p class='add-child-task'>
+                        <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
+                        <span class='chart-list'>添加子任务</span>
+                      </p>
+                </ul>
+
+              </li>
+           </ul>
+       </div>
+
     </div>
-  </section>
 </template>
 
 <script>
-import krInput from '~/components/EnglishInput.vue'
 
 export default {
-     transition (to, from) {
-        if (!from) return 'slide-left'
-        return +to.query.page < +from.query.page ? 'slide-right' : 'slide-left'
-    },
     data() {
         return{
-           params:{
-              serialNumber:'' 
-           } 
+           treeData:[
+             {
+               name:'信息收集',
+               tId:'1',
+               children:[
+                 {name:'意向书',tId:'2',children:[]},
+                 {name:'意向书',tId:'3',children:[]}
+               ]
+             },
+             {
+               name:'项目评估',
+               tId:'4',
+               children:[]
+             }
+           ],
+
         }
     },
-    components: {
-        krInput
-    },
     methods:{
-      keyEnter(ev){
-        console.log(';;;;',ev,this.params);
+      editClick(id){
+         console.log('dddd',id);
       },
-      inputChange(ev){
-        console.log('form-22',this.params);
-      }
+      showClick(id){
+         var dom=document.getElementById('chart-children'+id);
+         var icon=document.getElementById('parent-icon'+id);
+         var classVal = icon.getAttribute("class");
+         var classDom= dom.getAttribute("class");
+         if(dom.style.display=='none'){
+            dom.style.display='block';
+            classVal = classVal.concat(" iconDown");
+            icon.setAttribute("class",classVal );
+         }else{
+            dom.style.display='none';
+            classVal = classVal.replace("iconDown","");
+            icon.setAttribute("class",classVal );
+         }
+       }
     }
 }
 </script>
 
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
+<style lang='less' scoped>
+   .chart-wrap{
+      width:246px;
+      display:inline-block;
+      border:solid 1px #E1E6EB;
+      padding-bottom:30px;
+     .chart-title{
+       width:100%;
+       height:101px;
+       text-align:center;
+       line-height:101px;
+       padding-left:12px;
+       padding-right:18px;
+       background: #F0F1F6;
+       border-bottom:solid 1px #E1E6EB;
+      }
+      .chart-detail{
+         width:100%;
+         background: #F0F1F6;
+         .detail-li{
+             .chart-parent{
+                height:70px;
+                line-height:70px;
+                border-bottom:solid 1px #E1E6EB;
+                padding-left:12px;
+                padding-right:18px;
+                .chart-left-name{
+                  display:inline-block;
+                  cursor: pointer;
+                  .chart-name{
+                    font-family: PingFang-SC-Medium;
+                    font-size: 14px;
+                    color: #499DF1;
+                    padding-left:4px;
+                    display:inline-block;
+                }
+              }
+              .chart-edit{
+                  cursor: pointer;
+                  float:right;
+              }
+              .parent-icon{
+                 display:inline-block;
+                 width:10px;
+                 height:8px;
+                 background:url(images/down.svg) no-repeat center;
+                 background-size: 100%;
+                 vertical-align: middle;
+                 margin-top:-3px;
+                 transition: all 0.5s ease;
+              }
+              .iconDown{
+                 transform: rotate(180deg);
+              }
+           }
+           .chart-children{
+               transition: all 0.5s ease;
+              .chart-left-name{
+                 padding-left:14px;
+              }
+           }
+        }   
+      }
+      p{
+          display:inline-block;
+          font-family: PingFang-SC-Medium;
+          font-size: 14px;
+          color: #666666;
+          line-height: 14px;
+          width:50%;
+          text-align:left;
+      }
+      .chart-title-right{
+         text-align: right;
+         cursor: pointer;
+      }
+      .add-child-task{
+        width:100%;
+        height:70px;
+        line-height:70px;
+        padding-left:26px;
+        border-bottom:solid 1px #E1E6EB;
+        cursor: pointer;
+      }
+      .chart-list{
+        padding-left:5px;
+        color:#499DF1;
+      }
+   }
+   
 </style>

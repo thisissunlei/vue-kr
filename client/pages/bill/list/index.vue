@@ -417,9 +417,11 @@ import PdfDownload from './pdfDownload';
                     billId:this.printDetail.billId,
                     seal:this.seal
                 }
+               
                 this.$http.post('bill-down-pdf',params, (response) => {
                     
                     utils.downFile(response.data.pdfUrl)
+                    this.openDownloadDialog();
                     }, (error) => {
                         this.$Notice.error({
                             title:error.message||"后台出错请联系管理员"

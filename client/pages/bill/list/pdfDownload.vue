@@ -6,13 +6,13 @@
       <div class="u-print-img-content">
           <div class="u-left-img u-print-box" @click="changeCheck('0')">
               <div class="u-print-img">
-                 <span :class="[checked?'checked-logo':'check-logo']"></span>
+                 <span :class="[seal==0?'checked-logo':'check-logo']"></span>
               </div>
               <div class="u-print-title">示例一：未加盖公章的合同</div>
           </div>
           <div class="u-right-img  u-print-box" @click="changeCheck('1')">
               <div class="u-print-img">
-                <span :class="[checked?'check-logo':'checked-logo']"></span>
+                <span :class="[seal!=0?'checked-logo':'check-logo']"></span>
               </div>
               <div class="u-print-title">示例二：加盖公章的合同</div>
           </div>
@@ -23,16 +23,23 @@
 export default {
   props:{
 			isSeal:String
-	},
-   data(){
-     return{
-        checked:true,
-        seal:'0',
-     }
-   },
+  },
+  data(){
+    return{
+      seal:'0'
+    }
+  },
+  watch: {
+			isSeal: {
+				deep: true,
+				handler(nextProps) {
+				  this.seal=nextProps
+				}
+			}
+
+		},
    methods:{
      changeCheck(index){
-        this.checked=!this.checked;
         //0:不带章 1:带章
         this.seal=index;
         this.$emit('formData',this.seal);

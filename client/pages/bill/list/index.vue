@@ -438,6 +438,7 @@ import PdfDownload from './pdfDownload';
             openDownloadDialog(params){
                 if(params){
                    this.printDetail=params;
+                   this.seal="0";
                 }
                  this.openDownload=!this.openDownload;
             },

@@ -208,7 +208,7 @@ import utils from '~/plugins/utils';
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                 window.open(`./income/detail/${params.id}`,'_blank');
+                 window.open(`/bill/income/detail/${params.id}`,'_blank');
             },
             onExport(){
                  console.log('导出')

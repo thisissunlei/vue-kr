@@ -468,7 +468,7 @@ import PdfDownload from './pdfDownload';
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                window.open(`./list/detail/${params.billId}`,'_blank');
+                window.open(`/bill/list/detail/${params.billId}`,'_blank');
             },
             showSettle (params) {
                 params.btnType="Settle";

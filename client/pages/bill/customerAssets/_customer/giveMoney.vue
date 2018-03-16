@@ -32,9 +32,9 @@
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
-                        :current="page" 
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="1" 
+                        :current.sync="page"
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -54,9 +54,12 @@ import dateUtils from 'vue-dateutils';
 		components:{
 		},
 		data (){
+            let {params}=this.$route;
 			return{
                 searchForm:{
-
+                    pageSize:1,
+                    page:1,
+                    customerId:params.customer,
                 },
                 //打款方式
                 payment:[{
@@ -143,6 +146,47 @@ import dateUtils from 'vue-dateutils';
                     title: '打款方式',
                     key: 'payWay',
                     align:'center',
+                    render:function(h,params){
+                        let payWay = [{
+                            label:'社区变更',
+                            value:'NONE'
+                        },{
+                            label:'银行转账',
+                            value:'BANKTRANSFER'
+                        },{
+                            value:'ALIAPPPAY',
+                            label:'支付宝'
+                        },{
+                            value:'WXPAY',
+                            label:'微信'
+                        },{
+                            value:'DEP_RENT',
+                            label:'押金转租'
+                        },{
+                            value:'TRANSFER',
+                            label:'转移'
+                        },{
+                            value:'RENT_DEP',
+                            label:'租金转押'
+                        },{
+                            value:'ALIWEBPAY',
+                            label:'支付宝网银'
+                        },{
+                            value:'BANKONLINE',
+                            label:'网银'
+                        },{
+                            value:'BANLANCE',
+                            label:'余额支付'
+                        }]
+                        let type = '-';
+                        type = payWay.filter((item)=>{
+                            if(item.value == params.row.payWay){
+                                return item.label
+                            }
+                            return false
+                        })
+                        return type[0].label
+                    }
                 },{
                     title: '打款金额（元）',
                     key: 'amount',
@@ -170,7 +214,7 @@ import dateUtils from 'vue-dateutils';
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                     }
                 }],
                 summaryData:[],
@@ -179,9 +223,20 @@ import dateUtils from 'vue-dateutils';
 		},
 		methods:{
             changePage(page){
+                let form = this.searchForm;
+                if(form.begin){
+                    form.begin = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.begin))
+                }
+                if(form.end){
+                    form.end = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.end))
+                }
+                form.page = page;
+                this.page = page;
+                this.getDetail(form)
 
             },
             searchSubmit(name){
+                this.changePage(1)
                 console.log('searchSubmit',this.searchForm)
             },
             getSummary(){
@@ -198,14 +253,12 @@ import dateUtils from 'vue-dateutils';
                     });
                 })
             },
-            getDetail(){
+            getDetail(param){
                 //获取账户打款的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
+                param = Object.assign({},this.searchForm,param)
                 this.$http.get('payment-detail',param).then((res)=>{
                     this.detailList = res.data.items;
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

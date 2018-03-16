@@ -11,9 +11,8 @@
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
-                        :current="page" 
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="3" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -33,9 +32,12 @@ import utils from '~/plugins/utils';
         components:{
         },
         data (){
+            let {params}=this.$route;
             return{
                 searchForm:{
-
+                    page:1,
+                    pageSize:3,
+                    customerId:params.customer,
                 },
                 //支付类型
                 feeType:[
@@ -119,6 +121,27 @@ import utils from '~/plugins/utils';
                     title: '操作类型',
                     key: 'targetType',
                     align:'center',
+                    render:function(h,params){
+                        let payWay = [{
+                            label:'支付账单',
+                            value:'BILL'
+                        },{
+                            label:'支付订单',
+                            value:'ORDER'
+                        },{
+                            label:'充入余额',
+                            value:'BALANCE'
+                        }]
+                        let type = '-';
+                        type = payWay.filter((item)=>{
+                            if(item.value == params.row.targetType){
+                                return true
+                            }
+                            return false
+                        })
+                        // return type[0].label || '-'
+                        return '-'
+                    }
                 },{
                     title: '费用类型',
                     key: 'feeType',
@@ -152,7 +175,9 @@ import utils from '~/plugins/utils';
         },
         methods:{
             changePage(page){
-
+                 let form = this.searchForm;
+                form.page = page;
+                this.getDetail(form)
             },
             searchSubmit(name){
                 console.log('searchSubmit',this.searchForm)
@@ -171,12 +196,9 @@ import utils from '~/plugins/utils';
                     });
                 })
             },
-            getDetail(){
+            getDetail(param){
                 //获取账户消费的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
+                param = Object.assign({},this.searchForm,param)
                 this.$http.get('consumption-detail',param).then((res)=>{
                     this.detailList=res.data.items;
                     this.totalCount=res.data.totalCount;

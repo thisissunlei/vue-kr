@@ -31,14 +31,7 @@
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
-                    <Page 
-                        :current="page" 
-                        :total="totalCount" 
-                        :page-size="pageSize" 
-                        @on-change="changePage" 
-                        show-total 
-                        show-elevator
-                    ></Page>
+                     <Page :total="totalCount" :page-size='1' show-total show-elevator @on-change="changePage" :current.sync="page"/>
                 </div>
             </div>
     </div>
@@ -53,10 +46,15 @@ import dateUtils from 'vue-dateutils';
 		components:{
 		},
 		data (){
+            let {params}=this.$route;
 			return{
                 detailList:[],
                 searchForm:{
-
+                    pageSize:1,
+                    page:1,
+                    communityName:'',
+                    customerId:params.customer,
+                    operateType:'',
                 },
                 // 汇总数据
                 summaryData:[{
@@ -66,7 +64,7 @@ import dateUtils from 'vue-dateutils';
                 }],
                 page:1,
                 totalCount:1,
-                pageSize:5,
+                pageSize:1,
                 // 操作类型
                 operateType:[{
                     label:'余额充值',
@@ -150,6 +148,32 @@ import dateUtils from 'vue-dateutils';
                     title: '操作类型',
                     key: 'operateType',
                     align:'center',
+                    render:function(h,params){
+                        let operateType = [{
+                            label:'余额充值',
+                            value:'RECHARGE'
+                        },{
+                            label:'余额支付账单',
+                            value:'PAY_BILL'
+                        },{
+                            label:'退款',
+                            value:'REFUND'
+                        },{
+                            label:'退还',
+                            value:'BACK'
+                        },{
+                            label:'冻结押金',
+                            value:'LOCK_DESPOINT'
+                        }]
+                        let type = '-';
+                        type = operateType.filter((item)=>{
+                            if(item.value == params.row.operateType){
+                                return item.label
+                            }
+                            return false
+                        })
+                        return type[0].label
+                    }
                 },{
                     title: '操作金额（元）',
                     key: 'changedAmount',
@@ -162,18 +186,7 @@ import dateUtils from 'vue-dateutils';
                     key: 'paramType',
                     align:'center',
                     render:function(h,params){
-                        // 1.操作类型为充值时，相关记录读取银行/支付宝的交易流水号；
-                        // 2.操作类型为消费时，相关记录读取支付账单的账单编号；
-                        // 3操作类型转社区/转营业外/转余额时，主动操作的数据相关记录为空，被动生成的记录则为主动操作记录的操作id；
-                        // if(params.row.operateType == 'RECHARGE'){
-                        //      return 银行/支付宝的交易流水号
-                        // }else if(params.row.operateType == '消费'){
-                        //      return 支付账单的账单编号
-                        // }else{
-                        //      return 主动操作记录的操作id || ''  
-                        // 
-                        // }
-                        return params.row.paramType
+                        return params.row.paramType || '-'
                     }
                 },{
                     title: '操作人',
@@ -191,11 +204,20 @@ import dateUtils from 'vue-dateutils';
 		},
 		methods:{
             changePage(page){
-
+                let form = this.searchForm;
+                if(form.begin){
+                    form.begin = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.begin))
+                }
+                if(form.end){
+                    form.end = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.end))
+                }
+                form.page = page;
+                this.page = page;
+                this.getBalanceDetail(form)
             },
             searchSubmit(name){
-                this.getBalanceDetail()
-                console.log('searchSubmit',this.searchForm)
+                let form = this.searchForm;
+                this.changePage(1)
             },
             getBalanceList(){
                 //获取账户余额的汇总信息
@@ -212,16 +234,12 @@ import dateUtils from 'vue-dateutils';
                     });
                 })
             },
-            getBalanceDetail(){
+            getBalanceDetail(param){
                 //获取账户余额的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
                 param = Object.assign({},this.searchForm,param)
                 this.$http.get('balance-detail',param).then((res)=>{
                     this.detailList = res.data.items;
-                    console.log('获取账户余额的明细表',res.data.items)
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

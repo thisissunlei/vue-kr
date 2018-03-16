@@ -97,7 +97,10 @@
         cancel-text="取消"
         width="652"
      >
-         <PdfDownload  @formData="getSealPrint"/>
+         <PdfDownload  @formData="getSealPrint" :isSeal="seal"/>
+          <div class="spin-container" v-if="loading">
+                <Spin size="large" fix></Spin>
+          </div>
          <div slot="footer">
             <Button type="primary" @click="pdfDownload">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="openDownloadDialog">取消</Button>
@@ -153,6 +156,7 @@ import PdfDownload from './pdfDownload';
                 openDownload:false,
                 printDetail:'',
                 seal:'0',
+                loading:false,
                 columns: [
                     {
                         type: 'selection',
@@ -409,7 +413,6 @@ import PdfDownload from './pdfDownload';
         methods:{
             getSealPrint(seal){
                 this.seal=seal;
-                
             },
             //下载电子账单
             pdfDownload(){
@@ -417,11 +420,12 @@ import PdfDownload from './pdfDownload';
                     billId:this.printDetail.billId,
                     seal:this.seal
                 }
-               
+                this.loading=true;
                 this.$http.post('bill-down-pdf',params, (response) => {
-                    
-                    utils.downFile(response.data.pdfUrl)
+                    this.loading=false;
                     this.openDownloadDialog();
+                    utils.downFile(response.data.pdfUrl);
+                    
                     }, (error) => {
                         this.$Notice.error({
                             title:error.message||"后台出错请联系管理员"
@@ -619,6 +623,13 @@ import PdfDownload from './pdfDownload';
 
 <style lang="less">
 .g-bill{
+    .spin-container{
+        display: inline-block;
+        width: 652px;
+        height: 100px;
+        position: relative;
+       
+    }
     .u-search{
             height:32px;
             margin:16px 0;

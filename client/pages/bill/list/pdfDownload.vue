@@ -21,6 +21,9 @@
 </template>
 <script>
 export default {
+  props:{
+			isSeal:String
+	},
    data(){
      return{
         checked:true,

@@ -27,7 +27,7 @@
                 <!-- </FormItem> -->
             </Form>
         </div>
-		<Table  border :columns="detailColumns"></Table>
+		<Table  border :columns="detailColumns" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
@@ -173,7 +173,8 @@ import dateUtils from 'vue-dateutils';
                         return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
                     }
                 }],
-                summaryData:[]
+                summaryData:[],
+                detailList:[]
 			}
 		},
 		methods:{
@@ -190,7 +191,7 @@ import dateUtils from 'vue-dateutils';
                     customerId:params.customer
                 }
                 this.$http.get('payment-list',param).then((res)=>{
-                    this.summaryData=res.data.items;
+                    this.summaryData=res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -203,9 +204,8 @@ import dateUtils from 'vue-dateutils';
                 let param = {
                     customerId:params.customer
                 }
-                return;
                 this.$http.get('payment-detail',param).then((res)=>{
-                   
+                    this.detailList = res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

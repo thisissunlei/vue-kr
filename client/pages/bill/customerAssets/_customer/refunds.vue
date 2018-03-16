@@ -6,7 +6,7 @@
         <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
         <div class="title-type">退款变化明细表</div>
-        <Table  border :columns="detailColumns" class="table-style"></Table>
+        <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
@@ -118,7 +118,7 @@ import utils from '~/plugins/utils';
                     customerId:params.customer
                 }
                 this.$http.get('refund-list',param).then((res)=>{
-                    this.summaryList = res.data.items;
+                    this.summaryList = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

@@ -3,10 +3,10 @@
 <template>  
     <div class="spending">
         <div class="title-type">消费总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" ></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
         <div class="title-type">消费变化明细表</div>
-        <Table  border :columns="detailColumns" class="table-style"></Table>
+        <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
@@ -145,7 +145,9 @@ import utils from '~/plugins/utils';
                     title: '操作人',
                     key: 'creater',
                     align:'center',
-                }]
+                }],
+                detailList:[],
+                summaryList:[]
             }
         },
         methods:{
@@ -161,9 +163,8 @@ import utils from '~/plugins/utils';
                 let param = {
                     customerId:params.customer
                 }
-                return;
                 this.$http.get('consumption-list',param).then((res)=>{
-
+                    this.summaryList = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -176,9 +177,8 @@ import utils from '~/plugins/utils';
                 let param = {
                     customerId:params.customer
                 }
-                return;
                 this.$http.get('consumption-detail',param).then((res)=>{
-                    this.accountList=res.data.items;
+                    this.detailList=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({

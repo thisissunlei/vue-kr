@@ -27,7 +27,7 @@
                 <!-- </FormItem> -->
             </Form>
         </div>
-		<Table  border :columns="detailColumns"></Table>
+		<Table  border :columns="detailColumns" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
@@ -54,6 +54,7 @@ import dateUtils from 'vue-dateutils';
 		},
 		data (){
 			return{
+                detailList:[],
                 searchForm:{
 
                 },
@@ -204,7 +205,7 @@ import dateUtils from 'vue-dateutils';
                 }
                 
                 this.$http.get('balance-list',param).then((res)=>{
-                    this.summaryData = res.data.items
+                    this.summaryData = res.data
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -219,6 +220,7 @@ import dateUtils from 'vue-dateutils';
                 }
                 param = Object.assign({},this.searchForm,param)
                 this.$http.get('balance-detail',param).then((res)=>{
+                    this.detailList = res.data.items;
                     console.log('获取账户余额的明细表',res.data.items)
                 }).catch((err)=>{
                     this.$Notice.error({

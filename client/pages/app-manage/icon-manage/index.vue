@@ -228,11 +228,11 @@ export default {
             })
         },
         jumpCreate(){
-             window.open('./icon-manage/create','_blank');
+             window.open('/app-manage/icon-manage/create','_blank');
         },
         jumpEdit(params){
             let iconId=params.iconId;
-             window.open(`./icon-manage/edit/${iconId}`,'_blank');
+             window.open(`/app-manage/icon-manage/edit/${iconId}`,'_blank');
         },
         openDelete(value){
             this.openCancel=!this.openCancel;

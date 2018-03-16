@@ -132,8 +132,10 @@ import utils from '~/plugins/utils';
             getDetail(param){
                 //获取账户退款的明细表
                 param = Object.assign({},this.searchForm,param)
+
                 this.$http.get('refund-detail',param).then((res)=>{
-                    this.detailList = res.data.items
+                    this.detailList = res.data.items;
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

@@ -8,18 +8,20 @@
 		<div class="title-type">打款变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
-                <FormItem label="社区名称">
-                    <Input type="text" v-model="searchForm.name" placeholder="社区名称"/>
+                <FormItem label="社区名称" style="text-align:left">
+                    <selectCommunities test="searchForm" :onchange="changeCommunity" />
+
                 </FormItem>
                 <FormItem label="打款方式">
-                    <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
+                    <Select v-model="searchForm.payWay" clearable style="width:100px;text-align:left">
                         <Option v-for="item in payment" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
-                <FormItem label="操作时间">
-                   <DatePicker type="date" v-model="searchForm.begin" placeholder="开始时间" style="width: 130px"></DatePicker>
+                <FormItem label="操作时间" style="position:relative">
+                   <DatePicker type="date" v-model="searchForm.startDate" placeholder="开始时间" style="width: 130px"></DatePicker>
                    <span style="margin:0 10px">至</span>
-                   <DatePicker type="date" v-model="searchForm.end" placeholder="结束时间" style="width: 130px"></DatePicker>
+                   <DatePicker type="date" v-model="searchForm.endDate" placeholder="结束时间" style="width: 130px"></DatePicker>
+                   <div class="error" v-if="timeError != false" >{{timeError}}</div>
 
                 </FormItem>
                 <!-- <FormItem style="width:100px"> -->
@@ -33,7 +35,7 @@
                 <div style="float: right;">
                     <Page 
                         :total="totalCount" 
-                        :page-size="1" 
+                        :page-size="15" 
                         :current.sync="page"
                         @on-change="changePage" 
                         show-total 
@@ -49,15 +51,17 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
+import selectCommunities from '~/components/SelectCommunities.vue'
 
 	export default {
 		components:{
+            selectCommunities
 		},
 		data (){
             let {params}=this.$route;
 			return{
                 searchForm:{
-                    pageSize:1,
+                    pageSize:15,
                     page:1,
                     customerId:params.customer,
                 },
@@ -95,7 +99,6 @@ import dateUtils from 'vue-dateutils';
                 }],
                 page:1,
                 totalCount:1,
-                pageSize:5,
 				allColumns:[
                     {
                         title: '序号',
@@ -209,6 +212,14 @@ import dateUtils from 'vue-dateutils';
                     title: '操作人',
                     key: 'creater',
                     align:'center',
+                    render:function(h,params){
+                        let type = params.row.creater;
+
+                        if(type === 0){
+                            type = '系统自动'
+                        }
+                        return type;
+                    }
                 },{
                     title: '操作时间',
                     key: 'ctime',
@@ -218,17 +229,18 @@ import dateUtils from 'vue-dateutils';
                     }
                 }],
                 summaryData:[],
-                detailList:[]
+                detailList:[],
+                timeError:false,
 			}
 		},
 		methods:{
             changePage(page){
                 let form = this.searchForm;
-                if(form.begin){
-                    form.begin = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.begin))
+                if(form.startDate){
+                    form.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.startDate))
                 }
-                if(form.end){
-                    form.end = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.end))
+                if(form.endDate){
+                    form.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.endDate))
                 }
                 form.page = page;
                 this.page = page;
@@ -236,8 +248,10 @@ import dateUtils from 'vue-dateutils';
 
             },
             searchSubmit(name){
-                this.changePage(1)
-                console.log('searchSubmit',this.searchForm)
+                this.checkTime()
+                if(!this.timeError){
+                    this.changePage(1)
+                }
             },
             getSummary(){
                 //获取账户打款的汇总信息
@@ -265,6 +279,29 @@ import dateUtils from 'vue-dateutils';
                     });
                 })
             },
+            changeCommunity(value){
+                if(value){
+                    this.searchForm.communityId = value;
+                }else{
+                    this.searchForm.communityId = ''
+                }
+            },
+            checkTime(){
+                if(!this.searchForm.startDate || !this.searchForm.endDate){
+                    this.timeError = false;
+                    return;
+                }
+                if(this.searchForm.startDate && this.searchForm.endDate){
+                    let begin = new Date(this.searchForm.startDate).getTime();
+                    let end = new Date(this.searchForm.endDate).getTime();
+
+                    if(begin>end){
+                        this.timeError = '结束时间不得大于开始时间'
+                    }else{
+                        this.timeError = false
+                    }
+                }
+            }
 
 		},
 		mounted(){
@@ -290,9 +327,15 @@ import dateUtils from 'vue-dateutils';
         .table-style{
             margin:20px 0;
         }
+        .error{
+            position: absolute;
+            right: 0px;
+            color:red;
+        }
         .search{
             text-align: right;
             margin-top:20px;
+            margin-bottom: 10px;
         }
     	padding:5px 30px;
     }

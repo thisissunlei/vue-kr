@@ -119,32 +119,11 @@ import utils from '~/plugins/utils';
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'targetType',
+                    key: 'targetTypeName',
                     align:'center',
-                    render:function(h,params){
-                        let payWay = [{
-                            label:'支付账单',
-                            value:'BILL'
-                        },{
-                            label:'支付订单',
-                            value:'ORDER'
-                        },{
-                            label:'充入余额',
-                            value:'BALANCE'
-                        }]
-                        let type = '-';
-                        type = payWay.filter((item)=>{
-                            if(item.value == params.row.targetType){
-                                return true
-                            }
-                            return false
-                        })
-                        // return type[0].label || '-'
-                        return '-'
-                    }
                 },{
                     title: '费用类型',
-                    key: 'feeType',
+                    key: 'feeTypeName',
                     align:'center',
                 },{
                     title: '消费金额（元）',
@@ -166,7 +145,7 @@ import utils from '~/plugins/utils';
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'creater',
+                    key: 'createrName',
                     align:'center',
                 }],
                 detailList:[],

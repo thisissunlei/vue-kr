@@ -596,31 +596,13 @@
                 }else{
                     parameter.contractType = "NOSEAL"
                 }
-                // this.newWin = window.open()
-
-                this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-                    if(!r.data.fileId){
-                        this.$Notice.error({
-                                title:"fileId不能为空！"
-                        });
-                        return;
-                    }
-
-                    this.downLoadPdf(r.data);
-                    this.showDown();
-                }, e => {
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
-                })
+                this.downLoadPdf(parameter);
+                this.showDown();
             },
             //下载接口调用
             downLoadPdf(params){
-                this.$http.post('get-station-contract-pdf-url', {
-                    id:params.fileId,
-                    
-                }, (response) => {
-                    utils.downFile(response.data,'hetong.pdf')
+                this.$http.post('contract-list-get-pdf-url', params, (response) => {
+                    utils.downFile(response.data)
                    
                 }, (error) => {
                     this.openMessage=true;

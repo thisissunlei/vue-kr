@@ -179,6 +179,14 @@
                         }
                     },
                     {
+                        title: '租赁期限',
+                        key: 'ctime',
+                        align:'center',
+                        render(tag, params){
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
+                        }
+                    },
+                    {
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',

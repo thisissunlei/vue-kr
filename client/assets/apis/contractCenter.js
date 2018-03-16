@@ -30,6 +30,11 @@ export default {
         url: '/api/krspace-op-web/sys/down-file',
         method: 'post'
     },
+    //合同列表页获取获取pdf地址
+    'contract-list-get-pdf-url': {
+        url: '/api/krspace-erp-web/wf/station/contract/pdf/down',
+        method: 'post'
+    },
     //获取其他约定的数据
     'get-contract-other-convention-data': {
         url: '/api/krspace-erp-web/wf/station/contract/info/type/other-agreed',

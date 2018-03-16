@@ -29,7 +29,7 @@
      >
         <Form :model="formRight" :rules="ruleValidate" label-position="left">
 
-            <Form-item label="项目名称" class="bill-search-class" prop="name">
+            <!--<Form-item label="项目名称" class="bill-search-class" prop="name">
                     <i-input 
                         v-model="formRight.name" 
                         placeholder="请输入项目名称"
@@ -44,7 +44,7 @@
                         @okClick="okClick"
                         @change="cascaderChange"
                     />
-            </Form-item>
+            </Form-item>-->
 
             <!--<KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
             <KrField :readOrEdit="true" type="city" label="含税" :cityValue="valueCity" placeholder="请输入含税收入" />
@@ -59,7 +59,7 @@
 
             <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />-->
           
-            <KrField 
+            <!--<KrField 
                 :readOrEdit="true" 
                 type="datetime"  
                 label="含税" 
@@ -117,9 +117,17 @@
                 value="什么东西" 
                 placeholder="请输入含税收入" 
                 @okClick="okClick"
-            />
+            />-->
           
-            <!-- <KrField type="selectTree" :data="data" label="含税" value="formRight.input" placeholder="请输入含税收入" /> -->
+            <KrField 
+              type="selectTree" 
+              :data="data" 
+              label="含税" 
+              value="formRight.input" 
+              placeholder="请输入含税收入"
+            />
+
+
             <KrField 
                 :readOrEdit="true" 
                 type="upFiles" 

@@ -3,7 +3,7 @@
         <div class='m-watch-record'>
              <ul
                class='record-wrap'
-               v-for="item in recordData" 
+               v-for="item in watchRecord" 
                :key="item.time"
              >
                  <li class='first'>{{item.time}}</li>
@@ -21,7 +21,7 @@
 
 export default {
     props:{
-        recordData:Array,
+        watchRecord:Array,
         default:[]
     },
     data(){

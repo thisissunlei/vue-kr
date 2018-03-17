@@ -11,7 +11,7 @@
        <div class='chart-detail'> 
            <ul>
               <li
-                v-for="item in treeData"
+                v-for="item in data"
                 :key="item.tId"
                 class='detail-li'
               >
@@ -57,32 +57,22 @@
 <script>
 
 export default {
+    props:{
+        data:{
+            type:Array
+        }
+	},
     data() {
         return{
-           treeData:[
-             {
-               name:'信息收集',
-               tId:'1',
-               children:[
-                 {name:'意向书',tId:'2',children:[]},
-                 {name:'意向书',tId:'3',children:[]}
-               ]
-             },
-             {
-               name:'项目评估',
-               tId:'4',
-               children:[]
-             }
-           ],
-
+           
         }
     },
     methods:{
       addClick(id){
-         console.log('id',id); 
+         this.$emit("addClick",id); 
       },
       editClick(id){
-         console.log('dddd',id);
+         this.$emit("editClick",id); 
       },
       showClick(id){
          var dom=document.getElementById('chart-children'+id);
@@ -147,7 +137,7 @@ export default {
                  display:inline-block;
                  width:10px;
                  height:8px;
-                 background:url(images/down.svg) no-repeat center;
+                 background:url(../images/down.svg) no-repeat center;
                  background-size: 100%;
                  vertical-align: middle;
                  margin-top:-3px;

@@ -9,6 +9,10 @@
                 <div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>
             </div>
 
+             <div class='tab-second-title'>
+
+             </div>
+
             <div class='detail-detail'>
                 <Tabs>
                     <TabPane label="项目档案">
@@ -231,5 +235,8 @@ export default {
            background: #fff;
            display:inline-block;
        }
+       .tab-second-title{
+            height:70px;
+        }
    }
 </style>

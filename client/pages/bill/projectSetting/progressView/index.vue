@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class='tab-second-title'>
+
+        </div>
+
         <div class='chart-tab-left'>
           <div class='chart-left'>
             <Tabs size="small">
@@ -51,7 +55,11 @@ export default {
 </script>
 
 <style lang="less">
+   .tab-second-title{
+        height:70px;
+    }
    .chart-tab-left{
+       margin:0 26px;
        padding:14px 0px 30px 0;
        width:246px;
        border: 1px solid #E1E6EB;

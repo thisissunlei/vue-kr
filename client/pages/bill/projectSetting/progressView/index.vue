@@ -385,7 +385,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.open(`./projectSetting/progressView/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
+            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
         },
         //tab切换
         tabsClick(key){

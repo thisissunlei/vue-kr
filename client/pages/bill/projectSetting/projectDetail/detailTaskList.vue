@@ -138,7 +138,7 @@ export default {
                  display:inline-block;
                  width:10px;
                  height:8px;
-                 background:url(../images/down.svg) no-repeat center;
+                 background:url(./images/down.svg) no-repeat center;
                  background-size: 100%;
                  vertical-align: middle;
                  margin-top:-3px;

@@ -139,7 +139,11 @@ export default {
         DetailTaskList
     },
     created(){
-        this.queryData=this.$route.query;
+       
+        this.queryData=this.$route.query; 
+    },
+    mounted(){
+         GLOBALSIDESWITCH("false");
     },
     methods:{
         //获取树数据

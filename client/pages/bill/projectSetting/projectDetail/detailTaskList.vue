@@ -25,7 +25,7 @@
                       </div>
                  </div>
                  
-                  <ul class='chart-children' style="display:none;" :id='"chart-children"+item.t_id'>
+                  <ul class='chart-children' :id='"chart-children"+item.t_id'>
                       <li
                         v-for="items in item.children"
                         :key="items.t_id"
@@ -70,6 +70,7 @@ export default {
          this.$emit("editClick",id,parentId); 
       },
       showClick(id){
+         return ;
          var dom=document.getElementById('chart-children'+id);
          var icon=document.getElementById('parent-icon'+id);
          var classVal = icon?icon.getAttribute("class"):'';

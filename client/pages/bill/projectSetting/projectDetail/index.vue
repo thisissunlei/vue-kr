@@ -10,11 +10,6 @@
             </div>
 
             <div class='detail-detail'>
-                <Tabs>
-                    <TabPane label="项目档案">
-                       123
-                    </TabPane>
-                    <TabPane label="项目开业进度">
                         <div class='tab-second-title'>
 
                         </div>
@@ -22,10 +17,8 @@
                             :data="listData"
                             @addClick="addTask"
                             @editClick="editTask"
-                            />
-                    </TabPane>
-              </Tabs>
-           </div>
+                        />
+            </div>
         </div>
        
         <Modal

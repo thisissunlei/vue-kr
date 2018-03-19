@@ -75,15 +75,15 @@
              <!-- 左侧切换部分内容 -->
             <div class='chart-tab-left'>
                 <div class='chart-left'>
-                    <Tabs size="small">
-                        <TabPane label="待开业项目">
+                    <Tabs size="small" value="name1" @on-click="tabsClick">
+                        <TabPane label="待开业项目" name="name1">
                             <TableList
                                 :listData="todoData"
                                 @rowClick="rowClick"
                                 v-if="mask"
                             />
                         </TabPane>
-                        <TabPane label="投拓期项目">
+                        <TabPane label="投拓期项目" name="name2">
                             <TableList
                                 :listData="downData"
                                 @rowClick="rowClick"
@@ -155,7 +155,7 @@ export default {
 
 
             todoData:[
-                {name:'俊浩中牙膏公园你好好',communityName:'2',city:'3',tId:'1'},
+                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园',city:'3',tId:'1'},
                 {name:'6',communityName:'7',city:'8',tId:'2'},
             ],
             downData:[
@@ -205,10 +205,6 @@ export default {
         //数组去重
         distinct(arr) {
           
-        },
-        //跳转编辑页
-        rowClick(item){
-            window.open(`./projectSetting/progressView/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
         },
         //下拉事件被触发
         selectChange(event){

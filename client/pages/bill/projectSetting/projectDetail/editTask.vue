@@ -1,26 +1,27 @@
 <template>
   <div>
       <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;">
-                <Form-item label="任务名称"  class="bill-search-class" prop="orderNum">
+                <Form-item label="任务名称"  class="bill-search-class" prop="name">
                     <i-input 
-                        v-model="formItem.orderNum" 
+                        v-model="formItem.name" 
                         placeholder="请输入任务名称"
                         style="width: 252px"
+                        @on-change="nameChange"
                     />
                 </Form-item>
                 <div>
-                        <Form-item label="计划起止日期" class="bill-search" prop="cStartDate">
+                        <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
                             <DatePicker 
-                                v-model="formItem.cStartDate"
+                                v-model="formItem.planStartTime"
                                 type="date" 
                                 placeholder="开始日期" 
                                 style="width: 252px"
                             />
                         <span class="u-date-txt">至</span>
                         </Form-item>
-                        <Form-item prop="cEndDate" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
+                        <Form-item prop="planEndTime" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
                             <DatePicker 
-                                v-model="formItem.cEndDate"
+                                v-model="formItem.planEndTime"
                                 type="date" 
                                 placeholder="结束日期" 
                                 style="width: 252px"
@@ -32,14 +33,14 @@
                 <div>
                         <Form-item label="完成起止日期" class="bill-search">
                             <DatePicker 
-                                v-model="formItem.cStDate"
+                                v-model="formItem.actualStartTime"
                                 type="date" 
                                 placeholder="开始日期" 
                                 style="width: 252px"
                             />
                         <span class="u-date-txt">至</span>
                         <DatePicker 
-                                v-model="formItem.cEDate"
+                                v-model="formItem.actualEndTime"
                                 type="date" 
                                 placeholder="结束日期" 
                                 style="width: 252px"
@@ -49,11 +50,11 @@
                </div>
 
                 <FormItem label="任务描述"  class="bill-search-class" style="width:575px">
-                        <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
-                        <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                        <Input v-model="formItem.descr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
+                        <div style="text-align:right">{{formItem.descr?formItem.descr.length+"/500":0+"/500"}}</div>
                 </FormItem>
 
-                <div class='edit-record'>
+                <!--<div class='edit-record'>
                     <span class='title-record'>编辑记录</span>
                     <div
                         class='record-wrap'
@@ -67,7 +68,7 @@
                                 </Poptip>
                             </div>
                     </div>
-                </div>
+                </div>-->
 
          </Form>
   </div>
@@ -79,11 +80,15 @@ import dateUtils from 'vue-dateutils';
 export default {
     props:{
         id:{
-            type:Number
+            type:[Number,String]
         },
         editRecord:{
             type:Array,
             default:[]
+        },
+        getEdit:{
+            type:Object,
+            default:{}
         }
     },
     data(){
@@ -91,29 +96,35 @@ export default {
             dateError:false,
             cDateError:false,
             formItem:{
-                   orderNum:'',
-                   cEndDate:'',
-                   cStartDate:'',
-                   cStDate:'',
-                   cEDate:'',
-                   remark:''
+                   name:'',
+                   planEndTime:'',
+                   planStartTime:'',
+                   actualStartTime:'',
+                   actualEndTime:'',
+                   descr:''
             },
             ruleValidate: {
-                orderNum: [
+                name: [
                     { required: true, message: '请输入任务名称', trigger: 'change' }
                 ],
-                cStartDate:[
+                planStartTime:[
                     { required: true,type: 'date', message: '请输入开始日期', trigger: 'change' }
                 ],
-                cEndDate:[
+                planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
                 ]
             }
         }
     },
+    created(){    
+        this.queryData=this.$route.query; 
+    },
+    mounted(){
+        this.formItem=this.getEdit;
+    },
     updated:function(){
-        if(this.formItem.cStartDate&&this.formItem.cEndDate){
-                if(this.formItem.cStartDate>this.formItem.cEndDate){
+        if(this.formItem.planStartTime&&this.formItem.planEndTime){
+                if(this.formItem.planStartTime>this.formItem.planEndTime){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 
@@ -121,8 +132,8 @@ export default {
             }else{
                     this.dateError=false; 
         }
-        if(this.formItem.cStDate&&this.formItem.cEDate){
-                if(this.formItem.cStDate>this.formItem.cEDate){
+        if(this.formItem.actualStartTime&&this.formItem.actualEndTime){
+                if(this.formItem.actualStartTime>this.formItem.actualEndTime){
                     this.cDateError=true;
                 }else{
                     this.cDateError=false; 
@@ -133,7 +144,21 @@ export default {
         this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
     },
     methods:{
-       
+       nameChange(event){
+            let params={
+                name:event.target.value,
+                propertyId:this.queryData.id,
+                id:this.id
+            }
+            this.$http.get('project-name-check',params).then((response)=>{
+                    this.formItem.error=false;
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                    });
+                    this.formItem.error=true;
+                 })
+        }
     }
 }
 

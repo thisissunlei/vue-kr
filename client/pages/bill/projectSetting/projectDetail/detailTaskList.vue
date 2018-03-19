@@ -20,7 +20,7 @@
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.lable}}</span>
                       </div>
-                      <div @click="editClick(item.value)" class='chart-edit'>
+                      <div @click="editClick(item.value,'')" class='chart-edit'>
                          <span class='edit'></span>
                       </div>
                  </div>
@@ -36,7 +36,7 @@
                                 <Icon type="minus-round" size="4" style="color: #666666;"/>
                                 <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
                               </div>
-                              <div @click="editClick(items.value)" class='chart-edit'>
+                              <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
                           </div>
@@ -71,8 +71,8 @@ export default {
       addClick(id){
          this.$emit("addClick",id); 
       },
-      editClick(id){
-         this.$emit("editClick",id); 
+      editClick(id,parentId){
+         this.$emit("editClick",id,parentId); 
       },
       showClick(id){
          var dom=document.getElementById('chart-children'+id);

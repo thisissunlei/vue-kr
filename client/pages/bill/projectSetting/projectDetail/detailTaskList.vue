@@ -35,10 +35,12 @@
                       >
                           <div class='chart-parent' :data-box-id="items.t_id">
                             <div class='parent-middle'>
-                              <div class='chart-left-name'>
-                                <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
-                              </div>
+                              <Tooltip :content="items.lable" placement="top">
+                                  <div class='chart-left-name'>
+                                    <Icon type="minus-round" size="4" style="color: #666666;"/>
+                                    <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
+                                  </div>
+                              </Tooltip>
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
@@ -125,6 +127,10 @@ export default {
                 }
                 .chart-left-name{
                   display:inline-block;
+                  max-width:180px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
                   cursor: pointer;
                   .chart-name{
                     font-family: PingFang-SC-Medium;

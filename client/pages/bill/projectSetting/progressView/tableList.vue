@@ -44,8 +44,8 @@ export default {
 <style lang="less" scoped>
     .view-table-list{
         width:100%;
-        height:51px;
-        line-height:51px;
+        height:50px;
+        line-height:50px;
         border: 1px solid #E1E6EB;
         border-right:none;
         border-top: none;
@@ -68,7 +68,7 @@ export default {
         width:100%;
         li{
            width:100%;
-           height:51px;
+           height:50px;
            border: 1px solid #E1E6EB;
            border-right:none;
            border-left:none;

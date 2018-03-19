@@ -3,7 +3,7 @@
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' v-if="!isLoading">
             <div class="hander">
-                <div style="display:inline-block">
+                <div style="display:inline-block;margin-top: 6px;">
                      <span style="vertical-align:middle;">项目计划</span>
                      <span 
                         class="article" 
@@ -155,7 +155,7 @@ export default {
 
 
             todoData:[
-                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园',city:'3',tId:'1'},
+                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园skdjsjkjckjksjkvjcksjkvkdhdfkdsjhjhsdjkhjhsdjf',city:'3',tId:'1'},
                 {name:'6',communityName:'7',city:'8',tId:'2'},
             ],
             downData:[
@@ -401,20 +401,33 @@ export default {
         width:100%;
         height: 400px;
         box-sizing: border-box;
-      
         display:inline-block;
         overflow: auto;
+        position: relative;
         .chart-tab-left{
-            
-            padding: 16px 0px 0px 0px;
             width:246px;
             border: 1px solid #E1E6EB;
             display:inline-block;
+            border-bottom: none;
             .chart-left{
-                .ivu-tabs-bar{
-                    width:195px;
-                    margin:0 auto;
+                .ivu-tabs-nav{
+                   width:100%;
+                   height: 50px;
+                   padding-top: 8px;
+                   .ivu-tabs-ink-bar{
+                       width:58px !important;
+                       left: 31px;
+                   }
                 }
+            }
+            .ivu-tabs-mini .ivu-tabs-tab{
+                width:50%;
+                text-align: center;
+                font-family: PingFangSC-Medium;
+                font-size: 14px;
+            }
+            .ivu-tabs-nav .ivu-tabs-tab-active{
+                color: #4A90E2;
             }
         }
         .right-draw{

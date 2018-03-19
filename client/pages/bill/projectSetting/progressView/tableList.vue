@@ -48,10 +48,12 @@ export default {
         line-height:51px;
         border: 1px solid #E1E6EB;
         border-right:none;
+        border-top: none;
         border-left:none;
         font-family: PingFangSC-Medium;
         font-size: 14px;
         color: #666666;
+        font-weight: 500;
         p{
            display:inline-block;
            border-right:1px solid #E1E6EB;
@@ -81,11 +83,17 @@ export default {
                 display:inline-block;
                 border-right:1px solid #E1E6EB;
                 width:33%;
-                padding:5px;
+                padding:10px;
                 height:100%;
                 display:table-cell;
-                vertical-align:middle;    
+                vertical-align:middle;
+                word-break:break-all;    
                 text-align: center;
+                font-family: PingFang-SC-Medium;
+                font-size: 12px;
+                color: #666666;
+                line-height: 16px;
+                font-weight: 500;
                 &:nth-child(3){
                     border-right:none;
                 }

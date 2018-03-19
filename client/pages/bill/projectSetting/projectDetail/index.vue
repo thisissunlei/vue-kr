@@ -120,12 +120,11 @@ export default {
         }
     },
     created(){    
-
         this.queryData=this.$route.query; 
     },
     mounted(){
          GLOBALSIDESWITCH("false");
-         this.getListData();
+         this.getListData();  
     },
     methods:{
         //获取树数据
@@ -134,7 +133,7 @@ export default {
                 propertyId:this.queryData.id
             }
             this.$http.get('project-list-task',params).then((response)=>{
-                     this.listData=response.items; 
+                     this.listData=response.data.items; 
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,

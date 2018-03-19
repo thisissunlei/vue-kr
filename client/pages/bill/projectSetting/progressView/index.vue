@@ -25,6 +25,8 @@
                 >
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
+
+                
             </div>
            
             <div class="right-draw" style="overflow:auto;">

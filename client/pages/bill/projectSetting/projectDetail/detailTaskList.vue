@@ -21,7 +21,7 @@
                         <span class="chart-name">{{item.name}}</span>
                       </div>
                       <div @click="editClick(item.tId)" class='chart-edit'>
-                        <Icon type="edit" size="15" style='color:#979797;'/>
+                         <span class='edit'></span>
                       </div>
                  </div>
                  
@@ -37,7 +37,7 @@
                                 <span class="chart-name" style="color: #666666;">{{items.name}}</span>
                               </div>
                               <div @click="editClick(items.tId)" class='chart-edit'>
-                                <Icon type="edit" size="15" style='color:#979797;'/>
+                                <span class='edit'></span>
                               </div>
                           </div>
                       </li>
@@ -132,6 +132,13 @@ export default {
               .chart-edit{
                   cursor: pointer;
                   float:right;
+                  .edit{
+                     display:inline-block;
+                     width:15px;
+                     height:15px;
+                     background:url(./images/edit.svg) no-repeat center;
+                     background-size: contain;
+                  }
               }
               .parent-icon{
                  display:inline-block;

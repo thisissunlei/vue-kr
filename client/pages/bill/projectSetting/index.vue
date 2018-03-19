@@ -2,12 +2,12 @@
   <div class="project-setting">
         <Tabs size="default" value="tab1" @on-click="tabsClick">
             <TabPane label="项目档案管理" name="tab1">
-              
-                 <archives v-if="mask"/>
+                <ProgressView v-if="mask"/>
+                
             </TabPane>
             <TabPane label="开业进度总览" name="tab2">
                  
-                 <ProgressView v-if="!mask"/>
+                <archives v-if="!mask"/>
 
             </TabPane>
         </Tabs>

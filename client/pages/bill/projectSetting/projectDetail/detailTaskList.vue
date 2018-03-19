@@ -29,13 +29,13 @@
                    </div>
                  </div>
                  
-                  <ul class='chart-children' :id='"chart-children"+item.t_id'>
+                  <ul class='chart-children'  :id='"chart-children"+item.t_id'>
                       <li
                         v-for="items in item.children"
                         :key="items.t_id"
                         class='detail-li'
                       >
-                          <div class='chart-parent' :data-box-id="items.t_id">
+                          <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id">
                             <div class='parent-middle'>
                               <Tooltip :content="items.lable" placement="top">
                                   <div class='chart-left-name'>
@@ -69,7 +69,7 @@ export default {
         data:{
             type:Array
         }
-	  },
+    },
     methods:{
       addClick(id){
          this.$emit("addClick",id); 

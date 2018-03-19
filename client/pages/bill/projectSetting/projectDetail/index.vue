@@ -139,7 +139,7 @@ export default {
                      this.listData=response.data.items; 
                      //后面进行组件优化
                      this.listData.map((item,index)=>{
-                        item.children.push({label:'添加自任务',type:'single'})
+                        item.children.push({label:'添加自任务',chartType:'single'})
                      })
                  }).catch((error)=>{
                      this.$Notice.error({

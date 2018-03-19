@@ -67,10 +67,12 @@
                     class="content"
                     :style="{width:dayAllNum*minCalibration+'px'}"
                 >
-                    <div class="every-col" style="position:relative;">
+                    <div class="every-col" data-chart="t_id" style="position:relative;" v-for="item in data" :key="item.id">
                         <Article 
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
+                            :data="item.data"
+                            :label="item.label"
                         />
                     </div>
                 </div>
@@ -94,6 +96,12 @@ export default {
         DrawMonth,
         DrawWeek,
         Article,
+    },
+    props:{
+        data:{
+            type:Array,
+            default:()=>[]
+        }
     },
     data(){
         return{

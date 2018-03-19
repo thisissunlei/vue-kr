@@ -5,7 +5,7 @@
             background:getBgColor(),
             width:boxDetail.width * minCalibration+'px',
             left:boxDetail.office * minCalibration+'px'
-            }"
+        }"
     >
        
         <div 
@@ -16,8 +16,8 @@
             }"
         >
             <Poptip placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
-                <Tooltip :content="data.label" placement="bottom-start">
-                    <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
+                <Tooltip :content="label" placement="bottom-start">
+                    <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{label}}</div>
                 </Tooltip>
             
                 <div class="api" slot="content">
@@ -34,11 +34,12 @@
                 width:actualDetail.width * minCalibration+'px',
                 left:actualDetail.office * minCalibration + 'px'
             }"
+            v-if="data.actualStartTime && data.actualEndTime"
         >
             <Poptip placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
-                <Tooltip :content="data.label" placement="bottom-start">
+                <Tooltip :content="label" placement="bottom-start">
                     <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
-                         {{data.label}}
+                         {{label}}
                     </div>
                    
                 </Tooltip>
@@ -61,26 +62,30 @@ export default {
         SpecificPlan
     },
     props:{
-       minCalibration:{
-           type:[String,Number],
-           default:50
-       },
-       startDate:{
-           type:Object,
-           
-       }
+        minCalibration:{
+            type:[String,Number],
+            default:50
+        },
+        startDate:{
+            type:Object,
+        },
+        label:{
+            type:String
+        },
+        data:{
+            type:Object,
+        }
     },
     data(){
         return {
-            data:{
-                label:'意向数钱数',
-                currentStatus:-40,
-                planStartTime:1515513600000,
-                planEndTime:1516204800000,
-                actualStartTime:1515686400000,
-                actualEndTime:1516377600000,
-
-            },
+            // data:{
+                
+            //     currentStatus:-40,
+            //     planStartTime:1515513600000,
+            //     planEndTime:1516204800000,
+            //     actualStartTime:1515686400000,
+            //     actualEndTime:1516377600000,
+            // },
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
@@ -88,17 +93,23 @@ export default {
         }
     },
     mounted(){
+        console.log(this.label,"llllllll")
        this.getBoxWidthAndOffice();
     },
     methods:{
        getBgColor(){
-           if(this.data.currentStatus<0){
-               return "#FFCDCD"
-           }else if(this.data.currentStatus>0){
-               return '#FFECD4';
-           }else{
-               return "#E0F2CD"
-           }
+            if(this.data.currentStatus){
+                if(this.data.currentStatus<0){
+                    return "#FFCDCD"
+                }else if(this.data.currentStatus>0){
+                    return '#FFECD4';
+                }else{
+                    return "#E0F2CD"
+                }
+            }else {
+                return "#fff";
+            }
+          
        },
        
        getBoxWidthAndOffice(){
@@ -112,7 +123,8 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
             var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            console.log(planStart,min,max)
+
+            console.log(planStart,min,max,"OOOOOOOO")
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,officeEnd)
@@ -127,7 +139,19 @@ export default {
             }
        },
        getEndpointDate(){
-           var arr = [this.data.actualStartTime,this.data.actualEndTime,this.data.planStartTime,this.data.planEndTime];
+            var arr = [];
+            if(this.data.actualStartTime){
+                arr.push(this.data.actualStartTime)
+            }
+            if(this.data.actualEndTime){
+                arr.push(this.data.actualEndTime)
+            }
+            if(this.data.planStartTime){
+                arr.push(this.data.planStartTime)
+            }
+            if(this.data.planEndTime){
+                arr.push(this.data.planEndTime)
+            }
             var max = arr[0],min=arr[0];
             for (var i = 1; i < arr.length; i++) {
                 if(max<arr[i])

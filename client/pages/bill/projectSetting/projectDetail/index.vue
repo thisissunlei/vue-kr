@@ -8,7 +8,7 @@
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>
             </div>
-            <GanttChart>
+            <GanttChart :data="listData">
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 
                         :data="listData"

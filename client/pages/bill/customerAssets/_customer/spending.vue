@@ -3,17 +3,16 @@
 <template>  
     <div class="spending">
         <div class="title-type">消费总汇表</div>
-        <Table  border :columns="allColumns" class="table-style" ></Table>
+        <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
         <div class="title-type">消费变化明细表</div>
-        <Table  border :columns="detailColumns" class="table-style"></Table>
+        <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
-                        :current="page" 
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="3" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -33,9 +32,12 @@ import utils from '~/plugins/utils';
         components:{
         },
         data (){
+            let {params}=this.$route;
             return{
                 searchForm:{
-
+                    page:1,
+                    pageSize:3,
+                    customerId:params.customer,
                 },
                 //支付类型
                 feeType:[
@@ -117,11 +119,11 @@ import utils from '~/plugins/utils';
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'targetType',
+                    key: 'targetTypeName',
                     align:'center',
                 },{
                     title: '费用类型',
-                    key: 'feeType',
+                    key: 'feeTypeName',
                     align:'center',
                 },{
                     title: '消费金额（元）',
@@ -143,14 +145,18 @@ import utils from '~/plugins/utils';
                     align:'center',
                 },{
                     title: '操作人',
-                    key: 'creater',
+                    key: 'createrName',
                     align:'center',
-                }]
+                }],
+                detailList:[],
+                summaryList:[]
             }
         },
         methods:{
             changePage(page){
-
+                 let form = this.searchForm;
+                form.page = page;
+                this.getDetail(form)
             },
             searchSubmit(name){
                 console.log('searchSubmit',this.searchForm)
@@ -161,24 +167,19 @@ import utils from '~/plugins/utils';
                 let param = {
                     customerId:params.customer
                 }
-                return;
                 this.$http.get('consumption-list',param).then((res)=>{
-
+                    this.summaryList = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
-            getDetail(){
+            getDetail(param){
                 //获取账户消费的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
-                return;
+                param = Object.assign({},this.searchForm,param)
                 this.$http.get('consumption-detail',param).then((res)=>{
-                    this.accountList=res.data.items;
+                    this.detailList=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({

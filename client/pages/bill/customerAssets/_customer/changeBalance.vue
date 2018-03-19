@@ -14,19 +14,17 @@
         props:{
                 editData:Object,
                 editStatus:String,
+                type:String
             },
         data () {
-            console.log('editData',this.editData.balance)
+            let basicMoney = this.editData[this.type]
             const validateFirst = (rule, value, callback) => {
-                console.log('rule',rule);
-                console.log('value',value);
-                console.log('value>this.editData.balance',Number(value)>Number(this.editData.balance))
 
                 if(isNaN(value)){
                     console.log('isNaN(value)',isNaN(value))
                     callback(new Error('转移金额请填写数字'))
                 }
-                if(Number(value)>Number(this.editData.balance)){
+                if(Number(value)>Number(basicMoney)){
                     callback(new Error('转移金额不得大于可转金额'));
                 }
                 if (value === '') {
@@ -38,7 +36,7 @@
             
             return {
                 formItem: {
-                    allMoney:this.editData.balance || 3000,
+                    allMoney:basicMoney,
                 },
                 ruleCustom:{
                     community: [

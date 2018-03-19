@@ -896,6 +896,18 @@
                             type: 'vue',
                             router: 'app-manage/icon-manage'
                         },
+                        {
+                            primaryText: '推送管理',
+                            menuCode: 'app_console_push',
+                            type: 'vue',
+                            router: 'app-manage/push-manage'
+                        },
+                        {
+                            primaryText: '通知管理',
+                            menuCode: 'app_console_notification',
+                            type: 'vue',
+                            router: 'app-manage/notification-manage'
+                        },
                     ]
                 },
                 {
@@ -1125,7 +1137,7 @@
                             primaryText: '参数配置',
                             router: 'basic/parameter',
                             type: 'vue',
-                            menuCode: 'op_ver',
+                            menuCode: 'system_param',
                         },
                     ]
                 },

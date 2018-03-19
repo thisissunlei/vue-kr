@@ -8,18 +8,20 @@
 		<div class="title-type">打款变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
-                <FormItem label="社区名称">
-                    <Input type="text" v-model="searchForm.name" placeholder="社区名称"/>
+                <FormItem label="社区名称" style="text-align:left">
+                    <selectCommunities test="searchForm" :onchange="changeCommunity" />
+
                 </FormItem>
                 <FormItem label="打款方式">
-                    <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
+                    <Select v-model="searchForm.payWay" clearable style="width:100px;text-align:left">
                         <Option v-for="item in payment" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                 </FormItem>
-                <FormItem label="操作时间">
-                   <DatePicker type="date" v-model="searchForm.begin" placeholder="开始时间" style="width: 130px"></DatePicker>
+                <FormItem label="操作时间" style="position:relative">
+                   <DatePicker type="date" v-model="searchForm.startDate" placeholder="开始时间" style="width: 130px"></DatePicker>
                    <span style="margin:0 10px">至</span>
-                   <DatePicker type="date" v-model="searchForm.end" placeholder="结束时间" style="width: 130px"></DatePicker>
+                   <DatePicker type="date" v-model="searchForm.endDate" placeholder="结束时间" style="width: 130px"></DatePicker>
+                   <div class="error" v-if="timeError != false" >{{timeError}}</div>
 
                 </FormItem>
                 <!-- <FormItem style="width:100px"> -->
@@ -27,14 +29,14 @@
                 <!-- </FormItem> -->
             </Form>
         </div>
-		<Table  border :columns="detailColumns"></Table>
+		<Table  border :columns="detailColumns" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
-                        :current="page" 
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="15" 
+                        :current.sync="page"
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -49,14 +51,19 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
+import selectCommunities from '~/components/SelectCommunities.vue'
 
 	export default {
 		components:{
+            selectCommunities
 		},
 		data (){
+            let {params}=this.$route;
 			return{
                 searchForm:{
-
+                    pageSize:15,
+                    page:1,
+                    customerId:params.customer,
                 },
                 //打款方式
                 payment:[{
@@ -92,7 +99,6 @@ import dateUtils from 'vue-dateutils';
                 }],
                 page:1,
                 totalCount:1,
-                pageSize:5,
 				allColumns:[
                     {
                         title: '序号',
@@ -143,6 +149,47 @@ import dateUtils from 'vue-dateutils';
                     title: '打款方式',
                     key: 'payWay',
                     align:'center',
+                    render:function(h,params){
+                        let payWay = [{
+                            label:'社区变更',
+                            value:'NONE'
+                        },{
+                            label:'银行转账',
+                            value:'BANKTRANSFER'
+                        },{
+                            value:'ALIAPPPAY',
+                            label:'支付宝'
+                        },{
+                            value:'WXPAY',
+                            label:'微信'
+                        },{
+                            value:'DEP_RENT',
+                            label:'押金转租'
+                        },{
+                            value:'TRANSFER',
+                            label:'转移'
+                        },{
+                            value:'RENT_DEP',
+                            label:'租金转押'
+                        },{
+                            value:'ALIWEBPAY',
+                            label:'支付宝网银'
+                        },{
+                            value:'BANKONLINE',
+                            label:'网银'
+                        },{
+                            value:'BANLANCE',
+                            label:'余额支付'
+                        }]
+                        let type = '-';
+                        type = payWay.filter((item)=>{
+                            if(item.value == params.row.payWay){
+                                return item.label
+                            }
+                            return false
+                        })
+                        return type[0].label
+                    }
                 },{
                     title: '打款金额（元）',
                     key: 'amount',
@@ -165,23 +212,46 @@ import dateUtils from 'vue-dateutils';
                     title: '操作人',
                     key: 'creater',
                     align:'center',
+                    render:function(h,params){
+                        let type = params.row.creater;
+
+                        if(type === 0){
+                            type = '系统自动'
+                        }
+                        return type;
+                    }
                 },{
                     title: '操作时间',
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                     }
                 }],
-                summaryData:[]
+                summaryData:[],
+                detailList:[],
+                timeError:false,
 			}
 		},
 		methods:{
             changePage(page){
+                let form = this.searchForm;
+                if(form.startDate){
+                    form.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.startDate))
+                }
+                if(form.endDate){
+                    form.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.endDate))
+                }
+                form.page = page;
+                this.page = page;
+                this.getDetail(form)
 
             },
             searchSubmit(name){
-                console.log('searchSubmit',this.searchForm)
+                this.checkTime()
+                if(!this.timeError){
+                    this.changePage(1)
+                }
             },
             getSummary(){
                 //获取账户打款的汇总信息
@@ -190,28 +260,48 @@ import dateUtils from 'vue-dateutils';
                     customerId:params.customer
                 }
                 this.$http.get('payment-list',param).then((res)=>{
-                    this.summaryData=res.data.items;
+                    this.summaryData=res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
-            getDetail(){
+            getDetail(param){
                 //获取账户打款的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
-                return;
+                param = Object.assign({},this.searchForm,param)
                 this.$http.get('payment-detail',param).then((res)=>{
-                   
+                    this.detailList = res.data.items;
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
+            changeCommunity(value){
+                if(value){
+                    this.searchForm.communityId = value;
+                }else{
+                    this.searchForm.communityId = ''
+                }
+            },
+            checkTime(){
+                if(!this.searchForm.startDate || !this.searchForm.endDate){
+                    this.timeError = false;
+                    return;
+                }
+                if(this.searchForm.startDate && this.searchForm.endDate){
+                    let begin = new Date(this.searchForm.startDate).getTime();
+                    let end = new Date(this.searchForm.endDate).getTime();
+
+                    if(begin>end){
+                        this.timeError = '结束时间不得大于开始时间'
+                    }else{
+                        this.timeError = false
+                    }
+                }
+            }
 
 		},
 		mounted(){
@@ -237,9 +327,15 @@ import dateUtils from 'vue-dateutils';
         .table-style{
             margin:20px 0;
         }
+        .error{
+            position: absolute;
+            right: 0px;
+            color:red;
+        }
         .search{
             text-align: right;
             margin-top:20px;
+            margin-bottom: 10px;
         }
     	padding:5px 30px;
     }

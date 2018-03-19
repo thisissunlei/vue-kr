@@ -1,38 +1,3 @@
-<style lang="less">
-
-.g-bill{
-    .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-            .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;  
-                float:right;
-            }
-    }
-    
-    .ivu-table-cell{
-        padding:0;
-    }
-    
-    .u-table{
-        padding:0 20px;
-    }
-     
-    .m-search{
-        color:#2b85e4; 
-        display:inline-block;
-        margin-left:10px;
-        font-size:14px;
-        cursor:pointer;
-    } 
-    
-}
-</style>
-
 <template>
 <div class="g-bill">
     <SectionTitle title="应收管理"></SectionTitle>
@@ -44,7 +9,8 @@
                 v-model="tabParams.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
-            ></Input>
+                @on-enter="lowerSubmit"
+            />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div> 
     </div>
@@ -330,3 +296,38 @@ import utils from '~/plugins/utils';
 
     }
 </script>
+
+<style lang="less">
+
+.g-bill{
+    .u-search{
+            height:32px;
+            margin:16px 0;
+            padding:0 20px;
+            .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;  
+                float:right;
+            }
+    }
+    
+    .ivu-table-cell{
+        padding:0;
+    }
+    
+    .u-table{
+        padding:0 20px;
+    }
+     
+    .m-search{
+        color:#2b85e4; 
+        display:inline-block;
+        margin-left:10px;
+        font-size:14px;
+        cursor:pointer;
+    } 
+    
+}
+</style>

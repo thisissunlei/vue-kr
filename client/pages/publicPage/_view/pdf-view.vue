@@ -88,7 +88,7 @@ export default {
       var parameter = utils.getRequest()
       parameter.contractType = "NOSEAL"
       this.$http.get('get-station-contract-pdf-id',parameter, r => {  
-         
+        
           this.fileId = r.data.fileId || '';
           this.getPdfUrl(r.data.fileId||'');
           this.isLoading = false;
@@ -105,7 +105,7 @@ export default {
         this.isLoading = true;
           setTimeout(() => {
             this.getPdfId();
-          }, 1000);
+          }, 2000);
       })
     },
 
@@ -160,25 +160,12 @@ export default {
       }else{
         parameter.contractType = "NOSEAL"
       }
-      // this.newWin = window.open()
-      this.$http.get('get-station-contract-pdf-id',parameter, r => {    
-        if(!r.data.fileId){
-          this.$Notice.error({
-            title:"后台出错请联系管理员"
-          });
-          return;
-        }
-        this.downLoadPdf(r.data);
-        this.downSwitch();
-      }, e => {
-        this.$Message.info(e);
-      })
+      this.downLoadPdf(parameter);
+      this.downSwitch();
     },
 
     downLoadPdf(params){
-        this.$http.post('get-station-contract-pdf-url', {
-          id:params.fileId,
-        }, (response) => {
+        this.$http.post('contract-list-get-pdf-url',params, (response) => {
           // this.newWin.location = response.data;
           utils.downFile(response.data)
         }, (error) => {

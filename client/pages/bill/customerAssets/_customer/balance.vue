@@ -8,37 +8,32 @@
 		<div class="title-type">余额变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
-                <FormItem label="社区名称">
-                    <Input type="text" v-model="searchForm.communityName" placeholder="社区名称"/>
+                <FormItem label="社区名称" style="text-align:left">
+                    <selectCommunities test="searchForm" :onchange="changeCommunity" />
                 </FormItem>
                 <FormItem label="操作类型">
                 <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
                     <Option v-for="item in operateType" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 </FormItem>
-                <FormItem label="操作时间">
-                   <DatePicker type="date" v-model="searchForm.begin" placeholder="开始时间" style="width: 130px"></DatePicker>
+                <FormItem label="操作时间" style="position: relative;">
+                   <DatePicker type="date" v-model="searchForm.startDate" placeholder="开始时间" style="width: 130px"></DatePicker>
                    <span style="margin:0 10px">至</span>
-                   <DatePicker type="date" v-model="searchForm.end" placeholder="结束时间" style="width: 130px"></DatePicker>
+                   <DatePicker type="date" v-model="searchForm.endDate" placeholder="结束时间" style="width: 130px"></DatePicker>
+                <div class="error" v-if="timeError != false" >{{timeError}}</div>
+
 
                 </FormItem>
                 <!-- <FormItem style="width:100px"> -->
-                    <Button type="primary" @click="searchSubmit('searchForm')">查询</Button>
+                    <Button type="primary" @click="searchSubmit('searchForm')" >查询</Button>
                 <!-- </FormItem> -->
             </Form>
         </div>
-		<Table  border :columns="detailColumns"></Table>
+		<Table  border :columns="detailColumns" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
-                    <Page 
-                        :current="page" 
-                        :total="totalCount" 
-                        :page-size="pageSize" 
-                        @on-change="changePage" 
-                        show-total 
-                        show-elevator
-                    ></Page>
+                     <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="changePage" :current.sync="page"/>
                 </div>
         </div>
          <Modal
@@ -46,7 +41,7 @@
                 title="转余额"
                 width="500"
             >
-                <ChangeBalance ref="changeBalance" :editData="editData" v-if="openBalance == true" :syncData="syncData" />
+                <ChangeBalance ref="changeBalance" :editData="editData" v-if="openBalance == true" :syncData="syncData" :type="balanceType"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitBalance('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -57,7 +52,7 @@
                 title="转营业外"
                 width="500"
             >
-                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" :syncData="syncData"/>
+                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" :syncData="syncData" type="balance"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitBusiness('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -82,19 +77,29 @@
 <script>
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
+import selectCommunities from '~/components/selectCommunities';
 import dateUtils from 'vue-dateutils';
 import ChangeCommunity from './changeCommunity.vue';
 import ChangeBalance from './changeBalance.vue';
 	export default {
 		components:{
             ChangeCommunity,
-            ChangeBalance
+            ChangeBalance,
+            selectCommunities
 		},
 		data (){
+            let {params}=this.$route;
 			return{
                 // 弹窗传回的数据
                 submitData:{},
-                searchForm:{},
+                detailList:[],
+                searchForm:{
+                    pageSize:15,
+                    page:1,
+                    communityName:'',
+                    customerId:params.customer,
+                    operateType:'',
+                },
                 // 汇总数据
                 summaryData:[{
                     balance:'143123213'
@@ -103,7 +108,6 @@ import ChangeBalance from './changeBalance.vue';
                 }],
                 page:1,
                 totalCount:1,
-                pageSize:5,
                 // 操作类型
                 operateType:[{
                     label:'余额充值',
@@ -189,7 +193,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.lock_deposit))];
+                               tag('span', '￥'+utils.thousand(params.row.lockDeposit))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -201,7 +205,7 @@ import ChangeBalance from './changeBalance.vue';
                                         },
                                         on: {
                                             click: () => {
-                                                this.transferBalance('lock_deposit',params.row)
+                                                this.transferBalance('lockDeposit',params.row)
                                             }
                                         }
                                 }))
@@ -245,7 +249,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.balance))];
+                               tag('span', '￥'+utils.thousand(params.row.otherDeposit))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -280,6 +284,32 @@ import ChangeBalance from './changeBalance.vue';
                     title: '操作类型',
                     key: 'operateType',
                     align:'center',
+                    render:function(h,params){
+                        let operateType = [{
+                            label:'余额充值',
+                            value:'RECHARGE'
+                        },{
+                            label:'余额支付账单',
+                            value:'PAY_BILL'
+                        },{
+                            label:'退款',
+                            value:'REFUND'
+                        },{
+                            label:'退还',
+                            value:'BACK'
+                        },{
+                            label:'冻结押金',
+                            value:'LOCK_DESPOINT'
+                        }]
+                        let type = '-';
+                        type = operateType.filter((item)=>{
+                            if(item.value == params.row.operateType){
+                                return item.label
+                            }
+                            return false
+                        })
+                        return type[0].label
+                    }
                 },{
                     title: '操作金额（元）',
                     key: 'changedAmount',
@@ -292,18 +322,7 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'paramType',
                     align:'center',
                     render:function(h,params){
-                        // 1.操作类型为充值时，相关记录读取银行/支付宝的交易流水号；
-                        // 2.操作类型为消费时，相关记录读取支付账单的账单编号；
-                        // 3操作类型转社区/转营业外/转余额时，主动操作的数据相关记录为空，被动生成的记录则为主动操作记录的操作id；
-                        // if(params.row.operateType == 'RECHARGE'){
-                        //      return 银行/支付宝的交易流水号
-                        // }else if(params.row.operateType == '消费'){
-                        //      return 支付账单的账单编号
-                        // }else{
-                        //      return 主动操作记录的操作id || ''  
-                        // 
-                        // }
-                        return params.row.paramType
+                        return params.row.paramType || '-'
                     }
                 },{
                     title: '操作人',
@@ -321,16 +340,29 @@ import ChangeBalance from './changeBalance.vue';
                 openCommunity:false,//转社区弹窗
                 openBusiness:false,//转营业外弹窗
                 balanceType:'',
-                editData:{}
+                editData:{},
+                timeError:false,
 			}
 		},
 		methods:{
             changePage(page){
-
+                let form = this.searchForm;
+                if(form.startDate){
+                    form.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.startDate))
+                }
+                if(form.endDate){
+                    form.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(form.endDate))
+                }
+                form.page = page;
+                this.page = page;
+                this.getBalanceDetail(form)
             },
             searchSubmit(name){
-                this.getBalanceDetail()
-                console.log('searchSubmit',this.searchForm)
+                this.checkTime()
+                if(!this.timeError){
+                    this.changePage(1)
+                }
+                
             },
             getBalanceList(){
                 //获取账户余额的汇总信息
@@ -340,22 +372,19 @@ import ChangeBalance from './changeBalance.vue';
                 }
                 
                 this.$http.get('balance-list',param).then((res)=>{
-                    this.summaryData = res.data.items
+                    this.summaryData = res.data
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
-            getBalanceDetail(){
+            getBalanceDetail(param){
                 //获取账户余额的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
                 param = Object.assign({},this.searchForm,param)
                 this.$http.get('balance-detail',param).then((res)=>{
-                    console.log('获取账户余额的明细表',res.data.items)
+                    this.detailList = res.data.items;
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -371,6 +400,7 @@ import ChangeBalance from './changeBalance.vue';
             transferOutsideBusiness(item){
                 // 转营业外
                 console.log('转营业外',item)
+                this.editData = item;
                 this.openBusiness = true;
             },
             transferBalance(type,item){
@@ -379,6 +409,7 @@ import ChangeBalance from './changeBalance.vue';
                 console.log('转余额-->type',type)
                 this.openBalance = true;
                 this.balanceType = type;
+                this.editData = item;
                 
             },
             //转余额提交
@@ -457,8 +488,30 @@ import ChangeBalance from './changeBalance.vue';
             },
             syncData(data){
                 this.submitData = data;
-            }
+            },
+            changeCommunity(value){
+                if(value){
+                    this.searchForm.communityId = value
+                }else{
+                    this.searchForm.communityId = ''
+                }
+            },
+            checkTime(){
+                if(!this.searchForm.startDate || !this.searchForm.endDate){
+                    this.timeError = false;
+                    return;
+                }
+                if(this.searchForm.startDate && this.searchForm.endDate){
+                    let begin = new Date(this.searchForm.startDate).getTime();
+                    let end = new Date(this.searchForm.endDate).getTime();
 
+                    if(begin>end){
+                        this.timeError = '结束时间不得大于开始时间'
+                    }else{
+                        this.timeError = false
+                    }
+                }
+            }
 
 		},
 		mounted(){
@@ -485,9 +538,15 @@ import ChangeBalance from './changeBalance.vue';
         .table-style{
             margin:20px 0;
         }
+        .error{
+            position: absolute;
+            right: 0px;
+            color:red;
+        }
         .search{
             text-align: right;
             margin-top:20px;
+            margin-bottom: 10px
         }
     	padding:5px 20px;
     }

@@ -6,14 +6,13 @@
         <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
         <div class="title-type">退款变化明细表</div>
-        <Table  border :columns="detailColumns" class="table-style"></Table>
+        <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
-                    <Page 
-                        :current="page" 
+                    <Page  
                         :total="totalCount" 
-                        :page-size="pageSize" 
+                        :page-size="1" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -33,9 +32,12 @@ import utils from '~/plugins/utils';
         components:{
         },
         data (){
+            let {params}=this.$route;
             return{
                 searchForm:{
-
+                     page:1,
+                    pageSize:1,
+                    customerId:params.customer,
                 },
                 page:1,
                 totalCount:1,
@@ -97,7 +99,7 @@ import utils from '~/plugins/utils';
                     key: 'ctime',
                     align:'ctime',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                     }
                 }],
                 summaryList:[],
@@ -106,7 +108,9 @@ import utils from '~/plugins/utils';
         },
         methods:{
             changePage(page){
-
+                let form = this.searchForm;
+                form.page = page;
+                this.getDetail(form)
             },
             searchSubmit(name){
                 console.log('searchSubmit',this.searchForm)
@@ -118,21 +122,20 @@ import utils from '~/plugins/utils';
                     customerId:params.customer
                 }
                 this.$http.get('refund-list',param).then((res)=>{
-                    this.summaryList = res.data.items;
+                    this.summaryList = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
-            getDetail(){
+            getDetail(param){
                 //获取账户退款的明细表
-                let {params}=this.$route;
-                let param = {
-                    customerId:params.customer
-                }
+                param = Object.assign({},this.searchForm,param)
+
                 this.$http.get('refund-detail',param).then((res)=>{
-                    this.detailList = res.data.items
+                    this.detailList = res.data.items;
+                    this.totalCount = res.data.totalCount;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

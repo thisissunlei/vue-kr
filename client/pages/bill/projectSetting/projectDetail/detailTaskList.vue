@@ -16,6 +16,7 @@
                 class='detail-li'
               >
                  <div class='chart-parent' :data-box-id="item.t_id">
+                   <div class='parent-middle'>
                       <div class='chart-left-name' @click="showClick(item.t_id)">
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.lable}}</span>
@@ -23,6 +24,7 @@
                       <div @click="editClick(item.value,'')" class='chart-edit'>
                          <span class='edit'></span>
                       </div>
+                   </div>
                  </div>
                  
                   <ul class='chart-children' :id='"chart-children"+item.t_id'>
@@ -32,6 +34,7 @@
                         class='detail-li'
                       >
                           <div class='chart-parent' :data-box-id="items.t_id">
+                            <div class='parent-middle'>
                               <div class='chart-left-name'>
                                 <Icon type="minus-round" size="4" style="color: #666666;"/>
                                 <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
@@ -39,6 +42,7 @@
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
+                            </div>
                           </div>
                       </li>
                       <p class='add-child-task' @click="addClick(item.value)">
@@ -109,11 +113,16 @@ export default {
          background: #F0F1F6;
          .detail-li{
              .chart-parent{
+                width:100%;
                 height:70px;
-                line-height:70px;
                 border-bottom:solid 2px #E1E6EB;
                 padding-left:12px;
                 padding-right:18px;
+                display: table;
+                .parent-middle{
+                    display: table-cell;
+                    vertical-align: middle;
+                }
                 .chart-left-name{
                   display:inline-block;
                   cursor: pointer;
@@ -176,7 +185,7 @@ export default {
         height:70px;
         line-height:70px;
         padding-left:26px;
-        border-bottom:solid 1px #E1E6EB;
+        border-bottom:solid 2px #E1E6EB;
         cursor: pointer;
       }
       .chart-list{

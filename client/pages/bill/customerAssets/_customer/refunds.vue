@@ -12,7 +12,7 @@
                 <div style="float: right;">
                     <Page  
                         :total="totalCount" 
-                        :page-size="1" 
+                        :page-size="15" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -36,12 +36,12 @@ import utils from '~/plugins/utils';
             return{
                 searchForm:{
                      page:1,
-                    pageSize:1,
+                    pageSize:15,
                     customerId:params.customer,
                 },
                 page:1,
                 totalCount:1,
-                pageSize:5,
+                pageSize:15,
                 allColumns:[
                     {
                         title: '序号',
@@ -92,7 +92,7 @@ import utils from '~/plugins/utils';
                     }
                 },{
                     title: '操作人',
-                    key: 'creater',
+                    key: 'createrName',
                     align:'center',
                 },{
                     title: '操作时间',

@@ -187,14 +187,11 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     }
                 },{
                     title: '相关记录',
-                    key: 'paramType',
+                    key: 'records',
                     align:'center',
-                    render:function(h,params){
-                        return params.row.paramType || '-'
-                    }
                 },{
                     title: '操作人',
-                    key: 'operater',
+                    key: 'createrName',
                     align:'center',
                 },{
                     title: '操作时间',

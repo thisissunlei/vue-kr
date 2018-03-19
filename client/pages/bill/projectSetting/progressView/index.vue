@@ -78,24 +78,24 @@
                     <Tabs size="small">
                         <TabPane label="待开业项目">
                             <TableList
-                            :listData="todoData"
-                            @rowClick="rowClick"
+                                :listData="todoData"
+                                @rowClick="rowClick"
+                                v-if="mask"
                             />
                         </TabPane>
                         <TabPane label="投拓期项目">
                             <TableList
-                            :listData="downData"
-                            @rowClick="rowClick"
+                                :listData="downData"
+                                @rowClick="rowClick"
+                                v-if="!mask"
                             />
                         </TabPane>
                     </Tabs>
                 </div>
             </div>
-        </div>
-     
-
-        
+        </div>      
     </div>
+
 </template>
 
 <script>
@@ -162,7 +162,7 @@ export default {
                 {name:'1',communityName:'2',city:'3',tId:'1'},
                 {name:'6',communityName:'7',city:'8',tId:'2'},
             ],
-        
+            mask:true
         }
     },
     mounted(){
@@ -382,6 +382,18 @@ export default {
             }
             
             return obj;
+        },
+        //列表跳转详情
+        rowClick(item){
+            window.open(`./projectSetting/progressView/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
+        },
+        //tab切换
+        tabsClick(key){
+            if(key=='name2'){
+                this.mask=false;
+            }else{
+                this.mask=true;
+            }
         }
     }
 
@@ -423,6 +435,7 @@ export default {
             margin-top:20px;
             height: 50px; 
             width: 100%;
+            padding-left: 250px;
             .article{
                 display: inline-block;
                 width: 80px;

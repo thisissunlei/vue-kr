@@ -105,6 +105,12 @@ export default  {
       url: '/api/krspace-pay/payment/invoice',
       method: 'post'
     },
+
+     //项目管理－新建任务
+     'project-add-task': {
+      url: '/api/krspace-erp-web/pm/task/add',
+      method: 'post'
+    },
     
   }
   

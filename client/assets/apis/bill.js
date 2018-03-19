@@ -177,7 +177,16 @@ export default  {
       url: '/api/krspace-pay/balance/guardcard-deposit',
       method: 'post'
     },
-    // 服务保证金转余额
+    // 冻结服务保证金转余额
+    'lock-deposit': {
+      url: '/api/krspace-pay/balance/lock-deposit',
+      method: 'post'
+    },
+    // 其他服务保证金转余额
+    'other-deposit': {
+      url: '/api/krspace-pay/balance/other-deposit',
+      method: 'post'
+    },
     //余额转社区--社区列表
     'balance-community-list': {
       url: '/api/krspace-pay/account/community/list?',

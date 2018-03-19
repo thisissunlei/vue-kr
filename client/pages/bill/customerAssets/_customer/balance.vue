@@ -303,8 +303,8 @@ import ChangeBalance from './changeBalance.vue';
                             label:'冻结押金',
                             value:'LOCK_DESPOINT'
                         },{
-                            label:'INCOME',
-                            value:'营业外收入'
+                            label:'营业外收入',
+                            value:'INCOME'
                         },{
                             label:'转移',
                             value:'TRANSFER'
@@ -420,40 +420,34 @@ import ChangeBalance from './changeBalance.vue';
             },
             //转余额提交
             submitBalance(name){
-                console.log('转余额提交=========',name)
                 var balanceForm = this.$refs.changeBalance.$refs;
                 var isSubmit = true;
                 balanceForm[name].validate((valid,data) => {
-                    console.log('=======2',valid)
                     if (!valid) {
 
                         isSubmit = false
                     }else{
                         let params = Object.assign({},this.submitData,{customerId:this.customerId})
-                        console.log('submit',params)
                         let url = '';
                         switch (this.balanceType){
                             case 'guardCardDeposit':
-                                console.log('guardCardDeposit')
-                                
                                 url = 'guardcard-deposit';
                                 break;
                             case 'otherDeposit':
-                                console.log('otherDeposit')
-                                // url = 'guardcard-deposit';
+                                url = 'other-deposit';
                                 break;
                             case 'lockDeposit':
-                                console.log('lockDeposit')
-                                // url = 'guardcard-deposit';
+                                url = 'lock-deposit';
                                 break; 
                             default :
-                                // url = 'guardcard-deposit';
+                                url = '';
                                 break;
                         }
-                        console.log('submitBalance',this.balanceType,'url-->',url)
-                        // guardcard-deposit 门禁转余额
                         // 提交数据
-                        return;
+                        if(url === ''){
+                            return;
+                        }
+                        
                         this.$http.post(url, params).then((res)=>{
                             // 关闭窗口
                            this.openBalance = false;

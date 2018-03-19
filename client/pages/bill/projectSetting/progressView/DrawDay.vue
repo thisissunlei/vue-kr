@@ -40,8 +40,8 @@ export default {
         text-align: center;
         display: inline-block;
         box-sizing: border-box;
-        border-bottom: 1px solid #CAD5E4;
-        border-right: 1px solid #CAD5E4;
+        border-bottom: 1px solid #E1E6EB;
+        border-right: 1px solid #E1E6EB;
         transition: all 0.3;
     }
     

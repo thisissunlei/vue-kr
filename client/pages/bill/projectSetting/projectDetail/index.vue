@@ -10,9 +10,6 @@
             </div>
 
             <div class='detail-detail'>
-                        <div class='tab-second-title'>
-
-                        </div>
                         <DetailTaskList 
                             :data="listData"
                             @addClick="addTask"
@@ -257,13 +254,13 @@ export default {
        background: #F9F9FC;
        display:inline-block;
        .detail-title{
-           height:70px;
-           line-height:70px;
+           height:50px;
            .title-left{
                 display:inline-block;
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
                 color: #666666;
+                margin-top: 5px;
                 span:nth-child(1){
                     padding-right:10px;
                 }
@@ -277,9 +274,5 @@ export default {
            background: #fff;
            display:inline-block;
        }
-       .tab-second-title{
-            height:70px;
-            background: #fff;
-        }
    }
 </style>

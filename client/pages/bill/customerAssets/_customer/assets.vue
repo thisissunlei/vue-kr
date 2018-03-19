@@ -31,7 +31,7 @@
             </div>
             <div class="tab-content">
                 <GiveMoney v-if="selectedTab == 'play'"/>
-                <Balance v-if="selectedTab == 'balance'"/>
+                <Balance v-if="selectedTab == 'balance'" @update-data="updateData"/>
                 <Spending v-if="selectedTab == 'spending'"/>
                 <Refunds v-if="selectedTab == 'refunds'"/>
             </div>
@@ -100,6 +100,9 @@
                         title:err.message
                     });
                 })
+            },
+            updateData(){
+                this.getAccountInformation()
             }
 		},
 		mounted(){

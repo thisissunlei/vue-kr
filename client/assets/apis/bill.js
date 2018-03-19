@@ -163,18 +163,26 @@ export default  {
       method: 'get'
     },
     //余额转社区
-    'cmt-transfer': {
-      url: '/api/krspace-pay/cmt-transfer?',
-      method: 'get'
+    'transfer-community': {
+      url: '/api/krspace-pay/balance/transfer-community',
+      method: 'post'
     },
     // 余额转营业外
-    // 'cmt-transfer': {
-    //   url: '/mockjs/76/krspace-pay/cmt-transfer?',
-    //   method: 'get'
-    // },
-    // 冻结服务保证金转余额
+    'nonoperating': {
+      url: '/api/krspace-pay/balance/nonoperating',
+      method: 'post'
+    },
+    //门禁卡押金转余额
+    'guardcard-deposit': {
+      url: '/api/krspace-pay/balance/guardcard-deposit',
+      method: 'post'
+    },
     // 服务保证金转余额
-
+    //余额转社区--社区列表
+    'balance-community-list': {
+      url: '/api/krspace-pay/account/community/list?',
+      method: 'get'
+    },
     
   }
   

@@ -3,14 +3,14 @@
         <FormItem label="可转金额：" >
               ￥{{formItem.allMoney | thousand}}
         </FormItem>
-        <FormItem label="转至社区：" prop="community">
-            <Select v-model="formItem.community" clearable style="text-align:left">
-                <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <FormItem label="转至社区：" prop="toCmtId">
+            <Select v-model="formItem.toCmtId" style="text-align:left">
+                <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
             </Select>
         </FormItem>
         
-        <FormItem label="转移金额：" prop="money">
-            <Input v-model="formItem.money" placeholder="转移金额(请填写数字)" />
+        <FormItem label="转移金额：" prop="amount">
+            <Input v-model="formItem.amount" placeholder="转移金额(请填写数字)" />
 
         </FormItem>
     </Form>
@@ -51,12 +51,13 @@ import LabelText from '~/components/LabelText';
                 communityList:[],
                 formItem: {
                     allMoney:this.editData.balance,
+                    fromCmtId:this.editData.communityId
                 },
                 ruleCustom:{
-                    community: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                    toCmtId: [
+                        { required: true,message: '请选择社区', trigger: 'change' }
                     ],
-                    money: [
+                    amount: [
                         { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                 },
@@ -67,18 +68,22 @@ import LabelText from '~/components/LabelText';
         methods:{
             getCommunityList(){
                 console.log('转社区获取社区列表');
-                this.communityList = [{
-                    label:'1',
-                    value:'1'
-                },{
-                    label:2,
-                    value:2
-                }]
+                let params = {communityId:this.editData.communityId}
+                this.$http.get('balance-community-list', params).then((res)=>{
+                    this.communityList = res.data.items.map((item)=>{
+                        item.cmtId = item.cmtId+'';
+                        return item;
+                    });
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
         },
         updated:function(){
             let data = this.formItem
-            this.$emit('syncData', data);
+            this.$emit('sync-data', data);
              
             
         

@@ -148,7 +148,7 @@
                         key: 'rentAmount',
                         align:'center',
                         render(tag,params){ 
-                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
                           return <span class="u-txt">{money}</span>;
                         }
                     },
@@ -157,7 +157,7 @@
                         key: 'depositAmount',
                         align:'center',
                         render(tag,params){ 
-                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):'';                  
+                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
                           return <span class="u-txt">{money}</span>;
                         }
                     },

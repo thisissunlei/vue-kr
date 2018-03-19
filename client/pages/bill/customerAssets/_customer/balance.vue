@@ -41,7 +41,7 @@
                 title="转余额"
                 width="500"
             >
-                <ChangeBalance ref="changeBalance" :editData="editData" v-if="openBalance == true" :syncData="syncData" :type="balanceType"/>
+                <ChangeBalance ref="changeBalance" :editData="editData" v-if="openBalance == true" @sync-data="syncData" :type="balanceType"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitBalance('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -52,7 +52,7 @@
                 title="转营业外"
                 width="500"
             >
-                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" :syncData="syncData" type="balance"/>
+                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" @sync-data="syncData" type="balance"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitBusiness('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -63,7 +63,7 @@
                 title="转社区"
                 width="500"
             >
-                <ChangeCommunity ref="changeCommunity" :editData="editData" v-if="openCommunity == true" :syncData="syncData"/>
+                <ChangeCommunity ref="changeCommunity" :editData="editData" v-if="openCommunity == true" @sync-data="syncData"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitChangeCommunity('community')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -90,6 +90,8 @@ import ChangeBalance from './changeBalance.vue';
 		data (){
             let {params}=this.$route;
 			return{
+                updateTime:new Date(),
+                customerId:params.customer,
                 // 弹窗传回的数据
                 submitData:{},
                 detailList:[],
@@ -300,15 +302,22 @@ import ChangeBalance from './changeBalance.vue';
                         },{
                             label:'冻结押金',
                             value:'LOCK_DESPOINT'
+                        },{
+                            label:'INCOME',
+                            value:'营业外收入'
+                        },{
+                            label:'转移',
+                            value:'TRANSFER'
                         }]
                         let type = '-';
-                        type = operateType.filter((item)=>{
+                       operateType.filter((item)=>{
                             if(item.value == params.row.operateType){
+                                 type = item.label
                                 return item.label
                             }
                             return false
                         })
-                        return type[0].label
+                        return type
                     }
                 },{
                     title: '操作金额（元）',
@@ -411,23 +420,52 @@ import ChangeBalance from './changeBalance.vue';
             },
             //转余额提交
             submitBalance(name){
+                console.log('转余额提交=========',name)
                 var balanceForm = this.$refs.changeBalance.$refs;
                 var isSubmit = true;
                 balanceForm[name].validate((valid,data) => {
+                    console.log('=======2',valid)
                     if (!valid) {
 
                         isSubmit = false
                     }else{
-                        console.log('submitBalance')
+                        let params = Object.assign({},this.submitData,{customerId:this.customerId})
+                        console.log('submit',params)
+                        let url = '';
+                        switch (this.balanceType){
+                            case 'guardCardDeposit':
+                                console.log('guardCardDeposit')
+                                
+                                url = 'guardcard-deposit';
+                                break;
+                            case 'otherDeposit':
+                                console.log('otherDeposit')
+                                // url = 'guardcard-deposit';
+                                break;
+                            case 'lockDeposit':
+                                console.log('lockDeposit')
+                                // url = 'guardcard-deposit';
+                                break; 
+                            default :
+                                // url = 'guardcard-deposit';
+                                break;
+                        }
+                        console.log('submitBalance',this.balanceType,'url-->',url)
+                        // guardcard-deposit 门禁转余额
                         // 提交数据
-                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
-                        //     this.getTableData()
-                        //     this.openCreate = false;
-                        // }).catch((err)=>{
-                        //     this.$Notice.error({
-                        //         title:err.message
-                        //     });
-                        // })
+                        return;
+                        this.$http.post(url, params).then((res)=>{
+                            // 关闭窗口
+                           this.openBalance = false;
+                           // 更新数据（1）公示数据（2）余额汇总3）余额明细
+                           this.getBalanceList();
+                           this.getBalanceDetail()
+                           this.updateTime = new Date()
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
 
                     }
                 })
@@ -441,16 +479,21 @@ import ChangeBalance from './changeBalance.vue';
 
                         isSubmit = false
                     }else{
-                        console.log('submitBusiness',this.editData)
+                        let params = Object.assign({},this.submitData,{customerId:this.customerId})
+                        console.log('submit',params)
                         // 提交数据
-                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
-                        //     this.getTableData()
-                        //     this.openCreate = false;
-                        // }).catch((err)=>{
-                        //     this.$Notice.error({
-                        //         title:err.message
-                        //     });
-                        // })
+                        this.$http.post('nonoperating', params).then((res)=>{
+                           // 关闭窗口
+                           this.openBusiness = false;
+                           // 更新数据（1）公示数据（2）余额汇总3）余额明细
+                           this.getBalanceList();
+                           this.getBalanceDetail()
+                           this.updateTime = new Date()
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
 
                     }
                 })
@@ -464,16 +507,21 @@ import ChangeBalance from './changeBalance.vue';
 
                         isSubmit = false
                     }else{
-                        console.log('更改社区提交数据')
+                        let params = Object.assign({},this.submitData,{customerId:this.customerId})
+                        console.log('更改社区提交数据',params)
                         // 提交数据
-                        // this.$http.post('saveParamData', this.parameterData).then((res)=>{
-                        //     this.getTableData()
-                        //     this.openCreate = false;
-                        // }).catch((err)=>{
-                        //     this.$Notice.error({
-                        //         title:err.message
-                        //     });
-                        // })
+                        this.$http.post('transfer-community', params).then((res)=>{
+                            // 关闭窗口
+                           this.openCommunity = false;
+                           // 更新数据（1）公示数据（2）余额汇总3）余额明细
+                           this.getBalanceList();
+                           this.getBalanceDetail()
+                           this.updateTime = new Date()
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
 
                     }
                 })
@@ -484,6 +532,7 @@ import ChangeBalance from './changeBalance.vue';
                 this.openCommunity = false;
             },
             syncData(data){
+                console.log('syncData',data)
                 this.submitData = data;
             },
             changeCommunity(value){
@@ -516,7 +565,12 @@ import ChangeBalance from './changeBalance.vue';
             // 获取更新数据
             this.getBalanceList();
             this.getBalanceDetail()
-		}
+		},
+        watch:{
+            updateTime(){
+                this.$emit('update-data', new Date());
+            }
+        }
 	
 	}
 </script>

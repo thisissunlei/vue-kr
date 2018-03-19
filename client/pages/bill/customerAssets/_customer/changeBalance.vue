@@ -3,8 +3,8 @@
         <FormItem label="可转金额：" >
               ￥{{formItem.allMoney | thousand}}
         </FormItem>
-        <FormItem label="转移金额：" prop="money">
-            <Input v-model="formItem.money" placeholder="转移金额(请填写数字)" />
+        <FormItem label="转移金额：" prop="amount">
+            <Input v-model="formItem.amount" placeholder="转移金额(请填写数字)" />
 
         </FormItem>
     </Form>
@@ -17,7 +17,8 @@
                 type:String
             },
         data () {
-            let basicMoney = this.editData[this.type]
+            let basicMoney = this.editData[this.type];
+            let communityId = this.editData.communityId;
             const validateFirst = (rule, value, callback) => {
                 var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
                 
@@ -42,12 +43,13 @@
             return {
                 formItem: {
                     allMoney:basicMoney,
+                    communityId:communityId
                 },
                 ruleCustom:{
                     community: [
                         { required: true,message: '请填写名称', trigger: 'change' }
                     ],
-                    money: [
+                    amount: [
                         { required: true, trigger: 'change' ,validator: validateFirst},
                     ],
                 },
@@ -59,8 +61,9 @@
 
         },
         updated:function(){
+            console.log('update-->',this.formItem)
             let data = this.formItem
-            this.$emit('syncData', data);
+            this.$emit('sync-data', data);
         },
         mounted(){
         }

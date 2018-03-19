@@ -47,14 +47,24 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
+
 		}
     },
+    /*updated(){
+         var htmlBox=document.getElementById('treeScroll');
+         if(htmlBox){
+            this.htmlBox = htmlBox;
+            console.log(this.htmlBox)
+            this.oldContent = this.htmlBox.innerHTML;
+         }
+    },*/
     methods:{
         checkChange(event){
             this.checkValue=event;
             this.$emit('checkChange',event)
         },
         inputClick(){
+
             this.mask=true;
         },
         toggleExpand(event){
@@ -67,6 +77,7 @@ export default {
             // console.log(this.nowData,"ppppp")
             // this.$emit('search',searchKey);
             
+
         },
         sureClick(){
             this.mask=false;
@@ -86,6 +97,7 @@ export default {
         clearClick(){
             this.mask=false;
         },
+
         changeTreeData(event,data){
             var allData = data.map((item,index)=>{
                 if(item.t_id == event.t_id){
@@ -122,6 +134,7 @@ export default {
             })
          
             return  {allData:allData,isOpen:isOpen};
+
         }
     }
 }
@@ -130,6 +143,7 @@ export default {
 <style lang="less" scoped>
     .select-tree{
         .select{
+
             .tree-content{
                 min-width: 200px;
                 max-height: 150px;
@@ -149,6 +163,7 @@ export default {
             .footer{
                text-align: center;
             }
+
         }
     }
 </style>

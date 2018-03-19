@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' v-if="!isLoading">
             <div class="hander">
                 <div style="display:inline-block">
@@ -25,7 +26,8 @@
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </div>
-            <div style="width:100%;overflow:auto;">
+           
+            <div class="right-draw" style="overflow:auto;">
 
            
                 <div class="bar" :style="{width:dayAllNum*minCalibration+'px'}">
@@ -33,7 +35,7 @@
                         <div class="year-bar" v-if="years && years.length">
                             <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                         </div>
-                        <div class='month-bar' >
+                        <div class='month-bar' style="background:#F5F6FA;" >
                             <DrawMonth 
                                 v-for="( item ) in showData" 
                                 :key="item.id"  
@@ -70,11 +72,31 @@
                     </div>
                 </div>
             </div>
+             <!-- 左侧切换部分内容 -->
+            <div class='chart-tab-left'>
+                <div class='chart-left'>
+                    <Tabs size="small">
+                        <TabPane label="待开业项目">
+                            <TableList
+                            :listData="todoData"
+                            @rowClick="rowClick"
+                            />
+                        </TabPane>
+                        <TabPane label="投拓期项目">
+                            <TableList
+                            :listData="downData"
+                            @rowClick="rowClick"
+                            />
+                        </TabPane>
+                    </Tabs>
+                </div>
+            </div>
         </div>
+     
 
+        
     </div>
 </template>
-
 
 <script>
 import utils from '~/plugins/utils';
@@ -83,12 +105,14 @@ import DrawDay from './DrawDay';
 import DrawMonth from './DrawMonth';
 import DrawWeek from './DrawWeek';
 import Article from './Article';
+import TableList from './tableList';
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
-        Article
+        Article,
+        TableList
     },
     data(){
         return{
@@ -128,6 +152,16 @@ export default {
             //下拉的默认值
             barType: 'day',
             isLoading:true,
+
+
+            todoData:[
+                {name:'俊浩中牙膏公园你好好',communityName:'2',city:'3',tId:'1'},
+                {name:'6',communityName:'7',city:'8',tId:'2'},
+            ],
+            downData:[
+                {name:'1',communityName:'2',city:'3',tId:'1'},
+                {name:'6',communityName:'7',city:'8',tId:'2'},
+            ],
         
         }
     },
@@ -171,6 +205,10 @@ export default {
         //数组去重
         distinct(arr) {
           
+        },
+        //跳转编辑页
+        rowClick(item){
+            window.open(`./projectSetting/progressView/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
         },
         //下拉事件被触发
         selectChange(event){
@@ -346,6 +384,7 @@ export default {
             return obj;
         }
     }
+
 }
 </script>
 
@@ -357,7 +396,27 @@ export default {
       
         display:inline-block;
         overflow: auto;
+        .chart-tab-left{
+            
+            padding: 16px 0px 0px 0px;
+            width:246px;
+            border: 1px solid #E1E6EB;
+            display:inline-block;
+            .chart-left{
+                .ivu-tabs-bar{
+                    width:195px;
+                    margin:0 auto;
+                }
+            }
+        }
+        .right-draw{
+            position: absolute;
+           
+            left: 246px;
+            right: 0px;
+        }
         .content{
+           
             overflow:-webkit-paged-x;
         }
         .hander{
@@ -385,15 +444,19 @@ export default {
                 text-align: center;
                 display: inline-block;
                 box-sizing: border-box;
-                border-bottom: 1px solid #ccc;
-                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #CAD5E4;;
+                border-right: 1px solid #CAD5E4;
                 transition: all 0.3;
             }
         }
         
         .bar{
-            border-top: 1px solid #ccc;
-            border-left: 1px solid #ccc;
+            border-top: 1px solid #CAD5E4;
+            border-left: 1px solid #CAD5E4;
         }
    }
+   .tab-second-title{
+        height:70px;
+    }
+   
 </style>

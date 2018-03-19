@@ -36,8 +36,8 @@ export default {
     text-align: center;
     display: inline-block;
     box-sizing: border-box;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #CAD5E4;
+    border-right: 1px solid #CAD5E4;
     transition: all 0.3;
 }
 </style>

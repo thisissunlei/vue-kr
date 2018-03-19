@@ -7,6 +7,7 @@
             </TabPane>
             <TabPane label="项目档案管理">
                  <archives />
+
             </TabPane>
         </Tabs>
   </div>
@@ -26,12 +27,7 @@ export default {
         return{
 
         }
-    },
-    methods:{
-        
-    },
-
- 
+    }
 }
 
 </script>

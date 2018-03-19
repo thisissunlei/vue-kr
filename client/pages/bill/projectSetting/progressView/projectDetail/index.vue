@@ -47,8 +47,8 @@
             >
                 <EditTask  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask"/>
                 <div slot="footer">
-                    <Button type="primary" @click="submitEditTask('formItem')">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="editTask">取消</Button>
+                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">删除任务</Button>
                 </div>
         </Modal>
 
@@ -60,6 +60,18 @@
                 <WatchRecord :watchRecord="watchRecord"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitWatch">确定</Button>
+                </div>
+        </Modal>
+
+        <Modal
+                v-model="openDelete"
+                title="删除任务"
+                width="400"
+            >
+                <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
+                <div slot="footer">
+                    <Button type="primary" @click="submitDelete">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
                 </div>
         </Modal>
   </div>
@@ -97,6 +109,7 @@ export default {
             openAddTask:false,
             openEditTask:false,
             openWatch:false,
+            openDelete:false,
             upperError:false,
             addData:{},
             editData:{},
@@ -129,31 +142,57 @@ export default {
         this.queryData=this.$route.query;
     },
     methods:{
+        //获取树数据
         getListData(params){
 
         },
+        //打开新建任务
         addTask(id){
             this.openAddTask=!this.openAddTask;
             this.id=id;
         },
+        //打开编辑任务
         editTask(id){
             this.openEditTask=!this.openEditTask;
             this.id=id;
         },
+        //打开查看任务
         watchTask(){
             this.openWatch=!this.openWatch;
         },
+        //打开删除任务
+        cancelTask(){
+           this.openDelete=!this.openDelete; 
+        },
+        //提交查看任务
         submitWatch(){
             this.watchTask();
         },
+        //提交删除任务
+        submitDelete(){
+            var params={
+                id:this.id
+            }
+            this.$http.post('apply-contract',params).then((response)=>{
+                     this.cancelTask();
+                     this.getListData(this.params);
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                 });
+             })
+        },
+        //新建对象传递校验
         onAddChange(params,error){
             this.upperError=error;
             this.addData=params;
         },
+        //编辑对象传递校验
         onEditChange(params,error1,error2){
             this.upperError=(error1||error2)?true:false;
             this.editData=params;
         },
+        //新建任务提交
         submitAddTask(name){     
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
@@ -168,9 +207,12 @@ export default {
                 if(this.upperError){
                     return ;
                 }
-                this.addData.id=this.id;
+                this.addData.pid=this.id;
+                this.addData.propertyId=this.queryData.id;
+                this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
+                this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
                 this.params=Object.assign({},this.params,{time:+new Date()});
-                this.$http.post('apply-contract',this.addData).then((response)=>{
+                this.$http.post('project-add-task',this.addData).then((response)=>{
                      this.addTask();
                      this.getListData(this.params);
                  }).catch((error)=>{
@@ -179,6 +221,7 @@ export default {
                      });
                 })
           },
+          //编辑任务提交
           submitEditTask(name){
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
@@ -193,7 +236,10 @@ export default {
                 if(this.upperError){
                     return ;
                 }
-                this.editData.id=this.id;
+                this.editData.pid=this.id;
+                this.editData.propertyId=this.queryData.id;
+                this.editData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
+                this.editData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
                 this.params=Object.assign({},this.params,{time:+new Date()});
                 this.$http.post('apply-contract',this.editData).then((response)=>{
                      this.editTask();

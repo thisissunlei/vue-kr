@@ -62,7 +62,7 @@
                         >
                             <div class='first'><span class='circle'></span>{{item.time}}</div>
                             <div class='second'>
-                                <Poptip trigger="hover" :content=item.who placement="bottom">
+                                <Poptip trigger="hover" :content=item.who placement="right">
                                   {{item.detail}}
                                 </Poptip>
                             </div>

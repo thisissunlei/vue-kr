@@ -1,38 +1,38 @@
 <template>
   <div>
       <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;">
-                <Form-item label="任务名称"  class="bill-search-class" prop="orderNum">
+                <Form-item label="任务名称"  class="bill-search-class" prop="name">
                     <i-input 
-                        v-model="formItem.orderNum" 
+                        v-model="formItem.name" 
                         placeholder="请输入任务名称"
                         style="width: 252px"
                     />
                 </Form-item>
-                <Form-item label="任务类型" class="bill-search-class" prop="task" style="padding-left: 10px;"> 
+                <Form-item label="任务类型" class="bill-search-class" prop="type" style="padding-left: 10px;"> 
                     <Select 
-                        v-model="formItem.task" 
+                        v-model="formItem.type" 
                         placeholder="请输入任务类型" 
                         style="width: 252px;"
                         filterable
                         clearable
                         @on-change="typeChange"
                     >
-                        <Option v-for="item in taskList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in taskList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
                 </Form-item>
                 <div v-if="mask">
-                        <Form-item label="计划起止日期" class="bill-search" prop="cStartDate">
+                        <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
                             <DatePicker 
-                                v-model="formItem.cStartDate"
+                                v-model="formItem.planStartTime"
                                 type="date" 
                                 placeholder="开始日期" 
                                 style="width: 252px"
                             />
                         <span class="u-date-txt">至</span>
                         </Form-item>
-                        <Form-item prop="cEndDate" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
+                        <Form-item prop="planEndTime" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
                             <DatePicker 
-                                v-model="formItem.cEndDate"
+                                v-model="formItem.planEndTime"
                                 type="date" 
                                 placeholder="结束日期" 
                                 style="width: 252px"
@@ -42,9 +42,9 @@
                </div>
 
                 <div v-if="!mask">
-                        <Form-item label="会议节点日期" class="bill-search" prop="cStartDate">
+                        <Form-item label="会议节点日期" class="bill-search" prop="planStartTime">
                             <DatePicker 
-                                v-model="formItem.cStartDate"
+                                v-model="formItem.planStartTime"
                                 type="date" 
                                 placeholder="开始日期" 
                                 style="width: 252px"
@@ -53,8 +53,8 @@
                 </div>
 
              <FormItem label="任务描述"  class="bill-search-class" style="width:575px">
-                    <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
-                    <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
+                    <Input v-model="formItem.descr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
+                    <div style="text-align:right">{{formItem.descr?formItem.descr.length+"/500":0+"/500"}}</div>
             </FormItem>
 
          </Form>
@@ -69,36 +69,36 @@ export default {
         return{
             dateError:false,
             formItem:{
-                   orderNum:'',
-                   task:'s',
-                   cEndDate:'',
-                   cStartDate:'',
-                   remark:''
+                   name:'',
+                   type:'',
+                   planEndTime:'',
+                   planStartTime:'',
+                   descr:''
             },
             ruleValidate: {
-                orderNum: [
+                name: [
                     { required: true, message: '请输入任务名称', trigger: 'change' }
                 ],
-                task: [
+                type: [
                     { required: true, message: '请输入任务类型', trigger: 'change' }
                 ],
-                cStartDate:[
+                planStartTime:[
                     { required: true, type: 'date',message: '请输入开始日期', trigger: 'change' }
                 ],
-                cEndDate:[
+                planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
                 ]
             },
             taskList:[
-                {id:'s',name:'阶段任务'},
-                {id:'k',name:'会议节点'}
+                {id:'STAGETASK',name:'阶段任务'},
+                {id:'MEETING',name:'会议节点'}
             ],
             mask:true
         }
     },
     updated:function(){
-        if(this.formItem.cStartDate&&this.formItem.cEndDate){
-                if(this.formItem.cStartDate>this.formItem.cEndDate){
+        if(this.formItem.planStartTime&&this.formItem.planEndTime){
+                if(this.formItem.planStartTime>this.formItem.planEndTime){
                     this.dateError=true;
                 }else{
                     this.dateError=false; 
@@ -110,7 +110,7 @@ export default {
     },
     methods:{
         typeChange(params){
-            if(params=='s'){
+            if(params=='STAGETASK'){
                 this.mask=true;
             }else{
                 this.mask=false;

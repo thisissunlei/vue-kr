@@ -195,11 +195,11 @@ export default {
 
         jumpEdit(params){
             let manageId=params.manageId;
-             window.open(`./steward-setting/edit/${manageId}`,'_blank');
+             window.open(`/app-manage/steward-setting/edit/${manageId}`,'_blank');
         },
 
         jumpCreate(){
-             window.open('./steward-setting/create','_blank');
+             window.open('/app-manage/steward-setting/create','_blank');
         },
 
         submitLower(){

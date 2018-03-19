@@ -417,7 +417,7 @@ export default {
             .chart-left{
                 .ivu-tabs-nav{
                    width:100%;
-                   height: 50px;
+                   height: 51px;
                    padding-top: 8px;
                    .ivu-tabs-ink-bar{
                        width:58px !important;

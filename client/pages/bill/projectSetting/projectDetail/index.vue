@@ -23,7 +23,7 @@
                 title="添加任务"
                 width="660"
             >
-                <AddTask  @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
+                <AddTask  :id="id" @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitAddTask('formItem')">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="addTask">取消</Button>
@@ -35,7 +35,7 @@
                 title="编辑任务"
                 width="660"
             >
-                <EditTask  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask"/>
+                <EditTask :id="id"  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
                     <Button type="ghost" style="margin-left:8px" @click="cancelTask">删除任务</Button>
@@ -79,21 +79,7 @@ export default {
     data(){
         return{
             queryData:{},
-            listData:[
-             {
-               name:'信息收集',
-               tId:'1',
-               children:[
-                 {name:'意向书',tId:'2',children:[]},
-                 {name:'意向书',tId:'3',children:[]}
-               ]
-             },
-             {
-               name:'项目评估',
-               tId:'4',
-               children:[]
-             }
-           ],
+            listData:[],
 
 
             openAddTask:false,
@@ -128,17 +114,26 @@ export default {
         WatchRecord,
         DetailTaskList
     },
-    created(){
-       
+    created(){    
         this.queryData=this.$route.query; 
     },
     mounted(){
          GLOBALSIDESWITCH("false");
+         this.getListData();
     },
     methods:{
         //获取树数据
-        getListData(params){
-
+        getListData(){
+            let params={
+                propertyId:this.queryData.id
+            }
+            this.$http.get('project-list-task',params).then((response)=>{
+                     this.listData=response.items; 
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                     });
+                 })
         },
         //打开新建任务
         addTask(id){
@@ -205,10 +200,9 @@ export default {
                 this.addData.propertyId=this.queryData.id;
                 this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
                 this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
-                this.params=Object.assign({},this.params,{time:+new Date()});
                 this.$http.post('project-add-task',this.addData).then((response)=>{
                      this.addTask();
-                     this.getListData(this.params);
+                     this.getListData();
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -234,10 +228,9 @@ export default {
                 this.editData.propertyId=this.queryData.id;
                 this.editData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
                 this.editData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
-                this.params=Object.assign({},this.params,{time:+new Date()});
                 this.$http.post('apply-contract',this.editData).then((response)=>{
                      this.editTask();
-                     this.getListData(this.params);
+                     this.getListData();
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,

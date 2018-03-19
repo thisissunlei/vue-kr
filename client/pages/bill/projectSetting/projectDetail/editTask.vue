@@ -78,8 +78,13 @@
 import dateUtils from 'vue-dateutils';
 export default {
     props:{
-        editRecord:Array,
-        default:[]
+        id:{
+            type:Number
+        },
+        editRecord:{
+            type:Array,
+            default:[]
+        }
     },
     data(){
         return{

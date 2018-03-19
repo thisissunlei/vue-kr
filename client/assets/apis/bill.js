@@ -111,6 +111,30 @@ export default  {
       url: '/api/krspace-erp-web/pm/task/add',
       method: 'post'
     },
-    
+    //任务名称唯一性校验
+    'project-name-check': {
+      url: '/api/krspace-erp-web/pm/task/unique',
+      method: 'get'
+    },
+    //项目管理－编辑任务
+    'project-edit-task': {
+      url: '/api/krspace-erp-web/pm/task/edit',
+      method: 'post'
+    },
+    //项目管理－删除任务
+    'project-delete-task': {
+      url: '/api/krspace-erp-web/pm/task/delete',
+      method: 'delete'
+    },
+    //项目管理－查询任务
+    'project-get-task': {
+      url: '/api/krspace-erp-web/pm/task/detail',
+      method: 'get'
+    },
+    //项目管理－查询任务列表
+    'project-list-task': {
+      url: '/api/krspace-erp-web/pm/task/list',
+      method: 'get'
+    },
   }
   

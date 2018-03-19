@@ -12,36 +12,36 @@
            <ul>
               <li
                 v-for="item in data"
-                :key="item.tId"
+                :key="item.t_id"
                 class='detail-li'
               >
-                 <div class='chart-parent' :data-box-id="item.tId">
-                      <div class='chart-left-name' @click="showClick(item.tId)">
-                        <span class='parent-icon' :id="'parent-icon'+item.tId"></span>
-                        <span class="chart-name">{{item.name}}</span>
+                 <div class='chart-parent' :data-box-id="item.t_id">
+                      <div class='chart-left-name' @click="showClick(item.value)">
+                        <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
+                        <span class="chart-name">{{item.label}}</span>
                       </div>
-                      <div @click="editClick(item.tId)" class='chart-edit'>
+                      <div @click="editClick(item.value)" class='chart-edit'>
                          <span class='edit'></span>
                       </div>
                  </div>
                  
-                  <ul class='chart-children' style="display:none;" :id='"chart-children"+item.tId'>
+                  <ul class='chart-children' style="display:none;" :id='"chart-children"+item.t_id'>
                       <li
                         v-for="items in item.children"
-                        :key="items.tId"
+                        :key="items.t_id"
                         class='detail-li'
                       >
-                          <div class='chart-parent' :data-box-id="items.tId">
+                          <div class='chart-parent' :data-box-id="items.t_id">
                               <div class='chart-left-name'>
                                 <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                <span class="chart-name" style="color: #666666;">{{items.name}}</span>
+                                <span class="chart-name" style="color: #666666;">{{items.label}}</span>
                               </div>
-                              <div @click="editClick(items.tId)" class='chart-edit'>
+                              <div @click="editClick(items.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
                           </div>
                       </li>
-                      <p class='add-child-task' @click="addClick(item.tId)">
+                      <p class='add-child-task' @click="addClick(item.value)">
                         <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
                         <span class='chart-list'>添加子任务</span>
                       </p>
@@ -61,7 +61,7 @@ export default {
         data:{
             type:Array
         }
-	},
+	  },
     data() {
         return{
            

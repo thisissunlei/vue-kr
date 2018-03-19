@@ -6,6 +6,7 @@
                         v-model="formItem.name" 
                         placeholder="请输入任务名称"
                         style="width: 252px"
+                        @on-change="nameChange"
                     />
                 </Form-item>
                 <Form-item label="任务类型" class="bill-search-class" prop="type" style="padding-left: 10px;"> 
@@ -65,6 +66,11 @@
 <script>
 import dateUtils from 'vue-dateutils';
 export default {
+    props:{
+        id:{
+            type:Number
+        }
+	},
     data(){
         return{
             dateError:false,
@@ -96,6 +102,9 @@ export default {
             mask:true
         }
     },
+    created(){    
+        this.queryData=this.$route.query; 
+    },
     updated:function(){
         if(this.formItem.planStartTime&&this.formItem.planEndTime){
                 if(this.formItem.planStartTime>this.formItem.planEndTime){
@@ -115,6 +124,20 @@ export default {
             }else{
                 this.mask=false;
             }
+        },
+        nameChange(event){
+            let params={
+                name:event.target.value,
+                propertyId:this.queryData.id,
+                id:this.id
+            }
+            this.$http.get('project-name-check',params).then((response)=>{
+                    this.listData=response.items; 
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                  });
+            })
         }
     }
 }

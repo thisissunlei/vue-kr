@@ -237,6 +237,7 @@ export default {
        }
        .tab-second-title{
             height:70px;
+            background: #fff;
         }
    }
 </style>

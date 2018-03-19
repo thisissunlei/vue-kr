@@ -32,10 +32,10 @@
            
                 <div class="bar" :style="{width:dayAllNum*minCalibration+'px'}">
                     <div :style="{width:dayAllNum*minCalibration+'px'}">
-                        <div class="year-bar" v-if="years && years.length">
+                        <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
                             <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                         </div>
-                        <div class='month-bar' style="background:#F5F6FA;" >
+                        <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
                             <DrawMonth 
                                 v-for="( item ) in showData" 
                                 :key="item.id"  
@@ -63,7 +63,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="content">
+                <div    
+                    class="content"
+                    :style="{width:dayAllNum*minCalibration+'px'}"
+                >
                     <div style="position:relative;">
                         <Article 
                             :minCalibration="minCalibration"
@@ -175,36 +178,34 @@ export default {
     },
     methods:{
         getYears(arr){
-         var allYears = [];
-         var everuYearDayNum = 0;
-           for (var i = 0; i < arr.length; i++) {
-               for(var j=0;j<allYears.length;j++){
-                //    if(allYears[j].year !=arr[i].year){
-                //         if(allYears.length){
-                //             allYears[allYears.length-1].dayNum=everuYearDayNum;
-                //         }
-                            
-                            
-                //             everuYearDayNum = arr[i].dayNum;
-                //             allYears.push({year:arr[i].year,dayNum:0});
-                        
-                            
-                        
-                //     }else{
-                //         break;
-                //             everuYearDayNum +=arr[i].dayNum;
-                //     }
-               }
-           }
-           if(allYears.length == 1){
-               allYears[allYears.length-1].dayNum=everuYearDayNum;
-           }
-           
-           this.years = [].concat(allYears);
-        },
-        //数组去重
-        distinct(arr) {
-          
+            var allYears = [];
+            var startMonth = arr[0] ,
+                endMonth = arr[arr.length - 1];
+            var startDay = '',endDay='';
+            if(startMonth.year === endMonth.year){
+                startDay = startMonth.year+'-'+startMonth.month+'-'+'1';
+                endDay = endMonth.year+'-'+endMonth.month+'-'+endMonth.dayNum;
+                allYears.push({
+                    year:startMonth.year,
+                    dayNum:utils.dateDiff(startDay,endDay)+1
+                })
+            }else{
+                for (var i = startMonth.year; i <= endMonth.year; i++) {
+                    startDay = i+'-'+1+'-'+1;
+                    endDay =i.year+'-'+12+'-'+this.getDayNum(i,12);
+                    if(i==startMonth.year){
+                        startDay = startMonth.year+'-'+startMonth.month+'-'+'1';
+                    }
+                    if(i==endMonth.year){
+                        endDay = startMonth.year+'-'+startMonth.month+'-'+this.getDayNum(endMonth.year,endMonth.month);
+                    }
+                    allYears.push({
+                        year:i,
+                        dayNum:utils.dateDiff(startDay,endDay)+1
+                    })
+                }
+            }
+            this.years = [].concat(allYears);
         },
         //下拉事件被触发
         selectChange(event){
@@ -212,6 +213,8 @@ export default {
                 this.minCalibration = 20;
             }else if(event=='day'){
                 this.minCalibration = 50;
+            }else if(event=='month'){
+                this.minCalibration = 5;
             }
         },
         //获取进度条的总长度
@@ -440,19 +443,20 @@ export default {
                 margin-left: 10px; 
             }
         }
-        .day-bar,.month-bar,.week-bar,.day-bar{
+        .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
 
         }
-        .day-bar{
+        .year-bar{
             .year{
                
                 height: 50px;
                 line-height: 50px;
                 width: 50px;
-                text-align: center;
+                text-align: left;
                 display: inline-block;
                 box-sizing: border-box;
+                padding-left:20px; 
                 border-bottom: 1px solid #CAD5E4;;
                 border-right: 1px solid #CAD5E4;
                 transition: all 0.3;

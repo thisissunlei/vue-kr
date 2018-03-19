@@ -156,6 +156,9 @@ export default {
     .label{
         width: 100%;
         height: 100%;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
    .plan{
         height: 25px;

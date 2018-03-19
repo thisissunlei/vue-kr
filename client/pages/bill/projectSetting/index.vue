@@ -2,10 +2,11 @@
   <div class="project-setting">
         <Tabs size="default">
             <TabPane label="项目档案管理">
-                <archives />
+              
+                 <ProgressView/>
             </TabPane>
             <TabPane label="项目档案管理">
-                <ProgressView/>
+                 <archives />
             </TabPane>
         </Tabs>
   </div>

@@ -98,6 +98,7 @@ export default {
       display:inline-block;
       border:solid 1px #E1E6EB;
       padding-bottom:30px;
+      margin-left:25px;
      .chart-title{
        width:100%;
        height:101px;

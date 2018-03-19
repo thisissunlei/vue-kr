@@ -62,11 +62,6 @@ export default {
             type:Array
         }
 	  },
-    data() {
-        return{
-           
-        }
-    },
     methods:{
       addClick(id){
          this.$emit("addClick",id); 
@@ -97,6 +92,7 @@ export default {
       width:246px;
       display:inline-block;
       border:solid 1px #E1E6EB;
+      border-bottom:none;
      .chart-title{
        width:100%;
        height:101px;
@@ -105,7 +101,7 @@ export default {
        padding-left:12px;
        padding-right:18px;
        background: #F0F1F6;
-       border-bottom:solid 1px #E1E6EB;
+       border-bottom:solid 2px #E1E6EB;
       }
       .chart-detail{
          width:100%;
@@ -114,7 +110,7 @@ export default {
              .chart-parent{
                 height:70px;
                 line-height:70px;
-                border-bottom:solid 1px #E1E6EB;
+                border-bottom:solid 2px #E1E6EB;
                 padding-left:12px;
                 padding-right:18px;
                 .chart-left-name{

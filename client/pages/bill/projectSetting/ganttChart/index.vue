@@ -448,7 +448,6 @@ export default {
         
         .bar{
             border-top: 1px solid #E1E6EB;
-            border-left: 1px solid #E1E6EB;
         }
    }
    .tab-second-title{

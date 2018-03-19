@@ -28,13 +28,14 @@ import LabelText from '~/components/LabelText';
         data () {
             console.log('editData',this.editData.balance)
             const validateFirst = (rule, value, callback) => {
-                console.log('rule',rule);
-                console.log('value',value);
-                console.log('value>this.editData.balance',Number(value)>Number(this.editData.balance))
+                var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
 
                 if(isNaN(value)){
                     console.log('isNaN(value)',isNaN(value))
                     callback(new Error('转移金额请填写数字'))
+                }
+                if(!pattern.test(value)){
+                    callback(new Error('工位单价不得多于两位小数'))
                 }
                 if(Number(value)>Number(this.editData.balance)){
                     callback(new Error('转移金额不得大于可转金额'));

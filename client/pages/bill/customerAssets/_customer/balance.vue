@@ -77,7 +77,7 @@
 <script>
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
-import selectCommunities from '~/components/selectCommunities';
+import selectCommunities from '~/components/selectCommunities.vue';
 import dateUtils from 'vue-dateutils';
 import ChangeCommunity from './changeCommunity.vue';
 import ChangeBalance from './changeBalance.vue';

@@ -102,8 +102,13 @@ export default {
             font-family: PingFangSC-Medium;
             font-size: 14px;
         }
+
         .ivu-tabs-nav .ivu-tabs-tab-active{
             color: #4A90E2;
+
+        }
+        .bar{
+            border-top: 1px solid #E1E6EB;
         }
     }
        

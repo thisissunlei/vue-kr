@@ -68,7 +68,7 @@ import dateUtils from 'vue-dateutils';
 export default {
     props:{
         id:{
-            type:Number
+            type:[Number,String]
         }
 	},
     data(){
@@ -132,12 +132,13 @@ export default {
                 id:this.id
             }
             this.$http.get('project-name-check',params).then((response)=>{
-                    this.listData=response.items; 
+                    this.formItem.error=false;
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
-                  });
-            })
+                   });
+                   this.formItem.error=true;
+                })
         }
     }
 }

@@ -20,7 +20,7 @@
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.lable}}</span>
                       </div>
-                      <div @click="editClick(item.value)" class='chart-edit'>
+                      <div @click="editClick(item.value,'')" class='chart-edit'>
                          <span class='edit'></span>
                       </div>
                  </div>
@@ -36,7 +36,7 @@
                                 <Icon type="minus-round" size="4" style="color: #666666;"/>
                                 <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
                               </div>
-                              <div @click="editClick(items.value)" class='chart-edit'>
+                              <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
                           </div>
@@ -62,17 +62,12 @@ export default {
             type:Array
         }
 	  },
-    data() {
-        return{
-           
-        }
-    },
     methods:{
       addClick(id){
          this.$emit("addClick",id); 
       },
-      editClick(id){
-         this.$emit("editClick",id); 
+      editClick(id,parentId){
+         this.$emit("editClick",id,parentId); 
       },
       showClick(id){
          var dom=document.getElementById('chart-children'+id);
@@ -97,6 +92,7 @@ export default {
       width:246px;
       display:inline-block;
       border:solid 1px #E1E6EB;
+      border-bottom:none;
      .chart-title{
        width:100%;
        height:101px;
@@ -105,7 +101,7 @@ export default {
        padding-left:12px;
        padding-right:18px;
        background: #F0F1F6;
-       border-bottom:solid 1px #E1E6EB;
+       border-bottom:solid 2px #E1E6EB;
       }
       .chart-detail{
          width:100%;
@@ -114,7 +110,7 @@ export default {
              .chart-parent{
                 height:70px;
                 line-height:70px;
-                border-bottom:solid 1px #E1E6EB;
+                border-bottom:solid 2px #E1E6EB;
                 padding-left:12px;
                 padding-right:18px;
                 .chart-left-name{

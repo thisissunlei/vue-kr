@@ -25,7 +25,7 @@
                 title="添加任务"
                 width="660"
             >
-                <AddTask  :id="id" @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
+                <AddTask  :id="addId" @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitAddTask('formItem')">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="addTask">取消</Button>
@@ -37,7 +37,7 @@
                 title="编辑任务"
                 width="660"
             >
-                <EditTask :id="id"  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask"/>
+                <EditTask :id="editId"  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
                     <Button type="ghost" style="margin-left:8px" @click="cancelTask">删除任务</Button>
@@ -100,7 +100,10 @@ export default {
             upperError:false,
             addData:{},
             editData:{},
-            id:'',
+            getEdit:{},
+            addId:'',
+            editId:'',
+            parentId:'',
 
 
             params:{
@@ -143,12 +146,23 @@ export default {
         //打开新建任务
         addTask(id){
             this.openAddTask=!this.openAddTask;
-            this.id=id;
+            this.addId=id;
+        },
+        cancelEditTask(){
+            this.openEditTask=!this.openEditTask;
         },
         //打开编辑任务
-        editTask(id){
-            this.openEditTask=!this.openEditTask;
-            this.id=id;
+        editTask(id,parentId){
+            this.editId=id;
+            this.parentId=parentId;
+            this.$http.get('project-get-task',{id:id}).then((response)=>{
+                    this.getEdit=response.data;
+                    this.cancelEditTask();
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                     });
+                 })
         },
         //打开查看任务
         watchTask(){
@@ -165,11 +179,12 @@ export default {
         //提交删除任务
         submitDelete(){
             var params={
-                id:this.id
+                id:this.editId
             }
-            this.$http.post('apply-contract',params).then((response)=>{
+            this.$http.delete('project-delete-task',params).then((response)=>{
                      this.cancelTask();
-                     this.getListData(this.params);
+                     this.cancelEditTask();
+                     this.getListData();
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -201,7 +216,13 @@ export default {
                 if(this.upperError){
                     return ;
                 }
-                this.addData.pid=this.id;
+                if(this.addData.error){
+                    this.$Notice.error({
+                        title: '任务名称重复'
+                    });
+                    return ;
+                }
+                this.addData.pid=this.addId;
                 this.addData.propertyId=this.queryData.id;
                 this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
                 this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
@@ -229,11 +250,20 @@ export default {
                 if(this.upperError){
                     return ;
                 }
-                this.editData.pid=this.id;
+                // if(this.editData.error){
+                //     this.$Notice.error({
+                //         title: '任务名称重复'
+                //     });
+                //     return ;
+                // }
+                this.editData.id=this.editId;
+                this.editData.pid=this.parentId;
                 this.editData.propertyId=this.queryData.id;
-                this.editData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
-                this.editData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
-                this.$http.post('apply-contract',this.editData).then((response)=>{
+                this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
+                this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
+                this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
+                this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
+                this.$http.post('project-edit-task',this.editData).then((response)=>{
                      this.editTask();
                      this.getListData();
                  }).catch((error)=>{

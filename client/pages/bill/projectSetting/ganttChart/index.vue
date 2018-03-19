@@ -67,14 +67,16 @@
                     class="content"
                     :style="{width:dayAllNum*minCalibration+'px'}"
                 >
-                    <div class="every-col" data-chart="t_id" style="position:relative;" v-for="item in data" :key="item.id">
+                  
                         <Article 
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
-                            :data="item.data"
-                            :label="item.label"
+                            :data="item"
+                            style="position:relative;" 
+                            v-for="item in data" 
+                            :key="item.id"
                         />
-                    </div>
+                    
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -416,6 +418,7 @@ export default {
         }
         .content{
             .every-col{
+                height: 70px;
                 border-top: 1px solid #E1E6EB;;
                 border-bottom: 1px solid #E1E6EB;
             }

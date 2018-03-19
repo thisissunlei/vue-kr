@@ -1,56 +1,68 @@
 
 <template>
-	<div class="article" 
-        :style="{
-            background:getBgColor(),
-            width:boxDetail.width * minCalibration+'px',
-            left:boxDetail.office * minCalibration+'px'
-        }"
-    >
-       
-        <div 
-            class="plan"
+    <div>
+    <div class="every-col" :data-chart="data.t_id" >
+        <div class="article" 
             :style="{
-                width:planDetail.width * minCalibration + 'px',
-                left:planDetail.office * minCalibration + 'px'
+                background:getBgColor(),
+                width:boxDetail.width * minCalibration+'px',
+                left:boxDetail.office * minCalibration+'px'
             }"
         >
-            <Poptip placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
-                <Tooltip :content="label" placement="bottom-start">
-                    <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{label}}</div>
-                </Tooltip>
-            
-                <div class="api" slot="content">
-                    <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
-                </div>
-            </Poptip>
-        </div>
-    
-
-
-        <div 
-            class="actual"
-            :style="{
-                width:actualDetail.width * minCalibration+'px',
-                left:actualDetail.office * minCalibration + 'px'
-            }"
-            v-if="data.actualStartTime && data.actualEndTime"
-        >
-            <Poptip placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
-                <Tooltip :content="label" placement="bottom-start">
-                    <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
-                         {{label}}
+        
+            <div 
+                class="plan"
+                :style="{
+                    width:planDetail.width * minCalibration + 'px',
+                    left:planDetail.office * minCalibration + 'px'
+                }"
+                v-if="data.planStartTime && data.planEndTime"
+            >
+                <Poptip placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
+                    <Tooltip :content="data.label" placement="bottom-start">
+                        <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
+                    </Tooltip>
+                
+                    <div class="api" slot="content">
+                        <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
                     </div>
-                   
-                </Tooltip>
-                <div class="api" slot="content">
-                    <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
-                </div>
-            </Poptip>
+                </Poptip>
+            </div>
+        
+
+
+            <div 
+                class="actual"
+                :style="{
+                    width:actualDetail.width * minCalibration+'px',
+                    left:actualDetail.office * minCalibration + 'px'
+                }"
+                v-if="data.actualStartTime && data.actualEndTime"
+            >
+                <Poptip placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
+                    <Tooltip :content="data.label" placement="bottom-start">
+                        <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
+                            {{data.label}}
+                        </div>
+                    
+                    </Tooltip>
+                    <div class="api" slot="content">
+                        <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
+                    </div>
+                </Poptip>
+            </div>
         </div>
-            
-           
-	</div>
+       
+    </div>
+    
+     <Article 
+            v-for="item in data.children" 
+            :key="item.id" 
+            :data="item"
+            :minCalibration="minCalibration"
+            :startDate="startDate"
+        />
+    </div>
 </template>
 
 <script>
@@ -58,6 +70,7 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 export default {
+    name:'Article',
     components:{
         SpecificPlan
     },
@@ -74,6 +87,9 @@ export default {
         },
         data:{
             type:Object,
+        },
+        treeKey:{
+            type:[Number,String]
         }
     },
     data(){

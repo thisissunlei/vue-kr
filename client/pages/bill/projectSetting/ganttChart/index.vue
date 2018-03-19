@@ -68,14 +68,16 @@
                     :style="{width:dayAllNum*minCalibration+'px'}"
                 >
                   
-                        <Article 
-                            :minCalibration="minCalibration"
-                            :startDate="leftEndpoint"
-                            :data="item"
-                            style="position:relative;" 
-                            v-for="item in data" 
-                            :key="item.id"
-                        />
+                    <Article 
+                        
+                        :minCalibration="minCalibration"
+                        :startDate="leftEndpoint"
+                        :data="item"
+                        style="position:relative;" 
+                        v-for="item in data" 
+                        :key="item.id"
+                        :type="type"
+                    />
                     
                 </div>
             </div>
@@ -103,6 +105,10 @@ export default {
         data:{
             type:Array,
             default:()=>[]
+        },
+        type:{
+            type:String,
+            default:'view'
         }
     },
     data(){
@@ -162,6 +168,7 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
+        console.log(this.data,"PPPPPPP----------")
 
     },
     methods:{

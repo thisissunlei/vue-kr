@@ -16,9 +16,10 @@
                     width:planDetail.width * minCalibration + 'px',
                     left:planDetail.office * minCalibration + 'px'
                 }"
-                v-if="data.planStartTime && data.planEndTime"
+                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
             >
-                <Poptip placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
+                <span  v-if="type == 'edit'">{{data.label}}</span>
+                <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
                     <Tooltip :content="data.label" placement="bottom-start">
                         <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
                     </Tooltip>
@@ -37,9 +38,10 @@
                     width:actualDetail.width * minCalibration+'px',
                     left:actualDetail.office * minCalibration + 'px'
                 }"
-                v-if="data.actualStartTime && data.actualEndTime"
+                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
             >
-                <Poptip placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
+                <span  v-if="type == 'edit'">{{data.label}}</span>
+                <Poptip  v-if="type!='edit'" placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
                     <Tooltip :content="data.label" placement="bottom-start">
                         <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
                             {{data.label}}
@@ -55,12 +57,14 @@
        
     </div>
     
-     <Article 
+        <Article 
+            v-if="data.children"
             v-for="item in data.children" 
             :key="item.id" 
             :data="item"
             :minCalibration="minCalibration"
             :startDate="startDate"
+            :type="type"
         />
     </div>
 </template>
@@ -90,18 +94,14 @@ export default {
         },
         treeKey:{
             type:[Number,String]
+        },
+        type:{
+            type:String,
+            default:'view'
         }
     },
     data(){
         return {
-            // data:{
-                
-            //     currentStatus:-40,
-            //     planStartTime:1515513600000,
-            //     planEndTime:1516204800000,
-            //     actualStartTime:1515686400000,
-            //     actualEndTime:1516377600000,
-            // },
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
@@ -109,32 +109,37 @@ export default {
         }
     },
     mounted(){
-        console.log(this.label,"llllllll")
-       this.getBoxWidthAndOffice();
+        if(!this.data.chartType){
+            this.getBoxWidthAndOffice();
+        }
+        if (this.data.label == "kkk") {
+            
+        }
     },
     methods:{
        getBgColor(){
-            if(this.data.currentStatus){
-                if(this.data.currentStatus<0){
-                    return "#FFCDCD"
-                }else if(this.data.currentStatus>0){
-                    return '#FFECD4';
-                }else{
-                    return "#E0F2CD"
-                }
-            }else {
+            if(this.data.chartType || !this.data.data.currentStatus){
                 return "#fff";
             }
+            if(this.data.data.currentStatus<0){
+                return "#FFCDCD"
+            }else if(this.data.data.currentStatus>0){
+                return '#FFECD4';
+            }else{
+                return "#E0F2CD"
+            }
+           
           
        },
        
        getBoxWidthAndOffice(){
+           
             var dates = this.getEndpointDate();
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.planEndTime));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.actualEndTime));
+            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planStartTime));
+            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planEndTime));
+            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualStartTime));
+            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
@@ -156,17 +161,17 @@ export default {
        },
        getEndpointDate(){
             var arr = [];
-            if(this.data.actualStartTime){
-                arr.push(this.data.actualStartTime)
+            if(this.data.data.actualStartTime){
+                arr.push(this.data.data.actualStartTime)
             }
-            if(this.data.actualEndTime){
-                arr.push(this.data.actualEndTime)
+            if(this.data.data.actualEndTime){
+                arr.push(this.data.data.actualEndTime)
             }
-            if(this.data.planStartTime){
-                arr.push(this.data.planStartTime)
+            if(this.data.data.planStartTime){
+                arr.push(this.data.data.planStartTime)
             }
-            if(this.data.planEndTime){
-                arr.push(this.data.planEndTime)
+            if(this.data.data.planEndTime){
+                arr.push(this.data.data.planEndTime)
             }
             var max = arr[0],min=arr[0];
             for (var i = 1; i < arr.length; i++) {

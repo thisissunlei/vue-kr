@@ -17,10 +17,10 @@
               >
                  <div class='chart-parent' :data-box-id="item.t_id">
                    <div class='parent-middle'>
-                     <Tooltip :content="item.lable" placement="top">
+                     <Tooltip :content="item.label" placement="top">
                         <div class='chart-left-name' @click="showClick(item.t_id)">
                           <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
-                          <span class="chart-name">{{item.lable}}</span>
+                          <span class="chart-name">{{item.label}}</span>
                         </div>
                     </Tooltip>
                     <div @click="editClick(item.value,'')" class='chart-edit'>
@@ -29,18 +29,18 @@
                    </div>
                  </div>
                  
-                  <ul class='chart-children' :id='"chart-children"+item.t_id'>
+                  <ul class='chart-children'  :id='"chart-children"+item.t_id'>
                       <li
                         v-for="items in item.children"
                         :key="items.t_id"
                         class='detail-li'
                       >
-                          <div class='chart-parent' :data-box-id="items.t_id">
+                          <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id">
                             <div class='parent-middle'>
-                              <Tooltip :content="items.lable" placement="top">
+                              <Tooltip :content="items.label" placement="top">
                                   <div class='chart-left-name'>
                                     <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                    <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
+                                    <span class="chart-name" style="color: #666666;">{{items.label}}</span>
                                   </div>
                               </Tooltip>
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>
@@ -69,7 +69,7 @@ export default {
         data:{
             type:Array
         }
-	  },
+    },
     methods:{
       addClick(id){
          this.$emit("addClick",id); 

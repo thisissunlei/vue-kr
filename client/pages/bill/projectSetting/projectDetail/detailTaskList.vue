@@ -97,7 +97,6 @@ export default {
       width:246px;
       display:inline-block;
       border:solid 1px #E1E6EB;
-      margin-left:25px;
      .chart-title{
        width:100%;
        height:101px;

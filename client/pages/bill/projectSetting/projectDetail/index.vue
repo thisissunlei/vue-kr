@@ -1,6 +1,6 @@
 <template>
   <div>
-        <div class='chart-ul-wrap'>
+        <div class='edit-left-bar'>
             <div class='detail-title'>
                 <div class='title-left'>
                     <span>项目档案</span>
@@ -8,14 +8,16 @@
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>
             </div>
-
-            <div class='detail-detail'>
-                        <DetailTaskList 
-                            :data="listData"
-                            @addClick="addTask"
-                            @editClick="editTask"
-                        />
-            </div>
+            <GanttChart>
+                <div class='detail-detail' slot="leftBar">
+                    <DetailTaskList 
+                        :data="listData"
+                        @addClick="addTask"
+                        @editClick="editTask"
+                    />
+                </div>
+            </GanttChart>
+          
         </div>
        
         <Modal
@@ -74,8 +76,17 @@ import AddTask from './addTask';
 import EditTask from './editTask';
 import WatchRecord from './watchRecord';
 import DetailTaskList from './detailTaskList';
+import GanttChart from '../ganttChart';
+
 
 export default {
+    components:{
+        AddTask,
+        EditTask,
+        WatchRecord,
+        DetailTaskList,
+        GanttChart
+    },
     data(){
         return{
             queryData:{},
@@ -108,13 +119,8 @@ export default {
             ]
         }
     },
-    components:{
-        AddTask,
-        EditTask,
-        WatchRecord,
-        DetailTaskList
-    },
     created(){    
+
         this.queryData=this.$route.query; 
     },
     mounted(){
@@ -241,12 +247,13 @@ export default {
 }
 </script>
 
-<style lang="less">
-   .chart-ul-wrap{
+<style lang="less" scoped>
+   .edit-left-bar{
        width:100%;
-       background: #F9F9FC;
+       background: #fff;
        display:inline-block;
        .detail-title{
+           background: #F5F6FA;
            height:50px;
            .title-left{
                 display:inline-block;

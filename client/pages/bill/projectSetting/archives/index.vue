@@ -291,13 +291,27 @@ import KrTree from '~/components/KrTree'
                     },
                     {
                         title: '当前项目阶段',
-                        key: 'payableAmount',
+                        key: 'task',
                         align:'center',
+                        render(h, obj){
+                           var rows='';
+                           if(obj.row.tasks){
+                               rows=[];
+                               obj.row.tasks.map((item,index)=>{
+                                    rows.push(<div class='row-current-more'>{item.taskName}</div>)
+                               })
+                           }
+                           return rows
+                           console.log('h,obj',obj);
+                        }
                     },
                     {
-                        title: '当前项目进度',
+                        title: '当前项目进度状态',
                         key: 'paidAmount',
                         align:'center',
+                        render(h, obj){
+                           
+                        }
                     },
                     {
                         title: '创建时间',
@@ -409,7 +423,7 @@ import KrTree from '~/components/KrTree'
     }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .archives{
     padding:0 20px;
     .u-search{
@@ -426,10 +440,13 @@ import KrTree from '~/components/KrTree'
 
             }
     }
-   
 }
 .bill-search-class{
         width:50%;
         padding-left:32px;
+        height: 48px;
 }
+.row-current-more{
+    border-bottom:1px solid #e9eaec;
+ }
 </style>

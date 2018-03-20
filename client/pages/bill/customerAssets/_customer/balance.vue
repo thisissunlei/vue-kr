@@ -9,7 +9,10 @@
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称" style="text-align:left">
-                    <selectCommunities test="searchForm" :onchange="changeCommunity" />
+                    <Select v-model="searchForm.communityId" clearable style="width:200px;text-align:left">
+                        <Option v-for="item in options" :value="item.id" :key="item.name">{{ item.name }}</Option>
+                    </Select>
+                    <!-- <selectCommunities test="searchForm" :onchange="changeCommunity" /> -->
                 </FormItem>
                 <FormItem label="操作类型">
                 <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
@@ -90,6 +93,7 @@ import ChangeBalance from './changeBalance.vue';
 		data (){
             let {params}=this.$route;
 			return{
+                options:[],
                 updateTime:new Date(),
                 customerId:params.customer,
                 // 弹窗传回的数据
@@ -98,7 +102,6 @@ import ChangeBalance from './changeBalance.vue';
                 searchForm:{
                     pageSize:15,
                     page:1,
-                    communityName:'',
                     customerId:params.customer,
                     operateType:'',
                 },
@@ -354,6 +357,7 @@ import ChangeBalance from './changeBalance.vue';
             getBalanceDetail(param){
                 //获取账户余额的明细表
                 param = Object.assign({},this.searchForm,param)
+                this.searchForm = param;
                 this.$http.get('balance-detail',param).then((res)=>{
                     this.detailList = res.data.items;
                     this.totalCount = res.data.totalCount;
@@ -419,7 +423,7 @@ import ChangeBalance from './changeBalance.vue';
                            this.openBalance = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           this.getBalanceDetail({page:1})
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -447,7 +451,7 @@ import ChangeBalance from './changeBalance.vue';
                            this.openBusiness = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           this.getBalanceDetail({page:1})
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -475,7 +479,8 @@ import ChangeBalance from './changeBalance.vue';
                            this.openCommunity = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           let searchForm = {page:1,communityId:'',startDate:'',endDate:'',operateType:''};
+                           this.getBalanceDetail(searchForm)
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -518,6 +523,20 @@ import ChangeBalance from './changeBalance.vue';
                     }
                 }
             },
+            getComm(){
+                this.$http.get('join-bill-community','').then((response)=>{    
+                    let list = response.data.items;
+                    list = list.map(item=>{
+                        item.id = item.id+'';
+                        return item;
+                    })
+                    this.options = list;
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    }) 
+            }
 
 		},
 		mounted(){
@@ -525,6 +544,7 @@ import ChangeBalance from './changeBalance.vue';
             // 获取更新数据
             this.getBalanceList();
             this.getBalanceDetail()
+            this.getComm()
 		},
         watch:{
             updateTime(){

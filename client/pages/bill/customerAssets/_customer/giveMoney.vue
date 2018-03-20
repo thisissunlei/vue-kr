@@ -141,6 +141,9 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'tradeNo',
                     width:100,
                     align:'center',
+                    render:function(h,params){
+                        return params.row.tradeNo?params.row.tradeNo:'-';
+                    }
                 },{
                     title: '社区名称',
                     key: 'communityName',

@@ -26,7 +26,7 @@ import LabelText from '~/components/LabelText';
                 editStatus:String,
             },
         data () {
-            console.log('editData',this.editData.balance)
+            let basicMoney = (this.editData.balance/100).toFixed(2)
             const validateFirst = (rule, value, callback) => {
                 var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
 
@@ -37,7 +37,7 @@ import LabelText from '~/components/LabelText';
                 if(!pattern.test(value)){
                     callback(new Error('工位单价不得多于两位小数'))
                 }
-                if(Number(value)>Number(this.editData.balance)){
+                if(Number(value)>Number(basicMoney)){
                     callback(new Error('转移金额不得大于可转金额'));
                 }
                 if (value === '') {
@@ -50,7 +50,7 @@ import LabelText from '~/components/LabelText';
             return {
                 communityList:[],
                 formItem: {
-                    allMoney:this.editData.balance,
+                    allMoney:basicMoney,
                     fromCmtId:this.editData.communityId
                 },
                 ruleCustom:{

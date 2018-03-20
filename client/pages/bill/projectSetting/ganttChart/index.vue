@@ -2,7 +2,7 @@
     <div>
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
-            <div style="overflow:auto;">
+           
                 <div class="hander" >
                     <div style="display:inline-block;margin-top: 6px;">
                         <span style="vertical-align:middle;">项目计划</span>
@@ -33,45 +33,47 @@
                         label="甘特图显示任务项" 
                     /> -->
                 </div>
-            </div>
             <div 
-                ref="rightDom" 
+               
                 class="right-draw" 
-                style="overflow:auto;"
+                style="overflow:hidden;"
             >
-                <div v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
-                    <div :style="{width:dayAllNum*minCalibration+'px'}">
-                        <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
-                            <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
-                        </div>
-                        <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
-                            <DrawMonth 
-                                v-for="( item ) in showData" 
-                                :key="item.id"  
-                                :dayNum="item.dayNum" 
-                                :data="item"
-                                :minCalibration="minCalibration"
-                            />
-                        </div>
-                        <div v-if="barType=='week'" class='week-bar'>
-                            <DrawWeek 
-                                v-for="(item) in weeks" 
-                                :key="item.id" 
-                                :data="item" 
-                                :minCalibration="minCalibration"
-                            />
-                        </div>
-                        
-                        <div v-if="barType=='day'" class='day-bar' >
-                            <DrawDay 
-                                v-for="( item ) in showData" 
-                                :key="item.id" :data="item"  
-                                :dayNum="item.dayNum"
-                                :minCalibration="minCalibration"
-                            />
+                 <div style="overflow:auto;width:100%;position:relative;"  >
+                    <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
+                        <div :style="{width:dayAllNum*minCalibration+'px'}">
+                            <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
+                                <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
+                            </div>
+                            <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
+                                <DrawMonth 
+                                    v-for="( item ) in showData" 
+                                    :key="item.id"  
+                                    :dayNum="item.dayNum" 
+                                    :data="item"
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
+                            <div v-if="barType=='week'" class='week-bar'>
+                                <DrawWeek 
+                                    v-for="(item) in weeks" 
+                                    :key="item.id" 
+                                    :data="item" 
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
+                            
+                            <div v-if="barType=='day'" class='day-bar' >
+                                <DrawDay 
+                                    v-for="( item ) in showData" 
+                                    :key="item.id" :data="item"  
+                                    :dayNum="item.dayNum"
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                 </div>
                 <div
                     @scroll="rightScroll"
                     id="vue-chart-right-draw-content"
@@ -92,6 +94,8 @@
                             :type="type"
                         />
                     </div>
+
+                    <div style="height:1000px"></div>
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -376,8 +380,12 @@ export default {
             return obj;
         },
         rightScroll(event){
+            var el = event.target;
+            var top = el.scrollTop;
+            var left = el.scrollLeft;
+            this.$refs.rightBar.style.left = -left+'px';
+
             this.$emit('scroll',event);
-           
         }
     },
    
@@ -426,8 +434,13 @@ export default {
             left: 271px;
             right: 0px;
         }
-        .content{
+        #vue-chart-right-draw-content{
             max-height:500px;
+            width: 100%;
+            overflow:auto;
+        }
+        .content{
+          
            
             .every-col{
                 height: 70px;
@@ -470,6 +483,7 @@ export default {
         }
         
         .bar{
+            position: relative;
             border-top: 1px solid #E1E6EB;
         }
    }

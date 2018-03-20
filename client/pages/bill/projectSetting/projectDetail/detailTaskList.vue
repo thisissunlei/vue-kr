@@ -8,7 +8,7 @@
           </p>
        </div>
 
-       <div class='chart-detail'> 
+       <div class='chart-detail' @scroll="detailScroll"> 
            <ul>
               <li
                 v-for="item in data"
@@ -70,7 +70,7 @@ export default {
         }
     },
     mounted(){
-
+      
     },
     methods:{
       addClick(id){
@@ -93,7 +93,10 @@ export default {
             classVal = classVal.replace("iconDown","");
             icon.setAttribute("class",classVal );
          }
-       }
+      },
+      detailScroll(event){
+        this.$emit('scroll',event)
+      }
     }
 }
 </script>

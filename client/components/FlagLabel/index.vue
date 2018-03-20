@@ -1,5 +1,5 @@
 <template>
-    <div class='ui-flag'>
+    <div class='ui-flag' ref="tipFlag">
        <Tooltip :content="label" placement="right">
             <div :class='flagClass' ref="proFlag" />
        </Tooltip>
@@ -17,6 +17,14 @@ export default {
         type:{
             default:'lanqi',
             type:String
+        },
+        offset:{
+           default:'',
+           type:[Number,String]  
+        },
+        minCalibration:{
+           default:'',
+           type:[Number,String]  
         }
     },
     data() {
@@ -26,6 +34,8 @@ export default {
     },
     mounted(){
         this.flagClass=this.type=='lanqi'?'blueFlag':'yellowFlag';
+        let flagDom=this.$refs.tipFlag;  
+        flagDom.style.left=Number(this.offset)*Number(this.minCalibration)+'px';
     }
 }
 </script>

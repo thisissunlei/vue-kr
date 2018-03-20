@@ -4,7 +4,7 @@
             <p>项目名称</p>
             <p>城市</p>
         </div>
-        <ul @scoll="ulScoll" class='view-table-detail'>
+        <ul @scroll="ulScoll" class='view-table-detail'>
             <li
                 v-for="item in listData"
                 :key="item.name"
@@ -35,8 +35,8 @@ export default {
         rowClick(item){
             this.$emit('rowClick',item);
         },
-        ulScoll(){
-            console.log()
+        ulScoll(event){
+            this.$emit("scroll",event)
         }
     }
 }

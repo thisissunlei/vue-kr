@@ -1,6 +1,6 @@
 <template>
     <div>
-       <FlagLabel label="123"/>
+       <FlagLabel label="123" offset="20" minCalibration="50"/>
     </div>
 </template>
 

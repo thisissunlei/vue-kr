@@ -25,7 +25,12 @@
                 >
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-
+                
+                <KrField 
+                    type="selectTree" 
+                    :data="treeData" 
+                    label="甘特图显示任务项" 
+                 />
                 
             </div>
            
@@ -94,12 +99,14 @@ import DrawDay from './DrawDay';
 import DrawMonth from './DrawMonth';
 import DrawWeek from './DrawWeek';
 import Article from './Article';
+import KrField from '~/components/KrField';
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
         Article,
+        KrField
     },
     props:{
         data:{
@@ -109,6 +116,10 @@ export default {
         type:{
             type:String,
             default:'view'
+        },
+        treeData:{
+            type:Array,
+            default:()=>[]
         }
     },
     data(){
@@ -149,17 +160,6 @@ export default {
             //下拉的默认值
             barType: 'day',
             isLoading:true,
-
-
-            todoData:[
-                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园skdjsjkjckjksjkvjcksjkvkdhdfkdsjhjhsdjkhjhsdjf',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            downData:[
-                {name:'1',communityName:'2',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            mask:true
         }
     },
     mounted(){

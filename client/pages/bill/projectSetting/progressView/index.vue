@@ -2,7 +2,7 @@
     <div>
        
         <!-- 甘特图部分 -->
-        <GanttChart>
+        <GanttChart :treeData="treeData">
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
                     <Tabs size="small" value="name1" @on-click="tabsClick">
@@ -45,16 +45,32 @@ export default {
     data(){
         return{
             listData:[],
-            mask:true
+            mask:true,
+            treeData:[],
+            params:{
+                page:1,
+                pageSize:4,
+                status:'PREPARE',
+                taskTemplateIds:[]
+            }
         }
     },
-    mounted(){     
-        this.getListData();
+    mounted(){
+        this.getTreeData('PREPARE');
+        this.getListData(this.params);
     },
     methods:{
+        getTreeData(status){
+            this.$http.get('project-status-search',{statusType:status}).then((response)=>{
+                
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
         //获取进度列表数据
-        getListData(){
-            let params={};
+        getListData(params){
             this.$http.get('project-progress-list',params).then((response)=>{
                 
             }).catch((error)=>{

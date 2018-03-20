@@ -2,37 +2,38 @@
     <div>
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
-            <div class="hander" >
-                <div style="display:inline-block;margin-top: 6px;">
-                     <span style="vertical-align:middle;">项目计划</span>
-                     <span 
-                        class="article" 
-                        style="background:#4F9EED;vertical-align:middle;"
-                    ></span>
-                </div>
-                <div style="display:inline-block;margin-left:40px;">
-                    <span style="vertical-align:middle;">当前进展</span>
-                    <span 
-                        class="article" 
-                        style="background:#FDBA4D;vertical-align:middle;"
-                    ></span>
-                </div>
-               
-                <Select 
-                    v-model="barType" 
-                    @on-change="selectChange"
-                    style="width:200px;float:right;margin-right:20px;"
-                >
-                    <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
+            <div style="overflow:auto;">
+                <div class="hander" >
+                    <div style="display:inline-block;margin-top: 6px;">
+                        <span style="vertical-align:middle;">项目计划</span>
+                        <span 
+                            class="article" 
+                            style="background:#4F9EED;vertical-align:middle;"
+                        ></span>
+                    </div>
+                    <div style="display:inline-block;margin-left:40px;">
+                        <span style="vertical-align:middle;">当前进展</span>
+                        <span 
+                            class="article" 
+                            style="background:#FDBA4D;vertical-align:middle;"
+                        ></span>
+                    </div>
                 
-                <!-- <KrField 
-                    type="selectTree" 
-                    :data="treeData" 
-                    label="甘特图显示任务项" 
-                 /> -->
+                    <Select 
+                        v-model="barType" 
+                        @on-change="selectChange"
+                        style="width:200px;float:right;margin-right:20px;"
+                    >
+                        <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                    
+                    <!-- <KrField 
+                        type="selectTree" 
+                        :data="treeData" 
+                        label="甘特图显示任务项" 
+                    /> -->
+                </div>
             </div>
-
             <div 
                 ref="rightDom" 
                 class="right-draw" 
@@ -71,23 +72,26 @@
                         </div>
                     </div>
                 </div>
-                <div    
-                    class="content"
-                    :style="{width:dayAllNum*minCalibration+'px'}"
+                <div
                     @scroll="rightScroll"
                     id="vue-chart-right-draw-content"
                 >
-                  
-                    <Article 
-                        v-if="leftEndpoint"
-                        :minCalibration="minCalibration"
-                        :startDate="leftEndpoint"
-                        :data="item"
-                        style="position:relative;" 
-                        v-for="item in data" 
-                        :key="item.id"
-                        :type="type"
-                    />
+                    <div    
+                        class="content"
+                        :style="{width:dayAllNum*minCalibration+'px'}"
+                       
+                    >
+                    
+                        <Article 
+                            v-if="leftEndpoint"
+                            :minCalibration="minCalibration"
+                            :startDate="leftEndpoint"
+                            :data="item"
+                            v-for="item in data" 
+                            :key="item.id"
+                            :type="type"
+                        />
+                    </div>
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -424,13 +428,13 @@ export default {
         }
         .content{
             max-height:500px;
-            overflow:scroll;
+           
             .every-col{
                 height: 70px;
                 border-top: 1px solid #E1E6EB;;
                 border-bottom: 1px solid #E1E6EB;
             }
-            //overflow:-webkit-paged-x;
+            overflow:-webkit-paged-x;
         }
         .hander{
             margin-top:20px;

@@ -1,6 +1,6 @@
 
 <template>
-    <div>
+    <div >
     <div class="every-col" :data-chart="data.t_id" >
         <FlagLabel v-if="getFlagShow('MEETING')" label="123" offset="20" minCalibration="50" type="huangqi"/>
         <div class="article" 

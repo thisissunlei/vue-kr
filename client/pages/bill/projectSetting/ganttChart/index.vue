@@ -78,6 +78,7 @@
                 >
                   
                     <Article 
+                        v-if="leftEndpoint"
                         :minCalibration="minCalibration"
                         :startDate="leftEndpoint"
                         :data="item"
@@ -149,7 +150,7 @@ export default {
             //最小刻度的大小
             minCalibration:50,
             //原点数据
-            leftEndpoint:{},
+            leftEndpoint:'',
             //刻度的下拉选择项
             timeList: [
                     {
@@ -274,6 +275,7 @@ export default {
             this.showData = [].concat(showData);
             
             this.leftEndpoint = this.showData[0];
+            console.log(this.leftEndpoint,"pppppp")
             this.isLoading = false;
         },
        
@@ -370,14 +372,7 @@ export default {
         },
         rightScroll(event){
             this.$emit('scroll',event);
-            // var dom = event.target;
-            // var htmlHeight = dom.scrollHeight;
-            // var clientHeight = dom.clientHeight;
-            // var scrollTop = dom.scrollTop;
-            //  console.log("到底了")
-            // if(scrollTop+clientHeight==htmlHeight){
-            
-            // }
+           
         }
     },
    

@@ -369,7 +369,7 @@ export default {
             return obj;
         },
         rightScroll(event){
-            console.log("到底了")
+            this.$emit('scroll',event);
             // var dom = event.target;
             // var htmlHeight = dom.scrollHeight;
             // var clientHeight = dom.clientHeight;

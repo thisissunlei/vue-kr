@@ -2,6 +2,7 @@
 <template>
     <div>
     <div class="every-col" :data-chart="data.t_id" >
+        <FlagLabel label="123" offset="20" minCalibration="50" type="huangqi"/>
         <div class="article" 
             :style="{
                 background:getBgColor(),
@@ -73,10 +74,12 @@
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
+import FlagLabel from '~/components/FlagLabel';
 export default {
     name:'Article',
     components:{
-        SpecificPlan
+        SpecificPlan,
+        FlagLabel
     },
     props:{
         minCalibration:{

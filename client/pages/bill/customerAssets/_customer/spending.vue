@@ -118,10 +118,6 @@ import utils from '~/plugins/utils';
                     key: 'communityName',
                     align:'center',
                 },{
-                    title: '操作类型',
-                    key: 'targetTypeName',
-                    align:'center',
-                },{
                     title: '费用类型',
                     key: 'feeTypeName',
                     align:'center',

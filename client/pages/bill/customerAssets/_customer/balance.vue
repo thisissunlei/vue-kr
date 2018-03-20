@@ -284,41 +284,8 @@ import ChangeBalance from './changeBalance.vue';
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'operateType',
+                    key: 'operateTypeName',
                     align:'center',
-                    render:function(h,params){
-                        let operateType = [{
-                            label:'余额充值',
-                            value:'RECHARGE'
-                        },{
-                            label:'余额支付账单',
-                            value:'PAY_BILL'
-                        },{
-                            label:'退款',
-                            value:'REFUND'
-                        },{
-                            label:'退还',
-                            value:'BACK'
-                        },{
-                            label:'冻结押金',
-                            value:'LOCK_DESPOINT'
-                        },{
-                            label:'营业外收入',
-                            value:'INCOME'
-                        },{
-                            label:'转移',
-                            value:'TRANSFER'
-                        }]
-                        let type = '-';
-                       operateType.filter((item)=>{
-                            if(item.value == params.row.operateType){
-                                 type = item.label
-                                return item.label
-                            }
-                            return false
-                        })
-                        return type
-                    }
                 },{
                     title: '操作金额（元）',
                     key: 'changedAmount',
@@ -330,10 +297,9 @@ import ChangeBalance from './changeBalance.vue';
                     title: '相关记录',
                     key: 'records',
                     align:'center',
-                },{
-                    title: '操作人',
-                    key: 'createrName',
-                    align:'center',
+                    render:function(h,params){
+                        return params.row.records?params.row.records:'无'
+                    }
                 },{
                     title: '操作时间',
                     key: 'ctime',

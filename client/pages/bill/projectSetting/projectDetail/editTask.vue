@@ -9,7 +9,25 @@
                         @on-change="nameChange"
                     />
                 </Form-item>
-                <div>
+                <Form-item label="计划起止日期" class="bill-search" prop="planStartTime" v-if="!mask">
+                            <DatePicker 
+                                v-model="formItem.planStartTime"
+                                type="date" 
+                                placeholder="开始日期" 
+                                style="width: 252px"
+                            />
+                </Form-item>
+
+                <Form-item label="完成起止日期" class="bill-search" v-if="!mask">
+                            <DatePicker 
+                                v-model="formItem.actualStartTime"
+                                type="date" 
+                                placeholder="开始日期" 
+                                style="width: 252px"
+                            />
+                </Form-item>
+
+                <div v-if="mask">
                         <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
                             <DatePicker 
                                 v-model="formItem.planStartTime"
@@ -17,7 +35,7 @@
                                 placeholder="开始日期" 
                                 style="width: 252px"
                             />
-                        <span class="u-date-txt">至</span>
+                        <span class="u-date-txt" >至</span>
                         </Form-item>
                         <Form-item prop="planEndTime" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
                             <DatePicker 
@@ -27,10 +45,10 @@
                                 style="width: 252px"
                             /> 
                     </Form-item>
-                    <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
+                    <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                </div>
 
-                <div>
+                <div v-if="mask">
                         <Form-item label="完成起止日期" class="bill-search">
                             <DatePicker 
                                 v-model="formItem.actualStartTime"
@@ -38,7 +56,7 @@
                                 placeholder="开始日期" 
                                 style="width: 252px"
                             />
-                        <span class="u-date-txt">至</span>
+                        <span class="u-date-txt" v-if="mask">至</span>
                         <DatePicker 
                                 v-model="formItem.actualEndTime"
                                 type="date" 
@@ -113,13 +131,15 @@ export default {
                 planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
                 ]
-            }
+            },
+            mask:true
         }
     },
     created(){    
         this.queryData=this.$route.query; 
     },
     mounted(){
+        this.mask=this.getEdit.type=='STAGETASK'?true:false;
         this.formItem=this.getEdit;
     },
     updated:function(){

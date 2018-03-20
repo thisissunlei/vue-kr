@@ -25,7 +25,7 @@
                 >
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-                
+                 
                 <!-- <KrField 
                     v-if="mask"
                     type="selectTree" 
@@ -183,13 +183,24 @@ export default {
         this.getYears(this.showData);
     },
     updated(){
+        if(this.treeData.length){
+           this.recursiveFn(this.treeData);
+        }
         this.mask=this.treeData.length?true:false;
-        console.log('tree--',this.treeData);
-        this.treeData.map((item,index)=>{
-            
-        })
+        console.log('----',this.treeData);
     },
     methods:{
+        //递归赋值
+        recursiveFn(data){
+            data.map((item,index)=>{
+                item.title=item.label;
+                item.expand=false;
+                if(item.children&&item.children.length){
+                    this.recursiveFn(item.children);
+                }
+            })
+            return data;
+        },
         //获取年数组
         getYears(arr){
             var allYears = [];

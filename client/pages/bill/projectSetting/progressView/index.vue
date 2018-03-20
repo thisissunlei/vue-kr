@@ -10,6 +10,7 @@
                             <TableList
                                 :listData="listData"
                                 @rowClick="rowClick"
+                                @scroll="scroll"
                                 v-if="mask"
                             />
                         </TabPane>
@@ -17,6 +18,7 @@
                             <TableList
                                 :listData="listData"
                                 @rowClick="rowClick"
+                                @scroll="scroll"
                                 v-if="!mask"
                             />
                         </TabPane>

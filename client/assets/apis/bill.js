@@ -141,5 +141,10 @@ export default  {
       url: '/api/krspace-erp-web/pm/file/list/type/schedule',
       method: 'get'
     },
+     //项目管理－根据项目状态类型查询甘特图显示任务项
+     'project-status-search': {
+      url: '/api/krspace-erp-web/pm/task-template/list',
+      method: 'get'
+    },
   }
   

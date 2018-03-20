@@ -63,18 +63,24 @@ export default {
             },
             difference:7,
             listData:[],
-            mask:true
+            mask:true,
+            treeData:[],
+            params:{
+                page:1,
+                pageSize:4,
+                status:2,
+                taskTemplateIds:[]
+            }
         }
     },
     mounted(){
-       
-        this.getListData();
+        this.getListData(this.params);
     },
     
     methods:{
+      
         //获取进度列表数据
-        getListData(){
-            let params={};
+        getListData(params){
             this.$http.get('project-progress-list',params).then((response)=>{
                 
             }).catch((error)=>{
@@ -92,11 +98,7 @@ export default {
             if(key=='name2'){
                 this.mask=false;
                 this.params.status = 1;
-
                 this.getListData();
-           
-              
-               
             }else{
                 this.mask=true;
                 this.params.status = 2;

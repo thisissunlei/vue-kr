@@ -25,10 +25,14 @@
                 >
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
-
                 
+                <!-- <KrField 
+                    type="selectTree" 
+                    :data="treeData" 
+                    label="甘特图显示任务项" 
+                 /> -->
             </div>
-           
+
             <div 
                 ref="rightDom" 
                 class="right-draw" 
@@ -74,7 +78,6 @@
                 >
                   
                     <Article 
-                        
                         :minCalibration="minCalibration"
                         :startDate="leftEndpoint"
                         :data="item"
@@ -83,7 +86,6 @@
                         :key="item.id"
                         :type="type"
                     />
-                    
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -99,12 +101,14 @@ import DrawDay from './DrawDay';
 import DrawMonth from './DrawMonth';
 import DrawWeek from './DrawWeek';
 import Article from './Article';
+import KrField from '~/components/KrField';
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
         Article,
+        KrField
     },
     props:{
         data:{
@@ -120,6 +124,10 @@ export default {
         },
         endTime:{
             type:String
+        },
+        treeData:{
+            default:()=>[],
+            type:Array,
         }
     },
     data(){
@@ -159,7 +167,7 @@ export default {
             ],
             //下拉的默认值
             barType: 'day',
-            isLoading:true
+            isLoading:true,
         }
     },
     mounted(){

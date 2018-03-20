@@ -64,11 +64,9 @@ export default {
             this.$emit('checkChange',event)
         },
         inputClick(){
-
             this.mask=true;
         },
         toggleExpand(event){
-            console.log()
            this.nowData = this.changeTreeData(event,this.nowData);
         },
         inputSearch(event){
@@ -76,8 +74,6 @@ export default {
             this.nowData = this.searchTreeData(searchKey,this.nowData).allData;
             // console.log(this.nowData,"ppppp")
             // this.$emit('search',searchKey);
-            
-
         },
         sureClick(){
             this.mask=false;

@@ -591,10 +591,8 @@ import utils from '~/plugins/utils';
                 this.disabled = true;
                  this.$http.post('save-renew', renewForm).then( r => {
                     window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/renewView';
-                     window.opener.location.href=window.opener.location.href;  
-                    
-                      // window.close();
-                      // window.opener.location.reload();
+                    // 欢哥让删掉列表刷新
+                     // window.opener.location.href=window.opener.location.href;  
                 }).catch( e => {
                     _this.$Notice.error({
                         title:e.message

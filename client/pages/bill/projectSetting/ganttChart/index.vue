@@ -1,8 +1,8 @@
 <template>
     <div>
         <!-- 甘特图部分 -->
-        <div class='chart-ul-wrap' v-if="!isLoading">
-            <div class="hander">
+        <div class='chart-ul-wrap' >
+            <div class="hander" >
                 <div style="display:inline-block;margin-top: 6px;">
                      <span style="vertical-align:middle;">项目计划</span>
                      <span 
@@ -29,8 +29,13 @@
                 
             </div>
            
-            <div class="right-draw" style="overflow:auto;">
-                <div class="bar" :style="{width:dayAllNum*minCalibration+'px'}">
+            <div 
+                ref="rightDom" 
+                class="right-draw" 
+                style="overflow:auto;"
+                @scroll="rightScroll"
+            >
+                <div v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
                     <div :style="{width:dayAllNum*minCalibration+'px'}">
                         <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
                             <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
@@ -109,6 +114,12 @@ export default {
         type:{
             type:String,
             default:'view'
+        },
+        startTime:{
+            type:String,
+        },
+        endTime:{
+            type:String
         }
     },
     data(){
@@ -148,30 +159,19 @@ export default {
             ],
             //下拉的默认值
             barType: 'day',
-            isLoading:true,
-
-
-            todoData:[
-                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园skdjsjkjckjksjkvjcksjkvkdhdfkdsjhjhsdjkhjhsdjf',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            downData:[
-                {name:'1',communityName:'2',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            mask:true
+            isLoading:true
         }
     },
     mounted(){
-        this.init(2);
+        this.init(this.startTime,this.endTime);
         this.getDayBarWidth()
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
-        console.log(this.data,"PPPPPPP----------")
-
+       
     },
     methods:{
+        //获取年数组
         getYears(arr){
             var allYears = [];
             var startMonth = arr[0] ,
@@ -233,60 +233,43 @@ export default {
             return d.getDate();   
         },
         //数据初始化
-        init(volatility=2){
-            var nowMonth = {
-                year:this.today.year,
-                month:this.today.month
+        init(startTime,endTime){
+            var start = startTime.split("-"),
+                end = endTime.split("-");
+       
+            var startObj = {
+                year:+start[0],
+                month:+start[1]
+            },
+            endObj = {
+                year:+end[0],
+                month:+end[1]
             }
-            this.prev(nowMonth,volatility);
-            this.next(nowMonth,volatility);
+                 console.log(startObj,endObj,"ooooooo")
+            var showData = [];
+            for(var month=startObj.month,year=startObj.year;!(month==endObj.month && year == endObj.year); month++){
+                if(month >12){
+                    month = month-12;
+                    year +=1; 
+                }
+                
+                showData.push({
+                    year:year,
+                    month:month,
+                    dayNum:this.getDayNum(year,month),
+                })
+                
+
+            }
+           
+
+            this.showData = [].concat(showData);
+            
             this.leftEndpoint = this.showData[0];
             this.isLoading = false;
         },
-        //数据向前初始化
-        prev(nowMonth,volatility){
-            var everyMonth={};
-            for(var i=1;i<=volatility;i++){
-                var month = nowMonth.month - i;
-                if(month <= 0){
-                    var addNum = month%12==0?1:0;
-                   everyMonth = {
-                        year: nowMonth.year + Math.floor(month/12)-addNum,
-                        month: 12 + month%12
-                    }
-                }else{
-                    everyMonth = {
-                        year: nowMonth.year,
-                        month: month%12
-                    }
-                }
-
-                everyMonth.dayNum = this.getDayNum(everyMonth.year,everyMonth.month);
-                this.showData.unshift(everyMonth)
-            }
-        },
-        //数据向后初始化
-        next(nowMonth,volatility){
-            var everyMonth={};
-            for(var i=1;i<=volatility;i++){
-                var month = nowMonth.month + i;
-                var addNum = month%12==0?1:0;
-                var addMonth= month%12==0?12:0;
-                if(month >= 12){
-                    everyMonth={
-                        year: nowMonth.year + Math.floor(month/12)-addNum,
-                        month: (month-12)%12 + addMonth
-                    }
-                }else{
-                    everyMonth = {
-                        year: nowMonth.year,
-                        month: month%12
-                    }
-                }
-                everyMonth.dayNum = this.getDayNum(everyMonth.year,everyMonth.month);
-                this.showData.push(everyMonth)
-            }
-        },
+       
+        
         //获取某日为周几
         getWeekNum(year,month,day){
             var date = new Date(year,month-1,day);
@@ -376,8 +359,20 @@ export default {
             }
             
             return obj;
+        },
+        rightScroll(event){
+            console.log("到底了")
+            // var dom = event.target;
+            // var htmlHeight = dom.scrollHeight;
+            // var clientHeight = dom.clientHeight;
+            // var scrollTop = dom.scrollTop;
+            //  console.log("到底了")
+            // if(scrollTop+clientHeight==htmlHeight){
+            
+            // }
         }
-    }
+    },
+   
 
 }
 </script>

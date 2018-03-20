@@ -2,7 +2,7 @@
     <div>
        
         <!-- 甘特图部分 -->
-        <GanttChart>
+        <GanttChart type='view' :startTime="getStartDay()" :endTime="getEndDay()">
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
                     <Tabs size="small" value="name1" @on-click="tabsClick">
@@ -52,12 +52,21 @@ export default {
                 {name:'1',communityName:'2',city:'3',tId:'1'},
                 {name:'6',communityName:'7',city:'8',tId:'2'},
             ],
-            mask:true
+            mask:true,
+            params:{
+                endTime:'',
+                startTime:'',
+                pageSize:4,
+                page:1,
+                status:'',
+                taskTemplateIds:[]
+            },
+            difference:7,
         }
     },
     mounted(){
-       
-        // this.getYears(this.showData);
+        console.log( this.getEndDay(),"ppppppp",this.getStartDay());
+      
 
     },
     methods:{
@@ -69,9 +78,48 @@ export default {
         tabsClick(key){
             if(key=='name2'){
                 this.mask=false;
+                this.params.status = 1;
             }else{
                 this.mask=true;
+                this.params.status = 2;
             }
+        },
+        //获取今天日期
+        getStartDay(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            return today;
+        },
+        getEndDay(){
+            var today =this.getStartDay();
+            var start = today.split("-");
+            var year = +start[0],
+                month = +start[1],
+                day= +start[2];
+            for(var i=0;i<this.difference;i++){
+              
+               
+                if(month > 12){
+                    month = month-12;
+                    year += 1;
+                }
+                month ++ 
+            }
+            if(month > 12){
+                month = month-12;
+                year += 1;
+            }
+            return year+"-"+month+"-"+day;
+            
+        },
+        getAllData(){
+            this.isLoading = true;
+            this.$http.get('project-list-progress').then((response)=>{
+                console.log(response,"pppppppp")
+            }).catch((error)=>{
+                this.$Notice.error({
+                title: error.message,
+                });
+            })
         }
     }
 

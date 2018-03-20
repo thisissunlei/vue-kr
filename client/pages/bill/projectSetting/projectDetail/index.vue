@@ -14,6 +14,7 @@
                 type="edit"
                 startTime="2018-3-20"
                 endTime="2018-9-20"
+                @scroll="chartScroll"
             >
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 
@@ -285,8 +286,25 @@ export default {
                      });
                 })
           },
+          scrollBottom(dom){
+                var htmlHeight = dom.scrollHeight;
+                var clientHeight = dom.clientHeight;
+                var scrollTop = dom.scrollTop;
+                if(scrollTop+clientHeight==htmlHeight){
+                    console.log('ggg--到底了');
+                }
+          },
           scroll(event){
-              console.log('evnt00',event);
+              let leftDetail=document.getElementById('vue-chart-left-detail-list');
+              let chartDom=document.getElementById('vue-chart-right-draw-content');
+              chartDom.scrollTop=leftDetail.scrollTop;
+              this.scrollBottom(leftDetail);
+          },
+          chartScroll(){
+              let leftDetail=document.getElementById('vue-chart-left-detail-list');
+              let chartDom=document.getElementById('vue-chart-right-draw-content');
+              leftDetail.scrollTop=chartDom.scrollTop;
+              this.scrollBottom(chartDom);
           }
      }
 }

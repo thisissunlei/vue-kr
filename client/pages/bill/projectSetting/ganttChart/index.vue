@@ -87,6 +87,7 @@
                         :key="item.id"
                         :type="type"
                     />
+                    <div style="height:1000px"></div>
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -371,14 +372,6 @@ export default {
         },
         rightScroll(event){
             this.$emit('scroll',event);
-            // var dom = event.target;
-            // var htmlHeight = dom.scrollHeight;
-            // var clientHeight = dom.clientHeight;
-            // var scrollTop = dom.scrollTop;
-            //  console.log("到底了")
-            // if(scrollTop+clientHeight==htmlHeight){
-            
-            // }
         }
     },
    

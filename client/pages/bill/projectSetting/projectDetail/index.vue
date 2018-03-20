@@ -8,7 +8,11 @@
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>
             </div>
-            <GanttChart :data="listData">
+            <GanttChart 
+                v-if="!isLoading && listData.length" 
+                :data="listData"
+                type="edit"
+            >
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 
                         :data="listData"
@@ -91,8 +95,6 @@ export default {
         return{
             queryData:{},
             listData:[],
-
-
             openAddTask:false,
             openEditTask:false,
             openWatch:false,
@@ -104,13 +106,10 @@ export default {
             addId:'',
             editId:'',
             parentId:'',
-
-
             params:{
                 page:1,
                 pageSize:15
             },
-            
             watchRecord:[
                 {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
                 {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"}
@@ -119,7 +118,8 @@ export default {
             editRecord:[
                 {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
                 {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"} 
-            ]
+            ],
+            isLoading:true,
         }
     },
     created(){    
@@ -135,17 +135,20 @@ export default {
             let params={
                 propertyId:this.queryData.id
             }
+            this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
-                     this.listData=response.data.items; 
-                     //后面进行组件优化
-                     this.listData.map((item,index)=>{
-                        item.children.push({label:'添加自任务',chartType:'single'})
-                     })
-                 }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
-                 })
+                this.listData=response.data.items; 
+               
+                //后面进行组件优化
+                this.isLoading = false;
+                this.listData.map((item,index)=>{
+                item.children.push({label:'添加自任务',chartType:'single'})
+                })
+            }).catch((error)=>{
+                this.$Notice.error({
+                title: error.message,
+                });
+            })
         },
         //打开新建任务
         addTask(id){
@@ -159,9 +162,11 @@ export default {
         editTask(id,parentId){
             this.editId=id;
             this.parentId=parentId;
+            
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
                     this.cancelEditTask();
+                    
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -221,10 +226,10 @@ export default {
                     return ;
                 }
                 if(this.addData.error){
-                    this.$Notice.error({
-                        title: '任务名称重复'
-                    });
-                    return ;
+                    // this.$Notice.error({
+                    //     title: '任务名称重复'
+                    // });
+                    // return ;
                 }
                 this.addData.pid=this.addId;
                 this.addData.propertyId=this.queryData.id;

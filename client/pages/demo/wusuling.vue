@@ -6,9 +6,11 @@
 
 <script>
 import FlagLabel from '~/components/FlagLabel';
+import ToolTip from '~/components/ToolTip';
 export default {
     components:{
-        FlagLabel
+        FlagLabel,
+        ToolTip
     },
     data() {
         return{
@@ -23,5 +25,4 @@ export default {
 
 <style lang='less' scoped>
      
-  
 </style>

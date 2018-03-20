@@ -8,14 +8,14 @@
                     <Tabs size="small" value="name1" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
                             <TableList
-                                :listData="todoData"
+                                :listData="listData"
                                 @rowClick="rowClick"
                                 v-if="mask"
                             />
                         </TabPane>
                         <TabPane label="投拓期项目" name="name2">
                             <TableList
-                                :listData="downData"
+                                :listData="listData"
                                 @rowClick="rowClick"
                                 v-if="!mask"
                             />
@@ -26,7 +26,7 @@
         </GanttChart>
         <!-- 左侧切换部分内容 -->
            
-      
+    
     </div>
 
 </template>
@@ -54,22 +54,35 @@ export default {
             ],
             mask:true,
             params:{
-                endTime:'',
-                startTime:'',
+                endTime:this.getEndDay(),
+                startTime:this.getStartDay(),
                 pageSize:4,
                 page:1,
                 status:'',
                 taskTemplateIds:[]
             },
             difference:7,
+            listData:[],
+            mask:true
         }
     },
     mounted(){
-        console.log( this.getEndDay(),"ppppppp",this.getStartDay());
-      
-
+       
+        this.getListData();
     },
+    
     methods:{
+        //获取进度列表数据
+        getListData(){
+            let params={};
+            this.$http.get('project-progress-list',params).then((response)=>{
+                
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
         //列表跳转详情
         rowClick(item){
             window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
@@ -79,9 +92,15 @@ export default {
             if(key=='name2'){
                 this.mask=false;
                 this.params.status = 1;
+
+                this.getListData();
+           
+              
+               
             }else{
                 this.mask=true;
                 this.params.status = 2;
+                 this.getListData();
             }
         },
         //获取今天日期

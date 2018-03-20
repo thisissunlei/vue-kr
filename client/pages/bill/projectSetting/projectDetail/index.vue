@@ -6,7 +6,7 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>
+                <!--<div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>-->
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -142,7 +142,8 @@ export default {
                 //后面进行组件优化
                 this.isLoading = false;
                 this.listData.map((item,index)=>{
-                item.children.push({label:'添加自任务',chartType:'single'})
+                   item.children=item.children?item.children:[];
+                   item.children.push({label:'添加自任务',chartType:'single'})
                 })
             }).catch((error)=>{
                 this.$Notice.error({
@@ -166,7 +167,6 @@ export default {
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
                     this.cancelEditTask();
-                    
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -226,10 +226,10 @@ export default {
                     return ;
                 }
                 if(this.addData.error){
-                    // this.$Notice.error({
-                    //     title: '任务名称重复'
-                    // });
-                    // return ;
+                    this.$Notice.error({
+                        title: '任务名称重复'
+                    });
+                    return ;
                 }
                 this.addData.pid=this.addId;
                 this.addData.propertyId=this.queryData.id;
@@ -259,12 +259,13 @@ export default {
                 if(this.upperError){
                     return ;
                 }
-                // if(this.editData.error){
-                //     this.$Notice.error({
-                //         title: '任务名称重复'
-                //     });
-                //     return ;
-                // }
+                if(this.editData.error){
+                    this.$Notice.error({
+                        title: '任务名称重复'
+                    });
+                    return ;
+                }
+              
                 this.editData.id=this.editId;
                 this.editData.pid=this.parentId;
                 this.editData.propertyId=this.queryData.id;
@@ -273,7 +274,7 @@ export default {
                 this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
                 this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
                 this.$http.post('project-edit-task',this.editData).then((response)=>{
-                     this.editTask();
+                     this.cancelEditTask();
                      this.getListData();
                  }).catch((error)=>{
                      this.$Notice.error({

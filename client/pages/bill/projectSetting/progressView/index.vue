@@ -2,7 +2,13 @@
     <div>
        
         <!-- 甘特图部分 -->
-        <GanttChart type='view' :startTime="getStartDay()" :endTime="getEndDay()">
+        <GanttChart 
+           type='view' 
+           :startTime="getStartDay()" 
+           :endTime="getEndDay()"
+           @scroll="chartScroll"
+           :treeData="treeData"
+        >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
                     <Tabs size="small" value="name1" @on-click="tabsClick">
@@ -47,35 +53,41 @@ export default {
     data(){
         return{
             params:{
-                endTime:this.getEndDay(),
-                startTime:this.getStartDay(),
-                pageSize:4,
+                endTime:this.getEndDay()+' 00:00:00',
+                startTime:this.getStartDay()+' 00:00:00',
+                pageSize:6,
                 page:1,
-                status:'',
+                status:2,
                 taskTemplateIds:[]
+            },
+            treeParams:{
+               statusType:"PREPARE" 
             },
             difference:7,
             listData:[],
-            mask:true,
             treeData:[],
-            params:{
-                page:1,
-                pageSize:4,
-                status:2,
-                taskTemplateIds:[]
-            }
+            mask:true
         }
     },
     mounted(){
+        this.getTreeData(this.treeParams);
         this.getListData(this.params);
     },
-    
-    methods:{
-      
+    methods:{  
         //获取进度列表数据
         getListData(params){
             this.$http.get('project-progress-list',params).then((response)=>{
-                
+                this.listData=response.data;
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
+        //获取树列表数据
+        getTreeData(params){
+            this.$http.get('project-status-search',params).then((response)=>{
+                this.treeData=response.data.items;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -84,18 +96,22 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
+            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}`,'_blank');
         },
         //tab切换
         tabsClick(key){
             if(key=='name2'){
                 this.mask=false;
                 this.params.status = 1;
-                this.getListData();
+                this.getListData(this.params);
+                this.treeParams.statusType='INVEST';
+                this.getTreeData(this.treeParams);
             }else{
                 this.mask=true;
                 this.params.status = 2;
-                 this.getListData();
+                this.getListData(this.params);
+                this.treeParams.statusType='PREPARE';
+                this.getTreeData(this.treeParams);
             }
         },
         //获取今天日期
@@ -125,18 +141,25 @@ export default {
             return year+"-"+month+"-"+day;
             
         },
-        getAllData(){
-            this.isLoading = true;
-            this.$http.get('project-list-progress').then((response)=>{
-                console.log(response,"pppppppp")
-            }).catch((error)=>{
-                this.$Notice.error({
-                title: error.message,
-                });
-            })
+        scrollBottom(dom){
+                var htmlHeight = dom.scrollHeight;
+                var clientHeight = dom.clientHeight;
+                var scrollTop = dom.scrollTop;
+                if(scrollTop+clientHeight==htmlHeight){
+                    console.log('ggg--到底了');
+                }
         },
         scroll(event){
-            console.log('event--',event);
+            let leftList=document.getElementById('vue-chart-left-table-list');
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            chartDom.scrollTop=leftList.scrollTop;
+            this.scrollBottom(leftList);
+        },
+        chartScroll(){
+            let leftList=document.getElementById('vue-chart-left-table-list');
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            leftList.scrollTop=chartDom.scrollTop;
+            this.scrollBottom(chartDom);
         }
     }
 

@@ -38,7 +38,7 @@
                 class="right-draw" 
                 style="overflow:hidden;"
             >
-                 <div style="overflow:auto;width:100%;position:relative;"  >
+                 <div style="overflow:hidden;width:100%;position:relative;"  >
                     <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
@@ -178,6 +178,7 @@ export default {
             //下拉的默认值
             barType: 'day',
             isLoading:true,
+            mask:false
         }
     },
     mounted(){
@@ -186,7 +187,13 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
-       
+    },
+    updated(){
+        this.mask=this.treeData.length?true:false;
+        console.log('tree--',this.treeData);
+        this.treeData.map((item,index)=>{
+            
+        })
     },
     methods:{
         //获取年数组

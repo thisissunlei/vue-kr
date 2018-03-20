@@ -13,6 +13,7 @@
                 <p @click="rowClick(item)">{{item.name}}</p>
                 <p>{{item.cityName}}</p>
             </li>
+            <div style="height:1000px"></div>
         </ul> 
   </div>
 </template>
@@ -67,6 +68,9 @@ export default {
     }
     .view-table-detail{
         width:100%;
+        max-height:500px;
+        overflow: auto;
+        border-bottom: solid 1px #E1E6EB;
         li{
            width:100%;
            height:50px;

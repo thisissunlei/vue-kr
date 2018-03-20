@@ -5,22 +5,22 @@
         <div class="money-list">
             <div class="money-div">
                 <span class="name">账户余额</span>
-                <span class="money">￥ {{balance | thousand}}</span>
+                <span class="money">￥ {{ (balance/100).toFixed(2) | thousand}}</span>
             </div>
             <div class="between">=</div>
             <div class="money-div">
                 <span class="name">客户打款</span>
-                <span class="money">￥{{play|thousand}}</span>
+                <span class="money">￥{{(play/100).toFixed(2)|thousand}}</span>
             </div>
             <div  class="between">-</div>
             <div class="money-div">
                 <span class="name">客户消费</span>
-                <span class="money">￥{{spending|thousand}}</span>
+                <span class="money">￥{{(spending/100).toFixed(2)|thousand}}</span>
             </div>
             <div class="between">-</div>
             <div class="money-div">
                 <span class="name">客户退款</span>
-                <span class="money">￥{{refunds|thousand}}</span>
+                <span class="money">￥{{(refunds/100).toFixed(2)|thousand}}</span>
             </div>
         </div>
 

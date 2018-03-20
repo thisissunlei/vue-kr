@@ -17,7 +17,7 @@
                         style="background:#FDBA4D;vertical-align:middle;"
                     ></span>
                 </div>
-               
+                
                 <Select 
                     v-model="barType" 
                     @on-change="selectChange"
@@ -27,6 +27,7 @@
                 </Select>
                 
                 <!-- <KrField 
+                    v-if="mask"
                     type="selectTree" 
                     :data="treeData" 
                     label="甘特图显示任务项" 
@@ -171,6 +172,7 @@ export default {
             //下拉的默认值
             barType: 'day',
             isLoading:true,
+            mask:false
         }
     },
     mounted(){
@@ -179,7 +181,13 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
-       
+    },
+    updated(){
+        this.mask=this.treeData.length?true:false;
+        console.log('tree--',this.treeData);
+        this.treeData.map((item,index)=>{
+            
+        })
     },
     methods:{
         //获取年数组

@@ -105,7 +105,11 @@ export default  {
       url: '/api/krspace-pay/payment/invoice',
       method: 'post'
     },
-
+     //账单中心--账单--下载pdf
+     'bill-down-pdf': {
+      url: '/api/krspace-pay/bill/down/pdf',
+      method: 'get'
+    },
     
     // 账户中心
     'account-list': {

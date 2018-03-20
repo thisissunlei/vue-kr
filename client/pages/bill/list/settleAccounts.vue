@@ -69,14 +69,12 @@
 
 		},
 		watch: {
-
 			$props: {
 				deep: true,
 				handler(nextProps) {
-					
-					this.detail.customerId && this.getAmount(this.detail.customerId)
-				
-					
+					if(this.detail.customerId && this.detail.btnType=="Settle"){
+						this.getAmount(this.detail.customerId)
+					}
 				}
 			}
 

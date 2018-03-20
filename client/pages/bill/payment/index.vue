@@ -416,7 +416,7 @@ export default {
                 })
             },
             openView(params){
-                window.open(`./payment/detail/${params.id}`,'_blank');
+                window.open(`/bill/payment/detail/${params.id}`,'_blank');
             },
 
             bindPerson (params) {

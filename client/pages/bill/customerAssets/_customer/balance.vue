@@ -146,7 +146,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.balance))];
+                               tag('span', '￥'+utils.thousand((params.row.balance/100).toFixed(2)))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -185,7 +185,7 @@ import ChangeBalance from './changeBalance.vue';
                         align:'center',
                         render:(tag,params)=>{
                            
-                           return '￥'+utils.thousand(params.row.deposit);  
+                           return '￥'+utils.thousand((params.row.deposit/100).toFixed(2));  
                         }
                     },
                     {
@@ -195,7 +195,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.lockDeposit))];
+                               tag('span', '￥'+utils.thousand((params.row.lockDeposit/100).toFixed(2)))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -223,7 +223,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.guardCardDeposit))];
+                               tag('span', '￥'+utils.thousand((params.row.guardCardDeposit/100).toFixed(2)))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -251,7 +251,7 @@ import ChangeBalance from './changeBalance.vue';
                         render:(tag,params)=>{
                             let index = params.row._index;
                             var btnRender=[
-                               tag('span', '￥'+utils.thousand(params.row.otherDeposit))];
+                               tag('span', '￥'+utils.thousand((params.row.otherDeposit/100).toFixed(2)))];
                             if(index != 0){
                                 btnRender.push(
                                     tag(Buttons, {
@@ -324,7 +324,7 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'changedAmount',
                     align:'center',
                     render:function(h,params){
-                        return utils.thousand(params.row.changedAmount) ;
+                        return utils.thousand((params.row.changedAmount/100).toFixed(2)) ;
                     }
                 },{
                     title: '相关记录',
@@ -551,7 +551,7 @@ import ChangeBalance from './changeBalance.vue';
                         this.timeError = false
                     }
                 }
-            }
+            },
 
 		},
 		mounted(){

@@ -59,7 +59,7 @@ import utils from '~/plugins/utils';
                         key: 'amount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand(params.row.amount)
+                            return utils.thousand((params.row.amount/100).toFixed(2))
                          }
                     },
                     ],
@@ -77,7 +77,7 @@ import utils from '~/plugins/utils';
                     key: 'amount',
                     align:'center',
                     render:function(h,params){
-                        return utils.thousand(params.row.amount)
+                        return utils.thousand((params.row.amount/100).toFixed(2))
                     }
                 },{
                     title: '退至账户',

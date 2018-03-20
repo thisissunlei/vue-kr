@@ -116,7 +116,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'amount',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand(params.row.amount)
+                            return utils.thousand((params.row.amount/100).toFixed(2))
                          }
                     },
                     {
@@ -124,7 +124,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'bankTransfer',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand(params.row.bankTransfer)
+                            return utils.thousand((params.row.bankTransfer/100).toFixed(2))
                          }
                     },
                     {
@@ -132,7 +132,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                         key: 'communityTransfer',
                         align:'center',
                         render:function(h,params){
-                            return utils.thousand(params.row.communityTransfer)
+                            return utils.thousand((params.row.communityTransfer/100).toFixed(2))
                          }
                     },
                     ],
@@ -195,7 +195,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'amount',
                     align:'center',
                     render:function(h,params){
-                            return utils.thousand(params.row.amount)
+                            return utils.thousand((params.row.amount/100).toFixed(2))
                          }
                 },{
                     title: '账户名称',

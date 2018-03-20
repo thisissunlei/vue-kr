@@ -8,14 +8,14 @@
                     <Tabs size="small" value="name1" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
                             <TableList
-                                :listData="todoData"
+                                :listData="listData"
                                 @rowClick="rowClick"
                                 v-if="mask"
                             />
                         </TabPane>
                         <TabPane label="投拓期项目" name="name2">
                             <TableList
-                                :listData="downData"
+                                :listData="listData"
                                 @rowClick="rowClick"
                                 v-if="!mask"
                             />
@@ -26,7 +26,7 @@
         </GanttChart>
         <!-- 左侧切换部分内容 -->
            
-      
+    
     </div>
 
 </template>
@@ -44,23 +44,25 @@ export default {
     },
     data(){
         return{
-            todoData:[
-                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园skdjsjkjckjksjkvjcksjkvkdhdfkdsjhjhsdjkhjhsdjf',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            downData:[
-                {name:'1',communityName:'2',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
+            listData:[],
             mask:true
         }
     },
-    mounted(){
-       
-        // this.getYears(this.showData);
-
+    mounted(){     
+        this.getListData();
     },
     methods:{
+        //获取进度列表数据
+        getListData(){
+            let params={};
+            this.$http.get('project-progress-list',params).then((response)=>{
+                
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
         //列表跳转详情
         rowClick(item){
             window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.tId}&city=${item.city}`,'_blank');
@@ -69,8 +71,10 @@ export default {
         tabsClick(key){
             if(key=='name2'){
                 this.mask=false;
+                this.getListData();
             }else{
                 this.mask=true;
+                this.getListData();
             }
         }
     }

@@ -2,18 +2,16 @@
   <div>
         <div class='view-table-list'>
             <p>项目名称</p>
-            <p>社区名称</p>
             <p>城市</p>
         </div>
         <ul class='view-table-detail'>
             <li
                 v-for="item in listData"
                 :key="item.name"
-                :data-box-id="item.tId"
+                :data-box-id="item.id"
             >
                 <p @click="rowClick(item)">{{item.name}}</p>
-                <p>{{item.communityName}}</p>
-                <p>{{item.city}}</p>
+                <p>{{item.cityName}}</p>
             </li>
         </ul> 
   </div>
@@ -57,7 +55,7 @@ export default {
         p{
            display:inline-block;
            border-right:1px solid #E1E6EB;
-           width:33%;
+           width:50%;
            text-align: center;
            &:nth-child(3){
                border-right:none;

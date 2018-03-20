@@ -136,5 +136,10 @@ export default  {
       url: '/api/krspace-erp-web/pm/task/list',
       method: 'get'
     },
+    //项目管理－项目进度列表
+    'project-progress-list': {
+      url: '/api/krspace-erp-web/pm/file/list/type/schedule',
+      method: 'get'
+    },
   }
   

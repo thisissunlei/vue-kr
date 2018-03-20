@@ -17,7 +17,7 @@
                 type:String
             },
         data () {
-            let basicMoney = this.editData[this.type];
+            let basicMoney = (this.editData[this.type]/100).toFixed(2);
             let communityId = this.editData.communityId;
             const validateFirst = (rule, value, callback) => {
                 var pattern =/^[0-9]+(.[0-9]{1,2})?$/;

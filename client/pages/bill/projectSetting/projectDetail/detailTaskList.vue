@@ -17,12 +17,10 @@
               >
                  <div class='chart-parent' :data-box-id="item.t_id">
                    <div class='parent-middle'>
-                    <ToolTip :label="item.label" type="top">
-                      <div class='chart-left-name' @click="showClick(item.t_id)">
-                        <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
-                        <span class="chart-name">{{item.label}}</span>
-                      </div>
-                    </ToolTip>
+                    <div class='chart-left-name' @click="showClick(item.t_id)">
+                      <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
+                      <span class="chart-name">{{item.label}}</span>
+                    </div>
                     <div @click="editClick(item.value,'')" class='chart-edit'>
                         <span class='edit'></span>
                     </div>

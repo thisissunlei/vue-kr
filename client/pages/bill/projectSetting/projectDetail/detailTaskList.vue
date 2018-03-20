@@ -20,7 +20,7 @@
                      <Tooltip :content="item.lable" placement="top">
                         <div class='chart-left-name' @click="showClick(item.t_id)">
                           <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
-                          <span class="chart-name">{{item.lable}}</span>
+                          <span class="chart-name">{{item.label}}</span>
                         </div>
                     </Tooltip>
                     <div @click="editClick(item.value,'')" class='chart-edit'>
@@ -40,7 +40,7 @@
                               <Tooltip :content="items.lable" placement="top">
                                   <div class='chart-left-name'>
                                     <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                    <span class="chart-name" style="color: #666666;">{{items.lable}}</span>
+                                    <span class="chart-name" style="color: #666666;">{{items.label}}</span>
                                   </div>
                               </Tooltip>
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>

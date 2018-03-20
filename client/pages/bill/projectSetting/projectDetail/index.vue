@@ -260,6 +260,7 @@ export default {
                 //     });
                 //     return ;
                 // }
+                console.log('-----edit',this.editData);
                 this.editData.id=this.editId;
                 this.editData.pid=this.parentId;
                 this.editData.propertyId=this.queryData.id;

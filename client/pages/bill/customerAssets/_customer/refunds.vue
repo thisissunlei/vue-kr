@@ -5,7 +5,7 @@
         <div class="title-type">退款总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
-        <div class="title-type">退款变化明细表</div>
+        <div class="title-type" style="margin-top:30px">退款变化明细表</div>
         <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">

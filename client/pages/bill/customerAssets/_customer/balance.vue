@@ -5,7 +5,7 @@
 		<div class="title-type">余额总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryData"/>
 
-		<div class="title-type">余额变化明细表</div>
+		<div class="title-type" style="margin-top:30px">余额变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称" style="text-align:left">

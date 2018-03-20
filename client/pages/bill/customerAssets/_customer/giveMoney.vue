@@ -5,7 +5,7 @@
 		<div class="title-type">打款总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryData" ></Table>
 
-		<div class="title-type">打款变化明细表</div>
+		<div class="title-type" style="margin-top:30px">打款变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称" style="text-align:left">

@@ -281,7 +281,7 @@ export default {
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                window.open(`./list/detail/${params.orderId}`,'_blank');
+                window.open(`/order/list/detail/${params.orderId}`,'_blank');
                
             },
             cancel (params) {

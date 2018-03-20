@@ -934,6 +934,11 @@
                             primaryText: '轮播图列表',
                             menuCode: 'por_mobilepic_list',
                             router: 'WebBackstage/picList',
+                        },
+                        {
+                            primaryText: '社区设施标签',
+                            menuCode: 'por_mobilepic_list',
+                            router: 'facility-tags/',
                         }
                     ]
                 },

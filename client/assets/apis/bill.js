@@ -146,5 +146,10 @@ export default  {
       url: '/api/krspace-erp-web/pm/task-template/list',
       method: 'get'
     },
+    //项目档案管理列表
+    'project-archives-list': {
+      url: '/api/krspace-erp-web/pm/file/list/type/dashboard',
+      method: 'get'
+    },
   }
   

@@ -262,31 +262,31 @@ import KrTree from '~/components/KrTree'
                 columns: [
                     {
                         title: 'ID',
-                        key: 'billNo',
+                        key: 'id',
                         align:'center',
                         width:100,
                         fixed:'left'
                     },
                     {
                         title: '项目名称',
-                        key: 'customerName',
+                        key: 'name',
                         align:'center',
                         width:160,
                         fixed:'left'
                     },
                     {
                         title: '城市',
-                        key: 'communityName',
+                        key: 'city',
                         align:'center',
                     },
                     {
                         title: '产品类型',
-                        key: 'totalAmount',
+                        key: 'productType',
                         align:'center',
                     },
                     {
                         title: '计划项目周期',
-                        key: 'freeAmount',
+                        key: 'plannedPeriod',
                         align:'center',
                     },
                     {
@@ -311,7 +311,7 @@ import KrTree from '~/components/KrTree'
                             return time;
                         }
                     },
-                    {
+                    /*{
                         title: '操作',
                         key: 'operation',
                         align:'center',
@@ -336,7 +336,7 @@ import KrTree from '~/components/KrTree'
                             ])
                         }
                                           
-                    }
+                    }*/
                 ]
                 
             }
@@ -372,7 +372,7 @@ import KrTree from '~/components/KrTree'
             },
             //获取列表数据
             getTableData(params){
-                this.$http.get('get-bill-list', params).then((res)=>{
+                this.$http.get('project-archives-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;

@@ -17,12 +17,12 @@
               >
                  <div class='chart-parent' :data-box-id="item.t_id">
                    <div class='parent-middle'>
-                     <Tooltip :content="item.label" placement="top">
-                        <div class='chart-left-name' @click="showClick(item.t_id)">
-                          <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
-                          <span class="chart-name">{{item.label}}</span>
-                        </div>
-                    </Tooltip>
+                    <ToolTip :label="item.label" type="top">
+                      <div class='chart-left-name' @click="showClick(item.t_id)">
+                        <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
+                        <span class="chart-name">{{item.label}}</span>
+                      </div>
+                    </ToolTip>
                     <div @click="editClick(item.value,'')" class='chart-edit'>
                         <span class='edit'></span>
                     </div>
@@ -37,12 +37,10 @@
                       >
                           <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id">
                             <div class='parent-middle'>
-                              <Tooltip :content="items.label" placement="top">
-                                  <div class='chart-left-name'>
-                                    <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                    <span class="chart-name" style="color: #666666;">{{items.label}}</span>
-                                  </div>
-                              </Tooltip>
+                              <div class='chart-left-name'>
+                                <Icon type="minus-round" size="4" style="color: #666666;"/>
+                                <span class="chart-name" style="color: #666666;">{{items.label}}</span>
+                              </div>
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
@@ -63,12 +61,18 @@
 </template>
 
 <script>
-
+import ToolTip from '~/components/ToolTip';
 export default {
+    components:{
+       ToolTip
+    },
     props:{
         data:{
             type:Array
         }
+    },
+    mounted(){
+
     },
     methods:{
       addClick(id){
@@ -124,6 +128,7 @@ export default {
                 padding-right:18px;
                 display: table;
                 .parent-middle{
+                    position: relative;
                     display: table-cell;
                     vertical-align: middle;
                 }

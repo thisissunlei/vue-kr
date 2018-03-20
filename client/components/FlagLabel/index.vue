@@ -32,7 +32,7 @@ export default {
 
 <style lang='less' scoped>
      .ui-flag{
-         float:right;
+          position: relative;
          .blueFlag{
             width:20px;
             height:25px;

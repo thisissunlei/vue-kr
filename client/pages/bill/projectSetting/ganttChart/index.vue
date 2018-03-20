@@ -79,6 +79,7 @@
                 >
                   
                     <Article 
+                        v-if="leftEndpoint"
                         :minCalibration="minCalibration"
                         :startDate="leftEndpoint"
                         :data="item"
@@ -151,7 +152,7 @@ export default {
             //最小刻度的大小
             minCalibration:50,
             //原点数据
-            leftEndpoint:{},
+            leftEndpoint:'',
             //刻度的下拉选择项
             timeList: [
                     {
@@ -276,6 +277,7 @@ export default {
             this.showData = [].concat(showData);
             
             this.leftEndpoint = this.showData[0];
+            console.log(this.leftEndpoint,"pppppp")
             this.isLoading = false;
         },
        

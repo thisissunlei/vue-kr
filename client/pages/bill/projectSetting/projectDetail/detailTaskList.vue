@@ -8,7 +8,7 @@
           </p>
        </div>
 
-       <div class='chart-detail' @scroll="detailScroll"> 
+       <div class='chart-detail' @scroll="detailScroll" id="vue-chart-left-detail-list"> 
            <ul>
               <li
                 v-for="item in data"
@@ -120,6 +120,8 @@ export default {
       .chart-detail{
          width:100%;
          background: #F0F1F6;
+         max-height:500px;
+         overflow:scroll;
          .detail-li{
              .chart-parent{
                 width:100%;

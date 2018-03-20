@@ -10,6 +10,7 @@
                             <TableList
                                 :listData="listData"
                                 @rowClick="rowClick"
+                                @scroll="scroll"
                                 v-if="mask"
                             />
                         </TabPane>
@@ -17,6 +18,7 @@
                             <TableList
                                 :listData="listData"
                                 @rowClick="rowClick"
+                                @scroll="scroll"
                                 v-if="!mask"
                             />
                         </TabPane>
@@ -44,15 +46,6 @@ export default {
     },
     data(){
         return{
-            todoData:[
-                {name:'俊浩中牙膏公园你好好俊浩中牙膏公园你好好',communityName:'俊浩中牙膏公园skdjsjkjckjksjkvjcksjkvkdhdfkdsjhjhsdjkhjhsdjf',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            downData:[
-                {name:'1',communityName:'2',city:'3',tId:'1'},
-                {name:'6',communityName:'7',city:'8',tId:'2'},
-            ],
-            mask:true,
             params:{
                 endTime:this.getEndDay(),
                 startTime:this.getStartDay(),
@@ -141,6 +134,9 @@ export default {
                 title: error.message,
                 });
             })
+        },
+        scroll(event){
+            console.log('event--',event);
         }
     }
 

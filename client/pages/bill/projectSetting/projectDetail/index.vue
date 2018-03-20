@@ -20,6 +20,7 @@
                         :data="listData"
                         @addClick="addTask"
                         @editClick="editTask"
+                        @scroll="scroll"
                     />
                 </div>
             </GanttChart>
@@ -283,6 +284,9 @@ export default {
                         title: error.message,
                      });
                 })
+          },
+          scroll(event){
+              console.log('evnt00',event);
           }
      }
 }

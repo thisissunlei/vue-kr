@@ -37,7 +37,6 @@
                 ref="rightDom" 
                 class="right-draw" 
                 style="overflow:auto;"
-                @scroll="rightScroll"
             >
                 <div v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
                     <div :style="{width:dayAllNum*minCalibration+'px'}">
@@ -75,6 +74,8 @@
                 <div    
                     class="content"
                     :style="{width:dayAllNum*minCalibration+'px'}"
+                    @scroll="rightScroll"
+                    id="vue-chart-right-draw-content"
                 >
                   
                     <Article 
@@ -422,12 +423,14 @@ export default {
             right: 0px;
         }
         .content{
+            max-height:500px;
+            overflow:scroll;
             .every-col{
                 height: 70px;
                 border-top: 1px solid #E1E6EB;;
                 border-bottom: 1px solid #E1E6EB;
             }
-            overflow:-webkit-paged-x;
+            //overflow:-webkit-paged-x;
         }
         .hander{
             margin-top:20px;

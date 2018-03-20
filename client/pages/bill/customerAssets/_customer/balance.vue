@@ -576,7 +576,7 @@ import ChangeBalance from './changeBalance.vue';
         }
         .search{
             text-align: right;
-            margin-top:20px;
+            margin-top:-20px;
             margin-bottom: 10px
         }
     	padding:5px 20px;

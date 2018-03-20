@@ -5,7 +5,7 @@
 		<div class="title-type">打款总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryData" ></Table>
 
-		<div class="title-type">打款变化明细表</div>
+		<div class="title-type" style="margin-top:30px">打款变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称" style="text-align:left">
@@ -141,6 +141,9 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     key: 'tradeNo',
                     width:100,
                     align:'center',
+                    render:function(h,params){
+                        return params.row.tradeNo?params.row.tradeNo:'-';
+                    }
                 },{
                     title: '社区名称',
                     key: 'communityName',
@@ -334,7 +337,7 @@ import selectCommunities from '~/components/SelectCommunities.vue'
         }
         .search{
             text-align: right;
-            margin-top:20px;
+            margin-top:-20px;
             margin-bottom: 10px;
         }
     	padding:5px 30px;

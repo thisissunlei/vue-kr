@@ -5,11 +5,14 @@
 		<div class="title-type">余额总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryData"/>
 
-		<div class="title-type">余额变化明细表</div>
+		<div class="title-type" style="margin-top:30px">余额变化明细表</div>
         <div class="search">
             <Form ref="searchForm" :model="searchForm"  inline :label-width="80">
                 <FormItem label="社区名称" style="text-align:left">
-                    <selectCommunities test="searchForm" :onchange="changeCommunity" />
+                    <Select v-model="searchForm.communityId" clearable style="width:200px;text-align:left">
+                        <Option v-for="item in options" :value="item.id" :key="item.name">{{ item.name }}</Option>
+                    </Select>
+                    <!-- <selectCommunities test="searchForm" :onchange="changeCommunity" /> -->
                 </FormItem>
                 <FormItem label="操作类型">
                 <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
@@ -90,6 +93,7 @@ import ChangeBalance from './changeBalance.vue';
 		data (){
             let {params}=this.$route;
 			return{
+                options:[],
                 updateTime:new Date(),
                 customerId:params.customer,
                 // 弹窗传回的数据
@@ -98,7 +102,6 @@ import ChangeBalance from './changeBalance.vue';
                 searchForm:{
                     pageSize:15,
                     page:1,
-                    communityName:'',
                     customerId:params.customer,
                     operateType:'',
                 },
@@ -284,41 +287,8 @@ import ChangeBalance from './changeBalance.vue';
                     align:'center',
                 },{
                     title: '操作类型',
-                    key: 'operateType',
+                    key: 'operateTypeName',
                     align:'center',
-                    render:function(h,params){
-                        let operateType = [{
-                            label:'余额充值',
-                            value:'RECHARGE'
-                        },{
-                            label:'余额支付账单',
-                            value:'PAY_BILL'
-                        },{
-                            label:'退款',
-                            value:'REFUND'
-                        },{
-                            label:'退还',
-                            value:'BACK'
-                        },{
-                            label:'冻结押金',
-                            value:'LOCK_DESPOINT'
-                        },{
-                            label:'营业外收入',
-                            value:'INCOME'
-                        },{
-                            label:'转移',
-                            value:'TRANSFER'
-                        }]
-                        let type = '-';
-                       operateType.filter((item)=>{
-                            if(item.value == params.row.operateType){
-                                 type = item.label
-                                return item.label
-                            }
-                            return false
-                        })
-                        return type
-                    }
                 },{
                     title: '操作金额（元）',
                     key: 'changedAmount',
@@ -330,10 +300,9 @@ import ChangeBalance from './changeBalance.vue';
                     title: '相关记录',
                     key: 'records',
                     align:'center',
-                },{
-                    title: '操作人',
-                    key: 'createrName',
-                    align:'center',
+                    render:function(h,params){
+                        return params.row.records?params.row.records:'无'
+                    }
                 },{
                     title: '操作时间',
                     key: 'ctime',
@@ -388,6 +357,7 @@ import ChangeBalance from './changeBalance.vue';
             getBalanceDetail(param){
                 //获取账户余额的明细表
                 param = Object.assign({},this.searchForm,param)
+                this.searchForm = param;
                 this.$http.get('balance-detail',param).then((res)=>{
                     this.detailList = res.data.items;
                     this.totalCount = res.data.totalCount;
@@ -453,7 +423,7 @@ import ChangeBalance from './changeBalance.vue';
                            this.openBalance = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           this.getBalanceDetail({page:1})
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -481,7 +451,7 @@ import ChangeBalance from './changeBalance.vue';
                            this.openBusiness = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           this.getBalanceDetail({page:1})
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -509,7 +479,8 @@ import ChangeBalance from './changeBalance.vue';
                            this.openCommunity = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细
                            this.getBalanceList();
-                           this.getBalanceDetail()
+                           let searchForm = {page:1,communityId:'',startDate:'',endDate:'',operateType:''};
+                           this.getBalanceDetail(searchForm)
                            this.updateTime = new Date()
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -552,6 +523,20 @@ import ChangeBalance from './changeBalance.vue';
                     }
                 }
             },
+            getComm(){
+                this.$http.get('join-bill-community','').then((response)=>{    
+                    let list = response.data.items;
+                    list = list.map(item=>{
+                        item.id = item.id+'';
+                        return item;
+                    })
+                    this.options = list;
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    }) 
+            }
 
 		},
 		mounted(){
@@ -559,6 +544,7 @@ import ChangeBalance from './changeBalance.vue';
             // 获取更新数据
             this.getBalanceList();
             this.getBalanceDetail()
+            this.getComm()
 		},
         watch:{
             updateTime(){
@@ -590,7 +576,7 @@ import ChangeBalance from './changeBalance.vue';
         }
         .search{
             text-align: right;
-            margin-top:20px;
+            margin-top:-20px;
             margin-bottom: 10px
         }
     	padding:5px 20px;

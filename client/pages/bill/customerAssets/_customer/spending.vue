@@ -5,7 +5,7 @@
         <div class="title-type">消费总汇表</div>
         <Table  border :columns="allColumns" class="table-style" :data="summaryList" ></Table>
 
-        <div class="title-type">消费变化明细表</div>
+        <div class="title-type" style="margin-top:30px">消费变化明细表</div>
         <Table  border :columns="detailColumns" class="table-style" :data="detailList"></Table>
         
         <div style="margin: 10px 0 ;overflow: hidden">
@@ -116,10 +116,6 @@ import utils from '~/plugins/utils';
                 },{
                     title: '社区名称',
                     key: 'communityName',
-                    align:'center',
-                },{
-                    title: '操作类型',
-                    key: 'targetTypeName',
                     align:'center',
                 },{
                     title: '费用类型',

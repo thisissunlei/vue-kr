@@ -1,6 +1,6 @@
 <template>
     <div>
-       <FlagLabel label="123" offset="20" minCalibration="50"/>
+       <FlagLabel label="123" offset="20" minCalibration="50" type="huangqi"/>
     </div>
 </template>
 

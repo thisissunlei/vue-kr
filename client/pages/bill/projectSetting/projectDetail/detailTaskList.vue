@@ -70,7 +70,7 @@ export default {
         }
     },
     mounted(){
-
+      
     },
     methods:{
       addClick(id){

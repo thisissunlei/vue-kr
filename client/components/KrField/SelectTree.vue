@@ -47,7 +47,6 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
-
 		}
     },
     /*updated(){

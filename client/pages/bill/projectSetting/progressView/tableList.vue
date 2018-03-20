@@ -4,7 +4,7 @@
             <p>项目名称</p>
             <p>城市</p>
         </div>
-        <ul @scroll="ulScoll" class='view-table-detail'>
+        <ul @scroll="ulScoll" class='view-table-detail' id="vue-chart-left-table-list">
             <li
                 v-for="item in listData"
                 :key="item.name"

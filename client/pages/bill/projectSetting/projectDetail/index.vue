@@ -12,12 +12,15 @@
                 v-if="!isLoading && listData.length" 
                 :data="listData"
                 type="edit"
+                startTime="2018-3-20"
+                endTime="2018-9-20"
             >
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 
                         :data="listData"
                         @addClick="addTask"
                         @editClick="editTask"
+                        @scroll="scroll"
                     />
                 </div>
             </GanttChart>
@@ -281,6 +284,9 @@ export default {
                         title: error.message,
                      });
                 })
+          },
+          scroll(event){
+              console.log('evnt00',event);
           }
      }
 }

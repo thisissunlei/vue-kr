@@ -16,6 +16,7 @@
                         <TabPane label="待开业项目" name="name1">
                             <TableList
                                 :listData="listData"
+                                test="PREPARE"
                                 @rowClick="rowClick"
                                 @scroll="scroll"
                                 v-if="mask"
@@ -24,7 +25,9 @@
                         <TabPane label="投拓期项目" name="name2">
                             <TableList
                                 :listData="listData"
+                                test="INVEST"
                                 @rowClick="rowClick"
+                                @operationClick="operationClick"
                                 @scroll="scroll"
                                 v-if="!mask"
                             />
@@ -34,7 +37,17 @@
             </div>
         </GanttChart>
         <!-- 左侧切换部分内容 -->
-           
+        <Modal
+            v-model="openSure"
+            title="添加任务"
+            width="440"
+            >
+            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>
+            <div slot="footer">
+                <Button type="primary" @click="submitSure()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
     
     </div>
 
@@ -54,6 +67,8 @@ export default {
     data(){
         return{
             difference:7,
+            openSure:false,
+            id:'',
             params:{
                 endTime:'2018-6-7',
                 startTime:this.getStartDay(),
@@ -101,6 +116,23 @@ export default {
         //列表跳转详情
         rowClick(item){
             window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}`,'_blank');
+        },
+        operationClick(item){
+            this.cancelSure();
+            this.id=item.id;
+        },
+        submitSure(){
+            this.$http.post('sure-sign-project',{propertyId:this.id}).then((response)=>{
+                this.getListData(this.params);
+                this.cancelSure();
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
+        cancelSure(){
+            this.openSure=!this.openSure;
         },
         //tab切换
         tabsClick(key){
@@ -177,7 +209,13 @@ export default {
 </script>
 
 <style lang="less">
-  
+    .sure-sign{
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 26px;
+        font-size: 14px;
+    }
     .chart-tab-left{
         width:246px;
         border: 1px solid #E1E6EB;

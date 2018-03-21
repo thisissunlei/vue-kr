@@ -33,11 +33,6 @@ export default {
            default:''
        }
     },
-    data(){
-        return{
-            
-        }
-    },
     methods:{
         rowClick(item){
             this.$emit('rowClick',item);
@@ -55,8 +50,8 @@ export default {
 <style lang="less" scoped>
     .view-table-list{
         width:100%;
-        height:50px;
-        line-height:50px;
+        height:49px;
+        line-height:49px;
         border: 1px solid #E1E6EB;
         border-right:none;
         border-top: none;
@@ -84,7 +79,7 @@ export default {
         border-bottom: solid 1px #E1E6EB;
         li{
            width:100%;
-           height:50px;
+           height:70px;
            border: 1px solid #E1E6EB;
            border-right:none;
            border-left:none;

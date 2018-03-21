@@ -89,6 +89,15 @@ export default {
     mounted(){
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
+        var leftDom = document.querySelectorAll('div[data-box-id="'+this.listData.id+'"]');
+        console.log('leftDom-',leftDom);
+        // var rightHeight = this.showData.length * 70;
+        // var leftHeight =leftDom.style.height; 
+        // if(leftHeight>rightHeight){
+            
+        // }else{
+              
+        // }
     },
     methods:{  
         //获取进度列表数据
@@ -202,6 +211,12 @@ export default {
             let chartDom=document.getElementById('vue-chart-right-draw-content');
             leftList.scrollTop=chartDom.scrollTop;
             this.scrollBottom(chartDom);
+            if(chartDom.scrollLeft>=chartDom.clientWidth){
+                  console.log('划到最右边了');
+            }
+            if(chartDom.scrollLeft<10){
+                  console.log('滑倒最左边了');
+            }
         }
     }
 

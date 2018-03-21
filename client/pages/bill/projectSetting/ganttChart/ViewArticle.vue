@@ -88,6 +88,15 @@ export default {
     },
     mounted(){
         this.showData = [].concat(this.allDataFor(this.tasks));
+        var leftDom = document.querySelectorAll('div[data-box-id="'+this.tasks.t_id+'"]')[0];
+        console.log('tipgss-',leftDom);
+        // var rightHeight = this.showData.length * 70;
+        // var leftHeight =leftDom.style.height; 
+        // if(leftHeight>rightHeight){
+            
+        // }else{
+
+        // }
     },
     methods:{
        

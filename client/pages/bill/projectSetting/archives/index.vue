@@ -23,126 +23,14 @@
   
     <Modal
         v-model="openNewArchives"
-        title="新建档案"
+        title="新建项目"
         ok-text="确定"
         cancel-text="取消"
-        width="443"
+        width="373"
      >
-
-        <Form :model="formRight" :rules="ruleValidate" label-position="left">
-
-            <!--<Form-item label="项目名称" class="bill-search-class" prop="name">
-                    <i-input 
-                        v-model="formRight.name" 
-                        placeholder="请输入项目名称"
-                        style="width: 252px"
-                    /> 
-            </Form-item>
-            
-            <Form-item label="所在地区" class="bill-search-class" prop="city">
-                    <KrField 
-                        type="cascader" 
-                        placeholder="请输入所在地区" 
-                        @okClick="okClick"
-                        @change="cascaderChange"
-                    />
-            </Form-item>-->
-
-            <!--<KrField :readOrEdit="true" type="datetime"  label="含税" value="2018-01-02 10:10" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="city" label="含税" :cityValue="valueCity" placeholder="请输入含税收入" />
-            <KrField :readOrEdit="true" type="textarea"  label="含税" value="123er" placeholder="请输入含税收入" :maxLength="200"/>
-            <KrField :readOrEdit="true" type="time"  label="含税" value="10:10" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="date"  label="含税" value="2018-01-02" placeholder="请输入含税收入"/>
-            <KrField :readOrEdit="true" type="select"   label="含税" value="1" placeholder="请输入含税收入" :selectData="selectData" :filterable="true"/>
-
-            <KrField :readOrEdit="true" type="text" label="含税" value="什么东西" placeholder="请输入含税收入" />
-        
-            <KrField type="selectTree" :data="data" label="含税"  placeholder="请输入含税收入" />
-
-            <KrField :readOrEdit="true" type="upFiles" :data="data" label="含税"  placeholder="请输入含税收入" :value="imgs" />-->
-          
-            <!--<KrField 
-                :readOrEdit="true" 
-                type="datetime"  
-                label="含税" 
-                value="2018-01-02 10:10" 
-                placeholder="请输入含税收入"
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="cascader" 
-                label="含税" 
-                value="221"
-                placeholder="请输入含税收入" 
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="textarea"  
-                label="含税" 
-                value="123er" 
-                placeholder="请输入含税收入" 
-                :maxLength="200"
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="time"  
-                label="含税" 
-                value="10:10" 
-                placeholder="请输入含税收入"
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="date"  
-                label="含税" 
-                value="2018-01-02" 
-                placeholder="请输入含税收入"
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="select"   
-                label="含税" 
-                value="1" 
-                placeholder="请输入含税收入" 
-                :selectData="selectData" 
-                :filterable="true"
-                @okClick="okClick"
-            />
-            <KrField 
-                :readOrEdit="true" 
-                type="text" 
-                label="含税" 
-                value="什么东西" 
-                placeholder="请输入含税收入" 
-                @okClick="okClick"
-            />-->
-          
-            <KrField 
-              type="selectTree" 
-              :data="data" 
-              label="含税" 
-              value="formRight.input" 
-              placeholder="请输入含税收入"
-            />
-
-
-            <KrField 
-                :readOrEdit="true" 
-                type="upFiles" 
-                :data="data" 
-                label="含税"  
-                placeholder="请输入含税收入" 
-                :value="imgs" 
-                @okClick="okClick"
-            />
-
-        </Form>
-        <div slot="footer">
-            <Buttons type="primary" label='完成并创建' @click="newArchivesSubmit" :data="imgs" checkAction='bill_batch_pay'/>
+        <AddArchives @bindData="onAddArchives" ref="fromFieldArchives"/> 
+        <div slot="footer" style="text-align:center;">
+            <Button type="primary" @click="submitAddArchives('formRight')">完成并创建</Button>
         </div>
     </Modal>
     <!-- <Message 
@@ -163,7 +51,8 @@ import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
 import KrField from '~/components/KrField';
-import KrTree from '~/components/KrTree'
+import KrTree from '~/components/KrTree';
+import AddArchives from './addArchives';
 
     export default {
         name: 'Bill',
@@ -172,13 +61,11 @@ import KrTree from '~/components/KrTree'
             Message,
             Buttons,
             KrField,
-            KrTree
+            KrTree,
+            AddArchives
         },
         data () {
             return {
-                imgs:[{url:'http://krspace-upload.oss-cn-qingdao.aliyuncs.com/erp_public_upload/201801/A/185423628_871.jpg'},
-                    {url:'http://krspace-upload.oss-cn-qingdao.aliyuncs.com/erp_public_upload/201712/P/152142442_752.JPG'}
-                ],
                 totalCount:0,
                 openSearch:false,
                 openSettle:false,
@@ -193,19 +80,7 @@ import KrTree from '~/components/KrTree'
                     pageSize:15,
                     customerName:''
                 },
-                formRight:{
-                    input:'',
-                    name:'',
-                    city:''
-                },
-                ruleValidate: {
-                    name: [
-                        { required: true, message: '项目名称必填', trigger: 'change' }
-                    ],
-                    city: [
-                        { required: true, message: '所在城市必填', trigger: 'change' }
-                    ]
-                },
+                addData:{},
                 /**
                  * 开关部分内容
                 */
@@ -213,52 +88,6 @@ import KrTree from '~/components/KrTree'
                 warn:'',
                 MessageType:'',
                 billType:{},
-                selectData:[
-                    {label:'123',value:'1'},
-                    {label:'456',value:'2'}
-                ],
-                valueCity:[3,4,64],
-                data: [
-                    {
-                        title: 'parent 1',
-                      
-                        t_id:0,
-                        isSelect:true,
-                        children: [
-                            {
-                                title: 'parent 1-1',
-                               
-                                 t_id:1,
-                                children: [
-                                    {
-                                         t_id:2,
-                                        title: 'leaf 1-1-1'
-                                    },
-                                    {
-                                         t_id:3,
-                                        title: 'leaf 1-1-2'
-                                    }
-                                ]
-                            },
-                            {
-                                title: 'parent 1-2',
-                               
-                                 t_id:4,
-                                children: [
-                                    {
-                                         t_id:5,
-                                        title: 'leaf 1-2-1'
-                                    },
-                                    {
-                                         t_id:6,
-                                        title: 'leaf 1-2-1'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-               
                 columns: [
                     {
                         title: 'ID',
@@ -283,6 +112,10 @@ import KrTree from '~/components/KrTree'
                         title: '产品类型',
                         key: 'productType',
                         align:'center',
+                        render(h, obj){
+                           let detail=obj.row.productType?obj.row.productType:'-'
+                           return <span>{detail}</span>
+                        }
                     },
                     {
                         title: '计划项目周期',
@@ -291,6 +124,7 @@ import KrTree from '~/components/KrTree'
                     },
                     {
                         title: '当前项目阶段',
+                        className:'current-range',
                         key: 'task',
                         align:'center',
                         render(h, obj){
@@ -302,26 +136,44 @@ import KrTree from '~/components/KrTree'
                                })
                            }
                            return rows
-                           console.log('h,obj',obj);
                         }
                     },
                     {
                         title: '当前项目进度状态',
-                        key: 'paidAmount',
+                        key: 'task',
+                        className:'current-range',
                         align:'center',
                         render(h, obj){
-                           
+                           var rows='';
+                           if(obj.row.tasks){
+                               rows=[];
+                               obj.row.tasks.map((item,index)=>{
+                                    let label='';
+                                    let colorStyle='';
+                                    if(item.progressStatus<0){
+                                        label='延期'+Math.abs(item.progressStatus)+'天'
+                                        colorStyle="color: #FF6868;"
+                                    }else if(item.progressStatus==0){
+                                        label='正常'
+                                    }else{
+                                        label='提前'+item.progressStatus+'天'
+                                        colorStyle="color: #F5A623"
+                                    }
+                                    rows.push(<div class='row-current-more' style={colorStyle}>{label}</div>)
+                               })
+                           }
+                           return rows
                         }
                     },
                     {
                         title: '创建时间',
-                        key: 'billingDate',
+                        key: 'cTime',
                         align:'center',
                         render(h, obj){
                             if(!obj.row.billingDate){
                                 return '-'
                             }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.billingDate));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.billingDate));
                             return time;
                         }
                     },
@@ -360,26 +212,10 @@ import KrTree from '~/components/KrTree'
              if(!this.$route.query.customerName){
                  this.$route.query.customerName=""
              }
-             this.tabParams=this.$route.query;
+             this.tabParams=Object.assign({},this.$route.query,{page:1,pageSize:15});
              
         },
         methods:{
-            okClick(event){
-              
-            },
-            
-            change(event){
-                console.log(event.target.value,"llllll")
-            },
-            cascaderChange(event){
-                 this.formRight.city=event;
-            },
-            radioChange(event){
-                console.log(event,"event");
-            },
-            onSelectChange(value){
-                console.log(value,"Select")
-            },
             //跳转查看页面
             goView(params){
                 window.open(`./list/detail/${params.billId}`,'_blank');
@@ -397,9 +233,32 @@ import KrTree from '~/components/KrTree'
                 })
                 
             },
+            onAddArchives(params){
+                this.addData=params;
+            },
             //新建项目创建成功
-            newArchivesSubmit(){
-                console.log('from--',this.formRight);
+            submitAddArchives(name){   
+                var newPageRefs = this.$refs.fromFieldArchives.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+                        isSubmit = false
+                    }
+                })
+                if(!isSubmit){
+                    return;
+                }
+                this.addData.province=this.addData.citys[0];
+                this.addData.city=this.addData.citys[1];
+                this.addData.county=this.addData.citys[2];
+                this.$http.post('project-archives-add',this.addData).then((res)=>{
+                    this.getTableData(this.tabParams);
+                    this.newArchives();
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
             },
             //信息提示框
             onChangeOpen(data){
@@ -412,14 +271,10 @@ import KrTree from '~/components/KrTree'
                 this.getTableData(this.tabParams);
             },
             newArchives(){
+                utils.clearForm(this.addData);
                 this.openNewArchives = !this.openNewArchives;
-            },
-            dateChange(value){
-                console.log('value-',value);
             }
-            
         }
-
     }
 </script>
 
@@ -440,13 +295,20 @@ import KrTree from '~/components/KrTree'
 
             }
     }
+    .current-range{
+        .ivu-table-cell{
+            padding:0;
+            .row-current-more{
+                border-bottom:1px solid #e9eaec;
+                padding: 15px 0;
+            }
+        }
+    }
 }
 .bill-search-class{
         width:50%;
         padding-left:32px;
         height: 48px;
 }
-.row-current-more{
-    border-bottom:1px solid #e9eaec;
- }
+
 </style>

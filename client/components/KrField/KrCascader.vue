@@ -55,9 +55,10 @@ export default {
             cityValue:[],
             labelValue:'',
             id:this.value,
+            t_id:0
 		}
     },
-    mounted(){   
+    mounted(){  
         this.labelValue=this.cityValue ? this.fnTreeId(this.value,this.data) : '';
         this.cityValue = this.cityValue.reverse();
     },

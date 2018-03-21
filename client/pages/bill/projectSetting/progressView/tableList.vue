@@ -3,6 +3,7 @@
         <div class='view-table-list'>
             <p>项目名称</p>
             <p>城市</p>
+            <p v-if="test=='INVEST'">操作</p>
         </div>
         <ul @scroll="ulScoll" class='view-table-detail' id="vue-chart-left-table-list">
             <li
@@ -12,6 +13,7 @@
             >
                 <p @click="rowClick(item)">{{item.name}}</p>
                 <p>{{item.cityName}}</p>
+                <p v-if="test=='INVEST'" style="color:#499df1;cursor:pointer;" @click="operationClick(item)">确认已签署合同</p>
             </li>
             <div style="height:1000px"></div>
         </ul> 
@@ -25,6 +27,10 @@ export default {
     props:{
        listData:{
            type:Array
+       },
+       test:{
+           type:String,
+           default:''
        }
     },
     data(){
@@ -35,6 +41,9 @@ export default {
     methods:{
         rowClick(item){
             this.$emit('rowClick',item);
+        },
+        operationClick(item){
+            this.$emit('operationClick',item);
         },
         ulScoll(event){
             this.$emit("scroll",event)
@@ -56,11 +65,13 @@ export default {
         font-size: 14px;
         color: #666666;
         font-weight: 500;
+        display:table;   
         p{
            display:inline-block;
            border-right:1px solid #E1E6EB;
-           width:50%;
+           width:33%;
            text-align: center;
+           display:table-cell;
            &:nth-child(3){
                border-right:none;
            }

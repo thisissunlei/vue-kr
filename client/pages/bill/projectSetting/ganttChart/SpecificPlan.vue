@@ -78,7 +78,7 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
             var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            console.log(planStart,min,max)
+           
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,officeEnd)

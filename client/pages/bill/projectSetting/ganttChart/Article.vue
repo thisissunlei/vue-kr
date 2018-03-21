@@ -2,7 +2,6 @@
 <template>
     <div>
         <div class="every-col" :data-chart="data.t_id" >
-            <FlagLabel label="123" offset="20" minCalibration="50" type="huangqi"/>
             <div class="article" 
                 :style="{
                     background:getBgColor(),
@@ -21,7 +20,7 @@
                 >
                     <span  v-if="type == 'edit'">{{data.label}}</span>
                     <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
-                        <Tooltip :content="data.label" placement="bottom-start">
+                        <Tooltip :content="data.label" placement="right">
                             <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
                         </Tooltip>
                     
@@ -43,7 +42,7 @@
                 >
                     <span  v-if="type == 'edit'">{{data.label}}</span>
                     <Poptip  v-if="type!='edit'" placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
-                        <Tooltip :content="data.label" placement="bottom-start">
+                        <Tooltip :content="data.label" placement="right">
                             <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
                                 {{data.label}}
                             </div>
@@ -106,10 +105,6 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        if (this.data.label == "kkk") {
-            
-        }
-        console.log('data--',this.data);
     },
     methods:{
        getBgColor(){
@@ -131,17 +126,18 @@ export default {
            
             var dates = this.getEndpointDate();
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planEndTime));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualEndTime));
+            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
+            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planEndTime));
+            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualStartTime));
+            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
-            var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
+            var officeEnd = min;
+           
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
-                office:utils.dateDiff(officeStart,officeEnd)
+                office:utils.dateDiff(officeStart,min)
             }
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
@@ -151,6 +147,10 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
+           
+            console.log( officeStart,"-----------",min)
+           
+            
        },
        getEndpointDate(){
             var arr = [];
@@ -166,6 +166,7 @@ export default {
             if(this.data.data.planEndTime){
                 arr.push(this.data.data.planEndTime)
             }
+        
             var max = arr[0],min=arr[0];
             for (var i = 1; i < arr.length; i++) {
                 if(max<arr[i])
@@ -174,8 +175,8 @@ export default {
                     min = arr[i];
             }
             return {
-                min:min,
-                max:max
+                min:+min,
+                max:+max
             }
 
        },
@@ -190,7 +191,7 @@ export default {
 <style lang="less" scoped>
 .article{
     position: relative;
-    padding: 10px 0px;
+    padding: 8px 0px;
     .label{
         width: 100%;
         height: 100%;

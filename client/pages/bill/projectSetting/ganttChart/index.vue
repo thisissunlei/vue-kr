@@ -196,7 +196,7 @@ export default {
             //最小刻度的大小
             minCalibration:50,
             //原点数据
-            leftEndpoint:'',
+            leftEndpoint:{},
             //刻度的下拉选择项
             timeList: [
                     {

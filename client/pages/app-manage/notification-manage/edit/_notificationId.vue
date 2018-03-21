@@ -35,7 +35,7 @@
                     with-credentials
                     :on-success="handleSuccess"
                     type="drag"
-                    action="http://optest01.krspace.cn/api/krspace-finance-web/app/notification/upload"
+                    action="/api/krspace-finance-web/app/notification/upload"
                     style="display: inline-block;width:148px;">
                     <div style="width: 148px;height:148px;line-height: 158px;">
                         <Icon type="camera" size="40"></Icon>

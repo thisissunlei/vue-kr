@@ -31,11 +31,12 @@
                     name="imgUrl"
                     v-if="!this.imgUrl"
                     :show-upload-list="false"
-                    :format="['jpg','jpeg','png']"
+                    :format="['jpg','gif','png']"
                     with-credentials
                     :on-success="handleSuccess"
+                    :on-error="handleError"
                     type="drag"
-                    action="http://optest01.krspace.cn/api/krspace-finance-web/app/notification/upload"
+                    action="/api/krspace-finance-web/app/notification/upload"
                     style="display: inline-block;width:148px;">
                     <div style="width: 148px;height:148px;line-height: 158px;">
                         <Icon type="camera" size="40"></Icon>
@@ -444,6 +445,11 @@ export default {
         window.close();
         window.opener.location.reload();
     },
+     handleError(error,file){
+         this.$Notice.error({
+              title:error.message
+        });
+     }
 
 
 

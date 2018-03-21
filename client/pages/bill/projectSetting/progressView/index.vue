@@ -7,7 +7,7 @@
            :startTime="getStartDay()" 
            :endTime="getEndDay()"
            @scroll="chartScroll"
-           :treeData="treeData"
+           :treeData="listData"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>

@@ -1,73 +1,62 @@
 
 <template>
     <div>
-    <div class="every-col" :data-chart="data.t_id" >
-        <FlagLabel v-if="getFlagShow('MEETING')" label="123" offset="20" minCalibration="50" type="huangqi"/>
-        <div class="article" 
-            v-if="getFlagShow('STAGETASK')"
-            :style="{
-                background:getBgColor(),
-                width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px'
-            }"
-        >
-        
-            <div 
-                class="plan"
+        <div class="every-col" :data-chart="data.t_id" >
+            <FlagLabel label="123" offset="20" minCalibration="50" type="huangqi"/>
+            <div class="article" 
                 :style="{
-                    width:planDetail.width * minCalibration + 'px',
-                    left:planDetail.office * minCalibration + 'px'
+                    background:getBgColor(),
+                    width:boxDetail.width * minCalibration+'px',
+                    left:boxDetail.office * minCalibration+'px'
                 }"
-                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
             >
-                <span  v-if="type == 'edit'">{{data.label}}</span>
-                <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
-                    <Tooltip :content="data.label" placement="bottom-start">
-                        <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
-                    </Tooltip>
-                
-                    <div class="api" slot="content">
-                        <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
-                    </div>
-                </Poptip>
-            </div>
-        
-
-
-            <div 
-                class="actual"
-                :style="{
-                    width:actualDetail.width * minCalibration+'px',
-                    left:actualDetail.office * minCalibration + 'px'
-                }"
-                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-            >
-                <span  v-if="type == 'edit'">{{data.label}}</span>
-                <Poptip  v-if="type!='edit'" placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
-                    <Tooltip :content="data.label" placement="bottom-start">
-                        <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
-                            {{data.label}}
-                        </div>
+            
+                <div 
+                    class="plan"
+                    :style="{
+                        width:planDetail.width * minCalibration + 'px',
+                        left:planDetail.office * minCalibration + 'px'
+                    }"
+                    v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
+                >
+                    <span  v-if="type == 'edit'">{{data.label}}</span>
+                    <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
+                        <Tooltip :content="data.label" placement="bottom-start">
+                            <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
+                        </Tooltip>
                     
-                    </Tooltip>
-                    <div class="api" slot="content">
-                        <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
-                    </div>
-                </Poptip>
+                        <div class="api" slot="content">
+                            <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
+                        </div>
+                    </Poptip>
+                </div>
+            
+
+
+                <div 
+                    class="actual"
+                    :style="{
+                        width:actualDetail.width * minCalibration+'px',
+                        left:actualDetail.office * minCalibration + 'px'
+                    }"
+                    v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                >
+                    <span  v-if="type == 'edit'">{{data.label}}</span>
+                    <Poptip  v-if="type!='edit'" placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
+                        <Tooltip :content="data.label" placement="bottom-start">
+                            <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
+                                {{data.label}}
+                            </div>
+                        
+                        </Tooltip>
+                        <div class="api" slot="content">
+                            <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
+                        </div>
+                    </Poptip>
+                </div>
             </div>
+        
         </div>
-       
-    </div>
-    
-        <Article 
-            v-if="data.children"
-            v-for="item in data.children" 
-            :key="item.id" 
-            :data="item"
-            :minCalibration="minCalibration"
-            :startDate="startDate"
-            :type="type"
-        />
     </div>
 </template>
 
@@ -102,15 +91,15 @@ export default {
         type:{
             type:String,
             default:'view'
-        },
-       
+        }
     },
     data(){
         return {
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
-            leftEndpoint:this.startDate,       
+            leftEndpoint:this.startDate, 
+            showData:[],      
         }
     },
     mounted(){
@@ -122,29 +111,20 @@ export default {
         }
     },
     methods:{
-        getFlagShow(event){
-            if(this.data.data){
-                return this.data.data.taskType == event
-            }else{
-                var type = 'STAGETASK';
-                return type == event;
+       getBgColor(){
+            if(this.data.chartType || !this.data.data.currentStatus){
+                return "#fff";
             }
-
-        },
-        getBgColor(){
-                if(this.data.chartType || !this.data.data.currentStatus){
-                    return "#fff";
-                }
-                if(this.data.data.currentStatus<0){
-                    return "#FFCDCD"
-                }else if(this.data.data.currentStatus>0){
-                    return '#FFECD4';
-                }else{
-                    return "#E0F2CD"
-                }
-            
-            
-        },
+            if(this.data.data.currentStatus<0){
+                return "#FFCDCD"
+            }else if(this.data.data.currentStatus>0){
+                return '#FFECD4';
+            }else{
+                return "#E0F2CD"
+            }
+           
+          
+       },
        
        getBoxWidthAndOffice(){
            
@@ -158,8 +138,6 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
             var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-
-           
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,officeEnd)
@@ -172,7 +150,6 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
-             console.log(officeStart,officeEnd,"------")
        },
        getEndpointDate(){
             var arr = [];
@@ -212,7 +189,7 @@ export default {
 <style lang="less" scoped>
 .article{
     position: relative;
-    padding: 8px 0px;
+    padding: 10px 0px;
     .label{
         width: 100%;
         height: 100%;

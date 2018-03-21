@@ -2,104 +2,127 @@
     <div>
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
-            <div class="hander" >
-                <div style="display:inline-block;margin-top: 6px;">
-                     <span style="vertical-align:middle;">项目计划</span>
-                     <span 
-                        class="article" 
-                        style="background:#4F9EED;vertical-align:middle;"
-                    ></span>
-                </div>
-                <div style="display:inline-block;margin-left:40px;">
-                    <span style="vertical-align:middle;">当前进展</span>
-                    <span 
-                        class="article" 
-                        style="background:#FDBA4D;vertical-align:middle;"
-                    ></span>
-                </div>
+           
+                <div class="hander" >
+                    <div style="display:inline-block;margin-top: 6px;">
+                        <span style="vertical-align:middle;">项目计划</span>
+                        <span 
+                            class="article" 
+                            style="background:#4F9EED;vertical-align:middle;"
+                        ></span>
+                    </div>
+                    <div style="display:inline-block;margin-left:40px;">
+                        <span style="vertical-align:middle;">当前进展</span>
+                        <span 
+                            class="article" 
+                            style="background:#FDBA4D;vertical-align:middle;"
+                        ></span>
+                    </div>
                 
-                <Select 
-                    v-model="barType" 
-                    @on-change="selectChange"
-                    style="width:200px;float:right;margin-right:20px;"
-                >
-                    <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-                 
-                <span style="float:right;margin-top:6px;margin-right:20px;margin-left:40px;font-size:14px;color:#333333;">
-                   时间轴最小刻度
-                </span>
 
-                <Form label-position="left" style="float:right;">      
-                        <KrField 
-                            v-if="mask"
-                            type="selectTree" 
-                            :data="treeData" 
-                            @okClick="treeClick"
-                        />
-                </Form>
+                        <Select 
+                            v-model="barType" 
+                            @on-change="selectChange"
+                            style="width:200px;float:right;margin-right:20px;"
+                        >
+                            <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                        
+                        <span style="float:right;margin-top:6px;margin-right:20px;margin-left:40px;font-size:14px;color:#333333;">
+                        时间轴最小刻度
+                        </span>
 
-                <span style="float:right;margin-top:8px;margin-right:20px;font-size:14px;color:#333333;">
-                   甘特图显示任务项
-                </span>
+                        <Form label-position="left" style="float:right;">      
+                                <KrField 
+                                    v-if="mask"
+                                    type="selectTree" 
+                                    :data="treeData" 
+                                    @okClick="treeClick"
+                                />
+                        </Form>
 
-            </div>
+                        <span style="float:right;margin-top:8px;margin-right:20px;font-size:14px;color:#333333;">
+                        甘特图显示任务项
+                        </span>
+
+                    </div>
+
 
             <div 
-                ref="rightDom" 
+               
                 class="right-draw" 
-                style="overflow:auto;"
+                style="overflow:hidden;"
             >
-                <div v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
-                    <div :style="{width:dayAllNum*minCalibration+'px'}">
-                        <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
-                            <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
-                        </div>
-                        <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
-                            <DrawMonth 
-                                v-for="( item ) in showData" 
-                                :key="item.id"  
-                                :dayNum="item.dayNum" 
-                                :data="item"
-                                :minCalibration="minCalibration"
-                            />
-                        </div>
-                        <div v-if="barType=='week'" class='week-bar'>
-                            <DrawWeek 
-                                v-for="(item) in weeks" 
-                                :key="item.id" 
-                                :data="item" 
-                                :minCalibration="minCalibration"
-                            />
-                        </div>
-                        
-                        <div v-if="barType=='day'" class='day-bar' >
-                            <DrawDay 
-                                v-for="( item ) in showData" 
-                                :key="item.id" :data="item"  
-                                :dayNum="item.dayNum"
-                                :minCalibration="minCalibration"
-                            />
+                 <div style="overflow:hidden;width:100%;position:relative;"  >
+                    <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
+                        <div :style="{width:dayAllNum*minCalibration+'px'}">
+                            <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
+                                <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
+                            </div>
+                            <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
+                                <DrawMonth 
+                                    v-for="( item ) in showData" 
+                                    :key="item.id"  
+                                    :dayNum="item.dayNum" 
+                                    :data="item"
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
+                            <div v-if="barType=='week'" class='week-bar'>
+                                <DrawWeek 
+                                    v-for="(item) in weeks" 
+                                    :key="item.id" 
+                                    :data="item" 
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
+                            
+                            <div v-if="barType=='day'" class='day-bar' >
+                                <DrawDay 
+                                    v-for="( item ) in showData" 
+                                    :key="item.id" :data="item"  
+                                    :dayNum="item.dayNum"
+                                    :minCalibration="minCalibration"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div    
-                    class="content"
-                    :style="{width:dayAllNum*minCalibration+'px'}"
+
+                 </div>
+                <div
                     @scroll="rightScroll"
                     id="vue-chart-right-draw-content"
                 >
-                  
-                    <Article 
-                        v-if="leftEndpoint"
-                        :minCalibration="minCalibration"
-                        :startDate="leftEndpoint"
-                        :data="item"
-                        style="position:relative;" 
-                        v-for="item in data" 
-                        :key="item.id"
-                        :type="type"
-                    />
+                    <div    
+                        class="content"
+                        :style="{width:dayAllNum*minCalibration+'px'}"
+                       
+                    >
+                    
+                        <EditArticle 
+                            v-if="leftEndpoint && type== 'view'"
+                            :minCalibration="minCalibration"
+                            :startDate="leftEndpoint"
+                            :data="item"
+                            v-for="item in data" 
+                            :key="item.id"
+                            :type="type"
+                        />
+                         <!-- <Article 
+                            v-if="leftEndpoint && type== 'view'"
+                            :minCalibration="minCalibration"
+                            :startDate="leftEndpoint"
+                            v-for="item in treeData"
+                            :data="treeData"
+                            :key="item.id"
+                        /> -->
+                        <ViewArticle  
+                            v-for="item in treeData"
+                            :data="item"
+                            :key="item.id" 
+                        />
+                    </div>
+
                     <div style="height:1000px"></div>
                 </div>
             </div>
@@ -115,15 +138,17 @@ import dateUtils from 'vue-dateutils';
 import DrawDay from './DrawDay';
 import DrawMonth from './DrawMonth';
 import DrawWeek from './DrawWeek';
-import Article from './Article';
+import EditArticle from './EditArticle';
+import ViewArticle from './ViewArticle';
 import KrField from '~/components/KrField';
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
-        Article,
-        KrField
+        EditArticle,
+        KrField,
+        ViewArticle
     },
     props:{
         data:{
@@ -192,6 +217,7 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
+        console.log(this.treeData,"oooooooooo------")
     },
     updated(){
         if(this.treeData.length){
@@ -405,6 +431,11 @@ export default {
             return obj;
         },
         rightScroll(event){
+            var el = event.target;
+            var top = el.scrollTop;
+            var left = el.scrollLeft;
+            this.$refs.rightBar.style.left = -left+'px';
+
             this.$emit('scroll',event);
         }
     },
@@ -454,15 +485,20 @@ export default {
             left: 271px;
             right: 0px;
         }
-        .content{
+        #vue-chart-right-draw-content{
             max-height:500px;
-            overflow:scroll;
+            width: 100%;
+            overflow:auto;
+        }
+        .content{
+          
+           
             .every-col{
                 height: 70px;
                 border-top: 1px solid #E1E6EB;;
                 border-bottom: 1px solid #E1E6EB;
             }
-            //overflow:-webkit-paged-x;
+            overflow:-webkit-paged-x;
         }
         .hander{
             margin-top:20px;
@@ -498,6 +534,7 @@ export default {
         }
         
         .bar{
+            position: relative;
             border-top: 1px solid #E1E6EB;
         }
    }

@@ -2,7 +2,7 @@
 <template>
     <div >
     <div class="every-col" :data-chart="data.t_id" >
-        <FlagLabel v-if="getFlagShow('MEETING')" label="123" offset="20" minCalibration="50" type="huangqi"/>
+        <!-- <FlagLabel v-if="getFlagShow('MEETING')" label="123" offset="20" minCalibration="50" type="huangqi"/> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{
@@ -132,12 +132,12 @@ export default {
 
         },
         getBgColor(){
-                if(this.data.chartType || !this.data.data.currentStatus){
+                if(this.data.chartType || !this.data.data.progressStatus){
                     return "#fff";
                 }
-                if(this.data.data.currentStatus<0){
+                if(this.data.data.progressStatus<0){
                     return "#FFCDCD"
-                }else if(this.data.data.currentStatus>0){
+                }else if(this.data.data.progressStatus>0){
                     return '#FFECD4';
                 }else{
                     return "#E0F2CD"
@@ -156,7 +156,7 @@ export default {
             var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
+            var officeStart = this.startDate.year+"-"+this.startDate.month+"-"+1;
             var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
 
            
@@ -172,6 +172,7 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
+           console.log(officeStart,"ooooooo")
             
        },
        getEndpointDate(){

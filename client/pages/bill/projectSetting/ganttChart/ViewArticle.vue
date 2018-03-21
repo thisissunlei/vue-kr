@@ -1,21 +1,21 @@
 <template>
-  <div>
-       <div 
-        v-if="showData.length"
-        v-for="channels in showData"
-        :key="channels.id"
-       >
-           <Article 
-                v-if="leftEndpoint"
-                :minCalibration="minCalibration"
-                :startDate="leftEndpoint"
-                v-for="item in channels"
-                :data="item"
-                :key="item.id"
-            />
-           
-          
-       </div>
+  <div class="view-article">
+        <div 
+            v-if="showData.length"
+            v-for="channels in showData"
+            :key="channels.id"
+        >
+            <Article 
+                    v-if="leftEndpoint"
+                    :minCalibration="minCalibration"
+                    :startDate="leftEndpoint"
+                    v-for="item in channels"
+                    :data="item"
+                    :key="item.id"
+                />
+            
+            
+        </div>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
     },
     props:{
         data:{
-            type:Array
+            type:Object
         },
         leftEndpoint:{
             type:Object,
@@ -87,16 +87,11 @@ export default {
         }
     },
     mounted(){
-        this.showData = [].concat(this.allDataFor(this.tasks));
-        var leftDom = document.querySelectorAll('div[data-box-id="'+this.tasks.t_id+'"]')[0];
-        console.log('tipgss-',leftDom);
-        // var rightHeight = this.showData.length * 70;
-        // var leftHeight =leftDom.style.height; 
-        // if(leftHeight>rightHeight){
-            
-        // }else{
-
-        // }
+        if(this.data.tasks && this.data.tasks.length){
+            this.showData = [].concat(this.allDataFor(this.data.tasks));
+        }
+      
+      
     },
     methods:{
        
@@ -173,6 +168,8 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-       
+        height: 70px;
+        border-top: 1px solid #E1E6EB;;
+        border-bottom: 1px solid #E1E6EB;
     }
 </style>

@@ -12,8 +12,8 @@
                 v-if="!isLoading && listData.length" 
                 :data="listData"
                 type="edit"
-                startTime="2018-3-20"
-                endTime="2018-9-20"
+                :startTime="this.getStartDay()" 
+                :endTime="this.getEndDay()"
                 @scroll="chartScroll"
             >
                 <div class='detail-detail' slot="leftBar">
@@ -114,11 +114,13 @@ export default {
                 page:1,
                 pageSize:15
             },
+            difference:7,
             watchRecord:[
                 {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
                 {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"}
             ],
-
+            endTime:'',
+            startTime:this.getStartDay(),
             isLoading:true,
         }
     },
@@ -130,6 +132,40 @@ export default {
          this.getListData();  
     },
     methods:{
+         //获取今天日期
+        getStartDay(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            return today;
+        },
+        getEndDay(){
+           
+             if(this.params.endTime){
+                return this.params.endTime;
+            }
+           
+            var today =this.getStartDay();
+            var start = today.split("-");
+            var year = +start[0],
+                month = +start[1],
+                day= +start[2];
+
+            for(var i=0;i<this.difference;i++){
+              
+               
+                if(month > 12){
+                    month = month-12;
+                    year += 1;
+                }
+                month ++ 
+            }
+            if(month > 12){
+                month = month-12;
+                year += 1;
+            }
+          
+            return year+"-"+month+"-"+day;
+            
+        },
         //获取树数据
         getListData(){
             let params={

@@ -100,7 +100,7 @@
                     >
                     
                         <EditArticle 
-                            v-if="leftEndpoint && type== 'edit'"
+                            v-if="leftEndpoint.year && type== 'edit'"
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
                             :data="item"
@@ -117,9 +117,10 @@
                             :key="item.id"
                         /> -->
                         <ViewArticle  
-                            v-if="type== 'view'"
+
+                            v-if="leftEndpoint.year && type== 'view'"
                             v-for="item in listData"
-                            :data="listData"
+                            :data="item"
                             :key="item.id" 
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
@@ -219,11 +220,14 @@ export default {
         }
     },
     mounted(){
+       
+       
         this.init(this.startTime,this.endTime);
         this.getDayBarWidth()
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
+         console.log(this.startTime,"========",this.endTime);
     },
     updated(){
         if(this.treeData.length){
@@ -320,7 +324,6 @@ export default {
                 year:+end[0],
                 month:+end[1]
             }
-                 console.log(startObj,endObj,"ooooooo")
             var showData = [];
             for(var month=startObj.month,year=startObj.year;!(month==endObj.month && year == endObj.year); month++){
                 if(month >12){

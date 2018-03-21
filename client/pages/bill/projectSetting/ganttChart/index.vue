@@ -84,14 +84,27 @@
                        
                     >
                     
-                        <Article 
-                            v-if="leftEndpoint"
+                        <EditArticle 
+                            v-if="leftEndpoint && type== 'view'"
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
                             :data="item"
                             v-for="item in data" 
                             :key="item.id"
                             :type="type"
+                        />
+                         <!-- <Article 
+                            v-if="leftEndpoint && type== 'view'"
+                            :minCalibration="minCalibration"
+                            :startDate="leftEndpoint"
+                            v-for="item in treeData"
+                            :data="treeData"
+                            :key="item.id"
+                        /> -->
+                        <ViewArticle  
+                            v-for="item in treeData"
+                            :data="item"
+                            :key="item.id" 
                         />
                     </div>
 
@@ -110,15 +123,17 @@ import dateUtils from 'vue-dateutils';
 import DrawDay from './DrawDay';
 import DrawMonth from './DrawMonth';
 import DrawWeek from './DrawWeek';
-import Article from './Article';
+import EditArticle from './EditArticle';
+import ViewArticle from './ViewArticle';
 import KrField from '~/components/KrField';
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
-        Article,
-        KrField
+        EditArticle,
+        KrField,
+        ViewArticle
     },
     props:{
         data:{
@@ -187,13 +202,13 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
+        console.log(this.treeData,"oooooooooo------")
     },
     updated(){
         if(this.treeData.length){
            this.recursiveFn(this.treeData);
         }
         this.mask=this.treeData.length?true:false;
-        console.log('----',this.treeData);
     },
     methods:{
         //递归赋值

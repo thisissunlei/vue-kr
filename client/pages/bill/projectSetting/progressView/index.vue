@@ -7,7 +7,8 @@
            :startTime="getStartDay()" 
            :endTime="getEndDay()"
            @scroll="chartScroll"
-           :treeData="listData"
+           :treeData="treeData"
+           :listData="listData"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -77,7 +78,7 @@ export default {
         //获取进度列表数据
         getListData(params){
             this.$http.get('project-progress-list',params).then((response)=>{
-                this.listData=response.data;
+                this.listData=response.data.items;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,

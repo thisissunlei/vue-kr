@@ -109,6 +109,7 @@ export default {
         if (this.data.label == "kkk") {
             
         }
+        console.log('data--',this.data);
     },
     methods:{
        getBgColor(){

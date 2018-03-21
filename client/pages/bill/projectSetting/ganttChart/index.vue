@@ -100,7 +100,7 @@
                     >
                     
                         <EditArticle 
-                            v-if="leftEndpoint && type== 'view'"
+                            v-if="leftEndpoint && type== 'edit'"
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
                             :data="item"
@@ -112,14 +112,17 @@
                             v-if="leftEndpoint && type== 'view'"
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
-                            v-for="item in treeData"
-                            :data="treeData"
+                            v-for="item in listData"
+                            :data="listData"
                             :key="item.id"
                         /> -->
                         <ViewArticle  
-                            v-for="item in treeData"
-                            :data="item"
+                            v-if="type== 'view'"
+                            v-for="item in listData"
+                            :data="listData"
                             :key="item.id" 
+                            :leftEndpoint="leftEndpoint"
+                            :minCalibration="minCalibration"
                         />
                     </div>
 
@@ -168,7 +171,11 @@ export default {
         treeData:{
             default:()=>[],
             type:Array,
-        }
+        },
+        listData:{
+            default:()=>[],
+            type:Array,
+        },
     },
     data(){
         return{
@@ -217,7 +224,6 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
-        console.log(this.treeData,"oooooooooo------")
     },
     updated(){
         if(this.treeData.length){

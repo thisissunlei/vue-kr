@@ -1,6 +1,14 @@
 <template>
     <div>
-       <FlagLabel label="123" offset="20" minCalibration="50" type="huangqi"/>
+       <FlagLabel label="123" 
+            :data="timeObj"
+            :startDate="{
+                year:2018,
+                month:3,
+                dayNum:31
+            }"
+            minCalibration="50"
+        />
     </div>
 </template>
 
@@ -14,7 +22,12 @@ export default {
     },
     data() {
         return{
-
+            timeObj:{
+                actualEndTime:1521590400000,
+                actualStartTime:1520726400000,
+                planEndTime:1521504000000,
+                planStartTime:1520640000000
+            }
         }
     },
     methods:{

@@ -70,7 +70,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:'2018-6-7',
+                endTime:'',
                 startTime:this.getStartDay(),
                 pageSize:6,
                 page:1,

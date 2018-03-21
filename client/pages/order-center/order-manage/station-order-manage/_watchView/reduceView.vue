@@ -65,23 +65,7 @@
 				</div>
 			</DetailStyle>
 			<DetailStyle info="相关规则">
-				<div class="formula">
-					<h4>服务费总额计算公式</h4>
-					<div>服务费总额=月服务费*月数+日服务费*日数（除整月、拼凑整月外的零散天数）</div>
-					<div> 日服务费=月服务费/30</div>
-					<div>月服务费=系统自定义</div>
-				</div>
-				<div class="formula">
-					<h4 style="margin-top:15px">日费用的计算公式</h4>
-					<div>日费用（整月）=月服务费/日历月实际天数</div>
-					<div>日费用（拼凑整月）=月服务费/拼凑整月的实际天数</div>
-					<div>日费用（非整月）=月服务费/30</div>
-					<div>日费用（历史数据）=分期金额（历史数据）/分期总天数（历史数据）</div>
-				</div>
-				<div class="formula">
-					<h4 style="margin-top:15px">分期金额的计算公式</h4>
-					<div>首期金额=零散天（日历月中实际零散天数）日费用之和+付款方式（月付/季付等）*月服务费</div>
-				</div>
+				<div v-html="basicInfo.versionRemark" style="margin-left:12px"></div>
 			</DetailStyle>
 		</div>
 	</div>	
@@ -108,6 +92,7 @@ export default {
 	},
 	data(){
 		return{
+			versionRemark:'',
 			showButton:false,
 			showAll:false,
 			installments:[],
@@ -197,7 +182,6 @@ export default {
 			};
 			this.$http.get('reduce-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
-
 					this.installments = response.data.installments;
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';

@@ -8,7 +8,7 @@
                 :placeholder="placeholder"     
             />
         </div>
-        <div  class="select" v-if="mask" >
+        <div  class="select" v-if="mask" v-click-outside="clickedOutside">
             <div class="tree-content">
                  <Tree 
                     :data="nowData" 
@@ -49,6 +49,15 @@ export default {
             nowData:this.data,
 		}
     },
+    watch:{
+        $props:{
+            deep:true,
+            handler(nextProps) {
+               this.nowData=nextProps.data;
+               this.treeInput='';
+            }
+        }
+    },
     /*updated(){
          var htmlBox=document.getElementById('treeScroll');
          if(htmlBox){
@@ -57,13 +66,45 @@ export default {
             this.oldContent = this.htmlBox.innerHTML;
          }
     },*/
+    directives:{
+        'click-outside':{
+            bind: function (el, binding, vNode) {
+                // Provided expression must evaluate to a function.
+                if (typeof binding.value !== 'function') {
+                    var compName = vNode.context.name;
+                    var warn = '[Vue-click-outside:] provided expression ' + binding.expression + ' is not a function, but has to be';
+                    if (compName) {
+                        warn += 'Found in component ' + compName;
+                    }
+                    console.warn(warn);
+                }
+                // Define Handler and cache it on the element
+                var handler = function(e) {
+                    if (!el.contains(e.target) && el !== e.target) {
+                        binding.value(e);
+                    }
+                };
+                el.__vueClickOutside__ = handler;
+                // add Event Listeners
+                document.addEventListener('click', handler);
+            },
+            unbind: function (el, binding) {
+                // Remove Event Listeners
+                document.removeEventListener('click', el.__vueClickOutside__);
+                el.__vueClickOutside__ = null;
+            }
+        }
+    },
     methods:{
+        clickedOutside: function () {
+            this.mask = false;
+        },
         checkChange(event){
             this.checkValue=event;
             this.$emit('checkChange',event)
         },
         inputClick(){
-            this.mask=true;
+            this.clearClick();
         },
         toggleExpand(event){
            this.nowData = this.changeTreeData(event,this.nowData);
@@ -75,7 +116,7 @@ export default {
             // this.$emit('search',searchKey);
         },
         sureClick(){
-            this.mask=false;
+            this.clearClick();
             var str='';
             if(this.checkValue.length){
                 this.checkValue.map((item,index)=>{
@@ -88,9 +129,10 @@ export default {
                 })
             }
             this.treeInput=str;
+            this.$emit('okClick',this.checkValue);
         },
         clearClick(){
-            this.mask=false;
+            this.mask=!this.mask;
         },
 
         changeTreeData(event,data){
@@ -111,8 +153,7 @@ export default {
                 if( searchKey && item.title.indexOf(searchKey) != -1 ){
                     item.expand = true
                     isOpen = true;
-                    console.log(item.title,"------")
-                   
+                    console.log(item.title,"------")    
                 }else{
                      item.expand = false;
                 }   
@@ -121,7 +162,7 @@ export default {
                     let obj = this.searchTreeData(searchKey,item.children);
                     if(obj.isOpen){
                         item.expand = true;
-                         isOpen = true;
+                        isOpen = true;
                     }
                     item.children = obj.allData;
                 }
@@ -144,8 +185,7 @@ export default {
                 max-height: 150px;
                 overflow: auto;
                 margin: 5px 0;
-                padding: 5px 0;
-               
+                padding: 5px 10px;
                 background-color: #fff;
                 box-sizing: border-box;
             }
@@ -157,6 +197,7 @@ export default {
             z-index: 900;
             .footer{
                text-align: center;
+               background: #eee;
             }
 
         }

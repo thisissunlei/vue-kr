@@ -26,12 +26,23 @@
                     <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                  
-                <!-- <KrField 
-                    v-if="mask"
-                    type="selectTree" 
-                    :data="treeData" 
-                    label="甘特图显示任务项" 
-                 /> -->
+                <span style="float:right;margin-top:6px;margin-right:20px;margin-left:40px;font-size:14px;color:#333333;">
+                   时间轴最小刻度
+                </span>
+
+                <Form label-position="left" style="float:right;">      
+                        <KrField 
+                            v-if="mask"
+                            type="selectTree" 
+                            :data="treeData" 
+                            @okClick="treeClick"
+                        />
+                </Form>
+
+                <span style="float:right;margin-top:8px;margin-right:20px;font-size:14px;color:#333333;">
+                   甘特图显示任务项
+                </span>
+
             </div>
 
             <div 
@@ -187,9 +198,11 @@ export default {
            this.recursiveFn(this.treeData);
         }
         this.mask=this.treeData.length?true:false;
-        console.log('----',this.treeData);
     },
     methods:{
+        treeClick(params){
+            console.log('gggg',params);
+        },
         //递归赋值
         recursiveFn(data){
             data.map((item,index)=>{

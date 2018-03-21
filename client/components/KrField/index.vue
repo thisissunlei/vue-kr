@@ -99,6 +99,7 @@
             v-if="type==='selectTree'"
             :data = 'data'
             @checkChange="checkChange"
+            @okClick="okClick"
         />
         <UpFiles 
             v-if="type==='upFiles'"  

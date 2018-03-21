@@ -31,7 +31,7 @@
                     name="imgUrl"
                     v-if="!this.imgUrl"
                     :show-upload-list="false"
-                    :format="['jpg','jpeg','png']"
+                    :format="['jpg','gif','png']"
                     with-credentials
                     :on-success="handleSuccess"
                     :on-error="handleError"

@@ -45,7 +45,7 @@
                 title="编辑任务"
                 width="660"
             >
-                <EditTask :id="editId"  @bindData="onEditChange" :editRecord="editRecord" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
                     <Button type="ghost" style="margin-left:8px" @click="cancelTask">删除任务</Button>
@@ -119,10 +119,6 @@ export default {
                 {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"}
             ],
 
-            editRecord:[
-                {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
-                {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"} 
-            ],
             isLoading:true,
         }
     },
@@ -306,6 +302,12 @@ export default {
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               leftDetail.scrollTop=chartDom.scrollTop;
               this.scrollBottom(chartDom);
+              if(chartDom.scrollLeft>=chartDom.clientWidth){
+                  console.log('划到最右边了');
+              }
+              if(chartDom.scrollLeft<10){
+                  console.log('滑倒最左边了');
+              }
           }
      }
 }

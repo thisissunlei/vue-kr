@@ -72,21 +72,33 @@
                         <div style="text-align:right">{{formItem.descr?formItem.descr.length+"/500":0+"/500"}}</div>
                 </FormItem>
 
-                <!--<div class='edit-record'>
-                    <span class='title-record'>编辑记录</span>
-                    <div
-                        class='record-wrap'
-                        v-for="item in editRecord" 
-                        :key="item.time"
-                        >
-                            <div class='first'><span class='circle'></span>{{item.time}}</div>
-                            <div class='second'>
-                                <Poptip trigger="hover" :content=item.who placement="right">
-                                  {{item.detail}}
-                                </Poptip>
-                            </div>
+
+              <div class='edit-record'>
+                    <FormItem label="内部备注" style="width:545px;margin-left:10px;">
+                            <Input v-model="formItem.operDescr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入内部备注..."/>
+                            <div style="text-align:right">{{formItem.operDescr?formItem.operDescr.length+"/500":0+"/500"}}</div>
+                    </FormItem>
+   
+                    <div class='title-wrap'>
+                        <span class='title-record'>编辑记录</span>
+                        <div
+                            class='record-wrap'
+                            v-for="item in getEdit.operLogs" 
+                            :key="item.id"
+                            >
+                                <div class='first'><span class='circle'></span>{{item.uTime}}</div>
+                                <div style="display:inline-block;">
+                                    <div class='second'>
+                                        <span style="padding-right: 10px;">{{item.updatorName}}</span>
+                                        <span>{{item.comment}}</span>
+                                    </div>
+                                    <div class='third'>
+                                        {{item.descr}}
+                                    </div>
+                                </div>
+                        </div>
                     </div>
-                </div>-->
+                </div>
 
          </Form>
   </div>
@@ -99,10 +111,6 @@ export default {
     props:{
         id:{
             type:[Number,String]
-        },
-        editRecord:{
-            type:Array,
-            default:[]
         },
         getEdit:{
             type:Object,
@@ -119,7 +127,8 @@ export default {
                    planStartTime:'',
                    actualStartTime:'',
                    actualEndTime:'',
-                   descr:''
+                   descr:'',
+                   operDescr:''
             },
             ruleValidate: {
                 name: [
@@ -201,12 +210,17 @@ export default {
     }
     .edit-record{
         padding:10px;
-        margin-left: 30px;
-        width:562px;
+        margin-left: 12px;
+        width:600px;
         display:inline-block;
         background: #F6F6F6;
         border-radius: 4px;
         box-sizing: border-box;
+        max-height: 400px;
+        overflow: scroll;
+        .title-wrap{
+            padding-left: 20px;
+        }
         .title-record{
             font-family: PingFang-SC-Medium;
             font-size: 14px;
@@ -222,6 +236,7 @@ export default {
                 color: #666666;
                 display:inline-block;
                 padding-right:30px;
+                vertical-align: top;
                 .circle{
                     width:2px;
                     height:2px;
@@ -237,6 +252,15 @@ export default {
                 font-family: PingFang-SC-Regular;
                 font-size: 14px;
                 color: #666666;
+            }
+            .third{
+                padding:10px;
+                width: 330px;
+                background: #fff;
+                margin-top: 10px;
+                font-family: PingFang-SC-Regular;
+                font-size: 12px;
+                color: #666;
             }
         }
     }

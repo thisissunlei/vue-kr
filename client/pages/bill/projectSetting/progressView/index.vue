@@ -4,8 +4,8 @@
         <!-- 甘特图部分 -->
         <GanttChart 
            type='view' 
-           :startTime="getStartDay()" 
-           :endTime="getEndDay()"
+           :startTime="this.getStartDay()" 
+           :endTime="this.getEndDay()"
            @scroll="chartScroll"
            :treeData="treeData"
            :listData="listData"
@@ -53,9 +53,10 @@ export default {
     },
     data(){
         return{
+            difference:7,
             params:{
-                endTime:this.getEndDay()+' 00:00:00',
-                startTime:this.getStartDay()+' 00:00:00',
+                endTime:'2018-6-7',
+                startTime:this.getStartDay(),
                 pageSize:6,
                 page:1,
                 status:2,
@@ -64,7 +65,7 @@ export default {
             treeParams:{
                statusType:"PREPARE" 
             },
-            difference:7,
+           
             listData:[],
             treeData:[],
             mask:true
@@ -77,6 +78,8 @@ export default {
     methods:{  
         //获取进度列表数据
         getListData(params){
+            params.endTime = params.endTime + ' 00:00:00';
+            params.startTime = params.startTime + ' 00:00:00';
             this.$http.get('project-progress-list',params).then((response)=>{
                 this.listData=response.data.items;
             }).catch((error)=>{
@@ -121,11 +124,16 @@ export default {
             return today;
         },
         getEndDay(){
+             if(this.params.endTime){
+                return this.params.endTime;
+            }
+           
             var today =this.getStartDay();
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
                 day= +start[2];
+
             for(var i=0;i<this.difference;i++){
               
                
@@ -139,6 +147,7 @@ export default {
                 month = month-12;
                 year += 1;
             }
+          
             return year+"-"+month+"-"+day;
             
         },

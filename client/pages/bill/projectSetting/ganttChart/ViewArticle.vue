@@ -1,19 +1,20 @@
 <template>
   <div>
-       <div  
-        class="view-article"
-        v-for="(channel,index) in showData"
-        :key="index"
+       <div 
+        v-if="showData.length"
+        v-for="channels in showData"
+        :key="channels.id"
        >
-           <!-- <Article 
+           <Article 
                 v-if="leftEndpoint"
                 :minCalibration="minCalibration"
                 :startDate="leftEndpoint"
-                v-for="item in channel"
-                :data="channel"
-                :key="item.value"
-            /> -->
-            122334
+                v-for="item in channels"
+                :data="item"
+                :key="item.id"
+            />
+           
+          
        </div>
   </div>
 </template>
@@ -31,7 +32,7 @@ export default {
         },
         leftEndpoint:{
             type:Object,
-            default:{}
+         
         },
         minCalibration:{
             type:[String,Number],
@@ -41,14 +42,15 @@ export default {
         return{
             showData:[],
             channel:0,
+            isLoading:true,
             tasks:[
                 {
                     children:[],
                     data:{
-                        actualEndTime:'1520179200',
-                        actualStartTime:'1519833600',
-                        planEndTime:'1520179200',
-                        planStartTime:'1519833600',
+                        actualEndTime:1522944000000,
+                        actualStartTime:1522598400000,
+                        planEndTime:1522857600000,
+                        planStartTime:1522512000000,
                         taskType:'STAGETASK'
                     },
                     label:'123',
@@ -58,10 +60,10 @@ export default {
                 {
                     children:[],
                     data:{
-                        actualEndTime:'1520524800',
-                        actualStartTime:'1520092800',
-                        planEndTime:'1520524800',
-                        planStartTime:'1520092800',
+                        actualEndTime:1523116800000,
+                        actualStartTime:1522771200000,
+                        planEndTime:1523030400000,
+                        planStartTime:1522684800000,
                         taskType:'STAGETASK'
                     },
                     label:'1232',
@@ -71,10 +73,10 @@ export default {
                 {
                     children:[],
                     data:{
-                        actualEndTime:'1520784000',
-                        actualStartTime:'1520438400',
-                        planEndTime:'1520784000',
-                        planStartTime:'1520438400',
+                        actualEndTime:1523289600000,
+                        actualStartTime:1522944000000,
+                        planEndTime:1523203200000,
+                        planStartTime:1522857600000,
                         taskType:'STAGETASK'
                     },
                     label:'1233',
@@ -85,29 +87,32 @@ export default {
         }
     },
     mounted(){
-        this.allDataFor(this.tasks);
-        console.log('ddfff',this.showData);
+        this.showData = [].concat(this.allDataFor(this.tasks));
     },
     methods:{
+       
         //每一个任务的所有数据
         allDataFor(data){
-            this.showData[this.channel]=[data[0]];
+            var allArr = [];
+           allArr[this.channel]=[data[0]];
             for(var i=1;i<data.length;i++){
                 var everyStartDay = this.getMaxAndMin(data[i]).min;
-                var minChannel= this.showData[this.getChannelMin()];
+                var minChannel= allArr[this.getChannelMin(allArr)];
                 var minChannelEndData = minChannel[minChannel.length -1];
                 var minChannelEndDay = this.getMaxAndMin(minChannelEndData).max;
                 if(everyStartDay>minChannelEndDay){
-                    this.showData[this.getChannelMin()].push(data[i])
+                    allArr[this.getChannelMin(allArr)].push(data[i])
                 }else{
                     this.channel +=1;
-                    this.showData[this.channel]=[];
-                    this.showData[this.channel].push(data[i])
+                    allArr[this.channel]=[];
+                    allArr[this.channel].push(data[i])
                 }
             }
+            return allArr;
+           
         },
-        getChannelMin(){
-            var Obj = [].concat(this.showData)
+        getChannelMin(allArr){
+            var Obj = [].concat(allArr)
             var arr = [];
             var key = 1;
             for (var key in Obj) {
@@ -115,7 +120,7 @@ export default {
                 arr.push({
                     key:key,
                     data:everArr[everArr.length -1]
-                    });
+                });
             }
             
             var min = this.getMaxAndMin(arr[0].data).max;

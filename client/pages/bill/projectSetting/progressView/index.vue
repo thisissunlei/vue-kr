@@ -108,9 +108,13 @@ export default {
     },
     methods:{  
         //获取进度列表数据
-        getListData(params){
+        getListData(params,data){
             this.$http.get('project-progress-list',params).then((response)=>{
-                this.listData=response.data.items;
+                if(data){
+                    this.listData=this.listData.concat(response.data.items);
+                }else{
+                    this.listData=response.data.items;
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -161,12 +165,14 @@ export default {
             if(key=='name2'){
                 this.mask=false;
                 this.params.status = 1;
+                this.params.page=1;
                 this.getListData(this.params);
                 this.treeParams.statusType='INVEST';
                 this.getTreeData(this.treeParams);
             }else{
                 this.mask=true;
                 this.params.status = 2;
+                 this.params.page=1;
                 this.getListData(this.params);
                 this.treeParams.statusType='PREPARE';
                 this.getTreeData(this.treeParams);
@@ -223,8 +229,9 @@ export default {
             }
         },
         realFunc(){
+           console.log('func--');
            this.params.page+=1;
-           this.getListData(this.params);
+           this.getListData(this.params,'123');
         },
         scrollBottom(dom){
                 var htmlHeight = dom.scrollHeight;
@@ -240,19 +247,39 @@ export default {
             chartDom.scrollTop=leftList.scrollTop;
             this.scrollBottom(leftList);
         },
+        //通过年月获取日
+       getDaysInOneMonth(year, month){  
+            month = parseInt(month, 10);  
+            var d= new Date(year, month, 0);  
+            return d.getDate();  
+        },
+        //增加一个月
+        changeTime(time){
+            var times=time.split('-');
+            var middle=times[2].split(' 00');
+            var day=middle[0];
+            var year=times[0];
+            var month=times[1];
+            if(Number(month)+1>12){
+               year=Number(year)+1;
+               month=1;
+               this.getDaysInOneMonth(year,month); 
+            }else{
+               month=Number(month)+1;
+               this.getDaysInOneMonth(year,month); 
+            }
+            this.params.endTime=year+'-'+month+'-'+Number(day)+' 00:00:00';
+            this.getListData(this.params);
+        },
         chartScroll(){
             let leftList=document.getElementById('vue-chart-left-table-list');
             let chartDom=document.getElementById('vue-chart-right-draw-content');
             leftList.scrollTop=chartDom.scrollTop;
+            //下滑
             this.scrollBottom(chartDom);
+            //右滑
             if(chartDom.scrollLeft>=chartDom.clientWidth){
-                 if(!this.loading){
-                        return ;
-                 }
-                 setTimeout(() => {
-                        // this.getListData(this.params);
-                 },1000);
-
+                this.changeTime(this.params.endTime);
             }
             // if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');

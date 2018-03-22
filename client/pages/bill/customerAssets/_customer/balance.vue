@@ -106,11 +106,7 @@ import ChangeBalance from './changeBalance.vue';
                     operateType:'',
                 },
                 // 汇总数据
-                summaryData:[{
-                    balance:'143123213'
-                },{
-                    balance:'231233'
-                }],
+                summaryData:[],
                 page:1,
                 totalCount:1,
                 // 操作类型
@@ -126,9 +122,6 @@ import ChangeBalance from './changeBalance.vue';
                 },{
                     label:'退还',
                     value:'BACK'
-                },{
-                    label:'冻结押金',
-                    value:'LOCK_DESPOINT'
                 }],
 				allColumns:[
                     {

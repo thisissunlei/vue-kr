@@ -86,6 +86,7 @@
             v-if="type==='cascader'"
             :data="data"
             :value="value"
+            :mask="mask"
             :clearable='clearable'
             :placeholder="placeholder"
             :readOrEdit="readOrEdit"
@@ -175,6 +176,10 @@ export default {
             type:String
         },
         disabled:{
+            default:false,
+            type:Boolean
+        },
+        mask:{
             default:false,
             type:Boolean
         },

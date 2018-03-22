@@ -72,7 +72,7 @@ export default {
             params:{
                 endTime:this.getEndDay()+' 00:00:00',
                 startTime:this.getStartDay()+' 00:00:00',
-                pageSize:6,
+                pageSize:2,
                 page:1,
                 status:2,
                 taskTemplateIds:[]
@@ -84,8 +84,6 @@ export default {
             listData:[],
             treeData:[],
             mask:true,
-
-            loading:false
         }
     },
     mounted(){
@@ -110,10 +108,8 @@ export default {
     methods:{  
         //获取进度列表数据
         getListData(params){
-            this.loading=false;
             this.$http.get('project-progress-list',params).then((response)=>{
                 this.listData=response.data.items;
-                this.loading=true;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -197,18 +193,36 @@ export default {
             return year+"-"+month+"-"+day;
             
         },
+        // 简单的防抖动函数
+         throttle(func,delay) {
+            var timer = null;
+            var startTime = Date.now();
+
+            return function(){
+                var curTime = Date.now();
+                var remaining = delay-(curTime-startTime);
+                var context = this;
+                var args = arguments;
+
+                clearTimeout(timer);
+                if(remaining<=0){
+                    func.apply(context,args);
+                    startTime = Date.now();
+                }else{
+                    timer = setTimeout(func,remaining);
+                }
+            }
+        },
+        realFunc(){
+           this.params.page+=1;
+           this.getListData(this.params);
+        },
         scrollBottom(dom){
                 var htmlHeight = dom.scrollHeight;
                 var clientHeight = dom.clientHeight;
                 var scrollTop = dom.scrollTop;
-                if(scrollTop+clientHeight==htmlHeight){   
-                    if(!this.loading){
-                        return ;
-                    }
-                    setTimeout(() => {
-                         this.params.page+=1;
-                         this.getListData(this.params);
-                    },1000);
+                if(scrollTop+clientHeight==htmlHeight){
+                     this.throttle(this.realFunc(),1000)
                 }
         },
         scroll(event){
@@ -223,12 +237,7 @@ export default {
             leftList.scrollTop=chartDom.scrollTop;
             this.scrollBottom(chartDom);
             if(chartDom.scrollLeft>=chartDom.clientWidth){
-                 if(!this.loading){
-                        return ;
-                 }
-                 setTimeout(() => {
-                        this.getListData(this.params);
-                 },1000);
+                
             }
             // if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');

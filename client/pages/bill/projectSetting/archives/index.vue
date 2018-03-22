@@ -28,7 +28,7 @@
         cancel-text="取消"
         width="373"
      >
-        <AddArchives @bindData="onAddArchives" ref="fromFieldArchives"/> 
+        <AddArchives @bindData="onAddArchives" ref="fromFieldArchives" v-if="openNewArchives"/> 
         <div slot="footer" style="text-align:center;">
             <Button type="primary" @click="submitAddArchives('formRight')">完成并创建</Button>
         </div>

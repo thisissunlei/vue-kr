@@ -1,6 +1,7 @@
 import thousand from './thousand'; 
 import addEvent from './addEvent';
 import dataType from './dataType';
+import throttle from './throttle';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -136,6 +137,10 @@ import dataType from './dataType';
         return iDays  
     }
 
+    function debounce(delay, atBegin, callback) {
+        return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+    };
+
    export default{
     smalltoBIG,
     clearForm,
@@ -149,7 +154,8 @@ import dataType from './dataType';
     addEvent,
     dataType,
     getDaysInOneMonth,
-    dateDiff
+    dateDiff,
+    debounce
    }
 
 

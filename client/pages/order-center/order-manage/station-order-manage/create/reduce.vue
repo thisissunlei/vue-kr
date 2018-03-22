@@ -221,7 +221,8 @@ import utils from '~/plugins/utils';
                         title:'Success!'
                     });
                      window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/reduceView';
-                     window.opener.location.href=window.opener.location.href;  
+                     // 欢哥让删掉列表刷新
+                     // window.opener.location.href=window.opener.location.href;  
                      
                       // window.close();
                       // window.opener.location.reload();

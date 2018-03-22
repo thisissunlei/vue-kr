@@ -630,7 +630,8 @@ import utils from '~/plugins/utils';
                 this.disabled = true;
                  this.$http.post('save-join', formItem).then( r => {
                     window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/joinView';
-                     window.opener.location.href=window.opener.location.href;  
+                    //欢哥让删掉列表刷新
+                     // window.opener.location.href=window.opener.location.href;  
                 }).catch( e => {
                      _this.$Notice.error({
                         title:e.message

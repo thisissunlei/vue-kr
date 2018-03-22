@@ -528,7 +528,7 @@ import utils from '~/plugins/utils';
                     _this.selecedArr = data.orderSeatDetailVo;
                     // _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
-                    _this.depositAmount = data.deposit;
+                    _this.depositAmount = data.deposit+'';
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     // _this.getStationAmount()
                     _this.saleAmount = data.tactiscAmount

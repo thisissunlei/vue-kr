@@ -583,7 +583,7 @@ import utils from '~/plugins/utils';
                     _this.changeBeginTime(data.startDate)
                     _this.stationList = data.orderSeatDetailVo;
                     _this.formItem.firstPayTime = new Date(data.firstPayTime);
-                    _this.selectDeposit(data.deposit)
+                    _this.selectDeposit(data.deposit+'')
                     _this.selectPayType(data.installmentType);
                     _this.saleAmount = data.tactiscAmount;
                     _this.stationAmount =  utils.smalltoBIG(data.seatRentAmount);

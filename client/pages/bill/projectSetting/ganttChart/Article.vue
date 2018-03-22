@@ -49,7 +49,11 @@
                         
                         </Tooltip>
                         <div class="api" slot="content">
-                            <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
+                            <!-- <ViewArticle                          
+                                :data="secondObj"  
+                                :leftEndpoint="leftEndpoint"
+                                :minCalibration="minCalibration"
+                            />  -->
                         </div>
                     </Poptip>
                 </div>
@@ -64,11 +68,13 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
+import ViewArticle from './ViewArticle';
 export default {
     name:'Article',
     components:{
         SpecificPlan,
-        FlagLabel
+        FlagLabel,
+        ViewArticle
     },
     props:{
         minCalibration:{
@@ -98,7 +104,7 @@ export default {
             planDetail:{},
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
-            showData:[],      
+            secondObj:{}     
         }
     },
     mounted(){
@@ -182,7 +188,13 @@ export default {
        },
        //获取二级部分数据
        getSpecificData(){
-
+           this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
+                   this.secondObj.tasks=response.data.items;
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
        }
     }
 }

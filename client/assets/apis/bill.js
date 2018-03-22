@@ -160,6 +160,13 @@ export default  {
     'sure-sign-project': {
       url: '/api/krspace-erp-web/pm/file/signed',
       method: 'post'
+    },
+    
+    //根据父级ID查询子级任务列表
+    'parent-search-kid': {
+      url: '/api/krspace-erp-web/pm/task/sub-list',
+      method: 'get'
     }
+
   }
   

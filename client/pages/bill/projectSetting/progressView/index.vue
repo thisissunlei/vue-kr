@@ -205,8 +205,10 @@ export default {
                     if(!this.loading){
                         return ;
                     }
-                    this.params.page+=1;
-                    this.getListData(this.params);
+                    setTimeout(() => {
+                         this.params.page+=1;
+                         this.getListData(this.params);
+                    },1000);
                 }
         },
         scroll(event){
@@ -224,7 +226,9 @@ export default {
                  if(!this.loading){
                         return ;
                  }
-                 this.getListData(this.params);
+                 setTimeout(() => {
+                        this.getListData(this.params);
+                 },1000);
             }
             // if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');

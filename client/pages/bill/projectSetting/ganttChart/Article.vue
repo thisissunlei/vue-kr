@@ -1,8 +1,16 @@
 
 <template>
     <div>
+         
         <div class="every-col" :data-chart="data.t_id" >
+            <FlagLabel v-if="getFlagShow('MEETING')" 
+            :label="data.label" 
+            :data="20" 
+            :minCalibration="minCalibration" 
+            :startDate="leftEndpoint"
+        />
             <div class="article" 
+             v-if="getFlagShow('STAGETASK')"
                 :style="{
                     background:getBgColor(),
                     width:boxDetail.width * minCalibration+'px',
@@ -19,13 +27,18 @@
                     v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
                 >
                     <span  v-if="type == 'edit'">{{data.label}}</span>
-                    <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration" @on-popper-show="getSpecificData" >
+                    <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+44" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
                         <Tooltip :content="data.label" placement="right">
                             <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
                         </Tooltip>
                     
                         <div class="api" slot="content">
-                            <SpecificPlan :startDate="startDate"  :minCalibration="minCalibration"/> 
+                            <ChildArticle 
+                                v-if="isChild"
+                                :data="secondObj"
+                                :leftEndpoint="childLeftEndpoint"
+                                :minCalibration="minCalibration"
+                            /> 
                         </div>
                     </Poptip>
                 </div>
@@ -69,12 +82,14 @@ import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
 import ViewArticle from './ViewArticle';
+import ChildArticle from './ChildArticle'
 export default {
     name:'Article',
     components:{
         SpecificPlan,
         FlagLabel,
-        ViewArticle
+        ViewArticle,
+        ChildArticle
     },
     props:{
         minCalibration:{
@@ -104,7 +119,10 @@ export default {
             planDetail:{},
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
-            secondObj:{}     
+            secondObj:{},
+            isChild:false,  
+            childLeftEndpoint:{},
+           
         }
     },
     mounted(){
@@ -113,6 +131,18 @@ export default {
         }
     },
     methods:{
+        getFlagShow(event){
+            if(this.data.data){
+                return this.data.data.taskType == event
+            }else{
+                var type = 'STAGETASK';
+                return type == event;
+            }
+
+        },
+        cildHide(){
+            this.isChild = false;
+        },
        getBgColor(){
             if(this.data.chartType || !this.data.data.currentStatus){
                 return "#fff";
@@ -129,7 +159,6 @@ export default {
        },
        
        getBoxWidthAndOffice(){
-           
             var dates = this.getEndpointDate();
             var boxDetail={};
             var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
@@ -153,9 +182,6 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
-           
-            console.log( officeStart,"-----------",min)
-           
             
        },
        getEndpointDate(){
@@ -174,12 +200,22 @@ export default {
             }
         
             var max = arr[0],min=arr[0];
+           
             for (var i = 1; i < arr.length; i++) {
                 if(max<arr[i])
                     max =  arr[i];
                 if(min>arr[i])
                     min = arr[i];
             }
+            var minStr = dateUtils.dateToStr("YYYY-MM-DD",new Date(+min));
+            var minStr = minStr.split('-')
+            this.childLeftEndpoint={
+                year:minStr[0],
+                month:minStr[1],
+                dayNum:minStr[2] 
+            }
+            console
+
             return {
                 min:+min,
                 max:+max
@@ -187,9 +223,13 @@ export default {
 
        },
        //获取二级部分数据
-       getSpecificData(){
+       getSpecificData(event){
+         
            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
-                   this.secondObj.tasks=response.data.items;
+                this.secondObj.tasks=response.data.items;
+                this.isChild = true;
+                // this.getChildLeftEndpoint(response.data.items);
+
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,

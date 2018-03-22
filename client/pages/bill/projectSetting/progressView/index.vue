@@ -227,7 +227,7 @@ export default {
                         return ;
                  }
                  setTimeout(() => {
-                        this.getListData(this.params);
+                        // this.getListData(this.params);
                  },1000);
             }
             // if(chartDom.scrollLeft<10){

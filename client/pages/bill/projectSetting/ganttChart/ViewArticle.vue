@@ -43,53 +43,15 @@ export default {
             showData:[],
             channel:0,
             isLoading:true,
-            tasks:[
-                {
-                    children:[],
-                    data:{
-                        actualEndTime:1522944000000,
-                        actualStartTime:1522598400000,
-                        planEndTime:1522857600000,
-                        planStartTime:1522512000000,
-                        taskType:'STAGETASK'
-                    },
-                    label:'123',
-                    t_id:3,
-                    value:3
-                },
-                {
-                    children:[],
-                    data:{
-                        actualEndTime:1523116800000,
-                        actualStartTime:1522771200000,
-                        planEndTime:1523030400000,
-                        planStartTime:1522684800000,
-                        taskType:'STAGETASK'
-                    },
-                    label:'1232',
-                    t_id:2,
-                    value:2
-                },
-                {
-                    children:[],
-                    data:{
-                        actualEndTime:1523289600000,
-                        actualStartTime:1522944000000,
-                        planEndTime:1523203200000,
-                        planStartTime:1522857600000,
-                        taskType:'STAGETASK'
-                    },
-                    label:'1233',
-                    t_id:1,
-                    value:1
-                }
-            ]
         }
     },
     mounted(){
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
+            console.log(this.data.tasks,"lllllllll")
         }
+        
+
       
       
     },

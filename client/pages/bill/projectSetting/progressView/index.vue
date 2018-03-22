@@ -70,7 +70,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:'',
+                endTime:this.getEndDay(),
                 startTime:this.getStartDay(),
                 pageSize:6,
                 page:1,
@@ -114,6 +114,7 @@ export default {
         },
         //获取树列表数据
         getTreeData(params){
+            
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
             }).catch((error)=>{
@@ -165,9 +166,6 @@ export default {
             return today;
         },
         getEndDay(){
-             if(this.params.endTime){
-                return this.params.endTime;
-            }
            
             var today =this.getStartDay();
             var start = today.split("-");

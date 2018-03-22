@@ -120,7 +120,7 @@
 
                             v-if="leftEndpoint.year && type== 'view'"
                             v-for="item in listData"
-                            :data="item"
+                            :data="listData[3]"
                             :key="item.id" 
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"

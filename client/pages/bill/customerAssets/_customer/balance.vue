@@ -131,6 +131,9 @@ import ChangeBalance from './changeBalance.vue';
                 },{
                     label:'转社区',
                     value:'TRANSFER'
+                },{
+                    label:'冻结押金支出',
+                    value:'LOCK_DESPOINT_FREE'
                 }],
 				allColumns:[
                     {

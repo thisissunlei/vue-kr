@@ -254,6 +254,7 @@ import utils from '~/plugins/utils';
             };
             
             return {
+                showFree:false,
                 openStation:false,
                 customerName:'',
                 communityName:'',
@@ -281,6 +282,7 @@ import utils from '~/plugins/utils';
                 orderType:'',
                 stationAll:{},
                 payList:[
+                    
                     {value:'ONE',label:'月付'},
                     {value:'TWO',label:'两月付'},
                     {value:'THREE',label:'季付'},
@@ -290,6 +292,7 @@ import utils from '~/plugins/utils';
                 ],
                 params:{},
                 depositList:[
+                    {value:'0',label:'无押金'},
                     {label:'2个月',value:'2'},
                     {label:'3个月',value:'3'},
                     {label:'4个月',value:'4'},
@@ -454,6 +457,7 @@ import utils from '~/plugins/utils';
         },
         mounted(){
             this.getDetailData();
+            this.getFreeDeposit();
             GLOBALSIDESWITCH("false");
         },
         watch:{
@@ -1320,6 +1324,16 @@ import utils from '~/plugins/utils';
 
                 }, e => {
                     _this.youhui = []
+
+                })
+            },
+            getFreeDeposit(){
+                this.$http.get('get-seat-deposit-free', '').then( r => {
+                    this.showFree = r;
+                }).catch( e => {
+                        this.$Notice.error({
+                            title:e.message
+                        })
 
                 })
             },

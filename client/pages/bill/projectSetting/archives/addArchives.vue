@@ -10,13 +10,19 @@
                     /> 
             </Form-item>
             
-            <Form-item label="所在地区" class="bill-search-class city-class">
-                    <KrField 
-                        type="cascader" 
-                        placeholder="请输入所在地区" 
-                        @change="cascaderChange"
-                    />
+            <Form-item label="所在地区" class="bill-search-class city-class" prop="citys">
+                    <i-input 
+                        v-model="formRight.citys" 
+                        
+                    /> 
+                    
             </Form-item>
+            <KrField 
+                type="cascader" 
+                :mask="mask"
+                placeholder="请输入所在地区" 
+                @change="cascaderChange"
+            />
 
           
             <!--<KrField 
@@ -118,14 +124,22 @@ export default {
                 name:'',
                 city:'',
                 county:'',
-                province:''
+                province:'',
+                citys:''
             },
             ruleValidate: {
                 name: [
                     { required: true, message: '项目名称必填', trigger: 'change' }
+                ],
+                citys:[
+                    { required: true, message: '所在城市必填', trigger: 'change' }
                 ]
-            }  
+            },
+            mask:false  
         }
+    },
+    mounted(){
+        this.mask=true;
     },
     updated:function(){
         this.$emit('bindData',this.formRight);

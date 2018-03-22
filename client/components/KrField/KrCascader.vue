@@ -48,6 +48,10 @@ export default {
           default:()=>cityData,
           type:Array
         },
+        mask:{
+            default:false,
+            type:Boolean
+        },
 	},
 	data(){
 		return {
@@ -58,7 +62,11 @@ export default {
             t_id:0
 		}
     },
-    mounted(){  
+    mounted(){
+        if(this.mask){
+            this.labelValue="";
+            this.cityValue='';
+        }  
         this.labelValue=this.cityValue ? this.fnTreeId(this.value,this.data) : '';
         this.cityValue = this.cityValue.reverse();
     },

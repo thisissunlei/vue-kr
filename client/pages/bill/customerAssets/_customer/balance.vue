@@ -122,6 +122,15 @@ import ChangeBalance from './changeBalance.vue';
                 },{
                     label:'退还',
                     value:'BACK'
+                },{
+                    label:'冻结押金',
+                    value:'LOCK_DESPOINT'
+                },{
+                    label:'转营业外收入',
+                    value:'INCOME'
+                },{
+                    label:'转移',
+                    value:'TRANSFER'
                 }],
 				allColumns:[
                     {

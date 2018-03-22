@@ -171,7 +171,8 @@
                  <Col class="col">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" v-if="!showFree && types.label !='无押金' ">{{ types.label }}
+                            </span>
                         </div>
                         <div class="pay-error" v-if="errorAmount">请选择付款方式</div>
                  </Col>
@@ -254,7 +255,7 @@ import utils from '~/plugins/utils';
             };
             
             return {
-                showFree:false,
+                showFree:true,
                 openStation:false,
                 customerName:'',
                 communityName:'',

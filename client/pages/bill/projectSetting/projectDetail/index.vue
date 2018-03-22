@@ -319,31 +319,21 @@ export default {
                      });
                 })
           },
-          scrollBottom(dom){
-                var htmlHeight = dom.scrollHeight;
-                var clientHeight = dom.clientHeight;
-                var scrollTop = dom.scrollTop;
-                if(scrollTop+clientHeight==htmlHeight){
-                    console.log('ggg--到底了');
-                }
-          },
           scroll(event){
               let leftDetail=document.getElementById('vue-chart-left-detail-list');
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               chartDom.scrollTop=leftDetail.scrollTop;
-              this.scrollBottom(leftDetail);
           },
           chartScroll(){
               let leftDetail=document.getElementById('vue-chart-left-detail-list');
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               leftDetail.scrollTop=chartDom.scrollTop;
-              this.scrollBottom(chartDom);
               if(chartDom.scrollLeft>=chartDom.clientWidth){
                   console.log('划到最右边了');
               }
-              if(chartDom.scrollLeft<10){
-                  console.log('滑倒最左边了');
-              }
+            //   if(chartDom.scrollLeft<10){
+            //       console.log('滑倒最左边了');
+            //   }
           }
      }
 }

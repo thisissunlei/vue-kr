@@ -1,5 +1,5 @@
 <template>
-  <div class="view-article">
+  <div class="view-article" :data-article-id="id">
         <div 
             v-if="showData.length"
             v-for="channels in showData"
@@ -36,6 +36,9 @@ export default {
         },
         minCalibration:{
             type:[String,Number],
+        },
+        id:{
+            type:[String,Number]
         }
     },
     data(){
@@ -48,12 +51,16 @@ export default {
     mounted(){
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
-            console.log(this.data.tasks,"lllllllll")
+        } 
+        var leftDom = document.querySelectorAll('li[data-box-id="'+this.showData.id+'"]')[0];
+        var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
+        if(leftDom&&rightDom){
+            if(leftDom.offsetHeight>rightDom.offsetHeight){
+                rightDom.style.height=leftDom.offsetHeight+'px';
+            }else{
+                leftDom.style.height=rightDom.offsetHeight+'px';
+            }
         }
-        
-
-      
-      
     },
     methods:{
        

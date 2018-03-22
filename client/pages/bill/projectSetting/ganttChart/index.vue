@@ -117,11 +117,11 @@
                             :key="item.id"
                         /> -->
                         <ViewArticle  
-
                             v-if="leftEndpoint.year && type== 'view'"
                             v-for="item in listData"
-                            :data="listData[3]"
-                            :key="item.id" 
+                            :data="item"
+                            :key="item.id"
+                            :id="item.id" 
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                         />

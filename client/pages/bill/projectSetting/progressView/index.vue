@@ -70,8 +70,8 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay(),
-                startTime:this.getStartDay(),
+                endTime:this.getEndDay()+' 00:00:00',
+                startTime:this.getStartDay()+' 00:00:00',
                 pageSize:6,
                 page:1,
                 status:2,
@@ -83,29 +83,37 @@ export default {
            
             listData:[],
             treeData:[],
-            mask:true
+            mask:true,
+
+            loading:false
         }
     },
     mounted(){
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
-        var leftDom = document.querySelectorAll('div[data-box-id="'+this.listData.id+'"]');
-        console.log('leftDom-',leftDom);
-        // var rightHeight = this.showData.length * 70;
-        // var leftHeight =leftDom.style.height; 
-        // if(leftHeight>rightHeight){
-            
-        // }else{
-              
-        // }
+    },
+    updated(){
+        if(this.listData.length){
+            this.listData.map((item,index)=>{
+                 var leftDom = document.querySelectorAll('li[data-box-id="'+item.id+'"]')[0];
+                 var rightDom= document.querySelectorAll('div[data-article-id="'+item.id+'"]')[0];
+                 if(leftDom&&rightDom){
+                    if(leftDom.offsetHeight>rightDom.offsetHeight){
+                        rightDom.style.height=leftDom.offsetHeight+'px';
+                    }else{
+                        leftDom.style.height=rightDom.offsetHeight+'px';
+                    }
+                 }
+            })
+        }
     },
     methods:{  
         //获取进度列表数据
         getListData(params){
-            params.endTime = params.endTime + ' 00:00:00';
-            params.startTime = params.startTime + ' 00:00:00';
+            this.loading=false;
             this.$http.get('project-progress-list',params).then((response)=>{
                 this.listData=response.data.items;
+                this.loading=true;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -113,8 +121,7 @@ export default {
             })
         },
         //获取树列表数据
-        getTreeData(params){
-            
+        getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
             }).catch((error)=>{
@@ -194,8 +201,12 @@ export default {
                 var htmlHeight = dom.scrollHeight;
                 var clientHeight = dom.clientHeight;
                 var scrollTop = dom.scrollTop;
-                if(scrollTop+clientHeight==htmlHeight){
-                    console.log('ggg--到底了');
+                if(scrollTop+clientHeight==htmlHeight){   
+                    if(!this.loading){
+                        return ;
+                    }
+                    this.params.page+=1;
+                    this.getListData(this.params);
                 }
         },
         scroll(event){
@@ -210,14 +221,16 @@ export default {
             leftList.scrollTop=chartDom.scrollTop;
             this.scrollBottom(chartDom);
             if(chartDom.scrollLeft>=chartDom.clientWidth){
-                  console.log('划到最右边了');
+                 if(!this.loading){
+                        return ;
+                 }
+                 this.getListData(this.params);
             }
-            if(chartDom.scrollLeft<10){
-                  console.log('滑倒最左边了');
-            }
+            // if(chartDom.scrollLeft<10){
+            //       console.log('滑倒最左边了');
+            // }
         }
     }
-
 }
 </script>
 

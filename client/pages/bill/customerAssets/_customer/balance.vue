@@ -308,7 +308,7 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                     }
                 }],
                 openBalance:false,//转余额弹窗

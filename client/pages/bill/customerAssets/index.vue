@@ -46,8 +46,6 @@
                 pageSize:15,
 
             params:{
-                customerName:'',
-                page:1,
                 pageSize:15,
             },
             accountList:[],
@@ -117,7 +115,7 @@
         }
         },
          created(){
-          var params=Object.assign({},{page:1,pageSize:15},this.$route.query);
+          var params=Object.assign({},{pageSize:15},this.$route.query);
           this.getListData(params);
           this.params=params; 
         },
@@ -128,6 +126,7 @@
                 utils.addParams(this.params);
             },
             getListData(params){
+                params = Object.assign({},params,this.params)
                 this.$http.get('account-list',params).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -146,7 +145,7 @@
             },
             changePage(page){
                 this.params.page = page;
-                utils.addParams(this.params);
+                this.getListData(this.params)
             }
         }
     }

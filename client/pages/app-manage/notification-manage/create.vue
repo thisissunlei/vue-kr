@@ -31,9 +31,10 @@
                     name="imgUrl"
                     v-if="!this.imgUrl"
                     :show-upload-list="false"
-                    :format="['jpg','jpeg','png']"
+                    :format="['jpg','gif','png']"
                     with-credentials
                     :on-success="handleSuccess"
+                    :on-error="handleError"
                     type="drag"
                     action="/api/krspace-finance-web/app/notification/upload"
                     style="display: inline-block;width:148px;">
@@ -444,6 +445,11 @@ export default {
         window.close();
         window.opener.location.reload();
     },
+     handleError(error,file){
+         this.$Notice.error({
+              title:error.message
+        });
+     }
 
 
 

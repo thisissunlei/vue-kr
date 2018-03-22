@@ -67,35 +67,14 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                 },
                 //打款方式
                 payment:[{
-                    label:'社区变更',
-                    value:'NONE'
-                },{
                     label:'银行转账',
                     value:'BANKTRANSFER'
                 },{
                     value:'ALIAPPPAY',
                     label:'支付宝'
                 },{
-                    value:'WXPAY',
-                    label:'微信'
-                },{
-                    value:'DEP_RENT',
-                    label:'押金转租'
-                },{
-                    value:'TRANSFER',
-                    label:'转移'
-                },{
-                    value:'RENT_DEP',
-                    label:'租金转押'
-                },{
-                    value:'ALIWEBPAY',
-                    label:'支付宝网银'
-                },{
-                    value:'BANKONLINE',
-                    label:'网银'
-                },{
-                    value:'BANLANCE',
-                    label:'余额支付'
+                    value:'FUNDS_TRANSFER',
+                    label:'资金转移'
                 }],
                 page:1,
                 totalCount:1,
@@ -150,49 +129,8 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     align:'center',
                 },{
                     title: '打款方式',
-                    key: 'payWay',
+                    key: 'payWayName',
                     align:'center',
-                    render:function(h,params){
-                        let payWay = [{
-                            label:'社区变更',
-                            value:'NONE'
-                        },{
-                            label:'银行转账',
-                            value:'BANKTRANSFER'
-                        },{
-                            value:'ALIAPPPAY',
-                            label:'支付宝'
-                        },{
-                            value:'WXPAY',
-                            label:'微信'
-                        },{
-                            value:'DEP_RENT',
-                            label:'押金转租'
-                        },{
-                            value:'TRANSFER',
-                            label:'转移'
-                        },{
-                            value:'RENT_DEP',
-                            label:'租金转押'
-                        },{
-                            value:'ALIWEBPAY',
-                            label:'支付宝网银'
-                        },{
-                            value:'BANKONLINE',
-                            label:'网银'
-                        },{
-                            value:'BANLANCE',
-                            label:'余额支付'
-                        }]
-                        let type = '-';
-                        type = payWay.filter((item)=>{
-                            if(item.value == params.row.payWay){
-                                return item.label
-                            }
-                            return false
-                        })
-                        return type[0].label
-                    }
                 },{
                     title: '打款金额（元）',
                     key: 'amount',
@@ -213,15 +151,10 @@ import selectCommunities from '~/components/SelectCommunities.vue'
                     }
                 },{
                     title: '操作人',
-                    key: 'creater',
+                    key: 'createrName',
                     align:'center',
                     render:function(h,params){
-                        let type = params.row.creater;
-
-                        if(type === 0){
-                            type = '系统自动'
-                        }
-                        return type;
+                        return params.row.createrName?params.row.createrName:'系统自动'
                     }
                 },{
                     title: '操作时间',

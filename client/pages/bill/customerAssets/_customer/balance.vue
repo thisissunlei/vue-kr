@@ -106,11 +106,7 @@ import ChangeBalance from './changeBalance.vue';
                     operateType:'',
                 },
                 // 汇总数据
-                summaryData:[{
-                    balance:'143123213'
-                },{
-                    balance:'231233'
-                }],
+                summaryData:[],
                 page:1,
                 totalCount:1,
                 // 操作类型
@@ -126,9 +122,6 @@ import ChangeBalance from './changeBalance.vue';
                 },{
                     label:'退还',
                     value:'BACK'
-                },{
-                    label:'冻结押金',
-                    value:'LOCK_DESPOINT'
                 }],
 				allColumns:[
                     {
@@ -308,7 +301,7 @@ import ChangeBalance from './changeBalance.vue';
                     key: 'ctime',
                     align:'center',
                     render:function(h,params){
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.ctime))
+                        return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
                     }
                 }],
                 openBalance:false,//转余额弹窗

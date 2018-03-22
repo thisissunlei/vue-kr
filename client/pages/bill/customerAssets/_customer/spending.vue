@@ -12,7 +12,7 @@
                 <div style="float: right;">
                     <Page 
                         :total="totalCount" 
-                        :page-size="3" 
+                        :page-size="15" 
                         @on-change="changePage" 
                         show-total 
                         show-elevator
@@ -54,7 +54,7 @@ import utils from '~/plugins/utils';
                 ],
                 page:1,
                 totalCount:1,
-                pageSize:5,
+                pageSize:15,
                 allColumns:[
                     {
                         title: '序号',

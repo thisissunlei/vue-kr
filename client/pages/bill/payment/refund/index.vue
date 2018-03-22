@@ -174,9 +174,10 @@ import dateUtils from 'vue-dateutils';
                     duration: 3
                 });
             },
-            getAmount(customerId){
+            getAmount(customerId,communityId){
 				let params={
-					customerId:customerId
+                    customerId:customerId,
+                    communityId:communityId
 				};
 				this.$http.get('get-balance', params).then((res)=>{
 					this.amount=res.data.balance;
@@ -191,7 +192,7 @@ import dateUtils from 'vue-dateutils';
                 if(value){
                     this.formItem.communityId = value;
                     if(this.formItem.customerId){
-                        this.getAmount(value)
+                        this.getAmount(this.formItem.customerId,value)
                     }
                 }else{
                     this.formItem.communityId = '';
@@ -202,7 +203,7 @@ import dateUtils from 'vue-dateutils';
                 if(value){
                     this.formItem.customerId = value;
                     if(this.formItem.communityId){
-                        this.getAmount(value)
+                        this.getAmount(value,this.formItem.communityId)
                     }
                     
                 }else{

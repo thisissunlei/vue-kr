@@ -190,6 +190,9 @@ import dateUtils from 'vue-dateutils';
             changeCommunity:function(value){
                 if(value){
                     this.formItem.communityId = value;
+                    if(this.formItem.customerId){
+                        this.getAmount(value)
+                    }
                 }else{
                     this.formItem.communityId = '';
                 }  
@@ -198,7 +201,10 @@ import dateUtils from 'vue-dateutils';
                 
                 if(value){
                     this.formItem.customerId = value;
-                    this.getAmount(value)
+                    if(this.formItem.communityId){
+                        this.getAmount(value)
+                    }
+                    
                 }else{
                     this.formItem.customerId = '';
                     this.amount='-';

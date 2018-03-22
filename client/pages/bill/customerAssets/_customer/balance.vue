@@ -15,7 +15,7 @@
                     <!-- <selectCommunities test="searchForm" :onchange="changeCommunity" /> -->
                 </FormItem>
                 <FormItem label="操作类型">
-                <Select v-model="searchForm.operateType" clearable style="width:100px;text-align:left">
+                <Select v-model="searchForm.operateType" clearable style="width:130px;text-align:left">
                     <Option v-for="item in operateType" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
                 </FormItem>

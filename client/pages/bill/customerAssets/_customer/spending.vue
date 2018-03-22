@@ -36,7 +36,7 @@ import utils from '~/plugins/utils';
             return{
                 searchForm:{
                     page:1,
-                    pageSize:3,
+                    pageSize:15,
                     customerId:params.customer,
                 },
                 //支付类型

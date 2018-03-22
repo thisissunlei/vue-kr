@@ -1,7 +1,7 @@
 
 <template>
     <div >
-    <div class="every-col" :data-chart="data.t_id" >
+    <div class="child-every-article" :data-chart="data.t_id" >
         <div v-if="!this.data.chartType && isInitial()">
         <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
@@ -14,7 +14,9 @@
             :style="{
                 background:getBgColor(),
                 width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px'
+                left:boxDetail.office * minCalibration+'px',
+                position:'relative',
+                padding:'8px 0px'
             }"
         >
         
@@ -66,7 +68,7 @@ import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
 export default {
-    name:'EditArticle',
+   
     components:{
         SpecificPlan,
         FlagLabel
@@ -154,7 +156,7 @@ export default {
             var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            var officeStart = this.startDate.year+"-"+this.startDate.month+"-"+1;
+            var officeStart = this.startDate.year+"-"+this.startDate.month+"-"+this.startDate.dayNum;
             var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
 
            
@@ -207,10 +209,16 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.article{
+<style lang="less" >
+.article .ivu-poptip-popper{
+        left: -22px !important;
+    }
+.child-every-article{
+
     position: relative;
     padding: 8px 0px;
+
+    
     .label{
         width: 100%;
         height: 100%;

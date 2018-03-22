@@ -237,7 +237,13 @@ export default {
             leftList.scrollTop=chartDom.scrollTop;
             this.scrollBottom(chartDom);
             if(chartDom.scrollLeft>=chartDom.clientWidth){
-                
+                 if(!this.loading){
+                        return ;
+                 }
+                 setTimeout(() => {
+                        // this.getListData(this.params);
+                 },1000);
+
             }
             // if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');

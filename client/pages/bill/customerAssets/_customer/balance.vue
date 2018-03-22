@@ -111,16 +111,16 @@ import ChangeBalance from './changeBalance.vue';
                 totalCount:1,
                 // 操作类型
                 operateType:[{
-                    label:'余额充值',
+                    label:'打款',
                     value:'RECHARGE'
                 },{
-                    label:'余额支付账单',
+                    label:'支付账单',
                     value:'PAY_BILL'
                 },{
                     label:'退款',
                     value:'REFUND'
                 },{
-                    label:'退还',
+                    label:'转余额',
                     value:'BACK'
                 },{
                     label:'冻结押金',
@@ -129,7 +129,7 @@ import ChangeBalance from './changeBalance.vue';
                     label:'转营业外收入',
                     value:'INCOME'
                 },{
-                    label:'转移',
+                    label:'转社区',
                     value:'TRANSFER'
                 }],
 				allColumns:[

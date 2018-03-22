@@ -155,7 +155,7 @@
                  <Col class="col">
                     <span class="required-label" style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" v-if="!showFree && types.label !='无押金' ">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" >{{ types.label }}</span>
                         </div>
                          <div class="pay-error" v-if="errorAmount">请选择履约保证金总额</div>
                  </Col>
@@ -236,7 +236,7 @@ import utils from '~/plugins/utils';
                 }
             };
            return{
-                showFree:true,
+                showFree:false,
                 discount:0,
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
@@ -380,7 +380,6 @@ import utils from '~/plugins/utils';
                     {value:'ALL',label:'全款'},
                 ],
                 depositList:[
-                    {value:'0',label:'无押金'},
                     {label:'2个月',value:'2'},
                     {label:'3个月',value:'3'},
                     {label:'4个月',value:'4'},
@@ -1274,7 +1273,10 @@ import utils from '~/plugins/utils';
             },  
             getFreeDeposit(){
                 this.$http.get('get-seat-deposit-free', '').then( r => {
-                    this.showFree = r;
+                    this.showFree = r.data;
+                    if(r.data){
+                        this.depositList.push({value:'0',label:'无押金'},)
+                    }
                 }).catch( e => {
                         this.$Notice.error({
                             title:e.message

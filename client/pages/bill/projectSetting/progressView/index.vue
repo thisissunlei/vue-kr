@@ -6,6 +6,7 @@
            type='view' 
            :startTime="this.getStartDay()" 
            :endTime="this.getEndDay()"
+           @treeClick="treeClick"
            @scroll="chartScroll"
            :treeData="treeData"
            :listData="listData"
@@ -129,6 +130,14 @@ export default {
         //列表跳转详情
         rowClick(item){
             window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}`,'_blank');
+        },
+        treeClick(params){
+            var treeArray=[];
+            params.map((item,index)=>{
+                treeArray.push(item.value);
+            })
+            this.params.taskTemplateIds=treeArray.join(',');
+            this.getListData(this.params);
         },
         operationClick(item){
             this.cancelSure();

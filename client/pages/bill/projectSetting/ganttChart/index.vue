@@ -237,7 +237,7 @@ export default {
     },
     methods:{
         treeClick(params){
-            console.log('gggg',params);
+            this.$emit('treeClick',params);
         },
         //递归赋值
         recursiveFn(data){

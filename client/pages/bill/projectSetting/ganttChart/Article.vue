@@ -28,9 +28,11 @@
                 >
                     <span  v-if="type == 'edit'">{{data.label}}</span>
                     <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+44" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
-                        <Tooltip :content="data.label" placement="right">
-                            <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
-                        </Tooltip>
+                        <div class='tip-label'>
+                            <Tooltip :content="data.label" placement="right">
+                              <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
+                            </Tooltip>
+                        </div>
                     
                         <div class="api" slot="content">
                             <ChildArticle 
@@ -240,7 +242,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
  .every-view-col{
     height: 70px;
     border-top: 1px solid #E1E6EB;;
@@ -271,7 +273,14 @@ export default {
         color: #ffffff;
         position: relative;
         cursor: pointer;
-
+        .tip-label{
+            display:inline-block;
+            .ivu-tooltip-popper{
+                .ivu-tooltip-arrow{
+                    display:none;
+                }
+            }
+        }
    }
    .actual{
         height: 25px;

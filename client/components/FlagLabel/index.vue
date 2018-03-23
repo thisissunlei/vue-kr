@@ -5,7 +5,7 @@
             position:'relative'
         }">
             <Tooltip :content="label" placement="right" >
-                    <div class='blueFlag'/>
+                <div class='blueFlag'/>
             </Tooltip>
         </div>
         <div :style="{
@@ -29,7 +29,8 @@ export default {
             type:String
         },
         data:{
-            type:[Number,String],
+           default:{},
+           type:Object
         },
         startDate:{
             default:{},
@@ -77,8 +78,6 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
-           
-            console.log( this.boxDetail,"-----------",min)
            
             
        },

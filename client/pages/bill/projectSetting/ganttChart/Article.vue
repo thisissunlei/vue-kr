@@ -239,6 +239,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
+ .every-view-col{
+    height: 70px;
+    border-top: 1px solid #E1E6EB;;
+    border-bottom: 1px solid #E1E6EB;
+    &:first-child{
+        border-top:none;
+    }
+    &:last-child{
+        border-bottom:none;
+    }
+  }
 .article{
     position: relative;
     padding: 8px 0px;
@@ -249,7 +260,7 @@ export default {
         text-overflow:ellipsis;
         white-space: nowrap;
     }
-   .plan{
+    .plan{
         height: 25px;
         background: #4F9EED ;
         border-radius:100px; 

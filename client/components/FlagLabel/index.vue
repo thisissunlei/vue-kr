@@ -29,7 +29,7 @@ export default {
             type:String
         },
         data:{
-            type:Object,
+            type:[Number,String],
         },
         startDate:{
             default:{},

@@ -210,5 +210,8 @@ export default {
         color:#499DF1;
       }
    }
+   ::-webkit-scrollbar {
+         width:0px;
+    }
    
 </style>

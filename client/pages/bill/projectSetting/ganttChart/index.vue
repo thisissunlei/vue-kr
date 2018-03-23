@@ -3,7 +3,7 @@
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
            
-                <div class="hander" >
+                <div class="hander">
                     <div style="display:inline-block;margin-top: 6px;">
                         <span style="vertical-align:middle;">项目计划</span>
                         <span 
@@ -18,21 +18,12 @@
                             style="background:#FDBA4D;vertical-align:middle;"
                         ></span>
                     </div>
-                
 
-                        <Select 
-                            v-model="barType" 
-                            @on-change="selectChange"
-                            style="width:200px;float:right;margin-right:20px;"
-                        >
-                            <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                        
-                        <span style="float:right;margin-top:6px;margin-right:20px;margin-left:40px;font-size:14px;color:#333333;">
-                        时间轴最小刻度
+                    <div style="display:inline-block;margin-left:10px;">
+                        <span style="margin-top:8px;margin-right:15px;font-size:14px;color:#333333;">
+                         甘特图显示任务项
                         </span>
-
-                        <Form label-position="left" style="float:right;">      
+                        <Form label-position="left" style="display:inline-block;">      
                                 <KrField 
                                     v-if="mask"
                                     type="selectTree" 
@@ -40,10 +31,21 @@
                                     @okClick="treeClick"
                                 />
                         </Form>
-
-                        <span style="float:right;margin-top:8px;margin-right:20px;font-size:14px;color:#333333;">
-                        甘特图显示任务项
-                        </span>
+                    </div>
+                
+                    <div style="display:inline-block;">
+                            <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
+                                时间轴最小刻度
+                            </span>
+                            <Select 
+                                v-model="barType" 
+                                @on-change="selectChange"
+                                style="width:200px;margin-right:20px;text-align:left;"
+                            >
+                                <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                    </div>
+                    
 
                     </div>
 
@@ -237,7 +239,7 @@ export default {
     },
     methods:{
         treeClick(params){
-            console.log('gggg',params);
+            this.$emit('treeClick',params);
         },
         //递归赋值
         recursiveFn(data){
@@ -513,7 +515,8 @@ export default {
             margin-top:20px;
             height: 50px; 
             width: 100%;
-            padding-left: 250px;
+            text-align: right;
+            //padding-left: 250px;
             .article{
                 display: inline-block;
                 width: 80px;

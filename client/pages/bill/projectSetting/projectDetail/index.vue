@@ -6,7 +6,7 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <!--<div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>-->
+                <div class='title-right' v-if="signMask"><Button type="primary" @click="watchTask">确认合同已签署</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -75,6 +75,8 @@
                     <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
                 </div>
         </Modal>
+
+        
   </div>
 </template>
 
@@ -124,7 +126,8 @@ export default {
             startTime:this.getStartDay(),
             isLoading:true,
 
-            treeData:[]
+            treeData:[],
+            signMask:false
         }
     },
     created(){    
@@ -134,6 +137,7 @@ export default {
          GLOBALSIDESWITCH("false");
          this.getListData(); 
          let status=this.queryData.status==1?'INVEST':'PREPARE'
+         this.signMask=this.queryData.status==1?true:false;
          this.getTreeData({statusType:status});
     },
     methods:{

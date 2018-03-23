@@ -161,7 +161,7 @@ import ChangeBalance from './changeBalance.vue';
                                         props: {
                                             type: 'text',
                                             label:'转社区',
-                                            checkAction:'fina_detail_rerun',
+                                            checkAction:'customer_assets_button',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
@@ -173,7 +173,7 @@ import ChangeBalance from './changeBalance.vue';
                                         props: {
                                             type: 'text',
                                             label:'转营业外',
-                                            checkAction:'fina_detail_rerun',
+                                            checkAction:'customer_assets_button',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
@@ -210,7 +210,7 @@ import ChangeBalance from './changeBalance.vue';
                                         props: {
                                             type: 'text',
                                             label:'转余额',
-                                            checkAction:'fina_detail_rerun',
+                                            checkAction:'customer_assets_button',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
@@ -238,7 +238,7 @@ import ChangeBalance from './changeBalance.vue';
                                         props: {
                                             type: 'text',
                                             label:'转余额',
-                                            checkAction:'fina_detail_rerun',
+                                            checkAction:'customer_assets_button',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {
@@ -266,7 +266,7 @@ import ChangeBalance from './changeBalance.vue';
                                         props: {
                                             type: 'text',
                                             label:'转余额',
-                                            checkAction:'fina_detail_rerun',
+                                            checkAction:'customer_assets_button',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
                                         on: {

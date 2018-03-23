@@ -11,6 +11,7 @@
             <GanttChart 
                 v-if="!isLoading && listData.length" 
                 :data="listData"
+                :treeData="treeData"
                 type="edit"
                 :startTime="this.getStartDay()" 
                 :endTime="this.getEndDay()"
@@ -122,6 +123,8 @@ export default {
             endTime:'',
             startTime:this.getStartDay(),
             isLoading:true,
+
+            treeData:[]
         }
     },
     created(){    
@@ -129,9 +132,21 @@ export default {
     },
     mounted(){
          GLOBALSIDESWITCH("false");
-         this.getListData();  
+         this.getListData(); 
+         let status=this.queryData.status==1?'INVEST':'PREPARE'
+         this.getTreeData({statusType:status});
     },
     methods:{
+        //获取树列表数据
+        getTreeData(params){     
+            this.$http.get('project-status-search',params).then((response)=>{
+                this.treeData=response.data.items;
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
          //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());

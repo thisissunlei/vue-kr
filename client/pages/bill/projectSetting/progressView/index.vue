@@ -133,7 +133,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}`,'_blank');
+            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`,'_blank');
         },
         treeClick(params){
             var treeArray=[];

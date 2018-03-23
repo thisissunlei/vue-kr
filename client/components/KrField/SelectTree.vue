@@ -178,6 +178,7 @@ export default {
 
 <style lang="less" scoped>
     .select-tree{
+        text-align: left;
         .select{
 
             .tree-content{

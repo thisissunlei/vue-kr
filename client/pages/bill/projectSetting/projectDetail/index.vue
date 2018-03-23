@@ -381,8 +381,5 @@ export default {
            background: #fff;
            display:inline-block;
        }
-       ::-webkit-scrollbar {
-            width:0px;
-       }
    }
 </style>

@@ -1396,7 +1396,7 @@
                             menuCode: 'pay_deal_flow_page'
                         },
                         {
-                            primaryText: '账户资产中心',
+                            primaryText: '客户账户中心',
                             router: 'bill/customerAssets',
                             type:'vue',
                             menuCode: 'customer_assets'

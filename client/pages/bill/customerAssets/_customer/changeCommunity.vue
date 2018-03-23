@@ -70,7 +70,8 @@ import LabelText from '~/components/LabelText';
                 console.log('转社区获取社区列表');
                 let params = {communityId:this.editData.communityId}
                 this.$http.get('balance-community-list', params).then((res)=>{
-                    this.communityList = res.data.items.map((item)=>{
+                    let list = res.data.items || [];
+                    this.communityList = list.map((item)=>{
                         item.cmtId = item.cmtId+'';
                         return item;
                     });

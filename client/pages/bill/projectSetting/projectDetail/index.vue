@@ -6,7 +6,7 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <div class='title-right' v-if="signMask"><Button type="primary" @click="watchTask">确认合同已签署</Button></div>
+                <div class='title-right' v-if="signMask"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -76,6 +76,18 @@
                 </div>
         </Modal>
 
+        <Modal
+            v-model="openSure"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>
+            <div slot="footer">
+                <Button type="primary" @click="submitSure()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
+
         
   </div>
 </template>
@@ -127,7 +139,8 @@ export default {
             isLoading:true,
 
             treeData:[],
-            signMask:false
+            signMask:false,
+            openSure:false
         }
     },
     created(){    
@@ -353,7 +366,21 @@ export default {
             //   if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');
             //   }
-          }
+          },
+          submitSure(){
+            this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
+                window.close();
+                window.opener.location.reload();
+                this.cancelSure();
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+                })
+            },
+            cancelSure(){
+                this.openSure=!this.openSure;
+            },
      }
 }
 </script>
@@ -386,4 +413,11 @@ export default {
            display:inline-block;
        }
    }
+   .sure-sign{
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 26px;
+        font-size: 14px;
+    }
 </style>

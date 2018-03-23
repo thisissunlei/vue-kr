@@ -40,7 +40,7 @@
         <!-- 左侧切换部分内容 -->
         <Modal
             v-model="openSure"
-            title="添加任务"
+            title="提示"
             width="440"
             >
             <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>

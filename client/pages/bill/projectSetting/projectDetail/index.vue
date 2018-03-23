@@ -7,6 +7,7 @@
                     <span>{{queryData.name}}</span>
                 </div>
                 <div class='title-right' v-if="signMask"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
+                <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -60,7 +61,7 @@
             >
                 <WatchRecord :watchRecord="watchRecord"/>
                 <div slot="footer">
-                    <Button type="primary" @click="submitWatch">确定</Button>
+                    <Button type="primary" @click="cancelWatch">确定</Button>
                 </div>
         </Modal>
 
@@ -130,10 +131,7 @@ export default {
                 pageSize:15
             },
             difference:7,
-            watchRecord:[
-                {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
-                {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"}
-            ],
+            watchRecord:[],
             endTime:'',
             startTime:this.getStartDay(),
             isLoading:true,
@@ -154,6 +152,16 @@ export default {
          this.getTreeData({statusType:status});
     },
     methods:{
+        //获取查看编辑记录
+        getWatchData(id){
+            this.$http.get('watch-edit-record',{id:id}).then((response)=>{
+                this.watchRecord=response.data.items;
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
         //获取树列表数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
@@ -253,17 +261,18 @@ export default {
                      });
                  })
         },
+        //取消查看任务
+        cancelWatch(){
+            this.openWatch=!this.openWatch;
+        },
         //打开查看任务
         watchTask(){
-            this.openWatch=!this.openWatch;
+            this.getWatchData(this.queryData.id);
+            this.cancelWatch();  
         },
         //打开删除任务
         cancelTask(){
            this.openDelete=!this.openDelete; 
-        },
-        //提交查看任务
-        submitWatch(){
-            this.watchTask();
         },
         //提交删除任务
         submitDelete(){
@@ -311,7 +320,7 @@ export default {
                     });
                     return ;
                 }
-                this.addData.pid=this.addId;
+                this.addData.pid=this.addId?this.addId:0;
                 this.addData.planEndTime=this.addData.type=='STAGETASK'?this.addData.planEndTime:this.addData.planStartTime;
                 this.addData.propertyId=this.queryData.id;
                 this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
@@ -348,7 +357,7 @@ export default {
                 }
                 var dataParams=this.editData;
                 dataParams.id=this.editId;
-                dataParams.pid=this.parentId;
+                dataParams.pid=this.parentId?this.parentId:0;
                 dataParams.propertyId=this.queryData.id;
                 dataParams.planStartTime=dataParams.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planStartTime)):'';
                 dataParams.planEndTime=dataParams.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planEndTime)):'';

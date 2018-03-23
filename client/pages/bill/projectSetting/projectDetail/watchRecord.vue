@@ -4,12 +4,17 @@
              <ul
                class='record-wrap'
                v-for="item in watchRecord" 
-               :key="item.time"
+               :key="item.uTime"
              >
-                 <li class='first'>{{item.time}}</li>
+                 <li class='first'>{{item.uTime|dateFormat('MM-dd HH:mm')}}</li>
                  <li class='second'>
-                     <div>{{item.detail}}</div>
-                     <div style="color:#333;font-weight:500;">{{item.who}}</div>
+                        <div class='seconds'>
+                            <span style="padding-right: 10px;">{{item.updator}}</span>
+                            <span>{{item.comment}}</span>
+                        </div>
+                        <div class='thirds' style="font-weight:500">
+                            {{item.detail}}
+                        </div>
                  </li>
              </ul>
         </div>
@@ -53,6 +58,19 @@ export default {
                 display:inline-block;
                 div{
                     margin-bottom:20px;
+                }
+                .seconds{
+                display:inline-block;
+                font-family: PingFang-SC-Regular;
+                font-size: 14px;
+                color: #666666;
+                }
+                .thirds{
+                    width: 400px;
+                    background: #fff;
+                    font-family: PingFang-SC-Regular;
+                    font-size: 14px;
+                    color: #666;
                 }
             }
         }

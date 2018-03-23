@@ -86,13 +86,13 @@
                             v-for="item in getEdit.operLogs" 
                             :key="item.id"
                             >
-                                <div class='first'><span class='circle'></span>{{item.uTime}}</div>
+                                <div class='first'><span class='circle'></span>{{item.uTime|dateFormat('MM-dd HH:mm')}}</div>
                                 <div style="display:inline-block;">
                                     <div class='second'>
                                         <span style="padding-right: 10px;">{{item.updatorName}}</span>
                                         <span>{{item.comment}}</span>
                                     </div>
-                                    <div class='third'>
+                                    <div class='third' v-if="item.descr">
                                         {{item.descr}}
                                     </div>
                                 </div>

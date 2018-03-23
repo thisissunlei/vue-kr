@@ -166,6 +166,11 @@ export default  {
     'parent-search-kid': {
       url: '/api/krspace-erp-web/pm/task/sub-list',
       method: 'get'
+    },
+    //查看编辑记录
+    'watch-edit-record': {
+      url: '/api/krspace-erp-web/pm/operate-log/list',
+      method: 'get'
     }
 
   }

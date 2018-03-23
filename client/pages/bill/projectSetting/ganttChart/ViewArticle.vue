@@ -140,13 +140,10 @@ export default {
 <style lang="less" scoped>
     .view-article{
         //height: 70px;
-        border-top: 1px solid #E1E6EB;;
-        border-bottom: 1px solid #E1E6EB;
-        &:first-child{
-            border-top:none;
-        }
-        &:last-child{
-            border-bottom:none;
+        //border-top: 1px solid #E1E6EB;;
+        //border-bottom: 1px solid #E1E6EB;
+        &:nth-child(2n+1){
+            background: #F5F6FA;
         }
     }
 </style>

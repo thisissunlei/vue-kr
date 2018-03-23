@@ -346,15 +346,15 @@ export default {
                     });
                     return ;
                 }
-                console.log('edit---',this.editData);
-                this.editData.id=this.editId;
-                this.editData.pid=this.parentId;
-                this.editData.propertyId=this.queryData.id;
-                // this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
-                // this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
-                // this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
-                // this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
-                this.$http.post('project-edit-task',this.editData).then((response)=>{
+                var dataParams=this.editData;
+                dataParams.id=this.editId;
+                dataParams.pid=this.parentId;
+                dataParams.propertyId=this.queryData.id;
+                dataParams.planStartTime=dataParams.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planStartTime)):'';
+                dataParams.planEndTime=dataParams.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planEndTime)):'';
+                dataParams.actualStartTime=dataParams.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.actualStartTime)):'';
+                dataParams.actualEndTime=dataParams.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.actualEndTime)):'';
+                this.$http.post('project-edit-task',dataParams).then((response)=>{
                      this.cancelEditTask();
                      this.getListData();
                  }).catch((error)=>{

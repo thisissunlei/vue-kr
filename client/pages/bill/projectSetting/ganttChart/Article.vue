@@ -2,77 +2,75 @@
 <template>
     <div>
          
-        <div class="every-col" :data-chart="data.t_id" >
-            <FlagLabel v-if="getFlagShow('MEETING')" 
-            :label="data.label" 
-            :data="20" 
-            :minCalibration="minCalibration" 
-            :startDate="leftEndpoint"
-        />
-            <div class="article" 
-             v-if="getFlagShow('STAGETASK')"
-                :style="{
-                    background:getBgColor(),
-                    width:boxDetail.width * minCalibration+'px',
-                    left:boxDetail.office * minCalibration+'px'
-                }"
-            >
-            
-                <div 
-                    class="plan"
+            <div class="every-col" :data-chart="data.t_id" >
+                
+                <FlagLabel v-if="getFlagShow('MEETING')" 
+                    :label="data.label" 
+                    :data="20" 
+                    :minCalibration="minCalibration" 
+                    :startDate="leftEndpoint"
+                />
+                
+                <div class="article" 
+                v-if="getFlagShow('STAGETASK')"
                     :style="{
-                        width:planDetail.width * minCalibration + 'px',
-                        left:planDetail.office * minCalibration + 'px'
+                        background:getBgColor(),
+                        width:boxDetail.width * minCalibration+'px',
+                        left:boxDetail.office * minCalibration+'px'
                     }"
-                    v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
                 >
-                    <span  v-if="type == 'edit'">{{data.label}}</span>
-                    <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+44" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
-                        <Tooltip :content="data.label" placement="right">
-                            <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
-                        </Tooltip>
+                <Poptip v-if="type!='edit'" placement="bottom-start" :width="600" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
                     
-                        <div class="api" slot="content">
-                            <ChildArticle 
-                                v-if="isChild"
-                                :data="secondObj"
-                                :leftEndpoint="childLeftEndpoint"
-                                :minCalibration="minCalibration"
-                            /> 
-                        </div>
-                    </Poptip>
-                </div>
-            
-
-
-                <div 
-                    class="actual"
-                    :style="{
-                        width:actualDetail.width * minCalibration+'px',
-                        left:actualDetail.office * minCalibration + 'px'
-                    }"
-                    v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                >
-                    <span  v-if="type == 'edit'">{{data.label}}</span>
-                    <Poptip  v-if="type!='edit'" placement="bottom-start" :width="planDetail.width* minCalibration" @on-popper-show="getSpecificData" >
-                        <Tooltip :content="data.label" placement="right">
-                            <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
-                                {{data.label}}
-                            </div>
+                    <div 
+                        class="plan"
+                        :style="{
+                            width:planDetail.width * minCalibration + 'px',
+                            left:planDetail.office * minCalibration + 'px'
+                        }"
+                        v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
+                    >
+                        <span  v-if="type == 'edit'">{{data.label}}</span>
+                            <Tooltip :content="data.label" placement="right">
+                                <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
+                            </Tooltip>
                         
-                        </Tooltip>
-                        <div class="api" slot="content">
-                            <!-- <ViewArticle                          
-                                :data="secondObj"  
-                                :leftEndpoint="leftEndpoint"
-                                :minCalibration="minCalibration"
-                            />  -->
-                        </div>
-                    </Poptip>
+                           
+                        
+                    </div>
+                
+
+
+                    <div 
+                        class="actual"
+                        :style="{
+                            width:actualDetail.width * minCalibration+'px',
+                            left:actualDetail.office * minCalibration + 'px'
+                        }"
+                        v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                    >
+                        <span  v-if="type == 'edit'">{{data.label}}</span>
+                            <Tooltip :content="data.label" placement="right">
+                                <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
+                                    {{data.label}}
+                                </div>
+                            
+                            </Tooltip>
+                            
+                    </div>
+                     <div class="api" slot="content">
+                        <ChildArticle 
+                            v-if="isChild"
+                            :data="secondObj"
+                            :leftEndpoint="childLeftEndpoint"
+                            :minCalibration="minCalibration"
+                        /> 
+                    </div>
+                </Poptip>
                 </div>
+                   
+                    
             </div>
-        
-        </div>
+             
     </div>
 </template>
 

@@ -237,12 +237,12 @@ export default {
             leftList.scrollTop=chartDom.scrollTop;
             this.scrollBottom(chartDom);
             if(chartDom.scrollLeft>=chartDom.clientWidth){
-                 if(!this.loading){
-                        return ;
-                 }
-                 setTimeout(() => {
-                        // this.getListData(this.params);
-                 },1000);
+                //  if(!this.loading){
+                //         return ;
+                //  }
+                //  setTimeout(() => {
+                //         // this.getListData(this.params);
+                //  },1000);
 
             }
             // if(chartDom.scrollLeft<10){

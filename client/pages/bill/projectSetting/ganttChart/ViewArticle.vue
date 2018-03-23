@@ -51,16 +51,20 @@ export default {
     mounted(){
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
-        } 
-        var leftDom = document.querySelectorAll('li[data-box-id="'+this.showData.id+'"]')[0];
-        var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
-        if(leftDom&&rightDom){
-            if(leftDom.offsetHeight>rightDom.offsetHeight){
-                rightDom.style.height=leftDom.offsetHeight+'px';
-            }else{
-                leftDom.style.height=rightDom.offsetHeight+'px';
+
+            var leftDom = document.querySelectorAll('li[data-box-id="'+this.showData.id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
+            if(leftDom&&rightDom){
+                if(leftDom.offsetHeight>rightDom.offsetHeight){
+                    rightDom.style.height=this.showData.length + 70+'px';
+                }else{
+                    leftDom.style.height=rightDom.offsetHeight+'px';
+                }
+                console.log(leftDom,"leftDom",rightDom,"======")
             }
-        }
+             console.log(leftDom,"leftDom",rightDom,"======")
+        } 
+        
     },
     methods:{
        

@@ -346,14 +346,14 @@ export default {
                     });
                     return ;
                 }
-              
+                console.log('edit---',this.editData);
                 this.editData.id=this.editId;
                 this.editData.pid=this.parentId;
                 this.editData.propertyId=this.queryData.id;
-                this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
-                this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
-                this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
-                this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
+                // this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
+                // this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
+                // this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
+                // this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
                 this.$http.post('project-edit-task',this.editData).then((response)=>{
                      this.cancelEditTask();
                      this.getListData();

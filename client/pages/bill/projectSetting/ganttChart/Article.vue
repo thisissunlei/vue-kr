@@ -3,12 +3,12 @@
     <div>
          
         <div class="every-view-col" :data-chart="data.t_id" >
-            <FlagLabel v-if="getFlagShow('MEETING')" 
+            <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
             :data="20" 
             :minCalibration="minCalibration" 
             :startDate="leftEndpoint"
-        />
+        /> -->
             <div class="article" 
              v-if="getFlagShow('STAGETASK')"
                 :style="{

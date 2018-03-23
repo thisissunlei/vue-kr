@@ -216,7 +216,7 @@ export default {
         background: #F6F6F6;
         border-radius: 4px;
         box-sizing: border-box;
-        max-height: 400px;
+        max-height: 240px;
         overflow: scroll;
         .title-wrap{
             padding-left: 20px;

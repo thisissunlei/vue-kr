@@ -4,10 +4,10 @@
         <!-- 甘特图部分 -->
         <GanttChart 
            type='view' 
-           :startTime="this.getStartDay()" 
-           :endTime="this.getEndDay()"
+           :startTime="params.startTime" 
+           :endTime="params.endTime"
            @treeClick="treeClick"
-           @scroll="chartScroll"
+           @scroll="scroll"
            :treeData="treeData"
            :listData="listData"
         >
@@ -60,6 +60,8 @@ import dateUtils from 'vue-dateutils';
 
 import TableList from './tableList';
 import GanttChart from '../ganttChart';
+var isLoading = false;
+var allPage = 1;
 export default {
     components:{
         TableList,
@@ -67,13 +69,13 @@ export default {
     },
     data(){
         return{
-            difference:7,
+            
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay()+' 00:00:00',
-                startTime:this.getStartDay()+' 00:00:00',
-                pageSize:2,
+                endTime:this.getEndDay(10),
+                startTime:this.getStartDay(),
+                pageSize:6,
                 page:1,
                 status:2,
                 taskTemplateIds:[]
@@ -81,7 +83,8 @@ export default {
             treeParams:{
                statusType:"PREPARE" 
             },
-           
+            minDay:'',
+            maxDay:'',
             listData:[],
             treeData:[],
             mask:true,
@@ -91,30 +94,35 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
     },
-    updated(){
-        if(this.listData.length){
-            this.listData.map((item,index)=>{
-                 var leftDom = document.querySelectorAll('li[data-box-id="'+item.id+'"]')[0];
-                 var rightDom= document.querySelectorAll('div[data-article-id="'+item.id+'"]')[0];
-                 if(leftDom&&rightDom){
-                    if(leftDom.offsetHeight>rightDom.offsetHeight){
-                        rightDom.style.height=leftDom.offsetHeight+'px';
-                    }else{
-                        leftDom.style.height=rightDom.offsetHeight+'px';
-                    }
-                 }
-            })
-        }
-    },
+    
     methods:{  
         //获取进度列表数据
-        getListData(params,data){
-            this.$http.get('project-progress-list',params).then((response)=>{
-                if(data){
+        getListData(params,type){
+          
+            if(allPage<params.page){
+                return;
+            }
+            isLoading = true;
+            var data = Object.assign({},params);
+            var startTime = data.startTime.split(" ")[0]+' 00:00:00';
+            var endTime = data.endTime.split(" ")[0]+' 00:00:00';
+            data.startTime = startTime;
+            data.endTime = endTime;
+            this.$http.get('project-progress-list',data).then((response)=>{
+                console.log(response.data);
+                if(type){
                     this.listData=this.listData.concat(response.data.items);
                 }else{
                     this.listData=response.data.items;
                 }
+                
+                if(response.data.hasTime){
+                    this.minDay = this.getTimeToDay(response.data.firstStartTime);
+                    this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
+                }
+                allPage = response.data.totalPages;
+                isLoading = false;
+                this.params.page = response.data.page+1;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -135,6 +143,7 @@ export default {
         rowClick(item){
             window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`,'_blank');
         },
+        //树
         treeClick(params){
             var treeArray=[];
             params.map((item,index)=>{
@@ -183,17 +192,15 @@ export default {
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             return today;
         },
-        getEndDay(){
-           
+        //结束日期
+        getEndDay(n){
             var today =this.getStartDay();
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
                 day= +start[2];
-
-            for(var i=0;i<this.difference;i++){
+            for(var i=0;i<n;i++){
               
-               
                 if(month > 12){
                     month = month-12;
                     year += 1;
@@ -204,86 +211,74 @@ export default {
                 month = month-12;
                 year += 1;
             }
-          
-            return year+"-"+month+"-"+day;
             
+            return year+"-"+month+"-"+day;
         },
-        // 简单的防抖动函数
-         throttle(func,delay) {
-            var timer = null;
-            var startTime = Date.now();
-
-            return function(){
-                var curTime = Date.now();
-                var remaining = delay-(curTime-startTime);
-                var context = this;
-                var args = arguments;
-
-                clearTimeout(timer);
-                if(remaining<=0){
-                    func.apply(context,args);
-                    startTime = Date.now();
-                }else{
-                    timer = setTimeout(func,remaining);
-                }
-            }
+        getDayToTime(str){
+            return (new Date(str+' 00:00:00')).getTime();
         },
-        realFunc(){
-           console.log('func--');
-           this.params.page+=1;
-           this.getListData(this.params,'123');
-        },
-        scrollBottom(dom){
-                var htmlHeight = dom.scrollHeight;
-                var clientHeight = dom.clientHeight;
-                var scrollTop = dom.scrollTop;
-                if(scrollTop+clientHeight==htmlHeight){
-                     this.throttle(this.realFunc(),1000)
-                }
+        getTimeToDay(date){
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(date));
         },
         scroll(event){
             let leftList=document.getElementById('vue-chart-left-table-list');
             let chartDom=document.getElementById('vue-chart-right-draw-content');
+            const isBottom = chartDom.scrollHeight - chartDom.clientHeight - chartDom.scrollTop;
+            const isRight = chartDom.scrollWidth - chartDom.clientWidth - chartDom.scrollLeft;
             chartDom.scrollTop=leftList.scrollTop;
-            this.scrollBottom(leftList);
-        },
-        //通过年月获取日
-       getDaysInOneMonth(year, month){  
-            month = parseInt(month, 10);  
-            var d= new Date(year, month, 0);  
-            return d.getDate();  
-        },
-        //增加一个月
-        changeTime(time){
-            var times=time.split('-');
-            var middle=times[2].split(' 00');
-            var day=middle[0];
-            var year=times[0];
-            var month=times[1];
-            if(Number(month)+1>12){
-               year=Number(year)+1;
-               month=1;
-               this.getDaysInOneMonth(year,month); 
-            }else{
-               month=Number(month)+1;
-               this.getDaysInOneMonth(year,month); 
+            var startTime = this.getDayToTime(this.params.startTime);
+            var endTime = this.getDayToTime(this.params.endTime);
+
+            if(isRight<=0){
+                console.log("到达最右边")
+               if(isLoading ||endTime>=this.maxDay){
+                   return;
+               }
+
             }
-            this.params.endTime=year+'-'+month+'-'+Number(day)+' 00:00:00';
-            this.getListData(this.params);
-        },
-        chartScroll(){
-            let leftList=document.getElementById('vue-chart-left-table-list');
-            let chartDom=document.getElementById('vue-chart-right-draw-content');
-            leftList.scrollTop=chartDom.scrollTop;
-            //下滑
-            this.scrollBottom(chartDom);
-            //右滑
-            if(chartDom.scrollLeft>=chartDom.clientWidth){
-                this.changeTime(this.params.endTime);
+            if(chartDom.scrollLeft<=0){
+                console.log("到达最左边")
+                if(isLoading ||startTime<=this.minDay){
+                   return;
+                }
+                addBeforeMonthNum()
+
             }
-            // if(chartDom.scrollLeft<10){
-            //       console.log('滑倒最左边了');
-            // }
+            if(isBottom<=0){
+                if(isLoading){
+                   return;
+                }
+                this.getListData(this.params,true)
+            }
+           
+        },
+        //向前增加一个月
+        addBeforeMonthNum(startTime,n){
+            var allDay = startTime.split("-");
+            var year = allDay[0],month=allDay[1];
+            for (var i = 1; i <= n; i++) {
+                month -=1;
+                if(month<1){
+                    month =  12 -month;
+                    year -= 1;
+                }
+            }
+            this.params.start = year + '-'+month+'-'+1;
+            this.getListData(this.params)
+        },
+        // 向后加一个月
+        addAfterMonthNum(endTime,n){
+            var allDay = startTime.split("-");
+            var year = allDay[0],month=allDay[1];
+            for (var i = 1; i <= n; i++) {
+                month +=1;
+                if(month>12){
+                    month = month - 12;
+                    year += 1;
+                }
+            }
+            this.params.endTime = year + '-'+month+'-'+1;
+            this.getListData(this.params)
         }
     }
 }

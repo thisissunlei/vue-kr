@@ -2,7 +2,7 @@
 <template>
     <div>
          
-            <div class="every-col" :data-chart="data.t_id" >
+            <div class="every-view-col" :data-chart="data.t_id" >
                 
                 <FlagLabel v-if="getFlagShow('MEETING')" 
                     :label="data.label" 
@@ -19,7 +19,7 @@
                         left:boxDetail.office * minCalibration+'px'
                     }"
                 >
-                <Poptip v-if="type!='edit'" placement="bottom-start" :width="600" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
+                <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+40" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
                     
                     <div 
                         class="plan"

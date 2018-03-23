@@ -15,7 +15,7 @@
                 <p>{{item.cityName}}</p>
                 <p v-if="test=='INVEST'" style="color:#499df1;cursor:pointer;" @click="operationClick(item)">确认已签署合同</p>
             </li>
-            <div style="height:1000px"></div>
+          
         </ul> 
   </div>
 </template>

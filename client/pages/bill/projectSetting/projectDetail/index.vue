@@ -6,15 +6,15 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <!--<div class='title-right'><Button type="primary" @click="watchTask">查看记录</Button></div>-->
+                <div class='title-right' v-if="signMask"><Button type="primary" @click="watchTask">确认合同已签署</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
                 :data="listData"
                 :treeData="treeData"
                 type="edit"
-                :startTime="this.getStartDay()" 
-                :endTime="this.getEndDay()"
+                :startTime="startTime" 
+                :endTime="endTime"
                 @scroll="chartScroll"
             >
                 <div class='detail-detail' slot="leftBar">
@@ -75,6 +75,8 @@
                     <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
                 </div>
         </Modal>
+
+        
   </div>
 </template>
 
@@ -120,11 +122,12 @@ export default {
                 {time:'2月22日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"},
                 {time:'2月23日 23:32',detail:'AI 编辑了社区开业进度详情',who:"编辑任务  项目评估"}
             ],
-            endTime:'',
+            endTime:this.getEndDay(7),
             startTime:this.getStartDay(),
             isLoading:true,
 
-            treeData:[]
+            treeData:[],
+            signMask:false
         }
     },
     created(){    
@@ -134,11 +137,13 @@ export default {
          GLOBALSIDESWITCH("false");
          this.getListData(); 
          let status=this.queryData.status==1?'INVEST':'PREPARE'
+         this.signMask=this.queryData.status==1?true:false;
          this.getTreeData({statusType:status});
     },
     methods:{
-        //获取树列表数据
-        getTreeData(params){     
+        //获取树数据
+        getTreeData(params){   
+            
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
             }).catch((error)=>{
@@ -152,19 +157,14 @@ export default {
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             return today;
         },
-        getEndDay(){
-           
-             if(this.params.endTime){
-                return this.params.endTime;
-            }
-           
+        getEndDay(n){
             var today =this.getStartDay();
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
                 day= +start[2];
 
-            for(var i=0;i<this.difference;i++){
+            for(var i=0;i<n;i++){
               
                
                 if(month > 12){
@@ -177,15 +177,17 @@ export default {
                 month = month-12;
                 year += 1;
             }
-          
+            
             return year+"-"+month+"-"+day;
             
         },
-        //获取树数据
+       
+        //获取列表数据
         getListData(){
             let params={
                 propertyId:this.queryData.id
             }
+
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 

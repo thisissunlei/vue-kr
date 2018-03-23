@@ -60,9 +60,7 @@ export default {
                 }else{
                     leftDom.style.height=rightDom.offsetHeight+'px';
                 }
-                console.log(leftDom,"leftDom",rightDom,"======")
             }
-             console.log(leftDom,"leftDom",rightDom,"======")
         } 
         
     },

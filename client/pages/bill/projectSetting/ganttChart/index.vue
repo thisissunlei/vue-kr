@@ -128,8 +128,6 @@
                             :minCalibration="minCalibration"
                         />
                     </div>
-
-                    <div style="height:1000px"></div>
                 </div>
             </div>
            <slot name="leftBar"></slot>
@@ -222,14 +220,12 @@ export default {
         }
     },
     mounted(){
-       
-       
         this.init(this.startTime,this.endTime);
         this.getDayBarWidth()
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
-         console.log(this.startTime,"========",this.endTime);
+         
     },
     updated(){
         if(this.treeData.length){
@@ -317,7 +313,7 @@ export default {
         init(startTime,endTime){
             var start = startTime.split("-"),
                 end = endTime.split("-");
-       
+            
             var startObj = {
                 year:+start[0],
                 month:+start[1]
@@ -326,8 +322,10 @@ export default {
                 year:+end[0],
                 month:+end[1]
             }
+           
             var showData = [];
-            for(var month=startObj.month,year=startObj.year;!(month==endObj.month && year == endObj.year); month++){
+
+            for(var month=startObj.month,year=startObj.year;+(year+''+month) <+(endObj.year+''+endObj.month); month++){
                 if(month >12){
                     month = month-12;
                     year +=1; 
@@ -338,19 +336,14 @@ export default {
                     month:month,
                     dayNum:this.getDayNum(year,month),
                 })
-                
-
             }
-           
-
+        
             this.showData = [].concat(showData);
-            
             this.leftEndpoint = this.showData[0];
-            console.log(this.leftEndpoint,"pppppp")
+           
+            
             this.isLoading = false;
         },
-       
-        
         //获取某日为周几
         getWeekNum(year,month,day){
             var date = new Date(year,month-1,day);
@@ -509,7 +502,7 @@ export default {
                 border-top: 1px solid #E1E6EB;;
                 border-bottom: 1px solid #E1E6EB;
             }
-            overflow:-webkit-paged-x;
+           
         }
         .hander{
             margin-top:20px;

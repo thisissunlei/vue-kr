@@ -1291,6 +1291,7 @@ import utils from '~/plugins/utils';
                 this.$http.get('get-seat-deposit-free', '').then( r => {
                     if(r.data){
                         this.depositList.push({value:'0',label:'无押金'},)
+                        this.depositList.push({value:'1',label:'1个月'},)
                     }
                 }).catch( e => {
                         this.$Notice.error({

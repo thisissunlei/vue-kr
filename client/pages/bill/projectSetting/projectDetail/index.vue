@@ -158,11 +158,23 @@ export default {
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
+                this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
                 });
             })
+        },
+         //递归甘特图任务赋值
+        recursiveFn(data){
+            data.map((item,index)=>{
+                item.title=item.label;
+                item.expand=false;
+                if(item.children&&item.children.length){
+                    this.recursiveFn(item.children);
+                }
+            })
+            return data;
         },
          //获取今天日期
         getStartDay(){

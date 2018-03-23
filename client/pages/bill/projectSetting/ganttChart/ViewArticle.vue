@@ -52,15 +52,17 @@ export default {
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
         } 
-        var leftDom = document.querySelectorAll('li[data-box-id="'+this.showData.id+'"]')[0];
-        var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
-        if(leftDom&&rightDom){
-            if(leftDom.offsetHeight>rightDom.offsetHeight){
-                rightDom.style.height=leftDom.offsetHeight+'px';
-            }else{
-                leftDom.style.height=rightDom.offsetHeight+'px';
+        setTimeout(() => {
+            var leftDom = document.querySelectorAll('div[data-box-id="'+this.showData.id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
+            if(leftDom&&rightDom){
+                if(leftDom.offsetHeight>rightDom.offsetHeight){
+                    rightDom.style.height=leftDom.offsetHeight+'px';
+                }else{
+                    leftDom.style.height=rightDom.offsetHeight+'px';
+                }
             }
-        }
+        },100);
     },
     methods:{
        
@@ -137,8 +139,14 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-        height: 70px;
+        //height: 70px;
         border-top: 1px solid #E1E6EB;;
         border-bottom: 1px solid #E1E6EB;
+        &:first-child{
+            border-top:none;
+        }
+        &:last-child{
+            border-bottom:none;
+        }
     }
 </style>

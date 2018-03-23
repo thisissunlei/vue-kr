@@ -232,25 +232,11 @@ export default {
          console.log(this.startTime,"========",this.endTime);
     },
     updated(){
-        if(this.treeData.length){
-           this.recursiveFn(this.treeData);
-        }
         this.mask=this.treeData.length?true:false;
     },
     methods:{
         treeClick(params){
             this.$emit('treeClick',params);
-        },
-        //递归赋值
-        recursiveFn(data){
-            data.map((item,index)=>{
-                item.title=item.label;
-                item.expand=false;
-                if(item.children&&item.children.length){
-                    this.recursiveFn(item.children);
-                }
-            })
-            return data;
         },
         //获取年数组
         getYears(arr){

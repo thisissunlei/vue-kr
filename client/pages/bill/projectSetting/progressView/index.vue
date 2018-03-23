@@ -15,23 +15,46 @@
                 <div class='chart-left'>
                     <Tabs size="small" value="name1" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
-                            <TableList
-                                :listData="listData"
-                                test="PREPARE"
-                                @rowClick="rowClick"
-                                @scroll="scroll"
-                                v-if="mask"
-                            />
+
+                            <div class='chart-left-table' v-if="mask">
+                                 <div class='view-table-list'>
+                                    <p>项目名称</p>
+                                    <p>城市</p>
+                                </div> 
+                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
+                                     <ListTable
+                                        v-for="item in listData"
+                                        :key="item.id"
+                                        :data="item"
+                                        test="PREPARE"
+                                        @rowClick="rowClick"
+                                    />
+                                     <div style="height:1000px"></div>
+                                </div>   
+                            </div>
+
                         </TabPane>
                         <TabPane label="投拓期项目" name="name2">
-                            <TableList
-                                :listData="listData"
-                                test="INVEST"
-                                @rowClick="rowClick"
-                                @operationClick="operationClick"
-                                @scroll="scroll"
-                                v-if="!mask"
-                            />
+
+                            <div class='chart-left-table' v-if="!mask">
+                                 <div class='view-table-list'>
+                                    <p>项目名称</p>
+                                    <p>城市</p>
+                                    <p>操作</p>
+                                </div> 
+                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
+                                     <ListTable
+                                        v-for="item in listData"
+                                        :key="item.id"
+                                        :data="item"
+                                        test="INVEST"
+                                        @rowClick="rowClick"
+                                        @operationClick="operationClick"
+                                    />
+                                     <div style="height:1000px"></div>
+                                </div>   
+                            </div>
+
                         </TabPane>
                     </Tabs>
                 </div>
@@ -58,12 +81,12 @@
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 
-import TableList from './tableList';
 import GanttChart from '../ganttChart';
+import ListTable from './listTable';
 export default {
     components:{
-        TableList,
-        GanttChart
+        GanttChart,
+        ListTable
     },
     data(){
         return{
@@ -91,21 +114,6 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
     },
-    updated(){
-        if(this.listData.length){
-            this.listData.map((item,index)=>{
-                 var leftDom = document.querySelectorAll('li[data-box-id="'+item.id+'"]')[0];
-                 var rightDom= document.querySelectorAll('div[data-article-id="'+item.id+'"]')[0];
-                 if(leftDom&&rightDom){
-                    if(leftDom.offsetHeight>rightDom.offsetHeight){
-                        rightDom.style.height=leftDom.offsetHeight+'px';
-                    }else{
-                        leftDom.style.height=rightDom.offsetHeight+'px';
-                    }
-                 }
-            })
-        }
-    },
     methods:{  
         //获取进度列表数据
         getListData(params,data){
@@ -121,15 +129,27 @@ export default {
                 });
             })
         },
-        //获取树列表数据
+        //获取甘特图任务数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
+                this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
                 });
             })
+        },
+        //递归甘特图任务赋值
+        recursiveFn(data){
+            data.map((item,index)=>{
+                item.title=item.label;
+                item.expand=false;
+                if(item.children&&item.children.length){
+                    this.recursiveFn(item.children);
+                }
+            })
+            return data;
         },
         //列表跳转详情
         rowClick(item){
@@ -172,7 +192,7 @@ export default {
             }else{
                 this.mask=true;
                 this.params.status = 2;
-                 this.params.page=1;
+                this.params.page=1;
                 this.getListData(this.params);
                 this.treeParams.statusType='PREPARE';
                 this.getTreeData(this.treeParams);
@@ -310,6 +330,41 @@ export default {
                 .ivu-tabs-ink-bar{
                     width:58px !important;
                     left: 31px;
+                }
+            }
+            .chart-left-table{
+                .view-table-list{
+                    width:100%;
+                    height:49px;
+                    line-height:49px;
+                    border: 1px solid #E1E6EB;
+                    border-right:none;
+                    border-top: none;
+                    border-left:none;
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #666666;
+                    font-weight: 500;
+                    display:table;   
+                    p{
+                        display:inline-block;
+                        border-right:1px solid #E1E6EB;
+                        width:33%;
+                        text-align: center;
+                        display:table-cell;
+                        &:nth-child(3){
+                            border-right:none;
+                        }
+                    }
+                }
+                .view-table-detail{
+                     width:100%;
+                    max-height:500px;
+                    overflow: auto;
+                    border-bottom: solid 1px #E1E6EB;
+                }
+                ::-webkit-scrollbar {
+                    width:0px;
                 }
             }
         }

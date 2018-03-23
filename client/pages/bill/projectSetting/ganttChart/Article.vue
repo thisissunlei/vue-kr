@@ -247,12 +247,6 @@ export default {
     height: 70px;
     border-top: 1px solid #E1E6EB;;
     border-bottom: 1px solid #E1E6EB;
-    &:first-child{
-        border-top:none;
-    }
-    &:last-child{
-        border-bottom:none;
-    }
   }
 .article{
     position: relative;

@@ -1397,9 +1397,9 @@
                         },
                         {
                             primaryText: '账户资产中心',
-                            router: 'customer_assets',
+                            router: 'bill/customerAssets',
                             type:'vue',
-                            menuCode: 'pay_deal_flow_page'
+                            menuCode: 'customer_assets'
                         }
                     ]
                 },

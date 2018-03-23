@@ -33,12 +33,12 @@
             <Button type="primary" @click="submitAddArchives('formRight')">完成并创建</Button>
         </div>
     </Modal>
-    <!-- <Message 
+    <Message 
         :type="MessageType" 
         :openMessage="openMessage"
         :warn="warn"
         @changeOpen="onChangeOpen"
-    ></Message> -->
+    />
 </div>
 </template>
 
@@ -67,9 +67,9 @@ import AddArchives from './addArchives';
         data () {
             return {
                 totalCount:0,
-                openSearch:false,
                 openSettle:false,
                 openAntiSettle:false,
+                openMessage:false,
                 openClose:false,
                 billList:[],
                 itemDetail:{},
@@ -225,11 +225,10 @@ import AddArchives from './addArchives';
                 this.$http.get('project-archives-list', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
                 })
                 
             },
@@ -254,10 +253,13 @@ import AddArchives from './addArchives';
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
                     this.getTableData(this.tabParams);
                     this.newArchives();
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
+                    this.openMessage=true;
+                    this.warn='新建成功';
+                    this.MessageType="success";
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
                 })
             },
             //信息提示框

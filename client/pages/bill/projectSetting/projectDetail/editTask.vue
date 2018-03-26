@@ -86,13 +86,13 @@
                             v-for="item in getEdit.operLogs" 
                             :key="item.id"
                             >
-                                <div class='first'><span class='circle'></span>{{item.uTime}}</div>
+                                <div class='first'><span class='circle'></span>{{item.uTime|dateFormat('MM-dd HH:mm')}}</div>
                                 <div style="display:inline-block;">
                                     <div class='second'>
                                         <span style="padding-right: 10px;">{{item.updatorName}}</span>
                                         <span>{{item.comment}}</span>
                                     </div>
-                                    <div class='third'>
+                                    <div class='third' v-if="item.descr">
                                         {{item.descr}}
                                     </div>
                                 </div>
@@ -149,6 +149,10 @@ export default {
     },
     mounted(){
         this.mask=this.getEdit.type=='STAGETASK'?true:false;
+        this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
+        this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
+        this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
+        this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
         this.formItem=this.getEdit;
     },
     updated:function(){

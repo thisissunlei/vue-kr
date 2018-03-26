@@ -137,14 +137,18 @@ export default {
         overShow(id){
             var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
-            leftDom.style.background="#F7F9FB";
-            rightDom.style.background="#F7F9FB";
+            if(leftDom&&rightDom){
+                leftDom.style.background="#F7F9FB";
+                rightDom.style.background="#F7F9FB";
+            }
         },
         outHide(id){
             var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
-            leftDom.style.background="#fff";
-            rightDom.style.background="#fff";
+             if(leftDom&&rightDom){
+                 leftDom.style.background="#fff";
+                 rightDom.style.background="#fff";
+             }
         }
     }
 }

@@ -226,7 +226,7 @@ export default {
 
 <style lang="less">
  .every-view-col{
-    height: 70px;
+    height: 45px;
     border-top: 1px solid #E1E6EB;;
     border-bottom: 1px solid #E1E6EB;
   }

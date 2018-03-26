@@ -42,7 +42,7 @@
                             <Select 
                                 v-model="barType" 
                                 @on-change="selectChange"
-                                style="width:200px;margin-right:20px;text-align:left;"
+                                style="width:100px;margin-right:20px;text-align:left;"
                             >
                                 <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -55,7 +55,7 @@
             <div 
                
                 class="right-draw" 
-                style="overflow:auto;"
+                :style="{left:type=='edit'?'271px':'371px'}"
             >
                 <div class="calibration" >
                  <div  style="width:100%;position:relative;overflow:hidden;"  >
@@ -485,7 +485,7 @@ export default {
         }
         .right-draw{
             position: absolute;
-           
+            overflow:auto;
             left: 371px;
             right: 0px;
             .calibration  {
@@ -518,11 +518,10 @@ export default {
                     opacity: .1;
             }
             .every-col{
-                height: 70px;
-                border-top: 1px solid #E1E6EB;;
-                border-bottom: 1px solid #E1E6EB;
+                height: 45px;
+                //border-top: 1px solid #E1E6EB;;
+                border-bottom: 1px solid #F0F0F0;
             }
-           
         }
         .hander{
             margin-top:20px;
@@ -568,7 +567,7 @@ export default {
         }
    }
    .tab-second-title{
-        height:70px;
+        height:45px;
     }
    
 </style>

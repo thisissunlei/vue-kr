@@ -11,6 +11,7 @@
                     :startDate="leftEndpoint"
                 />
                 
+                
                 <div class="article" 
                 v-if="getFlagShow('STAGETASK')"
                     :style="{
@@ -19,8 +20,18 @@
                         left:boxDetail.office * minCalibration+'px'
                     }"
                 >
-                <div class="label"> {{data.label}} </div>
-                <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+40" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
+                 <Poptip 
+                    v-if="type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
+                    placement="bottom-start" 
+                    :width="boxDetail.width  * minCalibration + 40" 
+                    @on-popper-show="getSpecificData" 
+                    @on-popper-hide="cildHide"
+                >
+                <div 
+                    class="label"
+                    :style="{width:boxDetail.width * minCalibration+'px'}"
+                > {{data.label}} </div>
+               
                     
                     <div 
                         class="plan"
@@ -28,12 +39,9 @@
                             width:planDetail.width * minCalibration + 'px',
                             left:planDetail.office * minCalibration + 'px'
                         }"
-                        v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
                     >
                     </div>
                 
-
-
                     <div 
                         class="actual"
                         :style="{
@@ -43,7 +51,7 @@
                         v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                     >       
                     </div>
-                     <div class="api" slot="content">
+                      <div class="api" slot="content">
                         <ChildArticle 
                             v-if="isChild"
                             :data="secondObj"
@@ -51,9 +59,11 @@
                             :minCalibration="minCalibration"
                         /> 
                     </div>
-                </Poptip>
+                     
+               </Poptip>
                 </div>
-                   
+              
+                 
                     
             </div>
              
@@ -65,14 +75,12 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
-import ViewArticle from './ViewArticle';
 import ChildArticle from './ChildArticle'
 export default {
     name:'Article',
     components:{
         SpecificPlan,
         FlagLabel,
-        ViewArticle,
         ChildArticle
     },
     props:{
@@ -113,6 +121,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
+        console.log(this.leftEndpoint,"-----------")
     },
     methods:{
         getFlagShow(event){
@@ -232,7 +241,7 @@ export default {
   }
 .article{
     position: relative;
-    padding: 8px 0px;
+    
     .label{
         width: 100%;
        
@@ -240,9 +249,9 @@ export default {
         text-overflow:ellipsis;
         white-space: nowrap;
         background: #DEEEFF;
-        border-radius: 7px 7px 8px 8px;
-        line-height: 30px;
-        height: 30px;
+        border-radius: 7px 7px 0px 0px;
+        line-height: 28px;
+        height: 28px;
         color: #0561B5;
         padding: 0px 10px;
     }

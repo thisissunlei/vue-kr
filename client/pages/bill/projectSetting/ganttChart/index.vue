@@ -243,7 +243,7 @@ export default {
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+1;
 
-            this.tagToLeft = utils.dateDiff(today,startTime)+this.minCalibration;
+            this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
         },
         treeClick(params){
             this.$emit('treeClick',params);

@@ -289,6 +289,7 @@ export default {
             leftList.scrollTop = chartDom.scrollTop;
             var startTime = this.getDayToTime(this.params.startTime);
             var endTime = this.getDayToTime(this.params.endTime);
+            return ;
             if(isRight<=0){
                 
                if(isLoading ||endTime>=this.maxDay){

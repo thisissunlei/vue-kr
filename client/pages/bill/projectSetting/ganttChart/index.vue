@@ -104,7 +104,7 @@
                         :style="{width:dayAllNum*minCalibration+'px'}"
                        
                     >
-                    
+                        
                         <EditArticle 
                             v-if="leftEndpoint.year && type== 'edit'"
                             :minCalibration="minCalibration"
@@ -114,14 +114,7 @@
                             :key="item.id"
                             :type="type"
                         />
-                         <!-- <Article 
-                            v-if="leftEndpoint && type== 'view'"
-                            :minCalibration="minCalibration"
-                            :startDate="leftEndpoint"
-                            v-for="item in listData"
-                            :data="listData"
-                            :key="item.id"
-                        /> -->
+                        
                         <ViewArticle  
                             v-if="leftEndpoint.year && type== 'view'"
                             v-for="item in listData"
@@ -131,6 +124,9 @@
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                         />
+                        <div class="tag" :style="{width:minCalibration + 'px',left:tagToLeft+'px'}"></div>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -221,7 +217,8 @@ export default {
             barType: 'day',
             isLoading:true,
             mask:false,
-            scrollWidth:0
+            scrollWidth:0,
+            tagToLeft:0,
         }
     },
     mounted(){
@@ -232,12 +229,22 @@ export default {
         //获取周的具体数据
         this.getWeekStartAndEnd();
         this.getYears(this.showData);
+        this.getTodayTOLeft(this.showData);
+       
          
     },
+   
     updated(){
         this.mask=this.treeData.length?true:false;
     },
     methods:{
+        getTodayTOLeft(data){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var startMonth = data[0];
+            var startTime = startMonth.year + '-'+startMonth.month+'-'+1;
+
+            this.tagToLeft = utils.dateDiff(today,startTime)+this.minCalibration;
+        },
         treeClick(params){
             this.$emit('treeClick',params);
         },
@@ -498,8 +505,18 @@ export default {
             overflow:auto;
         }
         .content{
+            position: relative;
           
             background: #F3F2F7;
+            .tag{
+                    width: 50px;
+                    position: absolute;
+                    background: #E0C4F0;
+                    top: 0px;
+                    left: 0px;
+                    height: 100%;
+                    opacity: .1;
+            }
             .every-col{
                 height: 45px;
                 //border-top: 1px solid #E1E6EB;;

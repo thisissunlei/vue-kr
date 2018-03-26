@@ -19,6 +19,7 @@
                         left:boxDetail.office * minCalibration+'px'
                     }"
                 >
+                <div class="label"> {{data.label}} </div>
                 <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+40" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
                     
                     <div 
@@ -29,13 +30,6 @@
                         }"
                         v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
                     >
-                        <span  v-if="type == 'edit'">{{data.label}}</span>
-                            <Tooltip :content="data.label" placement="right">
-                                <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">{{data.label}}</div>
-                            </Tooltip>
-                        
-                           
-                        
                     </div>
                 
 
@@ -47,15 +41,7 @@
                             left:actualDetail.office * minCalibration + 'px'
                         }"
                         v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                    >
-                        <span  v-if="type == 'edit'">{{data.label}}</span>
-                            <Tooltip :content="data.label" placement="right">
-                                <div class="label" :style="{width:planDetail.width * minCalibration -20 + 'px'}">
-                                    {{data.label}}
-                                </div>
-                            
-                            </Tooltip>
-                            
+                    >       
                     </div>
                      <div class="api" slot="content">
                         <ChildArticle 
@@ -249,35 +235,34 @@ export default {
     padding: 8px 0px;
     .label{
         width: 100%;
-        height: 100%;
+       
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
+        background: #DEEEFF;
+        border-radius: 7px 7px 8px 8px;
+        line-height: 30px;
+        height: 30px;
+        color: #0561B5;
+        padding: 0px 10px;
     }
-    .plan{
-        height: 25px;
-        background: #4F9EED ;
+   .plan{
+        height: 8px;
+        background: #FDBA4D ;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #ffffff;
         position: relative;
         cursor: pointer;
-        .tip-label{
-            display:inline-block;
-            .ivu-tooltip-popper{
-                .ivu-tooltip-arrow{
-                    display:none;
-                }
-            }
-        }
+
    }
    .actual{
-        height: 25px;
+        height: 8px;
         margin-top:1px; 
-        background: #FDBA4D;
+        background: #7ED321;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #fff;
         position: relative;

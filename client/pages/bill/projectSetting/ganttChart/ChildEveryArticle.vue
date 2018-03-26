@@ -1,6 +1,5 @@
 
 <template>
-    <div >
     <div class="child-every-article" :data-chart="data.t_id" >
         <div v-if="!this.data.chartType && isInitial()">
         <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
@@ -12,14 +11,13 @@
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{
-                background:getBgColor(),
                 width:boxDetail.width * minCalibration+'px',
                 left:boxDetail.office * minCalibration+'px',
                 position:'relative',
-                padding:'8px 0px'
+                
             }"
         >
-        
+            <div class="label">{{data.label}}</div>
             <div 
                 class="plan"
                 :style="{
@@ -28,12 +26,8 @@
                 }"
                 v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
             >
-                <span >{{data.label}}</span>
                 
             </div>
-        
-
-
             <div 
                 class="actual"
                 :style="{
@@ -42,23 +36,10 @@
                 }"
                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
             >
-                <span>{{data.label}}</span>
                 
             </div>
         </div>
         </div>
-       
-    </div>
-    
-        <EditArticle 
-            v-if="data.children"
-            v-for="item in data.children" 
-            :key="item.id" 
-            :data="item"
-            :minCalibration="minCalibration"
-            :startDate="startDate"
-            :type="type"
-        />
     </div>
 </template>
 
@@ -109,6 +90,7 @@ export default {
             this.getBoxWidthAndOffice();
         }
       
+      console.log()
     },
     methods:{
         isInitial(){
@@ -216,7 +198,6 @@ export default {
 .child-every-article{
 
     position: relative;
-    padding: 8px 0px;
 
     
     .label{
@@ -226,17 +207,17 @@ export default {
         text-overflow:ellipsis;
         white-space: nowrap;
         background: #DEEEFF;
-        border-radius: 7px 7px 8px 8px;
-        line-height: 30px;
-        height: 30px;
+        border-radius: 7px 7px 0px 0px;
+        line-height: 28px;
+        height: 28px;
         color: #0561B5;
         padding: 0px 10px;
     }
    .plan{
-        height: 8px;
+        height: 4px;
         background: #FDBA4D ;
         border-radius:100px; 
-        line-height: 8px;
+        line-height: 4px;
         padding-left:10px;
         color: #ffffff;
         position: relative;
@@ -244,11 +225,11 @@ export default {
 
    }
    .actual{
-        height: 8px;
+        height: 4px;
         margin-top:1px; 
         background: #7ED321;
         border-radius:100px; 
-        line-height: 8px;
+        line-height: 4px;
         padding-left:10px;
         color: #fff;
         position: relative;

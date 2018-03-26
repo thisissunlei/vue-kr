@@ -11,16 +11,26 @@
                     :startDate="leftEndpoint"
                 />
                 
+                
                 <div class="article" 
                 v-if="getFlagShow('STAGETASK')"
                     :style="{
-                        background:getBgColor(),
                         width:boxDetail.width * minCalibration+'px',
                         left:boxDetail.office * minCalibration+'px'
                     }"
                 >
-                <div class="label"> {{data.label}} </div>
-                <Poptip v-if="type!='edit'" placement="bottom-start" :width="planDetail.width * minCalibration+40" @on-popper-show="getSpecificData" @on-popper-hide="cildHide">
+                 <Poptip 
+                    v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
+                    placement="bottom-start" 
+                    :width="boxDetail.width  * minCalibration + 40" 
+                    @on-popper-show="getSpecificData" 
+                    @on-popper-hide="cildHide"
+                >
+                <div 
+                    class="label"
+                    :style="{width:boxDetail.width * minCalibration+'px'}"
+                > {{data.label}} </div>
+               
                     
                     <div 
                         class="plan"
@@ -28,12 +38,9 @@
                             width:planDetail.width * minCalibration + 'px',
                             left:planDetail.office * minCalibration + 'px'
                         }"
-                        v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
                     >
                     </div>
                 
-
-
                     <div 
                         class="actual"
                         :style="{
@@ -43,7 +50,7 @@
                         v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                     >       
                     </div>
-                     <div class="api" slot="content">
+                      <div class="api" slot="content">
                         <ChildArticle 
                             v-if="isChild"
                             :data="secondObj"
@@ -51,9 +58,11 @@
                             :minCalibration="minCalibration"
                         /> 
                     </div>
-                </Poptip>
+                     
+               </Poptip>
                 </div>
-                   
+              
+                 
                     
             </div>
              
@@ -65,14 +74,12 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
-import ViewArticle from './ViewArticle';
 import ChildArticle from './ChildArticle'
 export default {
     name:'Article',
     components:{
         SpecificPlan,
         FlagLabel,
-        ViewArticle,
         ChildArticle
     },
     props:{
@@ -104,7 +111,7 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
             secondObj:{},
-            isChild:false,  
+            isChild:true,  
             childLeftEndpoint:{},
            
         }
@@ -113,6 +120,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
+        
     },
     methods:{
         getFlagShow(event){
@@ -211,7 +219,12 @@ export default {
          
            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
                 this.secondObj.tasks=response.data.items;
-                this.isChild = true;
+                if(!response.data.items||response.data.items.length == 0){
+                     this.isChild = false;
+                }else {
+                     this.isChild = true;
+                }
+
                 // this.getChildLeftEndpoint(response.data.items);
 
             }).catch((error)=>{
@@ -227,22 +240,29 @@ export default {
 <style lang="less">
  .every-view-col{
     height: 45px;
-    border-top: 1px solid #E1E6EB;;
+    
     border-bottom: 1px solid #E1E6EB;
+     &:last-child{
+            margin-top:0px;
+            border-top:none;
+        }
+    .ivu-poptip-rel{
+         background: transparent;
+    }
   }
 .article{
     position: relative;
-    padding: 8px 0px;
+     background: transparent;
+    
     .label{
         width: 100%;
-       
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
         background: #DEEEFF;
-        border-radius: 7px 7px 8px 8px;
-        line-height: 30px;
-        height: 30px;
+        border-radius: 7px 7px 0px 0px;
+        line-height: 28px;
+        height: 28px;
         color: #0561B5;
         padding: 0px 10px;
     }

@@ -4,18 +4,20 @@
    @mouseout="outHide(id)"
    >
         <div 
+            class="view-channel"
             v-if="showData.length"
             v-for="channels in showData"
             :key="channels.id"
+            style=""
         >
             <Article 
-                    v-if="leftEndpoint"
-                    :minCalibration="minCalibration"
-                    :startDate="leftEndpoint"
-                    v-for="item in channels"
-                    :data="item"
-                    :key="item.id"
-                />
+                v-if="leftEndpoint.year"
+                :minCalibration="minCalibration"
+                :startDate="leftEndpoint"
+                v-for="item in channels"
+                :data="item"
+                :key="item.id"
+            />
             
             
         </div>
@@ -26,6 +28,9 @@
 <script>
 import Article from './Article';
 export default {
+    components:{
+        Article,
+    },
    
     props:{
         data:{
@@ -156,7 +161,11 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-        height: 70px;
+        .every-col{
+            height: 47px;
+            //border-top: 1px solid #E1E6EB;;
+            border-bottom: 1px solid #F0F0F0;
+        }
         border-top: 1px solid #F0F0F0;;
         border-bottom: 1px solid #F0F0F0;
         background:#fff;
@@ -164,6 +173,9 @@ export default {
         &:first-child{
             margin-top:0px;
             border-top:none;
+        }
+        .view-channel{
+            border-bottom:1px solid #F1F1F1; 
         }
     }
 </style>

@@ -85,6 +85,7 @@ import ListTable from './ListTable';
 import GanttChart from '../ganttChart';
 var isLoading = false;
 var allPage = 1;
+var nowPage = 1;
 export default {
     components:{
         GanttChart,
@@ -99,7 +100,7 @@ export default {
                 endTime:this.getEndDay(10),
                 startTime:this.getStartDay(),
                 pageSize:6,
-                page:1,
+                page:nowPage,
                 status:2,
                 taskTemplateIds:[]
             },
@@ -136,7 +137,6 @@ export default {
             data.startTime = startTime;
             data.endTime = endTime;
             this.$http.get('project-progress-list',data).then((response)=>{
-                console.log(response.data);
                 if(type){
                     this.listData=this.listData.concat(response.data.items);
                 }else{
@@ -149,7 +149,8 @@ export default {
                 }
                 allPage = response.data.totalPages;
                 isLoading = false;
-                this.params.page = response.data.page+1;
+                nowPage = response.data.page;
+                
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -271,7 +272,7 @@ export default {
             const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
             chartDom.scrollTop = leftList.scrollTop;
             if(isBottom<=0){
-                if(isLoading){
+                if(isLoading ){
                    return;
                 }
                 this.getListData(this.params,true)
@@ -289,19 +290,23 @@ export default {
             leftList.scrollTop = chartDom.scrollTop;
             var startTime = this.getDayToTime(this.params.startTime);
             var endTime = this.getDayToTime(this.params.endTime);
+            
             if(isRight<=0){
                 
+               
                if(isLoading ||endTime>=this.maxDay){
                    return;
                }
-                this.addAfterMonthNum(this.params.startTime,2);
+                this.addAfterMonthNum(this.params.endTime,2);
 
             }
             if(chartDom.scrollLeft<=0){
+              
+                
                 if(isLoading ||startTime<=this.minDay){
                    return;
                 }
-                this.addBeforeMonthNum(this.params.endTime,2)
+                this.addBeforeMonthNum(this.params.startTime,2)
 
             }
             if(isBottom<=0){
@@ -309,6 +314,7 @@ export default {
 
                    return;
                 }
+                this.params.page = response.data.page+1;
                 this.getListData(this.params,true)
             }
         },
@@ -323,7 +329,7 @@ export default {
                     year -= 1;
                 }
             }
-            this.params.start = year + '-'+month+'-'+1;
+            this.params.startTime = year + '-'+month+'-'+1;
             this.getListData(this.params)
         },
         // 向后加一个月

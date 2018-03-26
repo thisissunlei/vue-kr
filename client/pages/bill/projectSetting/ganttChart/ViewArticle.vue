@@ -1,5 +1,8 @@
 <template>
-  <div class="view-article" :data-article-id="id">
+  <div class="view-article" :data-article-id="id"
+   @mouseover="overShow(id)"
+   @mouseout="outHide(id)"
+   >
         <div 
             v-if="showData.length"
             v-for="channels in showData"
@@ -130,6 +133,18 @@ export default {
                 min:min,
                 max:max
             }
+        },
+        overShow(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+            leftDom.style.background="#F7F9FB";
+            rightDom.style.background="#F7F9FB";
+        },
+        outHide(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+            leftDom.style.background="#fff";
+            rightDom.style.background="#fff";
         }
     }
 }
@@ -138,10 +153,13 @@ export default {
 <style lang="less" scoped>
     .view-article{
         height: 70px;
-        //border-top: 1px solid #E1E6EB;;
-        border-bottom: 1px solid #E1E6EB;
-        &:nth-child(2n+1){
-            background: #F5F6FA;
+        border-top: 1px solid #F0F0F0;;
+        border-bottom: 1px solid #F0F0F0;
+        background:#fff;
+        margin-top:10px;
+        &:first-child{
+            margin-top:0px;
+            border-top:none;
         }
     }
 </style>

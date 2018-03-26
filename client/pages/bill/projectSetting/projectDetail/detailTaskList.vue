@@ -108,7 +108,7 @@ export default {
 
 <style lang='less' scoped>
    .chart-wrap{
-      width:246px;
+      width:346px;
       display:inline-block;
       border:solid 1px #E1E6EB;
       border-bottom:none;

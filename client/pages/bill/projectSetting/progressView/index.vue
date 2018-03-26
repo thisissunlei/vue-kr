@@ -7,7 +7,7 @@
            :startTime="params.startTime" 
            :endTime="params.endTime"
            @treeClick="treeClick"
-           @scroll="scroll"
+           @scroll="rightScroll"
            :treeData="treeData"
            :listData="listData"
         >
@@ -15,23 +15,47 @@
                 <div class='chart-left'>
                     <Tabs size="small" value="name1" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
-                            <TableList
-                                :listData="listData"
-                                test="PREPARE"
-                                @rowClick="rowClick"
-                                @scroll="scroll"
-                                v-if="mask"
-                            />
+
+                            <div class='chart-left-table' v-if="mask">
+                                 <div class='view-table-list'>
+                                    <p>项目名称</p>
+                                    <p>城市</p>
+                                </div> 
+                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
+                                     <ListTable
+                                        v-for="item in listData"
+                                        :key="item.id"
+                                        :data="item"
+                                        test="PREPARE"
+                                        @rowClick="rowClick"
+                                    />
+                                    <div :style="{height:scrollWidth+'px'}"></div>
+                                    
+                                </div>   
+                            </div>
+
                         </TabPane>
                         <TabPane label="投拓期项目" name="name2">
-                            <TableList
-                                :listData="listData"
-                                test="INVEST"
-                                @rowClick="rowClick"
-                                @operationClick="operationClick"
-                                @scroll="scroll"
-                                v-if="!mask"
-                            />
+
+                            <div class='chart-left-table' v-if="!mask">
+                                 <div class='view-table-list'>
+                                    <p>项目名称</p>
+                                    <p>城市</p>
+                                    <p>操作</p>
+                                </div> 
+                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
+                                     <ListTable
+                                        v-for="item in listData"
+                                        :key="item.id"
+                                        :data="item"
+                                        test="INVEST"
+                                        @rowClick="rowClick"
+                                        @operationClick="operationClick"
+                                    />
+                                    <div :style="{height:scrollWidth+'px'}"></div>
+                                </div>   
+                            </div>
+
                         </TabPane>
                     </Tabs>
                 </div>
@@ -40,7 +64,7 @@
         <!-- 左侧切换部分内容 -->
         <Modal
             v-model="openSure"
-            title="添加任务"
+            title="提示"
             width="440"
             >
             <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>
@@ -57,15 +81,14 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-
-import TableList from './tableList';
+import ListTable from './ListTable';
 import GanttChart from '../ganttChart';
 var isLoading = false;
 var allPage = 1;
 export default {
     components:{
-        TableList,
-        GanttChart
+        GanttChart,
+        ListTable
     },
     data(){
         return{
@@ -88,11 +111,15 @@ export default {
             listData:[],
             treeData:[],
             mask:true,
+            scrollWidth:0,
         }
+
     },
     mounted(){
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
+        this.scrollWidth = utils.getScrollBarSize()
+       
     },
     
     methods:{  
@@ -129,15 +156,27 @@ export default {
                 });
             })
         },
-        //获取树列表数据
+        //获取甘特图任务数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
+                this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
                 });
             })
+        },
+        //递归甘特图任务赋值
+        recursiveFn(data){
+            data.map((item,index)=>{
+                item.title=item.label;
+                item.expand=false;
+                if(item.children&&item.children.length){
+                    this.recursiveFn(item.children);
+                }
+            })
+            return data;
         },
         //列表跳转详情
         rowClick(item){
@@ -181,7 +220,7 @@ export default {
             }else{
                 this.mask=true;
                 this.params.status = 2;
-                 this.params.page=1;
+                this.params.page=1;
                 this.getListData(this.params);
                 this.treeParams.statusType='PREPARE';
                 this.getTreeData(this.treeParams);
@@ -220,37 +259,58 @@ export default {
         getTimeToDay(date){
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(date));
         },
+
+
         scroll(event){
-            let leftList=document.getElementById('vue-chart-left-table-list');
+            
+            if(!this.params.startTime || !this.params.endTime){
+                return;
+            }
             let chartDom=document.getElementById('vue-chart-right-draw-content');
-            const isBottom = chartDom.scrollHeight - chartDom.clientHeight - chartDom.scrollTop;
-            const isRight = chartDom.scrollWidth - chartDom.clientWidth - chartDom.scrollLeft;
-            chartDom.scrollTop=leftList.scrollTop;
-            var startTime = this.getDayToTime(this.params.startTime);
-            var endTime = this.getDayToTime(this.params.endTime);
-
-            if(isRight<=0){
-                console.log("到达最右边")
-               if(isLoading ||endTime>=this.maxDay){
-                   return;
-               }
-
-            }
-            if(chartDom.scrollLeft<=0){
-                console.log("到达最左边")
-                if(isLoading ||startTime<=this.minDay){
-                   return;
-                }
-                addBeforeMonthNum()
-
-            }
+            let leftList=document.getElementById('vue-chart-left-table-list');
+            const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
+            chartDom.scrollTop = leftList.scrollTop;
             if(isBottom<=0){
                 if(isLoading){
                    return;
                 }
                 this.getListData(this.params,true)
             }
-           
+        },
+
+        rightScroll(){
+            if(!this.params.startTime || !this.params.endTime){
+                return;
+            }
+            let leftList=document.getElementById('vue-chart-left-table-list');
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            const isBottom = chartDom.scrollHeight - chartDom.clientHeight - chartDom.scrollTop;
+            const isRight = chartDom.scrollWidth - chartDom.clientWidth - chartDom.scrollLeft;
+            leftList.scrollTop = chartDom.scrollTop;
+            var startTime = this.getDayToTime(this.params.startTime);
+            var endTime = this.getDayToTime(this.params.endTime);
+            if(isRight<=0){
+                
+               if(isLoading ||endTime>=this.maxDay){
+                   return;
+               }
+                this.addAfterMonthNum(this.params.startTime,2);
+
+            }
+            if(chartDom.scrollLeft<=0){
+                if(isLoading ||startTime<=this.minDay){
+                   return;
+                }
+                this.addBeforeMonthNum(this.params.endTime,2)
+
+            }
+            if(isBottom<=0){
+                if(isLoading){
+
+                   return;
+                }
+                this.getListData(this.params,true)
+            }
         },
         //向前增加一个月
         addBeforeMonthNum(startTime,n){
@@ -305,6 +365,41 @@ export default {
                 .ivu-tabs-ink-bar{
                     width:58px !important;
                     left: 31px;
+                }
+            }
+            .chart-left-table{
+                .view-table-list{
+                    width:100%;
+                    height:49px;
+                    line-height:49px;
+                    border: 1px solid #E1E6EB;
+                    border-right:none;
+                    border-top: none;
+                    border-left:none;
+                    font-family: PingFangSC-Medium;
+                    font-size: 14px;
+                    color: #666666;
+                    font-weight: 500;
+                    display:table;   
+                    p{
+                        display:inline-block;
+                        border-right:1px solid #E1E6EB;
+                        width:33%;
+                        text-align: center;
+                        display:table-cell;
+                        &:nth-child(3){
+                            border-right:none;
+                        }
+                    }
+                }
+                .view-table-detail{
+                     width:100%;
+                    max-height:500px;
+                    overflow: auto;
+                    border-bottom: solid 1px #E1E6EB;
+                }
+                ::-webkit-scrollbar {
+                    width:0px;
                 }
             }
         }

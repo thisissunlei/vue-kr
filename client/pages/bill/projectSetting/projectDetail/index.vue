@@ -6,7 +6,7 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <div class='title-right' v-if="signMask"><Button type="primary" @click="watchTask">确认合同已签署</Button></div>
+                <div class='title-right' v-if="signMask"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -76,6 +76,18 @@
                 </div>
         </Modal>
 
+        <Modal
+            v-model="openSure"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>
+            <div slot="footer">
+                <Button type="primary" @click="submitSure()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
+
         
   </div>
 </template>
@@ -127,13 +139,17 @@ export default {
             isLoading:true,
 
             treeData:[],
-            signMask:false
+            signMask:false,
+            openSure:false,
+            scrollWidth:0
         }
     },
     created(){    
+       
         this.queryData=this.$route.query; 
     },
     mounted(){
+         this.scrollWidth= utils.getScrollBarSize()
          GLOBALSIDESWITCH("false");
          this.getListData(); 
          let status=this.queryData.status==1?'INVEST':'PREPARE'
@@ -146,11 +162,23 @@ export default {
             
             this.$http.get('project-status-search',params).then((response)=>{
                 this.treeData=response.data.items;
+                this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
                 });
             })
+        },
+         //递归甘特图任务赋值
+        recursiveFn(data){
+            data.map((item,index)=>{
+                item.title=item.label;
+                item.expand=false;
+                if(item.children&&item.children.length){
+                    this.recursiveFn(item.children);
+                }
+            })
+            return data;
         },
          //获取今天日期
         getStartDay(){
@@ -319,14 +347,14 @@ export default {
                     });
                     return ;
                 }
-              
+                console.log('edit---',this.editData);
                 this.editData.id=this.editId;
                 this.editData.pid=this.parentId;
                 this.editData.propertyId=this.queryData.id;
-                this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
-                this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
-                this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
-                this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
+                // this.editData.planStartTime=this.editData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planStartTime)):'';
+                // this.editData.planEndTime=this.editData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.planEndTime)):'';
+                // this.editData.actualStartTime=this.editData.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualStartTime)):'';
+                // this.editData.actualEndTime=this.editData.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.editData.actualEndTime)):'';
                 this.$http.post('project-edit-task',this.editData).then((response)=>{
                      this.cancelEditTask();
                      this.getListData();
@@ -351,7 +379,21 @@ export default {
             //   if(chartDom.scrollLeft<10){
             //       console.log('滑倒最左边了');
             //   }
-          }
+          },
+          submitSure(){
+            this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
+                window.close();
+                window.opener.location.reload();
+                this.cancelSure();
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+                })
+            },
+            cancelSure(){
+                this.openSure=!this.openSure;
+            },
      }
 }
 </script>
@@ -384,4 +426,11 @@ export default {
            display:inline-block;
        }
    }
+   .sure-sign{
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 26px;
+        font-size: 14px;
+    }
 </style>

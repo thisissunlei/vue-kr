@@ -3,7 +3,7 @@
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
            
-                <div class="hander">
+                <div class="hander" >
                     <div style="display:inline-block;margin-top: 6px;">
                         <span style="vertical-align:middle;">项目计划</span>
                         <span 
@@ -53,10 +53,11 @@
             <div 
                
                 class="right-draw" 
-                style="overflow:hidden;"
+                style="overflow:auto;"
             >
-                 <div style="overflow:hidden;width:100%;position:relative;"  >
-                    <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+'px'}">
+                <div class="calibration" >
+                 <div  style="width:100%;position:relative;overflow:hidden;"  >
+                    <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
                                 <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
@@ -91,6 +92,7 @@
                     </div>
 
                  </div>
+                </div>
                 <div
                     @scroll="rightScroll"
                     id="vue-chart-right-draw-content"
@@ -216,11 +218,14 @@ export default {
             //下拉的默认值
             barType: 'day',
             isLoading:true,
-            mask:false
+            mask:false,
+            scrollWidth:0
         }
     },
     mounted(){
+        this.scrollWidth = utils.getScrollBarSize()
         this.init(this.startTime,this.endTime);
+
         this.getDayBarWidth()
         //获取周的具体数据
         this.getWeekStartAndEnd();
@@ -228,25 +233,11 @@ export default {
          
     },
     updated(){
-        if(this.treeData.length){
-           this.recursiveFn(this.treeData);
-        }
         this.mask=this.treeData.length?true:false;
     },
     methods:{
         treeClick(params){
             this.$emit('treeClick',params);
-        },
-        //递归赋值
-        recursiveFn(data){
-            data.map((item,index)=>{
-                item.title=item.label;
-                item.expand=false;
-                if(item.children&&item.children.length){
-                    this.recursiveFn(item.children);
-                }
-            })
-            return data;
         },
         //获取年数组
         getYears(arr){
@@ -488,6 +479,16 @@ export default {
            
             left: 271px;
             right: 0px;
+            .calibration  {
+                width:100%;
+                position:relative;
+                overflow:hidden;
+                height: 101px;
+                ::-webkit-scrollbar {
+                        width:0px;
+                }
+            }
+            
         }
         #vue-chart-right-draw-content{
             max-height:500px;

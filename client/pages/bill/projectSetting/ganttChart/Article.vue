@@ -6,7 +6,7 @@
                 
                 <FlagLabel v-if="getFlagShow('MEETING')" 
                     :label="data.label" 
-                    :data="20" 
+                    :data="data.data" 
                     :minCalibration="minCalibration" 
                     :startDate="leftEndpoint"
                 />
@@ -238,17 +238,11 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
  .every-view-col{
     height: 70px;
     border-top: 1px solid #E1E6EB;;
     border-bottom: 1px solid #E1E6EB;
-    &:first-child{
-        border-top:none;
-    }
-    &:last-child{
-        border-bottom:none;
-    }
   }
 .article{
     position: relative;
@@ -269,7 +263,14 @@ export default {
         color: #ffffff;
         position: relative;
         cursor: pointer;
-
+        .tip-label{
+            display:inline-block;
+            .ivu-tooltip-popper{
+                .ivu-tooltip-arrow{
+                    display:none;
+                }
+            }
+        }
    }
    .actual{
         height: 25px;

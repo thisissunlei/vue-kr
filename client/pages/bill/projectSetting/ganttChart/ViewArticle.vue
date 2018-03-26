@@ -23,9 +23,7 @@
 <script>
 import Article from './Article';
 export default {
-    components:{
-       Article
-    },
+   
     props:{
         data:{
             type:Object
@@ -51,18 +49,18 @@ export default {
     mounted(){
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
-
-            var leftDom = document.querySelectorAll('li[data-box-id="'+this.showData.id+'"]')[0];
+        } 
+        setTimeout(() => {
+            var leftDom = document.querySelectorAll('div[data-box-id="'+this.showData.id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
             if(leftDom&&rightDom){
                 if(leftDom.offsetHeight>rightDom.offsetHeight){
-                    rightDom.style.height=this.showData.length + 70+'px';
+                    rightDom.style.height=leftDom.offsetHeight+'px';
                 }else{
                     leftDom.style.height=rightDom.offsetHeight+'px';
                 }
             }
-        } 
-        
+        },100);
     },
     methods:{
        
@@ -140,7 +138,10 @@ export default {
 <style lang="less" scoped>
     .view-article{
         height: 70px;
-        border-top: 1px solid #E1E6EB;;
+        //border-top: 1px solid #E1E6EB;;
         border-bottom: 1px solid #E1E6EB;
+        &:nth-child(2n+1){
+            background: #F5F6FA;
+        }
     }
 </style>

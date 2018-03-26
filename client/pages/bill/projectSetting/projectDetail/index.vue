@@ -17,6 +17,7 @@
                 :startTime="startTime" 
                 :endTime="endTime"
                 @scroll="chartScroll"
+                @treeClick="treeClick"
             >
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 
@@ -139,11 +140,12 @@ export default {
             treeData:[],
             signMask:false,
             openSure:false,
-            scrollWidth:0
+            scrollWidth:0,
+
+            ids:''
         }
     },
-    created(){    
-       
+    created(){         
         this.queryData=this.$route.query; 
     },
     mounted(){
@@ -187,6 +189,15 @@ export default {
             })
             return data;
         },
+        //树
+        treeClick(params){
+            var treeArray=[];
+            params.map((item,index)=>{
+                treeArray.push(item.value);
+            })
+            this.ids=treeArray.join(',');
+            this.getListData(this.ids);
+        },
          //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -218,9 +229,10 @@ export default {
         },
        
         //获取列表数据
-        getListData(){
+        getListData(ids){
             let params={
-                propertyId:this.queryData.id
+                propertyId:this.queryData.id,
+                taskTemplateIds:ids?ids:[]
             }
 
             this.isLoading = true;
@@ -283,7 +295,8 @@ export default {
             this.$http.delete('project-delete-task',params).then((response)=>{
                      this.cancelTask();
                      this.cancelEditTask();
-                     this.getListData();
+                     this.getListData(this.ids);
+                     this.getTreeData({propertyId:this.queryData.id});
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -327,8 +340,10 @@ export default {
                 this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
                 this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
                 this.$http.post('project-add-task',this.addData).then((response)=>{
+                     this.ids=this.ids?this.ids+','+response.data:'';
                      this.addTask();
-                     this.getListData();
+                     this.getListData(this.ids);
+                     this.getTreeData({propertyId:this.queryData.id});
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,
@@ -366,7 +381,8 @@ export default {
                 dataParams.actualEndTime=dataParams.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.actualEndTime)):'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                      this.cancelEditTask();
-                     this.getListData();
+                     this.getListData(this.ids);
+                     this.getTreeData({propertyId:this.queryData.id});
                  }).catch((error)=>{
                      this.$Notice.error({
                         title: error.message,

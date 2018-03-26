@@ -47,6 +47,8 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
+
+            str:''
 		}
     },
     watch:{
@@ -115,20 +117,25 @@ export default {
             // console.log(this.nowData,"ppppp")
             // this.$emit('search',searchKey);
         },
+        treeSelect(data){
+            data.map((item,index)=>{
+                    if(this.checkValue.length-1==index){
+                        this.str+=item.title;
+                    }else{
+                        this.str+=item.title+',';
+                    }
+                    if(item.children&&item.children.length){
+                        this.treeSelect(item.children);
+                    }
+            })
+            this.treeInput=this.str;
+            return data
+        },
         sureClick(){
             this.clearClick();
-            var str='';
             if(this.checkValue.length){
-                this.checkValue.map((item,index)=>{
-                    item.checked=true;
-                    if(this.checkValue.length-1==index){
-                        str+=item.title;
-                    }else{
-                        str+=item.title+',';
-                    }
-                })
+                this.treeSelect(this.checkValue);
             }
-            this.treeInput=str;
             this.$emit('okClick',this.checkValue);
         },
         clearClick(){
@@ -157,7 +164,7 @@ export default {
                 }else{
                      item.expand = false;
                 }   
-               
+                
                 if(item.children && item.children.length){
                     let obj = this.searchTreeData(searchKey,item.children);
                     if(obj.isOpen){

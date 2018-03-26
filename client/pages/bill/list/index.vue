@@ -569,7 +569,6 @@ import PdfDownload from './pdfDownload';
             },
             antiSettleSubmit(){
                 let params={
-                    amount:this.antiSettleData,
                     billId:this.itemDetail.billId
                 }
                 this.$http.post('bill-release',params).then((res)=>{

@@ -3,20 +3,34 @@
 
 
 <template>
-    <div class="section-title">
+    <div :class="classType[type]">
         {{title}}
     </div>
 </template>
 <script>
+    
     export default {
+       
         props:{
-            title:String
+            title:String,
+            type:{
+                default:'listTitle',
+                type:String,
+            }
         },
+        data(){
+            return {
+                classType:{
+                    listTitle:'section-title',
+                    detailTitle:'section-detail-title'
+                }
+            }
+        }
     }
 </script>
 
 
-<style lang="less"> 
+<style lang="less" scoped> 
     .section-title {
         border-bottom: 1px solid #E8E9E9;
         height: 50px;
@@ -35,6 +49,16 @@
             top: 12px;
             left: 0;
         }
+        
+    }
+    .section-detail-title {
+        border-bottom: 1px solid #E8E9E9;
+        height: 50px;
+        font-size: 16px;
+        color: #666;
+        line-height: 50px;
+        padding-left: 15px;
+        position: relative;
     }
    
 </style>

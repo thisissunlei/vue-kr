@@ -1,20 +1,18 @@
  import axios from 'axios'
  import APIS from '../assets/apis/index';
- import envs from '../configs/envs';
  import Qs from 'qs'; 
  // 超时时间
- // axios.defaults.timeout = 6000
+ axios.defaults.timeout = 6000
  // http请求拦截器
 
  const env = process.env.NODE_ENV;
  
 
-const hostname = envs[env]['test']||  "" ;
 
  axios.defaults.withCredentials = true;
  
  axios.defaults.mode = 'cors';
-// var requestUrl = [] ,saveTime = 1000;
+
 
 axios.interceptors.request.use(config => {
   if(config.method  == 'post'){
@@ -75,7 +73,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.get(hostname+APIS[url].url, {params:params})
+    axios.get(APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){
@@ -101,22 +99,7 @@ export default {
       return;
     }
 
-    /*let nowTime = new Date().getTime();
-    requestUrl = requestUrl.filter((item) => {
-      return (item.setTime + saveTime) > nowTime;
-    });
-    let sessionUrl = requestUrl.filter((item) => {
-      return item.url === APIS[url].url;
-    });
-    if (sessionUrl.length > 0) {
-      // console.log(obj.url + '请求重复 中断请求!');
-      return;
-    }
-    let item = { url: APIS[url].url, setTime: new Date().getTime() };
-
-    */
-    // requestUrl.push(item);
-    axios.post(hostname+APIS[url].url, params)
+    axios.post(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -153,7 +136,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.put(hostname+APIS[url].url, params)
+    axios.put(APIS[url].url, params)
     .then(check401)
     .then(function (response) {
       if(parseInt(response.code)>0){
@@ -177,7 +160,7 @@ export default {
     if(!APIS[url].url){
       return
     }
-    axios.delete(hostname+APIS[url].url, {params:params})
+    axios.delete(APIS[url].url, {params:params})
     .then(check401)
     .then(function (data) {
       if(parseInt(data.code)>0){

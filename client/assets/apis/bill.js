@@ -105,11 +105,97 @@ export default  {
       url: '/api/krspace-pay/payment/invoice',
       method: 'post'
     },
-    //账单中心--账单--下载pdf
-    'bill-down-pdf': {
+     //账单中心--账单--下载pdf
+     'bill-down-pdf': {
       url: '/api/krspace-pay/bill/down/pdf',
       method: 'get'
     },
- 
+    
+    // 账户中心
+    'account-list': {
+      url: '/api/krspace-pay/wallet/account-list?',
+      method: 'get'
+    },
+    // 账户详情页--客户基本信息
+    'customer-info': {
+      url: '/api/krspace-pay/account/customer?',
+      method: 'get'
+    },
+    // 账户详情页--公式
+    'account-detail': {
+      url: '/api/krspace-pay/account/detail?',
+      method: 'get'
+    },
+    // 客户打款-总表
+    'payment-list': {
+      url: '/api/krspace-pay/account/payment/list?',
+      method: 'get'
+    },
+    // 客户打款-明细表
+    'payment-detail': {
+      url: '/api/krspace-pay/account/payment-detail/list?',
+      method: 'get'
+    },
+    // 客户消费-汇总表
+    'consumption-list': {
+      url: '/api/krspace-pay/consumption/list?',
+      method: 'get'
+    },
+    // 客户消费-明细
+    'consumption-detail': {
+      url: '/api/krspace-pay/consumption-detail/list?',
+      method: 'get'
+    },
+    // 客户退款-汇总
+    'refund-list': {
+      url: '/api/krspace-pay/refund/list?',
+      method: 'get'
+    },
+    // 客户退款-明细
+    'refund-detail': {
+      url: '/api/krspace-pay/refund-detail/list?',
+      method: 'get'
+    },
+    // 账户余额-汇总
+    'balance-list': {
+      url: '/api/krspace-pay/balance/list?',
+      method: 'get'
+    },
+    // 账户余额-明细
+    'balance-detail': {
+      url: '/api/krspace-pay/balance-detail/list?',
+      method: 'get'
+    },
+    //余额转社区
+    'transfer-community': {
+      url: '/api/krspace-pay/balance/transfer-community',
+      method: 'post'
+    },
+    // 余额转营业外
+    'nonoperating': {
+      url: '/api/krspace-pay/balance/nonoperating',
+      method: 'post'
+    },
+    //门禁卡押金转余额
+    'guardcard-deposit': {
+      url: '/api/krspace-pay/balance/guardcard-deposit',
+      method: 'post'
+    },
+    // 冻结服务保证金转余额
+    'lock-deposit': {
+      url: '/api/krspace-pay/balance/lock-deposit',
+      method: 'post'
+    },
+    // 其他服务保证金转余额
+    'other-deposit': {
+      url: '/api/krspace-pay/balance/other-deposit',
+      method: 'post'
+    },
+    //余额转社区--社区列表
+    'balance-community-list': {
+      url: '/api/krspace-pay/account/community/list?',
+      method: 'get'
+    },
+    
   }
   

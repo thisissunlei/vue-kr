@@ -42,7 +42,7 @@
                             <Select 
                                 v-model="barType" 
                                 @on-change="selectChange"
-                                style="width:200px;margin-right:20px;text-align:left;"
+                                style="width:100px;margin-right:20px;text-align:left;"
                             >
                                 <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>

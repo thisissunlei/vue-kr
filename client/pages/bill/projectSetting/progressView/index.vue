@@ -328,7 +328,7 @@ export default {
         },
         // 向后加一个月
         addAfterMonthNum(endTime,n){
-            var allDay = startTime.split("-");
+            var allDay = endTime.split("-");
             var year = allDay[0],month=allDay[1];
             for (var i = 1; i <= n; i++) {
                 month +=1;

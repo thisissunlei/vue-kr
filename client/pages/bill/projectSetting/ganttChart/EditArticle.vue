@@ -1,6 +1,6 @@
 
 <template>
-    <div >
+    <div class="edit-article">
     <div class="every-col" :data-chart="data.t_id" style="background:#fff;"
         @mouseover="overShow(data.t_id)"
         @mouseout="outHide(data.t_id)"
@@ -228,9 +228,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.edit-article{
+
+     .every-col{
+                height: 49px;
+                //border-top: 1px solid #E1E6EB;;
+                border-bottom: 1px solid #F0F0F0;
+            }
 .article{
     position: relative;
-    padding: 8px 0px;
+   
+    
     .label{
         width: 100%;
        
@@ -267,5 +275,6 @@ export default {
         cursor: pointer;
    }
     
+}
 }
 </style>

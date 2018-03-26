@@ -161,7 +161,11 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-       
+        .every-col{
+            height: 47px;
+            //border-top: 1px solid #E1E6EB;;
+            border-bottom: 1px solid #F0F0F0;
+        }
         border-top: 1px solid #F0F0F0;;
         border-bottom: 1px solid #F0F0F0;
         background:#fff;

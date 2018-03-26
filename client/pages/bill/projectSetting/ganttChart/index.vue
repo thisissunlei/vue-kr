@@ -71,6 +71,7 @@
                                     :dayNum="item.dayNum" 
                                     :data="item"
                                     :minCalibration="minCalibration"
+                                    
                                 />
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
@@ -79,15 +80,18 @@
                                     :key="item.id" 
                                     :data="item" 
                                     :minCalibration="minCalibration"
+                                  
                                 />
                             </div>
                             
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
                                 <DrawDay 
                                     v-for="( item ) in showData" 
-                                    :key="item.id" :data="item"  
+                                    :key="item.id" 
+                                    :data="item"  
                                     :dayNum="item.dayNum"
                                     :minCalibration="minCalibration"
+                                    
                                 />
                             </div>
                         </div>
@@ -517,11 +521,7 @@ export default {
                     height: 100%;
                     opacity: .1;
             }
-            .every-col{
-                height: 45px;
-                //border-top: 1px solid #E1E6EB;;
-                border-bottom: 1px solid #F0F0F0;
-            }
+           
         }
         .hander{
             margin-top:20px;

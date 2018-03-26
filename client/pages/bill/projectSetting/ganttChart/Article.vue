@@ -15,13 +15,12 @@
                 <div class="article" 
                 v-if="getFlagShow('STAGETASK')"
                     :style="{
-                        background:getBgColor(),
                         width:boxDetail.width * minCalibration+'px',
                         left:boxDetail.office * minCalibration+'px'
                     }"
                 >
                  <Poptip 
-                    v-if="type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
+                    v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
                     placement="bottom-start" 
                     :width="boxDetail.width  * minCalibration + 40" 
                     @on-popper-show="getSpecificData" 
@@ -112,7 +111,7 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
             secondObj:{},
-            isChild:false,  
+            isChild:true,  
             childLeftEndpoint:{},
            
         }
@@ -121,7 +120,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        console.log(this.leftEndpoint,"-----------")
+        
     },
     methods:{
         getFlagShow(event){
@@ -220,7 +219,12 @@ export default {
          
            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
                 this.secondObj.tasks=response.data.items;
-                this.isChild = true;
+                if(!response.data.items||response.data.items.length == 0){
+                     this.isChild = false;
+                }else {
+                     this.isChild = true;
+                }
+
                 // this.getChildLeftEndpoint(response.data.items);
 
             }).catch((error)=>{
@@ -236,15 +240,22 @@ export default {
 <style lang="less">
  .every-view-col{
     height: 45px;
-    border-top: 1px solid #E1E6EB;;
+    
     border-bottom: 1px solid #E1E6EB;
+     &:last-child{
+            margin-top:0px;
+            border-top:none;
+        }
+    .ivu-poptip-rel{
+         background: transparent;
+    }
   }
 .article{
     position: relative;
+     background: transparent;
     
     .label{
         width: 100%;
-       
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;

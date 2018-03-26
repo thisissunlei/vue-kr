@@ -17,7 +17,7 @@
                 
             }"
         >
-            <div class="label"></div>
+            <div class="label">{{data.label}}</div>
             <div 
                 class="plan"
                 :style="{
@@ -198,7 +198,6 @@ export default {
 .child-every-article{
 
     position: relative;
-    padding: 8px 0px;
 
     
     .label{
@@ -215,10 +214,10 @@ export default {
         padding: 0px 10px;
     }
    .plan{
-        height: 8px;
+        height: 4px;
         background: #FDBA4D ;
         border-radius:100px; 
-        line-height: 8px;
+        line-height: 4px;
         padding-left:10px;
         color: #ffffff;
         position: relative;
@@ -226,11 +225,11 @@ export default {
 
    }
    .actual{
-        height: 8px;
+        height: 4px;
         margin-top:1px; 
         background: #7ED321;
         border-radius:100px; 
-        line-height: 8px;
+        line-height: 4px;
         padding-left:10px;
         color: #fff;
         position: relative;

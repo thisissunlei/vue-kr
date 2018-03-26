@@ -2,17 +2,22 @@
 <template>
 	<div class="draw-day" >
         <div class="day" v-for="item in monthDay" :key="item.id">
-            {{item}}
+            {{showLabel(item)}}
         </div>
 	</div>
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
+
 export default {
     props:{
         dayNum:{
             default:30,
             type:[String,Number]
+        },
+        data:{
+            type:Object
         }
     },
     data(){
@@ -25,6 +30,17 @@ export default {
             var num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
             num.length = this.dayNum;
             return num;
+        },
+        showLabel(num){
+            var month = +this.data.month<10?0+''+this.data.month:this.data.month;
+            var num = num<10?0+''+num:num;
+            var timeString = this.data.year+'-'+month+'-'+num;
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            if(today == timeString){
+                return '今天';
+            }else {
+                return num;
+            }
         } 
     }
 }

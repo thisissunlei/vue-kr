@@ -1,8 +1,13 @@
 <template>   
-        <div class='detail-li' :data-box-id="data.id">
+        <div class='detail-li' :data-box-id="data.id"
+         @mouseover="overShow(data.id)"
+         @mouseout="outHide(data.id)"
+        >
             <p @click="rowClick(data)">{{data.name}}</p>
-            <p>{{data.cityName}}</p>
-            <p v-if="test=='INVEST'" style="color:#499df1;cursor:pointer;" @click="operationClick(data)">确认已签署合同</p>
+            <p :class="noRight">{{data.cityName}}</p>
+            <p v-if="test=='INVEST'" style="border-right:none;">
+                <Button type="primary" @click="operationClick(data)" style="cursor:pointer;">确认已签署合同</Button>
+            </p>
         </div>
 </template>
 
@@ -20,7 +25,15 @@ export default {
            default:''
        }
     },
+    data(){
+        return {
+            noRight:''
+        }
+    },
     mounted(){
+        if(this.test=='PREPARE'){
+            this.noRight='noRight';
+        }
         setTimeout(() => {
             var leftDom = document.querySelectorAll('div[data-box-id="'+this.data.id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+this.data.id+'"]')[0];
@@ -39,6 +52,18 @@ export default {
         },
         operationClick(item){
             this.$emit('operationClick',item);
+        },
+        overShow(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+            leftDom.style.background="#F7F9FB";
+            rightDom.style.background="#F7F9FB";
+        },
+        outHide(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+            leftDom.style.background="#fff";
+            rightDom.style.background="#fff";
         }
     }
 }
@@ -48,19 +73,19 @@ export default {
         .detail-li{
            width:100%;
            height:70px;
-           border: 1px solid #E1E6EB;
+           border: 1px solid  #F0F0F0;
            border-right:none;
            border-left:none;
-           display:table;    
-           &:nth-child(2n+1){
-              background: #F5F6FA;
-           }
-           &:last-child{
-              border-bottom: 2px solid #E1E6EB;
+           display:table;   
+           background:#fff; 
+           margin-top: 10px;
+           &:first-child{
+               margin-top:0px;
+               border-top: none;
            }
            p{
                 display:inline-block;
-                border-right:1px solid #E1E6EB;
+                border-right:1px solid  #F0F0F0;
                 width:33%;
                 padding:10px;
                 height:100%;
@@ -70,15 +95,15 @@ export default {
                 text-align: center;
                 font-family: PingFang-SC-Medium;
                 font-size: 12px;
-                color: #666666;
+                color:#333333;
                 line-height: 16px;
                 font-weight: 500;
-                &:nth-child(3){
-                    border-right:none;
-                }
                 &:nth-child(1){
                     cursor: pointer;
                 }
+            }
+            .noRight{
+                border-right:none;
             }
         }
 </style>

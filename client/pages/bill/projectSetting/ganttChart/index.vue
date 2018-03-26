@@ -4,19 +4,21 @@
         <div class='chart-ul-wrap' >
            
                 <div class="hander" >
-                    <div style="display:inline-block;margin-top: 6px;">
-                        <span style="vertical-align:middle;">项目计划</span>
-                        <span 
-                            class="article" 
-                            style="background:#4F9EED;vertical-align:middle;"
-                        ></span>
-                    </div>
-                    <div style="display:inline-block;margin-left:40px;">
-                        <span style="vertical-align:middle;">当前进展</span>
-                        <span 
-                            class="article" 
-                            style="background:#FDBA4D;vertical-align:middle;"
-                        ></span>
+                    <div class='header-left'>
+                        <div style="display:inline-block;margin-top: 6px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">项目计划</span>
+                            <span 
+                                class="article" 
+                                style="background:#FDBA4D;vertical-align:middle;"
+                            ></span>
+                        </div>
+                        <div style="display:inline-block;margin-left:40px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">当前进展</span>
+                            <span 
+                                class="article" 
+                                style="background: #7ED321;vertical-align:middle;"
+                            ></span>
+                        </div>
                     </div>
 
                     <div style="display:inline-block;margin-left:10px;">
@@ -59,10 +61,10 @@
                  <div  style="width:100%;position:relative;overflow:hidden;"  >
                     <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
-                            <div class="year-bar" v-if="years && years.length && barType=='month'" style="background:#F5F6FA;">
+                            <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
-                            <div class='month-bar' :style="{background:barType=='month'?'#fff':'#F5F6FA'}" >
+                            <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <DrawMonth 
                                     v-for="( item ) in showData" 
                                     :key="item.id"  
@@ -71,7 +73,7 @@
                                     :minCalibration="minCalibration"
                                 />
                             </div>
-                            <div v-if="barType=='week'" class='week-bar'>
+                            <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
                                 <DrawWeek 
                                     v-for="(item) in weeks" 
                                     :key="item.id" 
@@ -80,7 +82,7 @@
                                 />
                             </div>
                             
-                            <div v-if="barType=='day'" class='day-bar' >
+                            <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
                                 <DrawDay 
                                     v-for="( item ) in showData" 
                                     :key="item.id" :data="item"  
@@ -449,8 +451,8 @@ export default {
         position: relative;
         padding-left:25px; 
         .chart-tab-left{
-            width:246px;
-            border: 1px solid #E1E6EB;
+            width:346px;
+            border: 1px solid #F0F0F0;
             display:inline-block;
             border-bottom: none;
             .chart-left{
@@ -460,7 +462,7 @@ export default {
                    padding-top: 8px;
                    .ivu-tabs-ink-bar{
                        width:58px !important;
-                       left: 31px;
+                       left: 56px;
                    }
                 }
             }
@@ -477,7 +479,7 @@ export default {
         .right-draw{
             position: absolute;
            
-            left: 271px;
+            left: 371px;
             right: 0px;
             .calibration  {
                 width:100%;
@@ -497,7 +499,7 @@ export default {
         }
         .content{
           
-           
+            background: #F3F2F7;
             .every-col{
                 height: 70px;
                 border-top: 1px solid #E1E6EB;;
@@ -511,6 +513,10 @@ export default {
             width: 100%;
             text-align: right;
             //padding-left: 250px;
+            .header-left{
+                display:inline-block;
+                float:left;
+            }
             .article{
                 display: inline-block;
                 width: 80px;

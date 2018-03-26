@@ -19,7 +19,7 @@
                             <div class='chart-left-table' v-if="mask">
                                  <div class='view-table-list'>
                                     <p>项目名称</p>
-                                    <p>城市</p>
+                                    <p style="border-right:none;">城市</p>
                                 </div> 
                                 <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
                                      <ListTable
@@ -29,7 +29,7 @@
                                         test="PREPARE"
                                         @rowClick="rowClick"
                                     />
-                                    <div :style="{height:scrollWidth+'px'}"></div>
+                                    <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
                                     
                                 </div>   
                             </div>
@@ -52,7 +52,7 @@
                                         @rowClick="rowClick"
                                         @operationClick="operationClick"
                                     />
-                                    <div :style="{height:scrollWidth+'px'}"></div>
+                                    <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
                                 </div>   
                             </div>
 
@@ -353,8 +353,8 @@ export default {
         font-size: 14px;
     }
     .chart-tab-left{
-        width:246px;
-        border: 1px solid #E1E6EB;
+        width:346px;
+        border: 1px solid #F0F0F0;
         display:inline-block;
         border-bottom: none;
         .chart-left{
@@ -364,7 +364,7 @@ export default {
                 padding-top: 8px;
                 .ivu-tabs-ink-bar{
                     width:58px !important;
-                    left: 31px;
+                    left: 56px;
                 }
             }
             .chart-left-table{
@@ -372,7 +372,7 @@ export default {
                     width:100%;
                     height:49px;
                     line-height:49px;
-                    border: 1px solid #E1E6EB;
+                    border: 1px solid #F0F0F0;
                     border-right:none;
                     border-top: none;
                     border-left:none;
@@ -380,10 +380,11 @@ export default {
                     font-size: 14px;
                     color: #666666;
                     font-weight: 500;
-                    display:table;   
+                    display:table;
+                    background:#FAFCFF;   
                     p{
                         display:inline-block;
-                        border-right:1px solid #E1E6EB;
+                        border-right:1px solid #F0F0F0;
                         width:33%;
                         text-align: center;
                         display:table-cell;
@@ -393,13 +394,17 @@ export default {
                     }
                 }
                 .view-table-detail{
-                     width:100%;
+                    width:100%;
                     max-height:500px;
                     overflow: auto;
-                    border-bottom: solid 1px #E1E6EB;
+                    border-bottom: solid 1px #F0F0F0;
+                    background: #F3F2F7;
                 }
                 ::-webkit-scrollbar {
                     width:0px;
+                }
+                .view-bottom-more{
+                    background:#fff;
                 }
             }
         }
@@ -408,6 +413,7 @@ export default {
             text-align: center;
             font-family: PingFangSC-Medium;
             font-size: 14px;
+            color: #666;
         }
 
         .ivu-tabs-nav .ivu-tabs-tab-active{
@@ -415,7 +421,7 @@ export default {
 
         }
         .bar{
-            border-top: 1px solid #E1E6EB;
+            border-top: 1px solid #F0F0F0;
         }
     }
        

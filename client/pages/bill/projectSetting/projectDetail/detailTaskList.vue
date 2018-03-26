@@ -17,10 +17,12 @@
               >
                  <div class='chart-parent' :data-box-id="item.t_id">
                    <div class='parent-middle'>
-                    <div class='chart-left-name' @click="showClick(item.t_id)">
-                      <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
-                      <span class="chart-name">{{item.label}}</span>
-                    </div>
+                    <Tooltip :content="item.label" placement="top">
+                      <div class='chart-left-name' @click="showClick(item.t_id)">
+                        <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
+                        <span class="chart-name">{{item.label}}</span>
+                      </div>
+                    </Tooltip>
                     <div @click="editClick(item.value,'')" class='chart-edit'>
                         <span class='edit'></span>
                     </div>
@@ -35,10 +37,12 @@
                       >
                           <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id">
                             <div class='parent-middle'>
-                              <div class='chart-left-name'>
-                                <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                <span class="chart-name" style="color: #666666;">{{items.label}}</span>
-                              </div>
+                              <Tooltip :content="items.label" placement="top">
+                                <div class='chart-left-name'>
+                                  <Icon type="minus-round" size="4" style="color: #666666;"/>
+                                  <span class="chart-name" style="color: #666666;">{{items.label}}</span>
+                                </div>
+                              </Tooltip>
                               <div @click="editClick(items.value,item.value)" class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
@@ -104,7 +108,7 @@ export default {
 
 <style lang='less' scoped>
    .chart-wrap{
-      width:246px;
+      width:346px;
       display:inline-block;
       border:solid 1px #E1E6EB;
       border-bottom:none;

@@ -1,7 +1,10 @@
 
 <template>
     <div >
-    <div class="every-col" :data-chart="data.t_id" >
+    <div class="every-col" :data-chart="data.t_id" style="background:#fff;"
+        @mouseover="overShow(data.t_id)"
+        @mouseout="outHide(data.t_id)"
+    >
         <div v-if="!this.data.chartType && isInitial()">
         <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
@@ -202,7 +205,23 @@ export default {
        //获取二级部分数据
        getSpecificData(){
            
-       }
+       },
+       overShow(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-chart="'+id+'"]')[0];
+            if(leftDom&&rightDom){
+                leftDom.style.background="#F7F9FB";
+                rightDom.style.background="#F7F9FB";
+            }
+        },
+        outHide(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-chart="'+id+'"]')[0];
+            if(leftDom&&rightDom){
+                leftDom.style.background="#fff";
+                rightDom.style.background="#fff";
+            }
+        }
     }
 }
 </script>

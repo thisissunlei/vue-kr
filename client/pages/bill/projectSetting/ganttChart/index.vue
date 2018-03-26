@@ -55,7 +55,7 @@
             <div 
                
                 class="right-draw" 
-                style="overflow:auto;"
+                :style="{left:type=='edit'?'271px':'371px'}"
             >
                 <div class="calibration" >
                  <div  style="width:100%;position:relative;overflow:hidden;"  >
@@ -478,7 +478,7 @@ export default {
         }
         .right-draw{
             position: absolute;
-           
+            overflow:auto;
             left: 371px;
             right: 0px;
             .calibration  {
@@ -501,11 +501,10 @@ export default {
           
             background: #F3F2F7;
             .every-col{
-                height: 70px;
-                border-top: 1px solid #E1E6EB;;
-                border-bottom: 1px solid #E1E6EB;
+                height: 45px;
+                //border-top: 1px solid #E1E6EB;;
+                border-bottom: 1px solid #F0F0F0;
             }
-           
         }
         .hander{
             margin-top:20px;
@@ -551,7 +550,7 @@ export default {
         }
    }
    .tab-second-title{
-        height:70px;
+        height:45px;
     }
    
 </style>

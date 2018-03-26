@@ -15,7 +15,10 @@
                 :key="item.t_id"
                 class='detail-li'
               >
-                 <div class='chart-parent' :data-box-id="item.t_id">
+                 <div class='chart-parent' :data-box-id="item.t_id" 
+                  @mouseover="overShow(item.t_id)"
+                  @mouseout="outHide(item.t_id)"
+                 >
                    <div class='parent-middle'>
                     <Tooltip :content="item.label" placement="top">
                       <div class='chart-left-name' @click="showClick(item.t_id)">
@@ -35,7 +38,10 @@
                         :key="items.t_id"
                         class='detail-li'
                       >
-                          <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id">
+                          <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id"
+                            @mouseover="overShow(items.t_id)"
+                            @mouseout="outHide(items.t_id)"
+                          >
                             <div class='parent-middle'>
                               <Tooltip :content="items.label" placement="top">
                                 <div class='chart-left-name'>
@@ -101,6 +107,22 @@ export default {
       },
       detailScroll(event){
         this.$emit('scroll',event)
+      },
+      overShow(id){
+            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+            var rightDom= document.querySelectorAll('div[data-chart="'+id+'"]')[0];
+            if(leftDom&&rightDom){
+                leftDom.style.background="#F7F9FB";
+                rightDom.style.background="#F7F9FB";
+            }
+      },
+      outHide(id){
+          var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+          var rightDom= document.querySelectorAll('div[data-chart="'+id+'"]')[0];
+          if(leftDom&&rightDom){
+              leftDom.style.background="#fff";
+              rightDom.style.background="#fff";
+          }
       }
     }
 }
@@ -108,30 +130,30 @@ export default {
 
 <style lang='less' scoped>
    .chart-wrap{
-      width:346px;
+      width:246px;
       display:inline-block;
-      border:solid 1px #E1E6EB;
-      border-bottom:none;
+      border:solid 1px #F0F0F0;
+      //border-bottom:none;
      .chart-title{
        width:100%;
-       height:101px;
+       height:100px;
        text-align:center;
-       line-height:101px;
+       line-height:100px;
        padding-left:12px;
        padding-right:18px;
-       background: #F0F1F6;
-       border-bottom:solid 2px #E1E6EB;
+       background: #fff;
+       border-bottom:solid 1px #F0F0F0;
       }
       .chart-detail{
          width:100%;
-         background: #F0F1F6;
+         background: #fff;
          max-height:500px;
          overflow:scroll;
          .detail-li{
              .chart-parent{
                 width:100%;
-                height:70px;
-                border-bottom:solid 2px #E1E6EB;
+                height:45px;
+                border-bottom:solid 1px #F0F0F0;
                 padding-left:12px;
                 padding-right:18px;
                 display: table;
@@ -139,6 +161,7 @@ export default {
                     position: relative;
                     display: table-cell;
                     vertical-align: middle;
+                    padding-top: 6px;
                 }
                 .chart-left-name{
                   display:inline-block;
@@ -203,10 +226,10 @@ export default {
       }
       .add-child-task{
         width:100%;
-        height:70px;
-        line-height:70px;
+        height:45px;
+        line-height:45px;
         padding-left:26px;
-        border-bottom:solid 2px #E1E6EB;
+        border-bottom:solid 1px #F0F0F0;
         cursor: pointer;
       }
       .chart-list{

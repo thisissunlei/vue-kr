@@ -9,14 +9,15 @@
             :minCalibration="minCalibration" 
             :startDate="leftEndpoint"
         /> -->
+
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{
-                background:getBgColor(),
                 width:boxDetail.width * minCalibration+'px',
                 left:boxDetail.office * minCalibration+'px'
             }"
-        >
+        >   
+            <div class="label">{{data.label}}</div>
         
             <div 
                 class="plan"
@@ -26,7 +27,7 @@
                 }"
                 v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
             >
-                <span >{{data.label}}</span>
+              
                 
             </div>
         
@@ -40,7 +41,7 @@
                 }"
                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
             >
-                <span>{{data.label}}</span>
+              
                 
             </div>
         </div>
@@ -134,9 +135,9 @@ export default {
                     return "#fff";
                 }
                 if(this.data.data.progressStatus<0){
-                    return "#FFCDCD"
+                    return "😨"
                 }else if(this.data.data.progressStatus>0){
-                    return '#FFECD4';
+                    return '😊';
                 }else{
                     return "#E0F2CD"
                 }
@@ -213,16 +214,22 @@ export default {
     padding: 8px 0px;
     .label{
         width: 100%;
-        height: 100%;
+       
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
+        background: #DEEEFF;
+        border-radius: 7px 7px 8px 8px;
+        line-height: 30px;
+        height: 30px;
+        color: #0561B5;
+        padding: 0px 10px;
     }
    .plan{
-        height: 25px;
-        background: #4F9EED ;
+        height: 8px;
+        background: #FDBA4D ;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #ffffff;
         position: relative;
@@ -230,11 +237,11 @@ export default {
 
    }
    .actual{
-        height: 25px;
+        height: 8px;
         margin-top:1px; 
-        background: #FDBA4D;
+        background: #7ED321;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #fff;
         position: relative;

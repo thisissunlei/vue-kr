@@ -221,16 +221,22 @@ export default {
     
     .label{
         width: 100%;
-        height: 100%;
+       
         overflow: hidden;
         text-overflow:ellipsis;
         white-space: nowrap;
+        background: #DEEEFF;
+        border-radius: 7px 7px 8px 8px;
+        line-height: 30px;
+        height: 30px;
+        color: #0561B5;
+        padding: 0px 10px;
     }
    .plan{
-        height: 25px;
-        background: #4F9EED ;
+        height: 8px;
+        background: #FDBA4D ;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #ffffff;
         position: relative;
@@ -238,11 +244,11 @@ export default {
 
    }
    .actual{
-        height: 25px;
+        height: 8px;
         margin-top:1px; 
-        background: #FDBA4D;
+        background: #7ED321;
         border-radius:100px; 
-        line-height: 25px;
+        line-height: 8px;
         padding-left:10px;
         color: #fff;
         position: relative;

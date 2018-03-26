@@ -171,6 +171,11 @@ export default  {
     'watch-edit-record': {
       url: '/api/krspace-erp-web/pm/operate-log/list',
       method: 'get'
+    },
+    //根据项目id查询甘特图显示任务项
+    'project-id-search': {
+      url: '/api/krspace-erp-web/pm/task/tree',
+      method: 'get'
     }
 
   }

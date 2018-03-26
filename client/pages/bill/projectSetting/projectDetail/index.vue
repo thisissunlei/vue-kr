@@ -152,7 +152,7 @@ export default {
          this.getListData(); 
          let status=this.queryData.status==1?'INVEST':'PREPARE'
          this.signMask=this.queryData.status==1?true:false;
-         this.getTreeData({statusType:status});
+         this.getTreeData({propertyId:this.queryData.id});
     },
     methods:{
          //获取查看编辑记录
@@ -167,7 +167,7 @@ export default {
         },
         //获取树列表数据
         getTreeData(params){     
-            this.$http.get('project-status-search',params).then((response)=>{
+            this.$http.get('project-id-search',params).then((response)=>{
                 this.treeData=response.data.items;
                 this.recursiveFn(this.treeData);
             }).catch((error)=>{

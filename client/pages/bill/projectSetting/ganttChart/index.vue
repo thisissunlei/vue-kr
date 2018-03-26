@@ -538,15 +538,15 @@ export default {
                 display: inline-block;
                 box-sizing: border-box;
                 padding-left:20px; 
-                border-bottom: 1px solid #E1E6EB;;
-                border-right: 1px solid #E1E6EB;
+                border-bottom: 1px solid #F0F0F0;
+                border-right: 1px solid #F0F0F0;
                 transition: all 0.3;
             }
         }
         
         .bar{
             position: relative;
-            border-top: 1px solid #E1E6EB;
+            border-top: 1px solid #F0F0F0;
         }
    }
    .tab-second-title{

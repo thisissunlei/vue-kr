@@ -43,8 +43,8 @@ export default {
         text-align: left;
         display: inline-block;
         box-sizing: border-box;
-        border-bottom: 1px solid #E1E6EB;
-        border-right: 1px solid #E1E6EB;
+        border-bottom: 1px solid #F0F0F0;
+        border-right: 1px solid #F0F0F0;
         transition: all 0.3;
         .label{
             display: inline-block;

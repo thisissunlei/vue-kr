@@ -5,7 +5,9 @@
             position:'relative'
         }">
             <Tooltip :content="label" placement="right" >
-                <div class='blueFlag'/>
+                <div class='blueFlag'>
+                    <span>{{label}}</span>
+                </div>
             </Tooltip>
         </div>
         <div :style="{
@@ -13,7 +15,9 @@
             position:'relative'
         }">
             <Tooltip :content="label" placement="right">
-                    <div class='yellowFlag'/>
+                    <div class='yellowFlag'>
+                        <span>{{label}}</span>
+                    </div>
             </Tooltip>
         </div>
     </div>
@@ -113,20 +117,53 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
      .ui-flag{
           position: relative;
+          .ivu-tooltip-popper{
+              top:0px !important;
+               .ivu-tooltip-arrow{
+                    display:none;
+                }
+                .ivu-tooltip-inner{
+                    padding: 3px 6px;
+                    min-height:0;
+                    background: rgba(0,0,0,0.6);
+                }
+          }
          .blueFlag{
-            width:20px;
-            height:25px;
-            background:url(images/lanqi.png) no-repeat center;
+            width:28px;
+            height:29px;
+            background:url(images/project.png) no-repeat center;
             background-size: contain;
+            span{
+                display:inline-block;
+                width:30px;
+                font-size: 10px;
+                color: #FFFFFF;
+                height:20px;
+                line-height:20px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
          } 
         .yellowFlag{
-            width:20px;
-            height:25px;
-            background:url(images/huangqi.png) no-repeat center;
+            width:28px;
+            height:29px;
+            background:url(images/actual.png) no-repeat center;
             background-size: contain;
+            span{
+                display:inline-block;
+                width:30px;
+                font-size: 10px;
+                color: #FFFFFF;
+                height:20px;
+                line-height:20px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
          } 
      }
 </style>

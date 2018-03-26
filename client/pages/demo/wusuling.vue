@@ -1,6 +1,6 @@
 <template>
     <div>
-       <FlagLabel label="123" 
+       <FlagLabel label="你好中国" 
             :data="timeObj"
             :startDate="{
                 year:2018,

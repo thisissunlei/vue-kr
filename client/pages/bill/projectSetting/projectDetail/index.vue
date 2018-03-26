@@ -226,7 +226,8 @@ export default {
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
-               
+               this.params.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
+               this.params.endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.lastEndTime));
                 //后面进行组件优化
                 this.isLoading = false;
                 this.listData.map((item,index)=>{
@@ -378,9 +379,11 @@ export default {
               chartDom.scrollTop=leftDetail.scrollTop;
           },
           chartScroll(){
+
               let leftDetail=document.getElementById('vue-chart-left-detail-list');
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               leftDetail.scrollTop=chartDom.scrollTop;
+              return; 
               if(chartDom.scrollLeft>=chartDom.clientWidth){
                   console.log('划到最右边了');
               }

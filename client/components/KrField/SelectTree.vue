@@ -47,6 +47,8 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
+
+            str:''
 		}
     },
     watch:{
@@ -69,7 +71,6 @@ export default {
     directives:{
         'click-outside':{
             bind: function (el, binding, vNode) {
-                // Provided expression must evaluate to a function.
                 if (typeof binding.value !== 'function') {
                     var compName = vNode.context.name;
                     var warn = '[Vue-click-outside:] provided expression ' + binding.expression + ' is not a function, but has to be';
@@ -78,18 +79,16 @@ export default {
                     }
                     console.warn(warn);
                 }
-                // Define Handler and cache it on the element
+               
                 var handler = function(e) {
                     if (!el.contains(e.target) && el !== e.target) {
                         binding.value(e);
                     }
                 };
                 el.__vueClickOutside__ = handler;
-                // add Event Listeners
                 document.addEventListener('click', handler);
             },
             unbind: function (el, binding) {
-                // Remove Event Listeners
                 document.removeEventListener('click', el.__vueClickOutside__);
                 el.__vueClickOutside__ = null;
             }
@@ -115,20 +114,25 @@ export default {
             // console.log(this.nowData,"ppppp")
             // this.$emit('search',searchKey);
         },
+        treeSelect(data){
+            data.map((item,index)=>{
+                    if(this.checkValue.length-1==index){
+                        this.str+=item.title;
+                    }else{
+                        this.str+=item.title+',';
+                    }
+                    if(item.children&&item.children.length){
+                        this.treeSelect(item.children);
+                    }
+            })
+            this.treeInput=this.str;
+            return data
+        },
         sureClick(){
             this.clearClick();
-            var str='';
             if(this.checkValue.length){
-                this.checkValue.map((item,index)=>{
-                    item.checked=true;
-                    if(this.checkValue.length-1==index){
-                        str+=item.title;
-                    }else{
-                        str+=item.title+',';
-                    }
-                })
+                this.treeSelect(this.checkValue);
             }
-            this.treeInput=str;
             this.$emit('okClick',this.checkValue);
         },
         clearClick(){
@@ -152,12 +156,11 @@ export default {
             var allData = data.map((item,index)=>{
                 if( searchKey && item.title.indexOf(searchKey) != -1 ){
                     item.expand = true
-                    isOpen = true;
-                    console.log(item.title,"------")    
+                    isOpen = true;  
                 }else{
                      item.expand = false;
                 }   
-               
+                
                 if(item.children && item.children.length){
                     let obj = this.searchTreeData(searchKey,item.children);
                     if(obj.isOpen){

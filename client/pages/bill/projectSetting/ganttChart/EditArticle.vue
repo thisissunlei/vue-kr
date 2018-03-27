@@ -23,9 +23,12 @@
                     >   
                     <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
 
-                    
-                        <div class="label">{{data.label}}</div>
-                    
+                        <div 
+                            class="label"
+                        > 
+                            <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
+                            <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
+                        </div>
                 
                         <div 
                             class="plan"
@@ -58,6 +61,9 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
+import no from './img/no.png';
+import ok from './img/ok.png';
+import yeas from './img/yeas.png';
 export default {
     name:'EditArticle',
     components:{
@@ -95,14 +101,16 @@ export default {
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
-            leftEndpoint:this.startDate
+            leftEndpoint:this.startDate,
+
+            picColor:''
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-      
+        this.getBgColor();
     },
     methods:{
         isInitial(){
@@ -126,19 +134,18 @@ export default {
 
         },
         getBgColor(){
-                if(this.data.chartType || !this.data.data.progressStatus){
-                    return "#fff";
-                }
-                if(this.data.data.progressStatus<0){
-                    return "😨"
-                }else if(this.data.data.progressStatus>0){
-                    return '😊';
-                }else{
-                    return "#E0F2CD"
-                }
-            
-            
-        },
+            if(this.data.chartType || !this.data.data.currentStatus){
+                this.picColor="";
+            }
+            if(this.data.data.currentStatus<0){
+                this.picColor=no;
+            }else if(this.data.data.currentStatus>0){
+                this.picColor=yeas;
+            }else{
+                this.picColor=ok;
+            }
+          
+       },
        
        getBoxWidthAndOffice(){
            

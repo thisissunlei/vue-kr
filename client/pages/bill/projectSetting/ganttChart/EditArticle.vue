@@ -25,6 +25,7 @@
 
                             <div 
                                 class="label"
+                                :style="{width:boxDetail.width * minCalibration+'px'}"
                             > 
                                 <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
                                 <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 

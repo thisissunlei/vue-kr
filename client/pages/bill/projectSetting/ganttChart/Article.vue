@@ -283,7 +283,7 @@ export default {
         text-overflow:ellipsis;
         white-space: nowrap;
         background: #DEEEFF;
-        border-radius: 7px 7px 0px 0px;
+        border-radius: 7px 7px 8px 8px;
         line-height: 28px;
         height: 28px;
         color: #0561B5;

@@ -1,37 +1,37 @@
 
 <template>
-    <div>
-         
-            <div class="every-view-col" :data-chart="data.t_id" >
-                
-                <FlagLabel v-if="getFlagShow('MEETING')" 
-                    :label="data.label" 
-                    :data="data.data" 
-                    :minCalibration="minCalibration" 
-                    :startDate="leftEndpoint"
-                />
-                
-                
-                <div class="article" 
-                v-if="getFlagShow('STAGETASK')"
-                    :style="{
-                        width:boxDetail.width * minCalibration+'px',
-                        left:boxDetail.office * minCalibration+'px'
-                    }"
-                >
-                 <Poptip 
-                    v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
-                    placement="bottom-start" 
-                    :width="boxDetail.width  * minCalibration + 40" 
-                    @on-popper-show="getSpecificData" 
-                    @on-popper-hide="cildHide"
-                >
-                <div 
-                    class="label"
-                    :style="{width:boxDetail.width * minCalibration+'px'}"
-                > {{data.label}} </div>
-               
-                    
+    <div class="every-view-col" :data-chart="data.t_id" >
+        
+        <FlagLabel v-if="getFlagShow('MEETING')" 
+            :label="data.label" 
+            :data="data.data" 
+            :minCalibration="minCalibration" 
+            :startDate="leftEndpoint"
+        />
+        
+        <div class="article" 
+            v-if="getFlagShow('STAGETASK')"
+            :style="{
+                width:boxDetail.width * minCalibration+'px',
+                left:boxDetail.office * minCalibration+'px'
+            }"
+        >
+            <Poptip 
+                v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
+                placement="bottom-start" 
+                :width="boxDetail.width  * minCalibration + 40" 
+                @on-popper-show="getSpecificData" 
+                @on-popper-hide="cildHide"
+            >
+                <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
+                    <div 
+                        class="label"
+                        :style="{width:boxDetail.width * minCalibration+'px'}"
+                    > 
+                        {{data.label}} 
+                    </div>
+        
+            
                     <div 
                         class="plan"
                         :style="{
@@ -40,7 +40,7 @@
                         }"
                     >
                     </div>
-                
+        
                     <div 
                         class="actual"
                         :style="{
@@ -50,7 +50,8 @@
                         v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                     >       
                     </div>
-                      <div class="api" slot="content">
+                    </Tooltip>
+                    <div class="api" slot="content">
                         <ChildArticle 
                             v-if="isChild"
                             :data="secondObj"
@@ -58,15 +59,12 @@
                             :minCalibration="minCalibration"
                         /> 
                     </div>
-                     
-               </Poptip>
-                </div>
-              
-                 
-                    
-            </div>
-             
+               
+            </Poptip>
+        </div>
+        
     </div>
+             
 </template>
 
 <script>
@@ -101,6 +99,9 @@ export default {
         },
         type:{
             type:String,
+        },
+        index:{
+            type:[Number,String]
         }
     },
     data(){
@@ -216,22 +217,22 @@ export default {
        //获取二级部分数据
        getSpecificData(event){
          
-           this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
+            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
                 this.secondObj.tasks=response.data.items;
                 if(!response.data.items||response.data.items.length == 0){
-                     this.isChild = false;
+                    this.isChild = false;
                 }else {
-                     this.isChild = true;
+                    this.isChild = true;
                 }
 
                 // this.getChildLeftEndpoint(response.data.items);
 
             }).catch((error)=>{
                 this.$Notice.error({
-                   title: error.message,
+                title: error.message,
                 });
             })
-       }
+        }
     }
 }
 </script>
@@ -239,8 +240,15 @@ export default {
 <style lang="less">
  .every-view-col{
     height: 45px;
-    
+
     border-bottom: 1px solid #E1E6EB;
+   
+        .ivu-tooltip-popper{
+            .ivu-tooltip-arrow{
+                display:none;
+            }
+        }
+
      &:last-child{
             margin-top:0px;
             border-top:none;

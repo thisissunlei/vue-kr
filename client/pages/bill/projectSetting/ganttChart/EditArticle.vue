@@ -6,66 +6,50 @@
         @mouseout="outHide(data.t_id)"
     >
         <div v-if="!this.data.chartType && isInitial()">
-        <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
+        <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
-            :data="20" 
+            :data="data.data" 
             :minCalibration="minCalibration" 
             :startDate="leftEndpoint"
-        /> -->
-
-        <div class="article" 
-            v-if="getFlagShow('STAGETASK')"
-            :style="{
-                width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px'
-            }"
-        >   
-
-         <div class='col-tool-label'>
-            <Tooltip :content="data.label" :placement="index==0?'bottom':'top'">
-              <div class="label">{{data.label}}</div>
-            </Tooltip>
-        </div>
-        
-            <div 
-                class="plan"
-                :style="{
-                    width:planDetail.width * minCalibration + 'px',
-                    left:planDetail.office * minCalibration + 'px'
-                }"
-                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
-            >
-              
+        />
+            <div class='col-tool-label'>
                 
-            </div>
-        
+                    <div class="article" 
+                        v-if="getFlagShow('STAGETASK')"
+                        :style="{
+                            width:boxDetail.width * minCalibration+'px',
+                            left:boxDetail.office * minCalibration+'px'
+                        }"
+                    >   
+                    <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
 
-
-            <div 
-                class="actual"
-                :style="{
-                    width:actualDetail.width * minCalibration+'px',
-                    left:actualDetail.office * minCalibration + 'px'
-                }"
-                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-            >
-              
+                    
+                        <div class="label">{{data.label}}</div>
+                    
                 
+                        <div 
+                            class="plan"
+                            :style="{
+                                width:planDetail.width * minCalibration + 'px',
+                                left:planDetail.office * minCalibration + 'px'
+                            }"
+                            v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
+                        ></div>
+                        <div 
+                            class="actual"
+                            :style="{
+                                width:actualDetail.width * minCalibration+'px',
+                                left:actualDetail.office * minCalibration + 'px'
+                            }"
+                            v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                        ></div>
+                    </Tooltip> 
+                </div>
             </div>
-        </div>
         </div>
        
     </div>
     
-        <EditArticle 
-            v-if="data.children"
-            v-for="item in data.children" 
-            :key="item.id" 
-            :data="item"
-            :minCalibration="minCalibration"
-            :startDate="startDate"
-            :type="type"
-        />
     </div>
 </template>
 

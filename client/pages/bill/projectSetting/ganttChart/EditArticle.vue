@@ -20,7 +20,12 @@
                 left:boxDetail.office * minCalibration+'px'
             }"
         >   
-            <div class="label">{{data.label}}</div>
+
+         <div class='col-tool-label'>
+            <Tooltip :content="data.label" :placement="index==0?'bottom':'top'">
+              <div class="label">{{data.label}}</div>
+            </Tooltip>
+        </div>
         
             <div 
                 class="plan"
@@ -96,6 +101,9 @@ export default {
             type:String,
             default:'view'
         },
+        index:{
+            type:[Number,String]
+        }
        
     },
     data(){
@@ -227,8 +235,16 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .edit-article{
+
+    .col-tool-label{
+        .ivu-tooltip-popper{
+            .ivu-tooltip-arrow{
+                display:none;
+            }
+        }
+    }
 
      .every-col{
                 height: 49px;

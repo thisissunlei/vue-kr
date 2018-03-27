@@ -43,7 +43,7 @@ export default {
     },
     data(){
 		return {
-            treeInput:'',
+            treeInput:'全部任务',
             mask:false,
             checkValue:[],
             nowData:this.data,
@@ -56,7 +56,7 @@ export default {
             deep:true,
             handler(nextProps) {
                this.nowData=nextProps.data;
-               this.treeInput='';
+               //this.treeInput='';
             }
         }
     },
@@ -125,7 +125,7 @@ export default {
                         this.treeSelect(item.children);
                     }
             })
-            this.treeInput=this.str;
+            //this.treeInput=this.str;
             return data
         },
         sureClick(){

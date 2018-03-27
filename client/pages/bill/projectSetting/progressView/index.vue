@@ -18,8 +18,8 @@
 
                             <div class='chart-left-table' v-if="mask">
                                  <div class='view-table-list'>
-                                    <p>项目名称</p>
-                                    <p style="border-right:none;">城市</p>
+                                    <p style="width:172px;">项目名称</p>
+                                    <p style="border-right:none;width:172px;">城市</p>
                                 </div> 
                                 <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
                                      <ListTable
@@ -39,9 +39,9 @@
 
                             <div class='chart-left-table' v-if="!mask">
                                  <div class='view-table-list'>
-                                    <p>项目名称</p>
-                                    <p>城市</p>
-                                    <p>操作</p>
+                                    <p style="width:103px;">项目名称</p>
+                                    <p style="width:105px;">城市</p>
+                                    <p style="width:136px;">操作</p>
                                 </div> 
                                 <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
                                      <ListTable
@@ -394,7 +394,7 @@ export default {
                     p{
                         display:inline-block;
                         border-right:1px solid #F0F0F0;
-                        width:33%;
+                        //width:33%;
                         text-align: center;
                         display:table-cell;
                         &:nth-child(3){

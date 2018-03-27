@@ -114,9 +114,10 @@
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
                             :data="item"
-                            v-for="item in data" 
+                            v-for="(item,index) in data" 
                             :key="item.id"
                             :type="type"
+                            :index="index"
                         />
                         
                         <ViewArticle  

@@ -244,7 +244,7 @@ export default {
  .every-view-col{
     height: 45px;
 
-    border-bottom: 1px solid #E1E6EB;
+    //border-bottom: 1px solid #E1E6EB;
    
         .ivu-tooltip-popper{
             .ivu-tooltip-arrow{

@@ -242,7 +242,7 @@ export default {
                 this.getTreeData(this.treeParams);
             }else{
                 this.mask=true;
-                this.params.status = 2;
+                this.params.status =2;
                 this.params.page=1;
                 this.getListData(this.params);
                 this.treeParams.statusType='PREPARE';
@@ -344,7 +344,7 @@ export default {
         //向前增加一个月
         addBeforeMonthNum(startTime,n){
             var allDay = startTime.split("-");
-            var year = allDay[0],month=allDay[1];
+            var year = Number(allDay[0]),month=Number(allDay[1]);
             for (var i = 1; i <= n; i++) {
                 month -=1;
                 if(month<1){
@@ -358,7 +358,7 @@ export default {
         // 向后加一个月
         addAfterMonthNum(endTime,n){
             var allDay = endTime.split("-");
-            var year = allDay[0],month=allDay[1];
+            var year = Number(allDay[0]),month=Number(allDay[1]);
             for (var i = 1; i <= n; i++) {
                 month +=1;
                 if(month>12){

@@ -42,7 +42,7 @@
                                     />
                                     </div>
                                     
-                                    <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
+                                    <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
                                     
                                 </div>   
                             </div>
@@ -74,7 +74,7 @@
                                             @operationClick="operationClick"
                                         />
                                     </div>
-                                    <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
+                                    <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
                                 </div>   
                             </div>
 
@@ -118,7 +118,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay(3),
+                endTime:this.getEndDay(7),
                 startTime:this.getStartDay(),
                 pageSize:6,
                 page:nowPage,

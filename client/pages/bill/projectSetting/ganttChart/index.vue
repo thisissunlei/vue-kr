@@ -291,7 +291,7 @@ export default {
             }else if(event=='day'){
                 this.minCalibration = 50;
             }else if(event=='month'){
-                this.minCalibration = 5;
+                this.minCalibration = 10;
             }
         },
         //获取进度条的总长度

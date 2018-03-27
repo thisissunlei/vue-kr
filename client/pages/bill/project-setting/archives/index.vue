@@ -170,10 +170,10 @@ import AddArchives from './addArchives';
                         key: 'cTime',
                         align:'center',
                         render(h, obj){
-                            if(!obj.row.billingDate){
+                            if(!obj.row.cTime){
                                 return '-'
                             }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.billingDate));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.cTime));
                             return time;
                         }
                     },

@@ -14,7 +14,7 @@
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
-                    <Tabs size="small" value="name1" @on-click="tabsClick">
+                    <Tabs size="small" :value="tabValue" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
 
                             <div class='chart-left-table' v-if="mask">
@@ -134,7 +134,9 @@ export default {
             treeData:[],
             mask:true,
             scrollWidth:0,
-            isLoading:false
+            isLoading:false,
+
+            tabValue:'name1'
         }
 
     },
@@ -142,18 +144,15 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize()
-        
     },
     
     methods:{  
        
         //获取进度列表数据
         getListData(params,type){
-          
             if(allPage<params.page){
                 return;
             }
-           
             this.isLoading = true;
             var data = Object.assign({},params);
             var startTime = data.startTime.split(" ")[0]+' 00:00:00';
@@ -169,7 +168,8 @@ export default {
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
                 }
-                allPage = response.data.totalPages;
+                var totalPages=response.data.totalPages;
+                allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
                 this.params.page = response.data.page+1;
                 
@@ -212,6 +212,7 @@ export default {
                 treeArray.push(item.value);
             })
             this.params.taskTemplateIds=treeArray.join(',');
+            this.params.page=1;
             this.getListData(this.params);
         },
         operationClick(item){
@@ -220,6 +221,10 @@ export default {
         },
         submitSure(){
             this.$http.post('sure-sign-project',{propertyId:this.id}).then((response)=>{
+                this.tabValue='name1';
+                this.mask=true;
+                this.params.page=1;
+                this.params.status=2;
                 this.getListData(this.params);
                 this.cancelSure();
             }).catch((error)=>{
@@ -234,6 +239,7 @@ export default {
         //tab切换
         tabsClick(key){
             if(key=='name2'){
+                this.tabValue=key;
                 this.mask=false;
                 this.params.status = 1;
                 this.params.page=1;
@@ -241,6 +247,7 @@ export default {
                 this.treeParams.statusType='INVEST';
                 this.getTreeData(this.treeParams);
             }else{
+                this.tabValue=key;
                 this.mask=true;
                 this.params.status =2;
                 this.params.page=1;

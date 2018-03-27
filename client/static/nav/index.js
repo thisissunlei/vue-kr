@@ -494,7 +494,7 @@
                     menuItems: [
                         {
                             primaryText: '客户线索',
-                            router: '/user/customerManage/customerList',
+                            router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
                         {
@@ -511,7 +511,7 @@
                         },
                         {
                             primaryText: "客户门禁权限",
-                            router: '/user/memberManage/doormanage',
+                            router: 'user/memberManage/doormanage',
                             menuCode: 'door_base',
                         },
                     ]   
@@ -524,23 +524,23 @@
                         {
                             primaryText: '工作人员',
                             menuCode: 'hrm_resourcesList_incumbency',
-                            router: '/user/personalManage/peopleState',
+                            router: 'user/personalManage/peopleState',
 
                         },
                         {
                             primaryText: "会员",
-                            router: '/user/memberManage/list',
+                            router: 'user/memberManage/list',
                             menuCode: 'mbr_list_base',
                         },
                         {
                             primaryText: "会员卡",
-                            router: '/user/membermanage/cardmanage',
+                            router: 'user/membermanage/cardmanage',
                             menuCode: 'mbr_card_base',
                         },
                         {
                             primaryText: '会员APP禁言',
                             menuCode: 'oper_cluster_base',
-                            router: '/user/communityAllocation/appmanage'
+                            router: 'user/communityAllocation/appmanage'
                         },
                     ]   
                 }, 
@@ -562,54 +562,54 @@
                     menuItems: [
                         {
                             primaryText: "招商数据",
-                            router: '/product/statistical/index',
+                            router: 'product/statistical/index',
                             menuCode: 'stat_group',
                         },
                         {
 
                             primaryText: '社区',
                             menuCode: 'oper_cmt_communityList_base',
-                            router: '/product/communityAllocation/communityList'
+                            router: 'product/communityAllocation/communityList'
                         },
                         {
                             primaryText: '社区平面图',
                             menuCode: 'oper_cmt_graph_base',
-                            router: '/product/communityAllocation/communityPlanList'
+                            router: 'product/communityAllocation/communityPlanList'
                         },
                         {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
-                            router: '/product/communityAllocation/CommunityMeetingRoom'
+                            router: 'product/communityAllocation/CommunityMeetingRoom'
                         },
                         {
                             primaryText: '工位',
                             menuCode: 'oper_cmt_stationList_base',
-                            router: '/product/communityAllocation/communityStation'
+                            router: 'product/communityAllocation/communityStation'
                         },
                         {
                             primaryText: '注册地址',
                             menuCode: 'cmt_registerAddress_list',
-                            router: '/product/communityAllocation/registeredAddress'
+                            router: 'product/communityAllocation/registeredAddress'
                         },
                         {
                             primaryText: "我方合同主体",
                             menuCode: 'lessor_management_base',
-                            router: '/product/customerManage/lessorManage',
+                            router: 'product/customerManage/lessorManage',
                         },
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
-                            router: '/product/communityAllocation/equipmentList'
+                            router: 'product/communityAllocation/equipmentList'
                         },
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
-                            router: '/product/communityManage/detail',
+                            router: 'product/communityManage/detail',
                         },
                         {
                             primaryText: '销控',
                             menuCode: 'cmt_sell_control',
-                            router: '/product/communityManage/controlTable',
+                            router: 'product/communityManage/controlTable',
                         },
                     ]   
                 }, 
@@ -632,24 +632,24 @@
                 menuItems: [
                     {
                         primaryText: '社区主页',
-                        router: '/community/operation/index',
+                        router: 'community/operation/index',
                         menuCode: 'operation_home',
                     },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
-                        router: '/community/communityManage/visitorsToRecord'
+                        router: 'community/communityManage/visitorsToRecord'
                     },
                     {
                         primaryText: '访客',
                         menuCode: 'visitRecord',
-                        router: '/community/visitor/list'
+                        router: 'community/visitor/list'
 
                     },
                     {
                         primaryText: '会议室',
                         menuCode: 'oper_appointment_base',
-                        router: '/community/communityManage/allAppointment'
+                        router: 'community/communityManage/allAppointment'
                     },
                     {
                         primaryText: '撤场',
@@ -680,55 +680,55 @@
                         {
                             primaryText: '公告',
                             menuCode: 'oper_notice_base',
-                            router: '/operation/communityAllocation/noticemanage'
+                            router: 'operation/communityAllocation/noticemanage'
                         },
                         {
                             primaryText: '活动',
                             menuCode: 'oper_activity_base',
-                            router: '/operation/communityAllocation/activity'
+                            router: 'operation/communityAllocation/activity'
                         },
                         {
                             primaryText: '广告',
                             menuCode: 'oper_advert_base',
-                            router: '/operation/communityAllocation/advert'
+                            router: 'operation/communityAllocation/advert'
                         },
                         {
                             primaryText: '管家',
                             menuCode: 'oper_steward_base',
                             type:'vue',
-                            originUrl: '/app-manage/steward-setting',
+                            originUrl: 'app-manage/steward-setting',
                         },
                         {
                             primaryText: '通知',
                             menuCode: 'app_console_notification',
                             type: 'vue',
-                            originUrl: '/app-manage/notification-manage'
+                            originUrl: 'app-manage/notification-manage'
                         },
                         {
                             primaryText: '图标',
                             menuCode: 'app_console_common_icon',
                             type: 'vue',
-                            originUrl: '/app-manage/icon-manage'
+                            originUrl: 'app-manage/icon-manage'
                         },
                         {
                             primaryText: '推送',
                             menuCode: 'app_console_push',
                             type: 'vue',
-                            originUrl: '/app-manage/push-manage'
+                            originUrl: 'app-manage/push-manage'
                         },
                         {
                             primaryText: '意见反馈',
                             menuCode: 'oper_opinion_base',
-                            router: '/operation/communityAllocation/opinion'
+                            router: 'operation/communityAllocation/opinion'
                         },
                         {
                             primaryText: '版本更新通知',
-                            router: '/permission/systemManage/appLoginLogs',
+                            router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
                         },
                         {
                             primaryText: '登录日志',
-                            router: '/permission/loginLog',
+                            router: 'permission/loginLog',
                             menuCode: 'sso_loginLog_base',
                         }
                         //少登陆日志（待与pc版拆分）    
@@ -743,18 +743,18 @@
                         {
                             primaryText: '新闻动态',
                             menuCode: 'main_news',
-                            router: '/WebBackstage/news/list',
+                            router: 'WebBackstage/news/list',
                         },
                         {
                             primaryText: '社区信息',
                             menuCode: 'krspace_cmt',
-                            router: '/WebBackstage/communityAllocation',
+                            router: 'WebBackstage/communityAllocation',
                         },
                         {
                             primaryText: '服务及设施配置',
                             menuCode: 'brightpoint_label_list',
                             type:'vue',
-                            originUrl: '/facility-tags/',
+                            originUrl: 'facility-tags/',
                         },
                     ]
                 },
@@ -767,32 +767,32 @@
                         {
                             primaryText: "客户来源配置",
                             menuCode: 'oper_csr_sourceList_base',
-                            router: '/operation/customerManage/customerSource',
+                            router: 'operation/customerManage/customerSource',
                         },
                         {
                             primaryText: '菜单配置',
-                            router: '/permission/menuSetting',
+                            router: 'permission/menuSetting',
                             menuCode: 'sso_module_list',
                         },
                         {
                             primaryText: '参数配置',
-                            originUrl: '/basic/parameter',
+                            router: 'basic/parameter',
                             type: 'vue',
                             menuCode: 'system_param',
                         },
                         {
                             primaryText: '首页轮播图列表',
                             menuCode: 'sys_dynamic_list',
-                            router: '/permission/homePageSetting/swperList',
+                            router: 'permission/homePageSetting/swperList',
                         },
                         {
                             primaryText: '首页动态列表',
                             menuCode: 'sys_slider_list',
-                            router: '/permission/homePageSetting/dynamicsList',
+                            router: 'permission/homePageSetting/dynamicsList',
                         },
                         {
                             primaryText: '版本更新通知',
-                            router: '/permission/systemManage/update-log',
+                            router: 'permission/systemManage/update-log',
                             menuCode: 'op_ver',
                         },
                     ]
@@ -805,28 +805,28 @@
                     menuItems: [
                         {
                             primaryText: '账号权限',
-                            router: '/permission/accountManage/accountList',
+                            router: 'permission/accountManage/accountList',
                             menuCode: 'sso_userList_base',
                         },
                         {
                             primaryText: '角色权限',
-                            router: '/permission/user',
+                            router: 'permission/user',
                             menuCode: 'sso_roleList_base',
                         },
                         {
                             primaryText: '操作项权限',
-                            router: '/permission/operations',
+                            router: 'permission/operations',
                             menuCode: 'sso_resource_base',
                         },
                         {
                             primaryText: '业务代码配置',
-                            router: '/permission/opCode',
+                            router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
                         {
                             primaryText: '其他合同角色权限列表',
                             menuCode: 'hrm_role_list',
-                            router: '/oa/organizationPower/role',
+                            router: 'oa/organizationPower/role',
                         },
                     ]
                 },
@@ -838,17 +838,17 @@
                     menuItems: [
                         {
                             primaryText: '操作日志',
-                            router: '/permission/accountManage/operationsLogs',
+                            router: 'permission/accountManage/operationsLogs',
                             menuCode: 'sso_actionLog_base',
                         },
                         {
                             primaryText: '消息日志',
-                            router: '/permission/systemManage/messageList',
+                            router: 'permission/systemManage/messageList',
                             menuCode: 'sso_infoList_base',
                         },
                         {
                             primaryText: '登录日志',
-                            router: '/permission/loginLog',
+                            router: 'permission/loginLog',
                             menuCode: 'sso_loginLog_base',
                         }
                     ]
@@ -861,22 +861,22 @@
                         {
                             primaryText: '表单配置',
                             menuCode: 'sys_form_list',
-                            router: '/permission/processManage/form',
+                            router: 'permission/processManage/form',
                         },
                         {
                             primaryText: '类型配置',
                             menuCode: 'wf_base_list',
-                            router: '/permission/processManage/processSetting',
+                            router: 'permission/processManage/processSetting',
                         },
                         {
                             primaryText: '公共字典',
                             menuCode: 'sys_publicDict_list',
-                            router:'/permission/processManage/dictionary',
+                            router:'permission/processManage/dictionary',
                         },
                         {
                             primaryText: 'SQL模版',
                             menuCode: 'sys_sqlTemplate_list',
-                            router: '/permission/processManage/sqlModel',
+                            router: 'permission/processManage/sqlModel',
                         },
                     ]
                 },
@@ -887,17 +887,17 @@
                     menuItems: [
                         {
                             primaryText: '同步主体',
-                            router: '/permission/Synchronization/main',
+                            router: 'permission/Synchronization/main',
                             menuCode: 'sync_main_part',
                         },
                         {
                             primaryText: '同步系统',
-                            router: '/permission/Synchronization/system',
+                            router: 'permission/Synchronization/system',
                             menuCode: 'sync_system',
                         },
                         {
                             primaryText: '同步日志',
-                            router: '/permission/Synchronization/journal/main/system',
+                            router: 'permission/Synchronization/journal/main/system',
                             menuCode: 'sync_log',
                         },
                     ]
@@ -991,22 +991,22 @@
                     {
                         primaryText: '其他合同',
                         menuCode: 'myCard',
-                        router: '/office/officeBackground/newOffice',
+                        router: 'office/officeBackground/newOffice',
                     },
                     {
                         primaryText: '我发起的合同',
                         menuCode: 'myCard',
-                        router: '/office/officeBackground/ownAdd',
+                        router: 'office/officeBackground/ownAdd',
                     },
                     {
                         primaryText: '合同库',
                         menuCode: 'wf_contract_list',
-                        router: '/office/officeBackground/contractMonitor',
+                        router: 'office/officeBackground/contractMonitor',
                     },
                     {
                         primaryText: '合同扫码',
                         menuCode: 'pigeonhole',
-                        originUrl: '/order-center/contract-manage/contract-yard',
+                        originUrl: 'order-center/contract-manage/contract-yard',
                     }
                 ]   
             }, 

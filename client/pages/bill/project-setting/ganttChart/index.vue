@@ -334,7 +334,6 @@ export default {
                     month = month-12;
                     year +=1; 
                 }
-                
                 showData.push({
                     year:year,
                     month:month,
@@ -344,8 +343,6 @@ export default {
         
             this.showData = [].concat(showData);
             this.leftEndpoint = this.showData[0];
-           
-            
             this.isLoading = false;
         },
         //获取某日为周几

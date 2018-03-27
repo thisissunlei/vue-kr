@@ -3,13 +3,14 @@
        
         <!-- 甘特图部分 -->
         <GanttChart 
-           type='view' 
-           :startTime="params.startTime" 
-           :endTime="params.endTime"
-           @treeClick="treeClick"
-           @scroll="rightScroll"
-           :treeData="treeData"
-           :listData="listData"
+           
+            type='view' 
+            :startTime="params.startTime" 
+            :endTime="params.endTime"
+            @treeClick="treeClick"
+            @scroll="rightScroll"
+            :treeData="treeData"
+            :listData="listData"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -21,14 +22,26 @@
                                     <p style="width:172px;">项目名称</p>
                                     <p style="border-right:none;width:172px;">城市</p>
                                 </div> 
-                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
-                                     <ListTable
+                                <div 
+                                   
+                                    @scroll="scroll" 
+                                    class='view-table-detail' 
+                                    id="vue-chart-left-table-list"
+                                >
+                                    <div 
+                                        v-if="!isLoading"
+                                    >
+                                        <ListTable
+                                       
                                         v-for="item in listData"
                                         :key="item.id"
                                         :data="item"
                                         test="PREPARE"
                                         @rowClick="rowClick"
+                                       
                                     />
+                                    </div>
+                                    
                                     <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
                                     
                                 </div>   
@@ -43,15 +56,24 @@
                                     <p style="width:105px;">城市</p>
                                     <p style="width:136px;">操作</p>
                                 </div> 
-                                <div @scroll="scroll" class='view-table-detail' id="vue-chart-left-table-list">
-                                     <ListTable
-                                        v-for="item in listData"
-                                        :key="item.id"
-                                        :data="item"
-                                        test="INVEST"
-                                        @rowClick="rowClick"
-                                        @operationClick="operationClick"
-                                    />
+                                <div 
+                                    @scroll="scroll" 
+                                    class='view-table-detail' 
+                                    id="vue-chart-left-table-list"
+                                >
+                                    <div 
+                                        v-if="!isLoading"
+                                    >
+                                        <ListTable
+                                          
+                                            v-for="item in listData"
+                                            :key="item.id"
+                                            :data="item"
+                                            test="INVEST"
+                                            @rowClick="rowClick"
+                                            @operationClick="operationClick"
+                                        />
+                                    </div>
                                     <div class='view-bottom-more' :style="{height:scrollWidth+'px'}"></div>
                                 </div>   
                             </div>
@@ -83,7 +105,7 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './ListTable';
 import GanttChart from '../ganttChart';
-var isLoading = false;
+
 var allPage = 1;
 var nowPage = 1;
 export default {
@@ -93,7 +115,6 @@ export default {
     },
     data(){
         return{
-            
             openSure:false,
             id:'',
             params:{
@@ -113,6 +134,7 @@ export default {
             treeData:[],
             mask:true,
             scrollWidth:0,
+            isLoading:false
         }
 
     },
@@ -132,25 +154,23 @@ export default {
                 return;
             }
            
-            isLoading = true;
+            this.isLoading = true;
             var data = Object.assign({},params);
             var startTime = data.startTime.split(" ")[0]+' 00:00:00';
             var endTime = data.endTime.split(" ")[0]+' 00:00:00';
             data.startTime = startTime;
             data.endTime = endTime;
             this.$http.get('project-progress-list',data).then((response)=>{
-                if(type){
-                    this.listData=this.listData.concat(response.data.items);
-                }else{
-                    this.listData=response.data.items;
-                }
+              
+                this.listData=response.data.items;
+               
                 
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
                 }
                 allPage = response.data.totalPages;
-                isLoading = false;
+                this.isLoading = false;
                 this.params.page = response.data.page+1;
                 
             }).catch((error)=>{
@@ -274,7 +294,7 @@ export default {
             const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
             chartDom.scrollTop = leftList.scrollTop;
             if(isBottom<=0){
-                if(isLoading ){
+                if(this.isLoading ){
                    return;
                 }
                 this.getListData(this.params,true)
@@ -296,7 +316,7 @@ export default {
             if(isRight<=0){
                 
                
-               if(isLoading ||endTime>=this.maxDay){
+               if(this.isLoading ||endTime>=this.maxDay){
                    return;
                }
                 this.addAfterMonthNum(this.params.endTime,2);
@@ -305,15 +325,15 @@ export default {
             if(chartDom.scrollLeft<=0){
               
                 
-                if(isLoading ||startTime<=this.minDay){
+                if(this.isLoading ||startTime<=this.minDay){
                    return;
                 }
                 this.addBeforeMonthNum(this.params.startTime,2)
 
             }
             if(isBottom<=0){
-                console.log("bottom=======")
-                if(isLoading){
+                console.log("bottom=======",isBottom)
+                if(this.isLoading){
 
                    return;
                 }

@@ -27,11 +27,16 @@
                     @on-popper-show="getSpecificData" 
                     @on-popper-hide="cildHide"
                 >
-                <div 
-                    class="label"
-                    :style="{width:boxDetail.width * minCalibration+'px'}"
-                > {{data.label}} </div>
-               
+
+                <div class='col-tool-label'>
+                    <Tooltip :content="data.label" :placement="index==0?'bottom':'top'">
+                        <div 
+                            class="label"
+                            :style="{width:boxDetail.width * minCalibration+'px'}"
+                        > {{data.label}} </div>
+                    </Tooltip>
+                </div>
+                
                     
                     <div 
                         class="plan"
@@ -103,6 +108,9 @@ export default {
         type:{
             type:String,
             default:'view'
+        },
+        index:{
+            type:[Number,String] 
         }
     },
     data(){
@@ -114,14 +122,13 @@ export default {
             secondObj:{},
             isChild:false,  
             childLeftEndpoint:{},
-           articleId:'article'+this.data.t_id,
+            articleId:'article'+this.data.t_id,
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        
     },
     methods:{
         getFlagShow(event){
@@ -253,6 +260,14 @@ export default {
  .every-view-col{
     height: 45px;
     
+    .col-tool-label{
+        .ivu-tooltip-popper{
+            .ivu-tooltip-arrow{
+                display:none;
+            }
+        }
+    }
+    
     border-bottom: 1px solid #E1E6EB;
      &:last-child{
             margin-top:0px;
@@ -264,7 +279,7 @@ export default {
   }
 .article{
     position: relative;
-     background: transparent;
+    background: transparent;
     
     .label{
         width: 100%;

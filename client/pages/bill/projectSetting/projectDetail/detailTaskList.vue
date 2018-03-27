@@ -11,7 +11,7 @@
        <div class='chart-detail' @scroll="detailScroll" id="vue-chart-left-detail-list"> 
            <ul>
               <li
-                v-for="item in data"
+                v-for="(item,index) in data"
                 :key="item.t_id"
                 class='detail-li'
               >
@@ -20,7 +20,7 @@
                   @mouseout="outHide(item.t_id)"
                  >
                    <div class='parent-middle'>
-                    <Tooltip :content="item.label" placement="top">
+                    <Tooltip :content="item.label" :placement="index==0?'bottom':'top'">
                       <div class='chart-left-name' @click="showClick(item.t_id)">
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.label}}</span>

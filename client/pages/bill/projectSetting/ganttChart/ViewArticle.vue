@@ -6,7 +6,7 @@
         <div 
             class="view-channel"
             v-if="showData.length"
-            v-for="channels in showData"
+            v-for="(channels,index) in showData"
             :key="channels.id"
             style=""
         >
@@ -17,6 +17,7 @@
                 v-for="item in channels"
                 :data="item"
                 :key="item.id"
+                :index="index"
             />
             
             

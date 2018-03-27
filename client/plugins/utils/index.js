@@ -117,8 +117,9 @@ import throttle from './throttle';
     function downFile(href, filename) {
         var a = document.createElement('a');
         a.href = href;
-        // a.download = filename;
+        //a.download = filename;
         a.click();
+     
     }
 
     function getDaysInOneMonth(year, month){  

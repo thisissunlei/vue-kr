@@ -239,10 +239,11 @@ import utils from '~/plugins/utils';
                 renewForm.endDate =start;
                 let _this = this;
                 
-                 this.$http.post('save-reduce', renewForm, r => {
-                      window.close();
+                 this.$http.post('save-reduce', renewForm).then( r => {
+                    window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/reduceView';
+                      // window.close();
                       window.opener.location.reload();
-                }, e => {
+                }).catch( e => {
                      _this.$Notice.error({
                         title:e.message
                     })

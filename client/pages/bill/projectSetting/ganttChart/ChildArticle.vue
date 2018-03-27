@@ -24,7 +24,7 @@
 import ChildEveryArticle from './ChildEveryArticle'
 export default {
     components:{
-      ChildArticle
+      ChildEveryArticle
     },
     props:{
         data:{

@@ -1,7 +1,7 @@
 // 千分位分隔符
 export default function thousand (params) {
   if (params === null || params === undefined) {
-    return null
+    return 0
   } else if (isNaN(params)) {
     return 'NaN'
   } else {

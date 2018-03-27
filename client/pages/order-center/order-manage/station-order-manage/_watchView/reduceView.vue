@@ -50,6 +50,23 @@
 			<DetailStyle info="相关合同">
 				<Table :columns="contract" :data="contractData"/>
 			</DetailStyle>
+			<DetailStyle info="分期计划">
+				<Table :columns="stagesColumn" :data="installments"/>
+				<div class="button-list">
+					<div class="table-button" v-if="showButton == true && showAll == false" @click="showAllList">
+						<span>展开</span>
+						<img class="showAll" src="~assets/images/arrows.svg" />
+						
+					</div>
+					<div class="table-button" v-if="showButton == true && showAll == true"  @click="notAllList">
+						<span>收起</span>
+						<img class="notAll" src="~assets/images/arrows.svg" />
+					</div>
+				</div>
+			</DetailStyle>
+			<DetailStyle info="相关规则">
+				<div v-html="basicInfo.versionRemark" style="margin-left:12px"></div>
+			</DetailStyle>
 		</div>
 	</div>	
 </template>
@@ -60,6 +77,7 @@
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
 
 export default {
 	name:'ReduceView',
@@ -74,6 +92,10 @@ export default {
 	},
 	data(){
 		return{
+			versionRemark:'',
+			showButton:false,
+			showAll:false,
+			installments:[],
 			basicInfo:{},
 			reduceStation:[],
             contract:[
@@ -93,7 +115,57 @@ export default {
                  align:'center'	
 				}  
 			],
-			contractData:[]
+			contractData:[],
+			stagesColumn:[
+                    {
+                        title: '分期类型',
+                        key: 'installmentCategoryStr'
+                    },
+                    {
+                        title: '账单日',
+                        key: 'billingDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.billingDate));
+							return time;
+                        }
+                    },
+                    {
+                        title:'最后付款日',
+                        key:'lastPaymentDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.lastPaymentDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期开始时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期结束时间',
+                        key: 'startDate',
+                        render:(h, params) => {
+							let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
+							return time;
+                        }
+                    },
+                    {
+                        title: '分期金额',
+                        key: 'totalAmount',
+                        render: (h, params) => {
+                        	console.log('分期金额',params.row.totalAmount,'----',utils.thousand(params.row.totalAmount));
+                            return utils.thousand(params.row.totalAmount)
+                        }
+                    },
+                    {
+                        title: '支付状态',
+                        key: 'payStatusStr',
+                    }
+                ],
 		}
 	},
 	
@@ -110,8 +182,7 @@ export default {
 			};
 			this.$http.get('reduce-bill-detail', from).then((response)=>{  
 					this.basicInfo=response.data;
-
-
+					this.installments = response.data.installments;
 					response.data.orderSeatDetailVo&&response.data.orderSeatDetailVo.map((item,index)=>{
 							item.startDate=item.startDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)):'';
 							item.endDate=item.endDate?dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)):'';
@@ -130,7 +201,17 @@ export default {
 						title:error.message
 					});
 			})
-		}
+		},
+		notAllList(){
+			let list = this.installmentAll
+			this.showAll = false;
+			this.installments = list.slice(0,10)
+		},
+		showAllList(){
+			let list = this.installmentAll
+			this.showAll = true;
+			this.installments = list;
+		},
 	}
 }
 </script>
@@ -166,6 +247,44 @@ export default {
 				padding-top:15px;
 				display:inline-block;
 
+			}
+		}
+		.table-button{
+			text-align: center;
+			cursor: pointer;
+			color:#499DF1;
+			display: inline-block;
+			transition:all .5s;
+			&>span{
+				font-size: 16px;
+				padding-bottom:5px;
+				padding-top:10px;
+				display: inline-block;
+			}
+		}
+		.button-list{
+			text-align: center;
+		}
+		.notAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+			transform: rotate(180deg);
+			vertical-align: middle;
+		}
+		.showAll{
+			display: block;
+			margin:0 auto;
+			width:16px;
+			height: 16px;
+
+			vertical-align: middle;
+		}
+		.formula{
+			margin-left:12px;
+			&>div{
+				margin:10px 0;
 			}
 		}
 	}

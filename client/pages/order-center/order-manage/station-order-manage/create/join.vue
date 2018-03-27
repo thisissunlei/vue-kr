@@ -628,10 +628,11 @@ import utils from '~/plugins/utils';
                 formItem.ssoName = this.ssoName;
                 let _this = this;
                 this.disabled = true;
-                 this.$http.post('save-join', formItem, r => {
-                      window.close();
-                      window.opener.location.reload();
-                }, e => {
+                 this.$http.post('save-join', formItem).then( r => {
+                    window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/joinView';
+                    //欢哥让删掉列表刷新
+                     // window.opener.location.href=window.opener.location.href;  
+                }).catch( e => {
                      _this.$Notice.error({
                         title:e.message
                     })

@@ -1,8 +1,8 @@
 
 <template>
 	<div class="draw-day" >
-        <div class="day" v-for="item in monthDay" :key="item.id">
-            {{showLabel(item)}}
+        <div class="day" v-for="item in monthDay" :key="item.id" :style="{backgorund:item=='今天'?'#F3F2F7':''}">
+            {{item}}
         </div>
 	</div>
 </template>
@@ -28,7 +28,13 @@ export default {
     methods:{
         getDayNum(){
             var num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
-            num.length = this.dayNum;
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var todyObj = today.split("-");
+             num.length = this.dayNum;
+            if(+today[0]===this.data.year && +today[1]==this.data.month){
+                num[+today[2]] = '今天'
+            }
+           
             return num;
         },
         showLabel(num){

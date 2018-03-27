@@ -148,7 +148,7 @@
                         key: 'rentAmount',
                         align:'center',
                         render(tag,params){ 
-                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
                           return <span class="u-txt">{money}</span>;
                         }
                     },
@@ -157,7 +157,7 @@
                         key: 'depositAmount',
                         align:'center',
                         render(tag,params){ 
-                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):'';                  
+                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
                           return <span class="u-txt">{money}</span>;
                         }
                     },
@@ -176,6 +176,14 @@
                                     return <span class="u-txt">{orderType[item]}</span>;
                                 }
                             }
+                        }
+                    },
+                    {
+                        title: '租赁期限',
+                        key: 'ctime',
+                        align:'center',
+                        render(tag, params){
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
                         }
                     },
                     {

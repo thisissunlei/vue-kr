@@ -98,20 +98,7 @@ export default{
                 endTime:'',
                 payStatus:'',
             },
-            typeList:[
-                {
-                    value:'MEETING',
-                    label:'会议室账单'
-                },
-                {
-                    value:'PRINT',
-                    label:'打印服务账单 '
-                },
-                {
-                    value:'CONTRACT',
-                    label:'工位服务订单'
-                },
-            ],
+            typeList:[],
             statusList:[
                 {
                     value:'WAIT',
@@ -130,7 +117,7 @@ export default{
 		}
     },
     mounted:function(){
-
+         this.getBillType();
         this.$http.get('join-bill-community','').then((res)=>{
              this.communityList=res.data.items;
         }).catch((error)=>{
@@ -138,6 +125,7 @@ export default{
                 title:error.message
             });
         })
+       
          
     },
     methods:{
@@ -146,7 +134,23 @@ export default{
         },
         endChange(date){
             this.formItem.billEndTime=date;
-        }
+        },
+        getBillType(){
+            
+            this.$http.get('get-bill-type', '').then((res)=>{
+                res.data.enums.map((item)=>{
+                    item.label=item.name;
+                    item.value=item.code;
+                       
+                })
+                 this.typeList=res.data.enums;
+               
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        },
     },
     updated:function(){
         this.$emit('formData', this.formItem);

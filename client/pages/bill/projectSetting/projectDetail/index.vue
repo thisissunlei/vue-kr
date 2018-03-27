@@ -157,6 +157,30 @@ export default {
          this.getTreeData({propertyId:this.queryData.id});
     },
     methods:{
+        //获取列表数据
+        getListData(ids){
+            let params={
+                propertyId:this.queryData.id,
+                taskTemplateIds:ids?ids:[]
+            }
+
+            this.isLoading = true;
+            this.$http.get('project-list-task',params).then((response)=>{
+                this.listData=response.data.items; 
+               this.params.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
+               this.params.endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.lastEndTime));
+                //后面进行组件优化
+                this.isLoading = false;
+                this.listData.map((item,index)=>{
+                   item.children=item.children?item.children:[];
+                   item.children.push({label:'添加自任务',chartType:'single'})
+                })
+            }).catch((error)=>{
+                this.$Notice.error({
+                title: error.message,
+                });
+            })
+        },
          //获取查看编辑记录
         getWatchData(id){
             this.$http.get('watch-edit-record',{id:id}).then((response)=>{
@@ -167,11 +191,15 @@ export default {
                 });
             })
         },
-        //获取树列表数据
+
+
+
+        //获取树任务项数据
         getTreeData(params){     
             this.$http.get('project-id-search',params).then((response)=>{
                 this.treeData=response.data.items;
                 this.recursiveFn(this.treeData);
+                //this.selectTree();
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -189,15 +217,76 @@ export default {
             })
             return data;
         },
-        //树
+
+
+
+
+        //树点击事件
         treeClick(params){
             var treeArray=[];
             params.map((item,index)=>{
-                treeArray.push(item.value);
+                treeArray.push(this.fnTree(item.value,this.treeData));
             })
-            this.ids=treeArray.join(',');
+            var middle=treeArray.join(',');
+            var ids=middle.split(',');
+            var res = [];
+            ids.map((item,index)=>{
+                var current = item;
+                if (res.indexOf(current) === -1&&item!='false') {
+                    res.push(current)
+                }
+            })
+            this.ids=res.join(',');
             this.getListData(this.ids);
         },
+
+        //递归找父级
+        fnTree(id,data){	
+            var cityLable = '';
+            for(var i=0;i<data.length;i++){		
+                let item = data[i];
+                cityLable = item.value;
+                if(!item.children && item.value == id ){
+                        this.key = item.value;
+                        cityLable = item.value;
+                        return cityLable;
+                }else{
+                    if(item.children){
+                        let text = this.fnTree(id,item.children);
+                        if(text){
+                            return cityLable+=','+text;
+                        }
+                    }	
+                }
+            }
+            return false;
+        },
+
+
+
+        //回血
+        treeFn(id,data){
+            data.map((item,index)=>{
+                if(item.value==id){
+                    item.checked=true;
+                }
+                if(item.children&&item.children.length){
+                    this.treeFn(id,item.children);
+                }
+            })
+        },
+        //回血
+        selectTree(){
+            var ids=this.ids?this.ids.split(','):[];
+            if(ids.length){
+                ids.map((item,index)=>{
+                    this.treeFn(item,this.treeData);
+                })
+            }
+        },
+
+
+
          //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -228,30 +317,6 @@ export default {
             
         },
        
-        //获取列表数据
-        getListData(ids){
-            let params={
-                propertyId:this.queryData.id,
-                taskTemplateIds:ids?ids:[]
-            }
-
-            this.isLoading = true;
-            this.$http.get('project-list-task',params).then((response)=>{
-                this.listData=response.data.items; 
-               this.params.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
-               this.params.endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.lastEndTime));
-                //后面进行组件优化
-                this.isLoading = false;
-                this.listData.map((item,index)=>{
-                   item.children=item.children?item.children:[];
-                   item.children.push({label:'添加自任务',chartType:'single'})
-                })
-            }).catch((error)=>{
-                this.$Notice.error({
-                title: error.message,
-                });
-            })
-        },
         //打开新建任务
         addTask(id){
             this.openAddTask=!this.openAddTask;
@@ -292,6 +357,15 @@ export default {
             var params={
                 id:this.editId
             }
+            var ids=this.ids?this.ids.split(','):[];
+            if(ids.length){
+               ids.map((item,index)=>{
+                   if(item==this.editId){
+                       ids.splice(index,1);
+                   }
+               }) 
+            }
+            this.ids=ids.join(',');
             this.$http.delete('project-delete-task',params).then((response)=>{
                      this.cancelTask();
                      this.cancelEditTask();

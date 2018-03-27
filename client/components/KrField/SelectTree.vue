@@ -71,7 +71,6 @@ export default {
     directives:{
         'click-outside':{
             bind: function (el, binding, vNode) {
-                // Provided expression must evaluate to a function.
                 if (typeof binding.value !== 'function') {
                     var compName = vNode.context.name;
                     var warn = '[Vue-click-outside:] provided expression ' + binding.expression + ' is not a function, but has to be';
@@ -80,18 +79,16 @@ export default {
                     }
                     console.warn(warn);
                 }
-                // Define Handler and cache it on the element
+               
                 var handler = function(e) {
                     if (!el.contains(e.target) && el !== e.target) {
                         binding.value(e);
                     }
                 };
                 el.__vueClickOutside__ = handler;
-                // add Event Listeners
                 document.addEventListener('click', handler);
             },
             unbind: function (el, binding) {
-                // Remove Event Listeners
                 document.removeEventListener('click', el.__vueClickOutside__);
                 el.__vueClickOutside__ = null;
             }
@@ -159,8 +156,7 @@ export default {
             var allData = data.map((item,index)=>{
                 if( searchKey && item.title.indexOf(searchKey) != -1 ){
                     item.expand = true
-                    isOpen = true;
-                    console.log(item.title,"------")    
+                    isOpen = true;  
                 }else{
                      item.expand = false;
                 }   

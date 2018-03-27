@@ -29,8 +29,11 @@
                 <div 
                     class="label"
                     :style="{width:boxDetail.width * minCalibration+'px'}"
-                > {{data.label}} </div>
-               
+                > 
+                    <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
+                    <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
+                </div>
+            
                     
                     <div 
                         class="plan"
@@ -74,7 +77,10 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
-import ChildArticle from './ChildArticle'
+import ChildArticle from './ChildArticle';
+import no from './img/no.png';
+import ok from './img/ok.png';
+import yeas from './img/yeas.png';
 export default {
     name:'Article',
     components:{
@@ -112,14 +118,15 @@ export default {
             secondObj:{},
             isChild:true,  
             childLeftEndpoint:{},
-           
+            
+            picColor:''
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        
+        this.getBgColor();
     },
     methods:{
         getFlagShow(event){
@@ -136,16 +143,15 @@ export default {
         },
        getBgColor(){
             if(this.data.chartType || !this.data.data.currentStatus){
-                return "#fff";
+                this.picColor="";
             }
             if(this.data.data.currentStatus<0){
-                return "#FFCDCD"
+                this.picColor=no;
             }else if(this.data.data.currentStatus>0){
-                return '#FFECD4';
+                this.picColor=yeas;
             }else{
-                return "#E0F2CD"
+                this.picColor=ok;
             }
-           
           
        },
        

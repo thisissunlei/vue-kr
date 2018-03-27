@@ -31,8 +31,8 @@ export default {
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var todyObj = today.split("-");
              num.length = this.dayNum;
-            if(+today[0]===this.data.year && +today[1]==this.data.month){
-                num[+today[2]] = '今天'
+            if(+todyObj[0]===this.data.year && +todyObj[1]==this.data.month){
+                num[+todyObj[2]-1] = '今天'
             }
            
             return num;

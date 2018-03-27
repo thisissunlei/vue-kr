@@ -124,12 +124,14 @@ export default {
     },
     
     methods:{  
+       
         //获取进度列表数据
         getListData(params,type){
           
             if(allPage<params.page){
                 return;
             }
+           
             isLoading = true;
             var data = Object.assign({},params);
             var startTime = data.startTime.split(" ")[0]+' 00:00:00';
@@ -149,7 +151,7 @@ export default {
                 }
                 allPage = response.data.totalPages;
                 isLoading = false;
-                nowPage = response.data.page;
+                this.params.page = response.data.page+1;
                 
             }).catch((error)=>{
                 this.$Notice.error({
@@ -279,7 +281,7 @@ export default {
             }
         },
 
-        rightScroll(){
+       rightScroll(){
             if(!this.params.startTime || !this.params.endTime){
                 return;
             }
@@ -310,11 +312,12 @@ export default {
 
             }
             if(isBottom<=0){
+                console.log("bottom=======")
                 if(isLoading){
 
                    return;
                 }
-                this.params.page = response.data.page+1;
+                
                 this.getListData(this.params,true)
             }
         },

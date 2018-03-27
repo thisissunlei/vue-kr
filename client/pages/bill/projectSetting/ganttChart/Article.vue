@@ -120,7 +120,6 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        
     },
     methods:{
         getFlagShow(event){

@@ -13,7 +13,6 @@
                 
                 
                 <div class="article" 
-                :id = "articleId"
                 v-if="getFlagShow('STAGETASK')"
                     :style="{
                         width:boxDetail.width * minCalibration+'px',
@@ -27,16 +26,11 @@
                     @on-popper-show="getSpecificData" 
                     @on-popper-hide="cildHide"
                 >
-
-                <div class='col-tool-label'>
-                    <Tooltip :content="data.label" :placement="index==0?'bottom':'top'">
-                        <div 
-                            class="label"
-                            :style="{width:boxDetail.width * minCalibration+'px'}"
-                        > {{data.label}} </div>
-                    </Tooltip>
-                </div>
-                
+                <div 
+                    class="label"
+                    :style="{width:boxDetail.width * minCalibration+'px'}"
+                > {{data.label}} </div>
+               
                     
                     <div 
                         class="plan"
@@ -67,7 +61,7 @@
                      
                </Poptip>
                 </div>
-                 
+              
                  
                     
             </div>
@@ -107,10 +101,6 @@ export default {
         },
         type:{
             type:String,
-            default:'view'
-        },
-        index:{
-            type:[Number,String] 
         }
     },
     data(){
@@ -120,15 +110,16 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
             secondObj:{},
-            isChild:false,  
+            isChild:true,  
             childLeftEndpoint:{},
-            articleId:'article'+this.data.t_id,
+           
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
+        
     },
     methods:{
         getFlagShow(event){
@@ -222,28 +213,17 @@ export default {
             }
 
        },
-       changePoptip(flag){
-           var articleDom = document.getElementById(this.articleId);
-           var popDom = articleDom.querySelectorAll('.ivu-poptip-popper')[0];
-           if(!flag){
-               popDom.style.opacity=0;
-           }else{
-               popDom.style.opacity=1;
-           }    
-       },
        //获取二级部分数据
        getSpecificData(event){
-           this.changePoptip(false);
+         
            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
                 this.secondObj.tasks=response.data.items;
                 if(!response.data.items||response.data.items.length == 0){
-                    this.isChild = false;
-                    this.changePoptip(false)
+                     this.isChild = false;
                 }else {
                      this.isChild = true;
-                     this.changePoptip(true);
                 }
-                
+
                 // this.getChildLeftEndpoint(response.data.items);
 
             }).catch((error)=>{
@@ -260,14 +240,6 @@ export default {
  .every-view-col{
     height: 45px;
     
-    .col-tool-label{
-        .ivu-tooltip-popper{
-            .ivu-tooltip-arrow{
-                display:none;
-            }
-        }
-    }
-    
     border-bottom: 1px solid #E1E6EB;
      &:last-child{
             margin-top:0px;
@@ -279,7 +251,7 @@ export default {
   }
 .article{
     position: relative;
-    background: transparent;
+     background: transparent;
     
     .label{
         width: 100%;

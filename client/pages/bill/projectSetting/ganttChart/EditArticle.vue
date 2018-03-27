@@ -6,66 +6,53 @@
         @mouseout="outHide(data.t_id)"
     >
         <div v-if="!this.data.chartType && isInitial()">
-        <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
+        <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
-            :data="20" 
+            :data="data.data" 
             :minCalibration="minCalibration" 
             :startDate="leftEndpoint"
-        /> -->
-
-        <div class="article" 
-            v-if="getFlagShow('STAGETASK')"
-            :style="{
-                width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px'
-            }"
-        >   
-
-         <div class='col-tool-label'>
-            <Tooltip :content="data.label" :placement="index==0?'bottom':'top'">
-              <div class="label">{{data.label}}</div>
-            </Tooltip>
-        </div>
-        
-            <div 
-                class="plan"
-                :style="{
-                    width:planDetail.width * minCalibration + 'px',
-                    left:planDetail.office * minCalibration + 'px'
-                }"
-                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
-            >
-              
+        />
+            <div class='col-tool-label'>
                 
-            </div>
-        
+                    <div class="article" 
+                        v-if="getFlagShow('STAGETASK')"
+                        :style="{
+                            width:boxDetail.width * minCalibration+'px',
+                            left:boxDetail.office * minCalibration+'px'
+                        }"
+                    >   
+                    <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
 
-
-            <div 
-                class="actual"
-                :style="{
-                    width:actualDetail.width * minCalibration+'px',
-                    left:actualDetail.office * minCalibration + 'px'
-                }"
-                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-            >
-              
+                        <div 
+                            class="label"
+                        > 
+                            <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
+                            <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
+                        </div>
                 
+                        <div 
+                            class="plan"
+                            :style="{
+                                width:planDetail.width * minCalibration + 'px',
+                                left:planDetail.office * minCalibration + 'px'
+                            }"
+                            v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
+                        ></div>
+                        <div 
+                            class="actual"
+                            :style="{
+                                width:actualDetail.width * minCalibration+'px',
+                                left:actualDetail.office * minCalibration + 'px'
+                            }"
+                            v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                        ></div>
+                    </Tooltip> 
+                </div>
             </div>
-        </div>
         </div>
        
     </div>
     
-        <EditArticle 
-            v-if="data.children"
-            v-for="item in data.children" 
-            :key="item.id" 
-            :data="item"
-            :minCalibration="minCalibration"
-            :startDate="startDate"
-            :type="type"
-        />
     </div>
 </template>
 
@@ -114,14 +101,16 @@ export default {
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
-            leftEndpoint:this.startDate
+            leftEndpoint:this.startDate,
+
+            picColor:''
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-      
+        this.getBgColor();
     },
     methods:{
         isInitial(){
@@ -145,19 +134,18 @@ export default {
 
         },
         getBgColor(){
-                if(this.data.chartType || !this.data.data.progressStatus){
-                    return "#fff";
-                }
-                if(this.data.data.progressStatus<0){
-                    return "😨"
-                }else if(this.data.data.progressStatus>0){
-                    return '😊';
-                }else{
-                    return "#E0F2CD"
-                }
-            
-            
-        },
+            if(this.data.chartType || !this.data.data.currentStatus){
+                this.picColor="";
+            }
+            if(this.data.data.currentStatus<0){
+                this.picColor=no;
+            }else if(this.data.data.currentStatus>0){
+                this.picColor=yeas;
+            }else{
+                this.picColor=ok;
+            }
+          
+       },
        
        getBoxWidthAndOffice(){
            

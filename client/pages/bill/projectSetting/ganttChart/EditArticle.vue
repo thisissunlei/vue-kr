@@ -26,7 +26,7 @@
                             <div 
                                 class="label"
                             > 
-                                <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
+                                <img v-if="picColor" :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
                                 <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
                             </div>
                     
@@ -120,7 +120,9 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        // this.getBgColor();
+        setTimeout(() => {
+             this.getBgColor();
+        },100);
     },
     methods:{
         isInitial(){
@@ -146,6 +148,7 @@ export default {
         getBgColor(){
             if(this.data.chartType || !this.data.data.currentStatus){
                 this.picColor="";
+                return ;
             }
             if(this.data.data.currentStatus<0){
                 this.picColor=no;

@@ -30,7 +30,7 @@
                         class="label"
                         :style="{width:boxDetail.width * minCalibration+'px'}"
                     > 
-                        <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;margin-bottom: 3px;"/>
+                        <img :src="picColor" v-if="picColor" width="21px" height="21px" style="vertical-align: middle;margin-bottom: 3px;"/>
                         <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
                     </div>
             
@@ -129,7 +129,9 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        this.getBgColor();
+         setTimeout(() => {
+             this.getBgColor();
+        },100);
     },
     methods:{
         getFlagShow(event){
@@ -147,6 +149,7 @@ export default {
        getBgColor(){
             if(this.data.chartType || !this.data.data.currentStatus){
                 this.picColor="";
+                return ;
             }
             if(this.data.data.currentStatus<0){
                 this.picColor=no;
@@ -249,7 +252,7 @@ export default {
  .every-view-col{
     height: 45px;
     position: relative;
-    border-bottom: 1px solid #E1E6EB;
+    //border-bottom: 1px solid #E1E6EB;
     .tag{
         width: 50px;
         position: absolute;

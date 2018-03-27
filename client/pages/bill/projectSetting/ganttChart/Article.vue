@@ -147,13 +147,13 @@ export default {
             this.isChild = false;
         },
        getBgColor(){
-            if(this.data.chartType || !this.data.data.currentStatus){
+            if(this.data.chartType || !this.data.data.progressStatus){
                 this.picColor="";
                 return ;
             }
-            if(this.data.data.currentStatus<0){
+            if(this.data.data.progressStatus<0){
                 this.picColor=no;
-            }else if(this.data.data.currentStatus>0){
+            }else if(this.data.data.progressStatus>0){
                 this.picColor=yeas;
             }else{
                 this.picColor=ok;

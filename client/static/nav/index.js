@@ -696,25 +696,25 @@
                             primaryText: '管家',
                             menuCode: 'oper_steward_base',
                             type:'vue',
-                            originUrl: 'app-manage/steward-setting',
+                            router: 'app-manage/steward-setting',
                         },
                         {
                             primaryText: '通知',
                             menuCode: 'app_console_notification',
                             type: 'vue',
-                            originUrl: 'app-manage/notification-manage'
+                            router: 'app-manage/notification-manage'
                         },
                         {
                             primaryText: '图标',
                             menuCode: 'app_console_common_icon',
                             type: 'vue',
-                            originUrl: 'app-manage/icon-manage'
+                            router: 'app-manage/icon-manage'
                         },
                         {
                             primaryText: '推送',
                             menuCode: 'app_console_push',
                             type: 'vue',
-                            originUrl: 'app-manage/push-manage'
+                            router: 'app-manage/push-manage'
                         },
                         {
                             primaryText: '意见反馈',
@@ -754,7 +754,7 @@
                             primaryText: '服务及设施配置',
                             menuCode: 'brightpoint_label_list',
                             type:'vue',
-                            originUrl: 'facility-tags/',
+                            router: 'facility-tags/',
                         },
                     ]
                 },
@@ -1006,7 +1006,7 @@
                     {
                         primaryText: '合同扫码',
                         menuCode: 'pigeonhole',
-                        originUrl: 'order-center/contract-manage/contract-yard',
+                        router: 'order-center/contract-manage/contract-yard',
                     }
                 ]   
             }, 

@@ -9,6 +9,7 @@
                 v-model="tabParams.customerName" 
                 placeholder="请输入客户名称"
                 style="width: 252px"
+                @on-enter="lowerSubmit"
             />
             <div class='m-search' @click="lowerSubmit">搜索</div>
          </div>
@@ -89,6 +90,22 @@
         :warn="warn"
         @changeOpen="onChangeOpen"
     ></Message>
+    <Modal
+        v-model="openDownload"
+        title="下载pdf"
+        ok-text="确定"
+        cancel-text="取消"
+        width="652"
+     >
+         <PdfDownload  @formData="getSealPrint" :isSeal="seal"/>
+          <div class="spin-container" v-if="loading">
+                <Spin size="large" fix></Spin>
+          </div>
+         <div slot="footer">
+            <Button type="primary" @click="pdfDownload">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDownloadDialog">取消</Button>
+        </div>
+    </Modal>
 </div>
 </template>
 
@@ -102,6 +119,7 @@ import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
+import PdfDownload from './pdfDownload';
 
     export default {
         name: 'Bill',
@@ -111,7 +129,8 @@ import Buttons from '~/components/Buttons';
             antiSettlement,
             SectionTitle,
             Message,
-            Buttons
+            Buttons,
+            PdfDownload
         },
         data () {
             return {
@@ -134,6 +153,10 @@ import Buttons from '~/components/Buttons';
                 warn:'',
                 MessageType:'',
                 billType:{},
+                openDownload:false,
+                printDetail:'',
+                seal:'0',
+                loading:false,
                 columns: [
                     {
                         type: 'selection',
@@ -281,7 +304,21 @@ import Buttons from '~/components/Buttons';
                                                         this.showAntiSettle(params.row)
                                                     }
                                                 }
-                                            })
+                                            }),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);  
                             }else if(params.row.payStatus==='PAID'){
                                 return h('div', [
@@ -298,7 +335,21 @@ import Buttons from '~/components/Buttons';
                                                         this.openView(params.row)
                                                     }
                                                 }
-                                            }, '查看')
+                                            }, '查看'),
+                                            h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);
                             }else if(params.row.payStatus==='WAIT'){
                                 return h('div', [
@@ -329,7 +380,20 @@ import Buttons from '~/components/Buttons';
                                                         this.showSettle(params.row)
                                                     }
                                                 }
-                                            })
+                                            }),h('Button', {
+                                                props: {
+                                                    type: 'text',
+                                                    size: 'small'
+                                                },
+                                                style: {
+                                                    color:'#2b85e4'
+                                                },
+                                                on: {
+                                                    click: () => {
+                                                        this.openDownloadDialog(params.row)
+                                                    }
+                                                }
+                                            }, '下载')
                                         ]);
                             }
                         }
@@ -347,6 +411,37 @@ import Buttons from '~/components/Buttons';
              
         },
         methods:{
+            getSealPrint(seal){
+                this.seal=seal;
+            },
+            //下载电子账单
+            pdfDownload(){
+                let params={
+                    billId:this.printDetail.billId,
+                    seal:this.seal
+                }
+                this.loading=true;
+                this.$http.post('bill-down-pdf',params, (response) => {
+                    this.loading=false;
+                    this.openDownloadDialog();
+                    utils.downFile(response.data.pdfUrl);
+                    
+                    }, (error) => {
+                        this.$Notice.error({
+                            title:error.message||"后台出错请联系管理员"
+                        });
+                })   
+               
+                
+            },
+            //下载提示框
+            openDownloadDialog(params){
+                if(params){
+                   this.printDetail=params;
+                   this.seal="0";
+                }
+                 this.openDownload=!this.openDownload;
+            },
             renderList(){
                 this.getBillType();
                 let bizType=this.billType;
@@ -380,9 +475,10 @@ import Buttons from '~/components/Buttons';
                 this.openSearch=!this.openSearch;
             },
             openView(params){
-                window.open(`./list/detail/${params.billId}`,'_blank');
+                window.open(`/bill/list/detail/${params.billId}`,'_blank');
             },
             showSettle (params) {
+                params.btnType="Settle";
                 this.itemDetail=params;
                 this.openSettle=!this.openSettle;
             },
@@ -473,7 +569,6 @@ import Buttons from '~/components/Buttons';
             },
             antiSettleSubmit(){
                 let params={
-                    amount:this.antiSettleData,
                     billId:this.itemDetail.billId
                 }
                 this.$http.post('bill-release',params).then((res)=>{
@@ -528,6 +623,13 @@ import Buttons from '~/components/Buttons';
 
 <style lang="less">
 .g-bill{
+    .spin-container{
+        display: inline-block;
+        width: 652px;
+        height: 100px;
+        position: relative;
+       
+    }
     .u-search{
             height:32px;
             margin:16px 0;

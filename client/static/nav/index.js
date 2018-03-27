@@ -896,6 +896,18 @@
                             type: 'vue',
                             router: 'app-manage/icon-manage'
                         },
+                        {
+                            primaryText: '推送管理',
+                            menuCode: 'app_console_push',
+                            type: 'vue',
+                            router: 'app-manage/push-manage'
+                        },
+                        {
+                            primaryText: '通知管理',
+                            menuCode: 'app_console_notification',
+                            type: 'vue',
+                            router: 'app-manage/notification-manage'
+                        },
                     ]
                 },
                 {
@@ -922,6 +934,11 @@
                             primaryText: '轮播图列表',
                             menuCode: 'por_mobilepic_list',
                             router: 'WebBackstage/picList',
+                        },
+                        {
+                            primaryText: '社区设施标签',
+                            menuCode: 'por_mobilepic_list',
+                            router: 'facility-tags/',
                         }
                     ]
                 },
@@ -1384,6 +1401,12 @@
                             type: 'vue',
                             menuCode: 'pay_deal_flow_page'
                         },
+                        {
+                            primaryText: '客户账户中心',
+                            router: 'bill/customerAssets',
+                            type:'vue',
+                            menuCode: 'customer_assets'
+                        }
                     ]
                 },
 

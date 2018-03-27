@@ -216,13 +216,17 @@ import utils from '~/plugins/utils';
                 renewForm.startDate = start;
                 renewForm.endDate =start;
                 let _this = this;
-                 this.$http.post('save-reduce', renewForm, r => {
+                 this.$http.post('save-reduce', renewForm).then( r => {
                      _this.$Notice.success({
                         title:'Success!'
                     });
-                      window.close();
-                      window.opener.location.reload();
-                }, e => {
+                     window.location.href = '/order-center/order-manage/station-order-manage/'+r.data.orderSeatId+'/reduceView';
+                     // 欢哥让删掉列表刷新
+                     // window.opener.location.href=window.opener.location.href;  
+                     
+                      // window.close();
+                      // window.opener.location.reload();
+                }).catch( e => {
                      _this.$Notice.error({
                         title:e.message
                     })

@@ -5,6 +5,16 @@
 .block{
 	display: block;
 }
+.circle{
+	&::before{
+		content:'';
+		display: inline-block;
+		width:8px;
+		height: 8px;
+		border:1px solid #333;
+		border-radius: 5px;
+	}
+}
 .ui-labeltext{
 	width:45%;
 	height: 14px;
@@ -27,12 +37,13 @@
 	.ui-label,.ui-text{
 		.block;
 	}
+	
 }
 
 </style>
 <template>
 <div  v-bind:class="[inline?unlineClass:inlineClass,labeltextClass]"  >
-	<div class="ui-label">
+	<div class="ui-label" :class="{ circle: type=='circle'}">
 		{{label}}
 	</div>
 	<div class="ui-text">
@@ -43,7 +54,7 @@
 <script>
 export default{
 	name:'labelText',
-	props:['label','inline'],
+	props:['label','inline','type'],
 	data (){
 		return{
 			labeltextClass:"ui-labeltext",

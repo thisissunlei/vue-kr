@@ -46,15 +46,16 @@
 		props:['detail'],
 		data (){
 			return{
-				amount:200,
+				amount:0,
 				account:0
 			}
 		},
 		methods:{
 
-			getAmount(customerId){
+			getAmount(customerId,communityId){
 				let params={
-					customerId:customerId
+					customerId:customerId,
+					communityId:communityId
 				};
 				this.$http.get('get-balance', params).then((res)=>{
 					this.amount=res.data.balance;
@@ -69,14 +70,12 @@
 
 		},
 		watch: {
-
 			$props: {
 				deep: true,
 				handler(nextProps) {
-					
-					this.detail.customerId && this.getAmount(this.detail.customerId)
-				
-					
+					if(this.detail.customerId && this.detail.btnType=="Settle"){
+						this.getAmount(this.detail.customerId,this.detail.communityId)
+					}
 				}
 			}
 

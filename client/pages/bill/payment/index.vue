@@ -13,6 +13,7 @@
                 v-model="params.customerName"
                 placeholder="请输入客户名称"
                 style="width: 252px"
+                @on-enter="lowerSubmit"
             />
 
             <div class='m-search' @click="lowerSubmit">搜索</div>
@@ -415,7 +416,7 @@ export default {
                 })
             },
             openView(params){
-                window.open(`./payment/detail/${params.id}`,'_blank');
+                window.open(`/bill/payment/detail/${params.id}`,'_blank');
             },
 
             bindPerson (params) {

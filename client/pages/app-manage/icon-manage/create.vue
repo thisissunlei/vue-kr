@@ -77,9 +77,10 @@
                 name="imgUrl"
                 v-if="!this.imgUrl"
                 :show-upload-list="false"
-                :format="['jpg','jpeg','png']"
+                :format="['jpg','jpeg','png','gif']"
                 with-credentials
                 :on-success="handleSuccess"
+                :on-error="handleError"
                 type="drag"
                 action="/api/krspace-finance-web/app/icon/upload"
                 style="display: inline-block;width:58px;">
@@ -231,7 +232,13 @@ export default {
     handleRemove(){
       this.formItem.iconUrl="";
       this.imgUrl="" 
+    },
+    handleError(error,file){
+         this.$Notice.error({
+                title:error.message
+        });
     }
+
    
 
 

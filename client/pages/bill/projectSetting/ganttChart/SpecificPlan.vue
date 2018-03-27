@@ -33,7 +33,6 @@ export default {
        },
        startDate:{
            type:Object,
-           
        }
     },
     data(){

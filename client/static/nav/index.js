@@ -1397,7 +1397,7 @@
                         },
                         {
                             primaryText: "项目管理",
-                            router: 'bill/project-setting',
+                            router: 'bill/projectSetting',
                             type: 'vue',
                             menuCode: 'pay_deal_flow_page'
                         },

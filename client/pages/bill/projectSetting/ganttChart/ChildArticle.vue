@@ -13,8 +13,6 @@
                 :data="item"
                 :key="item.id"
             />
-            
-            
         </div>
   </div>
 </template>

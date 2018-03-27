@@ -34,6 +34,7 @@ export default {
         if(this.test=='PREPARE'){
             this.noRight='noRight';
         }
+        console.log('data---',this.data);
         setTimeout(() => {
             this.nameAndContentHright();
         },100);

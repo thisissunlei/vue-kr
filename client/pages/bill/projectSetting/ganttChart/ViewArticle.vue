@@ -1,7 +1,7 @@
 <template>
   <div class="view-article" :data-article-id="id"
-   @mouseover="overShow(id)"
-   @mouseout="outHide(id)"
+    @mouseover="overShow(id)"
+    @mouseout="outHide(id)"
    >
         <div 
             class="view-channel"
@@ -30,7 +30,9 @@
 <script>
 import Article from './Article';
 export default {
-   
+    components:{
+        Article,
+    },
     props:{
         data:{
             type:Object

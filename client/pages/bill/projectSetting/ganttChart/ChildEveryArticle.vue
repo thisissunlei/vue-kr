@@ -2,12 +2,12 @@
 <template>
     <div class="child-every-article" :data-chart="data.t_id" >
         <div v-if="!this.data.chartType && isInitial()">
-        <!-- <FlagLabel v-if="getFlagShow('MEETING')" 
+        <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
-            :data="20" 
+            :data="data.data" 
             :minCalibration="minCalibration" 
             :startDate="leftEndpoint"
-        /> -->
+        />
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{

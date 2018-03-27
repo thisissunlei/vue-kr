@@ -38,7 +38,7 @@
                                         :data="item"
                                         test="PREPARE"
                                         @rowClick="rowClick"
-                                       
+                                        
                                     />
                                     </div>
                                     
@@ -103,7 +103,7 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import ListTable from './listTable';
+import ListTable from './ListTable';
 import GanttChart from '../ganttChart';
 
 var allPage = 1;
@@ -118,7 +118,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay(10),
+                endTime:this.getEndDay(3),
                 startTime:this.getStartDay(),
                 pageSize:6,
                 page:nowPage,
@@ -142,7 +142,7 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize()
-       
+        
     },
     
     methods:{  

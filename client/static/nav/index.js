@@ -953,7 +953,7 @@
                 iconName: 'icon-donething',
                 router: 'office',
                 iconColor: '#79859a',
-                menuCode: 'myCard',
+                menuCode: 'public',
                 menuItems: [
                     {
                         primaryText: "工位订单",
@@ -990,12 +990,12 @@
                     },
                     {
                         primaryText: '其他合同',
-                        menuCode: 'myCard',
+                        menuCode: 'public',
                         router: 'office/officeBackground/newOffice',
                     },
                     {
                         primaryText: '我发起的合同',
-                        menuCode: 'myCard',
+                        menuCode: 'public',
                         router: 'office/officeBackground/ownAdd',
                     },
                     {

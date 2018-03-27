@@ -33,7 +33,7 @@ module.exports = {
     vendor: ['iview'],
     publicPath: '/',
     extend(webpackConfig, { isDev, isClient, isServer }) {
-      webpackConfig.performance.maxEntrypointSize = 400000;
+      webpackConfig.performance.maxAssetSize = 400000;
       //webpackConfig.resolve.alias['kr/axios'] = path.join(process.cwd(), 'plugins/http');
     },
     plugins: [

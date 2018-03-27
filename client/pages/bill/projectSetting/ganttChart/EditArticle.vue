@@ -1,57 +1,67 @@
 
 <template>
     <div class="edit-article">
-    <div class="every-col" :data-chart="data.t_id" style="background:#fff;"
-        @mouseover="overShow(data.t_id)"
-        @mouseout="outHide(data.t_id)"
-    >
-        <div v-if="!this.data.chartType && isInitial()">
-        <FlagLabel v-if="getFlagShow('MEETING')" 
-            :label="data.label" 
-            :data="data.data" 
-            :minCalibration="minCalibration" 
-            :startDate="leftEndpoint"
-        />
-            <div class='col-tool-label'>
-                
-                    <div class="article" 
-                        v-if="getFlagShow('STAGETASK')"
-                        :style="{
-                            width:boxDetail.width * minCalibration+'px',
-                            left:boxDetail.office * minCalibration+'px'
-                        }"
-                    >   
-                    <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
+        <div class="every-col" :data-chart="data.t_id" style="background:#fff;"
+            @mouseover="overShow(data.t_id)"
+            @mouseout="outHide(data.t_id)"
+        >
+            <div v-if="!this.data.chartType && isInitial()">
+            <FlagLabel v-if="getFlagShow('MEETING')" 
+                :label="data.label" 
+                :data="data.data" 
+                :minCalibration="minCalibration" 
+                :startDate="leftEndpoint"
+            />
+                <div class='col-tool-label'>
+                    
+                        <div class="article" 
+                            v-if="getFlagShow('STAGETASK')"
+                            :style="{
+                                width:boxDetail.width * minCalibration+'px',
+                                left:boxDetail.office * minCalibration+'px'
+                            }"
+                        >   
+                        <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
 
-                        <div 
-                            class="label"
-                        > 
-                            <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
-                            <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
-                        </div>
-                
-                        <div 
-                            class="plan"
-                            :style="{
-                                width:planDetail.width * minCalibration + 'px',
-                                left:planDetail.office * minCalibration + 'px'
-                            }"
-                            v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
-                        ></div>
-                        <div 
-                            class="actual"
-                            :style="{
-                                width:actualDetail.width * minCalibration+'px',
-                                left:actualDetail.office * minCalibration + 'px'
-                            }"
-                            v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                        ></div>
-                    </Tooltip> 
+                            <div 
+                                class="label"
+                            > 
+                                <img :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
+                                <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
+                            </div>
+                    
+                            <div 
+                                class="plan"
+                                :style="{
+                                    width:planDetail.width * minCalibration + 'px',
+                                    left:planDetail.office * minCalibration + 'px'
+                                }"
+                                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
+                            ></div>
+                            <div 
+                                class="actual"
+                                :style="{
+                                    width:actualDetail.width * minCalibration+'px',
+                                    left:actualDetail.office * minCalibration + 'px'
+                                }"
+                                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                            ></div>
+                        </Tooltip> 
+                    </div>
                 </div>
             </div>
+        
         </div>
-       
-    </div>
+        <EditArticle 
+            v-if="leftEndpoint.year && type== 'edit'"
+            :minCalibration="minCalibration"
+            :startDate="leftEndpoint"
+            :data="item"
+            v-for="(item,index) in data.children" 
+            :key="item.id"
+            :type="type"
+            :index="index"
+        />
     
     </div>
 </template>
@@ -110,7 +120,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        this.getBgColor();
+        // this.getBgColor();
     },
     methods:{
         isInitial(){

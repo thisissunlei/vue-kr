@@ -45,7 +45,6 @@ export default {
                 planEndTime:1516204800000,
                 actualStartTime:1515686400000,
                 actualEndTime:1516377600000,
-
             },
             boxDetail:{},
             planDetail:{},
@@ -130,7 +129,7 @@ export default {
        line-height: 25px;
        padding-left:10px;
        color: #ffffff;
-        position: relative;
+        position: absolute;
 
    }
    .actual{
@@ -141,7 +140,7 @@ export default {
         line-height: 25px;
         padding-left:10px;
         color: #fff;
-        position: relative;
+        position: absolute;
    }
     
 }

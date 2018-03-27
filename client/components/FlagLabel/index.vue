@@ -1,8 +1,9 @@
 <template>
     <div class='ui-flag' :style="{width:boxDetail.width*minCalibration+'px',left:boxDetail.office*minCalibration+'px'}">
-        <div :style="{
+        <div class="000000" :style="{
             left:planDetail.office*minCalibration+'px',
-            position:'relative'
+            position:'absolute',
+            top:'15px'
         }">
             <Tooltip :content="label" placement="right" >
                 <div class='blueFlag'>
@@ -10,9 +11,11 @@
                 </div>
             </Tooltip>
         </div>
-        <div :style="{
-            left:actualDetail.office*minCalibration+'px',
-            position:'relative'
+
+        <div class="111111" :style="{
+            left:actualDetail.office*minCalibration+2+'px',
+            position:'absolute',
+            top:'15px'
         }">
             <Tooltip :content="label" placement="right">
                     <div class='yellowFlag'>
@@ -69,6 +72,14 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.startDate.year+"-"+this.startDate.month+"-"+1;
             var officeEnd = min;
+            var planOffice = utils.dateDiff(min,planStart);
+            var actualOffice = utils.dateDiff(min,actualStart);
+            var office = 0;
+           
+            if(actualOffice == planOffice){
+                office=0.5;
+            }
+            console.log(planOffice,"------",actualOffice)
            
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
@@ -80,8 +91,9 @@ export default {
             };
             this.actualDetail={
                 width:utils.dateDiff(actualStart,actualEnd)+1,
-                office:utils.dateDiff(min,actualStart)
+                office:utils.dateDiff(min,actualStart)+office
             }
+           
            
             
        },
@@ -132,7 +144,7 @@ export default {
                 }
           }
          .blueFlag{
-            width:28px;
+            width:26px;
             height:29px;
             background:url(images/project.png) no-repeat center;
             background-size: contain;
@@ -150,7 +162,7 @@ export default {
             }
          } 
         .yellowFlag{
-            width:28px;
+            width:26px;
             height:29px;
             background:url(images/actual.png) no-repeat center;
             background-size: contain;

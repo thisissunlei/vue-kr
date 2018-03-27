@@ -499,13 +499,13 @@
                         },
                         {
                             primaryText: '客户账户',
-                            originUrl: 'bill/customerAssets',
+                            router: 'bill/customerAssets',
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
                         {
                             primaryText: "客户管理员",
-                            originUrl: '/member/setting-manager',
+                            router: '/member/setting-manager',
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
@@ -653,7 +653,7 @@
                     },
                     {
                         primaryText: '撤场',
-                        originUrl: '/operations-center/from-field',
+                        router: '/operations-center/from-field',
                         type: 'vue',
                         menuCode: 'checklist_list',
                     },

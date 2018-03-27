@@ -103,7 +103,7 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import ListTable from './ListTable';
+import ListTable from './listTable';
 import GanttChart from '../ganttChart';
 
 var allPage = 1;

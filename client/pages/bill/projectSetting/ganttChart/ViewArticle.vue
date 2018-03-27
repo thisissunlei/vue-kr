@@ -30,9 +30,6 @@
 <script>
 import Article from './Article';
 export default {
-    components:{
-        Article,
-    },
    
     props:{
         data:{

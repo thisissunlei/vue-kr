@@ -5,9 +5,6 @@
             <span :class="circleClass"></span>
             <span>{{label}}</span>
         </div>
-        <div>
-            <slot></slot>
-        </div>
      </div>
 </template>
 

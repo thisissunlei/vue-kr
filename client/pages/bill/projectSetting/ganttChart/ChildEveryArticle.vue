@@ -90,7 +90,7 @@ export default {
             this.getBoxWidthAndOffice();
         }
       
-      console.log()
+       console.log('fvfvf-v-',this.data);
     },
     methods:{
         isInitial(){

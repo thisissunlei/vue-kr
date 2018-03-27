@@ -13,6 +13,7 @@
                 
                 
                 <div class="article" 
+                :id = "articleId"
                 v-if="getFlagShow('STAGETASK')"
                     :style="{
                         width:boxDetail.width * minCalibration+'px',
@@ -61,7 +62,7 @@
                      
                </Poptip>
                 </div>
-              
+                 
                  
                     
             </div>
@@ -111,9 +112,9 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
             secondObj:{},
-            isChild:true,  
+            isChild:false,  
             childLeftEndpoint:{},
-           
+           articleId:'article'+this.data.t_id,
         }
     },
     mounted(){
@@ -214,17 +215,28 @@ export default {
             }
 
        },
+       changePoptip(flag){
+           var articleDom = document.getElementById(this.articleId);
+           var popDom = articleDom.querySelectorAll('.ivu-poptip-popper')[0];
+           if(!flag){
+               popDom.style.opacity=0;
+           }else{
+               popDom.style.opacity=1;
+           }    
+       },
        //获取二级部分数据
        getSpecificData(event){
-         
+           this.changePoptip(false);
            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
                 this.secondObj.tasks=response.data.items;
                 if(!response.data.items||response.data.items.length == 0){
-                     this.isChild = false;
+                    this.isChild = false;
+                    this.changePoptip(false)
                 }else {
                      this.isChild = true;
+                     this.changePoptip(true);
                 }
-
+                
                 // this.getChildLeftEndpoint(response.data.items);
 
             }).catch((error)=>{

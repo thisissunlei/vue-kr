@@ -129,7 +129,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-         setTimeout(() => {
+        setTimeout(() => {
              this.getBgColor();
         },100);
     },

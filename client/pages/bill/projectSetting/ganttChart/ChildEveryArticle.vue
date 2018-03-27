@@ -17,7 +17,10 @@
                 
             }"
         >
-            <div class="label">{{data.label}}</div>
+            <div class="label">
+                 <img :src="picColor" v-if="picColor" width="21px" height="21px" style="vertical-align: middle;margin-bottom: 3px;"/>
+                 <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
+            </div>
             <div 
                 class="plan"
                 :style="{
@@ -48,6 +51,9 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
+import no from './img/no.png';
+import ok from './img/ok.png';
+import yeas from './img/yeas.png';
 export default {
    
     components:{
@@ -82,7 +88,9 @@ export default {
             boxDetail:{},
             planDetail:{},
             actualDetail:{} ,    
-            leftEndpoint:this.startDate
+            leftEndpoint:this.startDate,
+
+            picColor:''
         }
     },
     mounted(){
@@ -90,7 +98,9 @@ export default {
             this.getBoxWidthAndOffice();
         }
       
-       console.log('fvfvf-v-',this.data);
+       setTimeout(() => {
+             this.getBgColor();
+        },100);
     },
     methods:{
         isInitial(){
@@ -114,19 +124,19 @@ export default {
 
         },
         getBgColor(){
-                if(this.data.chartType || !this.data.data.progressStatus){
-                    return "#fff";
-                }
-                if(this.data.data.progressStatus<0){
-                    return "#FFCDCD"
-                }else if(this.data.data.progressStatus>0){
-                    return '#FFECD4';
-                }else{
-                    return "#E0F2CD"
-                }
-            
-            
-        },
+            if(this.data.chartType || !this.data.data.progressStatus){
+                this.picColor="";
+                return ;
+            }
+            if(this.data.data.currentStatus<0){
+                this.picColor=no;
+            }else if(this.data.data.currentStatus>0){
+                this.picColor=yeas;
+            }else{
+                this.picColor=ok;
+            }
+          
+       },
        
        getBoxWidthAndOffice(){
            

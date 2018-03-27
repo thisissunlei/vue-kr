@@ -6,8 +6,8 @@
                     <span>项目档案</span>
                     <span>{{queryData.name}}</span>
                 </div>
-                <div class='title-right' v-if="signMask"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
+                <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
             </div>
             <GanttChart 
                 v-if="!isLoading && listData.length" 
@@ -414,7 +414,7 @@ export default {
                 this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
                 this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
                 this.$http.post('project-add-task',this.addData).then((response)=>{
-                     this.ids=this.ids?this.ids+','+response.data:'';
+                     this.ids=this.ids?this.ids+','+response.data.id:'';
                      this.addTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});

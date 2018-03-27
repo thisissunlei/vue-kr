@@ -1,6 +1,6 @@
 <template>
   <div>
-        <div class='m-watch-record'>
+        <div class='m-watch-record' style="max-height: 400px;overflow: scroll;">
              <ul
                class='record-wrap'
                v-for="item in watchRecord" 

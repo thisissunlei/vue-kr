@@ -465,7 +465,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getUserNav(),getProductNav(), getOperationNav(),  getPermissionNav(), getSmartHardware(), getOrderCenter(), getBillCenter()];
+        var arr = [getHomeNav(), getOperationNav(),getUserNav(), getProductNav(),  getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
 
         return arr;
     }
@@ -505,7 +505,7 @@
                         },
                         {
                             primaryText: "客户管理员",
-                            router: '/member/setting-manager',
+                            router: 'member/setting-manager',
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
@@ -653,7 +653,7 @@
                     },
                     {
                         primaryText: '撤场',
-                        router: '/operations-center/from-field',
+                        router: 'operations-center/from-field',
                         type: 'vue',
                         menuCode: 'checklist_list',
                     },

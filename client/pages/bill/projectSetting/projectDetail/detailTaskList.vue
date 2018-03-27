@@ -152,7 +152,7 @@ export default {
          .detail-li{
              .chart-parent{
                 width:100%;
-                height:45px;
+                height:49px;
                 border-bottom:solid 1px #F0F0F0;
                 padding-left:12px;
                 padding-right:18px;
@@ -226,8 +226,8 @@ export default {
       }
       .add-child-task{
         width:100%;
-        height:45px;
-        line-height:45px;
+        height:49px;
+        line-height:49px;
         padding-left:26px;
         border-bottom:solid 1px #F0F0F0;
         cursor: pointer;

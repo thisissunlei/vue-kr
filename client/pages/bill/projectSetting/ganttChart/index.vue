@@ -118,6 +118,7 @@
                             :key="item.id"
                             :type="type"
                             :index="index"
+                            :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
                         
                         <ViewArticle  

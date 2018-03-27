@@ -1,10 +1,11 @@
 
 <template>
     <div class="edit-article">
-        <div class="every-col" :data-chart="data.t_id" style="background:#fff;"
+        <div class="every-col" :data-chart="data.t_id" style="background:#fff; position:relative;"
             @mouseover="overShow(data.t_id)"
             @mouseout="outHide(data.t_id)"
         >
+            <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
             <div v-if="!this.data.chartType && isInitial()">
             <FlagLabel v-if="getFlagShow('MEETING')" 
                 :label="data.label" 
@@ -62,6 +63,7 @@
             :key="item.id"
             :type="type"
             :index="index"
+            :todayDetail="todayDetail"
         />
     
     </div>
@@ -104,6 +106,9 @@ export default {
         },
         index:{
             type:[Number,String]
+        },
+        todayDetail:{
+            type:Object
         }
        
     },
@@ -242,6 +247,16 @@ export default {
 
 <style lang="less">
 .edit-article{
+
+     .tag{
+        width: 50px;
+        position: absolute;
+        background: #E0C4F0;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        opacity: .1;
+    }
 
     .col-tool-label{
         .ivu-tooltip-popper{

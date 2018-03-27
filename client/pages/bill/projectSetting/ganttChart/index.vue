@@ -128,9 +128,8 @@
                             :id="item.id" 
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
+                            :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
-                        <div class="tag" :style="{width:minCalibration + 'px',left:tagToLeft+'px'}"></div>
-                        
                         
                     </div>
                 </div>
@@ -513,15 +512,7 @@ export default {
             position: relative;
           
             background: #F3F2F7;
-            .tag{
-                    width: 50px;
-                    position: absolute;
-                    background: #E0C4F0;
-                    top: 0px;
-                    left: 0px;
-                    height: 100%;
-                    opacity: .1;
-            }
+           
            
         }
         .hander{

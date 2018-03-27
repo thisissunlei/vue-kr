@@ -1,6 +1,7 @@
 
 <template>
     <div class="every-view-col" :data-chart="data.t_id" >
+        <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
         
         <FlagLabel v-if="getFlagShow('MEETING')" 
             :label="data.label" 
@@ -13,7 +14,8 @@
             v-if="getFlagShow('STAGETASK')"
             :style="{
                 width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px'
+                left:boxDetail.office * minCalibration+'px',
+               
             }"
         >
             <Poptip 
@@ -105,6 +107,9 @@ export default {
         },
         index:{
             type:[Number,String]
+        },
+        todayDetail:{
+            type:Object
         }
     },
     data(){
@@ -243,9 +248,17 @@ export default {
 <style lang="less">
  .every-view-col{
     height: 45px;
-
+    position: relative;
     border-bottom: 1px solid #E1E6EB;
-   
+    .tag{
+        width: 50px;
+        position: absolute;
+        background: #E0C4F0;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        opacity: .1;
+    }
         .ivu-tooltip-popper{
             .ivu-tooltip-arrow{
                 display:none;

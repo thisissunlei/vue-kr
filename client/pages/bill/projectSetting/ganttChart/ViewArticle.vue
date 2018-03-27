@@ -18,6 +18,7 @@
                 :data="item"
                 :key="item.id"
                 :index="index"
+                :todayDetail="todayDetail"
             />
             
             
@@ -46,6 +47,9 @@ export default {
         },
         id:{
             type:[String,Number]
+        },
+        todayDetail:{
+            type:Object,
         }
     },
     data(){

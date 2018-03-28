@@ -39,7 +39,7 @@
                 <AddTask  :id="addId" @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitAddTask('formItem')">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="addTask">取消</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelAddTask">取消</Button>
                 </div>
         </Modal>
 
@@ -319,8 +319,11 @@ export default {
        
         //打开新建任务
         addTask(id){
-            this.openAddTask=!this.openAddTask;
+            this.cancelAddTask();
             this.addId=id;
+        },
+        cancelAddTask(){
+            this.openAddTask=!this.openAddTask;
         },
         cancelEditTask(){
             this.openEditTask=!this.openEditTask;
@@ -415,7 +418,7 @@ export default {
                 this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
                 this.$http.post('project-add-task',this.addData).then((response)=>{
                      this.ids=this.ids?this.ids+','+response.data.id:'';
-                     this.addTask();
+                     this.cancelAddTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
                  }).catch((error)=>{

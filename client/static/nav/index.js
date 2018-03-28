@@ -774,6 +774,15 @@
                             menuCode: 'fina_manager_setting_page'
 
                         },
+                        {
+                            primaryText: '门禁权限组管理',
+                            menuCode: 'auth_user_group_list',
+                            router: '/doorpermission/doorgroupmanage',
+                        }, {
+                            primaryText: "企业门禁授权",
+                            router: '/member/memberManage/doormanage',
+                            menuCode: 'door_base',
+                        }
                     ]
                 },
                 {

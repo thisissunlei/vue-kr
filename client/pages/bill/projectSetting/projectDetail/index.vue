@@ -10,7 +10,7 @@
                 <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
             </div>
             <GanttChart 
-                v-if="!isLoading && listData.length" 
+                v-if="listData.length" 
                 :data="listData"
                 :treeData="treeData"
                 type="edit"
@@ -244,7 +244,6 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                item.expand=false;
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }

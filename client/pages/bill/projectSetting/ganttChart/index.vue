@@ -201,7 +201,7 @@ export default {
             //所有周的数组数据
             weeks:[],
             //最小刻度的大小
-            minCalibration:50,
+            minCalibration:20,
             //原点数据
             leftEndpoint:{},
             //刻度的下拉选择项

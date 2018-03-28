@@ -79,7 +79,6 @@ export default {
             if(actualOffice == planOffice){
                 office=0.5;
             }
-            console.log(planOffice,"------",actualOffice)
            
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,

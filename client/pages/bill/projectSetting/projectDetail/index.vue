@@ -167,8 +167,10 @@ export default {
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
-               this.params.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
-               this.params.endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.lastEndTime));
+                this.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
+                var endObj = this.monthAdd(response.data.lastEndTime);
+                this.endTime = endObj.year+'-'+endObj.month+'-'+endObj.day;
+                console.log(this.startTime,"-------",this.endTime,"YYYY-MM-DD",new Date(response.data.lastEndTime))
                 //后面进行组件优化
                 this.isLoading = false;
                 this.listData.map((item,index)=>{
@@ -180,6 +182,21 @@ export default {
                 title: error.message,
                 });
             })
+        },
+        monthAdd(num){
+            var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
+            var endArr = endTime.split("-");
+            var endObj = {
+                year:+endArr[0],
+                month:+endArr[1],
+                day:+endArr[2]
+            }
+            endObj.month+=1;
+            if(endObj.month>12){
+                endObj.month = endObj.month - 12;
+                endObj.year = endArr.year+1;
+            }
+            return endObj;
         },
          //获取查看编辑记录
         getWatchData(id){

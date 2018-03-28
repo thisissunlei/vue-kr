@@ -101,6 +101,7 @@
                 </div>
                 <div
                     @scroll="rightScroll"
+                    @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
                     <div    
@@ -219,7 +220,7 @@ export default {
                     }
             ],
             //下拉的默认值
-            barType: 'month',
+            barType: 'week',
             isLoading:true,
             mask:false,
             scrollWidth:0,
@@ -243,6 +244,15 @@ export default {
         this.mask=this.treeData.length?true:false;
     },
     methods:{
+        rightOver(event){
+            this.$emit('rightOver',event);
+        },
+        rightScroll(event){
+            var el = event.target;
+            var top = el.scrollTop;
+            var left = el.scrollLeft;
+            this.$refs.rightBar.style.left = -left+'px';
+        },
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var startMonth = data[0];
@@ -436,14 +446,6 @@ export default {
             
             return obj;
         },
-        rightScroll(event){
-            var el = event.target;
-            var top = el.scrollTop;
-            var left = el.scrollLeft;
-            this.$refs.rightBar.style.left = -left+'px';
-
-            this.$emit('scroll',event);
-        }
     },
    
 

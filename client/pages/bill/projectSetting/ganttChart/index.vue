@@ -229,13 +229,7 @@ export default {
     mounted(){
         this.scrollWidth = utils.getScrollBarSize()
         this.init(this.startTime,this.endTime);
-        console.log(this.startTime,"======",this.endTime)
-        this.getDayBarWidth()
-        //获取周的具体数据
-        this.getWeekStartAndEnd();
-        this.getYears(this.showData);
-        this.getTodayTOLeft(this.showData);
-       
+        this.getYears(this.startTime,this.endTime);
          
     },
    
@@ -254,35 +248,54 @@ export default {
             this.$emit('treeClick',params);
         },
         //获取年数组
-        getYears(arr){
-            var allYears = [];
-            var startMonth = arr[0] ,
-                endMonth = arr[arr.length - 1];
-            var startDay = '',endDay='';
-            if(startMonth.year === endMonth.year){
-                startDay = startMonth.year+'-'+startMonth.month+'-'+'1';
-                endDay = endMonth.year+'-'+endMonth.month+'-'+endMonth.dayNum;
-                allYears.push({
-                    year:startMonth.year,
-                    dayNum:utils.dateDiff(startDay,endDay)+1
-                })
-            }else{
-                for (var i = startMonth.year; i <= endMonth.year; i++) {
-                    startDay = i+'-'+1+'-'+1;
-                    endDay =i.year+'-'+12+'-'+this.getDayNum(i,12);
-                    if(i==startMonth.year){
-                        startDay = startMonth.year+'-'+startMonth.month+'-'+'1';
-                    }
-                    if(i==endMonth.year){
-                        endDay = startMonth.year+'-'+startMonth.month+'-'+this.getDayNum(endMonth.year,endMonth.month);
-                    }
-                    allYears.push({
-                        year:i,
-                        dayNum:utils.dateDiff(startDay,endDay)+1
-                    })
-                }
+        getYears(startTime,endTime){
+            var startArr = startTime.split('-');
+            var endArr = endTime.split('-');
+            var startObj = {
+                year:+startArr[0],
+                month:+startArr[1],
             }
-            this.years = [].concat(allYears);
+            var endObj = {
+                year:+endArr[0],
+                month:+endArr[1]
+            }
+            var yearArr = [];
+            if(startObj.year == endObj.year){
+               yearArr=[{
+                   year:startObj.year,
+                   start:this.startTime,
+                   end:this.endTime
+               }]
+            }else{
+                yearArr=[{
+                    year:startObj.year,
+                    start:startObj.year+'-'+startObj.month+'-'+1,
+                    end:startObj.year+'-'+12+'-'+this.getDayNum(startObj.year,12)
+                }]
+                for (var year = startObj.year; ;) {
+                        year++;
+                        if(year == endObj.year){
+                            yearArr.push({
+                                year:endObj.year,
+                                start:endObj.year+'-'+1+'-'+1,
+                                end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
+                            })
+                            break;
+                        }
+                        yearArr.push({
+                            year:year,
+                            start:year+'-'+1+1,
+                            end:year+'-'+12+'-'+this.getDayNum(year,12)
+                        })
+                }
+
+            }
+           for (var i = 0; i < yearArr.length; i++) {
+               yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
+           }
+           this.years = [].concat(yearArr);
+            
+
         },
         //下拉事件被触发
         selectChange(event){
@@ -300,6 +313,7 @@ export default {
             for (var i = 0; i < this.showData.length; i++) {
                 barWidth += this.showData[i].dayNum;
             }
+
             this.dayAllNum = barWidth;
            
         },
@@ -316,6 +330,7 @@ export default {
         },
         //数据初始化
         init(startTime,endTime){
+           
             var start = startTime.split("-"),
                 end = endTime.split("-");
             
@@ -327,24 +342,33 @@ export default {
                 year:+end[0],
                 month:+end[1]
             }
-           
             var showData = [];
-
-            for(var month=startObj.month,year=startObj.year;+(year+''+month) <+(endObj.year+''+endObj.month); month++){
+            for(var month=startObj.month,year=startObj.year;; ){
+                
                 if(month >12){
                     month = month-12;
                     year +=1; 
                 }
+               
                 showData.push({
                     year:year,
                     month:month,
                     dayNum:this.getDayNum(year,month),
                 })
+                if((year+'-'+month) == (endObj.year+'-'+endObj.month)){
+                    break;
+                }
+                month++;
             }
-        
             this.showData = [].concat(showData);
             this.leftEndpoint = this.showData[0];
             this.isLoading = false;
+            this.getDayBarWidth()
+            //获取周的具体数据
+           
+            this.getWeekStartAndEnd(showData);
+           
+            this.getTodayTOLeft(showData);
         },
         //获取某日为周几
         getWeekNum(year,month,day){
@@ -352,9 +376,10 @@ export default {
             return date.getDay()==0?7:date.getDay()
         },
         //获取周的数据
-        getWeekStartAndEnd(){
-            var min = this.showData[0];
-            var max = this.showData[this.showData.length-1];
+        getWeekStartAndEnd(showData){
+            var min = showData[0];
+           
+            var max = showData[showData.length-1];
             var start = new Date(min.year,min.month-1,1);
             var end = new Date(max.year,max.month-1,max.dayNum);
             var Obj = {
@@ -416,7 +441,7 @@ export default {
                 }
 
             })
-            
+            console.log(arr,"ppppppp")
             this.weeks = [].concat(arr);
             
         },

@@ -505,6 +505,8 @@ export default {
             max-height:500px;
             width: 100%;
             overflow:auto;
+            border-bottom: 1px solid #F0F0F0;
+            
         }
         .content{
             position: relative;

@@ -152,7 +152,7 @@ export default {
 
         },
         getBgColor(){
-            if(this.data.chartType || !this.data.data.progressStatus){
+            if(this.data.chartType || (!this.data.data.progressStatus&&this.data.data&&this.data.data.progressStatus!==0)){
                 this.picColor="";
                 return ;
             }

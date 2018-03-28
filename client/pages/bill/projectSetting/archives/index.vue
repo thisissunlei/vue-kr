@@ -113,11 +113,11 @@ import AddArchives from './addArchives';
                         key: 'plannedPeriod',
                         align:'center',
                         render(h, obj){
-                            var label='';
+                            var label='-';
                             if(obj.row.status==1){
                                 label='-';
                             }else{
-                                label='150';
+                                label=obj.row.plannedPeriod;
                             }
                             return label
                         }

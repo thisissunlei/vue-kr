@@ -48,7 +48,9 @@ export default {
             checkValue:[],
             nowData:this.data,
 
-            str:''
+            str:'',
+
+            num:0
 		}
     },
     watch:{
@@ -114,6 +116,15 @@ export default {
             // console.log(this.nowData,"ppppp")
             // this.$emit('search',searchKey);
         },
+        calculateTree(data){
+            data.map((item,index)=>{
+                this.num+=1;
+                if(item.children&&item.children.length){
+                    this.calculateTree(item.children);
+                }
+            })
+            return this.num
+        },
         treeSelect(data){
             data.map((item,index)=>{
                     if(this.checkValue.length-1==index){
@@ -130,7 +141,13 @@ export default {
         },
         sureClick(){
             this.clearClick();
+            this.num=0;
             if(this.checkValue.length){
+                if(Number(this.calculateTree(this.nowData))==Number(this.checkValue.length)){
+                    this.treeInput="全部任务"
+                }else{
+                    this.treeInput="自定义"
+                }
                 this.treeSelect(this.checkValue);
             }
             this.$emit('okClick',this.checkValue);

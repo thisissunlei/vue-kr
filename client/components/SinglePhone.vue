@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div class="upload-phote-box">
     <Upload
         ref="upload"
-        v-if="phone==false"
+        v-if="phote==false"
         :show-upload-list="false"
         :on-success="handleSuccess"
         :format="['jpg','jpeg','png']"
@@ -13,33 +13,37 @@
         type="drag"
         name='upfile'
         action="/api/krspace-finance-web/activity/upload-pic/"
-        style="display: inline-block;width:200px;height:200px">
+        style="display: inline-block">
         <div class="upload-box">
             <Icon type="camera" size="27"></Icon>
         </div>
         
     </Upload>
-    <div class="demo-upload-list" v-if="phone!=false">
-        <img :src="phone">
+    <div class="demo-upload-list" v-if="phote!=false">
+        <img :src="phote">
         <div class="demo-upload-list-cover">
-            <Icon type="ios-eye-outline" @click.native="handleView()"></Icon>
+            <Icon type="ios-eye-outline"  @click.native="handleView()"></Icon>
             <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
         </div>
     </div>
-    <Modal title="imgName" v-model="visible">
-        <img :src="phone" v-if="visible" style="width: 100%">
+    <Modal :title="imgName" v-model="visible">
+        <img :src="phote" v-if="visible" style="width: 100%">
     </Modal>
     </div>
 </template>
 <script>
     export default {
+        props:{
+            defaultImg:String,
+            photeUrl:String,
+        },
         data () {
             return {
-                phoneUrl: '',
                 visible: false,
                 uploadList: [],
-                negative: 'http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/T/152515752_22.png',
-                phone:this.phoneUrl?this.phoneUrl:false,
+                imgName:'',
+                negative: this.defaultImg?this.defaultImg:'',
+                phote:this.photeUrl?this.photeUrl:false,
             }
         },
         methods: {
@@ -48,12 +52,13 @@
                 this.visible = true;
             },
             handleRemove (file) {
+                this.phote = false
                 console.log('删除图片')
             },
             handleSuccess (res, file) {
                 // 上传成功后执行的内容
                 console.log('res',res)
-                this.phone = res.data;
+                this.phote = res.data;
                 console.log('file',file)
             },
             handleFormatError (file) {
@@ -85,19 +90,32 @@
     }
 </script>
 <style lang="less">
+    .upload-phote-box{
+        border:1px dashed #dddee1;
+        padding:5px;
+        padding-bottom: 0;
+        border-radius: 4px;
+        display: inline-block;
+        &:hover{
+            border:1px dashed #499df1;
+            .ivu-upload-drag{
+                border:1px dashed #499df1;
+            }
+        }
+    }
     .demo-upload-list{
         display: inline-block;
-        width: 60px;
-        height: 60px;
+        width: 200px;
+        height: 200px;
         text-align: center;
         line-height: 60px;
-        border: 1px solid transparent;
+        border: 1px dashed #dddee1;
+
         border-radius: 4px;
         overflow: hidden;
         background: #fff;
         position: relative;
-        box-shadow: 0 1px 1px rgba(0,0,0,.2);
-        margin-right: 4px;
+        // box-shadow: 0 1px 1px rgba(0,0,0,.2);
     }
     .demo-upload-list{
         background-position: center;
@@ -120,7 +138,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(0,0,0,.6);
+        background: rgba(0,0,0,.4);
     }
     .demo-upload-list-cover i{
         color: #fff;
@@ -129,7 +147,7 @@
         margin: 0 2px;
     }
     .upload-box{
-        background:url(http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/T/152515752_22.png);
+        background:#f6f6f6;
         background-position: center;
         width:200px;
         height: 200px;

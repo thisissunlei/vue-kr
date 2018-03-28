@@ -229,7 +229,7 @@ export default {
     mounted(){
         this.scrollWidth = utils.getScrollBarSize()
         this.init(this.startTime,this.endTime);
-
+        console.log(this.startTime,"======",this.endTime)
         this.getDayBarWidth()
         //获取周的具体数据
         this.getWeekStartAndEnd();

@@ -248,7 +248,8 @@ export default {
                     background:#666;
                     display:inline-block;
                     vertical-align: middle;
-                    margin-right:3px;
+                    margin-right:10px;
+                    margin-top: -2px;
                 }
             }
             .second{

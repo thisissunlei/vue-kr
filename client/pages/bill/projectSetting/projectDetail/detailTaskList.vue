@@ -56,7 +56,7 @@
                           </div>
                       </li>
                       <p class='add-child-task' @click="addClick(item.value)">
-                        <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
+                        <Icon type="plus-circled" size="20" style="vertical-align:middle;color: rgb(102, 102, 102);"/>
                         <span class='chart-list'>添加子任务</span>
                       </p>
                 </ul>
@@ -234,7 +234,7 @@ export default {
       }
       .chart-list{
         padding-left:5px;
-        color:#499DF1;
+        color: rgb(102, 102, 102);
       }
    }
    ::-webkit-scrollbar {

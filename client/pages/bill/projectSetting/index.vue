@@ -1,13 +1,13 @@
 <template>
   <div class="project-setting">
-        <Tabs size="default" value="tab1" @on-click="tabsClick">
+        <Tabs size="default" :value="tabs" @on-click="tabsClick">
             <TabPane label="项目档案管理" name="tab1">
-                <ProgressView v-if="mask"/>
+                <archives v-if="mask"/>
                 
             </TabPane>
             <TabPane label="开业进度总览" name="tab2">
                  
-                <archives v-if="!mask"/>
+                <ProgressView v-if="!mask"/>
 
             </TabPane>
         </Tabs>
@@ -26,7 +26,15 @@ export default {
     },
     data(){
         return{
-            mask:true
+            mask:true,
+
+            tabs:'tab1'
+        }
+    },
+    mounted(){
+        this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
+        if(this.tabs=='tab2'){
+            this.mask=false;
         }
     },
     methods:{
@@ -36,6 +44,8 @@ export default {
             }else{
                 this.mask=true;
             }
+            this.tabs=key;
+            sessionStorage.setItem('chartSetting',key);
         }
     }
 }

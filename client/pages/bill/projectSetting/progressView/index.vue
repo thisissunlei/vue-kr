@@ -209,7 +209,7 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                item.expand=false;
+                
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }

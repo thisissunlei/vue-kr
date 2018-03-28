@@ -109,18 +109,18 @@ import AddArchives from './addArchives';
                         align:'center',
                     },
                     {
-                        title: '产品类型',
-                        key: 'productType',
-                        align:'center',
-                        render(h, obj){
-                           let detail=obj.row.productType?obj.row.productType:'-'
-                           return <span>{detail}</span>
-                        }
-                    },
-                    {
                         title: '计划项目周期',
                         key: 'plannedPeriod',
                         align:'center',
+                        render(h, obj){
+                            var label='';
+                            if(obj.row.status==1){
+                                label='-';
+                            }else{
+                                label='150';
+                            }
+                            return label
+                        }
                     },
                     {
                         title: '当前项目阶段',
@@ -206,7 +206,7 @@ import AddArchives from './addArchives';
                             return time;
                         }
                     },
-                    /*{
+                    {
                         title: '操作',
                         key: 'operation',
                         align:'center',
@@ -229,11 +229,9 @@ import AddArchives from './addArchives';
                                     }
                                 }, '查看详情'),
                             ])
-                        }
-                                          
-                    }*/
-                ]
-                
+                        }                      
+                    }
+                ]    
             }
         },
         created(){
@@ -247,7 +245,7 @@ import AddArchives from './addArchives';
         methods:{
             //跳转查看页面
             goView(params){
-                window.open(`./list/detail/${params.billId}`,'_blank');
+                window.open(`./projectSetting/projectDetail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`,'_blank');
             },
             //获取列表数据
             getTableData(params){

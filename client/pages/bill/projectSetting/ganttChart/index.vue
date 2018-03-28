@@ -231,19 +231,27 @@ export default {
         this.scrollWidth = utils.getScrollBarSize()
         this.init(this.startTime,this.endTime);
         this.getYears(this.startTime,this.endTime);
-         
+        setTimeout(() => {
+             this.scroolFix()
+        }, 100);
+       
     },
    
     updated(){
         this.mask=this.treeData.length?true:false;
     },
     methods:{
+        scroolFix(data){
+            var dom = document.getElementById("vue-chart-right-draw-content");
+            dom.scrollLeft = this.getTodayTOLeft(this.showData);
+        },
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+1;
 
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
+            return utils.dateDiff(today,startTime)*this.minCalibration;
         },
         treeClick(params){
             this.$emit('treeClick',params);
@@ -442,7 +450,7 @@ export default {
                 }
 
             })
-            console.log(arr,"ppppppp")
+           
             this.weeks = [].concat(arr);
             
         },

@@ -1,19 +1,8 @@
 <template>
     <div>
-    <div class="demo-upload-list" v-for="item in uploadList">
-        <template v-if="item.status === 'finished'">
-            <img :src="item.url">
-            <div class="demo-upload-list-cover">
-                <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-            </div>
-        </template>
-        <template v-else>
-            <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-        </template>
-    </div>
     <Upload
         ref="upload"
+        v-if="phone==false"
         :show-upload-list="false"
         :on-success="handleSuccess"
         :format="['jpg','jpeg','png']"
@@ -22,18 +11,23 @@
         :on-exceeded-size="handleMaxSize"
         :before-upload="handleBeforeUpload"
         type="drag"
-        action="/api/krspace-finance-web/activity/upload-pic"
-        style="display: inline-block;width:58px;">
-        <div style="width: 58px;height:58px;line-height: 58px;">
-            <Icon type="camera" size="20"></Icon>
+        name='upfile'
+        action="/api/krspace-finance-web/activity/upload-pic/"
+        style="display: inline-block;width:200px;height:200px">
+        <div class="upload-box">
+            <Icon type="camera" size="27"></Icon>
         </div>
-        <div class="demo-upload-list-cover" v-if="false">
-            <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-            <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-        </div>
+        
     </Upload>
-    <Modal title="View Image" v-model="visible">
-        <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+    <div class="demo-upload-list" v-if="phone!=false">
+        <img :src="phone">
+        <div class="demo-upload-list-cover">
+            <Icon type="ios-eye-outline" @click.native="handleView()"></Icon>
+            <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+        </div>
+    </div>
+    <Modal title="imgName" v-model="visible">
+        <img :src="phone" v-if="visible" style="width: 100%">
     </Modal>
     </div>
 </template>
@@ -41,24 +35,26 @@
     export default {
         data () {
             return {
-                imgName: '',
+                phoneUrl: '',
                 visible: false,
-                uploadList: []
+                uploadList: [],
+                negative: 'http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/T/152515752_22.png',
+                phone:this.phoneUrl?this.phoneUrl:false,
             }
         },
         methods: {
             handleView (name) {
-                this.imgName = name;
+                this.imgName = '图片放大';
                 this.visible = true;
             },
             handleRemove (file) {
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+                console.log('删除图片')
             },
             handleSuccess (res, file) {
                 // 上传成功后执行的内容
-                file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-                file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+                console.log('res',res)
+                this.phone = res.data;
+                console.log('file',file)
             },
             handleFormatError (file) {
                 // 格式校验失败执行内容
@@ -80,40 +76,7 @@
             handleBeforeUpload (file) {
                 // 文件上传前执行
                 console.log('文件上传前',file)
-                var check = false;
-                var form = new FormData();
-                form.append('upfile', file);
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            check = true;
-                            var response = xhr.response.data;
-                            form.append('sourceservicetoken', response.token);
-                            form.append('docTypeCode', response.docTypeCode);
-                            form.append('operater', response.operater);
-                            // var xhrfile = new XMLHttpRequest();
-                            // xhrfile.onreadystatechange = function() {
-                            //     if (xhrfile.readyState === 4) {
-                            //         var fileResponse = xhrfile.response;
-                            //         if (xhrfile.status === 200) {
-                                        
-                            //             console.log('xhrfile.response.data',xhrfile.response.data)
-                            //         } 
-                            //     }
-                            // };
-                            // xhrfile.open('POST', '/api/krspace-finance-web/activity/upload-pic', true);
-                            // xhrfile.withCredentials = true;
-                            // xhrfile.responseType = 'json';
-                            // xhrfile.send(form);
-                        } 
-                    }
-                };
-
-                xhr.open('GET', '/api/krspace-finance-web/finacontractdetail/getSourceServiceToken', true);
-                xhr.responseType = 'json';
-                xhr.send(null);
-
+                var check = true;
                 return check;
             }
         },
@@ -121,7 +84,7 @@
         }
     }
 </script>
-<style>
+<style lang="less">
     .demo-upload-list{
         display: inline-block;
         width: 60px;
@@ -136,9 +99,19 @@
         box-shadow: 0 1px 1px rgba(0,0,0,.2);
         margin-right: 4px;
     }
-    .demo-upload-list img{
-        width: 100%;
-        height: 100%;
+    .demo-upload-list{
+        background-position: center;
+        width:200px;
+        height: 200px;
+        line-height: 200px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        /*background: rgba(0,0,0,.6);*/
+    }
+    .demo-upload-list:hover .demo-upload-list-cover{
+        display: block;
     }
     .demo-upload-list-cover{
         display: none;
@@ -149,13 +122,17 @@
         right: 0;
         background: rgba(0,0,0,.6);
     }
-    .demo-upload-list:hover .demo-upload-list-cover{
-        display: block;
-    }
     .demo-upload-list-cover i{
         color: #fff;
         font-size: 20px;
         cursor: pointer;
         margin: 0 2px;
+    }
+    .upload-box{
+        background:url(http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/T/152515752_22.png);
+        background-position: center;
+        width:200px;
+        height: 200px;
+        line-height: 200px;
     }
 </style>

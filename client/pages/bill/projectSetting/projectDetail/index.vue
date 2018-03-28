@@ -485,6 +485,7 @@ export default {
             this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
                 window.close();
                 window.opener.location.reload();
+                sessionStorage.setItem('chartSetting','tab2');
                 this.cancelSure();
             }).catch((error)=>{
                 this.$Notice.error({

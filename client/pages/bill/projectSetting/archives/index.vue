@@ -165,11 +165,13 @@ import AddArchives from './addArchives';
                                     if(item.progressStatus<0){
                                         label='延期'+Math.abs(item.progressStatus)+'天'
                                         colorStyle="color: #FF6868;"
-                                    }else if(item.progressStatus==0){
+                                    }else if(item.progressStatus===0){
                                         label='正常'
-                                    }else{
+                                    }else if(item.progressStatus>0){
                                         label='提前'+item.progressStatus+'天'
                                         colorStyle="color: #F5A623"
+                                    }else{
+                                        label='-'
                                     }
 
                                     return h('div', [

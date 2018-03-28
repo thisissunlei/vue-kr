@@ -93,7 +93,27 @@ export default {
                     allArr[this.channel].push(data[i])
                 }
             }
-            return allArr;
+        return allArr;
+         
+        //获取所有数据
+        var allData = [].concat(data);
+        //所有通道数据
+        var allChannel = [];
+
+        //循环所有数据
+        for (var i = 0; i < allData.length; i++) {
+            var everyData = allData[i];//每一个数据
+            var minData = this.getChannelMin(allChannel);//最小行的最后一个数据
+            var minDataEnd = this.getMaxAndMin(minData).max;//最小行最后一个数据的最大值
+            var everyDataStart = this.getMaxAndMin(everyData).min;//当前元素的最小值
+            if(everyDataStart>minDataEnd){
+                allChannel[minData.key].push(everyData);
+            }else{
+                var newChannel = [everyData];
+                allChannel.push(newChannel);
+            }
+            
+        }
            
         },
         getChannelMin(allArr){

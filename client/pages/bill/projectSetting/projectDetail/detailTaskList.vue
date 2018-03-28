@@ -4,7 +4,7 @@
           <p>任务列表</p>
           <p class='chart-title-right' @click="addClick('')">
             <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
-            <span class='chart-list'>添加任务</span>
+            <span class='chart-list' style="color:#499df1;">添加任务</span>
           </p>
        </div>
 

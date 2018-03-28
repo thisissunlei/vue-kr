@@ -101,6 +101,7 @@
                 </div>
                 <div
                     @scroll="rightScroll"
+                    @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
                     <div    
@@ -219,7 +220,7 @@ export default {
                     }
             ],
             //下拉的默认值
-            barType: 'month',
+            barType: 'week',
             isLoading:true,
             mask:false,
             scrollWidth:0,
@@ -467,8 +468,10 @@ export default {
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
 
-            this.$emit('scroll',event);
-        }
+        },
+        rightOver(event){
+            this.$emit('rightOver',event);
+        },
     },
    
 

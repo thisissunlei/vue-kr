@@ -219,7 +219,7 @@ export default {
                     }
             ],
             //下拉的默认值
-            barType: 'day',
+            barType: 'month',
             isLoading:true,
             mask:false,
             scrollWidth:0,

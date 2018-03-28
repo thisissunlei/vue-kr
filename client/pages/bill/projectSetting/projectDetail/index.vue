@@ -10,7 +10,7 @@
                 <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
             </div>
             <GanttChart 
-                v-if="listData.length" 
+                v-if="!isLoading && listData.length" 
                 :data="listData"
                 :treeData="treeData"
                 type="edit"

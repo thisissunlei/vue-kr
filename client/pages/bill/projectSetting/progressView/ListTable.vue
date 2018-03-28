@@ -85,7 +85,7 @@ export default {
            border-left:none;
            display:table;   
            background:#fff; 
-           margin-top: 10px;
+           margin-top: 5px;
            &:first-child{
                margin-top:0px;
                border-top: none;
@@ -101,12 +101,13 @@ export default {
                 word-break:break-all;    
                 text-align: center;
                 font-family: PingFang-SC-Medium;
-                font-size: 12px;
+                font-size: 14px;
                 color:#333333;
                 line-height: 16px;
                 font-weight: 500;
                 &:nth-child(1){
                     cursor: pointer;
+                    font-weight: bold;
                 }
             }
             .noRight{

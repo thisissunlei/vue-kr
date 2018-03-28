@@ -136,6 +136,7 @@ export default {
       width:246px;
       display:inline-block;
       border:solid 1px #F0F0F0;
+      border-right:solid 5px #F0F0F0;
       //border-bottom:none;
      .chart-title{
        width:100%;
@@ -179,6 +180,7 @@ export default {
                     color: #499DF1;
                     padding-left:4px;
                     display:inline-block;
+                    font-weight:bold;
                 }
               }
               .chart-edit{

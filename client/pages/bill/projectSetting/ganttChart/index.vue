@@ -237,13 +237,18 @@ export default {
         this.getYears(this.showData);
         this.getTodayTOLeft(this.showData);
        
-         
+        this.scrollPosition();
     },
    
     updated(){
         this.mask=this.treeData.length?true:false;
     },
     methods:{
+        scrollPosition(){
+            var dom=document.getElementById('vue-chart-right-draw-content');
+            dom.scrollLeft=this.getTodayTOLeft(this.showData)*this.minCalibration+'px';
+            console.log('left--',dom,this.getTodayTOLeft(this.showData)*this.minCalibration+'px');
+        },
         rightOver(event){
             this.$emit('rightOver',event);
         },
@@ -259,6 +264,7 @@ export default {
             var startTime = startMonth.year + '-'+startMonth.month+'-'+1;
 
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
+            return utils.dateDiff(today,startTime)*this.minCalibration;
         },
         treeClick(params){
             this.$emit('treeClick',params);
@@ -464,6 +470,7 @@ export default {
         .chart-tab-left{
             width:346px;
             border: 1px solid #F0F0F0;
+            border-right: 5px solid #F0F0F0;
             display:inline-block;
             border-bottom: none;
             .chart-left{

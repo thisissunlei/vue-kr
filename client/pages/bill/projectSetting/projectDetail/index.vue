@@ -16,7 +16,7 @@
                 type="edit"
                 :startTime="startTime" 
                 :endTime="endTime"
-                @scroll="chartScroll"
+                @rightOver="rightOver"
                 @treeClick="treeClick"
             >
                 <div class='detail-detail' slot="leftBar">
@@ -24,7 +24,7 @@
                         :data="listData"
                         @addClick="addTask"
                         @editClick="editTask"
-                        @scroll="scroll"
+                        @leftOver="leftOver"
                     />
                 </div>
             </GanttChart>
@@ -157,6 +157,23 @@ export default {
          this.getTreeData({propertyId:this.queryData.id});
     },
     methods:{
+        leftOver(event){
+            var leftDom=document.getElementById('vue-chart-left-detail-list');
+            var rightDom=document.getElementById('vue-chart-right-draw-content');
+            if(leftDom&&rightDom){
+                leftDom.addEventListener('scroll',this.scroll);
+                rightDom.removeEventListener('scroll',this.chartScroll);
+            }
+        },
+        rightOver(event){
+            var rightDom=document.getElementById('vue-chart-right-draw-content');
+            var leftDom=document.getElementById('vue-chart-left-detail-list');
+            if(rightDom&&leftDom){
+                rightDom.addEventListener('scroll',this.chartScroll);
+                leftDom.removeEventListener('scroll',this.scroll);
+            }
+        },
+       
         //获取列表数据
         getListData(ids){
             let params={

@@ -8,7 +8,7 @@
             :startTime="params.startTime" 
             :endTime="params.endTime"
             @treeClick="treeClick"
-            @scroll="rightScroll"
+            @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
         >
@@ -22,9 +22,8 @@
                                     <p style="width:172px;">项目名称</p>
                                     <p style="border-right:none;width:172px;">城市</p>
                                 </div> 
-                                <div 
-                                   
-                                    @scroll="scroll" 
+                                <div                         
+                                    @mouseover='leftOver'
                                     class='view-table-detail' 
                                     id="vue-chart-left-table-list"
                                 >
@@ -57,7 +56,7 @@
                                     <p style="width:136px;">操作</p>
                                 </div> 
                                 <div 
-                                    @scroll="scroll" 
+                                    @mouseover='leftOver' 
                                     class='view-table-detail' 
                                     id="vue-chart-left-table-list"
                                 >
@@ -143,10 +142,26 @@ export default {
     mounted(){
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
-        this.scrollWidth = utils.getScrollBarSize()
+        this.scrollWidth = utils.getScrollBarSize();
     },
     
-    methods:{  
+    methods:{
+        leftOver(event){
+            var leftDom=document.getElementById('vue-chart-left-table-list');
+            var rightDom=document.getElementById('vue-chart-right-draw-content');
+            if(leftDom&&rightDom){
+                leftDom.addEventListener('scroll',this.scroll);
+                rightDom.removeEventListener('scroll',this.rightScroll);
+            }
+        },
+        rightOver(event){
+            var rightDom=document.getElementById('vue-chart-right-draw-content');
+            var leftDom=document.getElementById('vue-chart-left-table-list');
+            if(rightDom&&leftDom){
+                rightDom.addEventListener('scroll',this.rightScroll);
+                leftDom.removeEventListener('scroll',this.scroll);
+            }
+        },
        
         //获取进度列表数据
         getListData(params,type){

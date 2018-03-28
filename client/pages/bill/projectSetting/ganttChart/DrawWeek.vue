@@ -35,7 +35,7 @@ export default {
     width: 50px;
     overflow: hidden;
     text-align: center;
-    display: inline;
+    display: inline-block;
     box-sizing: border-box;
     border-bottom: 1px solid #F0F0F0;
     border-right: 1px solid #F0F0F0;

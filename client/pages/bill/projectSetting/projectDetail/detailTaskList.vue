@@ -4,11 +4,11 @@
           <p>任务列表</p>
           <p class='chart-title-right' @click="addClick('')">
             <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
-            <span class='chart-list'>添加任务</span>
+            <span class='chart-list' style="color:#499df1;">添加任务</span>
           </p>
        </div>
 
-       <div class='chart-detail' @scroll="detailScroll" id="vue-chart-left-detail-list"> 
+       <div class='chart-detail'  @mouseover='leftOver' id="vue-chart-left-detail-list"> 
            <ul>
               <li
                 v-for="(item,index) in data"
@@ -84,6 +84,9 @@ export default {
       
     },
     methods:{
+      leftOver(event){
+         this.$emit("leftOver",event); 
+      },
       addClick(id){
          this.$emit("addClick",id); 
       },
@@ -133,6 +136,7 @@ export default {
       width:246px;
       display:inline-block;
       border:solid 1px #F0F0F0;
+      border-right:solid 5px #F0F0F0;
       //border-bottom:none;
      .chart-title{
        width:100%;
@@ -176,6 +180,7 @@ export default {
                     color: #499DF1;
                     padding-left:4px;
                     display:inline-block;
+                    font-weight:bold;
                 }
               }
               .chart-edit{

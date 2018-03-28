@@ -193,7 +193,7 @@ export default {
         border-top: 1px solid #F0F0F0;;
         border-bottom: 1px solid #F0F0F0;
         background:#fff;
-        margin-top:10px;
+        margin-top:5px;
         &:first-child{
             margin-top:0px;
             border-top:none;

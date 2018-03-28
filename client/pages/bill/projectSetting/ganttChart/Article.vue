@@ -18,13 +18,13 @@
                
             }"
         >
-            <Poptip 
+            <!-- <Poptip 
                 v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
                 placement="bottom-start" 
                 :width="boxDetail.width  * minCalibration + 40" 
                 @on-popper-show="getSpecificData" 
                 @on-popper-hide="cildHide"
-            >
+            > -->
                 <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
                      <div 
                         class="label"
@@ -53,16 +53,16 @@
                     >       
                     </div>
                     </Tooltip>
-                    <div class="api" slot="content">
+                    <!-- <div class="api" slot="content">
                         <ChildArticle 
                             v-if="isChild"
                             :data="secondObj"
                             :leftEndpoint="childLeftEndpoint"
                             :minCalibration="minCalibration"
                         /> 
-                    </div>
+                    </div> -->
                
-            </Poptip>
+            <!-- </Poptip> -->
         </div>
         
     </div>

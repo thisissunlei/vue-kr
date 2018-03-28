@@ -58,7 +58,7 @@
                 :style="{left:type=='edit'?'271px':'371px'}"
             >
                 <div class="calibration" >
-                 <div  style="width:100%;position:relative;overflow:hidden;"  >
+                 <div  style="position:relative;overflow:hidden;"  >
                     <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">

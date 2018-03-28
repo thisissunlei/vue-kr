@@ -90,6 +90,13 @@
             </div>
         </Modal>
 
+        <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onChangeOpen"
+        />
+
         
   </div>
 </template>
@@ -102,6 +109,7 @@ import EditTask from './editTask';
 import WatchRecord from './watchRecord';
 import DetailTaskList from './detailTaskList';
 import GanttChart from '../ganttChart';
+import Message from '~/components/Message';
 
 
 export default {
@@ -110,12 +118,14 @@ export default {
         EditTask,
         WatchRecord,
         DetailTaskList,
-        GanttChart
+        GanttChart,
+        Message
     },
     data(){
         return{
             queryData:{},
             listData:[],
+            openMessage:false,
             openAddTask:false,
             openEditTask:false,
             openWatch:false,
@@ -142,7 +152,9 @@ export default {
             openSure:false,
             scrollWidth:0,
 
-            ids:''
+            ids:'',
+            MessageType:'',
+            warn:'',
         }
     },
     created(){         
@@ -196,7 +208,7 @@ export default {
                 })
             }).catch((error)=>{
                 this.$Notice.error({
-                title: error.message,
+                 title: error.message,
                 });
             })
         },
@@ -407,10 +419,14 @@ export default {
                      this.cancelEditTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="删除成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                 });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
              })
         },
         //新建对象传递校验
@@ -454,10 +470,14 @@ export default {
                      this.cancelAddTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="新建成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
                 })
           },
           //编辑任务提交
@@ -493,10 +513,14 @@ export default {
                      this.cancelEditTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="编辑成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
                 })
           },
           scroll(event){
@@ -524,10 +548,14 @@ export default {
                 sessionStorage.setItem('chartSetting','tab2');
                 this.cancelSure();
             }).catch((error)=>{
-                this.$Notice.error({
-                   title: error.message,
-                });
-                })
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+             })
+            },
+            //信息提示框
+            onChangeOpen(data){
+                this.openMessage=data;
             },
             cancelSure(){
                 this.openSure=!this.openSure;

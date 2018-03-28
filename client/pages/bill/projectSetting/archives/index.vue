@@ -128,14 +128,27 @@ import AddArchives from './addArchives';
                         key: 'task',
                         align:'center',
                         render(h, obj){
-                           var rows='';
+                           var row='';
                            if(obj.row.tasks){
-                               rows=[];
-                               obj.row.tasks.map((item,index)=>{
-                                    rows.push(<div class='row-current-more'>{item.taskName}</div>)
-                               })
+                               row=obj.row.tasks.map((item,index)=>{
+                                  return h('div', [
+                                       h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content: item.taskName
+                                         }
+                                        }, [
+                                        h('div', {
+                                            attrs: {
+                                             class: 'row-current-more current-more-task'
+                                            }
+                                        }, `${item.taskName}`)
+                                    ])
+                                  ]) 
+                                })
+                                return row
                            }
-                           return rows
+                          
                         }
                     },
                     {
@@ -144,10 +157,9 @@ import AddArchives from './addArchives';
                         className:'current-range',
                         align:'center',
                         render(h, obj){
-                           var rows='';
+                           var row='';
                            if(obj.row.tasks){
-                               rows=[];
-                               obj.row.tasks.map((item,index)=>{
+                               row=obj.row.tasks.map((item,index)=>{
                                     let label='';
                                     let colorStyle='';
                                     if(item.progressStatus<0){
@@ -159,10 +171,25 @@ import AddArchives from './addArchives';
                                         label='提前'+item.progressStatus+'天'
                                         colorStyle="color: #F5A623"
                                     }
-                                    rows.push(<div class='row-current-more' style={colorStyle}>{label}</div>)
+
+                                    return h('div', [
+                                       h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:label
+                                         }
+                                        }, [
+                                        h('div', {
+                                            attrs: {
+                                             class: 'row-current-more current-more-task'
+                                            },
+                                            style:colorStyle
+                                        }, `${label}`)
+                                    ])
+                                  ]) 
                                })
                            }
-                           return rows
+                           return row
                         }
                     },
                     {
@@ -173,7 +200,7 @@ import AddArchives from './addArchives';
                             if(!obj.row.cTime){
                                 return '-'
                             }
-                            let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(obj.row.cTime));
+                            let time=dateUtils.dateToStr("YYYY-MM-DD", new Date(obj.row.cTime));
                             return time;
                         }
                     },
@@ -301,7 +328,7 @@ import AddArchives from './addArchives';
         .ivu-table-cell{
             padding:0;
             .row-current-more{
-                border-bottom:1px solid #e9eaec;
+                //border-bottom:1px solid #e9eaec;
                 padding: 15px 0;
             }
         }
@@ -311,6 +338,19 @@ import AddArchives from './addArchives';
         width:50%;
         padding-left:32px;
         height: 48px;
+}
+.ivu-tooltip{
+    width:100%;
+    border-bottom: 1px solid #e9eaec;
+    .ivu-tooltip-rel{
+       width:100%; 
+    }
+}
+.current-more-task{
+    width:100%; 
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 }
 
 </style>

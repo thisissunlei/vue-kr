@@ -215,10 +215,8 @@ export default {
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-            // if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
-            //     return '#FFE9AF';
-            // }
-            if(!this.data.data.actualStartTime&&this.planEndTime<nowTime ){
+            
+            if(!this.data.data.actualEndTime&&this.data.data.planStartTime<nowTime ){
                 return '#FFE9AF'
             }else{
                 return '#E9F0F6'
@@ -349,8 +347,7 @@ export default {
 
     .every-col{
         height: 32px;
-        //border-top: 1px solid #E1E6EB;;
-        border-bottom: 2px solid #F0F0F0;
+        border-bottom: 1px solid #F0F0F0;
     }
     .article{
         position: relative; 
@@ -382,7 +379,7 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top:0px;
+            top:1px;
             overflow: hidden;
             text-overflow:ellipsis;
         }
@@ -396,7 +393,7 @@ export default {
             position: absolute;
             cursor: pointer;
             opacity: 0.5;
-            top:0px;
+            top:1px;
             overflow: hidden;
             text-overflow:ellipsis;
         }

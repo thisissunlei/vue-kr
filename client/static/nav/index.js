@@ -1026,7 +1026,11 @@
                 iconColor: '#79859a',
                 type: 'vue',
                 menuItems: [
-                // 少账单老数据,
+                    {
+                        primaryText: "账单(老数据)",
+                        router: 'finance/manage/orderbill/orderList',
+                        menuCode: 'fina_account_list'
+                    },
                     {
                         primaryText: "已出账单管理",
                         router: 'bill/list',
@@ -1061,11 +1065,6 @@
                         primaryText: "账款数据",
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
-                    },
-                    {
-                        primaryText: "账单(老数据)",
-                        router: 'finance/manage/orderbill/orderList',
-                        menuCode: 'fina_account_list'
                     },
                     ]
                 },

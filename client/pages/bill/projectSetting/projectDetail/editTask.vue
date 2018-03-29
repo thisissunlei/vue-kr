@@ -192,7 +192,7 @@ export default {
             if(typeof this.actualEnd=='number'){
                 this.actualEnd=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualEnd));
             }
-            if(this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd){
+            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
                 this.cDateError=false;

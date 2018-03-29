@@ -365,7 +365,7 @@ import AddArchives from './addArchives';
         }
     }
     .ivu-table th{
-         background-color: #F7F9FB;
+         background-color: #FAFCFF;
     }
 }
 .bill-search-class{

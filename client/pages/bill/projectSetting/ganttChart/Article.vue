@@ -139,15 +139,15 @@ export default {
         },
         getLabel(label){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-
+                this.data.data.actualEndTime<this.data.data.planStartTime){
+                    return '';
             }else {
                 return label;
             }
         },
         getActualLabel(label){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
+                this.data.data.actualEndTime<this.data.data.planStartTime){
                     return label;
             }else {
                 return '';
@@ -155,7 +155,7 @@ export default {
         },
         lineShow(){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
+                this.data.data.actualEndTime<this.data.data.planStartTime){
                 return true;
             }else {
                 return false;

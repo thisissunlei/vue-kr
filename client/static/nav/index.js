@@ -161,7 +161,7 @@
         }
         sidebarNavs.menuItems.map(function (item) {
             let iconName = item.iconName ? item.iconName : '';
-            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span>' + item.primaryText + '</div>';
+            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<ul>';
                 item.menuItems.map(function (child) {
@@ -483,20 +483,13 @@
     function getUserNav() {
         return {
             primaryText: "客户会员",
-            router: 'user',
-            originUrl: '#/user/customerManage/customerList',
+            type:'vue',
             menuItems: [
                 {
                     primaryText: '客户',
                     iconName: 'icon-donething',
                     iconColor: '#79859a',
-                    router:'index',
                     menuItems: [
-                        {
-                            primaryText: '客户线索',
-                            router: 'user/customerManage/customerList',
-                            menuCode: 'oper_csr_base',
-                        },
                         {
                             primaryText: '客户账户',
                             router: 'bill/customerAssets',
@@ -514,6 +507,11 @@
                             router: 'user/memberManage/doormanage',
                             menuCode: 'door_base',
                         },
+                        {
+                            primaryText: '客户线索',
+                            router: 'user/customerManage/customerList',
+                            menuCode: 'oper_csr_base',
+                        },
                     ]   
                 }, 
                 {
@@ -521,12 +519,6 @@
                     iconName: 'icon-donething',
                     iconColor: '#79859a',
                     menuItems: [
-                        {
-                            primaryText: '工作人员',
-                            menuCode: 'hrm_resourcesList_incumbency',
-                            router: 'user/personalManage/peopleState',
-
-                        },
                         {
                             primaryText: "会员",
                             router: 'user/memberManage/list',
@@ -541,6 +533,12 @@
                             primaryText: '会员APP禁言',
                             menuCode: 'oper_cluster_base',
                             router: 'user/communityAllocation/appmanage'
+                        },
+                        {
+                            primaryText: '工作人员',
+                            menuCode: 'hrm_resourcesList_incumbency',
+                            router: 'user/personalManage/peopleState',
+
                         },
                     ]   
                 }, 
@@ -560,11 +558,7 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-                        {
-                            primaryText: "招商数据",
-                            router: 'product/statistical/index',
-                            menuCode: 'stat_group',
-                        },
+                        
                         {
 
                             primaryText: '社区',
@@ -596,11 +590,7 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-                        {
-                            primaryText: '会议室设备配置',
-                            menuCode: 'oper_cmt_deviceList_base',
-                            router: 'product/communityAllocation/equipmentList'
-                        },
+                        
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -610,6 +600,16 @@
                             primaryText: '销控',
                             menuCode: 'cmt_sell_control',
                             router: 'product/communityManage/controlTable',
+                        },
+                        {
+                            primaryText: "招商数据",
+                            router: 'product/statistical/index',
+                            menuCode: 'stat_group',
+                        },
+                        {
+                            primaryText: '会议室设备配置',
+                            menuCode: 'oper_cmt_deviceList_base',
+                            router: 'product/communityAllocation/equipmentList'
                         },
                     ]   
                 }, 
@@ -673,7 +673,7 @@
             router: 'permission',
             menuItems: [
                 {
-                    primaryText: 'APP管理',
+                    primaryText: 'APP',
                     iconName: 'icon-app',
                     iconColor: '#79859a',
                     menuItems: [
@@ -721,34 +721,35 @@
                             menuCode: 'oper_opinion_base',
                             router: 'operation/communityAllocation/opinion'
                         },
-                        {
-                            primaryText: '版本更新通知',
-                            router: 'permission/systemManage/appLoginLogs',
-                            menuCode: 'sso_appVersion_base',
-                        },
+                        
                         {
                             primaryText: '登录日志',
                             router: 'permission/loginLog',
                             menuCode: 'sso_loginLog_base',
-                        }
-                        //少登陆日志（待与pc版拆分）    
+                        },
+                        {
+                            primaryText: '版本更新通知',
+                            router: 'permission/systemManage/appLoginLogs',
+                            menuCode: 'sso_appVersion_base',
+                        },   
                     ]
                 },
                 {
-                    primaryText: '官网管理',
+                    primaryText: '官网',
                     iconName: 'icon-website',
                     iconColor: '#79859a',
                     router: 'activity',
                     menuItems: [
-                        {
-                            primaryText: '新闻动态',
-                            menuCode: 'main_news',
-                            router: 'WebBackstage/news/list',
-                        },
+                        
                         {
                             primaryText: '社区信息',
                             menuCode: 'krspace_cmt',
                             router: 'WebBackstage/communityAllocation',
+                        },
+                        {
+                            primaryText: '新闻动态',
+                            menuCode: 'main_news',
+                            router: 'WebBackstage/news/list',
                         },
                         {
                             primaryText: '服务及设施配置',
@@ -781,12 +782,12 @@
                             menuCode: 'system_param',
                         },
                         {
-                            primaryText: '首页轮播图列表',
+                            primaryText: '首页轮播图配置',
                             menuCode: 'sys_dynamic_list',
                             router: 'permission/homePageSetting/swperList',
                         },
                         {
-                            primaryText: '首页动态列表',
+                            primaryText: '首页动态配置',
                             menuCode: 'sys_slider_list',
                             router: 'permission/homePageSetting/dynamicsList',
                         },
@@ -803,15 +804,21 @@
                     iconColor: '#79859a',
                     // router: 'activity',
                     menuItems: [
-                        {
-                            primaryText: '账号权限',
-                            router: 'permission/accountManage/accountList',
-                            menuCode: 'sso_userList_base',
-                        },
+                        
                         {
                             primaryText: '角色权限',
                             router: 'permission/user',
                             menuCode: 'sso_roleList_base',
+                        },
+                        {
+                            primaryText: '其他合同角色权限',
+                            menuCode: 'hrm_role_list',
+                            router: 'oa/organizationPower/role',
+                        },
+                        {
+                            primaryText: '账号权限',
+                            router: 'permission/accountManage/accountList',
+                            menuCode: 'sso_userList_base',
                         },
                         {
                             primaryText: '操作项权限',
@@ -823,11 +830,7 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        {
-                            primaryText: '其他合同角色权限列表',
-                            menuCode: 'hrm_role_list',
-                            router: 'oa/organizationPower/role',
-                        },
+                        
                     ]
                 },
                 {
@@ -841,16 +844,17 @@
                             router: 'permission/accountManage/operationsLogs',
                             menuCode: 'sso_actionLog_base',
                         },
+                        
+                        {
+                            primaryText: '登录日志',
+                            router: 'permission/loginLog',
+                            menuCode: 'sso_loginLog_base',
+                        },
                         {
                             primaryText: '消息日志',
                             router: 'permission/systemManage/messageList',
                             menuCode: 'sso_infoList_base',
                         },
-                        {
-                            primaryText: '登录日志',
-                            router: 'permission/loginLog',
-                            menuCode: 'sso_loginLog_base',
-                        }
                     ]
                 },
                 {
@@ -1006,6 +1010,7 @@
                     {
                         primaryText: '合同扫码',
                         menuCode: 'pigeonhole',
+                        type: 'vue',
                         router: 'order-center/contract-manage/contract-yard',
                     }
                 ]   
@@ -1021,32 +1026,37 @@
         type:'vue',
         menuItems: [
             {
-                primaryText: "账单中心",
+                primaryText: "账单财务",
                 iconName: 'icon-money',
                 iconColor: '#79859a',
-                type: 'vue',
+                type:'vue',
                 menuItems: [
-                // 少账单老数据,
+                    
                     {
-                        primaryText: "已出账单管理",
+                        primaryText: "账单",
                         router: 'bill/list',
                         type: 'vue',
                         menuCode: 'pay_created_bill_page',
                     },
                     {
-                        primaryText: "回款管理",
+                        primaryText: "账单(老数据)",
+                        router: 'finance/manage/orderbill/orderList',
+                        menuCode: 'fina_account_list'
+                    },
+                    {
+                        primaryText: "回款",
                         router: 'bill/payment',
                         type: 'vue',
                         menuCode: 'pay_payment_page',
                     },
                     {
-                        primaryText: "应收管理",
+                        primaryText: "应收",
                         router: 'bill/income',
                         type: 'vue',
                         menuCode: 'pay_income_page',
                     },
                     {
-                        primaryText: "结算单管理",
+                        primaryText: "结算单",
                         router: 'bill/settlement-list',
                         type: 'vue',
                         menuCode: 'checklist_list',
@@ -1061,11 +1071,6 @@
                         primaryText: "账款数据",
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
-                    },
-                    {
-                        primaryText: "账单(老数据)",
-                        router: 'finance/manage/orderbill/orderList',
-                        menuCode: 'fina_account_list'
                     },
                     ]
                 },

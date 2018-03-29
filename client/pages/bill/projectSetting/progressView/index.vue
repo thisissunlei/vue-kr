@@ -200,7 +200,16 @@ export default {
         //获取甘特图任务数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
-                this.treeData=response.data.items;
+                var array=[];
+                array.push(
+                    {
+                        label:'全部任务',
+                        value:0,
+                        t_id:0,
+                        children:response.data.items
+                    }
+                );
+                this.treeData=array;
                 this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({

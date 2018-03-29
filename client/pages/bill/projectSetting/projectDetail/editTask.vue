@@ -125,8 +125,8 @@ export default {
                 ]
             },
 
-            actualStart:'',
-            actualEnd:''
+            actualStart:this.getEdit.actualStartTime,
+            actualEnd:this.getEdit.actualEndTime
         }
     },
     created(){    
@@ -169,6 +169,10 @@ export default {
         },
         actualStartChange(params){
             this.actualStart=params;
+            this.formItem.actualStartTime=params;
+            if(typeof this.actualEnd=='number'){
+                this.actualEnd=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualEnd));
+            }
             if(this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd){
                 this.cDateError=true;
             }else{
@@ -177,6 +181,10 @@ export default {
         },
         actualEndChange(params){
             this.actualEnd=params;
+            this.formItem.actualEndTime=params;
+            if(typeof this.actualStart=='number'){
+                this.actualStart=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualStart));
+            }
             if(this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd){
                 this.cDateError=true;
             }else{

@@ -49,7 +49,7 @@
                             @on-change="actualEndChange"
                         /> 
                    </Form-item>
-                   <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期</div> 
+                   <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
         
 
                     <FormItem label="任务描述"  class="bill-search-class" style="width:575px;margin-bottom: 5px;">
@@ -204,7 +204,7 @@ export default {
             if(typeof this.actualStart=='number'){
                 this.actualStart=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualStart));
             }
-            if(this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd){
+            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
                 this.cDateError=false;

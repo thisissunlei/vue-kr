@@ -1,28 +1,3 @@
-<style lang="less">
-
-.g-order-detail{
-
-		.m-detail-content{
-
-			padding:30px 24px;
-
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-
-		}
-
-		.u-txt-red{
-			color:#FF6868;
-		}
-
-		.u-txt{
-			color:#666;
-		}
-	}
-
-</style>
-
 <template>
 
 <div class="g-order-detail">
@@ -165,3 +140,28 @@ export default {
 
 }
 </script>
+
+<style lang="less">
+
+.g-order-detail{
+
+		.m-detail-content{
+
+			padding:30px 24px;
+
+			.ivu-table-wrapper{
+				margin-bottom:30px;
+			}
+
+		}
+
+		.u-txt-red{
+			color:#FF6868;
+		}
+
+		.u-txt{
+			color:#666;
+		}
+	}
+
+</style>

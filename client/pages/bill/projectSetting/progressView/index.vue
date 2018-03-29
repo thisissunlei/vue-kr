@@ -405,7 +405,7 @@ export default {
     }
     .chart-tab-left{
         width:346px;
-        border: 1px solid #F0F0F0;
+        border: 1px solid #F6F6F6;
         display:inline-block;
         border-bottom: none;
         .chart-left{
@@ -423,7 +423,7 @@ export default {
                     width:100%;
                     height:49px;
                     line-height:49px;
-                    border: 1px solid #F0F0F0;
+                    border: 1px solid #F6F6F6;
                     border-right:none;
                     border-top: none;
                     border-left:none;
@@ -435,7 +435,7 @@ export default {
                     background:#FAFCFF;   
                     p{
                         display:inline-block;
-                        border-right:1px solid #F0F0F0;
+                        border-right:1px solid #F6F6F6;
                         width:50%;
                         text-align: center;
                         display:table-cell;
@@ -448,8 +448,8 @@ export default {
                     width:100%;
                     max-height:500px;
                     overflow: auto;
-                    border-bottom: solid 1px #F0F0F0;
-                    background: #F3F2F7;
+                    border-bottom: solid 1px #F6F6F6;
+                    background: #F6F6F6;
                 }
                 ::-webkit-scrollbar {
                     width:0px;
@@ -472,7 +472,7 @@ export default {
 
         }
         .bar{
-            border-top: 1px solid #F0F0F0;
+            border-top: 1px solid #F6F6F6;
         }
     }
        

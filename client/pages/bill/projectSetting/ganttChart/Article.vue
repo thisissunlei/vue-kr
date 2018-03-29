@@ -121,6 +121,15 @@ export default {
                 }
             }
         },
+        getPlanColor(){
+            var bgColor = this.getPlanBgColor();
+            if(bgColor=='#E9F0F6'){
+                return '#666666';
+            }else {
+                return '#BE8525';
+            }
+            
+        },
         getActualColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
@@ -175,10 +184,8 @@ export default {
                 return "#fff";
             }
             if(this.data.data.progressStatus<0){
-                
                 return '#F69C9C'
             }else if(this.data.data.progressStatus>=0){
-                // this.picColor=yeas;
                 return '#C2E998'
             }
        },

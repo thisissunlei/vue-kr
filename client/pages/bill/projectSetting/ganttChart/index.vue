@@ -622,7 +622,7 @@ export default {
             width: 30px;
             height: 15px;
             background: #499DF1;
-            border-radius: 0 0 3px 3px;
+            border-radius: 0 0 4px 4px;
             text-align: center;
             line-height: 15px;
             position: absolute;

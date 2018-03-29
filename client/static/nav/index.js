@@ -1081,7 +1081,7 @@
     function objecrSetting() {
         return {
             primaryText: "项目管理",
-            router: 'finance',
+            router: 'project',
             type: 'vue',
             menuItems: [
                 {

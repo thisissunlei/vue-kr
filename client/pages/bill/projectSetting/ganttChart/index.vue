@@ -335,6 +335,7 @@ export default {
             }else if(event=='month'){
                 this.minCalibration = 10;
             }
+            this.scroolFix();
         },
         //获取进度条的总长度
         getDayBarWidth(){

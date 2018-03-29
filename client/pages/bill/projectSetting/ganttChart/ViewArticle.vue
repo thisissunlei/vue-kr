@@ -139,16 +139,13 @@ export default {
         },
         getMaxAndMin(data){
             var arr = [];
-            if(data.data.actualStartTime){
+           if(data.data.actualStartTime && data.data.actualEndTime){
                 arr.push(data.data.actualStartTime)
-            }
-            if(data.data.actualEndTime){
                 arr.push(data.data.actualEndTime)
             }
-            if(data.data.planStartTime){
+           
+            if(data.data.planStartTime && data.data.planEndTime){
                 arr.push(data.data.planStartTime)
-            }
-            if(data.data.planEndTime){
                 arr.push(data.data.planEndTime)
             }
             var max = arr[0],min=arr[0];

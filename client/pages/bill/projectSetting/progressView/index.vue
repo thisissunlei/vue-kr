@@ -19,8 +19,8 @@
 
                             <div class='chart-left-table' v-if="mask">
                                  <div class='view-table-list'>
-                                    <p style="width:172px;">项目名称</p>
-                                    <p style="border-right:none;width:172px;">城市</p>
+                                    <p>项目名称</p>
+                                    <p style="border-right:none;">城市</p>
                                 </div> 
                                 <div                         
                                     @mouseover='leftOver'
@@ -51,9 +51,9 @@
 
                             <div class='chart-left-table' v-if="!mask">
                                  <div class='view-table-list'>
-                                    <p style="width:103px;">项目名称</p>
-                                    <p style="width:105px;">城市</p>
-                                    <p style="width:136px;">操作</p>
+                                    <p>项目名称</p>
+                                    <p>城市</p>
+                                    <!-- <p style="width:136px;">操作</p> -->
                                 </div> 
                                 <div 
                                     @mouseover='leftOver' 
@@ -436,7 +436,7 @@ export default {
                     p{
                         display:inline-block;
                         border-right:1px solid #F0F0F0;
-                        //width:33%;
+                        width:50%;
                         text-align: center;
                         display:table-cell;
                         &:nth-child(3){

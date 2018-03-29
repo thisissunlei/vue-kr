@@ -7,7 +7,7 @@
                     <span>{{queryData.name}}</span>
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
-                <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div>
+                <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
             </div>
             <GanttChart 
                 v-if="listData.length" 

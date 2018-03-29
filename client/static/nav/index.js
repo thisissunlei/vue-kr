@@ -1028,18 +1028,18 @@
                 iconName: 'icon-money',
                 iconColor: '#79859a',
                 menuItems: [
-                    {
-                        primaryText: "账单(老数据)",
-                        router: 'finance/manage/orderbill/orderList',
-                        menuCode: 'fina_account_list'
-                    },
+                    
                     {
                         primaryText: "账单",
                         router: 'bill/list',
                         type: 'vue',
                         menuCode: 'pay_created_bill_page',
                     },
-                    
+                    {
+                        primaryText: "账单(老数据)",
+                        router: 'finance/manage/orderbill/orderList',
+                        menuCode: 'fina_account_list'
+                    },
                     {
                         primaryText: "回款管理",
                         router: 'bill/payment',

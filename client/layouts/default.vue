@@ -16,7 +16,7 @@
             <Row type="flex">
                 <Col :span="spanRight">
                     <div class="layout-content" >
-                        <div class="layout-content-main" :style="bodyStyle">
+                        <div id="layout-content-main" class="layout-content-main" :style="bodyStyle">
                             <nuxt/>
                         </div>
                     </div>
@@ -36,17 +36,17 @@
                 spanRight: 24,
                 spanLeft:'',
                 bodyStyle:{
-                    minHeight:"200px"
+                    height:"200px"
                 }
 
             }
         },
         mounted(){
            
-            this.bodyStyle.minHeight = document.documentElement.clientHeight-135 + "px";
+            this.bodyStyle.height = document.documentElement.clientHeight-135 + "px";
             var that = this;
             window.onresize = function (params) {
-                that.bodyStyle.minHeight = document.documentElement.clientHeight-135 + "px";
+                that.bodyStyle.height = document.documentElement.clientHeight-135 + "px";
             }
         },
         

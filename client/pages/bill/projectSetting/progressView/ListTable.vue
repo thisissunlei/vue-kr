@@ -36,6 +36,8 @@ export default {
         }
         setTimeout(() => {
             this.nameAndContentHright();
+
+           
         },100);
     },
     methods:{

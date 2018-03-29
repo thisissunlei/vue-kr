@@ -146,6 +146,14 @@ export default {
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
+        setTimeout(() => {
+            var leftDom=document.getElementById('vue-chart-left-table-list');
+            var rightDom = document.getElementById("vue-chart-right-draw-content");
+            var clientHeight = document.documentElement.clientHeight;
+            leftDom.style.maxHeight = clientHeight - 362+"px";
+            rightDom.style.maxHeight = clientHeight - 362 +"px";
+            console.log(rightDom,leftDom,"------")
+        }, 400);
     },
     
     methods:{
@@ -426,8 +434,8 @@ export default {
                 height: 51px;
                 padding-top: 8px;
                 .ivu-tabs-ink-bar{
-                    width:58px !important;
-                    left: 56px;
+                    // width:58px !important;
+                    // left: 56px;
                 }
             }
             .chart-left-table{

@@ -80,6 +80,8 @@
                                 <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
+                                <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                
                                 <DrawMonth 
                                     v-for="( item ) in showData" 
                                     :key="item.id"  
@@ -88,10 +90,13 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+                                
                                 <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                                 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
+                                <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                
                                 <DrawWeek 
                                     v-for="(item) in weeks" 
                                     :key="item.id" 
@@ -112,6 +117,7 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+
                                 <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                             </div>
                         </div>
@@ -257,14 +263,10 @@ export default {
         this.init(this.startTime,this.endTime);
         this.getYears(this.startTime,this.endTime);
         setTimeout(() => {
-             this.scroolFix()
+            this.scroolFix()
+           
         }, 100);
-        let leftDom=document.getElementById('vue-chart-left-detail-list');
-        
-        var rightDom = document.getElementById("vue-chart-right-draw-content");
-        var clientHeight = document.documentElement.clientHeight;
-        leftDom.style.maxHeight = clientHeight - 375 +"px";
-        rightDom.style.maxHeight = clientHeight - 375 +"px";
+       
     },
    
     updated(){
@@ -535,13 +537,16 @@ export default {
             display:inline-block;
             border-bottom: none;
             .chart-left{
+                .ivu-tabs-tab{
+                    color:#333;
+                }
                 .ivu-tabs-nav{
                    width:100%;
                    height: 51px;
                    padding-top: 8px;
                    .ivu-tabs-ink-bar{
-                       width:58px !important;
-                       left: 56px;
+                    //    width:58px !important;
+                    //    left: 56px;
                    }
                 }
             }
@@ -606,6 +611,7 @@ export default {
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;
+            
 
         }
         .year-bar{
@@ -641,6 +647,14 @@ export default {
             color: #ffffff;
             font-size: 12px;
             transform: translateX(-50%);
+        }
+        .bar-line{
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            top: 0px;
+            background: #499DF1;
+            opacity: 0.3;
         }
    }
    .tab-second-title{

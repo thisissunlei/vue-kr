@@ -87,6 +87,8 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+                                <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
+                                
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
                                 <DrawWeek 
@@ -94,8 +96,10 @@
                                     :key="item.id" 
                                     :data="item" 
                                     :minCalibration="minCalibration"
-                                  
+                                    
                                 />
+                                <div v-if="barType=='week'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}">今天</div>
+                                
                             </div>
                             
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
@@ -107,6 +111,7 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+                                <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                             </div>
                         </div>
                     </div>
@@ -590,6 +595,7 @@ export default {
         }
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
+            position: relative;
 
         }
         .year-bar{
@@ -611,6 +617,20 @@ export default {
         .bar{
             position: relative;
             border-top: 1px solid #F6F6F6;
+
+        }
+        .today{
+            width: 30px;
+            height: 15px;
+            background: #499DF1;
+            border-radius: 0 0 3px 3px;
+            text-align: center;
+            line-height: 15px;
+            position: absolute;
+            top: 0px;
+            color: #ffffff;
+            font-size: 12px;
+            transform: translateX(-50%);
         }
    }
    .tab-second-title{

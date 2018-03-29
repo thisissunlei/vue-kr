@@ -83,7 +83,7 @@ export default {
             },
             ruleValidate: {
                 name: [
-                    { required: true, message: '请输入任务名称', trigger: 'change' }
+                    { required: true, message: '请输入任务名称且最多20个字符', trigger: 'change' ,max:20}
                 ],
                 planStartTime:[
                     { required: true, type: 'date',message: '请输入开始日期', trigger: 'change' }

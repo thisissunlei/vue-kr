@@ -3,6 +3,7 @@
 	<div class="draw-day" >
         <div class="day" v-for="item in monthDay" :key="item.id" :style="{backgorund:item=='今天'?'#F3F2F7':''}">
             {{item}}
+           
         </div>
 	</div>
 </template>
@@ -31,11 +32,17 @@ export default {
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var todyObj = today.split("-");
              num.length = this.dayNum;
-            if(+todyObj[0]===this.data.year && +todyObj[1]==this.data.month){
-                num[+todyObj[2]-1] = '今天'
-            }
+         
            
             return num;
+        },
+        theToday(num){
+             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+             if(today === this.data.year+'-'+this.data.month+'-'+num){
+                 return true;
+             }else {
+                 return false;
+             }
         },
         showLabel(num){
             var month = +this.data.month<10?0+''+this.data.month:this.data.month;
@@ -65,6 +72,8 @@ export default {
         border-bottom: 1px solid #F0F0F0;
         border-right: 1px solid #F0F0F0;
         transition: all 0.3;
+        position: relative;
+        
     }
     
 }

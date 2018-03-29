@@ -139,15 +139,15 @@ export default {
         },
         getLabel(label){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-
+                this.data.data.actualEndTime<this.data.data.planStartTime){
+                    return '';
             }else {
                 return label;
             }
         },
         getActualLabel(label){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
+                this.data.data.actualEndTime<this.data.data.planStartTime){
                     return label;
             }else {
                 return '';
@@ -155,7 +155,7 @@ export default {
         },
         lineShow(){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
+                this.data.data.actualEndTime<this.data.data.planStartTime){
                 return true;
             }else {
                 return false;
@@ -185,9 +185,9 @@ export default {
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-            if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
-                return '#FFE9AF';
-            }
+            // if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
+            //     return '#FFE9AF';
+            // }
             if(!this.data.data.actualStartTime&&this.planEndTime<nowTime ){
                 return '#FFE9AF';
             }else{
@@ -240,7 +240,7 @@ export default {
        },
        getEndpointDate(){
             var arr = [];
-           if(this.data.data.actualStartTime && this.data.data.actualEndTime){
+             if(this.data.data.actualStartTime && this.data.data.actualEndTime){
                 arr.push(this.data.data.actualStartTime)
                 arr.push(this.data.data.actualEndTime)
             }

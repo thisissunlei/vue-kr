@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='add-archives'>
        <Form ref="formRight" :model="formRight" :rules="ruleValidate" label-position="left">
 
             <Form-item label="项目名称" class="bill-search-class" prop="name" style="margin-bottom:30px;">
@@ -129,7 +129,7 @@ export default {
             },
             ruleValidate: {
                 name: [
-                    { required: true, message: '项目名称必填', trigger: 'change' }
+                    { required: true, message: '项目名称必填且最多20个字符', trigger: 'change',max:20 }
                 ],
                 maskCity:[
                     { required: true, message: '所在城市必填', trigger: 'change' }
@@ -153,6 +153,11 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+    .add-archives{
+        .ivu-form-item-error-tip{
+            width:250px;
+        }
+    }
     
 </style>

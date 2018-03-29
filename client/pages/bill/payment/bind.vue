@@ -49,52 +49,6 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
         </div>
     </Modal>
-
-    <Modal
-        v-model="openBind"
-        title="绑定客户"
-        ok-text="确定"
-        cancel-text="取消"
-        width="490"
-     >
-        <div class="u-cancel-title">
-
-            <Form
-                ref="form"
-                :model="formItem"
-                label-position="left"
-                :label-width="80"
-                class="u-bind u-clearfix"
-                :rules="ruleValidate"
-            >
-                <FormItem label="客户名称" prop="customerId">
-                    <SearchCompany
-                        :test="formItem"
-                        style="width: 250px"
-                        :onchange="onchange"
-                        v-if="openBind"
-                    ></SearchCompany>
-                </FormItem>
-
-                 <FormItem label="所在社区" prop="communityId">
-                    <SelectCommunitiy
-                        :test="formItem"
-                        style="width: 250px"
-                        v-if="openBind"
-                    ></SelectCommunitiy>
-                </FormItem>
-
-            </Form>
-
-        </div>
-
-        <div slot="footer">
-            <Button type="primary" @click="bindSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="bindPerson">取消</Button>
-        </div>
-
-    </Modal>
-
     <Message
         :type="MessageType"
         :openMessage="openMessage"
@@ -185,7 +139,6 @@ export default {
             return {
                 form:'form',
                 openSearch:false,
-                openBind:false,
                 openImport:false,
                 ifInvoice:false,
                 tableData:[],
@@ -284,56 +237,7 @@ export default {
                         align:'center',
                         width:110,
                         render:(h,params)=>{
-                          if(!params.row.customerId){
-                                return h('div', [
-                                    h('Button', {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small'
-                                        },
-                                        style: {
-                                            color:'#2b85e4'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openView(params.row);
-                                            }
-                                        }
-                                    }, '查看'),
-                                    h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small',
-                                            checkAction:'payment_bind',
-                                            label:'绑定客户',
-                                            styles:'color:#2b85e4;padding: 2px 7px;',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.bindPerson(params.row);
-                                            }
-                                        }
-                                    }),
-                                    h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small',
-                                            checkAction:'payment_invoice',
-                                            label:'开票',
-                                            styles:'color:#2b85e4;padding: 2px 7px;',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openInvoice(params.row);
-                                            }
-                                        }
-                                    })
-                                    
-                                ]);
-                              
-                              
-                          }else{
-                              return h('div', [
+                            return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -348,36 +252,26 @@ export default {
                                         }
                                     }
                                 }, '查看'),
+                                
                                 h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small',
-                                            checkAction:'payment_invoice',
-                                            label:'开票',
-                                            styles:'color:#2b85e4;padding: 2px 7px;',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openInvoice(params.row);
-                                            }
+                                    props: {
+                                        type: 'text',
+                                        size: 'small',
+                                        checkAction:'payment_invoice',
+                                        label:'开票',
+                                        styles:'color:#2b85e4;padding: 2px 7px;',
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openInvoice(params.row);
                                         }
-                                    })
+                                    }
+                                })
+                                
                             ]);
-                          }
-
                         }
                     }
                 ],
-                ruleValidate:{
-
-                    customerId: [
-                        { required: true, message: '请选择客户名称'}
-                    ],
-
-                    communityId: [
-                        { required: true, message: '请选择所在社区'}
-                    ],
-                },
                 rule:{
                     invoiceContent: [
                         { required: true, message: '请填写开票内容'}
@@ -394,9 +288,7 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    
                     if(nextProps.mask=='bind'){
-                        console.log('11111')
                       this.getTableData(this.params);
                     }
                 }
@@ -437,12 +329,7 @@ export default {
                 window.open(`/bill/payment/detail/${params.id}`,'_blank');
             },
 
-            bindPerson (params) {
-                this.$refs[this.form].resetFields();
-                this.itemDetail=params;
-                utils.clearForm(this.formItem);
-                this.openBind=!this.openBind;
-            },
+           
 
             onExport(){
                  console.log('导出')
@@ -460,36 +347,7 @@ export default {
                 })
             },
 
-            onchange(data){
-                this.formItem.customerId=data;
-            },
-            bindSubmit(){
-
-                this.$refs[this.form].validate((valid)=>{
-                    if(valid){
-                        this.formItem.paymentId=this.itemDetail.id;
-                        this.$http.post('payment-bind', this.formItem).then((res)=>{
-                            if(res.code==-1){
-                                this.MessageType="error";
-                                this.warn=res.message;
-                                this.openMessage=true;
-                                return;
-                            }
-                            this.openBind=false;
-                            this.MessageType="success";
-                            this.warn="客户绑定成功！"
-                            this.openMessage=true;
-                            this.getTableData(this.params);
-                        }).catch((err)=>{
-                             this.$Notice.error({
-                                title:err.message
-                            });
-                        })
-                    }
-                });
-
-            },
-
+           
             onChangeOpen(data){
                 this.openMessage=data;
             },

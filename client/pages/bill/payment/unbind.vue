@@ -98,27 +98,6 @@
         :warn="warn"
         @changeOpen="onChangeOpen"
     ></Message>
-
-   
-    <Modal
-        v-model="ifInvoice"
-        title="开票"
-        ok-text="确定"
-        cancel-text="取消"
-        width="500"
-     >
-        <div class="u-upload-title">
-             <Form ref="formItem" :model="forms" :rules="rule" >
-                <FormItem label="开票内容"  prop="invoiceContent" style="width:450px;margin-left:25px;">
-                        <Input v-model="forms.invoiceContent" type="textarea" :maxlength="maxlength" :rows="4" placeholder="开票内容" />
-                </FormItem>
-            </Form>
-        </div>
-         <div slot="footer">
-            <Button type="primary" @click="invoiceSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="openInvoice">取消</Button>
-        </div>
-    </Modal>
 </div>
 
 </template>
@@ -158,7 +137,6 @@ export default {
                 openSearch:false,
                 openBind:false,
                 openImport:false,
-                ifInvoice:false,
                 tableData:[],
                 totalCount:1,
                 pageSize:15,
@@ -171,9 +149,6 @@ export default {
                 formItem:{
                     customerId:'',
                     communityId:''
-                },
-                forms:{
-                    invoiceContent:''
                 },
                 openMessage:false,
                 MessageType:'',
@@ -255,7 +230,7 @@ export default {
                         align:'center',
                         width:110,
                         render:(h,params)=>{
-                          if(!params.row.customerId){
+                         
                                 return h('div', [
                                     h('Button', {
                                         props: {
@@ -285,56 +260,9 @@ export default {
                                             }
                                         }
                                     }),
-                                    h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small',
-                                            checkAction:'payment_invoice',
-                                            label:'开票',
-                                            styles:'color:#2b85e4;padding: 2px 7px;',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openInvoice(params.row);
-                                            }
-                                        }
-                                    })
+                                    
                                     
                                 ]);
-                              
-                              
-                          }else{
-                              return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.openView(params.row);
-                                        }
-                                    }
-                                }, '查看'),
-                                h(Buttons, {
-                                        props: {
-                                            type: 'text',
-                                            size: 'small',
-                                            checkAction:'payment_invoice',
-                                            label:'开票',
-                                            styles:'color:#2b85e4;padding: 2px 7px;',
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.openInvoice(params.row);
-                                            }
-                                        }
-                                    })
-                            ]);
-                          }
 
                         }
                     }
@@ -349,11 +277,7 @@ export default {
                         { required: true, message: '请选择所在社区'}
                     ],
                 },
-                rule:{
-                    invoiceContent: [
-                        { required: true, message: '请填写开票内容'}
-                    ],
-                }
+               
 
             }
         },
@@ -366,21 +290,13 @@ export default {
                 deep: true,
                 handler(nextProps) {
                     
-                    if(nextProps.mask=='bind'){
-                        console.log('11111')
+                    if(nextProps.mask=='unbind'){
                       this.getTableData(this.params);
                     }
                 }
             }
         },
         methods:{
-            openInvoice(params){
-                if(params){
-                     this.paymentId=params.id;
-                     this.forms.invoiceContent=params.invoiceContent;
-                }
-                this.ifInvoice=!this.ifInvoice
-            },
             onRefund(){
                 window.open('./payment/refund','_blank');
             },
@@ -388,22 +304,7 @@ export default {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;
             },
-            invoiceSubmit(){
-                this.forms.paymentId=this.paymentId;
-
-                this.$http.post('payment-invoice', this.forms).then((res)=>{
-                    this.openInvoice();
-                    this.$Notice.success({
-                        title:'开票成功'
-                    });
-                    this.getTableData(this.params);
-                    
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
-                })
-            },
+            
             openView(params){
                 window.open(`/bill/payment/detail/${params.id}`,'_blank');
             },
@@ -420,7 +321,7 @@ export default {
             },
 
             getTableData(params){
-                this.$http.get('get-payment-list', params).then((res)=>{
+                this.$http.get('get-payment-unbind-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;

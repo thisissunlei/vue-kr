@@ -2,7 +2,7 @@
 
 <div class="g-order">
     <div class="u-search" >
-        <span class="u-high-search" @click="showSearch"></span>
+        <!-- <span class="u-high-search" @click="showSearch"></span> -->
     </div>
 
     <div class="u-table">

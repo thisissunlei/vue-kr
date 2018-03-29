@@ -24,7 +24,7 @@ export default {
     },
    data(){
        return {
-           activeKey:'unbind',
+           activeKey:'bind',
            key:''
        }
    },

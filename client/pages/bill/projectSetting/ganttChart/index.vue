@@ -263,8 +263,8 @@ export default {
         
         var rightDom = document.getElementById("vue-chart-right-draw-content");
         var clientHeight = document.documentElement.clientHeight;
-        leftDom.style.maxHeight = clientHeight - 375 +"px";
-        rightDom.style.maxHeight = clientHeight - 375 +"px";
+        leftDom.style.maxHeight = clientHeight - 390+"px";
+        rightDom.style.maxHeight = clientHeight - 390 +"px";
     },
    
     updated(){

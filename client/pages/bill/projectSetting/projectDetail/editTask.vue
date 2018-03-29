@@ -16,6 +16,7 @@
                             type="date" 
                             placeholder="开始日期" 
                             style="width: 252px"
+                            @on-change="planStartChange"
                         />
                         <span class="u-date-txt" >至</span>
                     </Form-item>
@@ -25,6 +26,7 @@
                             type="date" 
                             placeholder="结束日期" 
                             style="width: 252px"
+                            @on-change="planEndChange"
                         /> 
                    </Form-item>
                    <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
@@ -126,7 +128,9 @@ export default {
             },
 
             actualStart:this.getEdit.actualStartTime,
-            actualEnd:this.getEdit.actualEndTime
+            actualEnd:this.getEdit.actualEndTime,
+            planStart:this.getEdit.planStartTime,
+            planEnd:this.getEdit.planEndTime
         }
     },
     created(){    
@@ -140,15 +144,6 @@ export default {
         this.formItem=this.getEdit;
     },
     updated:function(){
-        if(this.formItem.planStartTime&&this.formItem.planEndTime){
-                if(this.formItem.planStartTime>this.formItem.planEndTime){
-                    this.dateError=true;
-                }else{
-                    this.dateError=false; 
-                }
-            }else{
-                    this.dateError=false; 
-            }
         this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
     },
     methods:{
@@ -166,6 +161,30 @@ export default {
                     });
                     this.formItem.error=true;
                  })
+        },
+        planStartChange(params){
+            this.planStart=params;
+            this.formItem.planStartTime=params;
+            if(typeof this.planEnd=='number'){
+                this.planEnd=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.planEnd));
+            }
+            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+                this.dateError=true;
+            }else{
+                this.dateError=false;
+            }
+        },
+        planEndChange(params){
+            this.planEnd=params;
+            this.formItem.planEndTime=params;
+            if(typeof this.planStart=='number'){
+                this.planStart=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.planStart));
+            }
+            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+                this.dateError=true;
+            }else{
+                this.dateError=false;
+            }
         },
         actualStartChange(params){
             this.actualStart=params;

@@ -19,14 +19,14 @@
                   @mouseover="overShow(item.t_id)"
                   @mouseout="outHide(item.t_id)"
                  >
-                   <div class='parent-middle'>
+                   <div class='parent-middle' @click="editClick(item.value,'')">
                     <Tooltip :content="item.label" :placement="index==0?'bottom':'top'">
                       <div class='chart-left-name' @click="showClick(item.t_id)">
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.label}}</span>
                       </div>
                     </Tooltip>
-                    <div @click="editClick(item.value,'')" class='chart-edit'>
+                    <div  class='chart-edit'>
                         <span class='edit'></span>
                     </div>
                    </div>
@@ -42,14 +42,14 @@
                             @mouseover="overShow(items.t_id)"
                             @mouseout="outHide(items.t_id)"
                           >
-                            <div class='parent-middle'>
+                            <div class='parent-middle' @click="editClick(items.value,item.value)">
                               <Tooltip :content="items.label" placement="top">
                                 <div class='chart-left-name'>
                                   <Icon type="minus-round" size="4" style="color: #666666;"/>
                                   <span class="chart-name" style="color: #666666;">{{items.label}}</span>
                                 </div>
                               </Tooltip>
-                              <div @click="editClick(items.value,item.value)" class='chart-edit'>
+                              <div  class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
                             </div>

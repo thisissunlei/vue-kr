@@ -249,7 +249,7 @@ export default {
         setTimeout(() => {
              this.scroolFix()
         }, 100);
-       
+        
     },
    
     updated(){

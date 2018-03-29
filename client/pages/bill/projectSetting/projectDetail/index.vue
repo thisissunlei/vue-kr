@@ -155,6 +155,8 @@ export default {
             ids:'',
             MessageType:'',
             warn:'',
+
+            scrollH:''
         }
     },
     created(){         
@@ -399,6 +401,7 @@ export default {
                      this.MessageType="success";
                      this.openMessage=true;
                      this.warn="删除成功";
+                     this.scrollPosititon();
                  }).catch((error)=>{
                      this.MessageType="error";
                      this.openMessage=true;
@@ -451,6 +454,7 @@ export default {
                      this.MessageType="success";
                      this.openMessage=true;
                      this.warn="新建成功";
+                    this.scrollPosititon();
                  }).catch((error)=>{
                      this.MessageType="error";
                      this.openMessage=true;
@@ -498,22 +502,36 @@ export default {
                         this.openMessage=true;
                         this.warn="编辑成功";
                      }
+
+                     this.scrollPosititon();
                  }).catch((error)=>{
                      this.MessageType="error";
                      this.openMessage=true;
                      this.warn=error.message;
                 })
           },
+          scrollPosititon(){
+              setTimeout(() => {
+                    let leftDetail=document.getElementById('vue-chart-left-detail-list');
+                    let chartDom=document.getElementById('vue-chart-right-draw-content');
+                    if(leftDetail&&chartDom){
+                         chartDom.scrollTop=this.scrollH;
+                         leftDetail.scrollTop=this.scrollH;
+                    }
+                },50);
+          },
           scroll(event){
               let leftDetail=document.getElementById('vue-chart-left-detail-list');
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               chartDom.scrollTop=leftDetail.scrollTop;
+              this.scrollH=leftDetail.scrollTop;
           },
           chartScroll(){
 
               let leftDetail=document.getElementById('vue-chart-left-detail-list');
               let chartDom=document.getElementById('vue-chart-right-draw-content');
               leftDetail.scrollTop=chartDom.scrollTop;
+              this.scrollH=chartDom.scrollTop;
               return; 
               if(chartDom.scrollLeft>=chartDom.clientWidth){
                   console.log('划到最右边了');

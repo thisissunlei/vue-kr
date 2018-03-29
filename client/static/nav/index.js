@@ -1022,6 +1022,7 @@
         return {
         primaryText: "账单财务",
         router: 'finance',
+        type:'vue',
         menuItems: [
             {
                 primaryText: "账单中心",

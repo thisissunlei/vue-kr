@@ -182,6 +182,7 @@
                         title: '租赁期限',
                         key: 'ctime',
                         align:'center',
+                         width:100,
                         render(tag, params){
                             return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
                         }
@@ -190,7 +191,6 @@
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',
-                        width:80,
                         render(tag, params){
                             var orderStatus={
                                'NOT_EFFECTIVE':'未生效',

@@ -259,7 +259,12 @@ export default {
         setTimeout(() => {
              this.scroolFix()
         }, 100);
+        let leftDom=document.getElementById('vue-chart-left-detail-list');
         
+        var rightDom = document.getElementById("vue-chart-right-draw-content");
+        var clientHeight = document.documentElement.clientHeight;
+        leftDom.style.maxHeight = clientHeight - 375 +"px";
+        rightDom.style.maxHeight = clientHeight - 375 +"px";
     },
    
     updated(){
@@ -340,6 +345,7 @@ export default {
             }else if(event=='month'){
                 this.minCalibration = 10;
             }
+            this.scroolFix();
         },
         //获取进度条的总长度
         getDayBarWidth(){
@@ -627,7 +633,7 @@ export default {
             width: 30px;
             height: 15px;
             background: #499DF1;
-            border-radius: 0 0 3px 3px;
+            border-radius: 0 0 4px 4px;
             text-align: center;
             line-height: 15px;
             position: absolute;

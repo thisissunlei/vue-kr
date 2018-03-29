@@ -16,8 +16,8 @@
         margin: 15px;
         overflow: hidden;
         border-radius: 4px;
-        padding-bottom: 50px;
-        padding-top: 65px;
+        padding-bottom: 20px;
+        padding-top: 63px;
     }
     .layout-content-main{
          min-height: 200px;
@@ -92,6 +92,7 @@
   height: 60px;
   /*overflow: hidden;*/
   background: #fff;
+  border-bottom: 1px solid #eee;
 }
 .app-header .c-header .header-nav {
   display: inline-block;
@@ -128,7 +129,7 @@
   background: #394457;
   z-index: 900;
   overflow: auto;
-  text-align: center;
+  text-align: left;
   padding-bottom: 20px;
 }
 .app-header .sidebar .item .item-title {
@@ -146,9 +147,11 @@
   display: inline-block;
   color: #c8d2d9;
   font-size: 14px;
+  padding-left: 40px;
 }
 .app-header .sidebar .item ul li.active a {
   width: 100%;
+   padding-left: 40px;
   height: 48px;
   line-height: 48px;
   display: inline-block;
@@ -197,7 +200,7 @@
   position: absolute;
   display: inline-block;
   top: 17px;
-  left: 20px;
+  left: 15px;
   font-size: 18px;
 }
 .app-header #j_account_detail {

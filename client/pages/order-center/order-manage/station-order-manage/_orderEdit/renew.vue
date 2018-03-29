@@ -148,10 +148,10 @@
                         <div class="pay-error" v-if="errorPayType">请选择付款方式</div>
 
                  </Col>
-                 <Col class="col">
+                 <Col class="col"  style="max-width:560px">
                     <span class="required-label"  style="width:252px;padding:11px 12px 10px 0;color:#666;display:block">履约保证金总额</span>
                         <div style="display:block;min-width:252px">
-                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}">{{ types.label }}</span>
+                            <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" >{{ types.label }}</span>
                         </div>
                  </Col>
             </Row>
@@ -230,6 +230,7 @@ import utils from '~/plugins/utils';
                 }
             };
            return{
+                showFree:false,
                 disabled:false,//提交按钮是否有效
                 index:1,//优惠的index
                 openStation:false,//弹窗开关
@@ -412,6 +413,7 @@ import utils from '~/plugins/utils';
         },
         mounted(){
             this.getDetailData();
+            this.getFreeDeposit();
             GLOBALSIDESWITCH("false");
         },
         watch:{
@@ -526,7 +528,7 @@ import utils from '~/plugins/utils';
                     _this.selecedArr = data.orderSeatDetailVo;
                     // _this.renewForm.rentAmount = data.rentAmount;
                     _this.installmentType = data.installmentType;
-                    _this.depositAmount = data.deposit;
+                    _this.depositAmount = data.deposit+'';
                     _this.renewForm.firstPayTime = data.firstPayTime;
                     // _this.getStationAmount()
                     _this.saleAmount = data.tactiscAmount
@@ -1284,6 +1286,19 @@ import utils from '~/plugins/utils';
                         console.log('error',e)
                 })
 
+            },
+            getFreeDeposit(){
+                this.$http.get('get-seat-deposit-free', '').then( r => {
+                    if(r.data){
+                        this.depositList.push({value:'0',label:'无押金'},)
+                        this.depositList.push({value:'1',label:'1个月'},)
+                    }
+                }).catch( e => {
+                        this.$Notice.error({
+                            title:e.message
+                        })
+
+                })
             },
 
                     

@@ -5,6 +5,7 @@
         #__nuxt{
             height:100%;
         }
+        margin: 0px;
     }
     
 </style>

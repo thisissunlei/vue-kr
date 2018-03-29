@@ -5,8 +5,8 @@ function name(params) {
     
 }
 function dateFormat(time,fmt) {
-	if(!time){
-		return
+	if(!time || time == '-'){
+		return time
 	}
 	let format = fmt || 'YYYY-MM-dd HH:mm:ss'
 

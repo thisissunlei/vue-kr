@@ -183,4 +183,9 @@ export default  {
         url: '/api/krspace-op-web/order-seat/corporation-list',
         method: 'get'
     },
+    // 无押金--判断接口
+    'get-seat-deposit-free': {
+        url: '/api/krspace-op-web/seat-deposit-detail/free',
+        method: 'get'
+    },
 }

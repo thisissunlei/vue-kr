@@ -80,6 +80,8 @@
                                 <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
+                                <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                
                                 <DrawMonth 
                                     v-for="( item ) in showData" 
                                     :key="item.id"  
@@ -88,10 +90,13 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+                                
                                 <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                                 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
+                                <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                
                                 <DrawWeek 
                                     v-for="(item) in weeks" 
                                     :key="item.id" 
@@ -112,6 +117,7 @@
                                     :minCalibration="minCalibration"
                                     
                                 />
+
                                 <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                             </div>
                         </div>
@@ -602,6 +608,7 @@ export default {
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;
+            
 
         }
         .year-bar{
@@ -637,6 +644,14 @@ export default {
             color: #ffffff;
             font-size: 12px;
             transform: translateX(-50%);
+        }
+        .bar-line{
+            position: absolute;
+            width: 1px;
+            height: 50px;
+            top: 0px;
+            background: #499DF1;
+            opacity: 0.3;
         }
    }
    .tab-second-title{

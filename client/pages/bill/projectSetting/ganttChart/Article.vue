@@ -1,7 +1,7 @@
 
 <template>
     <div class="every-view-col" :data-chart="data.t_id" >
-        <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
+        <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{
@@ -38,7 +38,7 @@
                 {{getActualLabel(data.label)}}
                 </div>
                 <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                <div class="label" :style="{color:'#666666',width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
+                <div class="label" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
             </Tooltip>
                    
         </div>
@@ -106,20 +106,15 @@ export default {
        
     },
     methods:{
-        getColor(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var nowTime = (new Date(today+' 00:00:00')).getTime();
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-                return 'transparent';
+        getLabelColor(){
+            var planColor = this.getPlanBgColor();
+            var actualColor = this.getActualBgColor();
+            if(planColor == '#FFE9AF'){
+                return '#BE8525';
+            }else if(actualColor=='rgba(194,233,152,0.6)'){
+                return '#5A8C23';
             }else {
-                if(this.data.data.progressStatus === '' && this.planEndTime<nowTime){
-                    return '#BE8525'
-                }else if(this.data.data.progressStatus<0){
-                    return '#666666'
-                }else if(this.data.data.progressStatus>=0){
-                    return '#5A8C23'
-                }
+                return '#666666';
             }
         },
         getPlanColor(){
@@ -313,12 +308,14 @@ export default {
             border-bottom:1px dashed #E9F0F6;
             position: relative;
             top: 2px;
+            
+            
         }
         .label{
             position: absolute;
-            height: 28px;
-            line-height: 28px;
-            padding-left: 10px;
+            height: 29px;
+            line-height: 30px;
+            padding-left: 6px;
             top: -12px;
             overflow: hidden;
             width: 100%;
@@ -326,33 +323,37 @@ export default {
             text-overflow:ellipsis;
             white-space: nowrap;
             background: transparent;
+            font-weight:bold;
         }
         .plan{
-            height: 28px;
+            height: 29px;
             background: #E9F0F6;
             border-radius: 7px 7px 8px 8px;
             line-height: 30px;
-            padding-left:10px;
+            padding-left:6px;
             color: #666666;
             position: absolute;
             cursor: pointer;
             top: -11px;
-            overflow: hidden;
+             overflow: hidden;
             text-overflow:ellipsis;
+            white-space: nowrap;  
+            font-weight:bold;
         }
         .actual{
-            height: 28px;
+            height: 29px;
             
             border-radius: 7px 7px 8px 8px;
             line-height: 30px;
-            padding-left:10px;
+            padding-left:6px;
             color: #fff;
             position: absolute;
             cursor: pointer;
-            opacity: 0.5;
             top: -11px;
-            overflow: hidden;
+             overflow: hidden;
             text-overflow:ellipsis;
+            white-space: nowrap;  
+            font-weight:bold;
         }
     }
 }

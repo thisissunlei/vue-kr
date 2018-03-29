@@ -5,7 +5,7 @@
             @mouseover="overShow(data.t_id)"
             @mouseout="outHide(data.t_id)"
         >
-            <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
+            <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
             <div v-if="!this.data.chartType && isInitial()">
                 <div class='col-tool-label'>
                         <div class="article" 
@@ -25,7 +25,8 @@
                                 :style="{
                                     background:getPlanBgColor(),
                                     width:planDetail.width * minCalibration + 'px',
-                                    left:planDetail.office * minCalibration + 'px'
+                                    left:planDetail.office * minCalibration + 'px',
+                                    color:getPlanColor()
                                 }"
                             >{{getActualLabel(data.label)}}
                             </div>
@@ -36,7 +37,7 @@
                                     width:actualDetail.width * minCalibration+'px',
                                     left:actualDetail.office * minCalibration + 'px',
                                     background:getActualBgColor(),
-                                    color:'#666666'
+                                    color:getActualColor()
 
                                 }"
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
@@ -44,7 +45,7 @@
                             {{getActualLabel(data.label)}}
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                            <div class="label" :style="{color:'#666666',width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
+                            <div class="label" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
                         </Tooltip> 
                     </div>
                 </div>
@@ -135,36 +136,33 @@ export default {
          
             return false
         },
-         getColor(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var nowTime = (new Date(today+' 00:00:00')).getTime();
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-                return 'transparent';
+         getLabelColor(){
+            var planColor = this.getPlanBgColor();
+            var actualColor = this.getActualBgColor();
+            if(planColor == '#FFE9AF'){
+                return '#BE8525';
+            }else if(actualColor=='rgba(194,233,152,0.6)'){
+                return '#5A8C23';
             }else {
-                if(this.data.data.progressStatus === '' && this.planEndTime<nowTime){
-                    return '#BE8525'
-                }else if(this.data.data.progressStatus<0){
-                    return '#666666'
-                }else if(this.data.data.progressStatus>=0){
-                    return '#5A8C23'
-                }
+                return '#666666';
             }
         },
+        getPlanColor(){
+            var bgColor = this.getPlanBgColor();
+            if(bgColor=='#E9F0F6'){
+                return '#666666';
+            }else {
+                return '#BE8525';
+            }
+            
+        },
+       
         getActualColor(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var nowTime = (new Date(today+' 00:00:00')).getTime();
-           
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-                if(this.data.data.progressStatus === '' &&  this.planEndTime<nowTime){
-                    return '#BE8525' 
-                }else if(this.data.data.progressStatus<0){
-                    return '#666666'
-                }else if(this.data.data.progressStatus>=0){
-                    return '#5A8C23'
-                }
-                
+            var bgColor = this.getActualBgColor();
+            if(bgColor == 'rgba(246,156,156,0.5)'){
+                return '#666666';
+            }else {
+                return '#5A8C23'
             }
         },
         getLabel(label){
@@ -363,8 +361,8 @@ export default {
         .label{
             position: absolute;
             height: 29px;
-            line-height: 29px;
-            padding-left: 10px;
+            line-height: 30px;
+            padding-left: 6px;
            
             overflow: hidden;
             width: 100%;
@@ -373,33 +371,38 @@ export default {
             white-space: nowrap;    
             background: transparent;
             top:0px;
+            font-weight:bold;
         }
         .plan{
             height: 29px;
             background: #E9F0F6;
             border-radius: 7px 7px 8px 8px;
-            line-height: 29px;
-            padding-left:10px;
+            line-height: 30px;
+            padding-left:6px;
             color: #666666;
             position: absolute;
             cursor: pointer;
             top:1px;
             overflow: hidden;
-            text-overflow:ellipsis;
+             text-overflow:ellipsis;
+            white-space: nowrap;   
+            font-weight:bold;
         }
         .actual{
             height: 29px;
           
             border-radius: 7px 7px 8px 8px;
-            line-height: 29px;
-            padding-left:10px;
+            line-height: 30px;
+            padding-left:6px;
             color: #fff;
             position: absolute;
             cursor: pointer;
             // opacity: 0.5;
             top:1px;
-            overflow: hidden;
+             overflow: hidden;
             text-overflow:ellipsis;
+            white-space: nowrap;   
+            font-weight:bold; 
         }
         
     }

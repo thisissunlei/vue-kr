@@ -150,10 +150,10 @@ export default {
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
-            leftDom.style.maxHeight = clientHeight - 400+"px";
-            rightDom.style.maxHeight = clientHeight - 400 +"px";
-        
-        }, 200);
+            leftDom.style.maxHeight = clientHeight - 362+"px";
+            rightDom.style.maxHeight = clientHeight - 362 +"px";
+            console.log(rightDom,leftDom,"------")
+        }, 400);
     },
     
     methods:{

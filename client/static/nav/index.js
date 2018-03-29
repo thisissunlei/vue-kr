@@ -1043,19 +1043,19 @@
                         menuCode: 'fina_account_list'
                     },
                     {
-                        primaryText: "回款管理",
+                        primaryText: "回款",
                         router: 'bill/payment',
                         type: 'vue',
                         menuCode: 'pay_payment_page',
                     },
                     {
-                        primaryText: "应收管理",
+                        primaryText: "应收",
                         router: 'bill/income',
                         type: 'vue',
                         menuCode: 'pay_income_page',
                     },
                     {
-                        primaryText: "结算单管理",
+                        primaryText: "结算单",
                         router: 'bill/settlement-list',
                         type: 'vue',
                         menuCode: 'checklist_list',

@@ -438,18 +438,20 @@ export default {
                 length:length,
                 end:Object.assign({},end)
             }]
-            for (var i = 0; i <weekObj.weeks ;i++) {
+            for (var i = 1; i <weekObj.weeks ;i++) {
                
-                start.day = end.day + 1,
-                start = Object.assign(this.dayToWeekDetail(start));
+                start.day = +end.day + 1,
+                start.month = end.month,
+                start = Object.assign({},this.dayToWeekDetail(start));
+                // console.log(start,"ooooooooo")
                 end.day = start.day + 6;
-                end = Object.assign(this.dayToWeekDetail(end));
+                end = Object.assign({},this.dayToWeekDetail(end));
                 length = 7;
-               arr.push({
-                   start:Object.assign({},start),
-                   length:length,
-                   end:Object.assign({},end)
-               });
+                arr.push({
+                    start:Object.assign({},start),
+                    length:length,
+                    end:Object.assign({},end)
+                });
               
             }
             arr.push({
@@ -471,10 +473,11 @@ export default {
             
         },
         //每周的具体内容校正
-        dayToWeekDetail(weeks,start){
+        dayToWeekDetail(weeks){
             
             var obj = Object.assign({},weeks);
             var dayNum = this.getDayNum(obj.year,obj.month)
+           
             if(obj.day>dayNum){
                 obj.day = obj.day - dayNum;
                 obj.month = obj.month + 1;
@@ -483,7 +486,6 @@ export default {
                     obj.year = obj.year + 1;
                 }
             }
-            
             return obj;
         },
         rightScroll(event){

@@ -22,8 +22,8 @@
     <div class="demo-upload-list" v-if="phote!=false">
         <img :src="phote">
         <div class="demo-upload-list-cover">
-            <Icon type="ios-eye-outline"  @click.native="handleView()"></Icon>
-            <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+            <Icon type="ios-eye-outline" class="icon" @click.native="handleView()"></Icon>
+            <Icon type="ios-trash-outline" class="icon" @click.native="handleRemove()"></Icon>
         </div>
     </div>
     <Modal :title="imgName" v-model="visible">
@@ -97,9 +97,9 @@
         border-radius: 4px;
         display: inline-block;
         &:hover{
-            border:1px dashed #499df1;
+            // border:1px dashed #499df1;
             .ivu-upload-drag{
-                border:1px dashed #499df1;
+                border:1px dashed #dddee1;
             }
         }
     }
@@ -141,10 +141,12 @@
         background: rgba(0,0,0,.4);
     }
     .demo-upload-list-cover i{
-        color: #fff;
+        // color: #fff;
         font-size: 20px;
         cursor: pointer;
-        margin: 0 2px;
+        margin: 0 10px;
+        color:red;
+        background-color: #fff;
     }
     .upload-box{
         background:#f6f6f6;

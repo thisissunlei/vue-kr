@@ -196,10 +196,12 @@ export default {
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
-                this.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
-                var endObj = this.monthAdd(response.data.lastEndTime);
-                this.endTime = endObj.year+'-'+endObj.month+'-'+endObj.day;
-                console.log(this.startTime,"-------",this.endTime,"YYYY-MM-DD",new Date(response.data.lastEndTime))
+                if(response.data.hasTime){
+                       this.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
+                        var endObj = this.monthAdd(response.data.lastEndTime);
+                        this.endTime = endObj.year+'-'+endObj.month+'-'+endObj.day;
+                }
+             
                 //后面进行组件优化
                 this.isLoading = false;
                 this.listData.map((item,index)=>{

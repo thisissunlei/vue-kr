@@ -6,17 +6,31 @@
                 <div class="hander" >
                     <div class='header-left'>
                         <div style="display:inline-block;margin-top: 6px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">项目计划</span>
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">任务计划</span>
                             <span 
                                 class="article" 
-                                style="background:#FDBA4D;vertical-align:middle;"
+                                style="background:#DBE1E8;vertical-align:middle;"
                             ></span>
                         </div>
-                        <div style="display:inline-block;margin-left:40px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">当前进展</span>
+                        <div style="display:inline-block;margin-left:20px;margin-top: 6px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">准时或提前完成</span>
                             <span 
                                 class="article" 
-                                style="background: #7ED321;vertical-align:middle;"
+                                style="background: #A8DD6F;vertical-align:middle;"
+                            ></span>
+                        </div>
+                         <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">延期完成</span>
+                            <span 
+                                class="article" 
+                                style="background:#F69C9C;vertical-align:middle;"
+                            ></span>
+                        </div>
+                         <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进度未知</span>
+                            <span 
+                                class="article" 
+                                style="background:#FFD669;vertical-align:middle;"
                             ></span>
                         </div>
                     </div>
@@ -228,6 +242,7 @@ export default {
         }
     },
     mounted(){
+       
         this.scrollWidth = utils.getScrollBarSize()
         this.init(this.startTime,this.endTime);
         this.getYears(this.startTime,this.endTime);
@@ -563,7 +578,7 @@ export default {
             }
             .article{
                 display: inline-block;
-                width: 80px;
+                width: 30px;
                 height: 15px;
                 border-radius: 100px;
                 margin-left: 10px; 

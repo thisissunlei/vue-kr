@@ -156,8 +156,8 @@ export default {
          .detail-li{
              .chart-parent{
                 width:100%;
-                height:49px;
-                border-bottom:solid 1px #F0F0F0;
+                height:32px;
+                border-bottom:solid 2px #F0F0F0;
                 padding-left:12px;
                 padding-right:18px;
                 display: table;
@@ -165,7 +165,7 @@ export default {
                     position: relative;
                     display: table-cell;
                     vertical-align: middle;
-                    padding-top: 6px;
+                    padding-top: 4px;
                 }
                 .chart-left-name{
                   display:inline-block;
@@ -231,10 +231,10 @@ export default {
       }
       .add-child-task{
         width:100%;
-        height:49px;
-        line-height:49px;
+        height:30px;
+        line-height:30px;
         padding-left:26px;
-        border-bottom:solid 1px #F0F0F0;
+        border-bottom:solid 2px #F0F0F0;
         cursor: pointer;
       }
       .chart-list{

@@ -190,6 +190,7 @@
                         title: '订单状态',
                         key: 'orderStatus',
                         align:'center',
+                        width:80,
                         render(tag, params){
                             var orderStatus={
                                'NOT_EFFECTIVE':'未生效',

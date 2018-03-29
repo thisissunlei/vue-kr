@@ -218,7 +218,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.open(`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`,'_blank');
+            window.location.href=`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`;
         },
         //树
         treeClick(params){

@@ -32,6 +32,7 @@ export default {
         }
     },
     mounted(){
+        GLOBALSIDESWITCH("false");
         this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
         if(this.tabs=='tab2'){
             this.mask=false;

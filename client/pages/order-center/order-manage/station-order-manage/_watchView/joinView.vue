@@ -18,6 +18,12 @@
 				<LabelText label="创建时间：">
 					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
+				<LabelText label="订单状态：">
+					{{orderStatus}}
+				</LabelText>
+				<LabelText label="生效时间：">
+					{{basicInfo.effectDate| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="租赁信息">
 				<LabelText label="租赁开始日期：">

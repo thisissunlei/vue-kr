@@ -143,6 +143,8 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize();
+        this.leftOver();
+        this.rightOver();
     },
     
     methods:{

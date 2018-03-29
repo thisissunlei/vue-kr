@@ -169,6 +169,9 @@ export default {
          let status=this.queryData.status==1?'INVEST':'PREPARE'
          this.signMask=this.queryData.status==1?true:false;
          this.getTreeData({propertyId:this.queryData.id});
+
+        this.leftOver();
+        this.rightOver();
     },
     methods:{
         leftOver(event){

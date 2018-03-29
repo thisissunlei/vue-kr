@@ -347,8 +347,7 @@ export default {
 
     .every-col{
         height: 32px;
-        //border-top: 1px solid #E1E6EB;;
-        border-bottom: 2px solid #F0F0F0;
+        border-bottom: 1px solid #F0F0F0;
     }
     .article{
         position: relative; 
@@ -380,7 +379,7 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top:0px;
+            top:1px;
             overflow: hidden;
             text-overflow:ellipsis;
         }
@@ -394,7 +393,7 @@ export default {
             position: absolute;
             cursor: pointer;
             opacity: 0.5;
-            top:0px;
+            top:1px;
             overflow: hidden;
             text-overflow:ellipsis;
         }

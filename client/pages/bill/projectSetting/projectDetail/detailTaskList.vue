@@ -157,7 +157,7 @@ export default {
              .chart-parent{
                 width:100%;
                 height:32px;
-                border-bottom:solid 2px #F0F0F0;
+                border-bottom:solid 1px #F0F0F0;
                 padding-left:12px;
                 padding-right:18px;
                 display: table;
@@ -234,7 +234,7 @@ export default {
         height:32px;
         line-height:32px;
         padding-left:26px;
-        border-bottom:solid 2px #F0F0F0;
+        border-bottom:solid 1px #F0F0F0;
         cursor: pointer;
       }
       .chart-list{

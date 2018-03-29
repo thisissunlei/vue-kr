@@ -6,7 +6,6 @@
         :show-upload-list="false"
         :on-success="handleSuccess"
         :format="['jpg','jpeg','png']"
-        :max-size="2048"
         :on-format-error="handleFormatError"
         :on-exceeded-size="handleMaxSize"
         :before-upload="handleBeforeUpload"
@@ -15,15 +14,16 @@
         action="/api/krspace-finance-web/activity/upload-pic/"
         style="display: inline-block">
         <div class="upload-box">
-            <Icon type="camera" size="27"></Icon>
+            <img :src="negative" class="box-pic">
+            <Icon type="add" size="27"></Icon>
         </div>
         
     </Upload>
     <div class="demo-upload-list" v-if="phote!=false">
         <img :src="phote">
         <div class="demo-upload-list-cover">
-            <Icon type="ios-eye-outline" class="icon" @click.native="handleView()"></Icon>
-            <Icon type="ios-trash-outline" class="icon" @click.native="handleRemove()"></Icon>
+            <Icon type="ios-eye-outline" style="color:#19be6b" @click.native="handleView()"></Icon>
+            <Icon type="ios-trash-outline"  @click.native="handleRemove()"></Icon>
         </div>
     </div>
     <Modal :title="imgName" v-model="visible">
@@ -146,13 +146,25 @@
         cursor: pointer;
         margin: 0 10px;
         color:red;
+        width:25px;
+        height: 25px;
+        line-height: 25px;
+        border-radius: 15px;
         background-color: #fff;
     }
     .upload-box{
         background:#f6f6f6;
+        position: relative;
         background-position: center;
         width:200px;
         height: 200px;
         line-height: 200px;
+        .box-pic{
+            position: absolute;
+            left: 0;
+            top:0;
+            width: 100%;
+            height:100%;
+        }
     }
 </style>

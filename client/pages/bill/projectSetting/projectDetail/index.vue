@@ -181,7 +181,7 @@ export default {
             var clientHeight = document.documentElement.clientHeight;
             leftDom.style.maxHeight = clientHeight - 400+"px";
             rightDom.style.maxHeight = clientHeight - 400 +"px";
-        }, 100);
+        }, 200);
     },
     methods:{
         leftOver(event){

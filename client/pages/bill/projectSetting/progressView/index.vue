@@ -153,7 +153,7 @@ export default {
             leftDom.style.maxHeight = clientHeight - 400+"px";
             rightDom.style.maxHeight = clientHeight - 400 +"px";
         
-        }, 100);
+        }, 200);
     },
     
     methods:{

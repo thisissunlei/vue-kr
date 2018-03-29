@@ -1010,6 +1010,7 @@
                     {
                         primaryText: '合同扫码',
                         menuCode: 'pigeonhole',
+                        type: 'vue',
                         router: 'order-center/contract-manage/contract-yard',
                     }
                 ]   

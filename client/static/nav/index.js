@@ -673,7 +673,7 @@
             router: 'permission',
             menuItems: [
                 {
-                    primaryText: 'APP管理',
+                    primaryText: 'APP',
                     iconName: 'icon-app',
                     iconColor: '#79859a',
                     menuItems: [
@@ -735,7 +735,7 @@
                     ]
                 },
                 {
-                    primaryText: '官网管理',
+                    primaryText: '官网',
                     iconName: 'icon-website',
                     iconColor: '#79859a',
                     router: 'activity',
@@ -782,12 +782,12 @@
                             menuCode: 'system_param',
                         },
                         {
-                            primaryText: '首页轮播图列表',
+                            primaryText: '首页轮播图配置',
                             menuCode: 'sys_dynamic_list',
                             router: 'permission/homePageSetting/swperList',
                         },
                         {
-                            primaryText: '首页动态列表',
+                            primaryText: '首页动态配置',
                             menuCode: 'sys_slider_list',
                             router: 'permission/homePageSetting/dynamicsList',
                         },

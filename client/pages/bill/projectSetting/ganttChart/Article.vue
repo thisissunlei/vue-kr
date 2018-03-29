@@ -240,7 +240,7 @@ export default {
        },
        getEndpointDate(){
             var arr = [];
-           if(this.data.data.actualStartTime && this.data.data.actualEndTime){
+             if(this.data.data.actualStartTime && this.data.data.actualEndTime){
                 arr.push(this.data.data.actualStartTime)
                 arr.push(this.data.data.actualEndTime)
             }

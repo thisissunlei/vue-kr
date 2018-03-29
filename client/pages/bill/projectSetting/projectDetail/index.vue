@@ -238,6 +238,10 @@ export default {
                 });
             })
         },
+        setTime(old,now){
+            var oldTime = new Date('')
+        },
+
         monthAdd(num){
             var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
             var endArr = endTime.split("-");

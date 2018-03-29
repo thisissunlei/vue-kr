@@ -185,14 +185,13 @@ export default {
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-            
-            if(!this.data.chartType){
-                return '';
+            if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
+                return '#FFE9AF';
             }
-            if(this.data.data.progressStatus===''&&this.planEndTime<nowTime ){
-                return '#FFE9AF'
+            if(!this.data.data.actualStartTime&&this.planEndTime<nowTime ){
+                return '#FFE9AF';
             }else{
-                return '#E9F0F6'
+                return '#E9F0F6';
             }
        },
        getBoxWidthAndOffice(){
@@ -229,6 +228,10 @@ export default {
                 lineOffice = this.actualDetail.width+this.actualDetail.office;
                 lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
             }
+            if(!this.data.data.actualEndTime || !this.data.data.actualStartTime){
+                lineOffice = this.planDetail.office;
+                lineWidth = this.planDetail.width;
+            }
             this.lineDetail = {
                 width:lineWidth,
                 office:lineOffice
@@ -237,16 +240,13 @@ export default {
        },
        getEndpointDate(){
             var arr = [];
-            if(this.data.data.actualStartTime){
+           if(this.data.data.actualStartTime && this.data.data.actualEndTime){
                 arr.push(this.data.data.actualStartTime)
-            }
-            if(this.data.data.actualEndTime){
                 arr.push(this.data.data.actualEndTime)
             }
-            if(this.data.data.planStartTime){
+           
+            if(this.data.data.planStartTime && this.data.data.planEndTime){
                 arr.push(this.data.data.planStartTime)
-            }
-            if(this.data.data.planEndTime){
                 arr.push(this.data.data.planEndTime)
             }
         
@@ -342,7 +342,7 @@ export default {
         }
         .actual{
             height: 28px;
-            margin-top:1px; 
+            
             border-radius: 7px 7px 8px 8px;
             line-height: 30px;
             padding-left:10px;

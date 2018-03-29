@@ -171,6 +171,7 @@ export default {
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return '';
+
             }else {
                 return label;
             }
@@ -206,10 +207,10 @@ export default {
                 return;
             }
             if(this.data.data.progressStatus<0){
-                // this.picColor=no;
+               
                 return 'rgba(246,156,156,0.5)';
             }else if(this.data.data.progressStatus>=0){
-                // this.picColor=yeas;
+               
                 return 'rgba(194,233,152,0.6)'
             }
        },

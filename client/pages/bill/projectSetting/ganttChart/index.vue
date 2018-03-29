@@ -45,6 +45,7 @@
                                     type="selectTree" 
                                     :data="treeData" 
                                     @okClick="treeClick"
+                                    :treeIds="treeIds"
                                 />
                         </Form>
                     </div>
@@ -202,6 +203,10 @@ export default {
             default:()=>[],
             type:Array,
         },
+        treeIds:{
+            default:'',
+            type:String
+        }
     },
     data(){
         return{
@@ -254,7 +259,12 @@ export default {
         setTimeout(() => {
              this.scroolFix()
         }, 100);
+        let leftDom=document.getElementById('vue-chart-left-detail-list');
         
+        var rightDom = document.getElementById("vue-chart-right-draw-content");
+        var clientHeight = document.documentElement.clientHeight;
+        leftDom.style.maxHeight = clientHeight - 375 +"px";
+        rightDom.style.maxHeight = clientHeight - 375 +"px";
     },
    
     updated(){

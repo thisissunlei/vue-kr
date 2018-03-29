@@ -11,6 +11,7 @@
             @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
+            :treeIds="params.taskTemplateIds"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -122,7 +123,7 @@ export default {
                 pageSize:6,
                 page:nowPage,
                 status:2,
-                taskTemplateIds:[]
+                taskTemplateIds:''
             },
             treeParams:{
                statusType:"PREPARE" 
@@ -164,7 +165,7 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
-       
+        
         //获取进度列表数据
         getListData(params,type){
             if(allPage<params.page){

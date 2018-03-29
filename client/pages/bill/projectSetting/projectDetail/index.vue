@@ -245,7 +245,6 @@ export default {
             this.$http.get('project-id-search',params).then((response)=>{
                 this.treeData=response.data.items;
                 this.recursiveFn(this.treeData);
-                //this.selectTree();
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -306,31 +305,6 @@ export default {
             }
             return false;
         },
-
-
-
-        //回血
-        treeFn(id,data){
-            data.map((item,index)=>{
-                if(item.value==id){
-                    item.checked=true;
-                }
-                if(item.children&&item.children.length){
-                    this.treeFn(id,item.children);
-                }
-            })
-        },
-        //回血
-        selectTree(){
-            var ids=this.ids?this.ids.split(','):[];
-            if(ids.length){
-                ids.map((item,index)=>{
-                    this.treeFn(item,this.treeData);
-                })
-            }
-        },
-
-
 
          //获取今天日期
         getStartDay(){
@@ -460,6 +434,7 @@ export default {
                     });
                     return ;
                 }
+                this.addData.type="STAGETASK";
                 this.addData.pid=this.addId?this.addId:0;
                 this.addData.planEndTime=this.addData.type=='STAGETASK'?this.addData.planEndTime:this.addData.planStartTime;
                 this.addData.propertyId=this.queryData.id;
@@ -543,10 +518,8 @@ export default {
           },
           submitSure(){
             this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
-                window.close();
-                window.opener.location.reload();
-                sessionStorage.setItem('chartSetting','tab2');
                 this.cancelSure();
+                this.getListData();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

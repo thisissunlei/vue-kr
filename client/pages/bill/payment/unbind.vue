@@ -3,17 +3,6 @@
 <div class="g-order">
     <div class="u-search" >
         <span class="u-high-search" @click="showSearch"></span>
-        <div style='display:inline-block;float:right;padding-right:20px;'>
-
-            <Input
-                v-model="params.customerName"
-                placeholder="请输入客户名称"
-                style="width: 252px"
-                @on-enter="lowerSubmit"
-            />
-
-            <div class='m-search' @click="lowerSubmit">搜索</div>
-         </div>
     </div>
 
     <div class="u-table">
@@ -98,6 +87,9 @@
         :warn="warn"
         @changeOpen="onChangeOpen"
     ></Message>
+
+   
+    
 </div>
 
 </template>
@@ -144,7 +136,6 @@ export default {
                 params:{
                     page:1,
                     pageSize:15,
-                    customerName:'',
                 },
                 formItem:{
                     customerId:'',
@@ -376,17 +367,6 @@ export default {
                 this.params.page=1;
                 utils.addParams(this.params);
             },
-
-            lowerSubmit(){
-                this.page=1;
-                this.params={
-                    page:1,
-                    pageSize:15,
-                    customerName:this.params.customerName || ''
-                }
-                utils.addParams(this.params);
-            },
-
             changePage(page){
                 this.params.page=page;
                 this.page=page;

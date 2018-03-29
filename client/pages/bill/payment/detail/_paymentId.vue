@@ -34,11 +34,11 @@
 		<DetailStyle info="基本信息">
 
 			<LabelText label="回款流水号：">
-				{{basicInfo.tradeNo}}
+				{{basicInfo.tradeNo?basicInfo.tradeNo:'-'}}
 			</LabelText>
 
 			<LabelText label="回款方式：">
-				{{basicInfo.payWay}}
+				{{basicInfo.payWay?basicInfo.payWay:'-'}}
 			</LabelText>
 
 			<LabelText label="客户名称：">
@@ -48,15 +48,15 @@
 			</LabelText>
 
 			<LabelText label="付款账号：">
-				{{basicInfo.payAccount}}
+				{{basicInfo.payAccount?basicInfo.payAccount:'-'}}
 			</LabelText>
 
 			<LabelText label="回款金额：">
-				￥{{basicInfo.amount}}
+				￥{{basicInfo.amount?basicInfo.amount:'-'}}
 			</LabelText>
 
 			<LabelText label="回款时间：">
-				{{basicInfo.occurDate}}
+				{{basicInfo.occurDate?basicInfo.occurDate:'-'}}
 			</LabelText>
 
 			<LabelText label="社区名称：">
@@ -64,10 +64,10 @@
 			</LabelText>
 
 			<LabelText label="我司收款账号：">
-				{{basicInfo.receiveAccount}}
+				{{basicInfo.receiveAccount?basicInfo.receiveAccount:'-'}}
 			</LabelText>
 			<LabelText label="创建时间：">
-				{{basicInfo.ctime}}
+				{{basicInfo.ctime?basicInfo.ctime:'-'}}
 			</LabelText>
 
 		</DetailStyle>

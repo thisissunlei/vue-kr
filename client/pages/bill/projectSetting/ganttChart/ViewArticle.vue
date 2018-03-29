@@ -185,13 +185,7 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-        .every-col{
-            height: 47px;
-            //border-top: 1px solid #E1E6EB;;
-            border-bottom: 1px solid #F0F0F0;
-        }
-        border-top: 1px solid #F0F0F0;;
-        border-bottom: 1px solid #F0F0F0;
+       
         background:#fff;
         margin-top:5px;
         &:first-child{
@@ -199,7 +193,7 @@ export default {
             border-top:none;
         }
         .view-channel{
-            border-bottom:1px solid #F1F1F1; 
+            // border-bottom:2px solid #F1F1F1; 
         }
     }
 </style>

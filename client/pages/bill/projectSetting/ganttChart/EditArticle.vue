@@ -7,14 +7,7 @@
         >
             <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
             <div v-if="!this.data.chartType && isInitial()">
-            <FlagLabel v-if="getFlagShow('MEETING')" 
-                :label="data.label" 
-                :data="data.data" 
-                :minCalibration="minCalibration" 
-                :startDate="leftEndpoint"
-            />
                 <div class='col-tool-label'>
-                    
                         <div class="article" 
                             v-if="getFlagShow('STAGETASK')"
                             :style="{
@@ -22,32 +15,36 @@
                                 left:boxDetail.office * minCalibration+'px'
                             }"
                         >   
-                        <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
+                        <Tooltip 
+                            content="data.label" 
+                            :placement="index==0?'bottom-start':'top-start'"
+                        >
 
-                            <div 
-                                class="label"
-                                :style="{width:boxDetail.width * minCalibration+'px'}"
-                            > 
-                                <img v-if="picColor" :src="picColor" width="21px" height="21px" style="vertical-align: middle;"/>
-                                <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
-                            </div>
-                    
                             <div 
                                 class="plan"
                                 :style="{
+                                    background:getPlanBgColor(),
                                     width:planDetail.width * minCalibration + 'px',
                                     left:planDetail.office * minCalibration + 'px'
                                 }"
-                                v-if="!data.chartType && data.data.planStartTime && data.data.planEndTime"
-                            ></div>
+                            >{{getActualLabel(data.label)}}
+                            </div>
+
                             <div 
                                 class="actual"
                                 :style="{
                                     width:actualDetail.width * minCalibration+'px',
-                                    left:actualDetail.office * minCalibration + 'px'
+                                    left:actualDetail.office * minCalibration + 'px',
+                                    background:getActualBgColor(),
+                                    color:'#666666'
+
                                 }"
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                            ></div>
+                            >  
+                            {{getActualLabel(data.label)}}
+                            </div>
+                            <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
+                            <div class="label" :style="{color:'#666666'}">{{this.getLabel(data.label)}}</div>
                         </Tooltip> 
                     </div>
                 </div>
@@ -72,7 +69,6 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
 import no from './img/no.png';
 import ok from './img/ok.png';
@@ -80,7 +76,7 @@ import yeas from './img/yeas.png';
 export default {
     name:'EditArticle',
     components:{
-        SpecificPlan,
+        
         FlagLabel
     },
     props:{
@@ -118,7 +114,7 @@ export default {
             planDetail:{},
             actualDetail:{} ,    
             leftEndpoint:this.startDate,
-
+            lineDetail:{},
             picColor:''
         }
     },
@@ -126,9 +122,6 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        setTimeout(() => {
-             this.getBgColor();
-        },100);
     },
     methods:{
         isInitial(){
@@ -142,6 +135,62 @@ export default {
          
             return false
         },
+         getColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                return 'transparent';
+            }else {
+                if(this.data.data.progressStatus === '' && this.planEndTime<nowTime){
+                    return '#BE8525'
+                }else if(this.data.data.progressStatus<0){
+                    return '#666666'
+                }else if(this.data.data.progressStatus>=0){
+                    return '#5A8C23'
+                }
+            }
+        },
+        getActualColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+           
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                if(this.data.data.progressStatus === '' &&  this.planEndTime<nowTime){
+                    return '#BE8525'
+                }else if(this.data.data.progressStatus<0){
+                    return '#666666'
+                }else if(this.data.data.progressStatus>=0){
+                    return '#5A8C23'
+                }
+                
+            }
+        },
+        getLabel(label){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+
+            }else {
+                return label;
+            }
+        },
+        getActualLabel(label){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                    return label;
+            }else {
+                return '';
+            }
+        },
+        lineShow(){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                return true;
+            }else {
+                return false;
+            }
+        },
         getFlagShow(event){
             if(this.data.data){
                 return this.data.data.taskType == event
@@ -151,38 +200,46 @@ export default {
             }
 
         },
-        getBgColor(){
-            if(this.data.chartType || (!this.data.data.progressStatus&&this.data.data&&this.data.data.progressStatus!==0)){
-                this.picColor="";
-                return ;
+       getActualBgColor(){
+            if(this.data.data.progressStatus===''){
+                return;
             }
             if(this.data.data.progressStatus<0){
-                this.picColor=no;
-            }else if(this.data.data.progressStatus>0){
-                this.picColor=yeas;
-            }else{
-                this.picColor=ok;
+                // this.picColor=no;
+                return '#F69C9C'
+            }else if(this.data.data.progressStatus>=0){
+                // this.picColor=yeas;
+                return '#C2E998'
             }
-          
        },
-       
+       getPlanBgColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+            
+            if(!this.data.chartType){
+                return '';
+            }
+            if(this.data.data.progressStatus===''&&this.data.data.planEndTime<nowTime ){
+                return '#FFE9AF'
+            }else{
+                return '#E9F0F6'
+            }
+       },
        getBoxWidthAndOffice(){
-           
             var dates = this.getEndpointDate();
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.planEndTime));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(this.data.data.actualEndTime));
+            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
+            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planEndTime));
+            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualStartTime));
+            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            var officeStart = this.startDate.year+"-"+this.startDate.month+"-"+1;
-            var officeEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-
+            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
+            var officeEnd = min;
            
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
-                office:utils.dateDiff(officeStart,officeEnd)
+                office:utils.dateDiff(officeStart,min)
             }
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
@@ -192,7 +249,21 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
-        
+            var lineOffice = 0;
+            var lineWidth = 0;
+            if(this.data.data.planEndTime<this.data.data.actualStartTime){
+                lineOffice = this.planDetail.width+this.planDetail.office;
+                lineWidth = this.actualDetail.office - this.planDetail.office-this.planDetail.width;
+            }
+            if(this.data.data.actualEndTime<this.data.data.planStartTime){
+                lineOffice = this.actualDetail.width+this.actualDetail.office;
+                lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
+            }
+            this.lineDetail = {
+                width:lineWidth,
+                office:lineOffice
+            }
+            
        },
        getEndpointDate(){
             var arr = [];
@@ -208,22 +279,29 @@ export default {
             if(this.data.data.planEndTime){
                 arr.push(this.data.data.planEndTime)
             }
+        
             var max = arr[0],min=arr[0];
+           
             for (var i = 1; i < arr.length; i++) {
                 if(max<arr[i])
                     max =  arr[i];
                 if(min>arr[i])
                     min = arr[i];
             }
+            var minStr = dateUtils.dateToStr("YYYY-MM-DD",new Date(+min));
+            var minStr = minStr.split('-')
+            this.childLeftEndpoint={
+                year:minStr[0],
+                month:minStr[1],
+                dayNum:minStr[2] 
+            }
+            console
+
             return {
-                min:min,
-                max:max
+                min:+min,
+                max:+max
             }
 
-       },
-       //获取二级部分数据
-       getSpecificData(){
-           
        },
        overShow(id){
             var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
@@ -257,6 +335,12 @@ export default {
         height: 100%;
         opacity: .1;
     }
+    .ivu-tooltip-rel{
+        position: static;
+    }
+    .ivu-tooltip{
+        position: static;
+    }
 
     .col-tool-label{
         .ivu-tooltip-popper{
@@ -266,51 +350,60 @@ export default {
         }
     }
 
-     .every-col{
-                height: 49px;
-                //border-top: 1px solid #E1E6EB;;
-                border-bottom: 1px solid #F0F0F0;
-            }
-.article{
-    position: relative;
-   
-    
-    .label{
-        width: 100%;
-       
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
-        background: #DEEEFF;
-        border-radius: 7px 7px 8px 8px;
-        line-height: 30px;
-        height: 30px;
-        color: #0561B5;
-        padding: 0px 10px;
+    .every-col{
+        height: 32px;
+        //border-top: 1px solid #E1E6EB;;
+        border-bottom: 2px solid #F0F0F0;
     }
-   .plan{
-        height: 8px;
-        background: #FDBA4D ;
-        border-radius:100px; 
-        line-height: 8px;
-        padding-left:10px;
-        color: #ffffff;
-        position: relative;
-        cursor: pointer;
-
-   }
-   .actual{
-        height: 8px;
-        margin-top:1px; 
-        background: #7ED321;
-        border-radius:100px; 
-        line-height: 8px;
-        padding-left:10px;
-        color: #fff;
-        position: relative;
-        cursor: pointer;
-   }
-    
-}
+    .article{
+        position: relative; 
+        background: transparent;
+        height: 28px;
+        .line{
+            border-bottom:1px dashed #E9F0F6;
+            position: relative;
+            top: 2px;
+        }
+        .label{
+            position: absolute;
+            height: 28px;
+            line-height: 28px;
+            padding-left: 10px;
+           
+            overflow: hidden;
+            width: 100%;
+            text-overflow: ellipsis;
+            background: transparent;
+            top:0px;
+        }
+        .plan{
+            height: 28px;
+            background: #E9F0F6;
+            border-radius: 7px 7px 8px 8px;
+            line-height: 30px;
+            padding-left:10px;
+            color: #666666;
+            position: absolute;
+            cursor: pointer;
+            top:0px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        .actual{
+            height: 28px;
+            margin-top:1px; 
+            border-radius: 7px 7px 8px 8px;
+            line-height: 30px;
+            padding-left:10px;
+            color: #fff;
+            position: absolute;
+            cursor: pointer;
+            opacity: 0.5;
+            top:1px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        
+    }
 }
 </style>

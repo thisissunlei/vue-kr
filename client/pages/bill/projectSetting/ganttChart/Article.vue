@@ -2,14 +2,6 @@
 <template>
     <div class="every-view-col" :data-chart="data.t_id" >
         <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div>
-        
-        <FlagLabel v-if="getFlagShow('MEETING')" 
-            :label="data.label" 
-            :data="data.data" 
-            :minCalibration="minCalibration" 
-            :startDate="leftEndpoint"
-        />
-        
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
             :style="{
@@ -18,51 +10,36 @@
                
             }"
         >
-            <!-- <Poptip 
-                v-if=" type!='edit' && !data.chartType && data.data.planStartTime && data.data.planEndTime" 
-                placement="bottom-start" 
-                :width="boxDetail.width  * minCalibration + 40" 
-                @on-popper-show="getSpecificData" 
-                @on-popper-hide="cildHide"
-            > -->
-                <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
-                     <div 
-                        class="label"
-                        :style="{width:boxDetail.width * minCalibration+'px'}"
-                    > 
-                        <img :src="picColor" v-if="picColor" width="21px" height="21px" style="vertical-align: middle;margin-bottom: 3px;"/>
-                        <span style="display:inline-block;font-size: 14px;color: #0561B5;padding-left:3px;">{{data.label}}</span> 
-                    </div>
             
-                    <div 
-                        class="plan"
-                        :style="{
-                            width:planDetail.width * minCalibration + 'px',
-                            left:planDetail.office * minCalibration + 'px'
-                        }"
-                    >
-                    </div>
-        
-                    <div 
-                        class="actual"
-                        :style="{
-                            width:actualDetail.width * minCalibration+'px',
-                            left:actualDetail.office * minCalibration + 'px'
-                        }"
-                        v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                    >       
-                    </div>
-                    </Tooltip>
-                    <!-- <div class="api" slot="content">
-                        <ChildArticle 
-                            v-if="isChild"
-                            :data="secondObj"
-                            :leftEndpoint="childLeftEndpoint"
-                            :minCalibration="minCalibration"
-                        /> 
-                    </div> -->
-               
-            <!-- </Poptip> -->
+            <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
+                
+                <div 
+                    class="plan"
+                    :style="{
+                        background:getPlanBgColor(),
+                        width:planDetail.width * minCalibration + 'px',
+                        left:planDetail.office * minCalibration + 'px'
+                    }"
+                >{{getActualLabel(data.label)}}
+                </div>
+
+                <div 
+                    class="actual"
+                    :style="{
+                        width:actualDetail.width * minCalibration+'px',
+                        left:actualDetail.office * minCalibration + 'px',
+                        background:getActualBgColor(),
+                        color:'#666666'
+
+                    }"
+                    v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
+                >  
+                {{getActualLabel(data.label)}}
+                </div>
+                <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
+                <div class="label" :style="{color:'#666666'}">{{this.getLabel(data.label)}}</div>
+            </Tooltip>
+                   
         </div>
         
     </div>
@@ -72,18 +49,14 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
-import ChildArticle from './ChildArticle';
 import no from './img/no.png';
 import ok from './img/ok.png';
 import yeas from './img/yeas.png';
 export default {
     name:'Article',
     components:{
-        SpecificPlan,
         FlagLabel,
-        ChildArticle
     },
     props:{
         minCalibration:{
@@ -119,21 +92,75 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate, 
             secondObj:{},
-            isChild:true,  
             childLeftEndpoint:{},
             
-            picColor:''
+            picColor:'',
+            lineDetail:{}
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        setTimeout(() => {
-             this.getBgColor();
-        },100);
+       
     },
     methods:{
+        getColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                return 'transparent';
+            }else {
+                if(this.data.data.progressStatus === '' && this.planEndTime<nowTime){
+                    return '#BE8525'
+                }else if(this.data.data.progressStatus<0){
+                    return '#666666'
+                }else if(this.data.data.progressStatus>=0){
+                    return '#5A8C23'
+                }
+            }
+        },
+        getActualColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+           
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                if(this.data.data.progressStatus === '' &&  this.planEndTime<nowTime){
+                    return '#BE8525'
+                }else if(this.data.data.progressStatus<0){
+                    return '#666666'
+                }else if(this.data.data.progressStatus>=0){
+                    return '#5A8C23'
+                }
+                
+            }
+        },
+        getLabel(label){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+
+            }else {
+                return label;
+            }
+        },
+        getActualLabel(label){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                    return label;
+            }else {
+                return '';
+            }
+        },
+        lineShow(){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                this.data.data.actualEnd<this.data.data.planStartTime){
+                return true;
+            }else {
+                return false;
+            }
+        },
         getFlagShow(event){
             if(this.data.data){
                 return this.data.data.taskType == event
@@ -143,24 +170,31 @@ export default {
             }
 
         },
-        cildHide(){
-            this.isChild = false;
-        },
-       getBgColor(){
-            if(this.data.chartType || (!this.data.data.progressStatus&&this.data.data&&this.data.data.progressStatus!==0)){
-                this.picColor="";
-                return ;
+       getActualBgColor(){
+            if(this.data.data.progressStatus==''){
+                return "#fff";
             }
             if(this.data.data.progressStatus<0){
-                this.picColor=no;
-            }else if(this.data.data.progressStatus>0){
-                this.picColor=yeas;
-            }else{
-                this.picColor=ok;
+                
+                return '#F69C9C'
+            }else if(this.data.data.progressStatus>=0){
+                // this.picColor=yeas;
+                return '#C2E998'
             }
-          
        },
-       
+       getPlanBgColor(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var nowTime = (new Date(today+' 00:00:00')).getTime();
+            
+            if(!this.data.chartType){
+                return '';
+            }
+            if(this.data.data.progressStatus===''&&this.planEndTime<nowTime ){
+                return '#FFE9AF'
+            }else{
+                return '#E9F0F6'
+            }
+       },
        getBoxWidthAndOffice(){
             var dates = this.getEndpointDate();
             var boxDetail={};
@@ -184,6 +218,20 @@ export default {
             this.actualDetail={
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
+            }
+            var lineOffice = 0;
+            var lineWidth = 0;
+            if(this.data.data.planEndTime<this.data.data.actualStartTime){
+                lineOffice = this.planDetail.width+this.planDetail.office;
+                lineWidth = this.actualDetail.office - this.planDetail.office-this.planDetail.width;
+            }
+            if(this.data.data.actualEndTime<this.data.data.planStartTime){
+                lineOffice = this.actualDetail.width+this.actualDetail.office;
+                lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
+            }
+            this.lineDetail = {
+                width:lineWidth,
+                office:lineOffice
             }
             
        },
@@ -224,35 +272,16 @@ export default {
                 max:+max
             }
 
-       },
-       //获取二级部分数据
-       getSpecificData(event){
-         
-            this.$http.get('parent-search-kid',{pid:this.data.value}).then((response)=>{
-                this.secondObj.tasks=response.data.items;
-                if(!response.data.items||response.data.items.length == 0){
-                    this.isChild = false;
-                }else {
-                    this.isChild = true;
-                }
-
-                // this.getChildLeftEndpoint(response.data.items);
-
-            }).catch((error)=>{
-                this.$Notice.error({
-                title: error.message,
-                });
-            })
-        }
+       }
     }
 }
 </script>
 
 <style lang="less">
- .every-view-col{
-    height: 45px;
+.every-view-col{
+    height: 33px;
     position: relative;
-    //border-bottom: 1px solid #E1E6EB;
+    border-bottom: 2px solid #F1F1F1;
     .tag{
         width: 50px;
         position: absolute;
@@ -261,59 +290,71 @@ export default {
         left: 0px;
         height: 100%;
         opacity: .1;
+    }   
+    .ivu-tooltip{
+        height: 30px;
     }
-        .ivu-tooltip-popper{
-            .ivu-tooltip-arrow{
-                display:none;
-            }
+    .ivu-tooltip-popper{
+        .ivu-tooltip-arrow{
+            display:none;
         }
+    }
 
-     &:last-child{
-            margin-top:0px;
-            border-top:none;
-        }
+    &:last-child{
+        margin-top:0px;
+        border-top:none;
+    }
     .ivu-poptip-rel{
-         background: transparent;
+            background: transparent;
     }
-  }
-.article{
-    position: relative;
-     background: transparent;
-    
-    .label{
-        width: 100%;
-        overflow: hidden;
-        text-overflow:ellipsis;
-        white-space: nowrap;
-        background: #DEEEFF;
-        border-radius: 7px 7px 8px 8px;
-        line-height: 28px;
+    .article{
+        position: relative;
+        background: transparent;
         height: 28px;
-        color: #0561B5;
-        padding: 0px 10px;
+        .line{
+            border-bottom:1px dashed #E9F0F6;
+            position: relative;
+            top: 2px;
+        }
+        .label{
+            position: absolute;
+            height: 28px;
+            line-height: 28px;
+            padding-left: 10px;
+            top: -12px;
+            overflow: hidden;
+            width: 100%;
+            text-overflow: ellipsis;
+            background: transparent;
+        }
+        .plan{
+            height: 28px;
+            background: #E9F0F6;
+            border-radius: 7px 7px 8px 8px;
+            line-height: 30px;
+            padding-left:10px;
+            color: #666666;
+            position: absolute;
+            cursor: pointer;
+            top: -12px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        .actual{
+            height: 28px;
+            margin-top:1px; 
+            border-radius: 7px 7px 8px 8px;
+            line-height: 30px;
+            padding-left:10px;
+            color: #fff;
+            position: absolute;
+            cursor: pointer;
+            opacity: 0.5;
+            top: -13px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
     }
-   .plan{
-        height: 8px;
-        background: #FDBA4D ;
-        border-radius:100px; 
-        line-height: 8px;
-        padding-left:10px;
-        color: #ffffff;
-        position: relative;
-        cursor: pointer;
-
-   }
-   .actual{
-        height: 8px;
-        margin-top:1px; 
-        background: #7ED321;
-        border-radius:100px; 
-        line-height: 8px;
-        padding-left:10px;
-        color: #fff;
-        position: relative;
-        cursor: pointer;
-   }
-    
 }
+
 </style>

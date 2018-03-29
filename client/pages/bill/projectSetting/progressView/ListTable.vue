@@ -5,9 +5,9 @@
         >
             <p @click="rowClick(data)">{{data.name}}</p>
             <p :class="noRight">{{data.cityName}}</p>
-            <p v-if="test=='INVEST'" style="border-right:none;">
+            <!-- <p v-if="test=='INVEST'" style="border-right:none;">
                 <Button type="primary" @click="operationClick(data)" style="cursor:pointer;">确认已签署合同</Button>
-            </p>
+            </p> -->
         </div>
 </template>
 
@@ -93,7 +93,7 @@ export default {
            p{
                 display:inline-block;
                 border-right:1px solid  #F0F0F0;
-                width:33%;
+                width:50%;
                 padding:10px;
                 height:100%;
                 display:table-cell;
@@ -104,7 +104,7 @@ export default {
                 font-size: 14px;
                 color:#333333;
                 line-height: 16px;
-                font-weight: 500;
+                font-weight: 400;
                 &:nth-child(1){
                     cursor: pointer;
                     font-weight: bold;

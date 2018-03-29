@@ -94,14 +94,12 @@ import AddArchives from './addArchives';
                         key: 'id',
                         align:'center',
                         width:100,
-                        fixed:'left'
                     },
                     {
                         title: '项目名称',
                         key: 'name',
                         align:'center',
                         width:160,
-                        fixed:'left'
                     },
                     {
                         title: '城市',
@@ -140,9 +138,9 @@ import AddArchives from './addArchives';
                                         }, [
                                         h('div', {
                                             attrs: {
-                                             class: 'row-current-more current-more-task'
+                                             class: index!=obj.row.tasks.length-1?'row-current-more current-more-task':'row-current-more current-more-task noBorder'
                                             }
-                                        }, `${item.taskName}`)
+                                        }, item.taskName?`${item.taskName}`:'-')
                                     ])
                                   ]) 
                                 })
@@ -183,7 +181,7 @@ import AddArchives from './addArchives';
                                         }, [
                                         h('div', {
                                             attrs: {
-                                             class: 'row-current-more current-more-task'
+                                             class: index!=obj.row.tasks.length-1?'row-current-more current-more-task':'row-current-more current-more-task noBorder'
                                             },
                                             style:colorStyle
                                         }, `${label}`)
@@ -245,7 +243,7 @@ import AddArchives from './addArchives';
         methods:{
             //跳转查看页面
             goView(params){
-                window.open(`./projectSetting/projectDetail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`,'_blank');
+                window.location.href=`./projectSetting/projectDetail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
             },
             //获取列表数据
             getTableData(params){
@@ -325,11 +323,35 @@ import AddArchives from './addArchives';
             }
     }
     .current-range{
+        //border-bottom: none;
         .ivu-table-cell{
             padding:0;
-            .row-current-more{
-                //border-bottom:1px solid #e9eaec;
-                padding: 15px 0;
+            height:100%;
+            .ivu-tooltip{ 
+                .row-current-more{
+                    border-bottom:1px solid #e9eaec;
+                    padding: 14px 0 15px 0;
+                }
+                .noBorder{
+                    border-bottom:none;
+                }
+            }
+        }
+    }
+    .ivu-table-header{
+        .ivu-table-cell{
+            height:auto;
+        }
+        thead{
+            tr{
+                th{
+                    &:nth-child(5){
+                        border-bottom:solid 1px #e9eaec;
+                    }
+                    &:nth-child(6){
+                        border-bottom:solid 1px #e9eaec;
+                    }
+                }
             }
         }
     }
@@ -341,7 +363,7 @@ import AddArchives from './addArchives';
 }
 .ivu-tooltip{
     width:100%;
-    border-bottom: 1px solid #e9eaec;
+    //border-bottom: 1px solid #e9eaec;
     .ivu-tooltip-rel{
        width:100%; 
     }

@@ -19,14 +19,14 @@
                   @mouseover="overShow(item.t_id)"
                   @mouseout="outHide(item.t_id)"
                  >
-                   <div class='parent-middle'>
+                   <div class='parent-middle' @click="editClick(item.value,'')">
                     <Tooltip :content="item.label" :placement="index==0?'bottom':'top'">
                       <div class='chart-left-name' @click="showClick(item.t_id)">
                         <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
                         <span class="chart-name">{{item.label}}</span>
                       </div>
                     </Tooltip>
-                    <div @click="editClick(item.value,'')" class='chart-edit'>
+                    <div  class='chart-edit'>
                         <span class='edit'></span>
                     </div>
                    </div>
@@ -42,14 +42,14 @@
                             @mouseover="overShow(items.t_id)"
                             @mouseout="outHide(items.t_id)"
                           >
-                            <div class='parent-middle'>
+                            <div class='parent-middle' @click="editClick(items.value,item.value)">
                               <Tooltip :content="items.label" placement="top">
                                 <div class='chart-left-name'>
                                   <Icon type="minus-round" size="4" style="color: #666666;"/>
                                   <span class="chart-name" style="color: #666666;">{{items.label}}</span>
                                 </div>
                               </Tooltip>
-                              <div @click="editClick(items.value,item.value)" class='chart-edit'>
+                              <div  class='chart-edit'>
                                 <span class='edit'></span>
                               </div>
                             </div>
@@ -156,8 +156,8 @@ export default {
          .detail-li{
              .chart-parent{
                 width:100%;
-                height:49px;
-                border-bottom:solid 1px #F0F0F0;
+                height:32px;
+                border-bottom:solid 2px #F0F0F0;
                 padding-left:12px;
                 padding-right:18px;
                 display: table;
@@ -165,7 +165,7 @@ export default {
                     position: relative;
                     display: table-cell;
                     vertical-align: middle;
-                    padding-top: 6px;
+                    padding-top: 4px;
                 }
                 .chart-left-name{
                   display:inline-block;
@@ -231,10 +231,10 @@ export default {
       }
       .add-child-task{
         width:100%;
-        height:49px;
-        line-height:49px;
+        height:30px;
+        line-height:30px;
         padding-left:26px;
-        border-bottom:solid 1px #F0F0F0;
+        border-bottom:solid 2px #F0F0F0;
         cursor: pointer;
       }
       .chart-list{

@@ -45,6 +45,7 @@
                                     type="selectTree" 
                                     :data="treeData" 
                                     @okClick="treeClick"
+                                    :treeIds="treeIds"
                                 />
                         </Form>
                     </div>
@@ -202,6 +203,10 @@ export default {
             default:()=>[],
             type:Array,
         },
+        treeIds:{
+            default:'',
+            type:String
+        }
     },
     data(){
         return{

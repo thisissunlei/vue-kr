@@ -16,6 +16,7 @@
                 type="edit"
                 :startTime="startTime" 
                 :endTime="endTime"
+                :treeIds="taskIds"
                 @rightOver="rightOver"
                 @treeClick="treeClick"
             >
@@ -156,7 +157,9 @@ export default {
             MessageType:'',
             warn:'',
 
-            scrollH:''
+            scrollH:'',
+            //树组件传參
+            taskIds:''
         }
     },
     created(){         
@@ -169,6 +172,9 @@ export default {
          let status=this.queryData.status==1?'INVEST':'PREPARE'
          this.signMask=this.queryData.status==1?true:false;
          this.getTreeData({propertyId:this.queryData.id});
+
+        this.leftOver();
+        this.rightOver();
     },
     methods:{
         leftOver(event){
@@ -285,6 +291,7 @@ export default {
                 }
             })
             this.ids=res.join(',');
+            this.taskIds=res.join(',');
             this.getListData(this.ids);
         },
 

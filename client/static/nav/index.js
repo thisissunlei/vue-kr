@@ -161,7 +161,7 @@
         }
         sidebarNavs.menuItems.map(function (item) {
             let iconName = item.iconName ? item.iconName : '';
-            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span>' + item.primaryText + '</div>';
+            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<ul>';
                 item.menuItems.map(function (child) {
@@ -721,17 +721,17 @@
                             menuCode: 'oper_opinion_base',
                             router: 'operation/communityAllocation/opinion'
                         },
-                        {
-                            primaryText: '版本更新通知',
-                            router: 'permission/systemManage/appLoginLogs',
-                            menuCode: 'sso_appVersion_base',
-                        },
+                        
                         {
                             primaryText: '登录日志',
                             router: 'permission/loginLog',
                             menuCode: 'sso_loginLog_base',
-                        }
-                        //少登陆日志（待与pc版拆分）    
+                        },
+                        {
+                            primaryText: '版本更新通知',
+                            router: 'permission/systemManage/appLoginLogs',
+                            menuCode: 'sso_appVersion_base',
+                        },   
                     ]
                 },
                 {
@@ -740,15 +740,16 @@
                     iconColor: '#79859a',
                     router: 'activity',
                     menuItems: [
-                        {
-                            primaryText: '新闻动态',
-                            menuCode: 'main_news',
-                            router: 'WebBackstage/news/list',
-                        },
+                        
                         {
                             primaryText: '社区信息',
                             menuCode: 'krspace_cmt',
                             router: 'WebBackstage/communityAllocation',
+                        },
+                        {
+                            primaryText: '新闻动态',
+                            menuCode: 'main_news',
+                            router: 'WebBackstage/news/list',
                         },
                         {
                             primaryText: '服务及设施配置',
@@ -803,15 +804,21 @@
                     iconColor: '#79859a',
                     // router: 'activity',
                     menuItems: [
-                        {
-                            primaryText: '账号权限',
-                            router: 'permission/accountManage/accountList',
-                            menuCode: 'sso_userList_base',
-                        },
+                        
                         {
                             primaryText: '角色权限',
                             router: 'permission/user',
                             menuCode: 'sso_roleList_base',
+                        },
+                        {
+                            primaryText: '其他合同角色权限',
+                            menuCode: 'hrm_role_list',
+                            router: 'oa/organizationPower/role',
+                        },
+                        {
+                            primaryText: '账号权限',
+                            router: 'permission/accountManage/accountList',
+                            menuCode: 'sso_userList_base',
                         },
                         {
                             primaryText: '操作项权限',
@@ -823,11 +830,7 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        {
-                            primaryText: '其他合同角色权限列表',
-                            menuCode: 'hrm_role_list',
-                            router: 'oa/organizationPower/role',
-                        },
+                        
                     ]
                 },
                 {
@@ -841,16 +844,17 @@
                             router: 'permission/accountManage/operationsLogs',
                             menuCode: 'sso_actionLog_base',
                         },
+                        
+                        {
+                            primaryText: '登录日志',
+                            router: 'permission/loginLog',
+                            menuCode: 'sso_loginLog_base',
+                        },
                         {
                             primaryText: '消息日志',
                             router: 'permission/systemManage/messageList',
                             menuCode: 'sso_infoList_base',
                         },
-                        {
-                            primaryText: '登录日志',
-                            router: 'permission/loginLog',
-                            menuCode: 'sso_loginLog_base',
-                        }
                     ]
                 },
                 {
@@ -1026,16 +1030,17 @@
                 iconColor: '#79859a',
                 type: 'vue',
                 menuItems: [
+                    
+                    {
+                        primaryText: "账单",
+                        router: 'bill/list',
+                        type: 'vue',
+                        menuCode: 'pay_created_bill_page',
+                    },
                     {
                         primaryText: "账单(老数据)",
                         router: 'finance/manage/orderbill/orderList',
                         menuCode: 'fina_account_list'
-                    },
-                    {
-                        primaryText: "已出账单管理",
-                        router: 'bill/list',
-                        type: 'vue',
-                        menuCode: 'pay_created_bill_page',
                     },
                     {
                         primaryText: "回款管理",

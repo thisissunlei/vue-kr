@@ -66,6 +66,9 @@
 			<LabelText label="我司收款账号：">
 				{{basicInfo.receiveAccount}}
 			</LabelText>
+			<LabelText label="创建时间：">
+				{{basicInfo.ctime}}
+			</LabelText>
 
 		</DetailStyle>
 
@@ -149,6 +152,7 @@ export default {
 				let data=res.data;
 				this.basicInfo=data;
 				data.occurDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.occurDate));
+				data.ctime=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.ctime));
 				data.payWay=payType[data.payWay];
 			}).catch((err)=>{
 				this.$Notice.error({

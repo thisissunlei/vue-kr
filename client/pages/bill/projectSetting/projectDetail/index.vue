@@ -175,6 +175,13 @@ export default {
 
         this.leftOver();
         this.rightOver();
+        setTimeout(() => {
+            var leftDom=document.getElementById('vue-chart-left-detail-list');
+            var rightDom = document.getElementById("vue-chart-right-draw-content");
+            var clientHeight = document.documentElement.clientHeight;
+            leftDom.style.maxHeight = clientHeight - 400+"px";
+            rightDom.style.maxHeight = clientHeight - 400 +"px";
+        }, 100);
     },
     methods:{
         leftOver(event){

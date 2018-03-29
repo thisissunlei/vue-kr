@@ -38,7 +38,7 @@
                 {{getActualLabel(data.label)}}
                 </div>
                 <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                <div class="label" :style="{color:'#666666'}">{{this.getLabel(data.label)}}</div>
+                <div class="label" :style="{color:'#666666',width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
             </Tooltip>
                    
         </div>
@@ -322,7 +322,9 @@ export default {
             top: -12px;
             overflow: hidden;
             width: 100%;
-            text-overflow: ellipsis;
+           overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
             background: transparent;
         }
         .plan{

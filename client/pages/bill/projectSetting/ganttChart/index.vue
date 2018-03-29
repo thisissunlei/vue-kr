@@ -257,14 +257,10 @@ export default {
         this.init(this.startTime,this.endTime);
         this.getYears(this.startTime,this.endTime);
         setTimeout(() => {
-             this.scroolFix()
+            this.scroolFix()
+           
         }, 100);
-        let leftDom=document.getElementById('vue-chart-left-detail-list');
-        
-        var rightDom = document.getElementById("vue-chart-right-draw-content");
-        var clientHeight = document.documentElement.clientHeight;
-        leftDom.style.maxHeight = clientHeight - 390+"px";
-        rightDom.style.maxHeight = clientHeight - 390 +"px";
+       
     },
    
     updated(){

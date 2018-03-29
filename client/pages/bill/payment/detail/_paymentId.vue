@@ -43,7 +43,7 @@
 
 			<LabelText label="客户名称：">
 				<a href="">
-					{{basicInfo.customerName}}
+					{{basicInfo.customerName?basicInfo.customerName:'-'}}
 				</a>
 			</LabelText>
 
@@ -60,7 +60,7 @@
 			</LabelText>
 
 			<LabelText label="社区名称：">
-				{{basicInfo.communityName}}
+				{{basicInfo.communityName?basicInfo.communityName:'-'}}
 			</LabelText>
 
 			<LabelText label="我司收款账号：">

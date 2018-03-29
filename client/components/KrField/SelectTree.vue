@@ -39,6 +39,10 @@ export default {
         placeholder:{
             default:'请选择...',
             type:String
+        },
+        treeIds:{
+            default:'',
+            type:String
         }
     },
     data(){
@@ -61,6 +65,17 @@ export default {
                //this.treeInput='';
             }
         }
+    },
+    mounted(){
+        if(this.treeIds&&this.nowData){
+             var ids=this.treeIds.split(',');
+             if(Number(this.calculateTree(this.nowData))==Number(ids.length)){
+                 this.treeInput="全部任务"
+             }else{
+                 this.treeInput="自定义"
+             }
+        }
+
     },
     /*updated(){
          var htmlBox=document.getElementById('treeScroll');

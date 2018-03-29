@@ -11,6 +11,7 @@
             @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
+            :treeIds="params.taskTemplateIds"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -122,7 +123,7 @@ export default {
                 pageSize:6,
                 page:nowPage,
                 status:2,
-                taskTemplateIds:[]
+                taskTemplateIds:''
             },
             treeParams:{
                statusType:"PREPARE" 
@@ -143,6 +144,8 @@ export default {
         this.getTreeData(this.treeParams);
         this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize();
+        this.leftOver();
+        this.rightOver();
     },
     
     methods:{
@@ -162,7 +165,7 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
-       
+        
         //获取进度列表数据
         getListData(params,type){
             if(allPage<params.page){
@@ -197,7 +200,16 @@ export default {
         //获取甘特图任务数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{
-                this.treeData=response.data.items;
+                var array=[];
+                array.push(
+                    {
+                        label:'全部任务',
+                        value:0,
+                        t_id:0,
+                        children:response.data.items
+                    }
+                );
+                this.treeData=array;
                 this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({

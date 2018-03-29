@@ -101,6 +101,7 @@
             :data = 'data'
             @checkChange="checkChange"
             @okClick="okClick"
+            :treeIds="treeIds"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
@@ -207,6 +208,10 @@ export default {
         },
         selectData:{
             type:Array
+        },
+        treeIds:{
+            default:'',
+            type:String
         }
     },
     data(){

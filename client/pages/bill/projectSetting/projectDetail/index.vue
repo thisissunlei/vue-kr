@@ -16,6 +16,7 @@
                 type="edit"
                 :startTime="startTime" 
                 :endTime="endTime"
+                :treeIds="taskIds"
                 @rightOver="rightOver"
                 @treeClick="treeClick"
             >
@@ -156,7 +157,9 @@ export default {
             MessageType:'',
             warn:'',
 
-            scrollH:''
+            scrollH:'',
+            //树组件传參
+            taskIds:''
         }
     },
     created(){         
@@ -169,6 +172,9 @@ export default {
          let status=this.queryData.status==1?'INVEST':'PREPARE'
          this.signMask=this.queryData.status==1?true:false;
          this.getTreeData({propertyId:this.queryData.id});
+
+        this.leftOver();
+        this.rightOver();
     },
     methods:{
         leftOver(event){
@@ -187,6 +193,22 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
+
+        compareTime(data1,data2){
+            var data='';
+            var startData=(new Date(data1+' 00:00:00')).getTime();
+            var endData=data2;
+            data=startData>endData?startData:endData;
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+        },
+
+        compareEndTime(data1,data2){
+            var data='';
+            var startData=(new Date(data1+' 00:00:00')).getTime();
+            var endData=(new Date(data2+' 00:00:00')).getTime();;
+            data=startData>endData?startData:endData;
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+        },
        
         //获取列表数据
         getListData(ids){
@@ -199,9 +221,9 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
                 if(response.data.hasTime){
-                       this.startTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.firstStartTime));
+                       this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
                         var endObj = this.monthAdd(response.data.lastEndTime);
-                        this.endTime = endObj.year+'-'+endObj.month+'-'+endObj.day;
+                        this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
              
                 //后面进行组件优化
@@ -247,7 +269,16 @@ export default {
         //获取树任务项数据
         getTreeData(params){     
             this.$http.get('project-id-search',params).then((response)=>{
-                this.treeData=response.data.items;
+                var array=[];
+                array.push(
+                    {
+                        label:'全部任务',
+                        value:0,
+                        t_id:0,
+                        children:response.data.items
+                    }
+                );
+                this.treeData=array;
                 this.recursiveFn(this.treeData);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -285,6 +316,7 @@ export default {
                 }
             })
             this.ids=res.join(',');
+            this.taskIds=res.join(',');
             this.getListData(this.ids);
         },
 

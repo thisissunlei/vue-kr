@@ -483,14 +483,12 @@
     function getUserNav() {
         return {
             primaryText: "客户会员",
-            router: 'user',
-            originUrl: '#/user/customerManage/customerList',
+            type:'vue',
             menuItems: [
                 {
                     primaryText: '客户',
                     iconName: 'icon-donething',
                     iconColor: '#79859a',
-                    router:'index',
                     menuItems: [
                         {
                             primaryText: '客户账户',
@@ -1030,6 +1028,7 @@
                 primaryText: "账单中心",
                 iconName: 'icon-money',
                 iconColor: '#79859a',
+                type:'vue',
                 menuItems: [
                     
                     {

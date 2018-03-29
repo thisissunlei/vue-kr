@@ -50,7 +50,7 @@
                    <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期</div> 
         
 
-                    <FormItem label="任务描述"  class="bill-search-class" style="width:575px">
+                    <FormItem label="任务描述"  class="bill-search-class" style="width:575px;margin-bottom: 5px;">
                             <Input v-model="formItem.descr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
                             <div style="text-align:right">{{formItem.descr?formItem.descr.length+"/500":0+"/500"}}</div>
                     </FormItem>

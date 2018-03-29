@@ -489,9 +489,13 @@ export default {
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
 
-                     this.MessageType="success";
-                     this.openMessage=true;
-                     this.warn="编辑成功";
+                     if(response.code>1){
+                         this.cancelSure();
+                     }else{
+                        this.MessageType="success";
+                        this.openMessage=true;
+                        this.warn="编辑成功";
+                     }
                  }).catch((error)=>{
                      this.MessageType="error";
                      this.openMessage=true;
@@ -517,7 +521,11 @@ export default {
             //   }
           },
           submitSure(){
-            this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
+            let params={
+                id:this.editId,
+                propertyId:this.queryData.id
+            }
+            this.$http.post('sure-sign-project',params).then((response)=>{
                 this.cancelSure();
                 this.getListData();
             }).catch((error)=>{

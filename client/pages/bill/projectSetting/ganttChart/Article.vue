@@ -277,9 +277,9 @@ export default {
 
 <style lang="less">
 .every-view-col{
-    height: 33px;
+    height: 32px;
     position: relative;
-    border-bottom: 2px solid #F1F1F1;
+    border-bottom: 1px solid #F1F1F1;
     .tag{
         width: 50px;
         position: absolute;
@@ -334,7 +334,7 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top: -12px;
+            top: -11px;
             overflow: hidden;
             text-overflow:ellipsis;
         }
@@ -348,7 +348,7 @@ export default {
             position: absolute;
             cursor: pointer;
             opacity: 0.5;
-            top: -13px;
+            top: -11px;
             overflow: hidden;
             text-overflow:ellipsis;
         }

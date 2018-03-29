@@ -1,6 +1,6 @@
 <template>
 <div class="g-notification-created">
-<SectionTitle title="新建通知" />
+<SectionTitle title="编辑通知" />
 <div class="u-form">
      <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
         <DetailStyle info="通知列表显示内容">
@@ -123,6 +123,11 @@ export default {
      DetailStyle,
      LabelText
   },
+  head () {
+        return {
+            title: "编辑通知"
+        }
+    },
   data(){
       return{
           formItem:{

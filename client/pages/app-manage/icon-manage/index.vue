@@ -88,6 +88,11 @@ export default {
     components:{
         SectionTitle
     },
+    head () {
+        return {
+            title: "Icon管理"
+        }
+    },
     data(){
         return{
             Params:{

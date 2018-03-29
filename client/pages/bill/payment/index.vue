@@ -175,6 +175,11 @@ export default {
             SelectCommunitiy,
             Buttons
         },
+        head () {
+            return {
+                title: "回款管理"
+            }
+        },
         data () {
             return {
                 form:'form',

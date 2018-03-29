@@ -87,6 +87,11 @@ export default {
 		LabelText,
 		SectionTitle
 	},
+	head () {
+		return {
+			title: "回款详情"
+		}
+    },
 	data(){
 		return{
 			basicInfo:{},

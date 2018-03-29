@@ -82,7 +82,11 @@ export default {
      SectionTitle,
      SearchMember
   },
-
+  head () {
+        return {
+            title: "编辑管家"
+        }
+  },
   data(){
       return{
           formItem:{

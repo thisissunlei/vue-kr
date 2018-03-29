@@ -116,6 +116,11 @@ export default {
   components:{
      SectionTitle,
   },
+  head () {
+        return {
+            title: "新增Icon"
+        }
+    },
   data(){
       return{
           formItem:{

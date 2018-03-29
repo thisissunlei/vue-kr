@@ -90,6 +90,11 @@ import dateUtils from 'vue-dateutils';
             SearchCompany,
             selectCommunities
         },
+        head () {
+            return {
+                title: "回款"
+            }
+        },
         data() {
             return {
                 formItem: {

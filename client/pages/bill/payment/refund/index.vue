@@ -100,6 +100,11 @@ import dateUtils from 'vue-dateutils';
             SearchCompany,
             selectCommunities
         },
+        head () {
+            return {
+                title: "退款"
+            }
+        },
         data() {
             return {
                 formItem: {

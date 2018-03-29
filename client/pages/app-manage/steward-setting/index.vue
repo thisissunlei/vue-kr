@@ -64,6 +64,11 @@ export default {
         SectionTitle,
         SelectCommunitiy
     },
+    head () {
+        return {
+            title: "管家管理"
+        }
+    },
     data () {
         return{
             Params:{

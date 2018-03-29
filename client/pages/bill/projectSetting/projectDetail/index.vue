@@ -90,6 +90,13 @@
             </div>
         </Modal>
 
+        <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onChangeOpen"
+        />
+
         
   </div>
 </template>
@@ -102,6 +109,7 @@ import EditTask from './editTask';
 import WatchRecord from './watchRecord';
 import DetailTaskList from './detailTaskList';
 import GanttChart from '../ganttChart';
+import Message from '~/components/Message';
 
 
 export default {
@@ -110,12 +118,14 @@ export default {
         EditTask,
         WatchRecord,
         DetailTaskList,
-        GanttChart
+        GanttChart,
+        Message
     },
     data(){
         return{
             queryData:{},
             listData:[],
+            openMessage:false,
             openAddTask:false,
             openEditTask:false,
             openWatch:false,
@@ -142,7 +152,9 @@ export default {
             openSure:false,
             scrollWidth:0,
 
-            ids:''
+            ids:'',
+            MessageType:'',
+            warn:'',
         }
     },
     created(){         
@@ -196,7 +208,7 @@ export default {
                 })
             }).catch((error)=>{
                 this.$Notice.error({
-                title: error.message,
+                 title: error.message,
                 });
             })
         },
@@ -233,7 +245,6 @@ export default {
             this.$http.get('project-id-search',params).then((response)=>{
                 this.treeData=response.data.items;
                 this.recursiveFn(this.treeData);
-                //this.selectTree();
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -294,31 +305,6 @@ export default {
             }
             return false;
         },
-
-
-
-        //回血
-        treeFn(id,data){
-            data.map((item,index)=>{
-                if(item.value==id){
-                    item.checked=true;
-                }
-                if(item.children&&item.children.length){
-                    this.treeFn(id,item.children);
-                }
-            })
-        },
-        //回血
-        selectTree(){
-            var ids=this.ids?this.ids.split(','):[];
-            if(ids.length){
-                ids.map((item,index)=>{
-                    this.treeFn(item,this.treeData);
-                })
-            }
-        },
-
-
 
          //获取今天日期
         getStartDay(){
@@ -407,10 +393,14 @@ export default {
                      this.cancelEditTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="删除成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                 });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
              })
         },
         //新建对象传递校验
@@ -444,6 +434,7 @@ export default {
                     });
                     return ;
                 }
+                this.addData.type="STAGETASK";
                 this.addData.pid=this.addId?this.addId:0;
                 this.addData.planEndTime=this.addData.type=='STAGETASK'?this.addData.planEndTime:this.addData.planStartTime;
                 this.addData.propertyId=this.queryData.id;
@@ -454,10 +445,14 @@ export default {
                      this.cancelAddTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="新建成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
                 })
           },
           //编辑任务提交
@@ -493,10 +488,14 @@ export default {
                      this.cancelEditTask();
                      this.getListData(this.ids);
                      this.getTreeData({propertyId:this.queryData.id});
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="编辑成功";
                  }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
                 })
           },
           scroll(event){
@@ -519,15 +518,17 @@ export default {
           },
           submitSure(){
             this.$http.post('sure-sign-project',{propertyId:this.queryData.id}).then((response)=>{
-                window.close();
-                window.opener.location.reload();
-                sessionStorage.setItem('chartSetting','tab2');
                 this.cancelSure();
+                this.getListData();
             }).catch((error)=>{
-                this.$Notice.error({
-                   title: error.message,
-                });
-                })
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+             })
+            },
+            //信息提示框
+            onChangeOpen(data){
+                this.openMessage=data;
             },
             cancelSure(){
                 this.openSure=!this.openSure;

@@ -72,18 +72,14 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import SpecificPlan from './SpecificPlan'
 import FlagLabel from '~/components/FlagLabel';
-import ChildArticle from './ChildArticle';
 import no from './img/no.png';
 import ok from './img/ok.png';
 import yeas from './img/yeas.png';
 export default {
     name:'Article',
     components:{
-        SpecificPlan,
         FlagLabel,
-        ChildArticle
     },
     props:{
         minCalibration:{

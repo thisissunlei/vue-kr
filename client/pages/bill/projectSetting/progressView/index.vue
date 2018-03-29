@@ -434,8 +434,8 @@ export default {
                 height: 51px;
                 padding-top: 8px;
                 .ivu-tabs-ink-bar{
-                    width:58px !important;
-                    left: 56px;
+                    // width:58px !important;
+                    // left: 56px;
                 }
             }
             .chart-left-table{

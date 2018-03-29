@@ -531,13 +531,16 @@ export default {
             display:inline-block;
             border-bottom: none;
             .chart-left{
+                .ivu-tabs-tab{
+                    color:#333;
+                }
                 .ivu-tabs-nav{
                    width:100%;
                    height: 51px;
                    padding-top: 8px;
                    .ivu-tabs-ink-bar{
-                       width:58px !important;
-                       left: 56px;
+                    //    width:58px !important;
+                    //    left: 56px;
                    }
                 }
             }

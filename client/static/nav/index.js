@@ -1025,7 +1025,7 @@
         type:'vue',
         menuItems: [
             {
-                primaryText: "账单中心",
+                primaryText: "账单财务",
                 iconName: 'icon-money',
                 iconColor: '#79859a',
                 type:'vue',

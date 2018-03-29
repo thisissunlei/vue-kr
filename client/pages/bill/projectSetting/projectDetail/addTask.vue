@@ -9,7 +9,7 @@
                         @on-change="nameChange"
                     />
                 </Form-item>
-                <Form-item label="任务类型" class="bill-search-class" prop="type" style="padding-left: 10px;"> 
+                <!-- <Form-item label="任务类型" class="bill-search-class" style="padding-left: 10px;"> 
                     <Select 
                         v-model="formItem.type" 
                         placeholder="请输入任务类型" 
@@ -20,7 +20,7 @@
                     >
                         <Option v-for="item in taskList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
-                </Form-item>
+                </Form-item> -->
                 <div v-if="mask">
                         <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
                             <DatePicker 
@@ -84,9 +84,6 @@ export default {
             ruleValidate: {
                 name: [
                     { required: true, message: '请输入任务名称', trigger: 'change' }
-                ],
-                type: [
-                    { required: true, message: '请输入任务类型', trigger: 'change' }
                 ],
                 planStartTime:[
                     { required: true, type: 'date',message: '请输入开始日期', trigger: 'change' }

@@ -80,7 +80,7 @@ export default {
         .detail-li{
            width:100%;
            height:70px;
-           border: 1px solid  #F0F0F0;
+           border: 1px solid  #F6F6F6;
            border-right:none;
            border-left:none;
            display:table;   
@@ -92,7 +92,7 @@ export default {
            }
            p{
                 display:inline-block;
-                border-right:1px solid  #F0F0F0;
+                border-right:1px solid  #F6F6F6;
                 width:50%;
                 padding:10px;
                 height:100%;

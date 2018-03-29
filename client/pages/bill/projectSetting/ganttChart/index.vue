@@ -512,7 +512,8 @@ export default {
         padding-left:25px; 
         .chart-tab-left{
             width:346px;
-            border: 1px solid #F0F0F0;
+            border: 1px solid #F6F6F6;
+            border-right:5px solid #F6F6F6;
             display:inline-block;
             border-bottom: none;
             .chart-left{
@@ -556,13 +557,13 @@ export default {
             max-height:500px;
             width: 100%;
             overflow:auto;
-            border-bottom: 1px solid #F0F0F0;
+            border-bottom: 1px solid #F6F6F6;
             
         }
         .content{
             position: relative;
           
-            background: #F3F2F7;
+            background: #F6F6F6;
            
            
         }
@@ -598,15 +599,15 @@ export default {
                 display: inline-block;
                 box-sizing: border-box;
                 padding-left:20px; 
-                border-bottom: 1px solid #F0F0F0;
-                border-right: 1px solid #F0F0F0;
+                border-bottom: 1px solid #F6F6F6;
+                border-right: 1px solid #F6F6F6;
                 transition: all 0.3;
             }
         }
         
         .bar{
             position: relative;
-            border-top: 1px solid #F0F0F0;
+            border-top: 1px solid #F6F6F6;
         }
    }
    .tab-second-title{

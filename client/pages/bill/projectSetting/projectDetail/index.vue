@@ -198,7 +198,7 @@ export default {
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=data2;
-            data=startData>endData?startData:endData;
+            data=startData<endData?startData:endData;
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
         },
 

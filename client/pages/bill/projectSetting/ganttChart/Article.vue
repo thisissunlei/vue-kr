@@ -18,7 +18,8 @@
                     :style="{
                         background:getPlanBgColor(),
                         width:planDetail.width * minCalibration + 'px',
-                        left:planDetail.office * minCalibration + 'px'
+                        left:planDetail.office * minCalibration + 'px',
+                        color:getPlanColor()
                     }"
                 >{{getActualLabel(data.label)}}
                 </div>
@@ -29,7 +30,7 @@
                         width:actualDetail.width * minCalibration+'px',
                         left:actualDetail.office * minCalibration + 'px',
                         background:getActualBgColor(),
-                        color:'#666666'
+                        color:getActualColor()
 
                     }"
                     v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
@@ -121,20 +122,22 @@ export default {
                 }
             }
         },
+        getPlanColor(){
+            var bgColor = this.getPlanBgColor();
+            if(bgColor=='#E9F0F6'){
+                return '#666666';
+            }else {
+                return '#BE8525';
+            }
+            
+        },
+       
         getActualColor(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var nowTime = (new Date(today+' 00:00:00')).getTime();
-           
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEnd<this.data.data.planStartTime){
-                if(this.data.data.progressStatus === '' &&  this.planEndTime<nowTime){
-                    return '#BE8525'
-                }else if(this.data.data.progressStatus<0){
-                    return '#666666'
-                }else if(this.data.data.progressStatus>=0){
-                    return '#5A8C23'
-                }
-                
+            var bgColor = this.getActualBgColor();
+            if(bgColor == 'rgba(246,156,156,0.5)'){
+                return '#666666';
+            }else {
+                return '#5A8C23'
             }
         },
         getLabel(label){
@@ -171,15 +174,12 @@ export default {
 
         },
        getActualBgColor(){
-            if(this.data.data.progressStatus==''){
-                return "#fff";
-            }
-            if(this.data.data.progressStatus<0){
-                
-                return '#F69C9C'
+            
+            if(this.data.data.progressStatus<0){ 
+                return 'rgba(246,156,156,0.5)';
             }else if(this.data.data.progressStatus>=0){
-                // this.picColor=yeas;
-                return '#C2E998'
+               
+                return 'rgba(194,233,152,0.6)'
             }
        },
        getPlanBgColor(){

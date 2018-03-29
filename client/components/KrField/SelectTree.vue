@@ -218,7 +218,7 @@ export default {
 
             .tree-content{
                 min-width: 200px;
-                max-height: 150px;
+                max-height: 250px;
                 overflow: auto;
                 margin: 5px 0;
                 padding: 5px 10px;

@@ -158,7 +158,7 @@ export default {
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
                 this.data.data.actualEnd<this.data.data.planStartTime){
                 if(this.data.data.progressStatus === '' &&  this.planEndTime<nowTime){
-                    return '#BE8525'
+                    return '#BE8525' 
                 }else if(this.data.data.progressStatus<0){
                     return '#666666'
                 }else if(this.data.data.progressStatus>=0){
@@ -170,6 +170,7 @@ export default {
         getLabel(label){
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
                 this.data.data.actualEndTime<this.data.data.planStartTime){
+                    return '';
 
             }else {
                 return label;
@@ -184,6 +185,7 @@ export default {
             }
         },
         lineShow(){
+           
             if(this.data.data.planEndTime<this.data.data.actualStartTime || 
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                 return true;
@@ -205,11 +207,11 @@ export default {
                 return;
             }
             if(this.data.data.progressStatus<0){
-                // this.picColor=no;
-                return '#F69C9C'
+               
+                return 'rgba(246,156,156,0.5)';
             }else if(this.data.data.progressStatus>=0){
-                // this.picColor=yeas;
-                return '#C2E998'
+               
+                return 'rgba(194,233,152,0.6)'
             }
        },
        getPlanBgColor(){
@@ -360,8 +362,8 @@ export default {
         }
         .label{
             position: absolute;
-            height: 28px;
-            line-height: 28px;
+            height: 29px;
+            line-height: 29px;
             padding-left: 10px;
            
             overflow: hidden;
@@ -371,10 +373,10 @@ export default {
             top:0px;
         }
         .plan{
-            height: 28px;
+            height: 29px;
             background: #E9F0F6;
             border-radius: 7px 7px 8px 8px;
-            line-height: 30px;
+            line-height: 29px;
             padding-left:10px;
             color: #666666;
             position: absolute;
@@ -384,15 +386,15 @@ export default {
             text-overflow:ellipsis;
         }
         .actual{
-            height: 28px;
+            height: 29px;
           
             border-radius: 7px 7px 8px 8px;
-            line-height: 30px;
+            line-height: 29px;
             padding-left:10px;
             color: #fff;
             position: absolute;
             cursor: pointer;
-            opacity: 0.5;
+            // opacity: 0.5;
             top:1px;
             overflow: hidden;
             text-overflow:ellipsis;

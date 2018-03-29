@@ -1022,26 +1022,24 @@
         return {
         primaryText: "账单财务",
         router: 'finance',
-        type:'vue',
         menuItems: [
             {
                 primaryText: "账单中心",
                 iconName: 'icon-money',
                 iconColor: '#79859a',
-                type: 'vue',
                 menuItems: [
-                    
+                    {
+                        primaryText: "账单(老数据)",
+                        router: 'finance/manage/orderbill/orderList',
+                        menuCode: 'fina_account_list'
+                    },
                     {
                         primaryText: "账单",
                         router: 'bill/list',
                         type: 'vue',
                         menuCode: 'pay_created_bill_page',
                     },
-                    {
-                        primaryText: "账单(老数据)",
-                        router: 'finance/manage/orderbill/orderList',
-                        menuCode: 'fina_account_list'
-                    },
+                    
                     {
                         primaryText: "回款管理",
                         router: 'bill/payment',

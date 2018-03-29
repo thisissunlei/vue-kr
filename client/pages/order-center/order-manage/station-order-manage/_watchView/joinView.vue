@@ -19,10 +19,10 @@
 					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 				<LabelText label="订单状态：">
-					{{basicInfo.orderStatus}}
+					{{basicInfo.orderStatusName}}
 				</LabelText>
 				<LabelText label="生效时间：">
-					{{basicInfo.effectDate| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="租赁信息">

@@ -493,11 +493,6 @@
                     router:'index',
                     menuItems: [
                         {
-                            primaryText: '客户线索',
-                            router: 'user/customerManage/customerList',
-                            menuCode: 'oper_csr_base',
-                        },
-                        {
                             primaryText: '客户账户',
                             router: 'bill/customerAssets',
                             type:'vue',
@@ -514,6 +509,11 @@
                             router: 'user/memberManage/doormanage',
                             menuCode: 'door_base',
                         },
+                        {
+                            primaryText: '客户线索',
+                            router: 'user/customerManage/customerList',
+                            menuCode: 'oper_csr_base',
+                        },
                     ]   
                 }, 
                 {
@@ -521,12 +521,6 @@
                     iconName: 'icon-donething',
                     iconColor: '#79859a',
                     menuItems: [
-                        {
-                            primaryText: '工作人员',
-                            menuCode: 'hrm_resourcesList_incumbency',
-                            router: 'user/personalManage/peopleState',
-
-                        },
                         {
                             primaryText: "会员",
                             router: 'user/memberManage/list',
@@ -541,6 +535,12 @@
                             primaryText: '会员APP禁言',
                             menuCode: 'oper_cluster_base',
                             router: 'user/communityAllocation/appmanage'
+                        },
+                        {
+                            primaryText: '工作人员',
+                            menuCode: 'hrm_resourcesList_incumbency',
+                            router: 'user/personalManage/peopleState',
+
                         },
                     ]   
                 }, 
@@ -560,11 +560,7 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-                        {
-                            primaryText: "招商数据",
-                            router: 'product/statistical/index',
-                            menuCode: 'stat_group',
-                        },
+                        
                         {
 
                             primaryText: '社区',
@@ -596,11 +592,7 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-                        {
-                            primaryText: '会议室设备配置',
-                            menuCode: 'oper_cmt_deviceList_base',
-                            router: 'product/communityAllocation/equipmentList'
-                        },
+                        
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -610,6 +602,16 @@
                             primaryText: '销控',
                             menuCode: 'cmt_sell_control',
                             router: 'product/communityManage/controlTable',
+                        },
+                        {
+                            primaryText: "招商数据",
+                            router: 'product/statistical/index',
+                            menuCode: 'stat_group',
+                        },
+                        {
+                            primaryText: '会议室设备配置',
+                            menuCode: 'oper_cmt_deviceList_base',
+                            router: 'product/communityAllocation/equipmentList'
                         },
                     ]   
                 }, 

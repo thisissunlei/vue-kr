@@ -185,9 +185,9 @@ export default {
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-            if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
-                return '#FFE9AF';
-            }
+            // if(this.data.data.actualStartTime && !this.data.data.actualEndTime){
+            //     return '#FFE9AF';
+            // }
             if(!this.data.data.actualStartTime&&this.planEndTime<nowTime ){
                 return '#FFE9AF';
             }else{

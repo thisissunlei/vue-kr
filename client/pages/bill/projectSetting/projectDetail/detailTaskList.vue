@@ -231,8 +231,8 @@ export default {
       }
       .add-child-task{
         width:100%;
-        height:30px;
-        line-height:30px;
+        height:32px;
+        line-height:32px;
         padding-left:26px;
         border-bottom:solid 2px #F0F0F0;
         cursor: pointer;

@@ -355,6 +355,18 @@ import AddArchives from './addArchives';
             }
         }
     }
+    tr.ivu-table-row-hover td{
+        background-color: #F7F9FB;
+    }
+    .ivu-table-header{
+        thead{
+            height:50px;
+            line-height:50px;
+        }
+    }
+    .ivu-table th{
+         background-color: #FAFCFF;
+    }
 }
 .bill-search-class{
         width:50%;

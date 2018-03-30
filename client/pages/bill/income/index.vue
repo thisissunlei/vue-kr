@@ -81,6 +81,11 @@ import utils from '~/plugins/utils';
             AddIncome,
             Message
         },
+        head () {
+            return {
+                title: "应收管理"
+            }
+        },
         data () {
             return {
                 totalCount:0,

@@ -70,7 +70,12 @@ export default {
 		DetailStyle,
 		LabelText,
 		SectionTitle
-	},
+    },
+    head () {
+        return {
+            title: "推送详情"
+        }
+    },
 	data(){
 		return{
             basicInfo:{},

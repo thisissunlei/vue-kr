@@ -30,7 +30,7 @@ export default  {
       url: '/api/krspace-pay/bill/detail?',
       method: 'get'
     },
-    //账单中心--回款列表
+    //账单中心--回款列表--已绑定
     'get-payment-list': {
       url: '/api/krspace-pay/payment/list?',
       method: 'get'
@@ -194,6 +194,11 @@ export default  {
     //余额转社区--社区列表
     'balance-community-list': {
       url: '/api/krspace-pay/account/community/list?',
+      method: 'get'
+    },
+    //账单中心--回款列表--未绑定列表
+    'get-payment-unbind-list': {
+      url: '/api/krspace-pay/payment/unbind/list',
       method: 'get'
     },
     

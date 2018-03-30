@@ -1,7 +1,7 @@
 <template>
 
 <div class="g-push-detail">
-	<SectionTitle title="推送详情"></SectionTitle>
+	<SectionTitle title="通知详情"></SectionTitle>
 	<div class="m-detail-content">
 		<DetailStyle info="基本信息">
 			<LabelText label="创建人：">
@@ -76,7 +76,12 @@ export default {
 		DetailStyle,
 		LabelText,
 		SectionTitle
-	},
+    },
+    head () {
+        return {
+            title: "通知详情"
+        }
+    },
 	data(){
 		return{
             basicInfo:{},

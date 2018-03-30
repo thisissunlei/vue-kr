@@ -119,6 +119,11 @@ export default {
             SectionTitle,
             Message
         },
+        head () {
+            return {
+                title: "会议室订单管理"
+            }
+        },
         data () {
             return {
                 openSearch:false,

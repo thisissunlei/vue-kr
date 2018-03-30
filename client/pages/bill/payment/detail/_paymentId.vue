@@ -1,28 +1,3 @@
-<style lang="less">
-
-.g-order-detail{
-
-		.m-detail-content{
-
-			padding:30px 24px;
-
-			.ivu-table-wrapper{
-				margin-bottom:30px;
-			}
-
-		}
-
-		.u-txt-red{
-			color:#FF6868;
-		}
-
-		.u-txt{
-			color:#666;
-		}
-	}
-
-</style>
-
 <template>
 
 <div class="g-order-detail">
@@ -34,37 +9,40 @@
 		<DetailStyle info="基本信息">
 
 			<LabelText label="回款流水号：">
-				{{basicInfo.tradeNo}}
+				{{basicInfo.tradeNo?basicInfo.tradeNo:'-'}}
 			</LabelText>
 
 			<LabelText label="回款方式：">
-				{{basicInfo.payWay}}
+				{{basicInfo.payWay?basicInfo.payWay:'-'}}
 			</LabelText>
 
 			<LabelText label="客户名称：">
 				<a href="">
-					{{basicInfo.customerName}}
+					{{basicInfo.customerName?basicInfo.customerName:'-'}}
 				</a>
 			</LabelText>
 
 			<LabelText label="付款账号：">
-				{{basicInfo.payAccount}}
+				{{basicInfo.payAccount?basicInfo.payAccount:'-'}}
 			</LabelText>
 
 			<LabelText label="回款金额：">
-				￥{{basicInfo.amount}}
+				￥{{basicInfo.amount?basicInfo.amount:'-'}}
 			</LabelText>
 
 			<LabelText label="回款时间：">
-				{{basicInfo.occurDate}}
+				{{basicInfo.occurDate?basicInfo.occurDate:'-'}}
 			</LabelText>
 
 			<LabelText label="社区名称：">
-				{{basicInfo.communityName}}
+				{{basicInfo.communityName?basicInfo.communityName:'-'}}
 			</LabelText>
 
 			<LabelText label="我司收款账号：">
-				{{basicInfo.receiveAccount}}
+				{{basicInfo.receiveAccount?basicInfo.receiveAccount:'-'}}
+			</LabelText>
+			<LabelText label="创建时间：">
+				{{basicInfo.ctime?basicInfo.ctime:'-'}}
 			</LabelText>
 
 		</DetailStyle>
@@ -87,6 +65,11 @@ export default {
 		LabelText,
 		SectionTitle
 	},
+	head () {
+		return {
+			title: "回款详情"
+		}
+    },
 	data(){
 		return{
 			basicInfo:{},
@@ -144,6 +127,7 @@ export default {
 				let data=res.data;
 				this.basicInfo=data;
 				data.occurDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.occurDate));
+				data.ctime=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.ctime));
 				data.payWay=payType[data.payWay];
 			}).catch((err)=>{
 				this.$Notice.error({
@@ -156,3 +140,28 @@ export default {
 
 }
 </script>
+
+<style lang="less">
+
+.g-order-detail{
+
+		.m-detail-content{
+
+			padding:30px 24px;
+
+			.ivu-table-wrapper{
+				margin-bottom:30px;
+			}
+
+		}
+
+		.u-txt-red{
+			color:#FF6868;
+		}
+
+		.u-txt{
+			color:#666;
+		}
+	}
+
+</style>

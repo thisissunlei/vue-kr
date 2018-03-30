@@ -524,7 +524,7 @@ export default {
 <style lang="less">
    .chart-ul-wrap{
         width:100%;
-        height: 800px;
+        
         box-sizing: border-box;
         display:inline-block;
         overflow: auto;

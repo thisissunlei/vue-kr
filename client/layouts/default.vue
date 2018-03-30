@@ -45,10 +45,10 @@
         },
         mounted(){
            
-            this.bodyStyle.height = document.documentElement.clientHeight-135 + "px";
+            this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;
             window.onresize = function (params) {
-                that.bodyStyle.height = document.documentElement.clientHeight-135 + "px";
+                that.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             }
         },
         

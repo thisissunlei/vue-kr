@@ -8,8 +8,8 @@
             v-if="showData.length"
             v-for="(channels,index) in showData"
             :key="channels.id"
-            style=""
         >
+            
             <Article 
                 v-if="leftEndpoint.year"
                 :minCalibration="minCalibration"
@@ -78,64 +78,87 @@ export default {
        
         //每一个任务的所有数据
         allDataFor(data){
-            var allArr = [];
-           allArr[this.channel]=[data[0]];
-            for(var i=1;i<data.length;i++){
-                var everyStartDay = this.getMaxAndMin(data[i]).min;
-                var minChannel= allArr[this.getChannelMin(allArr)];
-                var minChannelEndData = minChannel[minChannel.length -1];
-                var minChannelEndDay = this.getMaxAndMin(minChannelEndData).max;
-                if(everyStartDay>minChannelEndDay){
-                    allArr[this.getChannelMin(allArr)].push(data[i])
-                }else{
-                    this.channel +=1;
-                    allArr[this.channel]=[];
-                    allArr[this.channel].push(data[i])
-                }
-            }
-        return allArr;
-         
-        //获取所有数据
-        var allData = [].concat(data);
-        //所有通道数据
-        var allChannel = [];
-
-        //循环所有数据
-        for (var i = 0; i < allData.length; i++) {
-            var everyData = allData[i];//每一个数据
-            var minData = this.getChannelMin(allChannel);//最小行的最后一个数据
-            var minDataEnd = this.getMaxAndMin(minData).max;//最小行最后一个数据的最大值
-            var everyDataStart = this.getMaxAndMin(everyData).min;//当前元素的最小值
-            if(everyDataStart>minDataEnd){
-                allChannel[minData.key].push(everyData);
-            }else{
-                var newChannel = [everyData];
-                allChannel.push(newChannel);
-            }
             
-        }
+         
+            //获取所有数据
+            var allData = [].concat(this.allArrSort(data));
+            //所有通道数据
+            var allChannel = [];
+
+            //循环所有数据
+            var startObj = Object.assign({},allData[0]);
+            startObj.key = this.channel;
+            allChannel[this.channel]=[startObj];
+            for (var i = 1; i < allData.length; i++) {
+               
+                var everyData = allData[i];//每一个数据
+                var minData = this.getChannelMin(allChannel);//最小行的最后一个数据
+                
+                var minDataEnd = this.getMaxAndMin(minData).max;//最小行最后一个数据的最大值
+                
+                var everyDataStart = this.getMaxAndMin(everyData).min;//当前元素的最小值
+                if(everyDataStart>minDataEnd){
+                    everyData.key = minData.key;
+                    allChannel[minData.key].push(everyData);
+                }else{
+                    everyData.key = this.channel;
+                    var newChannel = [everyData];
+                    allChannel.push(newChannel);
+                    this.channel++;
+                }
+                
+            }
+            console.log(allChannel,"ppppppppp")
+            return allChannel;
            
         },
         getChannelMin(allArr){
-            var Obj = [].concat(allArr)
+           
+            var allChannel = [].concat(allArr);
             var arr = [];
-            var key = 1;
-            for (var key in Obj) {
-                var everArr = [].concat(Obj[key]);
-                arr.push({
-                    key:key,
-                    data:everArr[everArr.length -1]
-                });
+            var data = {};
+            var min = 0;
+            for(var i=0;i<allChannel.length;i++){
+                arr.push(allChannel[i][allChannel[i].length-1]);
             }
-            
-            var min = this.getMaxAndMin(arr[0].data).max;
-            for (var i = 1; i < arr.length; i++) {
-                if(min>this.getMaxAndMin(arr[i].data).max){
-                    min = this.getMaxAndMin(arr[i].data).max
-                    key = arr[i].key;
+             
+            var minObj = arr[0];
+             minObj.min = this.getMaxAndMin(minObj).max;
+            if(arr.length ===1){
+                data = arr[0];
+            }else {
+                for (var i = 1; i < arr.length; i++) {
+                    
+                    var channelObj = arr[i];
+                    channelObj.min =  this.getMaxAndMin(channelObj).max;
+                    if(minObj.min>channelObj.Object){
+                       minObj = channelObj;
+                    }
                 }
             }
-            return key;
+            return Object.assign({},minObj);
+
+            
+        },
+        allArrSort(data){
+            var allArr = [].concat(data);
+            var isSwap = '';
+            for (var i = 0; i < allArr.length; i++) {
+               isSwap = false;
+                for (var j = 0; j < allArr.length-1-i; j++) {
+                    if(this.getMaxAndMin(allArr[j]).min >this.getMaxAndMin(allArr[j+1]).min){
+                        isSwap = true;
+                        var temp = Object.assign({},allArr[j+1]);
+                        allArr[j+1] =Object.assign({},allArr[j]);
+                        allArr[j] = Object.assign({},temp);
+                    }
+                    
+                }
+                if(!isSwap){
+                    break;
+                }
+            }
+            return allArr;
         },
         getMaxAndMin(data){
             var arr = [];
@@ -182,15 +205,20 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-       
+       position: relative;
         background:#fff;
         margin-top:5px;
         &:first-child{
             margin-top:0px;
             border-top:none;
+           
         }
         .view-channel{
             // border-bottom:2px solid #F1F1F1; 
+            position: relative;
+            height: 32px;
+           
         }
     }
+   
 </style>

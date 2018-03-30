@@ -36,8 +36,6 @@ export default {
         }
         setTimeout(() => {
             this.nameAndContentHright();
-
-           
         },100);
     },
     methods:{
@@ -81,7 +79,7 @@ export default {
 <style lang="less" scoped>
         .detail-li{
            width:100%;
-           height:70px;
+           height:32px;
            border: 1px solid  #F6F6F6;
            border-right:none;
            border-left:none;

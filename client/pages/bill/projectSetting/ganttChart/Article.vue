@@ -273,7 +273,10 @@ export default {
 <style lang="less">
 .every-view-col{
     height: 32px;
-    position: relative;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+   
     border-bottom: 1px solid #F1F1F1;
     .tag{
         width: 50px;
@@ -296,6 +299,9 @@ export default {
     &:last-child{
         margin-top:0px;
         border-top:none;
+        .every-view-col{
+            top:0px;
+        }
     }
     .ivu-poptip-rel{
             background: transparent;
@@ -303,7 +309,8 @@ export default {
     .article{
         position: relative;
         background: transparent;
-        height: 28px;
+        height: 30px;
+        top: -1px;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;

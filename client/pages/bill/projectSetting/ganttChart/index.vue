@@ -587,7 +587,9 @@ export default {
             position: relative;
           
             background: #F6F6F6;
-           
+            .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
+                top: 0px;
+            }
            
         }
         .hander{

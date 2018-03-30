@@ -192,6 +192,15 @@
                         }
                     },
                     {
+                        title: '生效时间',
+                        key: 'effectDate',
+                        align:'center',
+                        render(tag, params){
+                            let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
+                            return time;
+                        }
+                    },
+                    {
                         title: '操作',
                         key: 'action',
                         align:'center',
@@ -358,6 +367,8 @@
                 this.params.pageSize=15;
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
+                this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
+                this.params.effectStart=this.params.effectStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectStart)):'';
                 utils.addParams(this.params);
             },
 

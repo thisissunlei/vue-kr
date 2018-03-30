@@ -73,6 +73,22 @@
                     />
                     <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
              </Form-item>
+             <Form-item label="生效日期" class="bill-search">
+                    <DatePicker 
+                        v-model="formItem.effectStart"
+                        type="date" 
+                        placeholder="生效开始日期" 
+                        style="width: 252px"
+                    />
+                   <span class="u-date-txt">至</span>
+                    <DatePicker 
+                        v-model="formItem.effectEnd"
+                        type="date" 
+                        placeholder="生效结束日期" 
+                        style="width: 252px"
+                    />
+                    <div style="color:red;" v-show="effectError">开始日期不能大于结束日期</div>  
+             </Form-item>
          </Form>
 </template>
 
@@ -88,6 +104,7 @@
         data (){
             return{
                 dateError:false,
+                effectError:false,
                 formItem:{
                    orderNum:'',
                    customerName:'',
@@ -127,6 +144,15 @@
                 }
             }else{
                 this.dateError=false; 
+            }
+            if(this.formItem.effectStart&&this.formItem.effectEnd){
+                if(this.formItem.effectStart>this.formItem.effectEnd){
+                    this.effectError=true;
+                }else{
+                    this.effectError=false; 
+                }
+            }else{
+                this.effectError=false; 
             }
             this.$emit('bindData', this.formItem,this.dateError);
         },

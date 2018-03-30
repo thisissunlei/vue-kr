@@ -154,6 +154,19 @@ export default {
             rightDom.style.maxHeight = clientHeight - 362 +"px";
            
         }, 400);
+
+        window.onresize=function(){
+            console.log('----');
+            var leftDom=document.getElementById('vue-chart-left-table-list');
+            var rightDom = document.getElementById("vue-chart-right-draw-content");
+            var clientHeight = document.documentElement.clientHeight;
+            
+            var dom = document.getElementById('layout-content-main');
+            
+            dom.style.height = document.documentElement.clientHeight-130 + "px"
+            leftDom.style.maxHeight = clientHeight - 362+"px";
+            rightDom.style.maxHeight = clientHeight - 362 +"px";
+        }
     },
     
     methods:{

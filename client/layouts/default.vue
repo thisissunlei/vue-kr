@@ -47,9 +47,10 @@
            
             this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;
-            window.onresize = function (params) {
-                that.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
-            }
+            // window.onresize = function (params) {
+            //     console.log(';;;;;;>');
+            //     that.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
+            // }
         },
         
     }

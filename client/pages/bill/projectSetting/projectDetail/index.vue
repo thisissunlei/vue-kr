@@ -51,8 +51,8 @@
             >
                 <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
                 <div slot="footer">
+                    <Button type="ghost" style="margin-left:8px;float:left;color:red;border-color:red;" @click="cancelTask">删除任务</Button>
                     <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">删除任务</Button>
                 </div>
         </Modal>
 

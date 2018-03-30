@@ -530,6 +530,11 @@
                             menuCode: 'mbr_card_base',
                         },
                         {
+                            primaryText: '会员权限组',
+                            menuCode: 'auth_user_group_list',
+                            router: 'doorpermission/doorgroupmanage',
+                        },
+                        {
                             primaryText: '会员APP禁言',
                             menuCode: 'oper_cluster_base',
                             router: 'user/communityAllocation/appmanage'
@@ -590,7 +595,6 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-                        
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',

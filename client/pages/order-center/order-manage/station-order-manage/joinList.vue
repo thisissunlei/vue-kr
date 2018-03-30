@@ -182,6 +182,7 @@
                         title: '租赁期限',
                         key: 'ctime',
                         align:'center',
+                         width:100,
                         render(tag, params){
                             return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
                         }
@@ -216,6 +217,15 @@
                         align:'center',
                         render(tag, params){
                             let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                            return time;
+                        }
+                    },
+                    {
+                        title: '生效时间',
+                        key: 'effectDate',
+                        align:'center',
+                        render(tag, params){
+                            let time = params.row.effectDate?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.effectDate)):'-'
                             return time;
                         }
                     },
@@ -370,6 +380,8 @@
                 this.params.mask='join';
                 this.params.page=1;
                 this.params.pageSize=15;
+                this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
+                this.params.effectStart=this.params.effectStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectStart)):'';
                 this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
                 this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 utils.addParams(this.params);

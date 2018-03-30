@@ -94,7 +94,7 @@ export default {
                 display:inline-block;
                 border-right:1px solid  #F6F6F6;
                 width:50%;
-                padding:10px;
+                // padding:10px;
                 height:100%;
                 display:table-cell;
                 vertical-align:middle;

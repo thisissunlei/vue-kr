@@ -120,7 +120,7 @@ export default {
             params:{
                 endTime:this.getEndDay(7),
                 startTime:this.getStartDay(),
-                pageSize:6,
+                pageSize:15,
                 page:nowPage,
                 status:2,
                 taskTemplateIds:''

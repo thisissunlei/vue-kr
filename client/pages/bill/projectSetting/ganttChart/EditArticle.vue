@@ -346,7 +346,7 @@ export default {
     }
 
     .every-col{
-        height: 32px;
+        height: 40px;
         border-bottom: 1px solid #F0F0F0;
     }
     .article{
@@ -370,7 +370,7 @@ export default {
             text-overflow:ellipsis;
             white-space: nowrap;    
             background: transparent;
-            top:0px;
+            top:5px;
             font-weight:bold;
         }
         .plan{
@@ -382,7 +382,7 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top:1px;
+            top:5px;
             overflow: hidden;
              text-overflow:ellipsis;
             white-space: nowrap;   
@@ -398,7 +398,7 @@ export default {
             position: absolute;
             cursor: pointer;
             // opacity: 0.5;
-            top:1px;
+            top:5px;
              overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;   

@@ -152,7 +152,7 @@ export default {
             var clientHeight = document.documentElement.clientHeight;
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
-            console.log(rightDom,leftDom,"------")
+           
         }, 400);
     },
     
@@ -290,6 +290,14 @@ export default {
                 this.treeParams.statusType='PREPARE';
                 this.getTreeData(this.treeParams);
             }
+            setTimeout(() => {
+                var leftDom=document.getElementById('vue-chart-left-table-list');
+                var rightDom = document.getElementById("vue-chart-right-draw-content");
+                var clientHeight = document.documentElement.clientHeight;
+                leftDom.style.maxHeight = clientHeight - 362+"px";
+                rightDom.style.maxHeight = clientHeight - 362 +"px";
+           
+            }, 200);
         },
         //获取今天日期
         getStartDay(){

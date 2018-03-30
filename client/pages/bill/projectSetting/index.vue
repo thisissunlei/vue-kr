@@ -55,7 +55,13 @@ export default {
 
 <style lang="less" >
     .project-setting{
-        
+        .nav-text.ivu-tabs-nav{
+            width: 100%;
+        }
+        .ivu-tabs-nav .ivu-tabs-tab{
+            width: 50%;
+            text-align: center;
+        }
         .ivu-tabs-bar{
             margin: 0px;
         }

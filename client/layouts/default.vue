@@ -2,10 +2,11 @@
   body{
         padding-left:180px;
         min-height:100%;
+        
+        margin: 0px;
         #__nuxt{
             height:100%;
         }
-        margin: 0px;
     }
     
 </style>
@@ -36,7 +37,8 @@
                 spanRight: 24,
                 spanLeft:'',
                 bodyStyle:{
-                    height:"200px"
+                    height:"200px",
+                    overflow:'auto'
                 }
 
             }

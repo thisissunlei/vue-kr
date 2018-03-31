@@ -118,7 +118,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay(7),
+                endTime:this.getEndDay(20),
                 startTime:this.getStartDay(),
                 pageSize:15,
                 page:nowPage,
@@ -315,6 +315,7 @@ export default {
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            // return '2018-01-01'
             return today;
         },
         //结束日期
@@ -375,20 +376,22 @@ export default {
             leftList.scrollTop = chartDom.scrollTop;
             var startTime = this.getDayToTime(this.params.startTime);
             var endTime = this.getDayToTime(this.params.endTime);
+            var minTime = this.getDayToTime(this.minDay);
+            var maxTime = this.getDayToTime(this.maxDay);
             
             if(isRight<=0){
                 
                
-               if(this.isLoading ||endTime>=this.maxDay){
+               if(this.isLoading ||endTime>=maxTime){
                    return;
                }
                 this.addAfterMonthNum(this.params.endTime,2);
 
             }
-            if(chartDom.scrollLeft<=0){
+            if(chartDom.scrollLeft<=5){
               
-                
-                if(this.isLoading ||startTime<=this.minDay){
+                // console.log(startTime,this.minDay,"ppppppp")
+                if(this.isLoading ||startTime<=minTime){
                    return;
                 }
                 this.addBeforeMonthNum(this.params.startTime,2)

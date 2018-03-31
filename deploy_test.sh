@@ -27,7 +27,7 @@ case $1 in
     target_site="www@${test02_ip}"
     target_site_port=22
   ;;
-  test02)
+  test03)
     target_site="www@${test03_ip}"
     target_site_port=22
   ;;

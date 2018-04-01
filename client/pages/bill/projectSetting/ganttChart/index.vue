@@ -300,12 +300,17 @@ export default {
                 year:+endArr[0],
                 month:+endArr[1]
             }
+            endObj.month = endObj.month +1;
+            if(endObj>12){
+                endObj.month = endObj.month -1;
+                endObj.year = endObj.year +1;
+            }
             var yearArr = [];
             if(startObj.year == endObj.year){
                yearArr=[{
                    year:startObj.year,
                    start:this.startTime,
-                   end:this.endTime
+                   end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
                }]
             }else{
                 yearArr=[{
@@ -432,7 +437,7 @@ export default {
                 start:8 - Obj.start,
                 end:Obj.end
             }
-            weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7;
+            weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7+1;
             weekData.dayNum = this.dayAllNum-weekData.start-weekData.end;
             this.getWeeks(weekData,min,max);
         },
@@ -461,6 +466,7 @@ export default {
                 start.month = end.month,
                 start = Object.assign({},this.dayToWeekDetail(start));
                 // console.log(start,"ooooooooo")
+                end.month = start.month;
                 end.day = start.day + 6;
                 end = Object.assign({},this.dayToWeekDetail(end));
                 length = 7;

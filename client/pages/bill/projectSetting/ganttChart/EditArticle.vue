@@ -364,14 +364,13 @@ export default {
             line-height: 30px;
             padding-left: 6px;
            
-            overflow: hidden;
+           
             width: 100%;
-           overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: nowrap;    
+            
             background: transparent;
             top:5px;
             font-weight:bold;
+            white-space: nowrap;
         }
         .plan{
             height: 29px;
@@ -383,9 +382,8 @@ export default {
             position: absolute;
             cursor: pointer;
             top:5px;
-            overflow: hidden;
-             text-overflow:ellipsis;
-            white-space: nowrap;   
+             white-space: nowrap;
+              
             font-weight:bold;
         }
         .actual{
@@ -399,9 +397,8 @@ export default {
             cursor: pointer;
             // opacity: 0.5;
             top:5px;
-             overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: nowrap;   
+             white-space: nowrap;
+             
             font-weight:bold; 
         }
         

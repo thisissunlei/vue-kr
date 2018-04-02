@@ -118,7 +118,7 @@ export default {
             openSure:false,
             id:'',
             params:{
-                endTime:this.getEndDay(20),
+                endTime:this.getEndDay(24),
                 startTime:this.getStartDay(),
                 pageSize:15,
                 page:nowPage,
@@ -320,7 +320,7 @@ export default {
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            // return '2018-01-01'
+            return '2017-05-01'
             return today;
         },
         //结束日期
@@ -403,7 +403,6 @@ export default {
 
             }
             if(isBottom<=0){
-                console.log("bottom=======",isBottom)
                 if(this.isLoading){
 
                    return;

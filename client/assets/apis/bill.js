@@ -252,7 +252,6 @@ export default  {
       url: '/api/krspace-pay/account/community/list?',
       method: 'get'
     },
-<<<<<<< HEAD
     //根据父级ID查询子级任务列表
     'parent-search-kid': {
       url: '/api/krspace-erp-web/pm/task/sub-list',
@@ -267,15 +266,11 @@ export default  {
     'project-id-search': {
       url: '/api/krspace-erp-web/pm/task/tree',
       method: 'get'
-    }
-
-=======
+    },
     //账单中心--回款列表--未绑定列表
     'get-payment-unbind-list': {
       url: '/api/krspace-pay/payment/unbind/list',
       method: 'get'
     },
-    
->>>>>>> feature/修改菜单
   }
   

@@ -206,6 +206,10 @@ export default {
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
+                    this.params.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    var endObj = this.monthAdd(response.data.lastEndTime);
+                    this.params.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                
                 }
                 var totalPages=response.data.totalPages;
                 allPage = totalPages==0?1:totalPages;
@@ -218,6 +222,37 @@ export default {
                 });
             })
         },
+        monthAdd(num){
+            var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
+            var endArr = endTime.split("-");
+            var endObj = {
+                year:+endArr[0],
+                month:+endArr[1],
+                day:+endArr[2]
+            }
+            endObj.month+=1;
+            if(endObj.month>12){
+                endObj.month = endObj.month - 12;
+                endObj.year = endArr.year+1;
+            }
+            return endObj;
+        },
+         compareTime(data1,data2){
+            var data='';
+            var startData=(new Date(data1+' 00:00:00')).getTime();
+            var endData=data2;
+            data=startData<endData?startData:endData;
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+        },
+
+        compareEndTime(data1,data2){
+            var data='';
+            var startData=(new Date(data1+' 00:00:00')).getTime();
+            var endData=(new Date(data2+' 00:00:00')).getTime();;
+            data=startData>endData?startData:endData;
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+        },
+       
         //获取甘特图任务数据
         getTreeData(params){     
             this.$http.get('project-status-search',params).then((response)=>{

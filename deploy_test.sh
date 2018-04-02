@@ -27,18 +27,10 @@ case $1 in
     target_site="www@${test02_ip}"
     target_site_port=22
   ;;
-<<<<<<< HEAD
   test03)
     target_site="www@${test03_ip}"
     target_site_port=22
   ;;
-
-=======
-  test07)
-    target_site=www@$192.168.200.2:22
-    target_site_port=22
-  ;;
->>>>>>> 7480668371754f2bcc85d9bb609d514519a39516
   *)
 
   target_site=www@10.1.60.201

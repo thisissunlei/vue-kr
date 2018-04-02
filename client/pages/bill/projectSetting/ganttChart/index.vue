@@ -460,14 +460,18 @@ export default {
                 length:length,
                 end:Object.assign({},end)
             }]
-            for (var i = 1; i <weekObj.weeks ;i++) {
+            for (var i = 0; i <weekObj.weeks ;i++) {
                
                 start.day = +end.day + 1,
                 start.month = end.month,
+                end.day = start.day + 6;
                 start = Object.assign({},this.dayToWeekDetail(start));
                 // console.log(start,"ooooooooo")
+<<<<<<< HEAD
                 end.month = start.month;
                 end.day = start.day + 6;
+=======
+>>>>>>> 6ac54b1b4cf2ab84ad87adb37742a9735c1a5278
                 end = Object.assign({},this.dayToWeekDetail(end));
                 length = 7;
                 arr.push({

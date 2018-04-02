@@ -312,6 +312,11 @@ export default {
            
             }, 200);
         },
+        //获取当月的天数
+        getDayNum(year,month){
+            var d= new Date(year, month, 0);  
+            return d.getDate();   
+        },
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -324,7 +329,7 @@ export default {
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
-                day= +start[2];
+                day= this.getDayNum(year,month);
             for(var i=0;i<n;i++){
               
                 if(month > 12){

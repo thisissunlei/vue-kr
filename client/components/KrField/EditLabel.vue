@@ -85,6 +85,7 @@ export default {
 <style lang="less" scoped>
 .edit-label{
 	.edit-icon{
+
 		
 		position: absolute;
 		right: 0;

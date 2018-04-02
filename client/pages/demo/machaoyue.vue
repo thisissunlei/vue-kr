@@ -12,14 +12,38 @@
         {{list}}
         <SinglePhone :defaultImg="defaultImg" :photeUrl="photeUrl"/>
             <Button type="primary" @click="handleSubmit()" >提交</Button>
-        <Form ref="formRight" :model="formRight" :rules="ruleValidate" class="demo-m">
+        <Form ref="formRight" :model="formRight" :rules="ruleValidate" class="demo-m" label-position="top">
             <KrField 
                 :readOrEdit="true" 
                 type="text"  
                 label="含税" 
                 value="123er" 
                 name='try'
+                inline="true"
                 placeholder="请输s入含税收入" 
+                :maxLength="200"
+                @okClick="okClick"
+            />
+            <KrField 
+                :readOrEdit="true" 
+                type="select"  
+                label="selectData" 
+                value="202" 
+                name='try'
+                inline="true"
+                placeholder="selectData" 
+                :selectData="selectData"
+                :maxLength="200"
+                @okClick="okClick"
+            />
+             <KrField 
+                :readOrEdit="true" 
+                type="date"  
+                label="selectData" 
+                value="202" 
+                name='try'
+                inline="true"
+                placeholder="selectData" 
                 :maxLength="200"
                 @okClick="okClick"
             />
@@ -46,6 +70,17 @@ import KrField from '~/components/KrField';
                 ruleValidate:{
 
                 },
+                selectData:[
+                    {
+                        label:'11',
+                        value:'22'
+                    },
+                    {
+                        label:'101',
+                        value:'202'
+                    }
+
+                ],
                 defaultImg:'http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/W/150220446_340.png',
                 // photeUrl:''
                 photeUrl:'http://krspace-upload-test.oss-cn-beijing.aliyuncs.com/activity_unzip/201803/D/150334902_58.png'

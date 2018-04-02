@@ -123,7 +123,7 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
-
+//表单项的排列方式。在form上设置label-position，一共三个值：left;right;top
 export default {
     components:{
       KrCascader,

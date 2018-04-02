@@ -214,8 +214,9 @@ export default {
            
         }
         .view-channel{
-            // border-bottom:2px solid #F1F1F1; 
+            border-bottom:1px solid #F1F1F1;
             position: relative;
+            width: 100%;
             height: 32px;
            
         }

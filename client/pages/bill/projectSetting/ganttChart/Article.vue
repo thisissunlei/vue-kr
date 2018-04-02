@@ -1,6 +1,13 @@
 
 <template>
-    <div class="every-view-col" :data-chart="data.t_id" >
+    <div class="every-view-col" :data-chart="data.t_id" 
+        :style="{
+                width:boxDetail.width * minCalibration+'px',
+                left:boxDetail.office * minCalibration+'px',
+               
+            }"
+    
+    >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"

@@ -9,6 +9,7 @@ target_site_port=9830
 
 test01_ip=ali-docker-test01
 test02_ip=ali-docker-test02
+test03_ip=ali-docker-test03
 
 case $1 in
 
@@ -17,13 +18,17 @@ case $1 in
     target_site_port=9830
   ;;
 
-  test01 | test03 | test05)
+  test01)
     target_site="www@${test01_ip}"
     target_site_port=22
   ;;
 
-  test02 | test04 | test06)
+  test02)
     target_site="www@${test02_ip}"
+    target_site_port=22
+  ;;
+  test03)
+    target_site="www@${test03_ip}"
     target_site_port=22
   ;;
 
@@ -35,7 +40,9 @@ case $1 in
   ;;
   
 esac
-
+########
+#最新添加
+########
 
 echo $1
 echo $target_site

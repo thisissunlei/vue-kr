@@ -215,6 +215,11 @@ export default {
      DetailStyle,
      IconTip
   },
+  head () {
+        return {
+            title: "新建推送"
+        }
+  },
   data(){
       return{
           formItem:{

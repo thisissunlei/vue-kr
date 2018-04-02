@@ -132,6 +132,11 @@ import PdfDownload from './pdfDownload';
             Buttons,
             PdfDownload
         },
+        head () {
+            return {
+                title: "已出账单管理"
+            }
+        },
         data () {
             return {
                 totalCount:0,

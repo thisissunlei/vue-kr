@@ -78,6 +78,11 @@ export default {
 		LabelText,
 		SectionTitle
 	},
+	head () {
+            return {
+                title: "会议室订单详情"
+            }
+        },
 	data(){
 		return{
 			basicInfo:{},

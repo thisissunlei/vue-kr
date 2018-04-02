@@ -206,6 +206,11 @@ export default {
      DetailStyle,
      IconTip
   },
+  head () {
+        return {
+            title: "新建通知"
+        }
+    },
   data(){
       return{
           formItem:{

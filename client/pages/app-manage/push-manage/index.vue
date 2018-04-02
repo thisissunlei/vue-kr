@@ -54,6 +54,11 @@ export default {
         SearchForm,
         HighSearch
   },
+  head () {
+        return {
+            title: "推送管理"
+        }
+ },
   data(){
       return{
            page:1,

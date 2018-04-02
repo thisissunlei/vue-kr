@@ -59,6 +59,11 @@ export default {
 		LabelText,
 		SectionTitle
 	},
+	head () {
+            return {
+                title: "收入详情"
+            }
+    },
 	data(){
 		return{
 			basicInfo:{},

@@ -83,6 +83,11 @@ export default {
         components:{
             SectionTitle,
         },
+        head () {
+            return {
+                title: "交易流水"
+            }
+        },
         data () {
             return {
                 tableData:[],

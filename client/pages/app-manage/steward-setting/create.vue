@@ -81,6 +81,11 @@ export default {
      SectionTitle,
      SearchMember
   },
+  head () {
+        return {
+            title: "新增管家"
+        }
+ },
   data(){
       return{
           formItem:{

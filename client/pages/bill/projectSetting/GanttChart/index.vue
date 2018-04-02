@@ -330,7 +330,7 @@ export default {
                         }
                         yearArr.push({
                             year:year,
-                            start:year+'-'+1+1,
+                            start:year+'-'+1+'-'+1,
                             end:year+'-'+12+'-'+this.getDayNum(year,12)
                         })
                 }

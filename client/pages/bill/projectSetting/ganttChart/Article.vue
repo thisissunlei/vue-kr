@@ -1,11 +1,7 @@
 
 <template>
     <div class="every-view-col" :data-chart="data.t_id" 
-        :style="{
-                width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px',
-               
-            }"
+       
     
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
@@ -204,6 +200,7 @@ export default {
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
+            console.log(officeStart,"-----",min,utils.dateDiff(officeStart,min));
             var officeEnd = min;
            
             this.boxDetail={
@@ -232,6 +229,7 @@ export default {
                 lineOffice = this.planDetail.office;
                 lineWidth = this.planDetail.width;
             }
+            // console.log(this.boxDetail,"oooooooo",this.startDat,this.minCalibration);
             this.lineDetail = {
                 width:lineWidth,
                 office:lineOffice
@@ -283,6 +281,7 @@ export default {
     position: absolute;
     top: 0px;
     width: 100%;
+    left: 0px;
    
     border-bottom: 1px solid #F1F1F1;
     .tag{
@@ -314,7 +313,7 @@ export default {
             background: transparent;
     }
     .article{
-        position: relative;
+        position: absolute;
         background: transparent;
         height: 30px;
         top: -1px;

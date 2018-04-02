@@ -109,7 +109,7 @@ import AddTask from './addTask';
 import EditTask from './editTask';
 import WatchRecord from './watchRecord';
 import DetailTaskList from './detailTaskList';
-import GanttChart from '../ganttChart';
+import GanttChart from '../GanttChart';
 import Message from '~/components/Message';
 
 

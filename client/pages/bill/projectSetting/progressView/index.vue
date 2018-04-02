@@ -104,7 +104,7 @@
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './ListTable';
-import GanttChart from '../ganttChart';
+import GanttChart from '../GanttChart';
 
 var allPage = 1;
 var nowPage = 1;
@@ -251,7 +251,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.location.href=`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`;
+            window.location.href=`./projectSetting/ProjectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`;
         },
         //树
         treeClick(params){

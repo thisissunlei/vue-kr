@@ -2,7 +2,7 @@
   <div class="project-setting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick">
             <TabPane label="项目档案管理" name="tab1">
-                <archives v-if="mask"/>
+                <Archives v-if="mask"/>
                 
             </TabPane>
             <TabPane label="开业进度总览" name="tab2">
@@ -17,11 +17,11 @@
 
 <script>
 
-import archives from './archives'
-import ProgressView from './progressView';
+import Archives from './Archives'
+import ProgressView from './ProgressView';
 export default {
     components:{
-        archives,
+        Archives,
         ProgressView
     },
     data(){

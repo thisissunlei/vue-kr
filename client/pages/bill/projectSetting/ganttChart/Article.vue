@@ -1,17 +1,17 @@
 
 <template>
     <div class="every-view-col" :data-chart="data.t_id" 
-       
+        :style="{
+                width:boxDetail.width * minCalibration+'px',
+                left:boxDetail.office * minCalibration+'px',
+               
+            }"
     
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
-            :style="{
-                width:boxDetail.width * minCalibration+'px',
-                left:boxDetail.office * minCalibration+'px',
-               
-            }"
+          
         >
             
             <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
@@ -313,10 +313,11 @@ export default {
             background: transparent;
     }
     .article{
-        position: absolute;
+        position: relative;
         background: transparent;
         height: 30px;
         top: -1px;
+        width: 100%;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;

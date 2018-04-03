@@ -1,12 +1,13 @@
 <template>
     <div class="m-bill-wrap">
         <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-            <Tab-pane label="已付清账单" name="paid">   
-                <PaidList :mask="key"/>
-            </Tab-pane>
             <Tab-pane label="未付清账单" name="wait">
                 <WaitList :mask="key"/>
             </Tab-pane>
+            <Tab-pane label="已付清账单" name="paid">   
+                <PaidList :mask="key"/>
+            </Tab-pane>
+           
         </Tabs>    
     </div>
 </template>
@@ -24,7 +25,7 @@ export default {
     },
    data(){
        return {
-           activeKey:'paid',
+           activeKey:'wait',
            key:''
        }
    },
@@ -33,7 +34,7 @@ export default {
        WaitList
    },
    mounted(){
-      this.activeKey=sessionStorage.getItem('paymentMask')||'paid';
+      this.activeKey=sessionStorage.getItem('paymentMask')||'wait';
    },
    methods:{
         tabsClick(key){

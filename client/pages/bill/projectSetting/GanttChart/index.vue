@@ -147,6 +147,7 @@
                             :type="type"
                             :index="index"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
+                            @editClick="editClick"
                         />
                         
                         <ViewArticle  
@@ -266,13 +267,27 @@ export default {
         setTimeout(() => {
             this.scroolFix()
         }, 100);
-       
+
+        if(this.data.length){
+            this.circleId(this.data);
+        }
     },
    
     updated(){
         this.mask=this.treeData.length?true:false;
     },
     methods:{
+        editClick(id,pid){
+            this.$emit('editClick',id,pid);
+        },
+        circleId(data,param){
+            data.map((item,index)=>{
+                item.pid=param?param:'';
+                if(item.children&&item.children.length){
+                    this.circleId(item.children,item.value);
+                }
+            })
+        },
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){

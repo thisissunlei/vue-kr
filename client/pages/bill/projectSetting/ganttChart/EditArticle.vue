@@ -22,22 +22,26 @@
 
                             <div 
                                 class="plan"
+                                @click="editClick(data.value,data.pid)"
                                 :style="{
                                     background:getPlanBgColor(),
                                     width:planDetail.width * minCalibration + 'px',
                                     left:planDetail.office * minCalibration + 'px',
-                                    color:getPlanColor()
+                                    color:getPlanColor(),
+                                    cursor:'pointer'
                                 }"
                             >{{getActualLabel(data.label)}}
                             </div>
 
                             <div 
                                 class="actual"
+                                @click="editClick(data.value,data.pid)"
                                 :style="{
                                     width:actualDetail.width * minCalibration+'px',
                                     left:actualDetail.office * minCalibration + 'px',
                                     background:getActualBgColor(),
-                                    color:getActualColor()
+                                    color:getActualColor(),
+                                    cursor:'pointer'
 
                                 }"
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
@@ -45,7 +49,7 @@
                             {{getActualLabel(data.label)}}
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                            <div class="label" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
+                            <div class="label" @click="editClick(data.value,data.pid)" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px',cursor:'pointer'}">{{this.getLabel(data.label)}}</div>
                         </Tooltip> 
                     </div>
                 </div>
@@ -62,6 +66,7 @@
             :type="type"
             :index="index"
             :todayDetail="todayDetail"
+            @editClick="editClick"
         />
     
     </div>
@@ -125,6 +130,9 @@ export default {
         }
     },
     methods:{
+        editClick(id,pid){
+            this.$emit('editClick',id,pid);
+        },
         isInitial(){
              if(this.data.data.actualStartTime && this.data.data.actualEndTime){
                return true;

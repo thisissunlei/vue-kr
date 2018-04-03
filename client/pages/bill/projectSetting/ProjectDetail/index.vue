@@ -24,6 +24,7 @@
                 :treeIds="taskIds"
                 @rightOver="rightOver"
                 @treeClick="treeClick"
+                @editClick="editTask"
             >
                 <div class='detail-detail' slot="leftBar">
                     <DetailTaskList 

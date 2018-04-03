@@ -1,7 +1,6 @@
 <template>
 <div class="g-bill">
     <div class="u-search" >
-        <Buttons type="primary" label='批量结算' @click="onBillPay" checkAction='bill_batch_pay'/>
         <span class="u-high-search" @click="showSearch"></span> 
         <div style='display:inline-block;float:right;padding-right:20px;'>
             <Input 
@@ -43,46 +42,6 @@
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
         </div>
     </Modal>
-    <Modal
-        v-model="openSettle"
-        title="结账提示"
-        ok-text="确定"
-        cancel-text="取消"
-        width="443"
-     >
-       <settleAccounts 
-            :detail="itemDetail"
-        > </settleAccounts>
-        <div slot="footer">
-            <Button type="primary" @click="settleSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="showSettle">取消</Button>
-        </div>
-    </Modal>
-    <Modal
-        v-model="openAntiSettle"
-        title="反结算提示"
-        ok-text="确定"
-        cancel-text="取消"
-        width="443"
-     >
-       <antiSettlement 
-            :detail="itemDetail"
-            @formData="getAntiSettleData"
-        > </antiSettlement>
-        <div slot="footer">
-            <Button type="primary" @click="antiSettleSubmit">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="showAntiSettle">取消</Button>
-        </div>
-    </Modal>
-    <Modal
-        v-model="openClose"
-        title="提示"
-        ok-text="确定"
-        cancel-text="取消"
-        width="443"
-     >
-      <p class="u-tip">请先选择结算数据！</p>
-    </Modal>
     <Message 
         :type="MessageType" 
         :openMessage="openMessage"
@@ -111,8 +70,6 @@
 
 <script>
 import HighSearch from './highSearch';
-import settleAccounts from './settleAccounts';
-import antiSettlement from './antiSettlement';
 import dateUtils from 'vue-dateutils';
 import SectionTitle from '~/components/SectionTitle';
 import Message from '~/components/Message';
@@ -124,8 +81,6 @@ import PdfDownload from './pdfDownload';
         name: 'paid',
         components:{
             HighSearch,
-            settleAccounts,
-            antiSettlement,
             SectionTitle,
             Message,
             Buttons,
@@ -138,9 +93,6 @@ import PdfDownload from './pdfDownload';
             return {
                 totalCount:0,
                 openSearch:false,
-                openSettle:false,
-                openAntiSettle:false,
-                openClose:false,
                 billList:[],
                 billIds:[],
                 itemDetail:{},
@@ -262,142 +214,36 @@ import PdfDownload from './pdfDownload';
                         align:'center',
                         width:90,
                         render:(h,params)=>{
-                            if(params.row.payStatus==='PAYMENT'){
-                                 return h('div', [
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openView(params.row)
-                                                    }
-                                                }
-                                            }, '查看'),
-                                            h(Buttons, {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small',
-                                                    checkAction:'bill_pay',
-                                                    label:'结账',
-                                                    styles:'color:#2b85e4;padding: 2px 7px;',
-                                                },
-                                               
-                                                on: {
-                                                    click: () => {
-                                                        this.showSettle(params.row)
-                                                    }
-                                                }
-                                            }),
-                                            h(Buttons, {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small',
-                                                    checkAction:'bill_back_pay',
-                                                    label:'反结算',
-                                                    styles:'color:#2b85e4;padding: 2px 7px;',
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.showAntiSettle(params.row)
-                                                    }
-                                                }
-                                            }),
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openDownloadDialog(params.row)
-                                                    }
-                                                }
-                                            }, '下载')
-                                        ]);  
-                            }else if(params.row.payStatus==='PAID'){
-                                return h('div', [
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openView(params.row)
-                                                    }
-                                                }
-                                            }, '查看'),
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openDownloadDialog(params.row)
-                                                    }
-                                                }
-                                            }, '下载')
-                                        ]);
-                            }else if(params.row.payStatus==='WAIT'){
-                                return h('div', [
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openView(params.row)
-                                                    }
-                                                }
-                                            }, '查看'),
-                                            h(Buttons, {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small',
-                                                    checkAction:'bill_pay',
-                                                    label:'结账',
-                                                    styles:'color:#2b85e4;padding: 2px 7px;',
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.showSettle(params.row)
-                                                    }
-                                                }
-                                            }),h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openDownloadDialog(params.row)
-                                                    }
-                                                }
-                                            }, '下载')
-                                        ]);
-                            }
+                            return h('div', [
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openView(params.row)
+                                            }
+                                        }
+                                    }, '查看'),
+                                    h('Button', {
+                                        props: {
+                                            type: 'text',
+                                            size: 'small'
+                                        },
+                                        style: {
+                                            color:'#2b85e4'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.openDownloadDialog(params.row)
+                                            }
+                                        }
+                                    }, '下载')
+                                ]);
                         }
                     }
                 ]
@@ -489,15 +335,8 @@ import PdfDownload from './pdfDownload';
             openView(params){
                 window.open(`/bill/list/detail/${params.billId}`,'_blank');
             },
-            showSettle (params) {
-                params.btnType="Settle";
-                this.itemDetail=params;
-                this.openSettle=!this.openSettle;
-            },
-            showAntiSettle(params){
-                this.itemDetail=params;
-                this.openAntiSettle=!this.openAntiSettle;
-            },
+            
+            
             onExport(){
                  console.log('导出')
             },
@@ -521,87 +360,11 @@ import PdfDownload from './pdfDownload';
                 })
                 
             },
-            onBillPay(){
-                
-                if(this.billIds.length<=0){
-                     this.openClose=true; 
-                     return;  
-                }
-                let billIds=this.billIds.join(',');
-                let params={
-                    billIds:this.billIds.join(',')
-                }
-                this.$http.post('batch-pay',params).then((res)=>{
-                     if(res.code==-1){
-                        this.MessageType="error";
-                        this.warn=res.message;
-                        this.openMessage=true;
-                        return;
-                    }
-                    this.MessageType="success";
-                    this.warn=`已成功结算${res.data.successNum}条,失败${res.data.errorNum}条`;
-                    this.openMessage=true;
-                    this.billIds=""
-                    this.getTableData(this.tabParams);
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
-                })
-            },
-            
-            getAntiSettleData(form){
-                this.antiSettleData=form;
-            },
+           
             getSearchData(form){
                 this.searchData=form;
             },
-            settleSubmit(){
-                let params={
-                    billId:this.itemDetail.billId
-                }
-                this.$http.post('bill-pay',params).then((res)=>{
-                    if(res.code==-1){
-                        this.MessageType="error";
-                        this.warn=res.message;
-                        this.openMessage=true;
-                        return;
-                    }
-                    this.openSettle=false;
-                    this.MessageType="success";
-                    this.warn="结算成功！"
-                    this.openMessage=true;
-                    this.getTableData(this.tabParams);
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
-                })
-                
-            },
-            antiSettleSubmit(){
-                let params={
-                    billId:this.itemDetail.billId
-                }
-                this.$http.post('bill-release',params).then((res)=>{
-                     if(res.code==-1){
-                        this.MessageType="error";
-                        this.warn=res.message;
-                        this.openMessage=true;
-                        return;
-                    }
-                    this.openAntiSettle=false;
-                    this.MessageType="success";
-                    this.warn="反结算成功"
-                    this.openMessage=true;
-                    this.getTableData(this.tabParams);
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
-                });
-               
-            },
+           
             searchSubmit(){
                 this.tabParams=this.searchData;
                 this.page=1;

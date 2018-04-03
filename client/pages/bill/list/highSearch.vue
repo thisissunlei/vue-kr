@@ -7,15 +7,14 @@
                     v-model="formItem.billNo"
                     placeholder="请输入账单编号"
                     style="width: 250px"
-               ></Input>
+               />
             </FormItem>
             <FormItem label="客户名称" class="u-input">
                  <Input
                     v-model="formItem.customerName"
                     placeholder="请输入客户名称"
                     style="width: 250px"
-               ></Input>
-
+               />
             </FormItem>
 
             <FormItem label="社区名称" class="u-input">
@@ -48,7 +47,6 @@
                     </Option>
                 </Select>
             </FormItem>
-            </FormItem>
             <FormItem label="账单日"  class="u-input u-date">
                 <DatePicker
                     type="date"
@@ -66,20 +64,22 @@
                     @on-change="endChange"
                ></DatePicker>
             </FormItem>
-             <FormItem label="支付状态" class="u-input">
-                  <Select
-                    v-model="formItem.payStatus"
-                    style="width:250px"
-                    placeholder="请输入支付状态"
-                >
-                    <Option
-                        v-for="item in statusList"
-                        :value="item.value"
-                        :key="item.value"
-                    >
-                        {{ item.label }}
-                    </Option>
-                </Select>
+            <FormItem label="付款截止日期"  class="u-input u-date">
+                <DatePicker
+                    type="date"
+                    v-model="formItem.DueStartTime"
+                    placeholder="请选择开始日期"
+                    style="width: 250px;"
+                    @on-change="dueStartChange"
+               ></DatePicker>
+                <span class="u-date-txt">至</span>
+               <DatePicker
+                    type="date"
+                     v-model="formItem.DueEndTime"
+                    placeholder="请选择截止日期"
+                    style="width: 250px;"
+                    @on-change="dueEndChange"
+               ></DatePicker>
             </FormItem>
         </Form>
 </div>
@@ -96,7 +96,9 @@ export default{
                 billType:'',
                 startTime:'',
                 endTime:'',
-                payStatus:'',
+                DueEndTime:'',
+                DueStartTime:''
+
             },
             typeList:[],
             statusList:[
@@ -134,6 +136,12 @@ export default{
         },
         endChange(date){
             this.formItem.billEndTime=date;
+        },
+        dueStartChange(date){
+            this.formItem.billDueStartTime=date;
+        },
+        dueEndChange(date){
+            this.formItem.billDueEndTime=date;
         },
         getBillType(){
             

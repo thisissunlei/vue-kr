@@ -323,37 +323,6 @@ import PdfDownload from './pdfDownload';
                                                 }
                                             }, '下载')
                                         ]);  
-                            }else if(params.row.payStatus==='PAID'){
-                                return h('div', [
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openView(params.row)
-                                                    }
-                                                }
-                                            }, '查看'),
-                                            h('Button', {
-                                                props: {
-                                                    type: 'text',
-                                                    size: 'small'
-                                                },
-                                                style: {
-                                                    color:'#2b85e4'
-                                                },
-                                                on: {
-                                                    click: () => {
-                                                        this.openDownloadDialog(params.row)
-                                                    }
-                                                }
-                                            }, '下载')
-                                        ]);
                             }else if(params.row.payStatus==='WAIT'){
                                 return h('div', [
                                             h('Button', {

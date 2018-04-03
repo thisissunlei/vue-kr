@@ -71,6 +71,11 @@
         }
         globalNav.allSwitch()
     }
+    //设置页面的一级路由
+    GlobalRouter.prototype.setDefaultHeader = function (value) {
+        var j_li = document.getElementsByName(value)[0];
+        j_li.setAttribute("class", "active");
+    }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
         var router = getRouter();
@@ -205,11 +210,12 @@
                 href = item.menuItems[0].menuItems[0].router;
             }
             href = setHref(item.type, href)
+            //默认第一个（毅豪说的）
             if (index > navUtils.navNum - 1) {
-                more += '<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
+                more += '<li name="'+item.primaryText+'" class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
                 return;
             }
-            html += '<li class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
+            html += '<li name="'+item.primaryText+'" class=' + (item.router == router ? 'active' : 'default') + '><a href="' + href + '">' + item.primaryText + '</a></li>';
             // html += '<li class=' + (item.active ? 'active' : 'default') + '><span>' + item.primaryText + '</span></li>';
         });
         if (navs.length && navs.length > navUtils.navNum) {
@@ -388,6 +394,8 @@
     var globalNav = new GlobalNav();
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    global.GLOBALHEADERSET = Router.setDefaultHeader;
+
 
     Router.init();
     //第一级菜单

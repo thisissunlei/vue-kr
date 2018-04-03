@@ -499,6 +499,7 @@ export default {
                 .ivu-tabs-ink-bar{
                     // width:58px !important;
                     // left: 56px;
+                    top: auto;
                 }
             }
             .chart-left-table{

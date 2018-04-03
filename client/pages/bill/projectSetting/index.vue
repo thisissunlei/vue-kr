@@ -58,6 +58,9 @@ export default {
         .nav-text.ivu-tabs-nav{
             width: 100%;
         }
+        .ivu-tabs-ink-bar{
+            top:0px;
+        }
         .ivu-tabs-nav .ivu-tabs-tab{
             width: 50%;
             text-align: center;

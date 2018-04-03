@@ -108,7 +108,6 @@ export default {
                 }
                 
             }
-            console.log(allChannel,"ppppppppp")
             return allChannel;
            
         },

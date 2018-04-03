@@ -237,18 +237,18 @@ export default {
             leftEndpoint:{},
             //刻度的下拉选择项
             timeList: [
-                    {
-                        value: 'month',
-                        label: '月'
-                    },
-                    {
-                        value: 'week',
-                        label: '周'
-                    },
-                    {
-                        value: 'day',
-                        label: '天'
-                    }
+                {
+                    value: 'month',
+                    label: '月'
+                },
+                {
+                    value: 'week',
+                    label: '周'
+                },
+                {
+                    value: 'day',
+                    label: '天'
+                }
             ],
             //下拉的默认值
             barType: 'week',
@@ -265,7 +265,6 @@ export default {
         this.getYears(this.startTime,this.endTime);
         setTimeout(() => {
             this.scroolFix()
-           
         }, 100);
        
     },
@@ -277,7 +276,31 @@ export default {
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){
-                dom.scrollLeft = this.getTodayTOLeft(this.showData);
+                var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+                var offerLeft = 0;
+                var todayIsWeek = 0;
+                if(this.barType == 'day' || this.barType == 'week'){
+                    var todayIsWeek = (new Date()).getDay();
+                    offerLeft = (todayIsWeek+6) * this.minCalibration
+
+                }else{
+                    console.log(today,"ppppppppp=====")
+                    var todayArr = today.split('-');
+                    var todayObj = {
+                        year:+today[0],
+                        month:+today[1],
+                        dayNum:+today[2],
+                    }
+                    todayObj.month -=1;
+                    if(todayObj.month<0){
+                        todayObj.month = 12 - todayObj.month;
+                        todayObj.year -=1;
+                    }
+                    offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum)*this.minCalibration;
+
+                }   
+                console.log(offerLeft,"ppppppppp")
+                dom.scrollLeft = (this.getTodayTOLeft(this.showData)-offerLeft);
             }
         },
         getTodayTOLeft(data){
@@ -368,7 +391,6 @@ export default {
             }
 
             this.dayAllNum = barWidth;
-           
         },
         //获取今天日期
         getToday(){
@@ -443,7 +465,7 @@ export default {
                 start:8 - Obj.start,
                 end:Obj.end
             }
-            weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7+1;
+            weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7;
             weekData.dayNum = this.dayAllNum-weekData.start-weekData.end;
             this.getWeeks(weekData,min,max);
         },
@@ -451,9 +473,9 @@ export default {
         getWeeks(weekObj,min,max){
             
             var start={
-                    year:min.year,
-                    month:min.month,
-                    day:1
+                year:min.year,
+                month:min.month,
+                day:1
             }
             var length = weekObj.start;
             var end= {
@@ -495,7 +517,6 @@ export default {
                 }
 
             })
-           
             this.weeks = [].concat(arr);
             
         },
@@ -545,6 +566,7 @@ export default {
             display:inline-block;
             border-bottom: none;
             .chart-left{
+                overflow: hidden;
                 .ivu-tabs-nav{
                    width:100%;
                    height: 51px;

@@ -48,8 +48,11 @@ export default {
          getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{
                     res.data.enums.map((item)=>{
-                         this.billType[item.code]=item.name;  
+                         this.billType[item.code]=item.name; 
+                         item.label=item.name;
+                        item.value=item.code; 
                     })
+                    this.typeList=res.data.enums;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message

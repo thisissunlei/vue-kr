@@ -127,7 +127,7 @@ export default{
                 title:error.message
             });
         })
-        this.typeList=this.billType
+      
          
     },
     methods:{

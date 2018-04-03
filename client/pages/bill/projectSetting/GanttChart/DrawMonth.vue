@@ -2,7 +2,7 @@
 <template>
 	<div class="draw-month" :style="{width:dayNum * minCalibration+'px'}">
        <span class="label">
-           {{this.getShowDay(data)}}
+           {{data.year+'.'+(+data.month<10)?'0'+data.month:data.month}}
        </span>
 	</div>
        
@@ -29,13 +29,6 @@ export default {
         }
     },
     methods:{
-       getShowDay(data){
-           data.month = +data.month;
-           if(data.month<10){
-               data.month = '0'+data.month;
-           }
-           return data.year+'.'+data.month;
-       }
     }
 }
 </script>

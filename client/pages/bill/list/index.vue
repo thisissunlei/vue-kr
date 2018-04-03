@@ -48,14 +48,14 @@ export default {
        WaitList
    },
    mounted(){
-      this.activeKey=sessionStorage.getItem('paymentMask')||'wait';
+      this.activeKey=sessionStorage.getItem('billMask')||'wait';
       this.getBillType();
       this.getCommunity();
    },
    methods:{
         tabsClick(key){
            this.key=key;
-           sessionStorage.setItem('paymentMask',key);
+           sessionStorage.setItem('billMask',key);
             utils.addParams({});
         },
          getBillType(){

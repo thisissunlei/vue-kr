@@ -548,7 +548,9 @@ export default {
             font-family: PingFangSC-Medium;
             font-size: 14px;
             color: #666;
-            font-weight: bolder;
+        }
+       .ivu-tabs-mini .ivu-tabs-tab-active{
+           font-weight:bolder;
         }
 
         .ivu-tabs-nav .ivu-tabs-tab-active{

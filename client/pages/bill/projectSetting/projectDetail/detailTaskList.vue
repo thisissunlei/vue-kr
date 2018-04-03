@@ -2,10 +2,10 @@
     <div class='chart-wrap'>
        <div class='chart-title'>
           <p>任务列表</p>
-          <p class='chart-title-right' @click="addClick('')">
+          <!-- <p class='chart-title-right' @click="addClick('')">
             <Icon type="plus-circled" size="20" style="vertical-align:middle;color:#499df1;"/>
             <span class='chart-list' style="color:#499df1;">添加任务</span>
-          </p>
+          </p> -->
        </div>
 
        <div class='chart-detail'  @mouseover='leftOver' id="vue-chart-left-detail-list"> 
@@ -55,10 +55,10 @@
                             </div>
                           </div>
                       </li>
-                      <p class='add-child-task' @click="addClick(item.value)">
+                      <!-- <p class='add-child-task' @click="addClick(item.value)">
                         <Icon type="plus-circled" size="20" style="vertical-align:middle;color: rgb(102, 102, 102);"/>
                         <span class='chart-list'>添加子任务</span>
-                      </p>
+                      </p> -->
                 </ul>
 
               </li>
@@ -141,7 +141,7 @@ export default {
      .chart-title{
        width:100%;
        height:100px;
-       text-align:center;
+       //text-align:center;
        line-height:100px;
        padding-left:12px;
        padding-right:18px;

@@ -61,9 +61,14 @@ export default {
         .nav-text.ivu-tabs-nav{
             width: 100%;
         }
+        .ivu-tabs-ink-bar{
+            top:0px;
+            height: 4px;
+        }
         .ivu-tabs-nav .ivu-tabs-tab{
             width: 50%;
             text-align: center;
+            line-height: 35px;
         }
         .ivu-tabs-bar{
             margin: 0px;

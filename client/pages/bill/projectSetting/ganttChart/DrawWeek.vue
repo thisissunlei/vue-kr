@@ -1,7 +1,7 @@
 
 <template>
 	<div class="draw-week" :style="{width:data.length * minCalibration+'px'}" >
-        {{data.start.month+'.'+data.start.day+'-'+data.end.month+'.'+data.end.day}}
+        {{data.start.month+'/'+data.start.day+' - '+data.end.month+'/'+data.end.day}}
 	</div>
 </template>
 

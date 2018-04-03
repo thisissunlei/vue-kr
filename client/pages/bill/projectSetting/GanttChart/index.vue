@@ -542,10 +542,12 @@ export default {
                 .ivu-tabs-nav{
                    width:100%;
                    height: 51px;
-                   padding-top: 8px;
+                   line-height: 51px;
+                //    padding-top: 8px;
                    .ivu-tabs-ink-bar{
                     //    width:58px !important;
                     //    left: 56px;
+                    height: 2px;
                    }
                 }
             }
@@ -554,6 +556,9 @@ export default {
                 text-align: center;
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
+                line-height: 20px;
+                position: relative;
+                top: -10px;
             }
             .ivu-tabs-nav .ivu-tabs-tab-active{
                 color: #4A90E2;

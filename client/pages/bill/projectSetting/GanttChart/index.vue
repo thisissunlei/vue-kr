@@ -275,7 +275,9 @@ export default {
     methods:{
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
-            dom.scrollLeft = this.getTodayTOLeft(this.showData);
+            if(dom){
+                dom.scrollLeft = this.getTodayTOLeft(this.showData);
+            }
         },
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());

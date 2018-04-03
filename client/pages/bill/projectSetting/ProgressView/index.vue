@@ -5,8 +5,8 @@
         <GanttChart 
             v-if = "!isLoading"
             type='view' 
-            :startTime="params.startTime" 
-            :endTime="params.endTime"
+            :start="params.startTime" 
+            :end="params.endTime"
             @treeClick="treeClick"
             @rightOver="rightOver"
             :treeData="treeData"
@@ -193,8 +193,8 @@ export default {
             var data = Object.assign({},params);
             var startTime = data.startTime.split(" ")[0]+' 00:00:00';
             var endTime = data.endTime.split(" ")[0]+' 00:00:00';
-            data.startTime = startTime;
-            data.endTime = endTime;
+            data.startTime = '';
+            data.endTime = '';
             this.$http.get('project-progress-list',data).then((response)=>{
               
                 this.listData=response.data.items;

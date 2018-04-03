@@ -149,7 +149,7 @@ export default {
         },
         getPlanColor(){
             var bgColor = this.getPlanBgColor();
-            if(bgColor=='#E9F0F6'){
+            if(bgColor=='#EEEEEE'){
                 return '#666666';
             }else {
                 return '#BE8525';
@@ -219,7 +219,7 @@ export default {
             if(!this.data.data.actualEndTime&&this.data.data.planStartTime<nowTime ){
                 return '#FFE9AF'
             }else{
-                return '#E9F0F6'
+                return '#EEEEEE'
             }
        },
        getBoxWidthAndOffice(){

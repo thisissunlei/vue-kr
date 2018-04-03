@@ -1,11 +1,10 @@
 
 <template>
-	<div class="draw-month" :style="{width:dayNum * minCalibration+'px'}">
-       <span class="label">
+	<div class="draw-month" :style="{width:data.length * minCalibration+'px'}">
+       <span class="label" :style="{fontSize:size+'px'}">
            {{data.year+'.'+((+data.month<10)?'0'+data.month:data.month)}}
        </span>
 	</div>
-       
 </template>
 
 <script>
@@ -21,6 +20,9 @@ export default {
         minCalibration:{
             type:[String,Number],
             default:50
+        },
+        size:{
+            type:[String,Number]
         }
     },
     data(){
@@ -44,6 +46,7 @@ export default {
         box-sizing: border-box;
         border-bottom: 1px solid #F0F0F0;
         border-right: 1px solid #F0F0F0;
+        overflow: hidden;
         transition: all 0.3;
         .label{
             display: inline-block;

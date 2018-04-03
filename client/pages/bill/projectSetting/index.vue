@@ -55,6 +55,9 @@ export default {
 
 <style lang="less" >
     .project-setting{
+        .ivu-tabs{
+            overflow: visible;
+        }
         .nav-text.ivu-tabs-nav{
             width: 100%;
         }

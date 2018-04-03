@@ -37,7 +37,7 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch  @formData="getSearchData"></HighSearch>
+        <HighSearch  @formData="getSearchData" ></HighSearch>
          <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -132,7 +132,8 @@ import PdfDownload from './pdfDownload';
             PdfDownload
         },
         props:{
-            mask:String
+            mask:String,
+            billType:Array
         },
         
         data () {
@@ -155,11 +156,11 @@ import PdfDownload from './pdfDownload';
                 openMessage:false,
                 warn:'',
                 MessageType:'',
-                billType:{},
                 openDownload:false,
                 printDetail:'',
                 seal:'0',
                 loading:false,
+                typeList:[],
                 columns: [
                     {
                         type: 'selection',
@@ -389,6 +390,7 @@ import PdfDownload from './pdfDownload';
                     if(nextProps.mask=='wait'){
                       this.getTableData(this.params);
                     }
+                   
                 }
             }
         },
@@ -425,7 +427,6 @@ import PdfDownload from './pdfDownload';
                  this.openDownload=!this.openDownload;
             },
             renderList(){
-                this.getBillType();
                 let bizType=this.billType;
                 let billtype={
                         title: '账单类型',
@@ -439,19 +440,8 @@ import PdfDownload from './pdfDownload';
                 if(this.columns.length<13){
                     this.columns.splice(4, 0, billtype)
                 }
-                
             },
-            getBillType(){
-                this.$http.get('get-bill-type', '').then((res)=>{
-                    res.data.enums.map((item)=>{
-                         this.billType[item.code]=item.name;  
-                    })
-                }).catch((err)=>{
-                    this.$Notice.error({
-						title:err.message
-					});
-                })
-            },
+           
             showSearch (params) {
                 utils.clearForm(this.searchData);
                 this.openSearch=!this.openSearch;

@@ -119,7 +119,7 @@ export default{
 		}
     },
     mounted:function(){
-         this.getBillType();
+      
         this.$http.get('join-bill-community','').then((res)=>{
              this.communityList=res.data.items;
         }).catch((error)=>{
@@ -127,7 +127,7 @@ export default{
                 title:error.message
             });
         })
-       
+        this.typeList=this.billType
          
     },
     methods:{

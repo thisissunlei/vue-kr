@@ -22,7 +22,8 @@
 		</div>
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
-            	<Waiting v-if="selectedTab!='account'"/>
+            	<Basic v-if="selectedTab=='basic'"/>
+            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'"/>
         </div>
 		
     </div>
@@ -35,6 +36,7 @@
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
     import Waiting from './waiting.vue'; 
+    import Basic from './basic/index.vue'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -42,7 +44,8 @@
 			SectionTitle,
 			LabelText,
 			Assets,
-			Waiting
+			Waiting,
+			Basic
 		},
 		data (){
 			return{
@@ -69,7 +72,7 @@
 					name:'更多',
 					code:'more'
 				},],
-				selectedTab:'account',
+				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
 					customerName:'w',
@@ -133,7 +136,7 @@
 		.tab-list{
 			margin-left: 25px;
 			height: 25px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			.tab-span{
 				font-size:14px;
 				color:#666;

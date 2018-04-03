@@ -114,23 +114,11 @@ export default{
                     label:'未付清'
                 },
             ],
-            communityList:[]
 		}
     },
      props:{
-         typeList:Array
-    },
-    mounted:function(){
-      
-        this.$http.get('join-bill-community','').then((res)=>{
-             this.communityList=res.data.items;
-        }).catch((error)=>{
-            this.$Notice.error({
-                title:error.message
-            });
-        })
-      
-         
+         typeList:Array,
+         communityList:Array
     },
     methods:{
         startChange(date){

@@ -36,7 +36,11 @@
         cancel-text="取消"
         width="660"
      >
-        <HighSearch  @formData="getSearchData"  :typeList="typeList"></HighSearch>
+        <HighSearch  
+            @formData="getSearchData"  
+            :typeList="typeList"
+            :communityList="communityList"
+        />
          <div slot="footer">
             <Button type="primary" @click="searchSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
@@ -90,6 +94,7 @@ import PdfDownload from './pdfDownload';
             mask:String,
             billType:Array,
             typeList:Array,
+            communityList:Array,
         },
         data () {
             return {

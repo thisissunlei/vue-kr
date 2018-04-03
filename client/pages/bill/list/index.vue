@@ -2,10 +2,20 @@
     <div class="m-bill-wrap">
         <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
             <Tab-pane label="未付清账单" name="wait">
-                <WaitList :mask="key" :billType="billType" :typeList="typeList"/>
+                <WaitList 
+                    :mask="key" 
+                    :billType="billType" 
+                    :typeList="typeList"
+                    :communityList="communityList"
+                />
             </Tab-pane>
             <Tab-pane label="已付清账单" name="paid">   
-                <PaidList :mask="key"  :billType="billType"  :typeList="typeList"/>
+                <PaidList 
+                    :mask="key"  
+                    :billType="billType"  
+                    :typeList="typeList"
+                    :communityList="communityList"
+                />
             </Tab-pane>
            
         </Tabs>    
@@ -30,6 +40,7 @@ export default {
            key:'',
            billType:[],
            typeList:[],
+           communityList:[]
        }
    },
    components:{
@@ -39,11 +50,13 @@ export default {
    mounted(){
       this.activeKey=sessionStorage.getItem('paymentMask')||'wait';
       this.getBillType();
+      this.getCommunity();
    },
    methods:{
         tabsClick(key){
            this.key=key;
            sessionStorage.setItem('paymentMask',key);
+            utils.addParams({});
         },
          getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{
@@ -58,7 +71,16 @@ export default {
 						title:err.message
 					});
                 })
-            },
+         },
+         getCommunity(){
+              this.$http.get('join-bill-community','').then((res)=>{
+                this.communityList=res.data.items;
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
+         }
     }
  }
 </script>

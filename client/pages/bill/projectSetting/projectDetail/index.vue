@@ -3,8 +3,13 @@
         <div class='edit-left-bar'>
             <div class='detail-title'>
                 <div class='title-left'>
-                    <span>项目档案</span>
-                    <span>{{queryData.name}}</span>
+                    <div class='title-name-line'><span class='title-name'>项目档案</span></div>
+                    <div class='title-bread'>
+                        <Breadcrumb separator=">">
+                            <BreadcrumbItem to="/bill/projectSetting">开业进度总览</BreadcrumbItem>
+                            <BreadcrumbItem>{{queryData.name}}</BreadcrumbItem>
+                        </Breadcrumb>
+                    </div>
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
                 <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
@@ -622,7 +627,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
    .edit-left-bar{
        width:100%;
        background: #fff;
@@ -632,12 +637,33 @@ export default {
            height:50px;
            .title-left{
                 display:inline-block;
-                font-family: PingFangSC-Medium;
-                font-size: 14px;
-                color: #666666;
                 margin-top: 5px;
-                span:nth-child(1){
-                    padding-right:10px;
+                .title-name-line{
+                    display:inline-block;
+                    padding-right:6px;
+                    height:14px;
+                    line-height: 14px;
+                    border-right:2px solid #999;
+                    margin-right:6px;
+                    .title-name{
+                        font-family: PingFangSC-Medium;
+                        font-size: 14px;
+                        color: #666666;
+                    }
+                }
+                .title-bread{
+                    display:inline-block;
+                    .ivu-breadcrumb .ivu-breadcrumb-item-link{
+                        color:#499df1;
+                        font-size: 14px;
+                        font-weight: 700;
+                    }
+                    .ivu-breadcrumb .ivu-breadcrumb-item-separator{
+                        font-size: 14px;
+                        color: #2A2A2A;
+                        font-family: PingFangSC-Medium;
+                        margin: 0 6px 0 3px;
+                    }
                 }
            }
            .title-right{

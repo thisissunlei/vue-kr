@@ -45,6 +45,7 @@
                                     type="selectTree" 
                                     :data="treeData" 
                                     @okClick="treeClick"
+                                    @checkChange="treeChange"
                                     :treeIds="treeIds"
                                 />
                         </Form>
@@ -289,6 +290,9 @@ export default {
         },
         treeClick(params){
             this.$emit('treeClick',params);
+        },
+        treeChange(event){
+            this.$emit('treeChange',event);
         },
         //获取年数组
         getYears(startTime,endTime){

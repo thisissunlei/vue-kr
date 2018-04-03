@@ -2,7 +2,7 @@
 <template>
 	<div class="draw-month" :style="{width:dayNum * minCalibration+'px'}">
        <span class="label">
-           {{data.year+'.'+(+data.month<10)?'0'+data.month:data.month}}
+           {{data.year+'.'+((+data.month<10)?'0'+data.month:data.month)}}
        </span>
 	</div>
        

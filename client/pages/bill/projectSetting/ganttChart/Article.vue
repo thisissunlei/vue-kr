@@ -200,7 +200,6 @@ export default {
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
-            console.log(officeStart,"-----",min,utils.dateDiff(officeStart,min));
             var officeEnd = min;
            
             this.boxDetail={

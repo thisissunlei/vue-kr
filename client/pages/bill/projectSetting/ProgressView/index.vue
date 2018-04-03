@@ -125,9 +125,6 @@ export default {
                 status:2,
                 taskTemplateIds:''
             },
-            treeParams:{
-               statusType:"PREPARE" 
-            },
             minDay:'',
             maxDay:'',
             listData:[],
@@ -141,7 +138,7 @@ export default {
 
     },
     mounted(){
-        this.getTreeData(this.treeParams);
+        this.getTreeData();
         this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
@@ -254,8 +251,8 @@ export default {
         },
        
         //获取甘特图任务数据
-        getTreeData(params){     
-            this.$http.get('project-status-search',params).then((response)=>{
+        getTreeData(){     
+            this.$http.get('project-status-search').then((response)=>{
                 var array=[];
                 array.push(
                     {
@@ -327,16 +324,12 @@ export default {
                 this.params.status = 1;
                 this.params.page=1;
                 this.getListData(this.params);
-                this.treeParams.statusType='INVEST';
-                this.getTreeData(this.treeParams);
             }else{
                 this.tabValue=key;
                 this.mask=true;
                 this.params.status =2;
                 this.params.page=1;
                 this.getListData(this.params);
-                this.treeParams.statusType='PREPARE';
-                this.getTreeData(this.treeParams);
             }
             setTimeout(() => {
                 var leftDom=document.getElementById('vue-chart-left-table-list');

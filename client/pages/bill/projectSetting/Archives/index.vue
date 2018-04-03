@@ -327,16 +327,22 @@ import AddArchives from './addArchives';
         .ivu-table-cell{
             padding:0;
             height:100%;
-            .ivu-tooltip{ 
-                .row-current-more{
-                    border-bottom:1px solid #e9eaec;
-                    padding: 14px 0 15px 0;
-                }
-                .noBorder{
-                    border-bottom:none;
-                }
+        .ivu-tooltip{ 
+            .row-current-more{
+                //border-bottom:1px solid #e9eaec;
+                padding: 14px 0 15px 0;
+            }
+            .noBorder{
+                border-bottom:none;
             }
         }
+      }
+      .ivu-table-cell > div{
+            border-bottom:solid 1px #e9eaec;
+            &:last-child{
+                border-bottom:none;
+            }
+      }
     }
     .ivu-table-header{
         .ivu-table-cell{

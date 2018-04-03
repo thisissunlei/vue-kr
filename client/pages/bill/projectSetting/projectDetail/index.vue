@@ -249,10 +249,10 @@ export default {
              
                 //后面进行组件优化
                 this.isLoading = false;
-                this.listData.map((item,index)=>{
+                /*this.listData.map((item,index)=>{
                    item.children=item.children?item.children:[];
                    item.children.push({label:'添加自任务',chartType:'single'})
-                })
+                })*/
             }).catch((error)=>{
                 this.$Notice.error({
                  title: error.message,

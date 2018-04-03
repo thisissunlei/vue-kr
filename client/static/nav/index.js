@@ -483,6 +483,8 @@
     function getUserNav() {
         return {
             primaryText: "客户会员",
+            router: 'member/setting-manager',
+            type:'vue',
             menuItems: [
                 {
                     primaryText: '客户',

@@ -528,10 +528,8 @@ export default {
 <style lang="less">
    .chart-ul-wrap{
         width:100%;
-        
         box-sizing: border-box;
         display:inline-block;
-        overflow: auto;
         position: relative;
         padding-left:25px; 
         .chart-tab-left{

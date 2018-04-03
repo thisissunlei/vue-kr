@@ -100,7 +100,6 @@ export default{
                 DueStartTime:''
 
             },
-            typeList:[],
             statusList:[
                 {
                     value:'WAIT',
@@ -117,6 +116,9 @@ export default{
             ],
             communityList:[]
 		}
+    },
+     props:{
+         typeList:Array
     },
     mounted:function(){
       
@@ -142,23 +144,7 @@ export default{
         },
         dueEndChange(date){
             this.formItem.billDueEndTime=date;
-        },
-        getBillType(){
-            
-            this.$http.get('get-bill-type', '').then((res)=>{
-                res.data.enums.map((item)=>{
-                    item.label=item.name;
-                    item.value=item.code;
-                       
-                })
-                 this.typeList=res.data.enums;
-               
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
+        }
     },
     updated:function(){
         this.$emit('formData', this.formItem);

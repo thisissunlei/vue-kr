@@ -531,7 +531,7 @@
                             menuCode: 'mbr_card_base',
                         },
                         {
-                            primaryText: '会员权限组',
+                            primaryText: '会员门禁权限组',
                             menuCode: 'auth_user_group_list',
                             router: 'doorpermission/doorgroupmanage',
                         },

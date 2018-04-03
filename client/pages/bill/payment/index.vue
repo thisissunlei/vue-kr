@@ -16,7 +16,7 @@ import Bind from './bind';
 import Unbind from './unbind';
 
 export default {
-   name:'List',
+   name:'paymentList',
    head() {
         return {
             title: '订单管理'

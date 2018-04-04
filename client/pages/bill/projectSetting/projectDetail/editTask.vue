@@ -10,12 +10,12 @@
                         />
                     </Form-item>
 
-                    <Form-item label="管理层关注"  class="bill-search-class" prop="focus">
-                       <RadioGroup v-model="formItem.focus">
-                            <Radio label="true">
+                    <Form-item label="管理层关注"  class="bill-search-class" prop="fcus">
+                       <RadioGroup v-model="fcus" @on-change="radioChange">
+                            <Radio label="ok">
                                 是
                             </Radio>
-                            <Radio label="false">
+                            <Radio label="no">
                                 否
                             </Radio>
                         </RadioGroup>
@@ -107,6 +107,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import Vue from 'vue';
 export default {
     props:{
         id:{
@@ -121,16 +122,8 @@ export default {
         return{
             dateError:false,
             cDateError:false,
-            formItem:{
-                   name:'',
-                   planEndTime:'',
-                   planStartTime:'',
-                   actualStartTime:'',
-                   actualEndTime:'',
-                   descr:'',
-                   operDescr:'',
-                   focus:'true'
-            },
+            formItem:this.getEdit,
+            fcus:this.getEdit.focus,
             ruleValidate: {
                 name: [
                     { required: true, message: '请输入任务名称且最多20个字符', trigger: 'change',max:20 }
@@ -140,10 +133,7 @@ export default {
                 ],
                 planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
-                ],
-                focus:[
-                    { required: true, message: '请选择是否关注', trigger: 'change' }
-                ],
+                ]
             },
 
             actualStart:this.getEdit.actualStartTime,
@@ -155,19 +145,14 @@ export default {
     created(){    
         this.queryData=this.$route.query; 
     },
-    mounted(){
-        this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
-        this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
-        this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
-        this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
-        this.getEdit.focus=this.getEdit.focus?'true':'false';
-        this.formItem=this.getEdit;
-    },
     updated:function(){
         this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
     },
     methods:{
-       nameChange(event){
+        radioChange(bool){
+            this.formItem.focus=bool=='ok'?true:false;
+        },
+        nameChange(event){
             let params={
                 name:event.target.value,
                 propertyId:this.queryData.id,

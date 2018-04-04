@@ -467,6 +467,11 @@ export default {
             
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
+                    this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
+                    this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
+                    this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
+                    this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
+                    this.getEdit.focus=this.getEdit.focus?'ok':'no';
                     this.cancelEditTask();
                  }).catch((error)=>{
                      this.$Notice.error({
@@ -581,6 +586,7 @@ export default {
                     return ;
                 }
                 var dataParams=this.editData;
+                dataParams.focus=dataParams.focus=='ok'?true:(dataParams.focus=='no'?false:dataParams.focus);
                 dataParams.id=this.editId;
                 dataParams.pid=this.parentId?this.parentId:0;
                 dataParams.propertyId=this.queryData.id;

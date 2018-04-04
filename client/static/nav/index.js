@@ -394,7 +394,7 @@
     var globalNav = new GlobalNav();
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
-    global.GLOBALHEADERSET = Router.setDefaultHeader;
+    // global.GLOBALHEADERSET = Router.setDefaultHeader;
 
 
     Router.init();

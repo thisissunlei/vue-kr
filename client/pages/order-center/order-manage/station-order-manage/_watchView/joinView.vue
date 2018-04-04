@@ -18,6 +18,12 @@
 				<LabelText label="创建时间：">
 					{{basicInfo.ctime| dateFormat('YYYY-MM-dd HH:mm:SS')}}
 				</LabelText>
+				<LabelText label="订单状态：">
+					{{basicInfo.orderStatusName}}
+				</LabelText>
+				<LabelText label="生效时间：">
+					{{(basicInfo.effectDate || '-')| dateFormat('YYYY-MM-dd HH:mm:SS')}}
+				</LabelText>
 			</DetailStyle>
 			<DetailStyle info="租赁信息">
 				<LabelText label="租赁开始日期：">
@@ -271,6 +277,7 @@ export default {
 	
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
+		// GLOBALHEADERSET('订单合同')
 		this.getDetailData();
 	},
 

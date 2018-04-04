@@ -115,6 +115,11 @@ export default {
   components:{
      SectionTitle,
   },
+   head () {
+        return {
+            title: "编辑Icon"
+        }
+    },
   data(){
       return{
           formItem:{

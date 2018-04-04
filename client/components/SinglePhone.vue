@@ -150,8 +150,8 @@
             handleFormatError (file) {
                 // 格式校验失败执行内容
                 this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+                    title: '上传文件格式不正确',
+                    desc: '上传文件格式不正确，请选择jpg挥着png格式的文件'
                 });
             },
             handleMaxSize (file) {

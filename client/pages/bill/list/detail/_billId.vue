@@ -138,6 +138,11 @@ export default {
 		LabelText,
 		SectionTitle
 	},
+	head () {
+            return {
+                title: "账单详情"
+            }
+    },
 	data(){
 		return{
 			hideClass:'u-tab-list',

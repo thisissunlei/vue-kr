@@ -2,7 +2,7 @@
 <template>
 	<div class="draw-month" :style="{width:data.length * minCalibration+'px'}">
        <span class="label" :style="{fontSize:size+'px'}">
-           {{data.year+'.'+((+data.month<10)?'0'+data.month:data.month)}}
+           {{month}}
        </span>
 	</div>
 </template>
@@ -23,14 +23,24 @@ export default {
         },
         size:{
             type:[String,Number]
+        },
+        type:{
+            type:String
         }
     },
     data(){
         return {
-           
+           month:this.getMonth()
         }
     },
     methods:{
+        getMonth(){
+            if(this.type=='month'){
+                return this.data.month+'月';
+            }else {
+                return this.data.year+'.'+((+this.data.month<10)?'0'+this.data.month:this.data.month);
+            }
+        }
     }
 }
 </script>

@@ -146,6 +146,7 @@ export default {
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
+            return;
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
@@ -255,7 +256,16 @@ export default {
         //获取甘特图任务数据
         getTreeData(){     
             this.$http.get('project-status-search').then((response)=>{
-                this.treeData=response.data.items;
+                var array=[];
+                array.push(
+                    {
+                        label:'全部任务',
+                        value:0,
+                        t_id:0,
+                        children:response.data.items
+                    }
+                );
+                this.treeData=array;
                 //this.treeData.unshift({label:'全部任务',value:0,t_id:0})
                 this.recursiveFn(this.treeData);
                 //this.params.taskTemplateIds=this.treeMiddle.join(',');

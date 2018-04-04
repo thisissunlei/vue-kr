@@ -14,35 +14,45 @@
           
         >
             
-            <Tooltip :content="data.label" :placement="index==0?'bottom-start':'top-start'">
                 
-                <div 
-                    class="plan"
-                    :style="{
-                        background:getPlanBgColor(),
-                        width:planDetail.width * minCalibration + 'px',
-                        left:planDetail.office * minCalibration + 'px',
-                        color:getPlanColor()
-                    }"
-                >{{getActualLabel(data.label)}}
-                </div>
+            <div 
+                class="plan"
+                :style="{
+                    background:getPlanBgColor(),
+                    width:planDetail.width * minCalibration + 'px',
+                    left:planDetail.office * minCalibration + 'px',
+                    color:getPlanColor()
+                }"
+                @mouseover="toolOver"
+                @mouseout="toolOut"
+            >
+            {{getActualLabel(data.label)}}
+            </div>
 
-                <div 
-                    class="actual"
-                    :style="{
-                        width:actualDetail.width * minCalibration+'px',
-                        left:actualDetail.office * minCalibration + 'px',
-                        background:getActualBgColor(),
-                        color:getActualColor()
-
-                    }"
-                    v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
-                >  
-                {{getActualLabel(data.label)}}
-                </div>
-                <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                <div class="label" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}">{{this.getLabel(data.label)}}</div>
-            </Tooltip>
+            <div 
+                v-if="data.data.actualStartTime && data.data.actualEndTime"
+                class="actual"
+                :style="{
+                    width:actualDetail.width * minCalibration+'px',
+                    left:actualDetail.office * minCalibration + 'px',
+                    background:getActualBgColor(),
+                    color:getActualColor()
+                }"
+                @mouseover="toolOver"
+                @mouseout="toolOut"
+            >  
+            {{getActualLabel(data.label)}}
+            </div>
+            <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
+            <div 
+                class="label" 
+                :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}"
+                @mouseover="toolOver"
+                @mouseout="toolOut"
+            >
+                {{this.getLabel(data.label)}}
+            </div>
+        
                    
         </div>
         
@@ -109,6 +119,67 @@ export default {
        
     },
     methods:{
+        toolOver(event){
+            // return ;
+            var e = event || window.event;
+            var dom = event.target;
+            var detail = dom.getBoundingClientRect();
+            var tirDom = document.getElementById('gantt-chart-tool-tip');
+            tirDom.style.display = "inline-block";
+            var tirLocation = {
+                left:e.clientX,
+                top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
+            }
+            var obj  = this.getToolTipContent();
+            tirDom.innerHTML = obj.str;
+            tirDom.style.left = tirLocation.left-30 + 'px';
+            tirDom.style.top  = tirLocation.top +5 - 130 + 'px';
+            tirDom.style.width = obj.width + 'px';
+        },
+        getToolTipContent(){
+
+            var str  = '<div class="title">'+this.data.label+'</div>';
+            var data = Object.assign({},this.data.data);
+            var width = 150;
+            if(data.planEndTime && data.planStartTime){
+                var type ='MM/DD';
+
+                var startYear = (new Date(data.planStartTime)).getFullYear();
+                var endYear = (new Date(data.planEndTime)).getFullYear();
+                if(startYear !== endYear){
+                    type = 'YYYY/MM/DD';
+                    width=215;
+                }
+                
+                var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
+                var endDay = data.planEndTime?dateUtils.dateToStr(type,new Date(data.planEndTime)):'';
+                str += '<div class="content">'+'计划周期：'+startDay+'-'+endDay+'</div>'
+                
+            }
+            if(data.actualStartTime || data.actualEndTime){
+                var type ='MM/DD';
+                var startYear = (new Date(data.actualStartTime)).getFullYear();
+                var endYear = (new Date(data.actualEndTime)).getFullYear();
+                if(startYear !== endYear){
+                    type = 'YYYY/MM/DD';
+                    width=width>150?width:215;
+                }
+                var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
+                var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
+                
+                str += '<div class="content" >'+'完成周期：'+startDay+'-'+endDay+'</div>'
+            }
+            return {
+                str:str,
+                width:width
+
+            };
+        },
+        toolOut(event){
+            
+            var tirDom = document.getElementById('gantt-chart-tool-tip');
+            tirDom.style.display = "none";
+        },
         getLabelColor(){
             var planColor = this.getPlanBgColor();
             var actualColor = this.getActualBgColor();
@@ -329,7 +400,7 @@ export default {
             height: 29px;
             line-height: 30px;
             padding-left: 6px;
-            top: -12px;
+            
             overflow: hidden;
             width: 100%;
            overflow: hidden;
@@ -337,6 +408,8 @@ export default {
             white-space: nowrap;
             background: transparent;
             font-weight:bold;
+            top: 2px;
+            cursor: pointer;
         }
         .plan{
             height: 29px;
@@ -347,23 +420,22 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top: -11px;
-             overflow: hidden;
+            top: 2px;
+            overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;  
             font-weight:bold;
         }
         .actual{
             height: 29px;
-            
             border-radius: 7px 7px 8px 8px;
             line-height: 30px;
             padding-left:6px;
             color: #fff;
             position: absolute;
             cursor: pointer;
-            top: -11px;
-             overflow: hidden;
+            top: 2px;
+            overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;  
             font-weight:bold;

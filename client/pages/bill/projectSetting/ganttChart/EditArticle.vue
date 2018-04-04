@@ -15,14 +15,12 @@
                                 left:boxDetail.office * minCalibration+'px'
                             }"
                         >   
-                        <Tooltip 
-                            :content="data.label" 
-                            :placement="index==0?'bottom-start':'top-start'"
-                        >
-
+                       
                             <div 
                                 class="plan"
                                 @click="editClick(data.value,data.pid)"
+                                @mouseover="toolOver"
+                                @mouseout="toolOut"
                                 :style="{
                                     background:getPlanBgColor(),
                                     width:planDetail.width * minCalibration + 'px',
@@ -34,8 +32,11 @@
                             </div>
 
                             <div 
+                                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                                 class="actual"
                                 @click="editClick(data.value,data.pid)"
+                                @mouseover="toolOver"
+                                @mouseout="toolOut"
                                 :style="{
                                     width:actualDetail.width * minCalibration+'px',
                                     left:actualDetail.office * minCalibration + 'px',
@@ -44,13 +45,20 @@
                                     cursor:'pointer'
 
                                 }"
-                                v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                             >  
                             {{getActualLabel(data.label)}}
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                            <div class="label" @click="editClick(data.value,data.pid)" :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px',cursor:'pointer'}">{{this.getLabel(data.label)}}</div>
-                        </Tooltip> 
+                            <div 
+                                class="label" 
+                                @mouseover="toolOver"
+                                @mouseout="toolOut"
+                                @click="editClick(data.value,data.pid)" 
+                                :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px',cursor:'pointer'}"
+                            >
+                                {{this.getLabel(data.label)}}
+                            </div>
+                        
                     </div>
                 </div>
             </div>
@@ -130,6 +138,67 @@ export default {
         }
     },
     methods:{
+        toolOver(event){
+            // return ;
+            var e = event || window.event;
+            var dom = event.target;
+            var detail = dom.getBoundingClientRect();
+            var tirDom = document.getElementById('gantt-chart-tool-tip');
+            tirDom.style.display = "inline-block";
+            var tirLocation = {
+                left:e.clientX,
+                top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
+            }
+            var obj  = this.getToolTipContent();
+            tirDom.innerHTML = obj.str;
+            tirDom.style.left = tirLocation.left-30 + 'px';
+            tirDom.style.top  = tirLocation.top +5 - 130 + 'px';
+            tirDom.style.width = obj.width + 'px';
+        },
+        getToolTipContent(){
+
+            var str  = '<div class="title">'+this.data.label+'</div>';
+            var data = Object.assign({},this.data.data);
+            var width = 150;
+            if(data.planEndTime && data.planStartTime){
+                var type ='MM/DD';
+
+                var startYear = (new Date(data.planStartTime)).getFullYear();
+                var endYear = (new Date(data.planEndTime)).getFullYear();
+                if(startYear !== endYear){
+                    type = 'YYYY/MM/DD';
+                    width=215;
+                }
+                
+                var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
+                var endDay = data.planEndTime?dateUtils.dateToStr(type,new Date(data.planEndTime)):'';
+                str += '<div class="content">'+'计划周期：'+startDay+'-'+endDay+'</div>'
+                
+            }
+            if(data.actualStartTime || data.actualEndTime){
+                var type ='MM/DD';
+                var startYear = (new Date(data.actualStartTime)).getFullYear();
+                var endYear = (new Date(data.actualEndTime)).getFullYear();
+                if(startYear !== endYear){
+                    type = 'YYYY/MM/DD';
+                    width=width>150?width:215;
+                }
+                var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
+                var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
+                
+                str += '<div class="content" >'+'完成周期：'+startDay+'-'+endDay+'</div>'
+            }
+            return {
+                str:str,
+                width:width
+
+            };
+        },
+        toolOut(event){
+            
+            var tirDom = document.getElementById('gantt-chart-tool-tip');
+            tirDom.style.display = "none";
+        },
         editClick(id,pid){
             this.$emit('editClick',id,pid);
         },

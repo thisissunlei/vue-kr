@@ -90,6 +90,7 @@
                                     :data="item"
                                     :minCalibration="minCalibration"
                                     :size="barType=='month'?12:16"
+                                    :type="barType"
                                     
                                 />
                                 
@@ -165,7 +166,8 @@
                     </div>
                 </div>
             </div>
-           <slot name="leftBar"></slot>
+            <div id="gantt-chart-tool-tip"></div>
+            <slot name="leftBar"></slot>
         </div>      
     </div>
 
@@ -620,6 +622,41 @@ export default {
         display:inline-block;
         position: relative;
         padding-left:25px; 
+         #gantt-chart-tool-tip{
+                width: 250px;
+                min-height: 50px;
+                display: none;
+                background: rgba(70,76,91,.9);
+                position: absolute;
+                top: 500px;
+                left: 500px;
+                border-radius: 4px;
+                padding: 5px;
+                color: #ffffff;
+                .title{
+                    font-size: 14px;
+                    background: transparent;
+
+                }
+                .content{
+                    font-size: 12px;
+                    background: transparent;
+                    
+                }
+            }
+            #gantt-chart-tool-tip::before{
+                content: '';
+                position: absolute;
+                display:block;
+                // margin:10px;
+                width:0;
+                height:0;
+                border-style:solid;
+                border-width:5px;
+                top: -10px;
+                left: 10px;
+                border-color:transparent transparent rgba(70,76,91,.9) transparent;
+            }
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;
@@ -658,6 +695,7 @@ export default {
             overflow:auto;
             left: 371px;
             right: 0px;
+           
             .calibration  {
                 width:100%;
                 position:relative;
@@ -674,6 +712,7 @@ export default {
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
+            
             
         }
         .content{

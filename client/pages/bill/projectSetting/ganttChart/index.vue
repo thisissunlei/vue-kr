@@ -78,7 +78,7 @@
                     <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
-                                <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
+                                <div class="year" :style="{width:item.length * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
@@ -89,6 +89,8 @@
                                     :dayNum="item.dayNum" 
                                     :data="item"
                                     :minCalibration="minCalibration"
+                                    :size="barType=='month'?12:16"
+                                    :type="barType"
                                     
                                 />
                                 
@@ -164,7 +166,8 @@
                     </div>
                 </div>
             </div>
-           <slot name="leftBar"></slot>
+            <div id="gantt-chart-tool-tip"></div>
+            <slot name="leftBar"></slot>
         </div>      
     </div>
 
@@ -197,10 +200,10 @@ export default {
             type:String,
             default:'view'
         },
-        startTime:{
+        start:{
             type:String,
         },
-        endTime:{
+        end:{
             type:String
         },
         treeData:{
@@ -230,6 +233,8 @@ export default {
             volatility:2,
             dayBarWidth:0,
             dayAllNum:0,
+            startTime:this.start,
+            endTime:this.end,
             //所有周的数组数据
             weeks:[],
             //最小刻度的大小
@@ -260,10 +265,9 @@ export default {
         }
     },
     mounted(){
-       
         this.scrollWidth = utils.getScrollBarSize()
-        this.init(this.startTime,this.endTime);
-        this.getYears(this.startTime,this.endTime);
+       
+        this.limitDay(this.barType);
         setTimeout(() => {
             this.scroolFix()
         }, 100);
@@ -299,7 +303,6 @@ export default {
                     offerLeft = (todayIsWeek+6) * this.minCalibration
 
                 }else{
-                    console.log(today,"ppppppppp=====")
                     var todayArr = today.split('-');
                     var todayObj = {
                         year:+today[0],
@@ -314,7 +317,6 @@ export default {
                     offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum)*this.minCalibration;
 
                 }   
-                console.log(offerLeft,"ppppppppp")
                 dom.scrollLeft = (this.getTodayTOLeft(this.showData)-offerLeft);
             }
         },
@@ -396,15 +398,47 @@ export default {
             }else if(event=='month'){
                 this.minCalibration = 10;
             }
+            this.limitDay(event);
             this.scroolFix();
+        },
+        limitDay(type){
+            var start = this.startTime;
+            var startArr = start.split('-');
+            var startObj= {
+                year:+startArr[0],
+                month:+startArr[1],
+                day:+startArr[2]
+            };
+            if(type=='week' || type =='day'){
+                var startToWeek = (new Date(start)).getDay();
+                var offset = 7+startToWeek-1;
+                if(startObj.day-offset<0){
+                    startObj.month -=1;
+                    if(startObj.month<0){
+                        startObj.month = 12+ startObj.month;
+                        startObj.year -=1;
+                    }
+                    startObj.day = this.getDayNum(startObj.year,startObj.month)+startObj.day-offset;
+                }else{
+                    
+                     startObj.day = startObj.day-offset;
+                }
+            }else{
+                startObj.month -=1;
+                if(startObj.month<0){
+                    startObj.month = 12+ startObj.month;
+                    startObj.year -=1;
+                }
+                startObj.day =1;
+            }
+            this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
         },
         //获取进度条的总长度
         getDayBarWidth(){
             var barWidth = 0;
             for (var i = 0; i < this.showData.length; i++) {
-                barWidth += this.showData[i].dayNum;
+                barWidth += this.showData[i].length;
             }
-
             this.dayAllNum = barWidth;
         },
         //获取今天日期
@@ -434,15 +468,20 @@ export default {
             }
             var showData = [];
             for(var month=startObj.month,year=startObj.year;; ){
-                
+                var startDay = 1;
                 if(month >12){
                     month = month-12;
                     year +=1; 
                 }
-               
+                if(month==startObj.month && year == startObj.year ){
+                    startDay = +start[2];
+                }
+
                 showData.push({
                     year:year,
                     month:month,
+                    start:startDay,
+                    length:this.getDayNum(year,month)-startDay+1,
                     dayNum:this.getDayNum(year,month),
                 })
                 if((year+'-'+month) == (endObj.year+'-'+endObj.month)){
@@ -455,10 +494,9 @@ export default {
             this.isLoading = false;
             this.getDayBarWidth()
             //获取周的具体数据
-           
             this.getWeekStartAndEnd(showData);
-           
             this.getTodayTOLeft(showData);
+            this.getYears(startTime,endTime);
         },
         //获取某日为周几
         getWeekNum(year,month,day){
@@ -470,7 +508,7 @@ export default {
             var min = showData[0];
            
             var max = showData[showData.length-1];
-            var start = new Date(min.year,min.month-1,1);
+            var start = new Date(min.year,min.month-1,min.start);
             var end = new Date(max.year,max.month-1,max.dayNum);
             var Obj = {
                 start:start.getDay()==0?7:start.getDay(),
@@ -483,20 +521,30 @@ export default {
             weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7;
             weekData.dayNum = this.dayAllNum-weekData.start-weekData.end;
             this.getWeeks(weekData,min,max);
+        
         },
         //获取每一周的具体数据
         getWeeks(weekObj,min,max){
-            
             var start={
                 year:min.year,
                 month:min.month,
-                day:1
+                day:min.start
             }
             var length = weekObj.start;
             var end= {
                 year:start.year,
                 month:start.month,
-                day:weekObj.start,
+                day:min.start + weekObj.start,
+            }
+            if(end.day>this.getDayNum(end.year,end.month)){
+               end.day = end.day -this.getDayNum(end.year,end.month)-1;
+                end.month+=1;
+                if(end.month>12){
+                    end.month=end.month-12;
+                    end.year+=1;
+                }
+                
+
             }
             var arr = [{
                 start:Object.assign({},start),
@@ -574,6 +622,41 @@ export default {
         display:inline-block;
         position: relative;
         padding-left:25px; 
+         #gantt-chart-tool-tip{
+                width: 250px;
+                min-height: 50px;
+                display: none;
+                background: rgba(70,76,91,.9);
+                position: absolute;
+                top: 500px;
+                left: 500px;
+                border-radius: 4px;
+                padding: 5px;
+                color: #ffffff;
+                .title{
+                    font-size: 14px;
+                    background: transparent;
+
+                }
+                .content{
+                    font-size: 12px;
+                    background: transparent;
+                    
+                }
+            }
+            #gantt-chart-tool-tip::before{
+                content: '';
+                position: absolute;
+                display:block;
+                // margin:10px;
+                width:0;
+                height:0;
+                border-style:solid;
+                border-width:5px;
+                top: -10px;
+                left: 10px;
+                border-color:transparent transparent rgba(70,76,91,.9) transparent;
+            }
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;
@@ -612,6 +695,7 @@ export default {
             overflow:auto;
             left: 371px;
             right: 0px;
+           
             .calibration  {
                 width:100%;
                 position:relative;
@@ -628,6 +712,7 @@ export default {
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
+            
             
         }
         .content{
@@ -676,6 +761,7 @@ export default {
                 border-bottom: 1px solid #F6F6F6;
                 border-right: 1px solid #F6F6F6;
                 transition: all 0.3;
+                font-size: 16px;
             }
         }
         

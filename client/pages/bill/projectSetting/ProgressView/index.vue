@@ -5,8 +5,8 @@
         <GanttChart 
             v-if = "!isLoading"
             type='view' 
-            :startTime="params.startTime" 
-            :endTime="params.endTime"
+            :start="params.startTime" 
+            :end="params.endTime"
             @treeClick="treeClick"
             @treeChange="treeChange"
             @rightOver="rightOver"
@@ -147,6 +147,7 @@ export default {
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
+            return;
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;

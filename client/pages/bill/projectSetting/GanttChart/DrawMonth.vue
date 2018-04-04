@@ -1,11 +1,10 @@
 
 <template>
-	<div class="draw-month" :style="{width:dayNum * minCalibration+'px'}">
-       <span class="label">
-           {{data.year+'.'+((+data.month<10)?'0'+data.month:data.month)}}
+	<div class="draw-month" :style="{width:data.length * minCalibration+'px'}">
+       <span class="label" :style="{fontSize:size+'px'}">
+           {{month}}
        </span>
 	</div>
-       
 </template>
 
 <script>
@@ -21,14 +20,27 @@ export default {
         minCalibration:{
             type:[String,Number],
             default:50
+        },
+        size:{
+            type:[String,Number]
+        },
+        type:{
+            type:String
         }
     },
     data(){
         return {
-           
+           month:this.getMonth()
         }
     },
     methods:{
+        getMonth(){
+            if(this.type=='month'){
+                return this.data.month+'月';
+            }else {
+                return this.data.year+'.'+((+this.data.month<10)?'0'+this.data.month:this.data.month);
+            }
+        }
     }
 }
 </script>
@@ -44,6 +56,7 @@ export default {
         box-sizing: border-box;
         border-bottom: 1px solid #F0F0F0;
         border-right: 1px solid #F0F0F0;
+        overflow: hidden;
         transition: all 0.3;
         .label{
             display: inline-block;

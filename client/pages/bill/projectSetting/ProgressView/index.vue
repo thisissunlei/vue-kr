@@ -90,7 +90,7 @@
             title="提示"
             width="440"
             >
-            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动生成后续任务模板</div>
+            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动固化后续任务计划时间</div>
             <div slot="footer">
                 <Button type="primary" @click="submitSure()">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>

@@ -106,6 +106,7 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './ListTable';
 import GanttChart from '../GanttChart';
+import Vue from 'vue';
 
 var allPage = 1;
 var nowPage = 1;
@@ -265,9 +266,8 @@ export default {
                     }
                 );
                 this.treeData=array;
-                //this.treeData.unshift({label:'全部任务',value:0,t_id:0})
                 this.recursiveFn(this.treeData);
-                //this.params.taskTemplateIds=this.treeMiddle.join(',');
+                this.params.taskTemplateIds=this.treeMiddle.join(',');
                 this.getListData(this.params);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -279,8 +279,8 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                //item.checked=true;   
-                //this.treeMiddle.push(item.value)      
+                Vue.set(item,"checked",true);  
+                this.treeMiddle.push(item.value)      
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }
@@ -296,27 +296,31 @@ export default {
         //树
         treeClick(params){
             var treeArray=[];
-            params.map((item,index)=>{
-                treeArray.push(item.value);
-            })
+            if(!params.length){
+                treeArray=this.treeData[0].checked?this.treeMiddle:[];
+            }else{
+                params.map((item,index)=>{
+                  treeArray.push(item.value);
+                })
+            } 
             this.params.taskTemplateIds=treeArray.join(',');
             this.params.page=1;
             this.getListData(this.params);
         },
         treeChange(selectArr){
-            //this.nodeChecked(selectArr);
+            this.nodeChecked(selectArr); 
         },
-       /*nodeChecked(selectArr){
-            var treeData = [].concat(this.treeData);
-            for (let i = 0; i < treeData.length; i++) {
-                const element = treeData[i];
-                if(this.isHaver(selectArr,element.value)){
-                    treeData[i].checked = true;            
-                }else{
-                    treeData[i].checked = false;           
-                }       
-            }
-            this.treeData = [].concat(treeData);
+        nodeChecked(selectArr){
+                var treeData = [].concat(this.treeData);
+                for (let i = 0; i < treeData.length; i++) {
+                    const element = treeData[i];
+                    if(this.isHaver(selectArr,element.value)){
+                        Vue.set(treeData[i],"checked",true);             
+                    }else{
+                        Vue.set(treeData[i],"checked",false);       
+                    } 
+                }
+                this.treeData = [].concat(treeData);
         },
         isHaver(arr,val){
             for(var i=0;i<arr.length;i++){
@@ -325,7 +329,7 @@ export default {
                 }
             }
             return false;
-        },*/
+        },
 
 
        

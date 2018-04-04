@@ -54,14 +54,6 @@ export default {
             num:0
 		}
     },
-    watch:{
-        $props:{
-            deep:true,
-            handler(nextProps) {
-               this.nowData=nextProps.data;
-            }
-        }
-    },
     mounted(){
         if(this.treeIds&&this.nowData){
              var ids=this.treeIds.split(',');
@@ -137,6 +129,8 @@ export default {
                 }else{
                     this.treeInput="自定义"
                 }
+            }else{
+                this.treeInput="请选择"
             }
             this.$emit('okClick',this.checkValue);
         },

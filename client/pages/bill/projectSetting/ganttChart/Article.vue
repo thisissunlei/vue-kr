@@ -153,7 +153,7 @@ export default {
                 
                 var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
                 var endDay = data.planEndTime?dateUtils.dateToStr(type,new Date(data.planEndTime)):'';
-                str += '<div class="content">'+'计划周期：'+startDay+'-'+endDay+'</div>'
+                str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
                 
             }
             if(data.actualStartTime || data.actualEndTime){
@@ -167,7 +167,7 @@ export default {
                 var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
                 var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
                 
-                str += '<div class="content" >'+'完成周期：'+startDay+'-'+endDay+'</div>'
+                str += '<div class="content" >'+'完成周期：'+startDay+' - '+endDay+'</div>'
             }
             return {
                 str:str,

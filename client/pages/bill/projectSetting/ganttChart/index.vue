@@ -81,7 +81,7 @@
                                 <div class="year" :style="{width:item.length * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
-                                <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                                 
                                 <DrawMonth 
                                     v-for="( item ) in showData" 
@@ -98,7 +98,7 @@
                                 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
-                                <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                                 
                                 <DrawWeek 
                                     v-for="(item) in weeks" 
@@ -112,6 +112,8 @@
                             </div>
                             
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
+                                <div v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                
                                 <DrawDay 
                                     v-for="( item ) in showData" 
                                     :key="item.id" 
@@ -138,6 +140,7 @@
                         :style="{width:dayAllNum*minCalibration+'px'}"
                        
                     >
+
                         
                         <EditArticle 
                             v-if="leftEndpoint.year && type== 'edit'"
@@ -162,7 +165,7 @@
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
-                        
+                        <div class='today-flag' :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -712,7 +715,14 @@ export default {
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
-            
+            .today-flag{
+                background: rgba(73,157,241,0.20);
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                width: 50px;
+                pointer-events:none;
+            }
             
         }
         .content{
@@ -785,11 +795,12 @@ export default {
         }
         .bar-line{
             position: absolute;
-            width: 1px;
+            width: 50px;
             height: 50px;
             top: 0px;
             background: #499DF1;
             opacity: 0.3;
+           
         }
    }
    .tab-second-title{

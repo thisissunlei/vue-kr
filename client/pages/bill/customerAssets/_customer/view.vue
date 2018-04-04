@@ -120,6 +120,7 @@
 		mounted(){
 			this.getBasicInfo()
 			GLOBALSIDESWITCH('false');
+			GLOBALHEADERSET('客户会员')
 		}
 	
 	}
@@ -147,6 +148,7 @@
 			.tab-active{
 				color:#4A90E2;
 				position: relative;
+				font-weight: 500;
 				&:after{
 					content:'';
 					display:inline-block;

@@ -9,6 +9,7 @@
             </div>
             <div class="tab-content">
                 <Annex v-if="selectedTab == 'annex'"/>
+                <Info v-if="selectedTab == 'basic'" />
             </div>
         </div>
     </div>
@@ -19,12 +20,14 @@
 <script>
     import utils from '~/plugins/utils';
     import Annex from './annex.vue'; 
+    import Info from './info.vue'; 
 
 
     export default {
         name:'orderManange',
         components:{
             Annex,
+            Info
         },
         data (){
             return{
@@ -45,7 +48,7 @@
                     name:'修改记录',
                     code:'records'
                 }],
-                selectedTab:'annex',
+                selectedTab:'basic',
                 
             }
         },

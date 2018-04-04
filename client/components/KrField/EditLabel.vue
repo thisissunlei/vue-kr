@@ -87,19 +87,22 @@ export default {
 	.edit-icon{
 
 		
-		position: absolute;
-		right: 0;
-		top: 0px;
+		// position: absolute;
+		// right: 0;
+		// top: 0px;
 		line-height: 32px;
+		display: inline-block;
 		cursor: pointer;
 	}
 	.label-text{
 		padding-right: 20px;
+		display: inline-block;
 	}
 	.operation{
-		position: absolute;
-		top: 0px;
-		right: 0px;
+		display: inline-block;
+		// position: absolute;
+		// top: 0px;
+		// right: 0px;
 		line-height: 32px;
 
 	}

@@ -22,7 +22,7 @@
                      <KrField 
                         :readOrEdit="true" 
                         type="select"  
-                        label="selectData" 
+                        label="含税" 
                         value="202" 
                         name='try'
                         inline="true"
@@ -36,7 +36,7 @@
                      <KrField 
                         :readOrEdit="true" 
                         type="date"  
-                        label="selectData" 
+                        label="含税" 
                         value="202" 
                         name='try'
                         inline="true"

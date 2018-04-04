@@ -1,4 +1,3 @@
-
 <template>
 	<div class="edit-label">
         <EditLabel 
@@ -10,6 +9,7 @@
             <Input
                 :placeholder="placeholder"
                 type="text"
+                size='default'
                 v-model="inputValue"
                 @on-click="click"
                 @on-enter="enter"
@@ -19,7 +19,7 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
-                style="width:70%"
+                class="input-class"
             />
         </EditLabel>
 	</div>
@@ -109,5 +109,9 @@ export default {
 		line-height: 32px;
 
 	}
+    .edit-label .input-class{
+        width:170px;
+
+    }
 }
 </style>

@@ -1,6 +1,19 @@
-
+<style lang="less">
+    .kr-field .ivu-form-item .ivu-form-item-label{
+        font-size: 14px;
+        color:#666;
+        font-weight: 500;
+    }
+    .ivu-form-item{
+        margin-bottom: 12px;
+    }
+    .label-text{
+        font-size: 14px;
+        color: #666;
+    }
+</style>
 <template>
-  <div>
+  <div class="kr-field">
     <FormItem
         :label="label"
         :prop="prop"

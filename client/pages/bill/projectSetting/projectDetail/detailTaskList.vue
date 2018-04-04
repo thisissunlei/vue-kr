@@ -94,6 +94,7 @@ export default {
          this.$emit("editClick",id,parentId); 
       },
       iconClick(id,mask){
+         event.cancelBubble = true;
          this.$emit("iconClick",id,mask); 
       },
       showClick(id){

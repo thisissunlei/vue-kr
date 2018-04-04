@@ -272,5 +272,10 @@ export default  {
       url: '/api/krspace-pay/payment/unbind/list',
       method: 'get'
     },
+    //项目详情星星
+    'project-detail-star': {
+      url: '/api/krspace-erp-web/pm/task/focus',
+      method: 'post'
+    },
   }
   

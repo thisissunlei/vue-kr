@@ -1,13 +1,28 @@
 <template>
   <div>
-      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;">
-                    <Form-item label="任务名称"  class="bill-search-class" prop="name">
+      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow:scroll;">
+                    <Form-item label="任务名称"  class="bill-search-class" prop="name" style="width:100%;">
                         <i-input 
                             v-model="formItem.name" 
                             placeholder="请输入任务名称"
                             style="width: 252px"
                             @on-change="nameChange"
                         />
+                    </Form-item>
+
+                    <Form-item label="管理层关注"  class="bill-search-class" prop="focus">
+                       <RadioGroup v-model="formItem.focus">
+                            <Radio label="true">
+                                是
+                            </Radio>
+                            <Radio label="false">
+                                否
+                            </Radio>
+                        </RadioGroup>
+                    </Form-item>
+
+                    <Form-item label="责任部门"  class="bill-search-class">
+                        <span>{{getEdit.department}}</span>
                     </Form-item>
 
                     <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
@@ -113,7 +128,8 @@ export default {
                    actualStartTime:'',
                    actualEndTime:'',
                    descr:'',
-                   operDescr:''
+                   operDescr:'',
+                   focus:'true'
             },
             ruleValidate: {
                 name: [
@@ -124,7 +140,10 @@ export default {
                 ],
                 planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
-                ]
+                ],
+                focus:[
+                    { required: true, message: '请选择是否关注', trigger: 'change' }
+                ],
             },
 
             actualStart:this.getEdit.actualStartTime,
@@ -141,6 +160,7 @@ export default {
         this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
         this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
         this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
+        this.getEdit.focus=this.getEdit.focus?'true':'false';
         this.formItem=this.getEdit;
     },
     updated:function(){
@@ -238,8 +258,8 @@ export default {
         background: #F6F6F6;
         border-radius: 4px;
         box-sizing: border-box;
-        max-height: 240px;
-        overflow: scroll;
+        // max-height: 240px;
+        // overflow: scroll;
         .title-wrap{
             padding-left: 20px;
         }

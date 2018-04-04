@@ -51,9 +51,6 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
-
-            str:'',
-
             num:0
 		}
     },
@@ -62,7 +59,6 @@ export default {
             deep:true,
             handler(nextProps) {
                this.nowData=nextProps.data;
-               //this.treeInput='';
             }
         }
     },
@@ -77,14 +73,6 @@ export default {
         }
 
     },
-    /*updated(){
-         var htmlBox=document.getElementById('treeScroll');
-         if(htmlBox){
-            this.htmlBox = htmlBox;
-            console.log(this.htmlBox)
-            this.oldContent = this.htmlBox.innerHTML;
-         }
-    },*/
     directives:{
         'click-outside':{
             bind: function (el, binding, vNode) {
@@ -140,20 +128,6 @@ export default {
             })
             return this.num
         },
-        treeSelect(data){
-            data.map((item,index)=>{
-                    if(this.checkValue.length-1==index){
-                        this.str+=item.title;
-                    }else{
-                        this.str+=item.title+',';
-                    }
-                    if(item.children&&item.children.length){
-                        this.treeSelect(item.children);
-                    }
-            })
-            //this.treeInput=this.str;
-            return data
-        },
         sureClick(){
             this.clearClick();
             this.num=0;
@@ -163,7 +137,6 @@ export default {
                 }else{
                     this.treeInput="自定义"
                 }
-                this.treeSelect(this.checkValue);
             }
             this.$emit('okClick',this.checkValue);
         },

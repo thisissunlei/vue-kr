@@ -330,7 +330,7 @@ import AddArchives from './addArchives';
         .ivu-tooltip{ 
             .row-current-more{
                 //border-bottom:1px solid #e9eaec;
-                padding: 14px 0 15px 0;
+                padding: 15px 0 10px 0;
             }
             .noBorder{
                 border-bottom:none;

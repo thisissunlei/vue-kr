@@ -8,6 +8,7 @@
             :start="params.startTime" 
             :end="params.endTime"
             @treeClick="treeClick"
+            @treeChange="treeChange"
             @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
@@ -133,13 +134,14 @@ export default {
             scrollWidth:0,
             isLoading:false,
 
-            tabValue:'name1'
+            tabValue:'name1',
+
+            treeMiddle:[]
         }
 
     },
     mounted(){
         this.getTreeData();
-        this.getListData(this.params);
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
@@ -253,17 +255,11 @@ export default {
         //获取甘特图任务数据
         getTreeData(){     
             this.$http.get('project-status-search').then((response)=>{
-                var array=[];
-                array.push(
-                    {
-                        label:'全部任务',
-                        value:0,
-                        t_id:0,
-                        children:response.data.items
-                    }
-                );
-                this.treeData=array;
+                this.treeData=response.data.items;
+                //this.treeData.unshift({label:'全部任务',value:0,t_id:0})
                 this.recursiveFn(this.treeData);
+                //this.params.taskTemplateIds=this.treeMiddle.join(',');
+                this.getListData(this.params);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -274,7 +270,8 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                
+                //item.checked=true;   
+                //this.treeMiddle.push(item.value)      
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }
@@ -283,8 +280,10 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.location.href=`./projectSetting/ProjectDetail?name=${item.name}&id=${item.id}&city=${item.cityName}&status=${this.params.status}`;
+            window.location.href=`./projectSetting/ProjectDetail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
         },
+
+
         //树
         treeClick(params){
             var treeArray=[];
@@ -295,6 +294,32 @@ export default {
             this.params.page=1;
             this.getListData(this.params);
         },
+        treeChange(selectArr){
+            //this.nodeChecked(selectArr);
+        },
+       /*nodeChecked(selectArr){
+            var treeData = [].concat(this.treeData);
+            for (let i = 0; i < treeData.length; i++) {
+                const element = treeData[i];
+                if(this.isHaver(selectArr,element.value)){
+                    treeData[i].checked = true;            
+                }else{
+                    treeData[i].checked = false;           
+                }       
+            }
+            this.treeData = [].concat(treeData);
+        },
+        isHaver(arr,val){
+            for(var i=0;i<arr.length;i++){
+                if(arr[i].value==val){
+                    return true;
+                }
+            }
+            return false;
+        },*/
+
+
+       
         operationClick(item){
             this.cancelSure();
             this.id=item.id;
@@ -348,7 +373,6 @@ export default {
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            return '2017-05-01'
             return today;
         },
         //结束日期

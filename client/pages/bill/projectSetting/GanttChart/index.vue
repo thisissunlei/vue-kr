@@ -45,6 +45,7 @@
                                     type="selectTree" 
                                     :data="treeData" 
                                     @okClick="treeClick"
+                                    @checkChange="treeChange"
                                     :treeIds="treeIds"
                                 />
                         </Form>
@@ -147,6 +148,7 @@
                             :type="type"
                             :index="index"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
+                            @editClick="editClick"
                         />
                         
                         <ViewArticle  
@@ -262,19 +264,32 @@ export default {
     },
     mounted(){
         this.scrollWidth = utils.getScrollBarSize()
-        this.init(this.startTime,this.endTime);
        
+        this.limitDay(this.barType);
         setTimeout(() => {
             this.scroolFix()
         }, 100);
-       
+
+        if(this.data.length){
+            this.circleId(this.data);
+        }
     },
    
     updated(){
         this.mask=this.treeData.length?true:false;
     },
     methods:{
-        //今天位置定位
+        editClick(id,pid){
+            this.$emit('editClick',id,pid);
+        },
+        circleId(data,param){
+            data.map((item,index)=>{
+                item.pid=param?param:'';
+                if(item.children&&item.children.length){
+                    this.circleId(item.children,item.value);
+                }
+            })
+        },
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){
@@ -313,6 +328,9 @@ export default {
         },
         treeClick(params){
             this.$emit('treeClick',params);
+        },
+        treeChange(event){
+            this.$emit('treeChange',event);
         },
         //获取年数组
         getYears(startTime,endTime){
@@ -382,7 +400,6 @@ export default {
             this.scroolFix();
         },
         limitDay(type){
-           console.log(this.startTime,"***********",type)
             var start = this.startTime;
             var startArr = start.split('-');
             var startObj= {
@@ -393,18 +410,15 @@ export default {
             if(type=='week' || type =='day'){
                 var startToWeek = (new Date(start)).getDay();
                 var offset = 7+startToWeek-1;
-                console.log('kkkkk',offset,"ppppp",startObj.day)
                 if(startObj.day-offset<0){
                     startObj.month -=1;
                     if(startObj.month<0){
                         startObj.month = 12+ startObj.month;
                         startObj.year -=1;
                     }
-                    startObj.day = this.getDayNum(start.year,start.month)+startObj.day-offset;
-
-                  
-
+                    startObj.day = this.getDayNum(startObj.year,startObj.month)+startObj.day-offset;
                 }else{
+                    
                      startObj.day = startObj.day-offset;
                 }
             }else{
@@ -415,9 +429,6 @@ export default {
                 }
                 startObj.day =1;
             }
-           
-            // this.startTime = startObj.year+'-'+startObj.month+ '-' +startObj.day; 
-             console.log(startObj.year+'-'+startObj.month+ '-' +startObj.day,"=========")
             this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
         },
         //获取进度条的总长度

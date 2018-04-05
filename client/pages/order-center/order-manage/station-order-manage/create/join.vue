@@ -329,6 +329,7 @@ import utils from '~/plugins/utils';
                         key: 'guidePrice',
                         render: (h, params) => {
                             let price = params.row.originalPrice;
+                            
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
@@ -343,6 +344,9 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
+                                            if(!price){
+                                                return
+                                            }
                                             var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
                                             if(!pattern.test(price)){
                                                 this.$Notice.error({
@@ -483,7 +487,6 @@ import utils from '~/plugins/utils';
                         title:e.message
                     });
 
-                        console.log('error',e)
                 })
             }
            },
@@ -578,6 +581,20 @@ import utils from '~/plugins/utils';
                 if(priceError){
                    this.$Notice.error({
                         title:'工位单价不得小于最低定价'
+                    }) 
+                   return
+                }
+
+                //判断标准单价是否为空
+                let standardPrice = false;
+                station.map((item)=>{
+                    if(item.originalPrice === ''){
+                        standardPrice = true
+                    }
+                })
+                if(standardPrice){
+                   this.$Notice.error({
+                        title:'工位单价不得为空。'
                     }) 
                    return
                 }
@@ -1281,17 +1298,26 @@ import utils from '~/plugins/utils';
             },
              getStationAmount(list){
                 this.config()
+                //判断标准单价是否有值，若无值，则不提交计算总价
+                let originalPrice = false;
                 let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.guidePrice || 0;
-                    obj.originalPrice = item.originalPrice || item.price;
+                    obj.guidePrice = item.guidePrice || item.price || 0;
+                    console.log('guidePrice',item.guidePrice)
+                    obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice);
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
+                    if(item.originalPrice === ''){
+                        originalPrice = true;
+                    }
                     return obj;
                 })
+                if(originalPrice){
+                    return
+                }
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),

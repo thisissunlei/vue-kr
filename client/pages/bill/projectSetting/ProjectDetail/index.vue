@@ -256,8 +256,8 @@ export default {
             array.push(
                 {
                     label:'全部任务',
-                    value:'all',
-                    t_id:'all',
+                    value:'ALL',
+                    t_id:'ALL',
                     children:this.taskList
                 }
             );
@@ -265,6 +265,7 @@ export default {
             this.recursiveFn(this.treeData);
             this.params.departments=this.treeMiddle.join(',');
             this.taskIds=this.treeMiddle.join(',');
+            this.ids=this.treeMiddle.join(',');
             this.getListData(this.params.departments);
         },
 

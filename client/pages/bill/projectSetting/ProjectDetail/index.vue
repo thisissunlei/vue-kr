@@ -32,6 +32,7 @@
                         @addClick="addTask"
                         @editClick="editTask"
                         @leftOver="leftOver"
+                        @iconClick="iconClick"
                     />
                 </div>
             </GanttChart>
@@ -56,8 +57,8 @@
                 width="660"
             >
                 <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-                <div slot="footer">
-                    <Button type="ghost" style="margin-left:8px;float:left;color:red;border-color:red;" @click="cancelTask">删除任务</Button>
+                <div slot="footer" style="text-align: center;">
+                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
                     <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
                 </div>
         </Modal>
@@ -97,6 +98,19 @@
             </div>
         </Modal>
 
+        <Modal
+            v-model="openStar"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign' v-if="!grayStar">设置为“管理层关注”任务后，该任务会在项目总览中显示</div>
+            <div class='sure-sign' v-if="grayStar">取消设置“管理层关注”任务后，该任务不会在项目总览中显示</div>
+            <div slot="footer">
+                <Button type="primary" @click="submitStar()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelStar">取消</Button>
+            </div>
+        </Modal>
+
         <Message 
             :type="MessageType" 
             :openMessage="openMessage"
@@ -117,6 +131,7 @@ import WatchRecord from './watchRecord';
 import DetailTaskList from './detailTaskList';
 import GanttChart from '../GanttChart';
 import Message from '~/components/Message';
+import Vue from 'vue';
 
 
 
@@ -138,6 +153,7 @@ export default {
             openEditTask:false,
             openWatch:false,
             openDelete:false,
+            openStar:false,
             upperError:false,
             addData:{},
             editData:{},
@@ -166,7 +182,26 @@ export default {
 
             scrollH:'',
             //树组件传參
-            taskIds:''
+            taskIds:'',
+
+            //星星初始化
+            grayStar:false,
+            treeMiddle:[],
+            //任务项枚举
+            taskList:[
+                {label:'管理层',value:'MANAGEMENT',t_id:'MANAGEMENT'},
+                {label:'投拓部',value:'INVEST',t_id:'INVEST'},
+                {label:'招商部',value:'ATTRACT',t_id:'ATTRACT'},
+                {label:'财务部',value:'FINANCE',t_id:'FINANCE'},
+                {label:'法务部',value:'LAW',t_id:'LAW'},
+                {label:'工程设计部',value:'DESIGN',t_id:'DESIGN'},
+                {label:'工程施工部',value:'CONSTRUCT',t_id:'CONSTRUCT'},
+                {label:'工程成本部',value:'COST',t_id:'COST'},
+                {label:'市场公关部',value:'PR',t_id:'PR'},
+                {label:'弱电智能化部',value:'INTELLIGENT',t_id:'INTELLIGENT'},
+                {label:'技术部',value:'TECH',t_id:'TECH'},
+                {label:'运营部',value:'OPERATION',t_id:'OPERATION'},
+            ]
         }
     },
     created(){         
@@ -175,24 +210,18 @@ export default {
     mounted(){
          this.scrollWidth= utils.getScrollBarSize()
          GLOBALSIDESWITCH("false");
-         this.getListData(); 
-         let status=this.queryData.status==1?'INVEST':'PREPARE'
          this.signMask=this.queryData.status==1?true:false;
-         this.getTreeData({propertyId:this.queryData.id});
-
-        this.leftOver();
-        this.rightOver();
-        setTimeout(() => {
+         this.initTree();
+         this.leftOver();
+         this.rightOver();
+         setTimeout(() => {
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
-            console.log(rightDom,leftDom,"------")
-        }, 200);
-        window.onresize=function(){
-            console.log(rightDom,leftDom,"------")
-            
+         }, 200);
+         window.onresize=function(){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
              var clientHeight = document.documentElement.clientHeight;
@@ -201,7 +230,7 @@ export default {
             dom.style.height = document.documentElement.clientHeight-130 + "px"
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
-        }
+         }
     },
     methods:{
         leftOver(event){
@@ -219,6 +248,48 @@ export default {
                 rightDom.addEventListener('scroll',this.chartScroll);
                 leftDom.removeEventListener('scroll',this.scroll);
             }
+        },
+
+        initTree(){
+            var array=[];
+            array.push(
+                {
+                    label:'全部任务',
+                    value:0,
+                    t_id:0,
+                    children:this.taskList
+                }
+            );
+            this.treeData=array;
+            this.recursiveFn(this.treeData);
+            this.params.departments=this.treeMiddle.join(',');
+            this.getListData(this.params.departments);
+        },
+
+        iconClick(id,mask){
+           this.editId=id;
+           this.grayStar=mask;
+           this.cancelStar();
+        },
+        cancelStar(){
+            this.openStar=!this.openStar;
+        },
+        submitStar(){
+            var params={
+                id:this.editId,
+                focus:!this.grayStar
+            }
+            this.$http.post('project-detail-star',params).then((response)=>{
+                this.cancelStar();
+                this.MessageType="success";
+                this.openMessage=true;
+                this.warn="设置成功";
+                this.getListData(this.ids);
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
         },
 
         compareTime(data1,data2){
@@ -241,7 +312,7 @@ export default {
         getListData(ids){
             let params={
                 propertyId:this.queryData.id,
-                taskTemplateIds:ids?ids:[]
+                departments:ids?ids:''
             }
 
             this.isLoading = true;
@@ -253,12 +324,7 @@ export default {
                         this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
              
-                //后面进行组件优化
                 this.isLoading = false;
-                /*this.listData.map((item,index)=>{
-                   item.children=item.children?item.children:[];
-                   item.children.push({label:'添加自任务',chartType:'single'})
-                })*/
             }).catch((error)=>{
                 this.$Notice.error({
                  title: error.message,
@@ -297,39 +363,19 @@ export default {
 
 
 
-        //获取树任务项数据
-        getTreeData(params){     
-            this.$http.get('project-id-search',params).then((response)=>{
-                var array=[];
-                array.push(
-                    {
-                        label:'全部任务',
-                        value:0,
-                        t_id:0,
-                        children:response.data.items
-                    }
-                );
-                this.treeData=array;
-                this.recursiveFn(this.treeData);
-            }).catch((error)=>{
-                this.$Notice.error({
-                   title: error.message,
-                });
-            })
-        },
          //递归甘特图任务赋值
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
+                Vue.set(item,"checked",true); 
+                Vue.set(item,"expand",true);   
+                this.treeMiddle.push(item.value)    
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }
             })
             return data;
         },
-
-
-
 
         //树点击事件
         treeClick(params){
@@ -347,7 +393,7 @@ export default {
                 }
             })
             this.ids=res.join(',');
-            this.taskIds=res.join(',');
+            this.taskIds=res.join(',')?res.join(','):'no';
             this.getListData(this.ids);
         },
 
@@ -421,6 +467,11 @@ export default {
             
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
+                    this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
+                    this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
+                    this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
+                    this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
+                    this.getEdit.focus=this.getEdit.focus?'ok':'no';
                     this.cancelEditTask();
                  }).catch((error)=>{
                      this.$Notice.error({
@@ -446,20 +497,10 @@ export default {
             var params={
                 id:this.editId
             }
-            var ids=this.ids?this.ids.split(','):[];
-            if(ids.length){
-               ids.map((item,index)=>{
-                   if(item==this.editId){
-                       ids.splice(index,1);
-                   }
-               }) 
-            }
-            this.ids=ids.join(',');
             this.$http.delete('project-delete-task',params).then((response)=>{
                      this.cancelTask();
                      this.cancelEditTask();
                      this.getListData(this.ids);
-                     this.getTreeData({propertyId:this.queryData.id});
 
                      this.MessageType="success";
                      this.openMessage=true;
@@ -512,7 +553,6 @@ export default {
                      this.ids=this.ids?this.ids+','+response.data.id:'';
                      this.cancelAddTask();
                      this.getListData(this.ids);
-                     this.getTreeData({propertyId:this.queryData.id});
 
                      this.MessageType="success";
                      this.openMessage=true;
@@ -546,6 +586,7 @@ export default {
                     return ;
                 }
                 var dataParams=this.editData;
+                dataParams.focus=dataParams.focus=='ok'?true:(dataParams.focus=='no'?false:dataParams.focus);
                 dataParams.id=this.editId;
                 dataParams.pid=this.parentId?this.parentId:0;
                 dataParams.propertyId=this.queryData.id;
@@ -556,7 +597,6 @@ export default {
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                      this.cancelEditTask();
                      this.getListData(this.ids);
-                     this.getTreeData({propertyId:this.queryData.id});
 
                      if(response.code>1){
                          this.cancelSure();
@@ -599,9 +639,6 @@ export default {
               if(chartDom.scrollLeft>=chartDom.clientWidth){
                   console.log('划到最右边了');
               }
-            //   if(chartDom.scrollLeft<10){
-            //       console.log('滑倒最左边了');
-            //   }
           },
           submitSure(){
             let params={
@@ -610,7 +647,7 @@ export default {
             }
             this.$http.post('sure-sign-project',params).then((response)=>{
                 this.cancelSure();
-                this.getListData();
+                this.getListData(this.ids);
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

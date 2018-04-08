@@ -1,13 +1,28 @@
 <template>
   <div>
-      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;">
-                    <Form-item label="任务名称"  class="bill-search-class" prop="name">
+      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow:scroll;">
+                    <Form-item label="任务名称"  class="bill-search-class" prop="name" style="width:100%;">
                         <i-input 
                             v-model="formItem.name" 
                             placeholder="请输入任务名称"
                             style="width: 252px"
                             @on-change="nameChange"
                         />
+                    </Form-item>
+
+                    <Form-item label="管理层关注"  class="bill-search-class" prop="fcus">
+                       <RadioGroup v-model="fcus" @on-change="radioChange">
+                            <Radio label="ok">
+                                是
+                            </Radio>
+                            <Radio label="no">
+                                否
+                            </Radio>
+                        </RadioGroup>
+                    </Form-item>
+
+                    <Form-item label="责任部门"  class="bill-search-class">
+                        <span>{{getEdit.department}}</span>
                     </Form-item>
 
                     <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
@@ -92,6 +107,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import Vue from 'vue';
 export default {
     props:{
         id:{
@@ -106,15 +122,8 @@ export default {
         return{
             dateError:false,
             cDateError:false,
-            formItem:{
-                   name:'',
-                   planEndTime:'',
-                   planStartTime:'',
-                   actualStartTime:'',
-                   actualEndTime:'',
-                   descr:'',
-                   operDescr:''
-            },
+            formItem:this.getEdit,
+            fcus:this.getEdit.focus,
             ruleValidate: {
                 name: [
                     { required: true, message: '请输入任务名称且最多20个字符', trigger: 'change',max:20 }
@@ -136,18 +145,14 @@ export default {
     created(){    
         this.queryData=this.$route.query; 
     },
-    mounted(){
-        this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
-        this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
-        this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
-        this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
-        this.formItem=this.getEdit;
-    },
     updated:function(){
         this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
     },
     methods:{
-       nameChange(event){
+        radioChange(bool){
+            this.formItem.focus=bool=='ok'?true:false;
+        },
+        nameChange(event){
             let params={
                 name:event.target.value,
                 propertyId:this.queryData.id,
@@ -238,8 +243,8 @@ export default {
         background: #F6F6F6;
         border-radius: 4px;
         box-sizing: border-box;
-        max-height: 240px;
-        overflow: scroll;
+        // max-height: 240px;
+        // overflow: scroll;
         .title-wrap{
             padding-left: 20px;
         }

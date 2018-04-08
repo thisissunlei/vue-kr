@@ -12,7 +12,7 @@
             @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
-            :treeIds="params.taskTemplateIds"
+            :treeIds="treeIds"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -137,7 +137,8 @@ export default {
 
             tabValue:'name1',
 
-            treeMiddle:[]
+            treeMiddle:[],
+            treeIds:''
         }
 
     },
@@ -157,7 +158,6 @@ export default {
         }, 400);
 
         window.onresize=function(){
-            console.log('----');
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
@@ -238,7 +238,7 @@ export default {
             }
             return endObj;
         },
-         compareTime(data1,data2){
+        compareTime(data1,data2){
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=data2;
@@ -269,6 +269,7 @@ export default {
                 this.treeData=array;
                 this.recursiveFn(this.treeData);
                 this.params.taskTemplateIds=this.treeMiddle.join(',');
+                this.treeIds=this.params.taskTemplateIds;
                 this.getListData(this.params);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -280,7 +281,8 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                Vue.set(item,"checked",true);  
+                Vue.set(item,"checked",true); 
+                Vue.set(item,"expand",true);    
                 this.treeMiddle.push(item.value)      
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
@@ -305,6 +307,7 @@ export default {
                 })
             } 
             this.params.taskTemplateIds=treeArray.join(',');
+            this.treeIds=this.params.taskTemplateIds?this.params.taskTemplateIds:'no';
             this.params.page=1;
             this.getListData(this.params);
         },

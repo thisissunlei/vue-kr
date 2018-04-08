@@ -60,10 +60,9 @@ export default {
              if(Number(this.calculateTree(this.nowData))==Number(ids.length)){
                  this.treeInput="全部任务"
              }else{
-                 this.treeInput="自定义"
+                 this.treeInput=ids[0]=='no'?"请选择":"自定义"
              }
         }
-
     },
     directives:{
         'click-outside':{

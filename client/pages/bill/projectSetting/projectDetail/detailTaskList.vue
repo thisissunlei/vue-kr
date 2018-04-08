@@ -22,7 +22,7 @@
                    <div class='parent-middle' @click="editClick(item.value,'')">
                     <Tooltip :content="item.label" :placement="index==0?'bottom':'top'">
                       <div class='chart-left-name' @click="showClick(item.t_id)">
-                        <span class='parent-icon' :id="'parent-icon'+item.t_id"></span>
+                        <span :class="item.data.focus?'parent-icon active-icon':'parent-icon'" :id="'parent-icon'+item.t_id" @click="iconClick(item.value,item.data.focus)"></span>
                         <span class="chart-name">{{item.label}}</span>
                       </div>
                     </Tooltip>
@@ -38,15 +38,15 @@
                         :key="items.t_id"
                         class='detail-li'
                       >
-                          <div class='chart-parent' v-if="items.chartType!='single'" :data-box-id="items.t_id"
+                          <div class='chart-parent' style="padding-left:0;" v-if="items.chartType!='single'" :data-box-id="items.t_id"
                             @mouseover="overShow(items.t_id)"
                             @mouseout="outHide(items.t_id)"
                           >
                             <div class='parent-middle' @click="editClick(items.value,item.value)">
                               <Tooltip :content="items.label" placement="top">
                                 <div class='chart-left-name'>
-                                  <Icon type="minus-round" size="4" style="color: #666666;"/>
-                                  <span class="chart-name" style="color: #666666;">{{items.label}}</span>
+                                  <span :class="item.data.focus?'parent-icon active-icon':'parent-icon'" :id="'parent-icon'+item.t_id" @click="iconClick(items.value,items.data.focus)"></span>
+                                  <span class="chart-name">{{items.label}}</span>
                                 </div>
                               </Tooltip>
                               <div  class='chart-edit'>
@@ -92,6 +92,10 @@ export default {
       },
       editClick(id,parentId){
          this.$emit("editClick",id,parentId); 
+      },
+      iconClick(id,mask){
+         event.cancelBubble = true;
+         this.$emit("iconClick",id,mask); 
       },
       showClick(id){
          return ;
@@ -154,6 +158,7 @@ export default {
          max-height:500px;
          overflow:scroll;
          .detail-li{
+              cursor: pointer;
              .chart-parent{
                 width:100%;
                 height:40px;
@@ -180,7 +185,6 @@ export default {
                     color: #499DF1;
                     padding-left:4px;
                     display:inline-block;
-                    font-weight:bold;
                 }
               }
               .chart-edit{
@@ -196,13 +200,16 @@ export default {
               }
               .parent-icon{
                  display:inline-block;
-                 width:10px;
-                 height:8px;
-                 background:url(./images/down.svg) no-repeat center;
+                 width:14px;
+                 height:14px;
+                 background:url(./images/Star.svg) no-repeat center;
                  background-size: 100%;
                  vertical-align: middle;
-                 margin-top:-3px;
+                 margin-top:-4px;
                  transition: all 0.5s ease;
+              }
+              .active-icon{
+                 background:url(./images/Star_select.svg) no-repeat center;
               }
               .iconDown{
                  transform: rotate(180deg);
@@ -211,7 +218,7 @@ export default {
            .chart-children{
                transition: all 0.5s ease;
               .chart-left-name{
-                 padding-left:14px;
+                 padding-left:12px;
               }
            }
         }   

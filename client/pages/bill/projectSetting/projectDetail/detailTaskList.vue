@@ -184,7 +184,7 @@ export default {
                     font-size: 14px;
                     color: #499DF1;
                     padding-left:4px;
-                    display:inline-block;
+                    display:inline;
                 }
               }
               .chart-edit{

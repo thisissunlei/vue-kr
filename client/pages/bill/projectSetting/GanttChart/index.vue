@@ -277,7 +277,6 @@ export default {
     },
     mounted(){
         this.scrollWidth = utils.getScrollBarSize()
-       
         this.limitDay(this.barType);
         setTimeout(() => {
             this.scroolFix()
@@ -399,7 +398,7 @@ export default {
            for (var i = 0; i < yearArr.length; i++) {
                yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
            }
-           console.log(yearArr,"pppppppp")
+         
            this.years = [].concat(yearArr);
         },
         //下拉事件被触发

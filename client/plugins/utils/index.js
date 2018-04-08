@@ -131,9 +131,10 @@ import throttle from './throttle';
     function dateDiff(sDate1, sDate2) {
         var aDate, oDate1, oDate2, iDays
         aDate = sDate1.split("-")
-        oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])    //转换为12-18-2002格式  
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
         aDate = sDate2.split("-")
-        oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+       
         iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
         return iDays  
     }
@@ -141,6 +142,7 @@ import throttle from './throttle';
     function debounce(delay, atBegin, callback) {
         return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
     };
+    //获取滚动条的宽度
     function getScrollBarSize() {
        
         var cached = 0;

@@ -176,7 +176,6 @@ export default {
             };
         },
         toolOut(event){
-            
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             tirDom.style.display = "none";
         },
@@ -272,7 +271,7 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
             var officeEnd = min;
-           
+          
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,min)
@@ -285,6 +284,7 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
+            //  console.log(officeStart,min,"pppp",this.planDetail)
             var lineOffice = 0;
             var lineWidth = 0;
             if(this.data.data.planEndTime<this.data.data.actualStartTime){

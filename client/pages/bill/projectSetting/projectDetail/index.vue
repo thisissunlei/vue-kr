@@ -217,9 +217,12 @@ export default {
          setTimeout(() => {
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
+            if(leftDom && rightDom){
+                var clientHeight = document.documentElement.clientHeight;
+                leftDom.style.maxHeight = clientHeight - 362+"px";
+                rightDom.style.maxHeight = clientHeight - 362 +"px";
+            }
+           
          }, 200);
          window.onresize=function(){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
@@ -299,6 +302,8 @@ export default {
         },
 
         compareTime(data1,data2){
+            data1 = data1.replace(/-/g,'/');
+            data2 = data2.replace(/-/g,'/');
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=data2;
@@ -307,6 +312,8 @@ export default {
         },
 
         compareEndTime(data1,data2){
+            data1 = data1.replace(/-/g,'/');
+            data2 = data2.replace(/-/g,'/');
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=(new Date(data2+' 00:00:00')).getTime();;
@@ -325,9 +332,11 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
                 if(response.data.hasTime){
-                       this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
-                        var endObj = this.monthAdd(response.data.lastEndTime);
-                        this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    let minTime = this.getTimeToDay(response.data.firstStartTime);
+                    let maxTime = this.getTimeToDay(response.data.lastEndTime)
+                    this.startTime = this.compareTime(this.startTime,minTime);
+                    var endObj = this.monthAdd(response.data.lastEndTime);
+                    this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
              
                 this.isLoading = false;
@@ -336,6 +345,9 @@ export default {
                  title: error.message,
                 });
             })
+        },
+        getTimeToDay(date){
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(date));
         },
         setTime(old,now){
             var oldTime = new Date('')

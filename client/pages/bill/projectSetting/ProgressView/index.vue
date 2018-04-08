@@ -207,9 +207,9 @@ export default {
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
-                    this.params.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    this.params.startTime = this.compareTime(this.params.startTime,this.minDay);
                     var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.params.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.params.endTime=this.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 
                 }
                 var totalPages=response.data.totalPages;
@@ -239,6 +239,8 @@ export default {
             return endObj;
         },
         compareTime(data1,data2){
+            data1 = data1.replace(/-/g,'/');
+            data2 = data2.replace(/-/g,'/');
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=data2;
@@ -247,6 +249,8 @@ export default {
         },
 
         compareEndTime(data1,data2){
+            data1 = data1.replace(/-/g,'/');
+            data2 = data2.replace(/-/g,'/');
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=(new Date(data2+' 00:00:00')).getTime();;
@@ -463,8 +467,6 @@ export default {
 
             }
             if(chartDom.scrollLeft<=5){
-              
-                // console.log(startTime,this.minDay,"ppppppp")
                 if(this.isLoading ||startTime<=minTime){
                    return;
                 }

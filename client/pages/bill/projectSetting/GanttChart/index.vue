@@ -78,7 +78,7 @@
                     <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
-                                <div class="year" :style="{width:item.length * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
+                                <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
@@ -344,29 +344,32 @@ export default {
             var startObj = {
                 year:+startArr[0],
                 month:+startArr[1],
+                day:+startArr[2]
             }
             var endObj = {
                 year:+endArr[0],
-                month:+endArr[1]
+                month:+endArr[1],
+                day:+endArr[2]
             }
             endObj.month = endObj.month +1;
-            if(endObj>12){
-                endObj.month = endObj.month -1;
+            if(endObj.month>12){
+                endObj.month = endObj.month -12;
                 endObj.year = endObj.year +1;
             }
+
             var yearArr = [];
             if(startObj.year == endObj.year){
                yearArr=[{
                    year:startObj.year,
-                   start:this.startTime,
-                   end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
-               }]
+                   start:startTime,
+                   end:endObj.year+'-'+endObj.month+'-'+endObj.day
+               }];
             }else{
                 yearArr=[{
                     year:startObj.year,
                     start:startObj.year+'-'+startObj.month+'-'+1,
                     end:startObj.year+'-'+12+'-'+this.getDayNum(startObj.year,12)
-                }]
+                }];
                 for (var year = startObj.year; ;) {
                         year++;
                         if(year == endObj.year){
@@ -374,20 +377,23 @@ export default {
                                 year:endObj.year,
                                 start:endObj.year+'-'+1+'-'+1,
                                 end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
-                            })
+                            });
                             break;
                         }
                         yearArr.push({
                             year:year,
                             start:year+'-'+1+'-'+1,
-                            end:year+'-'+12+'-'+this.getDayNum(year,12)
-                        })
+                            end:year+'-'+endObj.month+'-'+endObj.day
+                        });
                 }
 
             }
            for (var i = 0; i < yearArr.length; i++) {
+
                yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
            }
+           console.log(yearArr,"ppppppppp")
+         
            this.years = [].concat(yearArr);
             
 
@@ -499,6 +505,7 @@ export default {
             //获取周的具体数据
             this.getWeekStartAndEnd(showData);
             this.getTodayTOLeft(showData);
+            console.log(startTime,"====",endTime);
             this.getYears(startTime,endTime);
         },
         //获取某日为周几

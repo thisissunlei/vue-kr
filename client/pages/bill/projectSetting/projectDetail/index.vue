@@ -530,7 +530,6 @@ export default {
         },
         //新建任务提交
         submitAddTask(name){     
-            console.log('0000==========')
                 // return;
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;

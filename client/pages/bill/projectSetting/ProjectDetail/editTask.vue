@@ -11,14 +11,18 @@
                     </Form-item>
 
                     <Form-item label="管理层关注"  class="bill-search-class" prop="fcus">
-                       <RadioGroup v-model="fcus" @on-change="radioChange">
-                            <Radio label="ok">
-                                是
-                            </Radio>
-                            <Radio label="no">
-                                否
-                            </Radio>
-                        </RadioGroup>
+                            <RadioGroup v-model="fcus" @on-change="radioChange">
+                            <Poptip  content="设置为“管理层关注”任务后，该任务会在项目总览中显示">
+                                <Radio label="ok">
+                                    是
+                                </Radio>
+                            </Poptip>
+                            <Poptip  content="取消设置“管理层关注”任务后，该任务不会在项目总览中显示">
+                                <Radio label="no">
+                                    否
+                                </Radio>
+                            </Poptip>
+                            </RadioGroup>
                     </Form-item>
 
                     <Form-item label="责任部门"  class="bill-search-class">

@@ -7,7 +7,7 @@
                     <div class='title-bread'>
                         <Breadcrumb separator=">">
                             <BreadcrumbItem to="/bill/projectSetting">开业进度总览</BreadcrumbItem>
-                            <BreadcrumbItem>{{queryData.name}}</BreadcrumbItem>
+                            <BreadcrumbItem><span @click="currentClick" style="cursor:pointer;">{{queryData.name}}</span></BreadcrumbItem>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -251,6 +251,7 @@ export default {
         },
 
         initTree(){
+            this.treeMiddle=[];
             var array=[];
             array.push(
                 {
@@ -263,6 +264,7 @@ export default {
             this.treeData=array;
             this.recursiveFn(this.treeData);
             this.params.departments=this.treeMiddle.join(',');
+            this.taskIds=this.treeMiddle.join(',');
             this.getListData(this.params.departments);
         },
 
@@ -270,6 +272,9 @@ export default {
            this.editId=id;
            this.grayStar=mask;
            this.cancelStar();
+        },
+        currentClick(){
+           this.initTree();
         },
         cancelStar(){
             this.openStar=!this.openStar;

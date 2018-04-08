@@ -174,7 +174,7 @@ export default {
                 }
                 .chart-left-name{
                   display:inline-block;
-                  max-width:180px;
+                  max-width:160px;
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis;

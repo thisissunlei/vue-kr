@@ -308,7 +308,7 @@ export default {
             var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+1;
+            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
             var officeEnd = min;
            
             this.boxDetail={

@@ -292,7 +292,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.location.href=`./projectSetting/ProjectDetail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
+            window.location.href=`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
         },
 
 

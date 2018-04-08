@@ -326,7 +326,7 @@ export default {
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var startMonth = data[0];
-            var startTime = startMonth.year + '-'+startMonth.month+'-'+1;
+            var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
 
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;

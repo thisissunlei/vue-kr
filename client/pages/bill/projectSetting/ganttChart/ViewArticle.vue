@@ -5,7 +5,7 @@
    >
         <div 
             class="view-channel"
-            v-if="showData.length"
+            v-if="channels.length>1 || (channels.length==1&&channels[0].data.planStartTime)"
             v-for="(channels,index) in showData"
             :key="channels.id"
         >
@@ -90,22 +90,25 @@ export default {
             startObj.key = this.channel;
             allChannel[this.channel]=[startObj];
             for (var i = 1; i < allData.length; i++) {
-               
-                var everyData = allData[i];//每一个数据
-                var minData = this.getChannelMin(allChannel);//最小行的最后一个数据
                 
-                var minDataEnd = this.getMaxAndMin(minData).max;//最小行最后一个数据的最大值
-                
-                var everyDataStart = this.getMaxAndMin(everyData).min;//当前元素的最小值
-                if(everyDataStart>minDataEnd){
-                    everyData.key = minData.key;
-                    allChannel[minData.key].push(everyData);
-                }else{
-                    everyData.key = this.channel;
-                    var newChannel = [everyData];
-                    allChannel.push(newChannel);
-                    this.channel++;
+                if(allData[i].data.planStartTime){
+                   var everyData = allData[i];//每一个数据
+                    var minData = this.getChannelMin(allChannel);//最小行的最后一个数据
+                    
+                    var minDataEnd = this.getMaxAndMin(minData).max;//最小行最后一个数据的最大值
+                    
+                    var everyDataStart = this.getMaxAndMin(everyData).min;//当前元素的最小值
+                    if(everyDataStart>minDataEnd){
+                        everyData.key = minData.key;
+                        allChannel[minData.key].push(everyData);
+                    }else{
+                        everyData.key = this.channel;
+                        var newChannel = [everyData];
+                        allChannel.push(newChannel);
+                        this.channel++;
+                    }
                 }
+                
                 
             }
             return allChannel;

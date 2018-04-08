@@ -63,11 +63,8 @@
                                 <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                     </div>
-                    
-
-                    </div>
-
-
+                  
+                </div>
             <div 
                
                 class="right-draw" 
@@ -75,14 +72,27 @@
             >
                 <div class="calibration" >
                  <div  style="position:relative;overflow:hidden;"  >
-                    <div ref="rightBar" v-if="!isLoading" class="bar" :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}">
+                    <div class="time-shaft-fixed">423345345345</div>
+                    <div 
+                        ref="rightBar" 
+                        v-if="!isLoading" 
+                        class="bar" 
+                        :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
+                    >
+                   
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
-                                <div v-if="barType=='month'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
-                                
+                                <div 
+                                    v-if="barType=='month'" 
+                                    class="bar-line" 
+                                    :style="{
+                                        left:tagToLeft+'px',
+                                        width:minCalibration+'px'
+                                    }"
+                                    ></div>
                                 <DrawMonth 
                                     v-for="( item ) in showData" 
                                     :key="item.id"  
@@ -101,7 +111,8 @@
                                 <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                                 
                                 <DrawWeek 
-                                    v-for="(item) in weeks" 
+                                    :ref = "'ganttChartTimeShaft'+index"
+                                    v-for="(item,index) in weeks" 
                                     :key="item.id" 
                                     :data="item" 
                                     :minCalibration="minCalibration"
@@ -138,10 +149,7 @@
                     <div    
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
-                       
                     >
-
-                        
                         <EditArticle 
                             v-if="leftEndpoint.year && type== 'edit'"
                             :minCalibration="minCalibration"
@@ -339,6 +347,7 @@ export default {
         },
         //获取年数组
         getYears(startTime,endTime){
+         
             var startArr = startTime.split('-');
             var endArr = endTime.split('-');
             var startObj = {
@@ -351,7 +360,6 @@ export default {
                 month:+endArr[1],
                 day:+endArr[2]
             }
-            endObj.month = endObj.month +1;
             if(endObj.month>12){
                 endObj.month = endObj.month -12;
                 endObj.year = endObj.year +1;
@@ -389,14 +397,10 @@ export default {
 
             }
            for (var i = 0; i < yearArr.length; i++) {
-
                yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
            }
-           console.log(yearArr,"ppppppppp")
-         
+           console.log(yearArr,"pppppppp")
            this.years = [].concat(yearArr);
-            
-
         },
         //下拉事件被触发
         selectChange(event){
@@ -410,6 +414,7 @@ export default {
             this.limitDay(event);
             this.scroolFix();
         },
+        //极限时间
         limitDay(type){
             var start = this.startTime;
             var startArr = start.split('-');
@@ -442,6 +447,7 @@ export default {
             }
             this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
         },
+
         //获取进度条的总长度
         getDayBarWidth(){
             var barWidth = 0;
@@ -450,23 +456,24 @@ export default {
             }
             this.dayAllNum = barWidth;
         },
+
         //获取今天日期
         getToday(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var arr = today.split("-");
             return {year:+arr[0],month:+arr[1],day:+arr[2]}
         },
+
         //获取当月的天数
         getDayNum(year,month){
             var d= new Date(year, month, 0);  
             return d.getDate();   
         },
+
         //数据初始化
         init(startTime,endTime){
-           
             var start = startTime.split("-"),
                 end = endTime.split("-");
-            
             var startObj = {
                 year:+start[0],
                 month:+start[1]
@@ -485,7 +492,6 @@ export default {
                 if(month==startObj.month && year == startObj.year ){
                     startDay = +start[2];
                 }
-
                 showData.push({
                     year:year,
                     month:month,
@@ -505,18 +511,18 @@ export default {
             //获取周的具体数据
             this.getWeekStartAndEnd(showData);
             this.getTodayTOLeft(showData);
-            console.log(startTime,"====",endTime);
             this.getYears(startTime,endTime);
         },
+
         //获取某日为周几
         getWeekNum(year,month,day){
             var date = new Date(year,month-1,day);
             return date.getDay()==0?7:date.getDay()
         },
+
         //获取周的数据
         getWeekStartAndEnd(showData){
             var min = showData[0];
-           
             var max = showData[showData.length-1];
             var start = new Date(min.year,min.month-1,min.start);
             var end = new Date(max.year,max.month-1,max.dayNum);
@@ -553,8 +559,6 @@ export default {
                     end.month=end.month-12;
                     end.year+=1;
                 }
-                
-
             }
             var arr = [{
                 start:Object.assign({},start),
@@ -574,7 +578,6 @@ export default {
                     length:length,
                     end:Object.assign({},end)
                 });
-              
             }
             arr.push({
                 start:{
@@ -589,16 +592,35 @@ export default {
                     day:max.dayNum
                 }
 
-            })
+            });
             this.weeks = [].concat(arr);
             
         },
+        //固定顶部的时间轴
+        timeShaftFixed(left,contentDom){
+            let type = this.barType;
+            let contentDetail = contentDom.getBoundingClientRect();
+            let contentToLeft = contentDetail.left;
+            let timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
+            let topShaftDomArr = document.querySelectorAll('.month-bar .draw-month');
+            if(type == 'month'){
+               topShaftDomArr = document.querySelectorAll('.year-bar .year');
+            }
+            for (let i = 0; i < topShaftDomArr.length; i++) {
+                let thatDom = topShaftDomArr[i];
+                let thatDomDetail = thatDom.getBoundingClientRect();
+                let thatStartToLeft = thatDomDetail.left;
+                let thatEndToLeft = thatDomDetail.width + thatDomDetail.left;
+                if(contentToLeft>=thatStartToLeft && contentToLeft<=thatEndToLeft){
+                    timeShaftFixed.innerHTML = thatDom.innerHTML;
+                    break;
+                }
+            }
+        },
         //每周的具体内容校正
         dayToWeekDetail(weeks){
-            
             var obj = Object.assign({},weeks);
-            var dayNum = this.getDayNum(obj.year,obj.month)
-           
+            var dayNum = this.getDayNum(obj.year,obj.month);
             if(obj.day>dayNum){
                 obj.day = obj.day - dayNum;
                 obj.month = obj.month + 1;
@@ -614,14 +636,13 @@ export default {
             var top = el.scrollTop;
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
-
+            
+            this.timeShaftFixed(left,el);
         },
         rightOver(event){
             this.$emit('rightOver',event);
         },
-    },
-   
-
+    }
 }
 </script>
 
@@ -679,10 +700,7 @@ export default {
                    width:100%;
                    height: 51px;
                    line-height: 51px;
-                //    padding-top: 8px;
                    .ivu-tabs-ink-bar{
-                    //    width:58px !important;
-                    //    left: 56px;
                     height: 2px;
                    }
                 }
@@ -705,6 +723,20 @@ export default {
             overflow:auto;
             left: 371px;
             right: 0px;
+            .time-shaft-fixed{
+                position: absolute;
+                // background: red;
+                background: #ffffff;
+                width:70px;
+                z-index: 99;
+                top: 1px;
+                left: 0px;
+                height: 48px;
+               
+             
+                line-height: 48px;
+                font-size: 16px;
+            }
            
             .calibration  {
                 width:100%;
@@ -712,7 +744,7 @@ export default {
                 overflow:hidden;
                 height: 101px;
                 ::-webkit-scrollbar {
-                        width:0px;
+                    width:0px;
                 }
             }
             
@@ -739,14 +771,13 @@ export default {
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
             }
-           
         }
         .hander{
             margin-top:20px;
             height: 50px; 
             width: 100%;
             text-align: right;
-            //padding-left: 250px;
+           
             .header-left{
                 display:inline-block;
                 float:left;

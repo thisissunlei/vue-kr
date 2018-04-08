@@ -473,10 +473,10 @@ export default {
             
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
-                    this.getEdit.planStartTime=this.getEdit.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planStartTime)):'';
-                    this.getEdit.planEndTime=this.getEdit.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.planEndTime)):'';
-                    this.getEdit.actualStartTime=this.getEdit.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualStartTime)):'';
-                    this.getEdit.actualEndTime=this.getEdit.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.getEdit.actualEndTime)):'';
+                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime);
+                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime);
+                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime);
+                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime)
                     this.getEdit.focus=this.getEdit.focus?'ok':'no';
                     this.cancelEditTask();
                  }).catch((error)=>{
@@ -530,6 +530,8 @@ export default {
         },
         //新建任务提交
         submitAddTask(name){     
+            console.log('0000==========')
+                // return;
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
@@ -574,6 +576,7 @@ export default {
           submitEditTask(name){
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
+                console.log("000000009999999")
                 newPageRefs[name].validate((valid,data) => {
                     if (!valid) {
                         isSubmit = false
@@ -596,10 +599,10 @@ export default {
                 dataParams.id=this.editId;
                 dataParams.pid=this.parentId?this.parentId:0;
                 dataParams.propertyId=this.queryData.id;
-                dataParams.planStartTime=dataParams.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planStartTime)):'';
-                dataParams.planEndTime=dataParams.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.planEndTime)):'';
-                dataParams.actualStartTime=dataParams.actualStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.actualStartTime)):'';
-                dataParams.actualEndTime=dataParams.actualEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(dataParams.actualEndTime)):'';
+                dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
+                dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
+                dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
+                dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                      this.cancelEditTask();
                      this.getListData(this.ids);
@@ -619,6 +622,17 @@ export default {
                      this.warn=error.message;
                 })
           },
+          timeApplyFox(str){
+            if(str){     
+               if(str.typeof == 'string'){
+                     str = str.replace(/-/g,'/');
+                }
+               str = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(str));
+            }else{
+               str = '';
+            }
+            return str;
+        },
           scrollPosititon(){
               setTimeout(() => {
                     let leftDetail=document.getElementById('vue-chart-left-detail-list');

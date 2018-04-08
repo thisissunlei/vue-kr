@@ -256,8 +256,8 @@ export default {
             array.push(
                 {
                     label:'全部任务',
-                    value:0,
-                    t_id:0,
+                    value:'all',
+                    t_id:'all',
                     children:this.taskList
                 }
             );

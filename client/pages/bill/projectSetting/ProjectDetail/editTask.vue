@@ -10,18 +10,14 @@
                         />
                     </Form-item>
 
-                    <Form-item label="管理层关注"  class="bill-search-class" prop="fcus">
+                    <Form-item label="管理层关注"  class="bill-search-class pop-position" prop="fcus">
                             <RadioGroup v-model="fcus" @on-change="radioChange">
-                            <Poptip  content="设置为“管理层关注”任务后，该任务会在项目总览中显示">
-                                <Radio label="ok">
-                                    是
-                                </Radio>
-                            </Poptip>
-                            <Poptip  content="取消设置“管理层关注”任务后，该任务不会在项目总览中显示">
-                                <Radio label="no">
-                                    否
-                                </Radio>
-                            </Poptip>
+                                <div class='single-radio-ok'><Poptip  content="设置为“管理层关注”任务后，该任务会在项目总览中显示">
+                                    <Radio label="ok">是</Radio>
+                                </Poptip></div>
+                                <div class='single-radio-no'><Poptip  content="取消设置“管理层关注”任务后，该任务不会在项目总览中显示">
+                                    <Radio label="no">否</Radio>
+                                </Poptip></div>
                             </RadioGroup>
                     </Form-item>
 
@@ -224,11 +220,20 @@ export default {
 
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
     .bill-search-class{
         display:inline-block;
         width:50%;
         padding-left:32px;
+    }
+    .pop-position{
+        .single-radio-ok{
+            display:inline-block;
+            margin-right:40px;
+        }
+        .single-radio-no{
+            display:inline-block;
+        }
     }
     .bill-search{
         display:inline-block;

@@ -306,7 +306,8 @@ export default {
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){
-                var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+                var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
+                console.log(today,"ppppppp")
                 var offerLeft = 0;
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
@@ -314,19 +315,20 @@ export default {
                     offerLeft = (todayIsWeek+6) * this.minCalibration
 
                 }else{
-                    var todayArr = today.split('-');
+                    var todayArr = today.split('/');
                     var todayObj = {
-                        year:+today[0],
-                        month:+today[1],
-                        dayNum:+today[2],
+                        year:+todayArr[0],
+                        month:+todayArr[1],
+                        dayNum:+todayArr[2],
                     }
                     todayObj.month -=1;
                     if(todayObj.month<0){
                         todayObj.month = 12 - todayObj.month;
                         todayObj.year -=1;
                     }
-                    offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum)*this.minCalibration;
-
+                    console.log()
+                    
+                    offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }   
                 dom.scrollLeft = (this.getTodayTOLeft(this.showData)-offerLeft);
             }
@@ -425,6 +427,7 @@ export default {
             };
             if(type=='week' || type =='day'){
                 var startToWeek = (new Date(start)).getDay();
+            
                 var offset = 7+startToWeek-1;
                 if(startObj.day-offset<0){
                     startObj.month -=1;
@@ -550,7 +553,7 @@ export default {
             var end= {
                 year:start.year,
                 month:start.month,
-                day:min.start + weekObj.start,
+                day:min.start + weekObj.start-1,
             }
             if(end.day>this.getDayNum(end.year,end.month)){
                end.day = end.day -this.getDayNum(end.year,end.month)-1;
@@ -625,6 +628,7 @@ export default {
         },
         //每周的具体内容校正
         dayToWeekDetail(weeks){
+            
             var obj = Object.assign({},weeks);
             var dayNum = this.getDayNum(obj.year,obj.month);
             if(obj.day>dayNum){

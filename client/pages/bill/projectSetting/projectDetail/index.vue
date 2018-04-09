@@ -288,7 +288,7 @@ export default {
         submitStar(){
             var params={
                 id:this.editId,
-                focus:!this.grayStar
+                focus:this.grayStar?0:1
             }
             this.$http.post('project-detail-star',params).then((response)=>{
                 this.cancelStar();

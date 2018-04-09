@@ -464,17 +464,15 @@ export default {
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
-            top: 2px;
+            top: 19px;
+            z-index: 1;
         }
         .label{
             position: absolute;
             height: 29px;
             line-height: 30px;
             padding-left: 6px;
-           
-           
             width: 100%;
-            
             background: transparent;
             top:5px;
             font-weight:bold;
@@ -490,9 +488,9 @@ export default {
             position: absolute;
             cursor: pointer;
             top:5px;
-             white-space: nowrap;
-              
+            white-space: nowrap;  
             font-weight:bold;
+            z-index: 2;
         }
         .actual{
             height: 29px;
@@ -503,11 +501,10 @@ export default {
             color: #fff;
             position: absolute;
             cursor: pointer;
-            // opacity: 0.5;
             top:5px;
-             white-space: nowrap;
-             
+            white-space: nowrap;
             font-weight:bold; 
+            z-index: 2;
         }
         .plan-content,.actual-content{
             display: inline-block;

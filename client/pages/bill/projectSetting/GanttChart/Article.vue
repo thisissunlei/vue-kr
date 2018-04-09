@@ -391,7 +391,8 @@ export default {
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
-            top: 2px;
+            top: 19px;
+            z-index: 1;
             
             
         }
@@ -425,6 +426,7 @@ export default {
             text-overflow:ellipsis;
             white-space: nowrap;  
             font-weight:bold;
+            z-index: 2;
         }
         .actual{
             height: 29px;
@@ -439,6 +441,7 @@ export default {
             text-overflow:ellipsis;
             white-space: nowrap;  
             font-weight:bold;
+            z-index: 2;
         }
     }
 }

@@ -41,47 +41,6 @@
 
                     />
                 </Col>
-                <!--Col class="col">
-                     <EditInput 
-                        label="公司规模：" 
-                        :value="basicInfo.person" 
-                        placeholder="公司规模" 
-                        :maxLength="200"
-                        :onchange="okClick"
-                        :label-width='labelWidth'
-
-                    />
-                </Col>
-                <Col class="col">
-                     <EditInput 
-                        label="行业分类：" 
-                        :value="basicInfo.person" 
-                        placeholder="客户联系人" 
-                        :maxLength="200"
-                        :label-width='labelWidth'
-                        :onchange="okClick"
-                    />
-                </Col>
-                <Col class="col">
-                     <EditInput 
-                        label="融资伦次：" 
-                        :value="basicInfo.person" 
-                        placeholder="客户联系人" 
-                        :maxLength="200"
-                        :label-width='labelWidth'
-                        :onchange="okClick"
-                    />
-                </Col>
-                <Col class="col">
-                     <EditInput 
-                        label="运营状态：" 
-                        :value="basicInfo.person" 
-                        placeholder="客户联系人" 
-                        :maxLength="200"
-                        :label-width='labelWidth'
-                        :onchange="okClick"
-                    />
-                </Col-->
                 <Col>
                      <EditInput  
                         label="公司描述：" 
@@ -242,9 +201,11 @@ import LabelText from '~/components/LabelText';
             height: 34px;
             line-height: 34px;
             display: inline-block;
+            vertical-align: top;
             .title{
-                padding:10px 12px 10px 0;
-                text-align: right;
+                // padding:10px 12px 10px 0;
+                text-align: left;
+                display: inline-block;
                 font-size: 14px;
                 color:#666;
                 width:110px;

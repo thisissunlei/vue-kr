@@ -11,6 +11,14 @@
         font-size: 14px;
         color: #666;
     }
+    .ivu-form-item-label{
+        &:before{
+            content:'';
+            width:7px;
+            margin-right: 4px;
+            display: inline-block;
+        }
+    }
 </style>
 <template>
   <div class="kr-field">
@@ -25,6 +33,7 @@
             :value="value"
             :placeholder="placeholder"
             :type='type'
+            :name="name"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
@@ -34,7 +43,7 @@
             @on-keyup="keyup"
             @on-keydown="keydown"
             @on-keypress="keypress"
-            @okClick="okClick"
+            @submitClick="submitClick"
         />
 
         <KrSelect
@@ -154,6 +163,10 @@ export default {
             default:'',
             type:String
         },
+        name:{
+            default:'',
+            type:String
+        },
         value:{
 			type:[Number,String,Array],
             default:''
@@ -240,6 +253,7 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
+            console.log('======',event)
             this.$emit('change',event);
         },
        
@@ -276,11 +290,16 @@ export default {
             this.$emit("toggleChange",event)
         },
         okClick(event){
+            console.log('krField',event)
             this.$emit("okClick",event);
         },
         radioChange(event){
             this.$emit("radioChange",event)
         },
+        submitClick(value){
+            this.$emit("onClick",value)
+            console.log('submitClick==========',value)
+        }
       
     }
 }

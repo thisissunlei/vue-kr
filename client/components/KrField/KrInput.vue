@@ -10,7 +10,8 @@
                 :placeholder="placeholder"
                 type="text"
                 size='default'
-                v-model="inputValue"
+                v-model="labelValue"
+                name='name'
                 @on-click="click"
                 @on-enter="enter"
                 @on-change="change"
@@ -40,6 +41,11 @@ export default {
 			type:[Number,String],
 			default:''
         },
+        name:{
+            type:String,
+            default:''
+        },
+
         readOrEdit:{
             type:Boolean,
             default:false,
@@ -60,7 +66,7 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
-         
+            console.log('=====change',event)
             this.$emit('change',event);
         },
         focus(event){
@@ -78,12 +84,17 @@ export default {
         keypress(event){
             this.$emit('keypress',event);
         },
-        okClick(){
-            this.labelValue = this.inputValue;
-            this.$emit("okClick",this.labelValue)
+        okClick(event){
+            console.log('okClick--',event)
+            console.log('labelValue--',this.labelValue)
+            console.log('inputValue--',this.inputValue)
+            this.inputValue = this.labelValue;
+            console.log('krInput=======>',this.labelValue)
+            this.$emit("submitClick",this.labelValue)
         },
         cancelClick(event){
-            this.inputValue = event
+            this.labelValue = this.inputValue;
+
         }
 	}
 }

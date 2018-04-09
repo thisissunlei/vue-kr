@@ -12,9 +12,9 @@
 			<LabelText label="客户名称："  type="circle" style="width:30%">
 				{{customerBasic.customerName}}
 			</LabelText>
-			<!-- <LabelText label="客户状态："  type="circle" style="width:30%">
+			<LabelText label="客户状态："  type="circle" style="width:30%">
 				{{customerBasic.status}}
-			</LabelText> -->
+			</LabelText> 
 		</div>
 		<div class="tab-list">
 			<span class="tab-span"  v-for="(item, index) in firstTab"

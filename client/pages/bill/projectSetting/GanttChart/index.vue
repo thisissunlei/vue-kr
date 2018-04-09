@@ -614,8 +614,8 @@ export default {
                 let thatEndToLeft = thatDomDetail.width + thatDomDetail.left;
                 if(contentToLeft>=thatStartToLeft && contentToLeft<=thatEndToLeft){
                     timeShaftFixed.innerHTML = thatDom.innerHTML;
-                    if(thatEndToLeft- contentDetail.left<70){
-                        timeShaftFixed.style.left =-(70 - (thatEndToLeft- contentDetail.left))-1 +'px';
+                    if(thatEndToLeft- contentDetail.left<90){
+                        timeShaftFixed.style.left =-(90 - (thatEndToLeft- contentDetail.left))-1 +'px';
                     }else {
                         timeShaftFixed.style.left = 0;
                     }
@@ -734,16 +734,16 @@ export default {
             right: 0px;
             .time-shaft-fixed{
                 position: absolute;
-                // background: red;
                 background: #ffffff;
-                width:70px;
+                width:90px;
                 z-index: 99;
                 top: 1px;
                 left: 0px;
                 height: 48px;
+                padding-left: 20px;
                
              
-                line-height: 48px;
+                line-height: 50px;
                 font-size: 16px;
             }
            
@@ -770,6 +770,7 @@ export default {
                 top: 0px;
                 width: 50px;
                 pointer-events:none;
+                z-index:3;
             }
             
         }

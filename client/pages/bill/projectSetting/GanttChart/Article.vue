@@ -176,7 +176,6 @@ export default {
                 
                 str += '<div class="content" >'+'完成周期：'+startDay+' - '+endDay+'</div>'
             }
-            console.log(width,"pooooooooo")
             return {
                 str:str,
                 width:width

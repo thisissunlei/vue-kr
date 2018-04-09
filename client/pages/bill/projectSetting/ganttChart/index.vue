@@ -326,8 +326,6 @@ export default {
                         todayObj.month = 12 - todayObj.month;
                         todayObj.year -=1;
                     }
-                    console.log()
-                    
                     offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }   
                 dom.scrollLeft = (this.getTodayTOLeft(this.showData)-offerLeft);
@@ -670,8 +668,8 @@ export default {
                 opacity: 0;
                 background: rgba(70,76,91,.9);
                 position: absolute;
-                top: 500px;
-                left: 500px;
+                top: 0px;
+                left: 0px;
                 border-radius: 4px;
                 padding: 5px;
                 color: #ffffff;

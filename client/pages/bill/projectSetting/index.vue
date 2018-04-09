@@ -33,9 +33,13 @@ export default {
     },
     mounted(){
         GLOBALSIDESWITCH("false");
+        var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
         this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
         if(this.tabs=='tab2'){
             this.mask=false;
+            tabDom.style.overflow = 'visible';
+        }else{
+             tabDom.style.overflow = 'hidden';
         }
     },
     methods:{

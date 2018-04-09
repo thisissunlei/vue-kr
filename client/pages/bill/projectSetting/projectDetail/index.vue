@@ -473,11 +473,11 @@ export default {
             
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                     this.getEdit=response.data;
-                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime);
-                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime);
-                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime);
-                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime)
-                    this.getEdit.focus=this.getEdit.focus?'ok':'no';
+                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
+                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
+                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
+                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
+                    this.getEdit.focus=this.getEdit.focus?'1':'0';
                     this.cancelEditTask();
                  }).catch((error)=>{
                      this.$Notice.error({
@@ -575,7 +575,6 @@ export default {
           submitEditTask(name){
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
-                console.log("000000009999999")
                 newPageRefs[name].validate((valid,data) => {
                     if (!valid) {
                         isSubmit = false
@@ -594,7 +593,8 @@ export default {
                     return ;
                 }
                 var dataParams=this.editData;
-                dataParams.focus=dataParams.focus=='ok'?true:(dataParams.focus=='no'?false:dataParams.focus);
+                dataParams.focus=dataParams.focus=='1'?1:0;
+                dataParams.type='STAGETASK';
                 dataParams.id=this.editId;
                 dataParams.pid=this.parentId?this.parentId:0;
                 dataParams.propertyId=this.queryData.id;
@@ -621,12 +621,12 @@ export default {
                      this.warn=error.message;
                 })
           },
-          timeApplyFox(str){
+          timeApplyFox(str,param){
             if(str){     
                if(str.typeof == 'string'){
                      str = str.replace(/-/g,'/');
                 }
-               str = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(str));
+               str = param?dateUtils.dateToStr("YYYY-MM-DD",new Date(str)):dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(str));
             }else{
                str = '';
             }

@@ -1,6 +1,6 @@
 <template>
   <div>
-      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow:scroll;">
+      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow-y:scroll;overflow-x:hidden;">
                     <Form-item label="任务名称"  class="bill-search-class" prop="name" style="width:100%;">
                         <i-input 
                             v-model="formItem.name" 
@@ -10,13 +10,13 @@
                         />
                     </Form-item>
 
-                    <Form-item label="管理层关注"  class="bill-search-class pop-position" prop="fcus">
-                            <RadioGroup v-model="fcus" @on-change="radioChange">
+                    <Form-item label="管理层关注"  class="bill-search-class pop-position" prop="focus">
+                            <RadioGroup v-model="formItem.focus">
                                 <div class='single-radio-ok'><Poptip  content="设置为“管理层关注”任务后，该任务会在项目总览中显示">
-                                    <Radio label="ok">是</Radio>
+                                    <Radio label="1">是</Radio>
                                 </Poptip></div>
                                 <div class='single-radio-no'><Poptip  content="取消设置“管理层关注”任务后，该任务不会在项目总览中显示">
-                                    <Radio label="no">否</Radio>
+                                    <Radio label="0">否</Radio>
                                 </Poptip></div>
                             </RadioGroup>
                     </Form-item>
@@ -122,8 +122,16 @@ export default {
         return{
             dateError:false,
             cDateError:false,
-            formItem:this.getEdit,
-            fcus:this.getEdit.focus,
+            formItem:{
+                name:this.getEdit.name?this.getEdit.name:'',
+                planStartTime:this.getEdit.planStartTime?this.getEdit.planStartTime:'',
+                planEndTime:this.getEdit.planEndTime?this.getEdit.planEndTime:'',
+                actualStartTime:this.getEdit.actualStartTime?this.getEdit.actualStartTime:'',
+                actualEndTime:this.getEdit.actualEndTime?this.getEdit.actualEndTime:'',
+                descr:this.getEdit.descr?this.getEdit.descr:'',
+                operDescr:this.getEdit.operDescr?this.getEdit.operDescr:'',
+                focus:this.getEdit.focus
+            },
             ruleValidate: {
                 name: [
                     { required: true, message: '请输入任务名称且最多20个字符', trigger: 'change',max:20 }
@@ -133,6 +141,9 @@ export default {
                 ],
                 planEndTime:[
                     { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
+                ],
+                focus:[
+                    { required: true, message: '请选择是否关注', trigger: 'change' }
                 ]
             },
 
@@ -149,9 +160,6 @@ export default {
         this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
     },
     methods:{
-        radioChange(bool){
-            this.formItem.focus=bool=='ok'?true:false;
-        },
         nameChange(event){
             let params={
                 name:event.target.value,
@@ -169,10 +177,6 @@ export default {
         },
         planStartChange(params){
             this.planStart=params;
-            this.formItem.planStartTime=params;
-            if(typeof this.planEnd=='number'){
-                this.planEnd=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.planEnd));
-            }
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
             }else{
@@ -181,10 +185,6 @@ export default {
         },
         planEndChange(params){
             this.planEnd=params;
-            this.formItem.planEndTime=params;
-            if(typeof this.planStart=='number'){
-                this.planStart=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.planStart));
-            }
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
             }else{
@@ -193,10 +193,6 @@ export default {
         },
         actualStartChange(params){
             this.actualStart=params;
-            this.formItem.actualStartTime=params;
-            if(typeof this.actualEnd=='number'){
-                this.actualEnd=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualEnd));
-            }
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
@@ -205,10 +201,6 @@ export default {
         },
         actualEndChange(params){
             this.actualEnd=params;
-            this.formItem.actualEndTime=params;
-            if(typeof this.actualStart=='number'){
-                this.actualStart=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.actualStart));
-            }
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{

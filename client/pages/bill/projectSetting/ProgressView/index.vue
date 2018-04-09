@@ -7,12 +7,13 @@
             type='view' 
             :start="params.startTime" 
             :end="params.endTime"
-            @treeClick="treeClick"
-            @treeChange="treeChange"
-            @rightOver="rightOver"
             :treeData="treeData"
             :listData="listData"
             :treeIds="treeIds"
+            @treeClick="treeClick"
+            @treeChange="treeChange"
+            @rightOver="rightOver"
+            @editClick="editTask"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
@@ -96,6 +97,37 @@
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
+
+        <Modal
+                v-model="openEditTask"
+                title="编辑任务"
+                width="660"
+            >
+                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+                <div slot="footer" style="text-align: center;">
+                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
+                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
+                </div>
+        </Modal>
+
+        <Modal
+                v-model="openDelete"
+                title="删除任务"
+                width="400"
+            >
+                <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
+                <div slot="footer">
+                    <Button type="primary" @click="submitDelete">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
+                </div>
+        </Modal>
+
+        <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onChangeOpen"
+        />
     
     </div>
 
@@ -105,7 +137,9 @@
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './ListTable';
+import EditTask from '../projectDetail/editTask';
 import GanttChart from '../GanttChart';
+import Message from '~/components/Message';
 import Vue from 'vue';
 
 var allPage = 1;
@@ -113,12 +147,22 @@ var nowPage = 1;
 export default {
     components:{
         GanttChart,
-        ListTable
+        ListTable,
+        EditTask,
+        Message
     },
     data(){
         return{
             openSure:false,
+            openEditTask:false,
+            openDelete:false,
+            MessageType:'',
+            openMessage:false,
+            warn:'',
             id:'',
+            editId:'',
+            propertyId:'',
+            getEdit:{},
             params:{
                 endTime:this.getEndDay(24),
                 startTime:this.getStartDay(),
@@ -134,6 +178,7 @@ export default {
             mask:true,
             scrollWidth:0,
             isLoading:false,
+            upperError:false,
 
             tabValue:'name1',
 
@@ -295,7 +340,7 @@ export default {
             window.location.href=`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
         },
 
-
+ 
         //树
         treeClick(params){
             var treeArray=[];
@@ -358,6 +403,131 @@ export default {
         cancelSure(){
             this.openSure=!this.openSure;
         },
+        cancelEditTask(){
+            this.openEditTask=!this.openEditTask;
+        },
+        //打开删除任务
+        cancelTask(){
+           this.openDelete=!this.openDelete; 
+        },
+        timeApplyFox(str,param){
+            if(str){     
+               if(str.typeof == 'string'){
+                     str = str.replace(/-/g,'/');
+                }
+               str = param?dateUtils.dateToStr("YYYY-MM-DD",new Date(str)):dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(str));
+            }else{
+               str = '';
+            }
+            return str;
+        },
+        //打开编辑任务
+        editTask(id,parentId){
+            this.editId=id;
+            this.propertyId=parentId;
+            
+            this.$http.get('project-get-task',{id:id}).then((response)=>{
+                    this.getEdit=response.data;
+                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
+                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
+                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
+                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
+                    this.getEdit.focus=this.getEdit.focus?'1':'0';
+                    this.cancelEditTask();
+                 }).catch((error)=>{
+                     this.$Notice.error({
+                        title: error.message,
+                     });
+                 })
+        },
+         //编辑对象传递校验
+        onEditChange(params,error1,error2){
+            this.upperError=(error1||error2)?true:false;
+            this.editData=params;
+        },
+        //编辑任务提交
+        submitEditTask(name){
+                var newPageRefs = this.$refs.fromFieldTask.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+                        isSubmit = false
+                    }
+                })
+                if(!isSubmit){
+                    return;
+                }
+                if(this.upperError){
+                    return ;
+                }
+                if(this.editData.error){
+                    this.$Notice.error({
+                        title: '任务名称重复'
+                    });
+                    return ;
+                }
+                var dataParams=this.editData;
+                dataParams.focus=dataParams.focus=='1'?1:0;
+                dataParams.type='STAGETASK';
+                dataParams.id=this.editId;
+                dataParams.pid=0;
+                dataParams.propertyId=this.propertyId;
+                dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
+                dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
+                dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
+                dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
+                this.$http.post('project-edit-task',dataParams).then((response)=>{
+                     this.cancelEditTask();
+                     this.getListData(this.params);
+
+                     if(response.code>1){
+                         this.cancelSure();
+                     }else{
+                        this.MessageType="success";
+                        this.openMessage=true;
+                        this.warn="编辑成功";
+                     }
+
+                     this.scrollPosititon();
+                 }).catch((error)=>{
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
+                })
+          },
+        //提交删除任务
+        submitDelete(){
+            var params={
+                id:this.editId
+            }
+            this.$http.delete('project-delete-task',params).then((response)=>{
+                     this.cancelTask();
+                     this.cancelEditTask();
+                     console.log('----',this.params);
+                     this.getListData(this.params);
+
+                     this.MessageType="success";
+                     this.openMessage=true;
+                     this.warn="删除成功";
+                     this.scrollPosititon();
+                 }).catch((error)=>{
+                     this.MessageType="error";
+                     this.openMessage=true;
+                     this.warn=error.message;
+             })
+        },
+        scrollPosititon(){
+              setTimeout(() => {
+                     var leftDom=document.getElementById('vue-chart-left-table-list');
+                     var chartDom=document.getElementById('vue-chart-right-draw-content');
+                    if(leftDom&&chartDom){
+                         chartDom.scrollTop=this.scrollH;
+                         leftDom.scrollTop=this.scrollH;
+                    }
+                },50);
+          },
+
+
         //tab切换
         tabsClick(key){
             if(key=='name2'){
@@ -507,7 +677,11 @@ export default {
             }
             this.params.endTime = year + '-'+month+'-'+1;
             this.getListData(this.params)
-        }
+        },
+        //信息提示框
+        onChangeOpen(data){
+            this.openMessage=data;
+        },
     }
 }
 </script>

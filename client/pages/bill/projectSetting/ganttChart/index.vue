@@ -172,6 +172,7 @@
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
+                            @editClick="editClick"
                         />
                         <div class='today-flag' :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                     </div>

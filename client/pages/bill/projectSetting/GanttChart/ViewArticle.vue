@@ -19,6 +19,7 @@
                 :key="item.id"
                 :index="index"
                 :todayDetail="todayDetail"
+                @editClick="editClick"
             />
             
             
@@ -75,6 +76,9 @@ export default {
         },100);
     },
     methods:{
+        editClick(id){
+            this.$emit('editClick',id,this.id);
+        },
        
         //每一个任务的所有数据
         allDataFor(data){

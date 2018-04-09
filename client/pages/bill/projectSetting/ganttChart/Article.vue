@@ -25,6 +25,7 @@
                 }"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
+                @click="editClick(data.value)"
             >
             {{getActualLabel(data.label)}}
             </div>
@@ -40,6 +41,7 @@
                 }"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
+                @click="editClick(data.value)"
             >  
             {{getActualLabel(data.label)}}
             </div>
@@ -49,6 +51,7 @@
                 :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
+                @click="editClick(data.value)"
             >
                 {{this.getLabel(data.label)}}
             </div>
@@ -119,6 +122,9 @@ export default {
        
     },
     methods:{
+        editClick(id){
+            this.$emit('editClick',id);
+        },
         toolOver(event){
             // return ;
             var e = event || window.event;

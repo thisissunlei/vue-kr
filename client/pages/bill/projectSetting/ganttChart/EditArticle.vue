@@ -175,7 +175,7 @@ export default {
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
             var tirDom = document.getElementById('gantt-chart-tool-tip');
-            tirDom.style.display = "inline-block";
+          
             var tirLocation = {
                 left:e.clientX,
                 top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
@@ -185,12 +185,13 @@ export default {
             tirDom.style.left = tirLocation.left-30 + 'px';
             tirDom.style.top  = tirLocation.top +5 - 130 + 'px';
             tirDom.style.width = obj.width + 'px';
+            tirDom.style.opacity = 1;
         },
         getToolTipContent(){
 
             var str  = '<div class="title">'+this.data.label+'</div>';
             var data = Object.assign({},this.data.data);
-            var width = 150;
+            var width = 155;
             if(data.planEndTime && data.planStartTime){
                 var type ='MM/DD';
 
@@ -198,7 +199,7 @@ export default {
                 var endYear = (new Date(data.planEndTime)).getFullYear();
                 if(startYear !== endYear){
                     type = 'YYYY/MM/DD';
-                    width=215;
+                    width=220;
                 }
                 
                 var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
@@ -212,7 +213,7 @@ export default {
                 var endYear = (new Date(data.actualEndTime)).getFullYear();
                 if(startYear !== endYear){
                     type = 'YYYY/MM/DD';
-                    width=width>150?width:215;
+                    width=width>155?width:220;
                 }
                 var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
                 var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
@@ -228,7 +229,7 @@ export default {
         toolOut(event){
             
             var tirDom = document.getElementById('gantt-chart-tool-tip');
-            tirDom.style.display = "none";
+            tirDom.style.opacity = 0;
         },
         editClick(id,pid){
             this.$emit('editClick',id,pid);
@@ -464,21 +465,20 @@ export default {
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
-            top: 2px;
+            top: 19px;
+            z-index: 1;
         }
         .label{
             position: absolute;
             height: 29px;
             line-height: 30px;
             padding-left: 6px;
-           
-           
             width: 100%;
-            
             background: transparent;
             top:5px;
             font-weight:bold;
             white-space: nowrap;
+            z-index: 3;
         }
         .plan{
             height: 29px;
@@ -490,9 +490,9 @@ export default {
             position: absolute;
             cursor: pointer;
             top:5px;
-             white-space: nowrap;
-              
+            white-space: nowrap;  
             font-weight:bold;
+            z-index: 2;
         }
         .actual{
             height: 29px;
@@ -503,11 +503,10 @@ export default {
             color: #fff;
             position: absolute;
             cursor: pointer;
-            // opacity: 0.5;
             top:5px;
-             white-space: nowrap;
-             
+            white-space: nowrap;
             font-weight:bold; 
+            z-index: 2;
         }
         .plan-content,.actual-content{
             display: inline-block;

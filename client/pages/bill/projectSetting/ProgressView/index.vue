@@ -284,10 +284,13 @@ export default {
             return endObj;
         },
         compareTime(data1,data2){
-            var data='';
-            var startData=(new Date(data1+' 00:00:00')).getTime();
-            var endData=data2;
+            let data='';
+            let startData=(new Date(data1+' 00:00:00')).getTime();
+            let todayDate = new Date();
+            let todayTime = todayDate.getTime();
+            let endData=data2;
             data=startData<endData?startData:endData;
+            data = data<todayTime?data:todayTime;
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
         },
 

@@ -158,6 +158,10 @@ export default {
         .ivu-form-item-error-tip{
             width:250px;
         }
+        .bill-search-class{
+            padding-left:32px;
+            height: 48px;
+        }
     }
     
 </style>

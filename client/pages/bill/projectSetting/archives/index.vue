@@ -374,11 +374,7 @@ import AddArchives from './addArchives';
          background-color: #FAFCFF;
     }
 }
-.bill-search-class{
-        width:50%;
-        padding-left:32px;
-        height: 48px;
-}
+
 .ivu-tooltip{
     width:100%;
     //border-bottom: 1px solid #e9eaec;

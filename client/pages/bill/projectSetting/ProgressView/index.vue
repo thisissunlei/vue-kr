@@ -390,7 +390,11 @@ export default {
             this.id=item.id;
         },
         submitSure(){
-            this.$http.post('sure-sign-project',{propertyId:this.propertyId}).then((response)=>{
+            let params={
+                id:this.editId,
+                propertyId:this.propertyId
+            }
+            this.$http.post('sure-sign-project',params).then((response)=>{
                 this.tabValue='name1';
                 this.mask=true;
                 this.params.page=1;

@@ -162,7 +162,7 @@ export default {
                 var endYear = (new Date(data.actualEndTime)).getFullYear();
                 if(startYear !== endYear){
                     type = 'YYYY/MM/DD';
-                    width=width>150?width:215;
+                    width=width>155?width:220;
                 }
                 var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
                 var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';

@@ -72,7 +72,7 @@
             >
                 <div class="calibration" >
                  <div  style="position:relative;overflow:hidden;"  >
-                    <div class="time-shaft-fixed">423345345345</div>
+                    <div class="time-shaft-fixed"></div>
                     <div 
                         ref="rightBar" 
                         v-if="!isLoading" 
@@ -601,6 +601,7 @@ export default {
             let contentDetail = contentDom.getBoundingClientRect();
             let contentToLeft = contentDetail.left;
             let timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
+            let timeShaftDetail = timeShaftFixed.getBoundingClientRect();
             let topShaftDomArr = document.querySelectorAll('.month-bar .draw-month');
             if(type == 'month'){
                topShaftDomArr = document.querySelectorAll('.year-bar .year');
@@ -612,6 +613,11 @@ export default {
                 let thatEndToLeft = thatDomDetail.width + thatDomDetail.left;
                 if(contentToLeft>=thatStartToLeft && contentToLeft<=thatEndToLeft){
                     timeShaftFixed.innerHTML = thatDom.innerHTML;
+                    if(thatEndToLeft- contentDetail.left<70){
+                        timeShaftFixed.style.left =-(70 - (thatEndToLeft- contentDetail.left))-1 +'px';
+                    }else {
+                        timeShaftFixed.style.left = 0;
+                    }
                     break;
                 }
             }
@@ -648,6 +654,7 @@ export default {
 <style lang="less">
    .chart-ul-wrap{
         width:100%;
+        
         box-sizing: border-box;
         display:inline-block;
         position: relative;

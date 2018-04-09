@@ -2,7 +2,7 @@
 <template>
 	<div class="draw-month" :style="{width:data.length * minCalibration+'px'}">
        <span class="label" :style="{fontSize:size+'px'}">
-           {{month}}
+           {{this.getMonth()}}
        </span>
 	</div>
 </template>

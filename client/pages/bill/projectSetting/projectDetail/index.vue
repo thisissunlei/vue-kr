@@ -33,6 +33,7 @@
                         @editClick="editTask"
                         @leftOver="leftOver"
                         @iconClick="iconClick"
+                        :scrollWidth="scrollWidth"
                     />
                 </div>
             </GanttChart>
@@ -208,7 +209,7 @@ export default {
         this.queryData=this.$route.query; 
     },
     mounted(){
-         this.scrollWidth= utils.getScrollBarSize()
+         this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
          this.signMask=this.queryData.status==1?true:false;
          this.initTree();

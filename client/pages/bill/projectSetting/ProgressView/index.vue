@@ -506,7 +506,6 @@ export default {
             this.$http.delete('project-delete-task',params).then((response)=>{
                      this.cancelTask();
                      this.cancelEditTask();
-                     console.log('----',this.params);
                      this.getListData(this.params);
 
                      this.MessageType="success";

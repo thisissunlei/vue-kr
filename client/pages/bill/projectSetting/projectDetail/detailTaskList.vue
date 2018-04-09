@@ -64,6 +64,9 @@
               </li>
             
            </ul>
+
+           <div class='view-bottom-more' v-if="data.length" :style="{height:scrollWidth+'px'}"></div>                              
+          
        </div>
 
     </div>
@@ -78,6 +81,9 @@ export default {
     props:{
         data:{
             type:Array
+        },
+        scrollWidth:{
+          type:[Number,String]
         }
     },
     mounted(){
@@ -156,7 +162,7 @@ export default {
          width:100%;
          background: #fff;
          max-height:500px;
-         overflow:scroll;
+         overflow:auto;
          .detail-li{
               cursor: pointer;
              .chart-parent{
@@ -247,6 +253,9 @@ export default {
       .chart-list{
         padding-left:5px;
         color: rgb(102, 102, 102);
+      }
+      .view-bottom-more{
+          background:#fff;
       }
    }
    ::-webkit-scrollbar {

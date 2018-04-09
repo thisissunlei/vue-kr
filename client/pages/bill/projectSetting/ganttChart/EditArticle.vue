@@ -28,7 +28,7 @@
                                     color:getPlanColor(),
                                     cursor:'pointer'
                                 }"
-                            >{{getActualLabel(data.label)}}
+                            ><div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
                             </div>
 
                             <div 
@@ -46,7 +46,7 @@
 
                                 }"
                             >  
-                            {{getActualLabel(data.label)}}
+                            <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
                             <div 
@@ -90,7 +90,6 @@ import yeas from './img/yeas.png';
 export default {
     name:'EditArticle',
     components:{
-        
         FlagLabel
     },
     props:{
@@ -129,17 +128,49 @@ export default {
             actualDetail:{} ,    
             leftEndpoint:this.startDate,
             lineDetail:{},
-            picColor:''
+            picColor:'',
+            planContentId:'plan-content' + this.data.t_id,
+            actualContentId:'actual-content' + this.data.t_id
+
+        
         }
     },
     mounted(){
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
+        
+       
+    },
+    updated(){
+        this.fontCover();
     },
     methods:{
+        fontCover(){
+            let planDom = document.getElementById(this.planContentId);
+            let actualDom = document.getElementById(this.actualContentId);
+            if(!planDom || !actualDom){
+                return
+            }
+           
+            let planDetail = planDom.getBoundingClientRect();
+            let actualDetail = actualDom.getBoundingClientRect();
+            if(planDetail.left+planDetail.width>actualDetail.left ||
+                actualDetail.left+actualDetail.width>planDetail.left){
+                  
+                if(planDetail.left+planDetail.width>actualDetail.left) {
+                    planDom.style.width =  actualDetail.left - planDetail.left + 'px';
+                }
+                if(actualDetail.left+actualDetail.width>planDetail.left) {
+                    actualDom.style.width =  planDetail.left - actualDetail.left + 'px';
+                }
+                console.log(actualDetail,planDetail,"pppppp")
+            }
+
+
+        },
         toolOver(event){
-            // return ;
+         
             var e = event || window.event;
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
@@ -477,6 +508,12 @@ export default {
              white-space: nowrap;
              
             font-weight:bold; 
+        }
+        .plan-content,.actual-content{
+            display: inline-block;
+             overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;  
         }
         
     }

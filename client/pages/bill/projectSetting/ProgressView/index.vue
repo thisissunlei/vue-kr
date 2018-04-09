@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div >
        
         <!-- 甘特图部分 -->
         <GanttChart 

@@ -663,6 +663,7 @@ export default {
                 border-radius: 4px;
                 padding: 5px;
                 color: #ffffff;
+                z-index: 999;
                 .title{
                     font-size: 14px;
                     background: transparent;

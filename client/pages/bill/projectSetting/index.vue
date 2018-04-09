@@ -40,9 +40,14 @@ export default {
     },
     methods:{
         tabsClick(key){
+            var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+
             if(key=='tab2'){
+                tabDom.style.overflow = 'visible';
                 this.mask=false;
+                
             }else{
+                tabDom.style.overflow = 'hidden';
                 this.mask=true;
             }
             this.tabs=key;

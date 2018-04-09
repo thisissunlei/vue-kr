@@ -219,8 +219,12 @@ export default {
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
+            if(leftDom){
+                leftDom.style.maxHeight = clientHeight - 362+"px";
+            }
+            if(rightDom){
+                rightDom.style.maxHeight = clientHeight - 362 +"px";
+            }
          }, 200);
          window.onresize=function(){
             var leftDom=document.getElementById('vue-chart-left-detail-list');

@@ -24,23 +24,24 @@
                         :label-width='labelWidth'
                         :maxLength="200"
                         :onchange="onChange"
-                        :submitValue="submitValue"
-                        :cancelValue="cancelValue"
-
-                    />
-                </Col>
-                <!--Col class="col">
-                     <EditInput  
-                        label="联系人电话：" 
-                        :value="basicInfo.person" 
-                        placeholder="联系人电话" 
-                        :maxLength="200"
-                        :onchange="okClick"
-                        :label-width='labelWidth'
 
                     />
                 </Col>
                 <Col class="col">
+                     <EditSelect  
+                        label="联系人电话：" 
+                        name="phone"
+                        :value="basicInfo.phone" 
+                        placeholder="联系人电话" 
+                        :canSubmit.sync="canSubmit"
+                        :maxLength="200"
+                        :data='optionData'
+                        :onchange="onSelectChange"
+                        :label-width='labelWidth'
+
+                    />
+                </Col>
+                <!--Col class="col">
                      <EditInput 
                         label="公司规模：" 
                         :value="basicInfo.person" 
@@ -80,27 +81,19 @@
                         :label-width='labelWidth'
                         :onchange="okClick"
                     />
-                </Col>
-                <Col class="col">
-                     <EditInput 
-                        label="公司官网：" 
-                        :value="basicInfo.person" 
-                        placeholder="公司官网" 
-                        :maxLength="200"
-                        :label-width='labelWidth'
-                        :onchange="okClick"
-                    />
-                </Col>
+                </Col-->
                 <Col>
                      <EditInput  
                         label="公司描述：" 
                         :value="basicInfo.text" 
+                        name="text"
                         placeholder="公司描述" 
                         :maxLength="200"
                         :label-width='labelWidth'
-                        :onchange="okClick"
+                        :onchange="onChange"
+                        type="textarea"
                     />
-                </Col-->
+                </Col>
                 
             </Row>
             
@@ -116,12 +109,14 @@
     import utils from '~/plugins/utils';
 import LabelText from '~/components/LabelText';
     import EditInput from '~/components/EditInput'
+    import EditSelect from '~/components/EditSelect'
 
 
     export default {
         components:{
             EditInput,
-            LabelText
+            LabelText,
+            EditSelect
         },
         data (){
             const validateName = (rule, value, callback) => {
@@ -164,9 +159,28 @@ import LabelText from '~/components/LabelText';
                 basicInfo:{
                     customerId:'3232',
                     customerName:'萨达多撒',
+                    phone:'1',
                     person:'冯吸臣',
                     text:'啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦'
-                }
+                },
+                optionData:[
+                    {
+                        label:'label1',
+                        value:'1'
+                    },
+                    {
+                        label:'label2',
+                        value:'2'
+                    },
+                    {
+                        label:'label3',
+                        value:'3'
+                    },
+                    {
+                        label:'label4',
+                        value:'4'
+                    },
+                ]
             }
         },
         methods:{
@@ -190,19 +204,22 @@ import LabelText from '~/components/LabelText';
                     this.canSubmit = false;
                     console.log('valid',valid)
                   } else{
+                    console.log('=========',this.canSubmit)
                     this.canSubmit = true;
                   } 
                 })
             },
             onChange(name,value){
+
                 this.basicInfo[name] = value;
                 this.handleSubmit()
             },
-            submitValue(name,value){
-
+            onSelectChange(name,value){
+                this.basicInfo[name] = value.value;
+                this.handleSubmit()
             },
-            cancelValue(name,value){
-
+            changeWeb(){
+                console.log('changeWeb',this.basicInfo.web)
             }
         },
         mounted(){

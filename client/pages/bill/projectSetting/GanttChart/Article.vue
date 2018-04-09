@@ -125,7 +125,7 @@ export default {
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
             var tirDom = document.getElementById('gantt-chart-tool-tip');
-            tirDom.style.display = "inline-block";
+            
             var tirLocation = {
                 left:e.clientX,
                 top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
@@ -135,12 +135,13 @@ export default {
             tirDom.style.left = tirLocation.left-30 + 'px';
             tirDom.style.top  = tirLocation.top +5 - 130 + 'px';
             tirDom.style.width = obj.width + 'px';
+            tirDom.style.opacity =1;
         },
         getToolTipContent(){
 
             var str  = '<div class="title">'+this.data.label+'</div>';
             var data = Object.assign({},this.data.data);
-            var width = 150;
+            var width = 155;
             if(data.planEndTime && data.planStartTime){
                 var type ='MM/DD';
 
@@ -148,7 +149,7 @@ export default {
                 var endYear = (new Date(data.planEndTime)).getFullYear();
                 if(startYear !== endYear){
                     type = 'YYYY/MM/DD';
-                    width=215;
+                    width=220;
                 }
                 
                 var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
@@ -169,6 +170,7 @@ export default {
                 
                 str += '<div class="content" >'+'完成周期：'+startDay+' - '+endDay+'</div>'
             }
+            console.log(width,"pooooooooo")
             return {
                 str:str,
                 width:width
@@ -177,7 +179,7 @@ export default {
         },
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
-            tirDom.style.display = "none";
+            tirDom.style.opacity = 0;
         },
         getLabelColor(){
             var planColor = this.getPlanBgColor();

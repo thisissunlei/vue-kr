@@ -662,7 +662,7 @@ export default {
          #gantt-chart-tool-tip{
                 width: 250px;
                 min-height: 50px;
-                display: none;
+                opacity: 0;
                 background: rgba(70,76,91,.9);
                 position: absolute;
                 top: 500px;
@@ -671,6 +671,7 @@ export default {
                 padding: 5px;
                 color: #ffffff;
                 z-index: 999;
+                transition: all .2s;
                 .title{
                     font-size: 14px;
                     background: transparent;

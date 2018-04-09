@@ -477,6 +477,7 @@ export default {
             top:5px;
             font-weight:bold;
             white-space: nowrap;
+            z-index: 3;
         }
         .plan{
             height: 29px;

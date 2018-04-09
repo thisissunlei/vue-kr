@@ -401,10 +401,10 @@ export default {
             height: 29px;
             line-height: 30px;
             padding-left: 6px;
-            
+            z-index: 3;
             overflow: hidden;
             width: 100%;
-           overflow: hidden;
+            overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;
             background: transparent;

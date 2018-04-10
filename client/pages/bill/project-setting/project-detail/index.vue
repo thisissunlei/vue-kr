@@ -165,7 +165,7 @@ export default {
                 pageSize:15
             },
             difference:7,
-            endTime:this.getEndDay(7),
+            endTime:this.getEndDay(13),
             watchRecord:[],
             startTime:this.getStartDay(),
             isLoading:true,
@@ -328,9 +328,9 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
                 if(response.data.hasTime){
-                       this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
-                        var endObj = this.monthAdd(response.data.lastEndTime);
-                        this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    var endObj = this.monthAdd(response.data.lastEndTime);
+                    this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
              
                 this.isLoading = false;

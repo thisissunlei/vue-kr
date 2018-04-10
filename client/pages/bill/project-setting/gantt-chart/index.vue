@@ -307,7 +307,6 @@ export default {
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
-                console.log(today,"ppppppp")
                 var offerLeft = 0;
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
@@ -367,11 +366,11 @@ export default {
 
             var yearArr = [];
             if(startObj.year == endObj.year){
-               yearArr=[{
-                   year:startObj.year,
-                   start:startTime,
-                   end:endObj.year+'-'+endObj.month+'-'+endObj.day
-               }];
+                yearArr=[{
+                    year:startObj.year,
+                    start:startTime,
+                    end:endObj.year+'-'+endObj.month+'-'+endObj.day
+                }];
             }else{
                 yearArr=[{
                     year:startObj.year,
@@ -379,20 +378,20 @@ export default {
                     end:startObj.year+'-'+12+'-'+this.getDayNum(startObj.year,12)
                 }];
                 for (var year = startObj.year; ;) {
-                        year++;
-                        if(year == endObj.year){
-                            yearArr.push({
-                                year:endObj.year,
-                                start:endObj.year+'-'+1+'-'+1,
-                                end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
-                            });
-                            break;
-                        }
+                    year++;
+                    if(year == endObj.year){
                         yearArr.push({
-                            year:year,
-                            start:year+'-'+1+'-'+1,
-                            end:year+'-'+endObj.month+'-'+endObj.day
+                            year:endObj.year,
+                            start:endObj.year+'-'+1+'-'+1,
+                            end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
                         });
+                        break;
+                    }
+                    yearArr.push({
+                        year:year,
+                        start:year+'-'+1+'-'+1,
+                        end:year+'-'+endObj.month+'-'+endObj.day
+                    });
                 }
 
             }
@@ -409,7 +408,7 @@ export default {
             }else if(event=='day'){
                 this.minCalibration = 50;
             }else if(event=='month'){
-                this.minCalibration = 10;
+                this.minCalibration = 4;
             }
             this.limitDay(event);
             this.scroolFix();

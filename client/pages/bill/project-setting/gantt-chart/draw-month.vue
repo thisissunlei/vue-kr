@@ -1,6 +1,6 @@
 
 <template>
-	<div class="draw-month" :style="{width:data.length * minCalibration+'px'}">
+	<div class="draw-month" :style="{width:data.length * minCalibration+'px',textAlign:type=='month'?'center':'left'}">
        <span class="label" :style="{fontSize:size+'px'}">
            {{this.getMonth()}}
        </span>
@@ -59,6 +59,7 @@ export default {
         .label{
             display: inline-block;
             padding-left:20px; 
+            padding-right: 20px;
         }
 }
 </style>

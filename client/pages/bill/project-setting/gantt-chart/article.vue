@@ -156,7 +156,7 @@ export default {
                 str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
                 
             }
-            if(data.actualStartTime || data.actualEndTime){
+            if(data.actualStartTime && data.actualEndTime){
                 var type ='MM/DD';
                 var startYear = (new Date(data.actualStartTime)).getFullYear();
                 var endYear = (new Date(data.actualEndTime)).getFullYear();

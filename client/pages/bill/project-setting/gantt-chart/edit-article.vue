@@ -28,9 +28,9 @@
                                     color:getPlanColor(),
                                     cursor:'pointer'
                                 }"
-                            ><div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
+                            >
+                                <div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
                             </div>
-
                             <div 
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                                 class="actual"
@@ -43,10 +43,9 @@
                                     background:getActualBgColor(),
                                     color:getActualColor(),
                                     cursor:'pointer'
-
                                 }"
                             >  
-                            <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
+                                <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
                             <div 
@@ -200,7 +199,7 @@ export default {
                 str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
                 
             }
-            if(data.actualStartTime || data.actualEndTime){
+            if(data.actualStartTime && data.actualEndTime){
                 var type ='MM/DD';
                 var startYear = (new Date(data.actualStartTime)).getFullYear();
                 var endYear = (new Date(data.actualEndTime)).getFullYear();
@@ -285,13 +284,21 @@ export default {
             }
         },
         lineShow(){
-           
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEndTime<this.data.data.planStartTime){
-                return true;
-            }else {
-                return false;
+            if(
+                this.data.data.actualStartTime && 
+                this.data.data.actualEndTime &&
+                this.data.data.planStartTime && 
+                this.data.data.planEndTime
+            ){
+
+                if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                    this.data.data.actualEndTime<this.data.data.planStartTime){
+                    return true;
+                }else {
+                    return false;
+                }
             }
+            
         },
         getFlagShow(event){
             if(this.data.data){

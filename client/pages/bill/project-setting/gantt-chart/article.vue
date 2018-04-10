@@ -114,6 +114,15 @@ export default {
         }
        
     },
+    watch:{
+        startDate:{
+            handler:function(){
+                this.leftEndpoint = this.startDate;
+                this.getBoxWidthAndOffice();
+            }
+           
+        },
+    },
     methods:{
         editClick(id){
             this.$emit('editClick',id);
@@ -333,8 +342,6 @@ export default {
                 month:minStr[1],
                 dayNum:minStr[2] 
             }
-            console
-
             return {
                 min:+min,
                 max:+max

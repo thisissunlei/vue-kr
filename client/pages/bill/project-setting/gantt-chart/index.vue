@@ -505,7 +505,8 @@ export default {
                 month++;
             }
             this.showData = [].concat(showData);
-            this.leftEndpoint = this.showData[0];
+            this.leftEndpoint = Object.assign({}, this.leftEndpoint,this.showData[0]);
+             
             this.isLoading = false;
             this.getDayBarWidth()
             //获取周的具体数据

@@ -1,15 +1,27 @@
 <template>
 <div class="customer-assets">
    <SectionTitle title="客户中心"></SectionTitle>
-        <div class="div-search">
-            <Input 
-                v-model="params.customerName" 
-                placeholder="请输入客户名称"
-                style="width: 252px"
-                @keyup.enter.native="onKeyEnter($event)"
-            />
-            <div class='m-search' @click="lowerSubmit">搜索</div>
-        </div>
+        
+            <div class='list-banner'>
+                    <div class='list-btn'>
+                        <Button type="primary" @click="createNew" class='join-btn'>新建</Button>
+                    </div>
+
+                    <div class='list-search'>
+                         <div class='lower-search'>
+                            <span style='padding-right:10px'>客户名称</span>
+                            <i-input 
+                                v-model="params.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 252px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                         </div>
+                         <div class='m-search' @click="lowerSubmit">搜索</div>
+                         <div class="m-bill-search" @click="showSearch"><span />
+                         </div> 
+                   </div>
+            </div>
         <div class="table-list">
             <Table  border :columns="columns" :data="accountList" />
              <div style="margin: 10px 0 ;overflow: hidden">
@@ -25,6 +37,28 @@
                 </div>
             </div>
         </div>
+        <Modal
+            v-model="openSearch"
+            title="高级搜索"
+            width="660"
+        >
+            <HeightSearch mask='join' @bindData="onUpperChange" :params="switchParams"/>
+            <div slot="footer">
+                <Button type="primary" @click="submitUpperSearch">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+            </div>
+        </Modal>
+        <Modal
+            v-model="openCreate"
+            title="新建客户"
+            width="660"
+        >
+            <CreateCustomer  @newData="newCustomer" ref="fromFieldNewPage" v-if="openCreate" />
+            <div slot="footer">
+                <Button type="primary" @click="submitCreate('fromFieldValidate')">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+            </div>
+        </Modal>
 </div>
 </template>
 
@@ -32,18 +66,28 @@
     import SectionTitle from '~/components/SectionTitle';
     import Buttons from '~/components/Buttons';
     import utils from '~/plugins/utils';
+    import HeightSearch from './heightSearch';
+    import CreateCustomer from './createCustomer';
+    import dateUtils from 'vue-dateutils';
 
     export default {
         name: 'customerAssets',
         components:{
             SectionTitle,
-            Buttons
+            Buttons,
+            CreateCustomer,
+            HeightSearch
         },
         data () {
             return {
                 totalCount:0,
                 page:1,
                 pageSize:15,
+                openSearch:false,
+                switchParams:{},
+                openCreate:false,
+                upperError:'',
+                newPageData:{},
 
             params:{
                 pageSize:15,
@@ -53,53 +97,41 @@
                     
                     {
                         title: '客户ID',
-                        key: 'customerId',
+                        key: 'id',
                         align:'center',
                     },
                     {
                         title: '客户名称',
-                        key: 'customerName',
+                        key: 'company',
                         align:'center',
                     },
                     {
                         title: '意向/入驻社区',
-                        key: 'balance',
+                        key: 'customerCommunitis',
                         align:'center',
-                        render:function(h,params){
-                            return utils.thousand((params.row.balance/100).toFixed(2))
-                         }
                     },
                     {
                         title: '行业分类',
-                        key: 'deposit',
+                        key: 'industryName',
                         align:'center',
-                        render:function(h,params){
-                            return utils.thousand((params.row.deposit/100).toFixed(2))
-                         }
                     },
                     {
                         title: '客户领取人',
-                        key: 'lockDeposit',
+                        key: 'receiveName',
                         align:'center',
-                        render:function(h,params){
-                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
-                         }
                     },
                     {
                         title: '创建时间',
-                        key: 'lockDeposit',
+                        key: 'createTime',
                         align:'center',
-                        render:function(h,params){
-                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
-                         }
+                        render(tag, params){
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.createTime)) ;
+                        }
                     },
                     {
                         title: '客户状态',
-                        key: 'lockDeposit',
+                        key: 'customerStatus',
                         align:'center',
-                        render:function(h,params){
-                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
-                         }
                     },
                     {
                         title: '操作',
@@ -143,7 +175,7 @@
             },
             getListData(params){
                 params = Object.assign({},params,this.params)
-                this.$http.get('account-list',params).then((res)=>{
+                this.$http.get('get-customer-list',params).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
@@ -162,6 +194,61 @@
             changePage(page){
                 this.params.page = page;
                 this.getListData(this.params)
+            },
+            createNew(){
+                this.openCreate = !this.openCreate;
+                console.log('createNew')
+            },
+            showSearch(){
+                this.openSearch = !this.openSearch;
+            },
+            submitUpperSearch(){
+                if(this.upperError){
+                    return ;
+                }
+                this.params=Object.assign({},this.params,this.upperData);
+                this.params.page=1;
+                this.params.pageSize=15;
+                this.params.startDate=this.params.startDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.startDate)):'';
+                this.params.endDate=this.params.endDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.endDate)):'';
+                console.log('submitCreate',this.params)
+                utils.addParams(this.params);
+
+            },
+            onUpperChange(params,error){
+                this.upperError=error;
+                this.upperData=params;
+            },
+            submitCreate(name){
+                var newPageRefs = this.$refs.fromFieldNewPage.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+
+                        isSubmit = false
+                    }
+                })
+                console.log('submitCreate',isSubmit)
+                if(!isSubmit){
+                    return;
+                }
+                console.log('submitCreate-->data',this.newPageData)
+
+
+            },
+            newCustomer(data){
+                 if(data){
+                    this.newPageData = Object.assign({},data);
+                    var params = Object.assign({},data)
+                    // this.$http.post('post-create-from-field',params, r => {
+                    //     this.isNewPageSubmit = true;
+                    // }, e => {
+                    //     this.isNewPageSubmit = false;
+                    //     this.openMessage=true;
+                    //     this.MessageType="error";
+                    //     this.warn=e.message;
+                    // })   
+                }
             }
         }
     }
@@ -177,6 +264,10 @@
     .table-list{
         padding:0 20px;
     }
+    .list-btn{
+        display:inline-block;
+        width:20%;
+    }
     .m-search{
         color: #2b85e4;
         display: inline-block;
@@ -184,5 +275,46 @@
         font-size: 14px;
         cursor: pointer;
     }
+    .list-banner{
+            width:100%;
+            padding:0 0 0 20px;
+            .list-btn{
+                display:inline-block;
+                width:20%;
+                .join-btn{
+                    margin-right:30px;
+                }
+            }
+            .list-search{
+                margin-bottom:10px;
+                display:inline-block;
+                width:80%;
+                text-align:right;
+                .lower-search{
+                    display:inline-block;
+                    margin:10px 20px;
+                    margin-right:5px;
+                }
+            }
+        }
+    .m-bill-search{
+        display:inline-block;
+        height:22px;
+        margin:16px 20px;
+        vertical-align: bottom;
+        span{
+            width:22px;
+            height:22px;
+            background:url('~assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;  
+            float:right;
+            cursor:pointer;
+        }
+    }
+    .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            cursor:pointer;
+     }
 }
 </style>

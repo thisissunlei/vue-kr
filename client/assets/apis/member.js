@@ -20,4 +20,24 @@ export default {
         url: '/api/krspace-op-web/customer/manager/manager-count',
         method: 'get'
     },
+    //客户信息列表请求
+    'get-customer-list': {
+        url: '/api/krspace-op-web/customer-center/list',
+        method: 'get'
+    },
+    //客户来源
+    'get-customer-source': {
+        url: '/api/krspace-op-web/customer-center/source/list',
+        method: 'get'
+    },
+    //客户基本信息详情
+    'get-customer-info-detai': {
+        url: '/api/krspace-op-web/customer/info-detai',
+        method: 'get'
+    },
+    //新增客户
+    'add-customer': {
+        url: '/api/krspace-op-web/customer-center/add',
+        method: 'post'
+    },
 } 

@@ -4,70 +4,57 @@
     <div class="assets-manage">
         <Form ref="basicInfo" :model="basicInfo" :rules="ruleValidate" class="basic-form" label-position="left">
              <Row>  
-                <Col class="col">
-                    
-                    <div class="customer-id">
-                        <span class="title">客户ID：</span>
-                        <span class="content">{{basicInfo.customerId}}</span>
-                    </div>
-                </Col>
-                
               
                 <Col class="col">
-                     <EditInput 
-                        label="客户联系人：" 
+                    <FieldBox label="客户id：" 
                         :value="basicInfo.person" 
-                        prop="person"
-                        name="person"
-                        :canSubmit.sync="canSubmit"
-                        placeholder="客户联系人" 
-                        :label-width='labelWidth'
-                        :maxLength="200"
-                        :onchange="onChange"
+                        :label-width='labelWidth'/>
 
-                    />
                 </Col>
                 <Col class="col">
-                     <EditSelect  
-                        label="联系人电话：" 
-                        name="phone"
-                        :value="basicInfo.phone" 
-                        placeholder="联系人电话" 
-                        :canSubmit.sync="canSubmit"
-                        :maxLength="200"
-                        :data='optionData'
-                        :onchange="onSelectChange"
-                        :label-width='labelWidth'
-
-                    />
+                    <FieldBox label="客户名称：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
-                     <EditInput  
-                        label="联系人电话：" 
-                        name="web"
-                        :value="basicInfo.web" 
-                        placeholder="联系人电话" 
-                        :maxLength="200"
-                        prop='web'
-                        :canSubmit.sync="canSubmit"
-                        :onchange="onChange"
-                        :label-width='labelWidth'
-                        type="url"
-
-                    />
+                    <FieldBox label="客户联系人：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="联系人电话：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="公司规模：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="行业分类：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="融资轮次：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="运营状态：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
+                </Col>
+                <Col class="col">
+                    <FieldBox label="公司官网：" 
+                        :value="basicInfo.person" 
+                        :label-width='labelWidth'/>
                 </Col>
                 <Col>
-                     <EditInput  
-                        label="公司描述：" 
+                    <FieldBox label="公司描述：" 
                         :value="basicInfo.text" 
-                        name="text"
-
-                        placeholder="公司描述" 
-                        :maxLength="200"
-                        :label-width='labelWidth'
-                        :onchange="onChange"
-                        type="textarea"
-                    />
+                        :label-width='labelWidth'/>
                 </Col>
                 
             </Row>
@@ -83,15 +70,17 @@
 <script>
     import utils from '~/plugins/utils';
 import LabelText from '~/components/LabelText';
-    import EditInput from '~/components/EditInput'
-    import EditSelect from '~/components/EditSelect'
+import FieldBox from '~/components/FieldBox';
+    // import EditInput from '~/components/EditInput'
+    // import EditSelect from '~/components/EditSelect'
 
 
     export default {
         components:{
-            EditInput,
+            // EditInput,
             LabelText,
-            EditSelect
+            FieldBox,
+            // EditSelect
         },
         data (){
             const validateName = (rule, value, callback) => {

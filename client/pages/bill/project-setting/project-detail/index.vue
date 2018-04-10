@@ -165,7 +165,7 @@ export default {
                 pageSize:15
             },
             difference:7,
-            endTime:this.getEndDay(13),
+            endTime:this.getEndDay(11),
             watchRecord:[],
             startTime:this.getStartDay(),
             isLoading:true,

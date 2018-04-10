@@ -16,14 +16,7 @@ export default {
             default:50
         }
     },
-    data(){
-        return {
-           
-        }
-    },
-    methods:{
-       
-    }
+   
 }
 </script>
 

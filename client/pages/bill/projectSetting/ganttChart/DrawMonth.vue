@@ -47,10 +47,8 @@ export default {
 
 <style lang="less" scoped>
 .draw-month{
-   
         height: 50px;
         line-height: 50px;
-       
         text-align: left;
         display: inline-block;
         box-sizing: border-box;

@@ -657,48 +657,45 @@ export default {
 <style lang="less">
    .chart-ul-wrap{
         width:100%;
-        
         box-sizing: border-box;
         display:inline-block;
         position: relative;
         padding-left:25px; 
-         #gantt-chart-tool-tip{
-                width: 250px;
-                min-height: 50px;
-                opacity: 0;
-                background: rgba(70,76,91,.9);
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                border-radius: 4px;
-                padding: 5px;
-                color: #ffffff;
-                z-index: 999;
-                transition: all .2s;
-                .title{
-                    font-size: 14px;
-                    background: transparent;
-
-                }
-                .content{
-                    font-size: 12px;
-                    background: transparent;
-                    
-                }
+        #gantt-chart-tool-tip{
+            width: 250px;
+            min-height: 50px;
+            opacity: 0;
+            background: rgba(70,76,91,.9);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            border-radius: 4px;
+            padding: 5px;
+            color: #ffffff;
+            z-index: 999;
+            transition: all .1s;
+            .title{
+                font-size: 14px;
+                background: transparent;
             }
-            #gantt-chart-tool-tip::before{
-                content: '';
-                position: absolute;
-                display:block;
-                // margin:10px;
-                width:0;
-                height:0;
-                border-style:solid;
-                border-width:5px;
-                top: -10px;
-                left: 10px;
-                border-color:transparent transparent rgba(70,76,91,.9) transparent;
+            .content{
+                font-size: 12px;
+                background: transparent;
             }
+        }
+        #gantt-chart-tool-tip::before{
+            content: '';
+            position: absolute;
+            display:block;
+            // margin:10px;
+            width:0;
+            height:0;
+            border-style:solid;
+            border-width:5px;
+            top: -10px;
+            left: 10px;
+            border-color:transparent transparent rgba(70,76,91,.9) transparent;
+        }
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;
@@ -712,7 +709,7 @@ export default {
                    height: 51px;
                    line-height: 51px;
                    .ivu-tabs-ink-bar{
-                    height: 2px;
+                        height: 2px;
                    }
                 }
             }
@@ -743,8 +740,6 @@ export default {
                 left: 0px;
                 height: 48px;
                 padding-left: 20px;
-               
-             
                 line-height: 50px;
                 font-size: 16px;
             }
@@ -778,7 +773,6 @@ export default {
         }
         .content{
             position: relative;
-          
             background: #F6F6F6;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
@@ -789,7 +783,6 @@ export default {
             height: 50px; 
             width: 100%;
             text-align: right;
-           
             .header-left{
                 display:inline-block;
                 float:left;

@@ -11,10 +11,7 @@
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
-          
         >
-            
-                
             <div 
                 class="plan"
                 :style="{
@@ -27,9 +24,8 @@
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >
-            {{getActualLabel(data.label)}}
+                {{getActualLabel(data.label)}}
             </div>
-
             <div 
                 v-if="data.data.actualStartTime && data.data.actualEndTime"
                 class="actual"
@@ -43,7 +39,7 @@
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >  
-            {{getActualLabel(data.label)}}
+                {{getActualLabel(data.label)}}
             </div>
             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
             <div 
@@ -54,13 +50,9 @@
                 @click="editClick(data.value)"
             >
                 {{this.getLabel(data.label)}}
-            </div>
-        
-                   
+            </div> 
         </div>
-        
     </div>
-             
 </template>
 
 <script>

@@ -1,12 +1,12 @@
 <template>
-  <div>
+    <div>
         <div class='edit-left-bar'>
             <div class='detail-title'>
                 <div class='title-left'>
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
                         <Breadcrumb separator=">">
-                            <BreadcrumbItem to="/bill/projectSetting">开业进度总览</BreadcrumbItem>
+                            <BreadcrumbItem to="/bill/project-setting">开业进度总览</BreadcrumbItem>
                             <BreadcrumbItem><span @click="currentClick" style="cursor:pointer;">{{queryData.name}}</span></BreadcrumbItem>
                         </Breadcrumb>
                     </div>
@@ -118,19 +118,17 @@
             :warn="warn"
             @changeOpen="onChangeOpen"
         />
-
-        
-  </div>
+    </div>
 </template>
 
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import AddTask from './addTask';
-import EditTask from './editTask';
-import WatchRecord from './watchRecord';
-import DetailTaskList from './detailTaskList';
-import GanttChart from '../GanttChart';
+import AddTask from './add-task';
+import EditTask from './edit-task';
+import WatchRecord from './watch-record';
+import DetailTaskList from './detail-task-list';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 

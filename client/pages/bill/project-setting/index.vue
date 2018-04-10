@@ -17,8 +17,8 @@
 
 <script>
 
-import Archives from './Archives'
-import ProgressView from './ProgressView';
+import Archives from './archives'
+import ProgressView from './progress-view';
 export default {
     components:{
         Archives,

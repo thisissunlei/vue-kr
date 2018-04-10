@@ -1115,7 +1115,7 @@
                     menuItems: [
                         {
                             primaryText: "项目管理",
-                            router: 'bill/projectSetting',
+                            router: 'bill/project-setting',
                             type: 'vue',
                             menuCode: 'pay_deal_flow_page'
                         }

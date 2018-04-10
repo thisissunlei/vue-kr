@@ -188,11 +188,11 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import DrawDay from './DrawDay';
-import DrawMonth from './DrawMonth';
-import DrawWeek from './DrawWeek';
-import EditArticle from './EditArticle';
-import ViewArticle from './ViewArticle';
+import DrawDay from './draw-day';
+import DrawMonth from './draw-month';
+import DrawWeek from './draw-week';
+import EditArticle from './edit-article';
+import ViewArticle from './view-article';
 import KrField from '~/components/KrField';
 export default {
     components:{

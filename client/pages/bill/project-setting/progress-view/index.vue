@@ -53,7 +53,7 @@
                         <TabPane label="投拓期项目" name="name2">
 
                             <div class='chart-left-table' v-if="!mask">
-                                 <div class='view-table-list'>
+                                <div class='view-table-list'>
                                     <p>项目名称</p>
                                     <p>城市</p>
                                     <!-- <p style="width:136px;">操作</p> -->
@@ -136,9 +136,9 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import ListTable from './ListTable';
-import EditTask from '../projectDetail/editTask';
-import GanttChart from '../GanttChart';
+import ListTable from './list-table';
+import EditTask from '../project-detail/edit-task';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 
@@ -340,7 +340,7 @@ export default {
         },
         //列表跳转详情
         rowClick(item){
-            window.location.href=`./projectSetting/projectDetail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
+            window.location.href=`./project-setting/project-detail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
         },
 
  

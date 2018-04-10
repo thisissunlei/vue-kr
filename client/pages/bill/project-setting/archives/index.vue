@@ -52,7 +52,7 @@ import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
 import KrField from '~/components/KrField';
 import KrTree from '~/components/KrTree';
-import AddArchives from './addArchives';
+import AddArchives from './add-archives';
 
     export default {
         name: 'Bill',
@@ -243,7 +243,7 @@ import AddArchives from './addArchives';
         methods:{
             //跳转查看页面
             goView(params){
-                window.location.href=`./projectSetting/projectDetail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
+                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
             },
             //获取列表数据
             getTableData(params){

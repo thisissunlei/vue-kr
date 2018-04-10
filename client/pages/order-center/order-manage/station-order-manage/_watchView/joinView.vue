@@ -277,6 +277,7 @@ export default {
 	
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
+		// GLOBALHEADERSET('订单合同')
 		this.getDetailData();
 	},
 

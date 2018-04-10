@@ -10,11 +10,6 @@ export default  {
       url: '/api/krspace-pay/bill/batch-pay?',
       method: 'post'
     },
-    //账单中心--获取账单列表
-    'get-bill-list': {
-      url: '/api/krspace-pay/bill/list',
-      method: 'get'
-    },
     //账单中心--账单结算
     'bill-pay': {
       url: '/api/krspace-pay/bill/pay?',
@@ -276,6 +271,16 @@ export default  {
     'project-detail-star': {
       url: '/api/krspace-erp-web/pm/task/focus',
       method: 'post'
+    },
+    //账单中心--获取账单列表--已付清
+    'get-bill-paid-list': {
+      url: '/api/krspace-pay/bill/paid/list',
+      method: 'get'
+    },
+    //账单中心--获取账单列表--未付清
+    'get-bill-wait-list': {
+      url: '/api/krspace-pay/bill/wait/list',
+      method: 'get'
     },
   }
   

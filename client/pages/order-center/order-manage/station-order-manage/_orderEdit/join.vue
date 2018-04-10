@@ -353,7 +353,7 @@ import utils from '~/plugins/utils';
                                         },
                                         'on-blur':()=>{
                                             var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                            if(!pattern.test(price)){
+                                            if(price && !pattern.test(price)){
                                                 this.$Notice.error({
                                                     title:'单价不得多余小数点后两位'
                                                 })
@@ -646,6 +646,22 @@ import utils from '~/plugins/utils';
                     }) 
                    return
                 }
+
+                 //判断标准单价是否为空
+                let standardPrice = false;
+                station.map((item)=>{
+                    if(item.originalPrice === ''){
+                        standardPrice = true
+                    }
+                })
+                if(standardPrice){
+                   this.$Notice.error({
+                        title:'工位单价不得为空。'
+                    }) 
+                   this.disabled = false;
+                   return;
+                }
+
 
 
                 let saleList = this.formItem.items.filter(item=>{
@@ -1344,16 +1360,27 @@ import utils from '~/plugins/utils';
             },
              getStationAmount(list){
                 this.config()
+                //判断标准单价是否有值，若无值，则不提交计算总价
+                let originalPrice = false;
+
                 let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.originalPrice = item.originalPrice  || item.price;
+                    obj.guidePrice = item.guidePrice || item.price || 0;
+                    obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice || item.price);
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate));
+                    if(item.originalPrice === ''){
+                        originalPrice = true;
+                    }
                     return obj;
                 })
+                console.log('=====>',originalPrice)
+                if(originalPrice){
+                    return
+                }
                 let params = {
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate)),
                     leaseBegindate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.startDate)),

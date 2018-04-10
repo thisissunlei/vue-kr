@@ -29,7 +29,7 @@
 
 
 <script>
-import Article from './Article';
+import Article from './article';
 export default {
     components:{
         Article,

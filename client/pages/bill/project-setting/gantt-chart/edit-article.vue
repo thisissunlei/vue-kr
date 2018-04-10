@@ -83,15 +83,8 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import FlagLabel from '~/components/FlagLabel';
-import no from './img/no.png';
-import ok from './img/ok.png';
-import yeas from './img/yeas.png';
 export default {
     name:'EditArticle',
-    components:{
-        FlagLabel
-    },
     props:{
         minCalibration:{
             type:[String,Number],

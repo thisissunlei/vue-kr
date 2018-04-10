@@ -126,11 +126,11 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import AddTask from './addTask';
-import EditTask from './editTask';
-import WatchRecord from './watchRecord';
-import DetailTaskList from './detailTaskList';
-import GanttChart from '../GanttChart';
+import AddTask from './add-task';
+import EditTask from './edit-task';
+import WatchRecord from './watch-record';
+import DetailTaskList from './detail-taskList';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 

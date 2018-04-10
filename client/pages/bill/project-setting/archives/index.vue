@@ -52,7 +52,7 @@ import utils from '~/plugins/utils';
 import Buttons from '~/components/Buttons';
 import KrField from '~/components/KrField';
 import KrTree from '~/components/KrTree';
-import AddArchives from './addArchives';
+import AddArchives from './add-archives';
 
     export default {
         name: 'Bill',

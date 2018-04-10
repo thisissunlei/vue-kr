@@ -136,9 +136,9 @@
 <script>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
-import ListTable from './ListTable';
-import EditTask from '../projectDetail/editTask';
-import GanttChart from '../GanttChart';
+import ListTable from './list-table';
+import EditTask from '../project-detail/edit-task';
+import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 

@@ -187,20 +187,7 @@ export default {
             grayStar:0,
             treeMiddle:[],
             //任务项枚举
-            taskList:[
-                {label:'管理层',value:'MANAGEMENT',t_id:'MANAGEMENT'},
-                {label:'投拓部',value:'INVEST',t_id:'INVEST'},
-                {label:'招商部',value:'ATTRACT',t_id:'ATTRACT'},
-                {label:'财务部',value:'FINANCE',t_id:'FINANCE'},
-                {label:'法务部',value:'LAW',t_id:'LAW'},
-                {label:'工程设计部',value:'DESIGN',t_id:'DESIGN'},
-                {label:'工程施工部',value:'CONSTRUCT',t_id:'CONSTRUCT'},
-                {label:'工程成本部',value:'COST',t_id:'COST'},
-                {label:'市场公关部',value:'PR',t_id:'PR'},
-                {label:'弱电智能化部',value:'INTELLIGENT',t_id:'INTELLIGENT'},
-                {label:'技术部',value:'TECH',t_id:'TECH'},
-                {label:'运营部',value:'OPERATION',t_id:'OPERATION'},
-            ]
+            taskList:[]
         }
     },
     created(){         
@@ -210,9 +197,10 @@ export default {
          this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
          this.signMask=this.queryData.status==1?true:false;
-         this.initTree();
+         
          this.leftOver();
          this.rightOver();
+         this.getSelectData();
          setTimeout(() => {
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
@@ -242,6 +230,31 @@ export default {
                 leftDom.addEventListener('scroll',this.scroll);
                 rightDom.removeEventListener('scroll',this.chartScroll);
             }
+        },
+        selectFormat(data){
+            var dataArr =  data.map((item)=>{
+
+                item.label = item.desc;
+                item.t_id = item.code;
+                return item;
+            })
+            this.taskList = [].concat(dataArr);
+
+            this.initTree();
+
+        },
+        getSelectData(){
+            
+            this.$http.post('get-enum-all-data',{
+                enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
+            }).then((response)=>{
+               this.selectFormat(response.data)
+
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
         },
         rightOver(event){
             var rightDom=document.getElementById('vue-chart-right-draw-content');

@@ -9,4 +9,8 @@ module.exports = {
         url: '/api/krspace-op-web/sys/upload-policy',
         method: 'get'
     },
+    'get-enum-all-data':{
+        url:'api/krspace-sso-web/sys/enmu',
+        method:'get'
+    }
 }

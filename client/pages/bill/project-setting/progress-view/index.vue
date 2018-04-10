@@ -204,6 +204,7 @@ export default {
         }, 400);
 
         window.onresize=function(){
+            
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;

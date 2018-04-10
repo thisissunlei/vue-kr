@@ -164,12 +164,12 @@ export default {
             }
         },
         toolOver(event){
-         
             var e = event || window.event;
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
             var tirDom = document.getElementById('gantt-chart-tool-tip');
-          
+            var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+            
             var tirLocation = {
                 left:e.clientX,
                 top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
@@ -177,9 +177,26 @@ export default {
             var obj  = this.getToolTipContent();
             tirDom.innerHTML = obj.str;
             tirDom.style.left = tirLocation.left-30 + 'px';
-            tirDom.style.top  = tirLocation.top +5 - 130 + 'px';
+            tirDom.style.top  = tirLocation.top +10 - 130 + 'px';
             tirDom.style.width = obj.width + 'px';
-            tirDom.style.opacity = 1;
+            angleDom.style.left = tirLocation.left-30+5 + 'px';
+            angleDom.style.top = tirLocation.top - 130 + 'px';
+            this.locationCorrect(tirDom,tirLocation.left-30,tirLocation.left-30+obj.width )
+            tirDom.style.opacity =1;
+            angleDom.style.opacity =1;
+        },
+        locationCorrect(tirDom,nowLeft,tirRightToleft){
+            let contentDom = document.getElementById('vue-chart-right-draw-content');
+            
+            let detail = contentDom.getBoundingClientRect();
+            let winWidth = document.body.clientWidth;            
+            let contentToRigth = winWidth - detail.right;
+            let tirToRigth = winWidth - tirRightToleft-20;
+            if(contentToRigth>tirToRigth){
+             
+                tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) +'px';
+            }
+
         },
         getToolTipContent(){
 
@@ -220,7 +237,10 @@ export default {
         toolOut(event){
             
             var tirDom = document.getElementById('gantt-chart-tool-tip');
+            var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+            
             tirDom.style.opacity = 0;
+            angleDom.style.opacity = 0;
         },
         editClick(id,pid){
             this.$emit('editClick',id,pid);

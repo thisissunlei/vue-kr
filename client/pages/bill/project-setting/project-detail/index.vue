@@ -270,7 +270,6 @@ export default {
             this.ids=this.treeMiddle.join(',');
             this.getListData(this.params.departments);
         },
-
         iconClick(id,mask){
            this.editId=id;
            this.grayStar=mask;

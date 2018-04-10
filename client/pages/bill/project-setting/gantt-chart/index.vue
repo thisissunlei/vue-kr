@@ -70,7 +70,7 @@
                 class="right-draw" 
                 :style="{left:type=='edit'?'271px':'371px'}"
             >
-                <div class="calibration" >
+                <div class="calibration" id="gantt-chart-calibration">
                  <div  style="position:relative;overflow:hidden;"  >
                     <div class="time-shaft-fixed"></div>
                     <div 
@@ -82,7 +82,11 @@
                    
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
-                                <div class="year" :style="{width:item.dayNum * minCalibration + 'px'}" v-for=" item in years" :key="item.id"><span>{{item.year}}</span></div>
+                                <div class="year" 
+                                    :style="{width:item.dayNum * minCalibration + 'px'}" 
+                                    v-for=" item in years" :key="item.id">
+                                    <span>{{item.year}}</span>
+                                </div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <div 
@@ -131,7 +135,6 @@
                                     :data="item"  
                                     :dayNum="item.dayNum"
                                     :minCalibration="minCalibration"
-                                    
                                 />
 
                                 <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
@@ -179,6 +182,7 @@
                 </div>
             </div>
             <div id="gantt-chart-tool-tip"></div>
+            <div id="gantt-chart-tool-tip-triangle"></div>
             <slot name="leftBar"></slot>
         </div>      
     </div>
@@ -280,7 +284,7 @@ export default {
         this.scrollWidth = utils.getScrollBarSize()
         this.limitDay(this.barType);
         setTimeout(() => {
-            this.scroolFix()
+            this.scroolFix(this.showData)
         }, 100);
 
         if(this.data.length){
@@ -305,13 +309,15 @@ export default {
         },
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
+            var offerLeft = 0;
             if(dom){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
-                var offerLeft = 0;
+               
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
                     var todayIsWeek = (new Date()).getDay();
                     offerLeft = (todayIsWeek+6) * this.minCalibration
+                    
 
                 }else{
                     var todayArr = today.split('/');
@@ -327,7 +333,8 @@ export default {
                     }
                     offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }   
-                dom.scrollLeft = (this.getTodayTOLeft(this.showData)-offerLeft);
+                var scrollLeft = this.getTodayTOLeft(data)-offerLeft;
+                dom.scrollLeft = scrollLeft;
             }
         },
         getTodayTOLeft(data){
@@ -411,7 +418,7 @@ export default {
                 this.minCalibration = 4;
             }
             this.limitDay(event);
-            this.scroolFix();
+            
         },
         //极限时间
         limitDay(type){
@@ -445,7 +452,10 @@ export default {
                 }
                 startObj.day =1;
             }
+            
             this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
+            
+            this.scroolFix(this.showData);
         },
 
         //获取进度条的总长度
@@ -513,6 +523,7 @@ export default {
             this.getWeekStartAndEnd(showData);
             this.getTodayTOLeft(showData);
             this.getYears(startTime,endTime);
+
         },
 
         //获取某日为周几
@@ -684,8 +695,9 @@ export default {
                 background: transparent;
             }
         }
-        #gantt-chart-tool-tip::before{
-            content: '';
+        #gantt-chart-tool-tip-triangle{
+         
+            opacity: 0;
             position: absolute;
             display:block;
             // margin:10px;
@@ -695,8 +707,24 @@ export default {
             border-width:5px;
             top: -10px;
             left: 10px;
+            transition: all .1s;
+            z-index: 999;
             border-color:transparent transparent rgba(70,76,91,.9) transparent;
+       
         }
+        // #gantt-chart-tool-tip::before{
+        //     content: '';
+        //     position: absolute;
+        //     display:block;
+        //     // margin:10px;
+        //     width:0;
+        //     height:0;
+        //     border-style:solid;
+        //     border-width:5px;
+        //     top: -10px;
+        //     left: 10px;
+        //     border-color:transparent transparent rgba(70,76,91,.9) transparent;
+        // }
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;

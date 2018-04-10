@@ -460,6 +460,7 @@ export default {
         position: relative; 
         background: transparent;
         height: 28px;
+        cursor: pointer;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;

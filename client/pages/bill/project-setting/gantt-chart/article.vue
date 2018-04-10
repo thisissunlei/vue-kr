@@ -387,6 +387,7 @@ export default {
         height: 30px;
         top: -1px;
         width: 100%;
+        cursor: pointer;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
@@ -409,7 +410,7 @@ export default {
             background: transparent;
             font-weight:bold;
             top: 2px;
-            cursor: pointer;
+            
         }
         .plan{
             height: 29px;

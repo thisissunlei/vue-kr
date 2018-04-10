@@ -505,6 +505,12 @@
                             menuCode: 'customer_assets'
                         },
                         {
+                            primaryText: '客户管理',
+                            router: 'client/manage',
+                            type:'vue',
+                            menuCode: 'customer_assets'
+                        },
+                        {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',
                             type:'vue',

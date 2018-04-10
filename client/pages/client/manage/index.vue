@@ -1,6 +1,6 @@
 <template>
 <div class="customer-assets">
-   <SectionTitle title="账户中心"></SectionTitle>
+   <SectionTitle title="客户中心"></SectionTitle>
         <div class="div-search">
             <Input 
                 v-model="params.customerName" 
@@ -62,7 +62,7 @@
                         align:'center',
                     },
                     {
-                        title: '账户余额',
+                        title: '意向/入驻社区',
                         key: 'balance',
                         align:'center',
                         render:function(h,params){
@@ -70,7 +70,7 @@
                          }
                     },
                     {
-                        title: '正常服务保证金（元）',
+                        title: '行业分类',
                         key: 'deposit',
                         align:'center',
                         render:function(h,params){
@@ -78,7 +78,23 @@
                          }
                     },
                     {
-                        title: '冻结服务保证金（元）',
+                        title: '客户领取人',
+                        key: 'lockDeposit',
+                        align:'center',
+                        render:function(h,params){
+                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
+                         }
+                    },
+                    {
+                        title: '创建时间',
+                        key: 'lockDeposit',
+                        align:'center',
+                        render:function(h,params){
+                            return utils.thousand((params.row.lockDeposit/100).toFixed(2))
+                         }
+                    },
+                    {
+                        title: '客户状态',
                         key: 'lockDeposit',
                         align:'center',
                         render:function(h,params){
@@ -140,7 +156,7 @@
                 this.lowerSubmit();
             },
             showDetail(item){
-                let url = '/bill/customerAssets/'+item.customerId+'/view#account'
+                let url = '/bill/customerAssets/'+item.customerId+'/view#basic'
                 window.open(url,'_blank');
             },
             changePage(page){

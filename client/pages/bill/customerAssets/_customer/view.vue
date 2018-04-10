@@ -45,6 +45,7 @@
 			Waiting
 		},
 		data (){
+
 			return{
 				//一层Tab目录
 				firstTab:[{
@@ -69,7 +70,7 @@
 					name:'更多',
 					code:'more'
 				},],
-				selectedTab:'account',
+				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
 					customerName:'w',
@@ -117,6 +118,8 @@
 		mounted(){
 			this.getBasicInfo()
 			GLOBALSIDESWITCH('false');
+			let hash = window.location.hash.split('#')[1];
+			this.selectedTab = hash || 'basic'
 		}
 	
 	}

@@ -11,10 +11,7 @@
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article" 
             v-if="getFlagShow('STAGETASK')"
-          
         >
-            
-                
             <div 
                 class="plan"
                 :style="{
@@ -27,9 +24,8 @@
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >
-            {{getActualLabel(data.label)}}
+                {{getActualLabel(data.label)}}
             </div>
-
             <div 
                 v-if="data.data.actualStartTime && data.data.actualEndTime"
                 class="actual"
@@ -43,7 +39,7 @@
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >  
-            {{getActualLabel(data.label)}}
+                {{getActualLabel(data.label)}}
             </div>
             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
             <div 
@@ -54,13 +50,9 @@
                 @click="editClick(data.value)"
             >
                 {{this.getLabel(data.label)}}
-            </div>
-        
-                   
+            </div> 
         </div>
-        
     </div>
-             
 </template>
 
 <script>
@@ -114,6 +106,15 @@ export default {
         }
        
     },
+    watch:{
+        startDate:{
+            handler:function(){
+                this.leftEndpoint = this.startDate;
+                this.getBoxWidthAndOffice();
+            }
+           
+        },
+    },
     methods:{
         editClick(id){
             this.$emit('editClick',id);
@@ -156,7 +157,7 @@ export default {
                 str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
                 
             }
-            if(data.actualStartTime || data.actualEndTime){
+            if(data.actualStartTime && data.actualEndTime){
                 var type ='MM/DD';
                 var startYear = (new Date(data.actualStartTime)).getFullYear();
                 var endYear = (new Date(data.actualEndTime)).getFullYear();
@@ -333,8 +334,6 @@ export default {
                 month:minStr[1],
                 dayNum:minStr[2] 
             }
-            console
-
             return {
                 min:+min,
                 max:+max
@@ -388,6 +387,7 @@ export default {
         height: 30px;
         top: -1px;
         width: 100%;
+        cursor: pointer;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
@@ -410,7 +410,7 @@ export default {
             background: transparent;
             font-weight:bold;
             top: 2px;
-            cursor: pointer;
+            
         }
         .plan{
             height: 29px;

@@ -28,9 +28,9 @@
                                     color:getPlanColor(),
                                     cursor:'pointer'
                                 }"
-                            ><div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
+                            >
+                                <div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
                             </div>
-
                             <div 
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                                 class="actual"
@@ -43,10 +43,9 @@
                                     background:getActualBgColor(),
                                     color:getActualColor(),
                                     cursor:'pointer'
-
                                 }"
                             >  
-                            <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
+                                <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
                             <div 
@@ -132,8 +131,15 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        
-       
+    },
+    watch:{
+        startDate:{
+            handler:function(){
+                this.leftEndpoint = this.startDate;
+                this.getBoxWidthAndOffice();
+            }
+           
+        },
     },
     updated(){
         this.fontCover();
@@ -143,24 +149,19 @@ export default {
             let planDom = document.getElementById(this.planContentId);
             let actualDom = document.getElementById(this.actualContentId);
             if(!planDom || !actualDom){
-                return
+                return ;
             }
-           
             let planDetail = planDom.getBoundingClientRect();
             let actualDetail = actualDom.getBoundingClientRect();
             if(planDetail.left+planDetail.width>actualDetail.left ||
-                actualDetail.left+actualDetail.width>planDetail.left){
-                  
+                actualDetail.left+actualDetail.width>planDetail.left){   
                 if(planDetail.left+planDetail.width>actualDetail.left) {
                     planDom.style.width =  actualDetail.left - planDetail.left + 'px';
                 }
                 if(actualDetail.left+actualDetail.width>planDetail.left) {
                     actualDom.style.width =  planDetail.left - actualDetail.left + 'px';
                 }
-                console.log(actualDetail,planDetail,"pppppp")
             }
-
-
         },
         toolOver(event){
          
@@ -187,20 +188,17 @@ export default {
             var width = 155;
             if(data.planEndTime && data.planStartTime){
                 var type ='MM/DD';
-
                 var startYear = (new Date(data.planStartTime)).getFullYear();
                 var endYear = (new Date(data.planEndTime)).getFullYear();
                 if(startYear !== endYear){
                     type = 'YYYY/MM/DD';
                     width=220;
                 }
-                
                 var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
                 var endDay = data.planEndTime?dateUtils.dateToStr(type,new Date(data.planEndTime)):'';
                 str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
-                
             }
-            if(data.actualStartTime || data.actualEndTime){
+            if(data.actualStartTime && data.actualEndTime){
                 var type ='MM/DD';
                 var startYear = (new Date(data.actualStartTime)).getFullYear();
                 var endYear = (new Date(data.actualEndTime)).getFullYear();
@@ -285,13 +283,21 @@ export default {
             }
         },
         lineShow(){
-           
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
-                this.data.data.actualEndTime<this.data.data.planStartTime){
-                return true;
-            }else {
-                return false;
+            if(
+                this.data.data.actualStartTime && 
+                this.data.data.actualEndTime &&
+                this.data.data.planStartTime && 
+                this.data.data.planEndTime
+            ){
+
+                if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                    this.data.data.actualEndTime<this.data.data.planStartTime){
+                    return true;
+                }else {
+                    return false;
+                }
             }
+            
         },
         getFlagShow(event){
             if(this.data.data){
@@ -363,7 +369,6 @@ export default {
                 width:lineWidth,
                 office:lineOffice
             }
-            
        },
        getEndpointDate(){
             var arr = [];
@@ -455,6 +460,7 @@ export default {
         position: relative; 
         background: transparent;
         height: 28px;
+        cursor: pointer;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;

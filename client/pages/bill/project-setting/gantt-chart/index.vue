@@ -307,7 +307,6 @@ export default {
             var dom = document.getElementById("vue-chart-right-draw-content");
             if(dom){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
-                console.log(today,"ppppppp")
                 var offerLeft = 0;
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
@@ -367,11 +366,11 @@ export default {
 
             var yearArr = [];
             if(startObj.year == endObj.year){
-               yearArr=[{
-                   year:startObj.year,
-                   start:startTime,
-                   end:endObj.year+'-'+endObj.month+'-'+endObj.day
-               }];
+                yearArr=[{
+                    year:startObj.year,
+                    start:startTime,
+                    end:endObj.year+'-'+endObj.month+'-'+endObj.day
+                }];
             }else{
                 yearArr=[{
                     year:startObj.year,
@@ -379,20 +378,20 @@ export default {
                     end:startObj.year+'-'+12+'-'+this.getDayNum(startObj.year,12)
                 }];
                 for (var year = startObj.year; ;) {
-                        year++;
-                        if(year == endObj.year){
-                            yearArr.push({
-                                year:endObj.year,
-                                start:endObj.year+'-'+1+'-'+1,
-                                end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
-                            });
-                            break;
-                        }
+                    year++;
+                    if(year == endObj.year){
                         yearArr.push({
-                            year:year,
-                            start:year+'-'+1+'-'+1,
-                            end:year+'-'+endObj.month+'-'+endObj.day
+                            year:endObj.year,
+                            start:endObj.year+'-'+1+'-'+1,
+                            end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
                         });
+                        break;
+                    }
+                    yearArr.push({
+                        year:year,
+                        start:year+'-'+1+'-'+1,
+                        end:year+'-'+endObj.month+'-'+endObj.day
+                    });
                 }
 
             }
@@ -409,7 +408,7 @@ export default {
             }else if(event=='day'){
                 this.minCalibration = 50;
             }else if(event=='month'){
-                this.minCalibration = 10;
+                this.minCalibration = 4;
             }
             this.limitDay(event);
             this.scroolFix();
@@ -506,7 +505,8 @@ export default {
                 month++;
             }
             this.showData = [].concat(showData);
-            this.leftEndpoint = this.showData[0];
+            this.leftEndpoint = Object.assign({}, this.leftEndpoint,this.showData[0]);
+             
             this.isLoading = false;
             this.getDayBarWidth()
             //获取周的具体数据
@@ -657,48 +657,46 @@ export default {
 <style lang="less">
    .chart-ul-wrap{
         width:100%;
-        
         box-sizing: border-box;
         display:inline-block;
         position: relative;
         padding-left:25px; 
-         #gantt-chart-tool-tip{
-                width: 250px;
-                min-height: 50px;
-                opacity: 0;
-                background: rgba(70,76,91,.9);
-                position: absolute;
-                top: 0px;
-                left: 0px;
-                border-radius: 4px;
-                padding: 5px;
-                color: #ffffff;
-                z-index: 999;
-                transition: all .2s;
-                .title{
-                    font-size: 14px;
-                    background: transparent;
-
-                }
-                .content{
-                    font-size: 12px;
-                    background: transparent;
-                    
-                }
+        #gantt-chart-tool-tip{
+            width: 250px;
+            min-height: 50px;
+            opacity: 0;
+            background: rgba(70,76,91,.9);
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            border-radius: 4px;
+            padding: 5px;
+            color: #ffffff;
+            z-index: 999;
+            transition: all .1s;
+            pointer-events:none;
+            .title{
+                font-size: 14px;
+                background: transparent;
             }
-            #gantt-chart-tool-tip::before{
-                content: '';
-                position: absolute;
-                display:block;
-                // margin:10px;
-                width:0;
-                height:0;
-                border-style:solid;
-                border-width:5px;
-                top: -10px;
-                left: 10px;
-                border-color:transparent transparent rgba(70,76,91,.9) transparent;
+            .content{
+                font-size: 12px;
+                background: transparent;
             }
+        }
+        #gantt-chart-tool-tip::before{
+            content: '';
+            position: absolute;
+            display:block;
+            // margin:10px;
+            width:0;
+            height:0;
+            border-style:solid;
+            border-width:5px;
+            top: -10px;
+            left: 10px;
+            border-color:transparent transparent rgba(70,76,91,.9) transparent;
+        }
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;
@@ -712,7 +710,7 @@ export default {
                    height: 51px;
                    line-height: 51px;
                    .ivu-tabs-ink-bar{
-                    height: 2px;
+                        height: 2px;
                    }
                 }
             }
@@ -743,8 +741,6 @@ export default {
                 left: 0px;
                 height: 48px;
                 padding-left: 20px;
-               
-             
                 line-height: 50px;
                 font-size: 16px;
             }
@@ -778,7 +774,6 @@ export default {
         }
         .content{
             position: relative;
-          
             background: #F6F6F6;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
@@ -789,7 +784,6 @@ export default {
             height: 50px; 
             width: 100%;
             text-align: right;
-           
             .header-left{
                 display:inline-block;
                 float:left;

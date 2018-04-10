@@ -144,6 +144,7 @@ import Vue from 'vue';
 
 var allPage = 1;
 var nowPage = 1;
+var ganttChartScrollTop = 0;
 export default {
     components:{
         GanttChart,
@@ -164,7 +165,7 @@ export default {
             propertyId:'',
             getEdit:{},
             params:{
-                endTime:this.getEndDay(24),
+                endTime:this.getEndDay(11),
                 startTime:this.getStartDay(),
                 pageSize:15,
                 page:nowPage,
@@ -245,28 +246,30 @@ export default {
             data.startTime = '';
             data.endTime = '';
             this.$http.get('project-progress-list',data).then((response)=>{
-              
                 this.listData=response.data.items;
-               
-                
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
                     this.params.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
                     this.params.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
-                
                 }
                 var totalPages=response.data.totalPages;
                 allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
+
                 this.params.page = response.data.page+1;
-                
+            
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
                 });
             })
+        },
+        setScrollTop(){
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            chartDom.scrollTop = ganttChartScrollTop;
+            
         },
         monthAdd(num){
             var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
@@ -342,8 +345,6 @@ export default {
         rowClick(item){
             window.location.href=`./project-setting/project-detail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
         },
-
- 
         //树
         treeClick(params){
             var treeArray=[];
@@ -363,16 +364,16 @@ export default {
             this.nodeChecked(selectArr); 
         },
         nodeChecked(selectArr){
-                var treeData = [].concat(this.treeData);
-                for (let i = 0; i < treeData.length; i++) {
-                    const element = treeData[i];
-                    if(this.isHaver(selectArr,element.value)){
-                        Vue.set(treeData[i],"checked",true);             
-                    }else{
-                        Vue.set(treeData[i],"checked",false);       
-                    } 
-                }
-                this.treeData = [].concat(treeData);
+            var treeData = [].concat(this.treeData);
+            for (let i = 0; i < treeData.length; i++) {
+                const element = treeData[i];
+                if(this.isHaver(selectArr,element.value)){
+                    Vue.set(treeData[i],"checked",true);             
+                }else{
+                    Vue.set(treeData[i],"checked",false);       
+                } 
+            }
+            this.treeData = [].concat(treeData);
         },
         isHaver(arr,val){
             for(var i=0;i<arr.length;i++){
@@ -382,9 +383,6 @@ export default {
             }
             return false;
         },
-
-
-       
         operationClick(item){
             this.cancelSure();
             this.id=item.id;
@@ -432,20 +430,19 @@ export default {
         editTask(id,parentId){
             this.editId=id;
             this.propertyId=parentId;
-            
             this.$http.get('project-get-task',{id:id}).then((response)=>{
-                    this.getEdit=response.data;
-                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-                    this.getEdit.focus=this.getEdit.focus==1?'1':'0';
-                    this.cancelEditTask();
-                 }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
-                 })
+            this.getEdit=response.data;
+            this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
+            this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
+            this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
+            this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
+            this.getEdit.focus=this.getEdit.focus==1?'1':'0';
+            this.cancelEditTask();
+            }).catch((error)=>{
+                this.$Notice.error({
+                title: error.message,
+                });
+            })
         },
          //编辑对象传递校验
         onEditChange(params,error1,error2){
@@ -454,86 +451,85 @@ export default {
         },
         //编辑任务提交
         submitEditTask(name){
-                var newPageRefs = this.$refs.fromFieldTask.$refs;
-                var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    if (!valid) {
-                        isSubmit = false
-                    }
-                })
-                if(!isSubmit){
-                    return;
+            var newPageRefs = this.$refs.fromFieldTask.$refs;
+            var isSubmit = true;
+            newPageRefs[name].validate((valid,data) => {
+                if (!valid) {
+                    isSubmit = false
                 }
-                if(this.upperError){
-                    return ;
-                }
-                if(this.editData.error){
-                    this.$Notice.error({
-                        title: '任务名称重复'
-                    });
-                    return ;
-                }
-                var dataParams=this.editData;
-                dataParams.focus=dataParams.focus=='1'?1:0;
-                dataParams.type='STAGETASK';
-                dataParams.id=this.editId;
-                dataParams.pid=0;
-                dataParams.propertyId=this.propertyId;
-                dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
-                dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
-                dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
-                dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
-                this.$http.post('project-edit-task',dataParams).then((response)=>{
-                     this.cancelEditTask();
-                     this.params.page=1;
-                     this.getListData(this.params);
-                     this.getTreeData();
+            })
+            if(!isSubmit){
+                return;
+            }
+            if(this.upperError){
+                return ;
+            }
+            if(this.editData.error){
+                this.$Notice.error({
+                    title: '任务名称重复'
+                });
+                return ;
+            }
+            var dataParams=this.editData;
+            dataParams.focus=dataParams.focus=='1'?1:0;
+            dataParams.type='STAGETASK';
+            dataParams.id=this.editId;
+            dataParams.pid=0;
+            dataParams.propertyId=this.propertyId;
+            dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
+            dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
+            dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
+            dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
+            this.$http.post('project-edit-task',dataParams).then((response)=>{
+                this.cancelEditTask();
+                this.params.page=1;
+                this.getListData(this.params);
+                this.getTreeData();
 
-                     if(response.code>1){
-                         this.cancelSure();
-                     }else{
-                        this.MessageType="success";
-                        this.openMessage=true;
-                        this.warn="编辑成功";
-                     }
+                if(response.code>1){
+                    this.cancelSure();
+                }else{
+                this.MessageType="success";
+                this.openMessage=true;
+                this.warn="编辑成功";
+                }
 
-                     this.scrollPosititon();
-                 }).catch((error)=>{
-                     this.MessageType="error";
-                     this.openMessage=true;
-                     this.warn=error.message;
-                })
-          },
+                this.scrollPosititon();
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
+        },
         //提交删除任务
         submitDelete(){
             var params={
                 id:this.editId
             }
             this.$http.delete('project-delete-task',params).then((response)=>{
-                     this.cancelTask();
-                     this.cancelEditTask();
-                     this.getListData(this.params);
-
-                     this.MessageType="success";
-                     this.openMessage=true;
-                     this.warn="删除成功";
-                     this.scrollPosititon();
-                 }).catch((error)=>{
-                     this.MessageType="error";
-                     this.openMessage=true;
-                     this.warn=error.message;
-             })
+                this.cancelTask();
+                this.cancelEditTask();
+                this.getListData(this.params);
+                this.MessageType="success";
+                this.openMessage=true;
+                this.warn="删除成功";
+                this.scrollPosititon();
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
         },
         scrollPosititon(){
-              setTimeout(() => {
-                     var leftDom=document.getElementById('vue-chart-left-table-list');
-                     var chartDom=document.getElementById('vue-chart-right-draw-content');
-                    if(leftDom&&chartDom){
-                         chartDom.scrollTop=this.scrollH;
-                         leftDom.scrollTop=this.scrollH;
-                    }
-                },50);
-          },
+            setTimeout(() => {
+                var leftDom=document.getElementById('vue-chart-left-table-list');
+                var chartDom=document.getElementById('vue-chart-right-draw-content');
+                if(leftDom&&chartDom){
+                    chartDom.scrollTop=this.scrollH;
+                    leftDom.scrollTop=this.scrollH;
+                }
+            },50);
+        },
 
 
         //tab切换
@@ -557,7 +553,6 @@ export default {
                 var clientHeight = document.documentElement.clientHeight;
                 leftDom.style.maxHeight = clientHeight - 362+"px";
                 rightDom.style.maxHeight = clientHeight - 362 +"px";
-           
             }, 200);
         },
         //获取当月的天数
@@ -578,7 +573,6 @@ export default {
                 month = +start[1],
                 day= this.getDayNum(year,month);
             for(var i=0;i<n;i++){
-              
                 if(month > 12){
                     month = month-12;
                     year += 1;
@@ -589,19 +583,18 @@ export default {
                 month = month-12;
                 year += 1;
             }
-            
             return year+"-"+month+"-"+day;
         },
+
         getDayToTime(str){
             return (new Date(str+' 00:00:00')).getTime();
         },
+
         getTimeToDay(date){
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(date));
         },
 
-
         scroll(event){
-            
             if(!this.params.startTime || !this.params.endTime){
                 return;
             }
@@ -609,6 +602,7 @@ export default {
             let leftList=document.getElementById('vue-chart-left-table-list');
             const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
             chartDom.scrollTop = leftList.scrollTop;
+            ganttChartScrollTop = leftList.scrollTop
             if(isBottom<=0){
                 if(this.isLoading ){
                    return;
@@ -616,8 +610,7 @@ export default {
                 this.getListData(this.params,true)
             }
         },
-
-       rightScroll(){
+        rightScroll(){
             if(!this.params.startTime || !this.params.endTime){
                 return;
             }
@@ -626,65 +619,7 @@ export default {
             const isBottom = chartDom.scrollHeight - chartDom.clientHeight - chartDom.scrollTop;
             const isRight = chartDom.scrollWidth - chartDom.clientWidth - chartDom.scrollLeft;
             leftList.scrollTop = chartDom.scrollTop;
-            var startTime = this.getDayToTime(this.params.startTime);
-            var endTime = this.getDayToTime(this.params.endTime);
-            var minTime = this.getDayToTime(this.minDay);
-            var maxTime = this.getDayToTime(this.maxDay);
-            
-            if(isRight<=0){
-                
-               
-               if(this.isLoading ||endTime>=maxTime){
-                   return;
-               }
-                this.addAfterMonthNum(this.params.endTime,2);
-
-            }
-            if(chartDom.scrollLeft<=5){
-              
-                // console.log(startTime,this.minDay,"ppppppp")
-                if(this.isLoading ||startTime<=minTime){
-                   return;
-                }
-                this.addBeforeMonthNum(this.params.startTime,2)
-
-            }
-            if(isBottom<=0){
-                if(this.isLoading){
-
-                   return;
-                }
-                
-                this.getListData(this.params,true)
-            }
-        },
-        //向前增加一个月
-        addBeforeMonthNum(startTime,n){
-            var allDay = startTime.split("-");
-            var year = Number(allDay[0]),month=Number(allDay[1]);
-            for (var i = 1; i <= n; i++) {
-                month -=1;
-                if(month<1){
-                    month =  12 -month;
-                    year -= 1;
-                }
-            }
-            this.params.startTime = year + '-'+month+'-'+1;
-            this.getListData(this.params)
-        },
-        // 向后加一个月
-        addAfterMonthNum(endTime,n){
-            var allDay = endTime.split("-");
-            var year = Number(allDay[0]),month=Number(allDay[1]);
-            for (var i = 1; i <= n; i++) {
-                month +=1;
-                if(month>12){
-                    month = month - 12;
-                    year += 1;
-                }
-            }
-            this.params.endTime = year + '-'+month+'-'+1;
-            this.getListData(this.params)
+            ganttChartScrollTop = chartDom.scrollTop;
         },
         //信息提示框
         onChangeOpen(data){

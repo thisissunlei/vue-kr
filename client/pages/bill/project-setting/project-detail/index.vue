@@ -131,7 +131,7 @@ import DetailTaskList from './detail-task-list';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
-
+var ganttChartScrollTop = 0;
 
 
 export default {
@@ -165,7 +165,7 @@ export default {
                 pageSize:15
             },
             difference:7,
-            endTime:this.getEndDay(7),
+            endTime:this.getEndDay(11),
             watchRecord:[],
             startTime:this.getStartDay(),
             isLoading:true,
@@ -227,9 +227,8 @@ export default {
          window.onresize=function(){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
-             var clientHeight = document.documentElement.clientHeight;
-            
-           var dom = document.getElementById('layout-content-main');
+            var clientHeight = document.documentElement.clientHeight;
+            var dom = document.getElementById('layout-content-main');
             dom.style.height = document.documentElement.clientHeight-130 + "px"
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
@@ -323,17 +322,16 @@ export default {
                 propertyId:this.queryData.id,
                 departments:ids?ids:''
             }
-
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 
                 if(response.data.hasTime){
-                       this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
-                        var endObj = this.monthAdd(response.data.lastEndTime);
-                        this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    var endObj = this.monthAdd(response.data.lastEndTime);
+                    this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
-             
                 this.isLoading = false;
+              
             }).catch((error)=>{
                 this.$Notice.error({
                  title: error.message,
@@ -343,7 +341,10 @@ export default {
         setTime(old,now){
             var oldTime = new Date('')
         },
-
+         setScrollTop(){
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            chartDom.scrollTop = ganttChartScrollTop;
+        },
         monthAdd(num){
             var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
             var endArr = endTime.split("-");
@@ -369,9 +370,6 @@ export default {
                 });
             })
         },
-
-
-
          //递归甘特图任务赋值
         recursiveFn(data){
             data.map((item,index)=>{
@@ -473,20 +471,19 @@ export default {
         editTask(id,parentId){
             this.editId=id;
             this.parentId=parentId;
-            
             this.$http.get('project-get-task',{id:id}).then((response)=>{
-                    this.getEdit=response.data;
-                    this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-                    this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-                    this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-                    this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-                    this.getEdit.focus=this.getEdit.focus==1?'1':'0';
-                    this.cancelEditTask();
-                 }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                     });
-                 })
+                this.getEdit=response.data;
+                this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
+                this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
+                this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
+                this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
+                this.getEdit.focus=this.getEdit.focus==1?'1':'0';
+                this.cancelEditTask();
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title: error.message,
+                });
+            })
         },
         //取消查看任务
         cancelWatch(){
@@ -507,19 +504,19 @@ export default {
                 id:this.editId
             }
             this.$http.delete('project-delete-task',params).then((response)=>{
-                     this.cancelTask();
-                     this.cancelEditTask();
-                     this.getListData(this.ids);
+                this.cancelTask();
+                this.cancelEditTask();
+                this.getListData(this.ids);
 
-                     this.MessageType="success";
-                     this.openMessage=true;
-                     this.warn="删除成功";
-                     this.scrollPosititon();
-                 }).catch((error)=>{
-                     this.MessageType="error";
-                     this.openMessage=true;
-                     this.warn=error.message;
-             })
+                this.MessageType="success";
+                this.openMessage=true;
+                this.warn="删除成功";
+                this.scrollPosititon();
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
         },
         //新建对象传递校验
         onAddChange(params,error){
@@ -606,28 +603,27 @@ export default {
                 dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
                 dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
-                     this.cancelEditTask();
-                     this.getListData(this.ids);
+                    this.cancelEditTask();
+                    this.getListData(this.ids);
 
-                     if(response.code>1){
-                         this.cancelSure();
-                     }else{
+                    if(response.code>1){
+                        this.cancelSure();
+                    }else{
                         this.MessageType="success";
                         this.openMessage=true;
                         this.warn="编辑成功";
-                     }
-
-                     this.scrollPosititon();
-                 }).catch((error)=>{
-                     this.MessageType="error";
-                     this.openMessage=true;
-                     this.warn=error.message;
+                    }
+                    this.scrollPosititon();
+                }).catch((error)=>{
+                    this.MessageType="error";
+                    this.openMessage=true;
+                    this.warn=error.message;
                 })
           },
           timeApplyFox(str,param){
             if(str){     
                if(str.typeof == 'string'){
-                     str = str.replace(/-/g,'/');
+                    str = str.replace(/-/g,'/');
                 }
                str = param?dateUtils.dateToStr("YYYY-MM-DD",new Date(str)):dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(str));
             }else{
@@ -635,34 +631,32 @@ export default {
             }
             return str;
         },
-          scrollPosititon(){
-              setTimeout(() => {
-                    let leftDetail=document.getElementById('vue-chart-left-detail-list');
-                    let chartDom=document.getElementById('vue-chart-right-draw-content');
-                    if(leftDetail&&chartDom){
-                         chartDom.scrollTop=this.scrollH;
-                         leftDetail.scrollTop=this.scrollH;
-                    }
-                },50);
-          },
-          scroll(event){
-              let leftDetail=document.getElementById('vue-chart-left-detail-list');
-              let chartDom=document.getElementById('vue-chart-right-draw-content');
-              chartDom.scrollTop=leftDetail.scrollTop;
-              this.scrollH=leftDetail.scrollTop;
-          },
-          chartScroll(){
+        scrollPosititon(){
+            setTimeout(() => {
+                let leftDetail=document.getElementById('vue-chart-left-detail-list');
+                let chartDom=document.getElementById('vue-chart-right-draw-content');
+                if(leftDetail&&chartDom){
+                    chartDom.scrollTop=this.scrollH;
+                    leftDetail.scrollTop=this.scrollH;
+                }
+            },50);
+        },
+        scroll(event){
+            let leftDetail=document.getElementById('vue-chart-left-detail-list');
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            chartDom.scrollTop=leftDetail.scrollTop;
+            this.scrollH=leftDetail.scrollTop;
+            ganttChartScrollTop = leftDetail.scrollTop;
+        },
+        chartScroll(){
 
-              let leftDetail=document.getElementById('vue-chart-left-detail-list');
-              let chartDom=document.getElementById('vue-chart-right-draw-content');
-              leftDetail.scrollTop=chartDom.scrollTop;
-              this.scrollH=chartDom.scrollTop;
-              return; 
-              if(chartDom.scrollLeft>=chartDom.clientWidth){
-                  console.log('划到最右边了');
-              }
-          },
-          submitSure(){
+            let leftDetail=document.getElementById('vue-chart-left-detail-list');
+            let chartDom=document.getElementById('vue-chart-right-draw-content');
+            leftDetail.scrollTop=chartDom.scrollTop;
+            this.scrollH=chartDom.scrollTop;
+            ganttChartScrollTop=chartDom.scrollTop;
+        },
+        submitSure(){
             let params={
                 id:this.editId,
                 propertyId:this.queryData.id
@@ -674,15 +668,15 @@ export default {
                 this.MessageType="error";
                 this.openMessage=true;
                 this.warn=error.message;
-             })
-            },
-            //信息提示框
-            onChangeOpen(data){
-                this.openMessage=data;
-            },
-            cancelSure(){
-                this.openSure=!this.openSure;
-            },
+            })
+        },
+        //信息提示框
+        onChangeOpen(data){
+            this.openMessage=data;
+        },
+        cancelSure(){
+            this.openSure=!this.openSure;
+        },
      }
 }
 </script>

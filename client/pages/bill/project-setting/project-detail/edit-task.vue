@@ -219,6 +219,20 @@ export default {
         padding-left:32px;
     }
     .pop-position{
+        .ivu-poptip-popper{
+            .ivu-poptip-arrow{
+            border-top-color: rgba(0,0,0,0.7);
+            }
+            .ivu-poptip-arrow:after{
+                border-top-color: rgba(0,0,0,0.1);
+            }
+            .ivu-poptip-inner{
+                background-color: rgba(0,0,0,0.7);
+            }
+            .ivu-poptip-body-content-inner{
+                color:#fff;
+            }
+        }
         .single-radio-ok{
             display:inline-block;
             margin-right:40px;

@@ -129,7 +129,7 @@ import dateUtils from 'vue-dateutils';
 import AddTask from './add-task';
 import EditTask from './edit-task';
 import WatchRecord from './watch-record';
-import DetailTaskList from './detail-taskList';
+import DetailTaskList from './detail-task-list';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';

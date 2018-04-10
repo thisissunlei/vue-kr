@@ -26,10 +26,11 @@
         }
     }
     .ivu-form-item-content{
-        padding-top:7px;
+        // padding-top:7px;
         position: relative;
     }
     .text{
+        padding-top: 7px;
         color: #666;
         font-size: 14px;
         line-height: 20px;
@@ -42,7 +43,6 @@
         position: absolute;
         top: 50%;
         transform:translateY(-50%);
-        margin-top: 3px;
         height: 32px;
         line-height: 32px;
         vertical-align: top;
@@ -72,6 +72,12 @@
         padding-right:4px;
 
     }
+    .edit-url{
+        padding-right: 50px;
+    }
+    .url-style{
+        right:0;
+    }
 </style>
 
 
@@ -81,9 +87,12 @@
     <FormItem :label="label" :prop="prop" :label-width="labelWidth">
 
         <div v-show="!showEditInput" class="text">{{value}} <span @click="showEdit" style="color:#4A90E2" class="icon-edit"></span></div>
-        <Input v-if="showEditInput && type!= 'textarea'" v-model="customer"  :placeholder="placeholder" @on-change="change" class="edit-input"/>
+        <Input v-if="showEditInput && type== 'text'" v-model="customer"  :placeholder="placeholder" @on-change="change" class="edit-input"/>
         <Input v-if="showEditInput && type=='textarea'" v-model="customer"  :placeholder="placeholder" @on-change="change" type="textarea" style="width:70%"/>
-        <div class="operation" v-show="showEditInput">
+        <Input v-if="showEditInput && type=='url'" v-model="customer"  :placeholder="placeholder" @on-change="changeUrl" :type="type" class="edit-url">
+            <span slot="prepend">http://</span>
+        </Input>
+        <div class="operation" v-show="showEditInput"  v-bind:class="{ 'url-style': type=='url' }">
             <span @click="okClick" >
                 <Icon class="icon-right"></Icon>
             </span>
@@ -122,10 +131,16 @@ import http from '~/plugins/http.js';
             }
         },
         data () {
-            
+            let urlArray = this.value
+            if(this.type == 'url'){
+                console.log('url')
+                urlArray = this.value.split('http://')[1]
+
+            }
+            console.log('=========',urlArray)
             return {
                 // 修改后的数据
-                customer:this.value,
+                customer:urlArray,
                 //是否编辑
                 showEditInput:false,
                 //传进来的元数据
@@ -154,6 +169,16 @@ import http from '~/plugins/http.js';
                 this.showEditInput = false;
                 this.onchange(this.name,this.labelValue)
             },
+            changeUrl(e){
+                console.log('changeUrl',this.customer)
+                if(this.customer.indexOf('http://') == 0){
+                   this.customer = this.customer.split('http://')[1]
+                }
+                console.log('changeUrl--2',this.customer)
+
+                this.onchange(this.name,'http://'+this.customer)
+
+            }
                     
                
         }

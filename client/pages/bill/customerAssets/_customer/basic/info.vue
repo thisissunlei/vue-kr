@@ -41,11 +41,27 @@
 
                     />
                 </Col>
+                <Col class="col">
+                     <EditInput  
+                        label="联系人电话：" 
+                        name="web"
+                        :value="basicInfo.web" 
+                        placeholder="联系人电话" 
+                        :maxLength="200"
+                        prop='web'
+                        :canSubmit.sync="canSubmit"
+                        :onchange="onChange"
+                        :label-width='labelWidth'
+                        type="url"
+
+                    />
+                </Col>
                 <Col>
                      <EditInput  
                         label="公司描述：" 
                         :value="basicInfo.text" 
                         name="text"
+
                         placeholder="公司描述" 
                         :maxLength="200"
                         :label-width='labelWidth'
@@ -111,6 +127,9 @@ import LabelText from '~/components/LabelText';
                     person:[
                         { required: true, trigger: 'change' ,validator: validateName},
                         { required: true, validator: validateName, trigger: 'blur' },
+                    ],
+                    web:[
+                        { trigger: 'change' ,type:'url', message: '请填写正确的公司网址'},
                     ]
                 },
                 selectData:[],
@@ -119,6 +138,7 @@ import LabelText from '~/components/LabelText';
                     customerId:'3232',
                     customerName:'萨达多撒',
                     phone:'1',
+                    web:'http://dsadasdasd.com',
                     person:'冯吸臣',
                     text:'啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦'
                 },
@@ -177,7 +197,8 @@ import LabelText from '~/components/LabelText';
                 this.basicInfo[name] = value.value;
                 this.handleSubmit()
             },
-            changeWeb(){
+            changeWeb(name,value){
+                this.basicInfo[name] = value;
                 console.log('changeWeb',this.basicInfo.web)
             }
         },

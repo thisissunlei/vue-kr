@@ -674,6 +674,7 @@ export default {
             color: #ffffff;
             z-index: 999;
             transition: all .1s;
+            pointer-events:none;
             .title{
                 font-size: 14px;
                 background: transparent;

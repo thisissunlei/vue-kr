@@ -131,15 +131,12 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-        console.log(this.startDate,"ppppppp--======")
     },
     watch:{
         startDate:{
             handler:function(){
                 this.leftEndpoint = this.startDate;
-                console.log(this.leftEndpoint,"ppp",this.startDate)
                 this.getBoxWidthAndOffice();
-                
             }
            
         },
@@ -372,7 +369,6 @@ export default {
                 width:lineWidth,
                 office:lineOffice
             }
-            
        },
        getEndpointDate(){
             var arr = [];

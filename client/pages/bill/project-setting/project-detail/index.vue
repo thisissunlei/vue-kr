@@ -104,8 +104,8 @@
             title="提示"
             width="440"
             >
-            <div class='sure-sign' v-if="!grayStar">设置为“管理层关注”任务后，该任务会在项目总览中显示</div>
-            <div class='sure-sign' v-if="grayStar">取消设置“管理层关注”任务后，该任务不会在项目总览中显示</div>
+            <div class='sure-sign' v-if="grayStar==0">设置为“管理层关注”任务后，该任务会在项目总览中显示</div>
+            <div class='sure-sign' v-if="grayStar==1">取消设置“管理层关注”任务后，该任务不会在项目总览中显示</div>
             <div slot="footer">
                 <Button type="primary" @click="submitStar()">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="cancelStar">取消</Button>
@@ -184,7 +184,7 @@ export default {
             taskIds:'',
 
             //星星初始化
-            grayStar:false,
+            grayStar:0,
             treeMiddle:[],
             //任务项枚举
             taskList:[
@@ -286,7 +286,7 @@ export default {
         submitStar(){
             var params={
                 id:this.editId,
-                focus:this.grayStar?0:1
+                focus:this.grayStar==1?0:1
             }
             this.$http.post('project-detail-star',params).then((response)=>{
                 this.cancelStar();
@@ -480,7 +480,7 @@ export default {
                     this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
                     this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
                     this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-                    this.getEdit.focus=this.getEdit.focus?'1':'0';
+                    this.getEdit.focus=this.getEdit.focus==1?'1':'0';
                     this.cancelEditTask();
                  }).catch((error)=>{
                      this.$Notice.error({

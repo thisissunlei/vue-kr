@@ -439,7 +439,7 @@ export default {
                     this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
                     this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
                     this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-                    this.getEdit.focus=this.getEdit.focus?'1':'0';
+                    this.getEdit.focus=this.getEdit.focus==1?'1':'0';
                     this.cancelEditTask();
                  }).catch((error)=>{
                      this.$Notice.error({
@@ -485,7 +485,9 @@ export default {
                 dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                      this.cancelEditTask();
+                     this.params.page=1;
                      this.getListData(this.params);
+                     this.getTreeData();
 
                      if(response.code>1){
                          this.cancelSure();

@@ -334,7 +334,10 @@ export default {
                     offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }   
                 var scrollLeft = this.getTodayTOLeft(data)-offerLeft;
-                dom.scrollLeft = scrollLeft;
+                setTimeout(() => {
+                     dom.scrollLeft = scrollLeft;
+                }, 100);
+               
             }
         },
         getTodayTOLeft(data){
@@ -712,19 +715,7 @@ export default {
             border-color:transparent transparent rgba(70,76,91,.9) transparent;
        
         }
-        // #gantt-chart-tool-tip::before{
-        //     content: '';
-        //     position: absolute;
-        //     display:block;
-        //     // margin:10px;
-        //     width:0;
-        //     height:0;
-        //     border-style:solid;
-        //     border-width:5px;
-        //     top: -10px;
-        //     left: 10px;
-        //     border-color:transparent transparent rgba(70,76,91,.9) transparent;
-        // }
+       
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;

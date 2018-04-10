@@ -243,7 +243,7 @@ import AddArchives from './add-archives';
         methods:{
             //跳转查看页面
             goView(params){
-                window.location.href=`./projectSetting/projectDetail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
+                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
             },
             //获取列表数据
             getTableData(params){

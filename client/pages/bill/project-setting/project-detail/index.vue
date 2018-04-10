@@ -1,12 +1,12 @@
 <template>
-  <div>
+    <div>
         <div class='edit-left-bar'>
             <div class='detail-title'>
                 <div class='title-left'>
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
                         <Breadcrumb separator=">">
-                            <BreadcrumbItem to="/bill/projectSetting">开业进度总览</BreadcrumbItem>
+                            <BreadcrumbItem to="/bill/project-setting">开业进度总览</BreadcrumbItem>
                             <BreadcrumbItem><span @click="currentClick" style="cursor:pointer;">{{queryData.name}}</span></BreadcrumbItem>
                         </Breadcrumb>
                     </div>
@@ -118,9 +118,7 @@
             :warn="warn"
             @changeOpen="onChangeOpen"
         />
-
-        
-  </div>
+    </div>
 </template>
 
 <script>

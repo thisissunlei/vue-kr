@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
    .chart-wrap{
       width:246px;
       display:inline-block;
@@ -177,6 +177,14 @@ export default {
                     display: table-cell;
                     vertical-align: middle;
                     padding-top: 8px;
+                    .ivu-tooltip-popper{
+                      max-width:150px;
+                      word-break:break-all;
+                      word-wrap: break-word; 
+                      .ivu-tooltip-inner{
+                         white-space:normal;
+                      }
+                    }
                 }
                 .chart-left-name{
                   display:inline-block;

@@ -2,7 +2,7 @@
   <div class='add-archives'>
        <Form ref="formRight" :model="formRight" :rules="ruleValidate" label-position="left">
 
-            <Form-item label="项目名称" class="bill-search-class" prop="name" style="margin-bottom:30px;">
+            <Form-item label="项目名称" class="bill-archives-class" prop="name" style="margin-bottom:30px;">
                     <i-input 
                         v-model="formRight.name" 
                         placeholder="请输入项目名称"
@@ -10,7 +10,7 @@
                     /> 
             </Form-item>
             
-            <Form-item label="所在地区" class="bill-search-class city-class" prop="maskCity">
+            <Form-item label="所在地区" class="bill-archives-class city-class" prop="maskCity">
                     <i-input 
                         v-model="formRight.maskCity" 
                         style="display:none;"
@@ -158,7 +158,7 @@ export default {
         .ivu-form-item-error-tip{
             width:250px;
         }
-        .bill-search-class{
+        .bill-archives-class{
             padding-left:32px;
             height: 48px;
         }

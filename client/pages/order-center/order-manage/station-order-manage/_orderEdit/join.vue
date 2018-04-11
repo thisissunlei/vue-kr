@@ -793,7 +793,9 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params).then( r => {
                     _this.stationList = r.data.seats;
                     _this.formItem.rentAmount = r.data.totalrent;
-                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    let money = this.formItem.stationAmount - r.data.totalrent;
+                    
+                    // let money = r.data.originalTotalrent - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     

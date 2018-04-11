@@ -197,7 +197,7 @@ import DrawMonth from './draw-month';
 import DrawWeek from './draw-week';
 import EditArticle from './edit-article';
 import ViewArticle from './view-article';
-import publicFn from '../publicFn'
+import publicFn from '../publicFn';
 import KrField from '~/components/KrField';
 export default {
     components:{
@@ -696,7 +696,7 @@ export default {
         }
         .bottom-triangle{
             border-color: transparent transparent rgba(70,76,91,.9)  transparent;
-            
+
         }
         #gantt-chart-tool-tip-triangle{
 

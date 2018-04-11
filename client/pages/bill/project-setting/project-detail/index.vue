@@ -14,12 +14,12 @@
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
                 <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
             </div>
-            <GanttChart 
-                v-if="!isLoading " 
+            <GanttChart
+                v-if="!isLoading "
                 :data="listData"
                 :treeData="treeData"
                 type="edit"
-                :start="startTime" 
+                :start="startTime"
                 :end="endTime"
                 :treeIds="taskIds"
                 @rightOver="rightOver"
@@ -27,7 +27,7 @@
                 @editClick="editTask"
             >
                 <div class='detail-detail' slot="leftBar">
-                    <DetailTaskList 
+                    <DetailTaskList
                         :data="listData"
                         @addClick="addTask"
                         @editClick="editTask"
@@ -37,9 +37,9 @@
                     />
                 </div>
             </GanttChart>
-          
+
         </div>
-       
+
         <Modal
                 v-model="openAddTask"
                 title="添加任务"
@@ -112,8 +112,8 @@
             </div>
         </Modal>
 
-        <Message 
-            :type="MessageType" 
+        <Message
+            :type="MessageType"
             :openMessage="openMessage"
             :warn="warn"
             @changeOpen="onChangeOpen"
@@ -190,14 +190,14 @@ export default {
             taskList:[]
         }
     },
-    created(){         
-        this.queryData=this.$route.query; 
+    created(){
+        this.queryData=this.$route.query;
     },
     mounted(){
          this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
          this.signMask=this.queryData.status==1?true:false;
-         
+
          this.leftOver();
          this.rightOver();
          this.getSelectData();
@@ -244,7 +244,7 @@ export default {
 
         },
         getSelectData(){
-            
+
             this.$http.post('get-enum-all-data',{
                 enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
             }).then((response)=>{
@@ -317,35 +317,35 @@ export default {
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=data2;
             data=startData<endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
         },
         compareEndTime(data1,data2){
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=(new Date(data2+' 00:00:00')).getTime();;
             data=startData>endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
         },
-       
+
         //获取列表数据
         getListData(ids){
             let params={
                 propertyId:this.queryData.id,
                 departments:ids?ids:''
             }
-           
+
             params.departments = params.departments.replace('-ALL-,','');
-            
+
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
-                this.listData=response.data.items; 
+                this.listData=response.data.items;
                 if(response.data.hasTime){
                     this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
                     this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
                 this.isLoading = false;
-              
+
             }).catch((error)=>{
                 this.$Notice.error({
                  title: error.message,
@@ -388,9 +388,9 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                Vue.set(item,"checked",true); 
-                Vue.set(item,"expand",true);   
-                this.treeMiddle.push(item.value)    
+                Vue.set(item,"checked",true);
+                Vue.set(item,"expand",true);
+                this.treeMiddle.push(item.value)
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }
@@ -419,9 +419,9 @@ export default {
         },
 
         //递归找父级
-        fnTree(id,data){	
+        fnTree(id,data){
             var cityLable = '';
-            for(var i=0;i<data.length;i++){		
+            for(var i=0;i<data.length;i++){
                 let item = data[i];
                 cityLable = item.value;
                 if(!item.children && item.value == id ){
@@ -434,7 +434,7 @@ export default {
                         if(text){
                             return cityLable+=','+text;
                         }
-                    }	
+                    }
                 }
             }
             return false;
@@ -453,23 +453,23 @@ export default {
                 day= +start[2];
 
             for(var i=0;i<n;i++){
-              
-               
+
+
                 if(month > 12){
                     month = month-12;
                     year += 1;
                 }
-                month ++ 
+                month ++
             }
             if(month > 12){
                 month = month-12;
                 year += 1;
             }
-            
+
             return year+"-"+month+"-"+day;
-            
+
         },
-       
+
         //打开新建任务
         addTask(id){
             this.cancelAddTask();
@@ -506,11 +506,11 @@ export default {
         //打开查看任务
         watchTask(){
             this.getWatchData(this.queryData.id);
-            this.cancelWatch();  
+            this.cancelWatch();
         },
         //打开删除任务
         cancelTask(){
-           this.openDelete=!this.openDelete; 
+           this.openDelete=!this.openDelete;
         },
         //提交删除任务
         submitDelete(){
@@ -543,7 +543,7 @@ export default {
             this.editData=params;
         },
         //新建任务提交
-        submitAddTask(name){     
+        submitAddTask(name){
                 // return;
                 var newPageRefs = this.$refs.fromFieldTask.$refs;
                 var isSubmit = true;
@@ -635,7 +635,7 @@ export default {
                 })
           },
           timeApplyFox(str,param){
-            if(str){     
+            if(str){
                if(str.typeof == 'string'){
                     str = str.replace(/-/g,'/');
                 }

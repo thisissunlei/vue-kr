@@ -10,7 +10,7 @@ function setContentHeight() {
 }
 
 //获取今天的日期
-function getToDay(year,month) {
+function getToDay() {
     var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
     return today; 
 }
@@ -180,9 +180,26 @@ function fontCover(planContentId, actualContentId) {
         }
     }
 }
+
+function windowResize() {
+    var leftDom = document.getElementById('vue-chart-left-table-list');
+    var rightDom = document.getElementById("vue-chart-right-draw-content");
+    var clientHeight = document.documentElement.clientHeight;
+    var dom = document.getElementById('layout-content-main');
+    if(dom){
+        dom.style.height = document.documentElement.clientHeight - 130 + "px"
+    }
+    if(leftDom){
+        leftDom.style.maxHeight = clientHeight - 362 + "px";
+    }
+    if (rightDom){
+        rightDom.style.maxHeight = clientHeight - 362 + "px";
+    }
+}
 export default {
     getAllMaxAndMin,
     getMonthDayNum,
     poptipOver,
-    fontCover
+    fontCover,
+    windowResize
 }

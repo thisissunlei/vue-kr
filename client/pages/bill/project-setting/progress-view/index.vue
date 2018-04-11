@@ -1,4 +1,4 @@
-<template>
+publicFn.getMonthDayNum<template>
     <div >
 
         <!-- 甘特图部分 -->
@@ -140,6 +140,7 @@ import ListTable from './list-table';
 import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
+import publicFn from '../publicFn'
 import Vue from 'vue';
 
 var allPage = 1;
@@ -195,23 +196,23 @@ export default {
         this.rightOver();
         setTimeout(() => {
 
-            var leftDom=document.getElementById('vue-chart-left-table-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
-
+            // var leftDom=document.getElementById('vue-chart-left-table-list');
+            // var rightDom = document.getElementById("vue-chart-right-draw-content");
+            // var clientHeight = document.documentElement.clientHeight;
+            // leftDom.style.maxHeight = clientHeight - 362+"px";
+            // rightDom.style.maxHeight = clientHeight - 362 +"px";
+              publicFn.windowResize();
         }, 400);
 
         window.onresize=function(){
-
-            var leftDom=document.getElementById('vue-chart-left-table-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            var dom = document.getElementById('layout-content-main');
-            dom.style.height = document.documentElement.clientHeight-130 + "px"
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
+            publicFn.windowResize();
+            // var leftDom=document.getElementById('vue-chart-left-table-list');
+            // var rightDom = document.getElementById("vue-chart-right-draw-content");
+            // var clientHeight = document.documentElement.clientHeight;
+            // var dom = document.getElementById('layout-content-main');
+            // dom.style.height = document.documentElement.clientHeight-130 + "px"
+            // leftDom.style.maxHeight = clientHeight - 362+"px";
+            // rightDom.style.maxHeight = clientHeight - 362 +"px";
         }
     },
 
@@ -545,18 +546,15 @@ export default {
                 this.getListData(this.params);
             }
             setTimeout(() => {
-                var leftDom=document.getElementById('vue-chart-left-table-list');
-                var rightDom = document.getElementById("vue-chart-right-draw-content");
-                var clientHeight = document.documentElement.clientHeight;
-                leftDom.style.maxHeight = clientHeight - 362+"px";
-                rightDom.style.maxHeight = clientHeight - 362 +"px";
+                // var leftDom=document.getElementById('vue-chart-left-table-list');
+                // var rightDom = document.getElementById("vue-chart-right-draw-content");
+                // var clientHeight = document.documentElement.clientHeight;
+                // leftDom.style.maxHeight = clientHeight - 362+"px";
+                // rightDom.style.maxHeight = clientHeight - 362 +"px";
+                publicFn.windowResize();
             }, 200);
         },
-        //获取当月的天数
-        getDayNum(year,month){
-            var d= new Date(year, month, 0);
-            return d.getDate();
-        },
+
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -568,7 +566,7 @@ export default {
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
-                day= this.getDayNum(year,month);
+                day= publicFn.getMonthDayNum(year,month);
             for(var i=0;i<n;i++){
                 if(month > 12){
                     month = month-12;

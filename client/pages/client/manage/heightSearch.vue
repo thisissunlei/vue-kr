@@ -2,7 +2,7 @@
             <Form ref="formItem" :model="formItem" label-position="top">
                 <Form-item label="客户名称" class="bill-search-class">
                     <i-input 
-                        v-model="formItem.customerName" 
+                        v-model="formItem.company" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
                     />
@@ -21,12 +21,12 @@
                 <Form-item label="行业分类" class="bill-search-class" >
                     <Select 
                         v-model="formItem.industryId" 
-                        placeholder="请输入订单类型" 
+                        placeholder="请输入行业分类" 
                         style="width: 252px"
                         clearable
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in industryList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -37,12 +37,12 @@
                 <Form-item label="入驻状态" class="bill-search-class" >
                     <Select 
                         v-model="formItem.status" 
-                        placeholder="请输入订单类型" 
+                        placeholder="请输入入驻状态" 
                         style="width: 252px"
                         clearable
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in statusList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -91,8 +91,11 @@
                     status:''
                 },
                 orderList:[],
+                statusList:[],
                 typeList:[],
-                communityList:[]
+                communityList:[],
+                industry:'com.krspace.sso.api.enums.customer.Industry',
+                industryList:[]
             }
         },
 
@@ -108,6 +111,7 @@
         mounted:function(){
             this.getCommunity();
             this.getOrderList();
+            this.getStatusList()
         },
 
         updated:function(){
@@ -144,7 +148,29 @@
                         title:error.message
                     });
                 })   
-            }
+            },
+            //获取行业分类
+            getIndustryList(){
+                this.$http.get('get-enmu-list',{enmuKey:this.industry}).then((response)=>{   
+                    this.industryList=response.data;
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })   
+            },
+            getStatusList(){
+                this.$http.get('get-enmu-list',{enmuKey:'com.krspace.sso.api.enums.customer.Status'}).then((response)=>{   
+                    this.statusList = response.data.map(item=>{
+                        item.label = item.desc;
+                        return item;
+                    })
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                }) 
+            },
         }
     }
 </script>

@@ -11,7 +11,7 @@
                          <div class='lower-search'>
                             <span style='padding-right:10px'>客户名称</span>
                             <i-input 
-                                v-model="params.customerName" 
+                                v-model="params.company" 
                                 placeholder="请输入客户名称"
                                 style="width: 252px"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -56,7 +56,7 @@
             <CreateCustomer  @newData="newCustomer" ref="fromFieldNewPage" v-if="openCreate" />
             <div slot="footer">
                 <Button type="primary" @click="submitCreate('fromFieldValidate')">确定</Button>
-                <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+                <Button type="ghost" style="margin-left:8px" @click="createNew">取消</Button>
             </div>
         </Modal>
 </div>
@@ -125,7 +125,7 @@
                         key: 'createTime',
                         align:'center',
                         render(tag, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.createTime)) ;
+                            return dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.createTime)) ;
                         }
                     },
                     {
@@ -174,10 +174,11 @@
                 utils.addParams(this.params);
             },
             getListData(params){
-                params = Object.assign({},params,this.params)
-                this.$http.get('get-customer-list',params).then((res)=>{
+                params = Object.assign({},params)
+                this.$http.get('get-client-list',params).then((res)=>{
                     this.accountList=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.params = params;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -188,7 +189,7 @@
                 this.lowerSubmit();
             },
             showDetail(item){
-                let url = '/bill/customerAssets/'+item.customerId+'/view#basic'
+                let url = '/bill/customerAssets/'+item.id+'/view#basic'
                 window.open(url,'_blank');
             },
             changePage(page){
@@ -211,8 +212,8 @@
                 this.params.pageSize=15;
                 this.params.startDate=this.params.startDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.startDate)):'';
                 this.params.endDate=this.params.endDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.endDate)):'';
-                console.log('submitCreate',this.params)
                 utils.addParams(this.params);
+                this.getListData(this.params)
 
             },
             onUpperChange(params,error){
@@ -233,7 +234,15 @@
                     return;
                 }
                 console.log('submitCreate-->data',this.newPageData)
-
+                this.$http.post('add-customer',this.newPageData, r => {
+                    this.openCreate = false;
+                    this.getListData()
+                }, e => {
+                    this.isNewPageSubmit = false;
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=e.message;
+                })
 
             },
             newCustomer(data){

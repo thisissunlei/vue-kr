@@ -5,6 +5,7 @@
                         v-model="formItem.company" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
+                        :maxlength="max"
                     />
                 </Form-item>
                 <Form-item label="相关社区" class="bill-search-class" prop="communityId"> 
@@ -24,9 +25,11 @@
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        @on-change="firstSourceChange"
+
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in firstSource" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -40,9 +43,10 @@
                         placeholder="请输入订单类型" 
                         style="width: 252px"
                         clearable
+                        not-found-text="请先选择客户一级来源"
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in secondSource" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -55,6 +59,7 @@
                         v-model="formItem.contactName" 
                         placeholder="请输入客户名称"
                         style="width: 252px"
+                        :maxlength="max"
                     />
                 </Form-item>
                 <Form-item label="联系人手机号" class="bill-search-class" prop="contactTel">
@@ -96,9 +101,11 @@
                 	company:'',
                 	communityId:''
                 },
-                orderList:[],
-                typeList:[],
+                statusList:[],
+                firstSource:[],
+                secondSource:[],
                 communityList:[],
+                max:25,
                 ruleValidate:{
                     communityId:[
                         { required: true, message: '请选择社区'}
@@ -119,7 +126,7 @@
                         { required: true, message: '请选择客户来源'}
                     ],
                     subSourceId:[
-                        { required: true, message: '请选择客户来源'}
+                        { required: true, message: '请选择客户来源',}
                         
                     ]
                 },
@@ -137,7 +144,7 @@
  
         mounted:function(){
             this.getCommunity();
-            this.getOrderList();
+            this.getCustomerSource()
         },
 
         updated:function(){
@@ -165,17 +172,31 @@
                         });
                     })
             },
-
-            getOrderList(){
-                this.$http.get('order-pay-list','').then((response)=>{   
-                    this.orderList=response.data.orderTypeVos;
-                    this.typeList=response.data.seatOrderTypeVos;
+            getCustomerSource(){
+                this.$http.get('get-customer-source','').then((response)=>{   
+                    this.firstSource = response.data.map(item=>{
+                        item.value = item.id+'';
+                        item.label = item.name;
+                        return item;
+                    })
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
                     });
-                })   
-            }
+                }) 
+            },
+            
+            firstSourceChange(value){
+                console.log('firstSourceChange=======',value)
+                this.secondSource = this.firstSource.filter(item=>{
+                    if(item.id == this.formItem.sourceId){
+                        return true;
+                    }
+                    return false
+                })
+                console.log('secondSource',this.secondSource)
+            },
+
         }
     }
 </script>

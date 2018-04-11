@@ -21,7 +21,7 @@ export default {
         method: 'get'
     },
     //客户信息列表请求
-    'get-customer-list': {
+    'get-client-list': {
         url: '/api/krspace-op-web/customer-center/list',
         method: 'get'
     },

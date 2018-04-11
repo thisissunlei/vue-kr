@@ -1,5 +1,5 @@
 <template>
-    <div class='chart-wrap'>
+    <div class='detail-chart-wrap'>
        <div class='chart-title'>
           <p>任务列表</p>
           <!-- <p class='chart-title-right' @click="addClick('')">
@@ -141,8 +141,8 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
-   .chart-wrap{
+<style lang='less'>
+   .detail-chart-wrap{
       width:246px;
       display:inline-block;
       border:solid 1px #F0F0F0;
@@ -177,6 +177,14 @@ export default {
                     display: table-cell;
                     vertical-align: middle;
                     padding-top: 8px;
+                    .ivu-tooltip-popper{
+                      max-width:150px;
+                      word-break:break-all;
+                      word-wrap: break-word; 
+                      .ivu-tooltip-inner{
+                         white-space:normal;
+                      }
+                    }
                 }
                 .chart-left-name{
                   display:inline-block;
@@ -257,9 +265,10 @@ export default {
       .view-bottom-more{
           background:#fff;
       }
-   }
-   ::-webkit-scrollbar {
+      ::-webkit-scrollbar {
          width:0px;
-    }
+      }
+  }
+   
    
 </style>

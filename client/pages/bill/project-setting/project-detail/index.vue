@@ -60,7 +60,7 @@
                 <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
                 <div slot="footer" style="text-align: center;">
                     <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
+                    <Button type="primary" @click="submitEditTask('formItem')" style="box-shadow:0 1px 4px 0;">确认编辑</Button>
                 </div>
         </Modal>
 
@@ -70,8 +70,8 @@
                 width="660"
             >
                 <WatchRecord :watchRecord="watchRecord"/>
-                <div slot="footer">
-                    <Button type="primary" @click="cancelWatch">确定</Button>
+                <div slot="footer" style="text-align:center;">
+                    <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
                 </div>
         </Modal>
 
@@ -271,8 +271,8 @@ export default {
             array.push(
                 {
                     label:'全部任务',
-                    value:'ALL',
-                    t_id:'ALL',
+                    value:'-ALL-',
+                    t_id:'-ALL-',
                     children:this.taskList
                 }
             );
@@ -319,7 +319,6 @@ export default {
             data=startData<endData?startData:endData;
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
         },
-
         compareEndTime(data1,data2){
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
@@ -334,6 +333,9 @@ export default {
                 propertyId:this.queryData.id,
                 departments:ids?ids:''
             }
+           
+            params.departments = params.departments.replace('-ALL-,','');
+            
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 

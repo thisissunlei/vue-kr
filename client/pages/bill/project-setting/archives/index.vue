@@ -5,7 +5,7 @@
     </div>
     
     <div class="u-table">
-        <Table stripe  border :columns="columns" :data="billList"></Table>
+        <Table border :columns="columns" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page 
@@ -30,7 +30,8 @@
      >
         <AddArchives @bindData="onAddArchives" ref="fromFieldArchives" v-if="openNewArchives"/> 
         <div slot="footer" style="text-align:center;">
-            <Button type="primary" @click="submitAddArchives('formRight')">完成并创建</Button>
+         
+            <Button type="primary" :disabled="!allowSubmit" @click="submitAddArchives('formRight')">完成并创建</Button>
         </div>
     </Modal>
     <Message 
@@ -88,6 +89,7 @@ import AddArchives from './add-archives';
                 warn:'',
                 MessageType:'',
                 billType:{},
+                allowSubmit:true,
                 columns: [
                     {
                         title: 'ID',
@@ -262,6 +264,7 @@ import AddArchives from './add-archives';
             },
             //新建项目创建成功
             submitAddArchives(name){   
+
                 var newPageRefs = this.$refs.fromFieldArchives.$refs;
                 var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
@@ -275,12 +278,14 @@ import AddArchives from './add-archives';
                 this.addData.province=this.addData.citys[0];
                 this.addData.city=this.addData.citys[1];
                 this.addData.county=this.addData.citys[2];
+                this.allowSubmit = false;
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
                     this.getTableData(this.tabParams);
                     this.newArchives();
                     this.openMessage=true;
                     this.warn='新建成功';
                     this.MessageType="success";
+                    this.allowSubmit = true;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -300,6 +305,9 @@ import AddArchives from './add-archives';
             newArchives(){
                 utils.clearForm(this.addData);
                 this.openNewArchives = !this.openNewArchives;
+                if(this.openNewArchives){
+                    this.allowSubmit = true;
+                }
             }
         }
     }

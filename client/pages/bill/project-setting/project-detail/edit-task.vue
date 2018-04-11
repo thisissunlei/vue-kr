@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="edit-task">
       <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow-y:scroll;overflow-x:hidden;">
                     <Form-item label="任务名称"  class="bill-search-class" prop="name" style="width:100%;">
                         <i-input 
@@ -21,7 +21,7 @@
                             </RadioGroup>
                     </Form-item>
 
-                    <Form-item label="责任部门"  class="bill-search-class">
+                    <Form-item label="责任部门"  class="bill-search-class dep-class">
                         <span>{{getEdit.department}}</span>
                     </Form-item>
 
@@ -213,10 +213,16 @@ export default {
 </script>
 
 <style lang='less'>
+.edit-task{
     .bill-search-class{
         display:inline-block;
         width:50%;
         padding-left:32px;
+    }
+    .dep-class{
+        .ivu-form-item-content{
+            line-height:34px;
+        }
     }
     .pop-position{
         .ivu-poptip-popper{
@@ -307,5 +313,6 @@ export default {
             }
         }
     }
+}
 
 </style>  

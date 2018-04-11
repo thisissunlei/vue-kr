@@ -1,18 +1,18 @@
 
 <template>
-    <div class="every-view-col" :data-chart="data.t_id" 
+    <div class="every-view-col" :data-chart="data.t_id"
         :style="{
             width:boxDetail.width * minCalibration+'px',
             left:boxDetail.office * minCalibration+'px',
-            
+
         }"
-    
+
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
-        <div class="article" 
+        <div class="article"
             v-if="getFlagShow('STAGETASK')"
         >
-            <div 
+            <div
                 class="plan"
                 :style="{
                     background:getPlanBgColor(),
@@ -26,7 +26,7 @@
             >
                 {{getActualLabel(data.label)}}
             </div>
-            <div 
+            <div
                 v-if="data.data.actualStartTime && data.data.actualEndTime"
                 class="actual"
                 :style="{
@@ -38,19 +38,19 @@
                 @mouseover="toolOver"
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
-            >  
+            >
                 {{getActualLabel(data.label)}}
             </div>
             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-            <div 
-                class="label" 
+            <div
+                class="label"
                 :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >
                 {{this.getLabel(data.label)}}
-            </div> 
+            </div>
         </div>
     </div>
 </template>
@@ -58,6 +58,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
+import publicFn from '../publicFn'
 export default {
     name:'Article',
     props:{
@@ -91,11 +92,9 @@ export default {
         return {
             boxDetail:{},
             planDetail:{},
-            actualDetail:{} ,    
-            leftEndpoint:this.startDate, 
+            actualDetail:{} ,
+            leftEndpoint:this.startDate,
             secondObj:{},
-            childLeftEndpoint:{},
-            
             picColor:'',
             lineDetail:{}
         }
@@ -104,7 +103,7 @@ export default {
         if(!this.data.chartType){
             this.getBoxWidthAndOffice();
         }
-       
+
     },
     watch:{
         startDate:{
@@ -112,7 +111,7 @@ export default {
                 this.leftEndpoint = this.startDate;
                 this.getBoxWidthAndOffice();
             }
-           
+
         },
     },
     methods:{
@@ -120,13 +119,14 @@ export default {
             this.$emit('editClick',id);
         },
         toolOver(event){
-            // return ;
+            publicFn.poptipOver(event,this.data)
+            return ;
             var e = event || window.event;
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-            
+
             var tirLocation = {
                 left:e.clientX,
                 top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
@@ -144,13 +144,13 @@ export default {
         },
         locationCorrect(tirDom,nowLeft,tirRightToleft){
             let contentDom = document.getElementById('vue-chart-right-draw-content');
-            
+
             let detail = contentDom.getBoundingClientRect();
-            let winWidth = document.body.clientWidth;            
+            let winWidth = document.body.clientWidth;
             let contentToRigth = winWidth - detail.right;
             let tirToRigth = winWidth - tirRightToleft-20;
             if(contentToRigth>tirToRigth){
-             
+
                 tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) +'px';
             }
 
@@ -169,11 +169,11 @@ export default {
                     type = 'YYYY/MM/DD';
                     width=220;
                 }
-                
+
                 var startDay = data.planStartTime?dateUtils.dateToStr(type,new Date(data.planStartTime)):'';
                 var endDay = data.planEndTime?dateUtils.dateToStr(type,new Date(data.planEndTime)):'';
                 str += '<div class="content">'+'计划周期：'+startDay+' - '+endDay+'</div>'
-                
+
             }
             if(data.actualStartTime && data.actualEndTime){
                 var type ='MM/DD';
@@ -185,7 +185,7 @@ export default {
                 }
                 var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
                 var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
-                
+
                 str += '<div class="content" >'+'完成周期：'+startDay+' - '+endDay+'</div>'
             }
             return {
@@ -197,7 +197,7 @@ export default {
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-            
+
             tirDom.style.opacity = 0;
             angleDom.style.opacity = 0;
         },
@@ -219,9 +219,9 @@ export default {
             }else {
                 return '#BE8525';
             }
-            
+
         },
-       
+
         getActualColor(){
             var bgColor = this.getActualBgColor();
             if(bgColor == 'rgba(246,156,156,0.5)'){
@@ -230,8 +230,8 @@ export default {
                 return '#5A8C23'
             }
         },
-        getLabel(label){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+        getLabel(label,data){
+            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return '';
             }else {
@@ -239,7 +239,7 @@ export default {
             }
         },
         getActualLabel(label){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return label;
             }else {
@@ -247,7 +247,7 @@ export default {
             }
         },
         lineShow(){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                 return true;
             }else {
@@ -264,18 +264,18 @@ export default {
 
         },
        getActualBgColor(){
-            
-            if(this.data.data.progressStatus<0){ 
+
+            if(this.data.data.progressStatus<0){
                 return 'rgba(246,156,156,0.5)';
             }else if(this.data.data.progressStatus>=0){
-               
+
                 return 'rgba(194,233,152,0.6)'
             }
        },
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-          
+
             if(!this.data.data.actualEndTime&&this.data.data.planStartTime<nowTime ){
                 return '#FFE9AF';
             }else{
@@ -283,7 +283,7 @@ export default {
             }
        },
        getBoxWidthAndOffice(){
-            var dates = this.getEndpointDate();
+            var dates = publicFn.getAllMaxAndMin(this.data);
             var boxDetail={};
             var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
             var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planEndTime));
@@ -293,7 +293,7 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
             var officeEnd = min;
-          
+
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,min)
@@ -321,46 +321,13 @@ export default {
                 lineOffice = this.planDetail.office;
                 lineWidth = this.planDetail.width;
             }
-            // console.log(this.boxDetail,"oooooooo",this.startDat,this.minCalibration);
             this.lineDetail = {
                 width:lineWidth,
                 office:lineOffice
             }
-            
-       },
-       getEndpointDate(){
-            var arr = [];
-             if(this.data.data.actualStartTime && this.data.data.actualEndTime){
-                arr.push(this.data.data.actualStartTime)
-                arr.push(this.data.data.actualEndTime)
-            }
-           
-            if(this.data.data.planStartTime && this.data.data.planEndTime){
-                arr.push(this.data.data.planStartTime)
-                arr.push(this.data.data.planEndTime)
-            }
-        
-            var max = arr[0],min=arr[0];
-           
-            for (var i = 1; i < arr.length; i++) {
-                if(max<arr[i])
-                    max =  arr[i];
-                if(min>arr[i])
-                    min = arr[i];
-            }
-            var minStr = dateUtils.dateToStr("YYYY-MM-DD",new Date(+min));
-            var minStr = minStr.split('-')
-            this.childLeftEndpoint={
-                year:minStr[0],
-                month:minStr[1],
-                dayNum:minStr[2] 
-            }
-            return {
-                min:+min,
-                max:+max
-            }
 
-       }
+       },
+
     }
 }
 </script>
@@ -372,7 +339,7 @@ export default {
     top: 0px;
     width: 100%;
     left: 0px;
-   
+
     border-bottom: 1px solid #F1F1F1;
     .tag{
         width: 50px;
@@ -382,7 +349,7 @@ export default {
         left: 0px;
         height: 100%;
         opacity: .1;
-    }   
+    }
     .ivu-tooltip{
         height: 30px;
     }
@@ -414,8 +381,8 @@ export default {
             position: relative;
             top: 19px;
             z-index: 1;
-            
-            
+
+
         }
         .label{
             position: absolute;
@@ -431,7 +398,7 @@ export default {
             background: transparent;
             font-weight:bold;
             top: 2px;
-            
+
         }
         .plan{
             height: 29px;
@@ -445,7 +412,7 @@ export default {
             top: 2px;
             overflow: hidden;
             text-overflow:ellipsis;
-            white-space: nowrap;  
+            white-space: nowrap;
             font-weight:bold;
             z-index: 2;
         }
@@ -460,7 +427,7 @@ export default {
             top: 2px;
             overflow: hidden;
             text-overflow:ellipsis;
-            white-space: nowrap;  
+            white-space: nowrap;
             font-weight:bold;
             z-index: 2;
         }

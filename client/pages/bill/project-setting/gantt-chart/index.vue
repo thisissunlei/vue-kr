@@ -2,34 +2,34 @@
     <div>
         <!-- 甘特图部分 -->
         <div class='chart-ul-wrap' >
-           
+
                 <div class="hander" >
                     <div class='header-left'>
                         <div style="display:inline-block;margin-top: 6px;">
                             <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">任务计划</span>
-                            <span 
-                                class="article" 
+                            <span
+                                class="article"
                                 style="background:#DBE1E8;vertical-align:middle;"
                             ></span>
                         </div>
                         <div style="display:inline-block;margin-left:20px;margin-top: 6px;">
                             <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">准时或提前完成</span>
-                            <span 
-                                class="article" 
+                            <span
+                                class="article"
                                 style="background: #A8DD6F;vertical-align:middle;"
                             ></span>
                         </div>
                          <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
                             <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">延期完成</span>
-                            <span 
-                                class="article" 
+                            <span
+                                class="article"
                                 style="background:#F69C9C;vertical-align:middle;"
                             ></span>
                         </div>
                          <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
                             <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进度未知</span>
-                            <span 
-                                class="article" 
+                            <span
+                                class="article"
                                 style="background:#FFD669;vertical-align:middle;"
                             ></span>
                         </div>
@@ -39,100 +39,100 @@
                         <span style="margin-top:8px;margin-right:15px;font-size:14px;color:#333333;">
                          甘特图显示任务项
                         </span>
-                        <Form label-position="left" style="display:inline-block;">      
-                                <KrField 
+                        <Form label-position="left" style="display:inline-block;">
+                                <KrField
                                     v-if="mask"
-                                    type="selectTree" 
-                                    :data="treeData" 
+                                    type="selectTree"
+                                    :data="treeData"
                                     @okClick="treeClick"
                                     @checkChange="treeChange"
                                     :treeIds="treeIds"
                                 />
                         </Form>
                     </div>
-                
+
                     <div style="display:inline-block;">
                             <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
                                 时间轴最小刻度
                             </span>
-                            <Select 
-                                v-model="barType" 
+                            <Select
+                                v-model="barType"
                                 @on-change="selectChange"
                                 style="width:100px;margin-right:20px;text-align:left;"
                             >
                                 <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                     </div>
-                  
+
                 </div>
-            <div 
-               
-                class="right-draw" 
+            <div
+
+                class="right-draw"
                 :style="{left:type=='edit'?'271px':'371px'}"
             >
                 <div class="calibration" id="gantt-chart-calibration">
                  <div  style="position:relative;overflow:hidden;"  >
                     <div class="time-shaft-fixed"></div>
-                    <div 
-                        ref="rightBar" 
-                        v-if="!isLoading" 
-                        class="bar" 
+                    <div
+                        ref="rightBar"
+                        v-if="!isLoading"
+                        class="bar"
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
-                   
+
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
-                                <div class="year" 
-                                    :style="{width:item.dayNum * minCalibration + 'px'}" 
+                                <div class="year"
+                                    :style="{width:item.dayNum * minCalibration + 'px'}"
                                     v-for=" item in years" :key="item.id">
                                     <span>{{item.year}}</span>
                                 </div>
                             </div>
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
-                                <div 
-                                    v-if="barType=='month'" 
-                                    class="bar-line" 
+                                <div
+                                    v-if="barType=='month'"
+                                    class="bar-line"
                                     :style="{
                                         left:tagToLeft+'px',
                                         width:minCalibration+'px'
                                     }"
                                     ></div>
-                                <DrawMonth 
-                                    v-for="( item ) in showData" 
-                                    :key="item.id"  
-                                    :dayNum="item.dayNum" 
+                                <DrawMonth
+                                    v-for="( item ) in showData"
+                                    :key="item.id"
+                                    :dayNum="item.dayNum"
                                     :data="item"
                                     :minCalibration="minCalibration"
                                     :size="barType=='month'?12:16"
                                     :type="barType"
-                                    
+
                                 />
-                                
+
                                 <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
-                                
+
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
                                 <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
-                                
-                                <DrawWeek 
+
+                                <DrawWeek
                                     :ref = "'ganttChartTimeShaft'+index"
-                                    v-for="(item,index) in weeks" 
-                                    :key="item.id" 
-                                    :data="item" 
+                                    v-for="(item,index) in weeks"
+                                    :key="item.id"
+                                    :data="item"
                                     :minCalibration="minCalibration"
-                                    
+
                                 />
                                 <div v-if="barType=='week'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}">今天</div>
-                                
+
                             </div>
-                            
+
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
                                 <div v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
-                                
-                                <DrawDay 
-                                    v-for="( item ) in showData" 
-                                    :key="item.id" 
-                                    :data="item"  
+
+                                <DrawDay
+                                    v-for="( item ) in showData"
+                                    :key="item.id"
+                                    :data="item"
                                     :dayNum="item.dayNum"
                                     :minCalibration="minCalibration"
                                 />
@@ -149,29 +149,29 @@
                     @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
-                    <div    
+                    <div
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
                     >
-                        <EditArticle 
+                        <EditArticle
                             v-if="leftEndpoint.year && type== 'edit'"
                             :minCalibration="minCalibration"
                             :startDate="leftEndpoint"
                             :data="item"
-                            v-for="(item,index) in data" 
+                            v-for="(item,index) in data"
                             :key="item.id"
                             :type="type"
                             :index="index"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                             @editClick="editClick"
                         />
-                        
-                        <ViewArticle  
+
+                        <ViewArticle
                             v-if="leftEndpoint.year && type== 'view'"
                             v-for="item in listData"
                             :data="item"
                             :key="item.id"
-                            :id="item.id" 
+                            :id="item.id"
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
@@ -184,7 +184,7 @@
             <div id="gantt-chart-tool-tip"></div>
             <div id="gantt-chart-tool-tip-triangle"></div>
             <slot name="leftBar"></slot>
-        </div>      
+        </div>
     </div>
 
 </template>
@@ -197,6 +197,7 @@ import DrawMonth from './draw-month';
 import DrawWeek from './draw-week';
 import EditArticle from './edit-article';
 import ViewArticle from './view-article';
+import publicFn from '../publicFn'
 import KrField from '~/components/KrField';
 export default {
     components:{
@@ -291,7 +292,7 @@ export default {
             this.circleId(this.data);
         }
     },
-   
+
     updated(){
         this.mask=this.treeData.length?true:false;
     },
@@ -312,12 +313,12 @@ export default {
             var offerLeft = 0;
             if(dom){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
-               
+
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
                     var todayIsWeek = (new Date()).getDay();
                     offerLeft = (todayIsWeek+6) * this.minCalibration
-                    
+
 
                 }else{
                     var todayArr = today.split('/');
@@ -332,12 +333,12 @@ export default {
                         todayObj.year -=1;
                     }
                     offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
-                }   
+                }
                 var scrollLeft = this.getTodayTOLeft(data)-offerLeft;
                 setTimeout(() => {
                      dom.scrollLeft = scrollLeft;
                 }, 100);
-               
+
             }
         },
         getTodayTOLeft(data){
@@ -356,7 +357,7 @@ export default {
         },
         //获取年数组
         getYears(startTime,endTime){
-         
+
             var startArr = startTime.split('-');
             var endArr = endTime.split('-');
             var startObj = {
@@ -408,7 +409,7 @@ export default {
            for (var i = 0; i < yearArr.length; i++) {
                yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
            }
-         
+
            this.years = [].concat(yearArr);
         },
         //下拉事件被触发
@@ -421,7 +422,7 @@ export default {
                 this.minCalibration = 4;
             }
             this.limitDay(event);
-            
+
         },
         //极限时间
         limitDay(type){
@@ -434,7 +435,7 @@ export default {
             };
             if(type=='week' || type =='day'){
                 var startToWeek = (new Date(start)).getDay();
-            
+
                 var offset = 7+startToWeek-1;
                 if(startObj.day-offset<0){
                     startObj.month -=1;
@@ -444,7 +445,7 @@ export default {
                     }
                     startObj.day = this.getDayNum(startObj.year,startObj.month)+startObj.day-offset;
                 }else{
-                    
+
                      startObj.day = startObj.day-offset;
                 }
             }else{
@@ -455,9 +456,9 @@ export default {
                 }
                 startObj.day =1;
             }
-            
+
             this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
-            
+
             this.scroolFix(this.showData);
         },
 
@@ -479,8 +480,8 @@ export default {
 
         //获取当月的天数
         getDayNum(year,month){
-            var d= new Date(year, month, 0);  
-            return d.getDate();   
+            var d= new Date(year, month, 0);
+            return d.getDate();
         },
 
         //数据初始化
@@ -500,7 +501,7 @@ export default {
                 var startDay = 1;
                 if(month >12){
                     month = month-12;
-                    year +=1; 
+                    year +=1;
                 }
                 if(month==startObj.month && year == startObj.year ){
                     startDay = +start[2];
@@ -519,7 +520,7 @@ export default {
             }
             this.showData = [].concat(showData);
             this.leftEndpoint = Object.assign({}, this.leftEndpoint,this.showData[0]);
-             
+
             this.isLoading = false;
             this.getDayBarWidth()
             //获取周的具体数据
@@ -552,7 +553,7 @@ export default {
             weekData.weeks = (this.dayAllNum-weekData.start-weekData.end)/7;
             weekData.dayNum = this.dayAllNum-weekData.start-weekData.end;
             this.getWeeks(weekData,min,max);
-        
+
         },
         //获取每一周的具体数据
         getWeeks(weekObj,min,max){
@@ -581,7 +582,7 @@ export default {
                 end:Object.assign({},end)
             }]
             for (var i = 0; i <weekObj.weeks ;i++) {
-               
+
                 start.day = +end.day + 1,
                 start.month = end.month,
                 end.day = start.day + 6;
@@ -609,7 +610,7 @@ export default {
 
             });
             this.weeks = [].concat(arr);
-            
+
         },
         //固定顶部的时间轴
         timeShaftFixed(left,contentDom){
@@ -640,7 +641,7 @@ export default {
         },
         //每周的具体内容校正
         dayToWeekDetail(weeks){
-            
+
             var obj = Object.assign({},weeks);
             var dayNum = this.getDayNum(obj.year,obj.month);
             if(obj.day>dayNum){
@@ -658,7 +659,7 @@ export default {
             var top = el.scrollTop;
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
-            
+
             this.timeShaftFixed(left,el);
         },
         rightOver(event){
@@ -674,7 +675,7 @@ export default {
         box-sizing: border-box;
         display:inline-block;
         position: relative;
-        padding-left:25px; 
+        padding-left:25px;
         #gantt-chart-tool-tip{
             width: 250px;
             min-height: 50px;
@@ -699,7 +700,7 @@ export default {
             }
         }
         #gantt-chart-tool-tip-triangle{
-         
+
             opacity: 0;
             position: absolute;
             display:block;
@@ -713,9 +714,9 @@ export default {
             transition: all .1s;
             z-index: 999;
             border-color:transparent transparent rgba(70,76,91,.9) transparent;
-       
+
         }
-       
+
         .chart-tab-left{
             width:346px;
             border: 1px solid #F6F6F6;
@@ -763,7 +764,7 @@ export default {
                 line-height: 50px;
                 font-size: 16px;
             }
-           
+
             .calibration  {
                 width:100%;
                 position:relative;
@@ -773,7 +774,7 @@ export default {
                     width:0px;
                 }
             }
-            
+
         }
         #vue-chart-right-draw-content{
             max-height:500px;
@@ -789,7 +790,7 @@ export default {
                 pointer-events:none;
                 z-index:3;
             }
-            
+
         }
         .content{
             position: relative;
@@ -800,7 +801,7 @@ export default {
         }
         .hander{
             margin-top:20px;
-            height: 50px; 
+            height: 50px;
             width: 100%;
             text-align: right;
             .header-left{
@@ -812,32 +813,32 @@ export default {
                 width: 30px;
                 height: 15px;
                 border-radius: 100px;
-                margin-left: 10px; 
+                margin-left: 10px;
             }
         }
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;
-            
+
 
         }
         .year-bar{
             .year{
-               
+
                 height: 50px;
                 line-height: 50px;
                 width: 50px;
                 text-align: left;
                 display: inline-block;
                 box-sizing: border-box;
-                padding-left:20px; 
+                padding-left:20px;
                 border-bottom: 1px solid #F6F6F6;
                 border-right: 1px solid #F6F6F6;
                 transition: all 0.3;
                 font-size: 16px;
             }
         }
-        
+
         .bar{
             position: relative;
             border-top: 1px solid #F6F6F6;
@@ -863,11 +864,11 @@ export default {
             top: 0px;
             background: #499DF1;
             opacity: 0.3;
-           
+
         }
    }
    .tab-second-title{
         height:45px;
     }
-   
+
 </style>

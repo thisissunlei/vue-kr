@@ -31,8 +31,8 @@ export default {
         method: 'get'
     },
     //客户基本信息详情
-    'get-customer-info-detai': {
-        url: '/api/krspace-op-web/customer/info-detai',
+    'get-customer-info-detail': {
+        url: '/api/krspace-op-web/customer/info-detail',
         method: 'get'
     },
     //新增客户

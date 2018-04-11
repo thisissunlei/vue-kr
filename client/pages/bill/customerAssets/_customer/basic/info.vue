@@ -155,6 +155,17 @@ import FieldBox from '~/components/FieldBox';
             selectTab(name){
                 this.selectedTab = name;
             },
+            getBasicInfo(){
+                let {params}=this.$route;
+                let param = {
+                    customerId:params.customer
+                 }
+                this.$http.get('get-customer-info-detail', param).then( r => {
+                    this.basicInfo = r.data
+                }).catch( e => {
+                    console.log('get-only')
+                })
+            },
             
             getOnlyName(){
                 let only = true;
@@ -193,6 +204,7 @@ import FieldBox from '~/components/FieldBox';
         },
         mounted(){
             GLOBALSIDESWITCH('false');
+            this.getBasicInfo()
         }
     
     }

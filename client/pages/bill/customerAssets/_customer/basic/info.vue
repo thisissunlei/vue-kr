@@ -7,53 +7,53 @@
               
                 <Col class="col">
                     <FieldBox label="客户id：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.id" 
                         :label-width='labelWidth'/>
 
                 </Col>
                 <Col class="col">
                     <FieldBox label="客户名称：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.company" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="客户联系人：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.contactName" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="联系人电话：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.contactTel" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="公司规模：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.scale" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="行业分类：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.industryId" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="融资轮次：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.roundId" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="运营状态：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.state" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="公司官网：" 
-                        :value="basicInfo.person" 
+                        :value="basicInfo.website" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col>
                     <FieldBox label="公司描述：" 
-                        :value="basicInfo.text" 
+                        :value="basicInfo.companyIntroduce" 
                         :label-width='labelWidth'/>
                 </Col>
                 

@@ -665,12 +665,14 @@ import utils from '~/plugins/utils';
 
                         obj.value =  r.data[i].map(item=>{
                             let obj = item;
-                            obj.oldPrice = item.originalPrice;
+                            obj.oldPrice = item.guidePrice;
+                            obj.originalPrice = item.guidePrice;
                             return obj;
                         });
                         station.push(obj)
                     }
                     _this.stationListData = station;
+                    console.log('getRenewStation=====',station)
                  
                 }, e => {
 
@@ -977,6 +979,7 @@ import utils from '~/plugins/utils';
                 if(!val.length){
                     return;
                 }
+                console.log('submitStation====',this.selecedArr)
                 this.selecedArr = this.selecedArr.map(item=>{
                     let obj = item;
                     obj.originalPrice = item.oldPrice;

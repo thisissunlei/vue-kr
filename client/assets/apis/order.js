@@ -130,7 +130,7 @@ export default  {
     },
     //获取可选择的续租工位
      'get-renew-station': {
-        url: '/api/krspace-op-web/order-seat-detail/continue?',
+        url: '/st/api/krspace-op-web/order-seat-detail/continue?',
         method: 'get'
     },
     //获取可选择的减租工位

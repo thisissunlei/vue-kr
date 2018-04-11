@@ -697,7 +697,8 @@ import utils from '~/plugins/utils';
 
                         obj.value =  r.data[i].map(item=>{
                             let obj = item;
-                            obj.oldPrice = item.originalPrice;
+                            obj.oldPrice = item.guidePrice;
+                            obj.originalPrice = item.guidePrice;
                             return obj;
                         });
 

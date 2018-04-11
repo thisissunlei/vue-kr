@@ -8,15 +8,15 @@
             <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
             <div v-if="!this.data.chartType && isInitial()">
                 <div class='col-tool-label'>
-                        <div class="article" 
+                        <div class="article"
                             v-if="getFlagShow('STAGETASK')"
                             :style="{
                                 width:boxDetail.width * minCalibration+'px',
                                 left:boxDetail.office * minCalibration+'px'
                             }"
-                        >   
-                       
-                            <div 
+                        >
+
+                            <div
                                 class="plan"
                                 @click="editClick(data.value,data.pid)"
                                 @mouseover="toolOver"
@@ -31,7 +31,7 @@
                             >
                                 <div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
                             </div>
-                            <div 
+                            <div
                                 v-if="!data.chartType && data.data.actualStartTime && data.data.actualEndTime"
                                 class="actual"
                                 @click="editClick(data.value,data.pid)"
@@ -44,44 +44,45 @@
                                     color:getActualColor(),
                                     cursor:'pointer'
                                 }"
-                            >  
-                                <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div> 
+                            >
+                                <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div>
                             </div>
                             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
-                            <div 
-                                class="label" 
+                            <div
+                                class="label"
                                 @mouseover="toolOver"
                                 @mouseout="toolOut"
-                                @click="editClick(data.value,data.pid)" 
+                                @click="editClick(data.value,data.pid)"
                                 :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px',cursor:'pointer'}"
                             >
                                 {{this.getLabel(data.label)}}
                             </div>
-                        
+
                     </div>
                 </div>
             </div>
-        
+
         </div>
-        <EditArticle 
+        <EditArticle
             v-if="leftEndpoint.year && type== 'edit'"
             :minCalibration="minCalibration"
             :startDate="leftEndpoint"
             :data="item"
-            v-for="(item,index) in data.children" 
+            v-for="(item,index) in data.children"
             :key="item.id"
             :type="type"
             :index="index"
             :todayDetail="todayDetail"
             @editClick="editClick"
         />
-    
+
     </div>
 </template>
 
 <script>
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
+import publicFn from '../publicFn'
 export default {
     name:'EditArticle',
     props:{
@@ -111,20 +112,20 @@ export default {
         todayDetail:{
             type:Object
         }
-       
+
     },
     data(){
         return {
             boxDetail:{},
             planDetail:{},
-            actualDetail:{} ,    
+            actualDetail:{} ,
             leftEndpoint:this.startDate,
             lineDetail:{},
             picColor:'',
             planContentId:'plan-content' + this.data.t_id,
             actualContentId:'actual-content' + this.data.t_id
 
-        
+
         }
     },
     mounted(){
@@ -138,7 +139,7 @@ export default {
                 this.leftEndpoint = this.startDate;
                 this.getBoxWidthAndOffice();
             }
-           
+
         },
     },
     updated(){
@@ -154,7 +155,7 @@ export default {
             let planDetail = planDom.getBoundingClientRect();
             let actualDetail = actualDom.getBoundingClientRect();
             if(planDetail.left+planDetail.width>actualDetail.left ||
-                actualDetail.left+actualDetail.width>planDetail.left){   
+                actualDetail.left+actualDetail.width>planDetail.left){
                 if(planDetail.left+planDetail.width>actualDetail.left) {
                     planDom.style.width =  actualDetail.left - planDetail.left + 'px';
                 }
@@ -169,7 +170,7 @@ export default {
             var detail = dom.getBoundingClientRect();
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-            
+
             var tirLocation = {
                 left:e.clientX,
                 top:(e.clientY<detail.top?e.clientY:detail.top)+detail.height
@@ -187,13 +188,13 @@ export default {
         },
         locationCorrect(tirDom,nowLeft,tirRightToleft){
             let contentDom = document.getElementById('vue-chart-right-draw-content');
-            
+
             let detail = contentDom.getBoundingClientRect();
-            let winWidth = document.body.clientWidth;            
+            let winWidth = document.body.clientWidth;
             let contentToRigth = winWidth - detail.right;
             let tirToRigth = winWidth - tirRightToleft-20;
             if(contentToRigth>tirToRigth){
-             
+
                 tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) +'px';
             }
 
@@ -225,7 +226,7 @@ export default {
                 }
                 var startDay = data.actualStartTime?dateUtils.dateToStr(type,new Date(data.actualStartTime)):'';
                 var endDay = data.actualEndTime?dateUtils.dateToStr(type,new Date(data.actualEndTime)):'';
-                
+
                 str += '<div class="content" >'+'完成周期：'+startDay+' - '+endDay+'</div>'
             }
             return {
@@ -235,10 +236,10 @@ export default {
             };
         },
         toolOut(event){
-            
+
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-            
+
             tirDom.style.opacity = 0;
             angleDom.style.opacity = 0;
         },
@@ -249,11 +250,11 @@ export default {
              if(this.data.data.actualStartTime && this.data.data.actualEndTime){
                return true;
             }
-           
+
             if(this.data.data.planStartTime && this.data.data.planEndTime){
                 return true;
             }
-         
+
             return false
         },
          getLabelColor(){
@@ -274,9 +275,9 @@ export default {
             }else {
                 return '#BE8525';
             }
-            
+
         },
-       
+
         getActualColor(){
             var bgColor = this.getActualBgColor();
             if(bgColor == 'rgba(246,156,156,0.5)'){
@@ -286,7 +287,7 @@ export default {
             }
         },
         getLabel(label){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return '';
 
@@ -295,7 +296,7 @@ export default {
             }
         },
         getActualLabel(label){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return label;
             }else {
@@ -304,20 +305,20 @@ export default {
         },
         lineShow(){
             if(
-                this.data.data.actualStartTime && 
+                this.data.data.actualStartTime &&
                 this.data.data.actualEndTime &&
-                this.data.data.planStartTime && 
+                this.data.data.planStartTime &&
                 this.data.data.planEndTime
             ){
 
-                if(this.data.data.planEndTime<this.data.data.actualStartTime || 
+                if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                     this.data.data.actualEndTime<this.data.data.planStartTime){
                     return true;
                 }else {
                     return false;
                 }
             }
-            
+
         },
         getFlagShow(event){
             if(this.data.data){
@@ -333,17 +334,17 @@ export default {
                 return;
             }
             if(this.data.data.progressStatus<0){
-               
+
                 return 'rgba(246,156,156,0.5)';
             }else if(this.data.data.progressStatus>=0){
-               
+
                 return 'rgba(194,233,152,0.6)'
             }
        },
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var nowTime = (new Date(today+' 00:00:00')).getTime();
-            
+
             if(!this.data.data.actualEndTime&&this.data.data.planStartTime<nowTime ){
                 return '#FFE9AF'
             }else{
@@ -351,7 +352,7 @@ export default {
             }
        },
        getBoxWidthAndOffice(){
-            var dates = this.getEndpointDate();
+            var dates =  publicFn.getAllMaxAndMin(this.data);
             var boxDetail={};
             var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
             var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planEndTime));
@@ -361,7 +362,7 @@ export default {
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
             var officeEnd = min;
-           
+
             this.boxDetail={
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,min)
@@ -384,46 +385,10 @@ export default {
                 lineOffice = this.actualDetail.width+this.actualDetail.office;
                 lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
             }
-            
             this.lineDetail = {
                 width:lineWidth,
                 office:lineOffice
             }
-       },
-       getEndpointDate(){
-            var arr = [];
-            if(this.data.data.actualStartTime && this.data.data.actualEndTime){
-                arr.push(this.data.data.actualStartTime)
-                arr.push(this.data.data.actualEndTime)
-            }
-           
-            if(this.data.data.planStartTime && this.data.data.planEndTime){
-                arr.push(this.data.data.planStartTime)
-                arr.push(this.data.data.planEndTime)
-            }
-        
-            var max = arr[0],min=arr[0];
-           
-            for (var i = 1; i < arr.length; i++) {
-                if(max<arr[i])
-                    max =  arr[i];
-                if(min>arr[i])
-                    min = arr[i];
-            }
-            var minStr = dateUtils.dateToStr("YYYY-MM-DD",new Date(+min));
-            var minStr = minStr.split('-')
-            this.childLeftEndpoint={
-                year:minStr[0],
-                month:minStr[1],
-                dayNum:minStr[2] 
-            }
-            console
-
-            return {
-                min:+min,
-                max:+max
-            }
-
        },
        overShow(id){
             var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
@@ -477,7 +442,7 @@ export default {
         border-bottom: 1px solid #F0F0F0;
     }
     .article{
-        position: relative; 
+        position: relative;
         background: transparent;
         height: 28px;
         cursor: pointer;
@@ -509,13 +474,13 @@ export default {
             position: absolute;
             cursor: pointer;
             top:5px;
-            white-space: nowrap;  
+            white-space: nowrap;
             font-weight:bold;
             z-index: 2;
         }
         .actual{
             height: 29px;
-          
+
             border-radius: 7px 7px 8px 8px;
             line-height: 30px;
             padding-left:6px;
@@ -524,16 +489,16 @@ export default {
             cursor: pointer;
             top:5px;
             white-space: nowrap;
-            font-weight:bold; 
+            font-weight:bold;
             z-index: 2;
         }
         .plan-content,.actual-content{
             display: inline-block;
              overflow: hidden;
             text-overflow:ellipsis;
-            white-space: nowrap;  
+            white-space: nowrap;
         }
-        
+
     }
 }
 </style>

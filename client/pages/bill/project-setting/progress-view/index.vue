@@ -1,11 +1,11 @@
 <template>
     <div >
-       
+
         <!-- 甘特图部分 -->
-        <GanttChart 
+        <GanttChart
             v-if = "!isLoading"
-            type='view' 
-            :start="params.startTime" 
+            type='view'
+            :start="params.startTime"
             :end="params.endTime"
             :treeData="treeData"
             :listData="listData"
@@ -24,29 +24,29 @@
                                  <div class='view-table-list'>
                                     <p>项目名称</p>
                                     <p style="border-right:none;">城市</p>
-                                </div> 
-                                <div                         
+                                </div>
+                                <div
                                     @mouseover='leftOver'
-                                    class='view-table-detail' 
+                                    class='view-table-detail'
                                     id="vue-chart-left-table-list"
                                 >
-                                    <div 
+                                    <div
                                         v-if="!isLoading"
                                     >
                                         <ListTable
-                                       
+
                                         v-for="item in listData"
                                         :key="item.id"
                                         :data="item"
                                         test="PREPARE"
                                         @rowClick="rowClick"
-                                        
+
                                     />
                                     </div>
-                                    
+
                                     <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
-                                    
-                                </div>   
+
+                                </div>
                             </div>
 
                         </TabPane>
@@ -57,17 +57,17 @@
                                     <p>项目名称</p>
                                     <p>城市</p>
                                     <!-- <p style="width:136px;">操作</p> -->
-                                </div> 
-                                <div 
-                                    @mouseover='leftOver' 
-                                    class='view-table-detail' 
+                                </div>
+                                <div
+                                    @mouseover='leftOver'
+                                    class='view-table-detail'
                                     id="vue-chart-left-table-list"
                                 >
-                                    <div 
+                                    <div
                                         v-if="!isLoading"
                                     >
                                         <ListTable
-                                          
+
                                             v-for="item in listData"
                                             :key="item.id"
                                             :data="item"
@@ -77,7 +77,7 @@
                                         />
                                     </div>
                                     <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
-                                </div>   
+                                </div>
                             </div>
 
                         </TabPane>
@@ -122,13 +122,13 @@
                 </div>
         </Modal>
 
-        <Message 
-            :type="MessageType" 
+        <Message
+            :type="MessageType"
             :openMessage="openMessage"
             :warn="warn"
             @changeOpen="onChangeOpen"
         />
-    
+
     </div>
 
 </template>
@@ -194,17 +194,17 @@ export default {
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
-            return;
+
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
-           
+
         }, 400);
 
         window.onresize=function(){
-            
+
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
@@ -214,7 +214,7 @@ export default {
             rightDom.style.maxHeight = clientHeight - 362 +"px";
         }
     },
-    
+
     methods:{
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-table-list');
@@ -232,7 +232,7 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
-        
+
         //获取进度列表数据
         getListData(params,type){
             if(allPage<params.page){
@@ -256,9 +256,7 @@ export default {
                 var totalPages=response.data.totalPages;
                 allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
-
                 this.params.page = response.data.page+1;
-            
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -268,7 +266,6 @@ export default {
         setScrollTop(){
             let chartDom=document.getElementById('vue-chart-right-draw-content');
             chartDom.scrollTop = ganttChartScrollTop;
-            
         },
         monthAdd(num){
             var endTime = dateUtils.dateToStr("YYYY-MM-DD",new Date(num));
@@ -293,7 +290,7 @@ export default {
             let endData=data2;
             data=startData<endData?startData:endData;
             data = data<todayTime?data:todayTime;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
         },
 
         compareEndTime(data1,data2){
@@ -302,11 +299,11 @@ export default {
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=(new Date(data2+' 00:00:00')).getTime();;
             data=startData>endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
+            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
         },
-       
+
         //获取甘特图任务数据
-        getTreeData(){     
+        getTreeData(){
             this.$http.get('project-status-search').then((response)=>{
                 var array=[];
                 array.push(
@@ -332,9 +329,9 @@ export default {
         recursiveFn(data){
             data.map((item,index)=>{
                 item.title=item.label;
-                Vue.set(item,"checked",true); 
-                Vue.set(item,"expand",true);    
-                this.treeMiddle.push(item.value)      
+                Vue.set(item,"checked",true);
+                Vue.set(item,"expand",true);
+                this.treeMiddle.push(item.value)
                 if(item.children&&item.children.length){
                     this.recursiveFn(item.children);
                 }
@@ -354,24 +351,24 @@ export default {
                 params.map((item,index)=>{
                   treeArray.push(item.value);
                 })
-            } 
+            }
             this.params.taskTemplateIds=treeArray.join(',');
             this.treeIds=this.params.taskTemplateIds?this.params.taskTemplateIds:'no';
             this.params.page=1;
             this.getListData(this.params);
         },
         treeChange(selectArr){
-            this.nodeChecked(selectArr); 
+            this.nodeChecked(selectArr);
         },
         nodeChecked(selectArr){
             var treeData = [].concat(this.treeData);
             for (let i = 0; i < treeData.length; i++) {
                 const element = treeData[i];
                 if(this.isHaver(selectArr,element.value)){
-                    Vue.set(treeData[i],"checked",true);             
+                    Vue.set(treeData[i],"checked",true);
                 }else{
-                    Vue.set(treeData[i],"checked",false);       
-                } 
+                    Vue.set(treeData[i],"checked",false);
+                }
             }
             this.treeData = [].concat(treeData);
         },
@@ -413,10 +410,10 @@ export default {
         },
         //打开删除任务
         cancelTask(){
-           this.openDelete=!this.openDelete; 
+           this.openDelete=!this.openDelete;
         },
         timeApplyFox(str,param){
-            if(str){     
+            if(str){
                if(str.typeof == 'string'){
                      str = str.replace(/-/g,'/');
                 }
@@ -557,8 +554,8 @@ export default {
         },
         //获取当月的天数
         getDayNum(year,month){
-            var d= new Date(year, month, 0);  
-            return d.getDate();   
+            var d= new Date(year, month, 0);
+            return d.getDate();
         },
         //获取今天日期
         getStartDay(){
@@ -577,7 +574,7 @@ export default {
                     month = month-12;
                     year += 1;
                 }
-                month ++ 
+                month ++
             }
             if(month > 12){
                 month = month-12;
@@ -667,7 +664,7 @@ export default {
                     color: #666666;
                     font-weight: 500;
                     display:table;
-                    background:#FAFCFF;   
+                    background:#FAFCFF;
                     p{
                         display:inline-block;
                         border-right:1px solid #F6F6F6;
@@ -713,7 +710,7 @@ export default {
             border-top: 1px solid #F6F6F6;
         }
     }
-       
-       
-   
+
+
+
 </style>

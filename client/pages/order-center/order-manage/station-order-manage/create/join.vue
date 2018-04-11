@@ -1148,6 +1148,7 @@ import utils from '~/plugins/utils';
                 this.formItem.saleAmount = 0;
             },
             onResultChange:function(val){//组件互通数据的触发事件
+                console.log('onResultChange',val)
                 this.stationData = val;
                 
             },

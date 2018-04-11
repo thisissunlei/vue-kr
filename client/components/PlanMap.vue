@@ -337,6 +337,8 @@ import http from '~/plugins/http.js';
 					})
 				}
 
+				console.log('selectedObj',selectedObjs)
+
 				
 				
 				
@@ -370,12 +372,24 @@ import http from '~/plugins/http.js';
 					}
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
+				console.log('allDataObj',allDataObj,'all',submitDataAll)
+				console.log('selectedObj----2',selectedObjs)
 
 
-				for (let i in selectedObj) {
-					submitDataAll = submitDataAll.concat(selectedObj[i]);
+				for (let i in selectedObjs) {
+					console.log('selectedObjs[i]',selectedObjs[i].id)
+					for (let j in submitDataAll){
+						console.log('submitDataAll[i]',submitDataAll[j].id)
+
+						if(selectedObjs[i].name == submitDataAll[j].name){
+							console.log('selectedObjs[i].id == submitDataAll[j].id')
+							submitDataAll[j].originalPrice = selectedObjs[i].originalPrice ;
+						}
+					}
+					// submitDataAll = submitDataAll.concat(selectedObj[i]);
 				}
 
+				console.log('selectedObj',selectedObjs,'all',submitDataAll)
 
 
 				for (let i in delDataObj) {
@@ -398,6 +412,7 @@ import http from '~/plugins/http.js';
 					obj1.name = item.name;
 					obj1.seatPrice = item.seatPrice || item.guidePrice;
 					obj1.capacity = item.capacity;
+					obj1.originalPrice = item.originalPrice || obj1.seatPrice|| '';
 					return obj1
 
 				})

@@ -119,7 +119,8 @@ export default {
             this.$emit('editClick',id);
         },
         toolOver(event){
-            // return ;
+            publicFn.poptipOver(event,this.data)
+            return ;
             var e = event || window.event;
             var dom = event.target;
             var detail = dom.getBoundingClientRect();

@@ -305,6 +305,9 @@ import AddArchives from './add-archives';
             newArchives(){
                 utils.clearForm(this.addData);
                 this.openNewArchives = !this.openNewArchives;
+                if(this.openNewArchives){
+                    this.allowSubmit = true;
+                }
             }
         }
     }

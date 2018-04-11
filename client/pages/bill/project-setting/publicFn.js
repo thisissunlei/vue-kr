@@ -180,5 +180,4 @@ export default {
     getMonthDayNum,
     poptipOver,
     fontCover
-
 }

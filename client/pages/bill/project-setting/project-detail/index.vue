@@ -271,8 +271,8 @@ export default {
             array.push(
                 {
                     label:'全部任务',
-                    value:'ALL',
-                    t_id:'ALL',
+                    value:'-ALL-',
+                    t_id:'-ALL-',
                     children:this.taskList
                 }
             );
@@ -319,7 +319,6 @@ export default {
             data=startData<endData?startData:endData;
             return dateUtils.dateToStr("YYYY-MM-DD",new Date(data)); 
         },
-
         compareEndTime(data1,data2){
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
@@ -334,6 +333,9 @@ export default {
                 propertyId:this.queryData.id,
                 departments:ids?ids:''
             }
+           
+            params.departments = params.departments.replace('-ALL-,','');
+            
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items; 

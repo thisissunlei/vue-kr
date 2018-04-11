@@ -126,8 +126,8 @@ export default {
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
 
-            // tirDom.style.opacity = 0;
-            // angleDom.style.opacity = 0;
+            tirDom.style.opacity = 0;
+            angleDom.style.opacity = 0;
         },
         getLabelColor(){
             var planColor = this.getPlanBgColor();

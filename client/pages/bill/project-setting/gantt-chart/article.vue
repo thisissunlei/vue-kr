@@ -119,7 +119,8 @@ export default {
             this.$emit('editClick',id);
         },
         toolOver(event){
-            // return ;
+            publicFn.poptipOver(event,this.data)
+            return ;
             var e = event || window.event;
             var dom = event.target;
             var detail = dom.getBoundingClientRect();
@@ -229,7 +230,7 @@ export default {
                 return '#5A8C23'
             }
         },
-        getLabel(label){
+        getLabel(label,data){
             if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return '';

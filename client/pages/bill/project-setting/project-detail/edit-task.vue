@@ -161,6 +161,10 @@ export default {
     },
     methods:{
         nameChange(event){
+            this.formItem.name=event.target.value.trim();
+            if(!this.formItem.name){
+                return ;
+            }
             let params={
                 name:event.target.value,
                 propertyId:this.queryData.id,

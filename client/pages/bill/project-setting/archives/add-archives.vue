@@ -7,6 +7,7 @@
                         v-model="formRight.name" 
                         placeholder="请输入项目名称"
                         style="width: 252px;"
+                        @on-change="nameChange"
                     /> 
             </Form-item>
             
@@ -148,6 +149,9 @@ export default {
         cascaderChange(event){
             this.formRight.citys=event;
             this.formRight.maskCity=event.length?'123':'';
+        },
+        nameChange(event){
+            this.formRight.name=event.target.value.trim();
         }
     }
 }

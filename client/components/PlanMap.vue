@@ -217,7 +217,7 @@ import http from '~/plugins/http.js';
 							obj.canFigureId = item.canFigureId;
 							obj.capacity = item.capacity;
 							obj.type = obj.belongType;
-							obj.price = item.price;
+							obj.seatPrice = item.seatPrice;
 							obj.checked = false;
 							obj.status = item.status || 4;
 							// 编辑带回的数据
@@ -260,7 +260,7 @@ import http from '~/plugins/http.js';
 								select.type = obj.belongType;
 								select.capacity = item.capacity;
 								select.seatType = obj.belongType == 'STATION'?'OPEN':'SPACE';
-								select.price = item.price;
+								select.seatPrice = item.seatPrice;
 
 								startToEnd.push(select)
 							}
@@ -336,6 +336,7 @@ import http from '~/plugins/http.js';
 						selectedObj['a'+floor].push(item)
 					})
 				}
+
 				
 				
 				
@@ -370,15 +371,17 @@ import http from '~/plugins/http.js';
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
 
+
 				for (let i in selectedObj) {
 					submitDataAll = submitDataAll.concat(selectedObj[i]);
 				}
+
+
 
 				for (let i in delDataObj) {
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
 				}
 				submitDataAll = submitDataAll.map(function(item, index) {
-					console.log('submitDataAll--map',item)
 					var obj1 = {};
 					let belongType = 1;
 					let type = 'OPEN'
@@ -393,7 +396,7 @@ import http from '~/plugins/http.js';
 					obj1.belongType = belongType;
 					obj1.whereFloor = item.whereFloor || item.floor;
 					obj1.name = item.name;
-					obj1.price = item.price;
+					obj1.seatPrice = item.seatPrice || item.guidePrice;
 					obj1.capacity = item.capacity;
 					return obj1
 

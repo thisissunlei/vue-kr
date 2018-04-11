@@ -657,6 +657,7 @@ import utils from '~/plugins/utils';
                     id:null
                 };
                 let _this = this;
+
                this.$http.get('get-renew-station', params, r => {
                     let station = []
                     for(let i in r.data){
@@ -665,8 +666,8 @@ import utils from '~/plugins/utils';
 
                         obj.value =  r.data[i].map(item=>{
                             let obj = item;
-                            obj.oldPrice = item.guidePrice;
-                            obj.originalPrice = item.guidePrice;
+                            obj.oldPrice = item.guidePrice == 0?'':item.guidePrice;
+                            obj.originalPrice = item.guidePrice == 0?'':item.guidePrice;
                             return obj;
                         });
                         station.push(obj)
@@ -991,7 +992,7 @@ import utils from '~/plugins/utils';
                 let day = 1000 * 60* 60*24;
                 let start = date + day;
                 this.renewForm.start = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(start));
-               
+               console.log('========')
                 this.getStationAmount()
                 this.clearStation()
                 
@@ -1008,15 +1009,21 @@ import utils from '~/plugins/utils';
                 this.config()
                 //工位原始结束日期，续租开始日期前一天
                 let startDate = '';
+                let originalPrice = false;
                
                 let station = val.map(item=>{
                     let obj = item;
                     obj.guidePrice = item.guidePrice || 0;
+                    if(item.originalPrice == ''){
+                        originalPrice = true;
+                    }
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
                     obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.start;
+                    obj.start = this.renewForm.start;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
+                    obj.end =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
                 let params = {
@@ -1025,6 +1032,11 @@ import utils from '~/plugins/utils';
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
 
+                }
+                console.log('========',station)
+                this.selecedStation = station
+                if(originalPrice){
+                    return
                 }
                
                 if(val.length){

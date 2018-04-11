@@ -5,7 +5,7 @@
     </div>
     
     <div class="u-table">
-        <Table  border :columns="columns" :data="billList"></Table>
+        <Table stripe  border :columns="columns" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page 

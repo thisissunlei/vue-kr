@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="add-task">
       <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;">
                 <Form-item label="任务名称"  class="bill-search-class" prop="name">
                     <i-input 
@@ -143,6 +143,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.add-task{
     .bill-search-class{
         display:inline-block;
         width:50%;
@@ -157,5 +158,7 @@ export default {
             color: #666;
         }
     }
+}
+    
 
 </style>  

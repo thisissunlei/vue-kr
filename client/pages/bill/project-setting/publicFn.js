@@ -8,10 +8,7 @@ function setContentHeight() {
     leftDom.style.maxHeight = clientHeight - 362 + "px";
     rightDom.style.maxHeight = clientHeight - 362 + "px";
 }
-//获取每一个数据里的最大值与最小值
-function getDataMaxAndMin(params) {
-    
-}
+
 //获取今天的日期
 function getToDay(year,month) {
     var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
@@ -52,7 +49,7 @@ function getAllMaxAndMin(data) {
 
 }
 // 获取当月的天数
-function getMonthDayNum(params) {
+function getMonthDayNum(year,month) {
     var d = new Date(year, month, 0);
     return d.getDate();
 }
@@ -145,15 +142,23 @@ function getToolTipContent(thatData) {
 }
 //气泡的位置微调
 function locationCorrect(tirDom, nowLeft, tirRightToleft) {
-    let contentDom = document.getElementById('vue-chart-right-draw-content');
 
+    let contentDom = document.getElementById('vue-chart-right-draw-content');
+    let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+    let tirDetail = tirDom.getBoundingClientRect();
     let detail = contentDom.getBoundingClientRect();
     let winWidth = document.body.clientWidth;
     let contentToRigth = winWidth - detail.right;
     let tirToRigth = winWidth - tirRightToleft - 20;
     if (contentToRigth > tirToRigth) {
-
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
+    }
+    if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
+        tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 +'px';
+        angleDom.className = 'top-triangle';
+        angleDom.style.top = parseInt(angleDom.style.top) - 35+ "px";
+    }else {
+        angleDom.className = 'bottom-triangle'
     }
 }
 //计划于实际文字覆盖计算

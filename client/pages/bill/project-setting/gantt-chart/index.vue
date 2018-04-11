@@ -182,7 +182,7 @@
                 </div>
             </div>
             <div id="gantt-chart-tool-tip"></div>
-            <div id="gantt-chart-tool-tip-triangle"></div>
+            <div id="gantt-chart-tool-tip-triangle" class="bottom-triangle"></div>
             <slot name="leftBar"></slot>
         </div>
     </div>
@@ -245,7 +245,7 @@ export default {
             showData:[{
                 year:this.getToday().year,
                 month:this.getToday().month,
-                dayNum:this.getDayNum(this.getToday().year,this.getToday().month)
+                dayNum:publicFn.getMonthDayNum(this.getToday().year,this.getToday().month)
             }],
             volatility:2,
             dayBarWidth:0,
@@ -332,7 +332,7 @@ export default {
                         todayObj.month = 12 - todayObj.month;
                         todayObj.year -=1;
                     }
-                    offerLeft = (this.getDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
+                    offerLeft = (publicFn.getMonthDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }
                 var scrollLeft = this.getTodayTOLeft(data)-offerLeft;
                 setTimeout(() => {
@@ -386,7 +386,7 @@ export default {
                 yearArr=[{
                     year:startObj.year,
                     start:startObj.year+'-'+startObj.month+'-'+1,
-                    end:startObj.year+'-'+12+'-'+this.getDayNum(startObj.year,12)
+                    end:startObj.year+'-'+12+'-'+publicFn.getMonthDayNum(startObj.year,12)
                 }];
                 for (var year = startObj.year; ;) {
                     year++;
@@ -394,7 +394,7 @@ export default {
                         yearArr.push({
                             year:endObj.year,
                             start:endObj.year+'-'+1+'-'+1,
-                            end:endObj.year+'-'+endObj.month+'-'+this.getDayNum(endObj.year,endObj.month)
+                            end:endObj.year+'-'+endObj.month+'-'+publicFn.getMonthDayNum(endObj.year,endObj.month)
                         });
                         break;
                     }
@@ -443,7 +443,7 @@ export default {
                         startObj.month = 12+ startObj.month;
                         startObj.year -=1;
                     }
-                    startObj.day = this.getDayNum(startObj.year,startObj.month)+startObj.day-offset;
+                    startObj.day = publicFn.getMonthDayNum(startObj.year,startObj.month)+startObj.day-offset;
                 }else{
 
                      startObj.day = startObj.day-offset;
@@ -470,20 +470,12 @@ export default {
             }
             this.dayAllNum = barWidth;
         },
-
         //获取今天日期
         getToday(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var arr = today.split("-");
             return {year:+arr[0],month:+arr[1],day:+arr[2]}
         },
-
-        //获取当月的天数
-        getDayNum(year,month){
-            var d= new Date(year, month, 0);
-            return d.getDate();
-        },
-
         //数据初始化
         init(startTime,endTime){
             var start = startTime.split("-"),
@@ -510,8 +502,8 @@ export default {
                     year:year,
                     month:month,
                     start:startDay,
-                    length:this.getDayNum(year,month)-startDay+1,
-                    dayNum:this.getDayNum(year,month),
+                    length:publicFn.getMonthDayNum(year,month)-startDay+1,
+                    dayNum:publicFn.getMonthDayNum(year,month),
                 })
                 if((year+'-'+month) == (endObj.year+'-'+endObj.month)){
                     break;
@@ -568,8 +560,8 @@ export default {
                 month:start.month,
                 day:min.start + weekObj.start-1,
             }
-            if(end.day>this.getDayNum(end.year,end.month)){
-               end.day = end.day -this.getDayNum(end.year,end.month)-1;
+            if(end.day>publicFn.getMonthDayNum(end.year,end.month)){
+               end.day = end.day -publicFn.getMonthDayNum(end.year,end.month)-1;
                 end.month+=1;
                 if(end.month>12){
                     end.month=end.month-12;
@@ -643,7 +635,7 @@ export default {
         dayToWeekDetail(weeks){
 
             var obj = Object.assign({},weeks);
-            var dayNum = this.getDayNum(obj.year,obj.month);
+            var dayNum = publicFn.getMonthDayNum(obj.year,obj.month);
             if(obj.day>dayNum){
                 obj.day = obj.day - dayNum;
                 obj.month = obj.month + 1;
@@ -699,6 +691,13 @@ export default {
                 background: transparent;
             }
         }
+        .top-triangle{
+            border-color: rgba(70,76,91,.9) transparent transparent transparent;
+        }
+        .bottom-triangle{
+            border-color: transparent transparent rgba(70,76,91,.9)  transparent;
+            
+        }
         #gantt-chart-tool-tip-triangle{
 
             opacity: 0;
@@ -713,7 +712,6 @@ export default {
             left: 10px;
             transition: all .1s;
             z-index: 999;
-            border-color:transparent transparent rgba(70,76,91,.9) transparent;
 
         }
 

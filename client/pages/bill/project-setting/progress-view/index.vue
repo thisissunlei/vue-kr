@@ -140,7 +140,7 @@ import ListTable from './list-table';
 import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
-import publicFn from '../publicFn'
+import publicFn from '../publicFn';
 import Vue from 'vue';
 
 var allPage = 1;
@@ -250,9 +250,9 @@ export default {
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
-                    this.params.startTime = this.compareTime(this.params.startTime,response.data.firstStartTime);
+                    this.params.startTime = publicFn.compareTime(this.params.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.params.endTime=this.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.params.endTime=publicFn.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
                 var totalPages=response.data.totalPages;
                 allPage = totalPages==0?1:totalPages;
@@ -283,26 +283,6 @@ export default {
             }
             return endObj;
         },
-        compareTime(data1,data2){
-            let data='';
-            let startData=(new Date(data1+' 00:00:00')).getTime();
-            let todayDate = new Date();
-            let todayTime = todayDate.getTime();
-            let endData=data2;
-            data=startData<endData?startData:endData;
-            data = data<todayTime?data:todayTime;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
-        },
-
-        compareEndTime(data1,data2){
-
-            var data='';
-            var startData=(new Date(data1+' 00:00:00')).getTime();
-            var endData=(new Date(data2+' 00:00:00')).getTime();;
-            data=startData>endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
-        },
-
         //获取甘特图任务数据
         getTreeData(){
             this.$http.get('project-status-search').then((response)=>{

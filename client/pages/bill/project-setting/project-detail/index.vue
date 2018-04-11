@@ -131,6 +131,7 @@ import DetailTaskList from './detail-task-list';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
+import publicFn from '../publicFn';
 var ganttChartScrollTop = 0;
 
 
@@ -311,22 +312,6 @@ export default {
                 this.warn=error.message;
             })
         },
-
-        compareTime(data1,data2){
-            var data='';
-            var startData=(new Date(data1+' 00:00:00')).getTime();
-            var endData=data2;
-            data=startData<endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
-        },
-        compareEndTime(data1,data2){
-            var data='';
-            var startData=(new Date(data1+' 00:00:00')).getTime();
-            var endData=(new Date(data2+' 00:00:00')).getTime();;
-            data=startData>endData?startData:endData;
-            return dateUtils.dateToStr("YYYY-MM-DD",new Date(data));
-        },
-
         //获取列表数据
         getListData(ids){
             let params={
@@ -340,9 +325,9 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items;
                 if(response.data.hasTime){
-                    this.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    this.startTime = publicFn.compareTime(this.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
                 this.isLoading = false;
 

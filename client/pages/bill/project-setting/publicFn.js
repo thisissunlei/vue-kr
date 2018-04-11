@@ -196,10 +196,36 @@ function windowResize() {
         rightDom.style.maxHeight = clientHeight - 362 + "px";
     }
 }
+
+function compareTime(data1, data2){
+    let data = '';
+    data1 = data1.replace('-', '/')
+    // data2 = data2.replace('-', '/')
+    let startData = (new Date(data1 + ' 00:00:00')).getTime();
+    let todayDate = new Date();
+    let todayTime = todayDate.getTime();
+    let endData = data2;
+    data = startData < endData ? startData : endData;
+    data = data < todayTime ? data : todayTime;
+    return dateUtils.dateToStr("YYYY-MM-DD", new Date(data));
+};
+
+function compareEndTime(data1, data2){
+    data1 = data1.replace('-', '/')
+    data2 = data2.replace('-', '/')
+    var data = '';
+    var startData = (new Date(data1 + ' 00:00:00')).getTime();
+    var endData = (new Date(data2 + ' 00:00:00')).getTime();;
+    data = startData > endData ? startData : endData;
+    return dateUtils.dateToStr("YYYY-MM-DD", new Date(data));
+};
 export default {
     getAllMaxAndMin,
     getMonthDayNum,
     poptipOver,
     fontCover,
-    windowResize
+    windowResize,
+    compareEndTime,
+    compareTime
+
 }

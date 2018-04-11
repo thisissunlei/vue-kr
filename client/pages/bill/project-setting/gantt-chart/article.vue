@@ -229,7 +229,7 @@ export default {
                 return '#5A8C23'
             }
         },
-        getLabel(label){
+        getLabel(label,data){
             if(this.data.data.planEndTime<this.data.data.actualStartTime ||
                 this.data.data.actualEndTime<this.data.data.planStartTime){
                     return '';

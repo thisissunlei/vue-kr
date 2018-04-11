@@ -84,4 +84,5 @@ function lineShow(data) {
 }
 export default {
     getAllMaxAndMin,
+    getMonthDayNum
 }

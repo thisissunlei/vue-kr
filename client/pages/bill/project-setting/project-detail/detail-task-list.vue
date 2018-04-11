@@ -1,5 +1,5 @@
 <template>
-    <div class='chart-wrap'>
+    <div class='detail-chart-wrap'>
        <div class='chart-title'>
           <p>任务列表</p>
           <!-- <p class='chart-title-right' @click="addClick('')">
@@ -142,7 +142,7 @@ export default {
 </script>
 
 <style lang='less'>
-   .chart-wrap{
+   .detail-chart-wrap{
       width:246px;
       display:inline-block;
       border:solid 1px #F0F0F0;
@@ -265,9 +265,10 @@ export default {
       .view-bottom-more{
           background:#fff;
       }
-   }
-   ::-webkit-scrollbar {
+      ::-webkit-scrollbar {
          width:0px;
-    }
+      }
+  }
+   
    
 </style>

@@ -251,9 +251,9 @@ export default {
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
-                    this.params.startTime = this.compareTime(this.startTime,response.data.firstStartTime);
+                    this.params.startTime = this.compareTime(this.params.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.params.endTime=this.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    this.params.endTime=this.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
                 var totalPages=response.data.totalPages;
                 allPage = totalPages==0?1:totalPages;
@@ -299,6 +299,7 @@ export default {
         },
 
         compareEndTime(data1,data2){
+
             var data='';
             var startData=(new Date(data1+' 00:00:00')).getTime();
             var endData=(new Date(data2+' 00:00:00')).getTime();;

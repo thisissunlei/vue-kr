@@ -344,11 +344,8 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
-                                            if(!price){
-                                                return
-                                            }
                                             var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                            if(!pattern.test(price)){
+                                            if(price && !pattern.test(price)){
                                                 this.$Notice.error({
                                                     title:'单价不得多余小数点后两位'
                                                 })

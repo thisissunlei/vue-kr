@@ -365,7 +365,8 @@ import PdfDownload from './pdfDownload';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                utils.addParams(this.tabParams);
+                this.getTableData(this.tabParams)
+                //utils.addParams(this.tabParams);
 
             },
             onChangeOpen(data){
@@ -379,7 +380,8 @@ import PdfDownload from './pdfDownload';
                     pageSize:15,
                     customerName:customerName
                 }
-                utils.addParams(this.tabParams);
+                 this.getTableData(this.tabParams)
+                //utils.addParams(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

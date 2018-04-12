@@ -45,4 +45,9 @@ export default {
         url: '/api/krspace-op-web/customer-center/check-company',
         method: 'get'
     },
+    //顶部客户名称、状态
+    'top-customer': {
+        url: '/api/krspace-op-web/customer-center/customer',
+        method: 'get'
+    },
 } 

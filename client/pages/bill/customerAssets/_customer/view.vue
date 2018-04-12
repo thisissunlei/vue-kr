@@ -13,7 +13,7 @@
 				{{customerBasic.company}}
 			</LabelText>
 			<LabelText label="客户状态："  type="circle" style="width:30%">
-				{{customerBasic.stateName}}
+				{{customerBasic.status}}
 			</LabelText> 
 		</div>
 		<div class="tab-list">
@@ -105,7 +105,7 @@
 				 let param = {
 				 	customerId:params.customer
 				 }
-				this.$http.get('get-customer-info-detail',param).then((res)=>{
+				this.$http.get('top-customer',param).then((res)=>{
 					this.customerBasic = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({

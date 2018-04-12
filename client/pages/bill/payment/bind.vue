@@ -79,7 +79,7 @@
             </Upload>
         </div>
          <div slot="footer">
-            <Button type="primary" @click="importSubmit">确定</Button>
+            <Button type="primary" :disabled="submitDisabled"   @click="importSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
         </div>
     </Modal>
@@ -164,6 +164,7 @@ export default {
                 IsCookie:true,
                 maxlength:500,
                 paymentId:'',
+                submitDisabled:false,
                 columns: [
                     {
                         title: '交易流水号',
@@ -392,9 +393,11 @@ export default {
             },
             importSubmit(){
                 var data=new FormData();
+                this.submitDisabled=true;
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data).then((res)=>{
                     this.openMessage=true;
+                    this.submitDisabled=false;
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
@@ -409,6 +412,7 @@ export default {
                     this.openImport=false;
                     this.getTableData(this.params);
                 }).catch((err)=>{
+                    this.submitDisabled=false;
                     this.$Notice.error({
 						title:err.message
 					});

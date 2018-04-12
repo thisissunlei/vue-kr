@@ -28,6 +28,9 @@ a, a:hover, a:focus, a:visited {
 .page-enter, .page-leave-active {
     opacity: 0
 }
+
+
+/*根据ui全局修改*/
 .ivu-modal-header{
     background: #F6F6F6;
     border-radius: 4px 4px 0 0;
@@ -56,3 +59,4 @@ a, a:hover, a:focus, a:visited {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+/*根据ui全局修改*/

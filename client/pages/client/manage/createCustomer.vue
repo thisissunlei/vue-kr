@@ -57,7 +57,7 @@
                 <Form-item label="客户联系人" class="bill-search-class" prop="contactName">
                     <i-input 
                         v-model="formItem.contactName" 
-                        placeholder="请输入客户名称"
+                        placeholder="请输入客户联系人"
                         style="width: 252px"
                         :maxlength="max"
                     />
@@ -65,14 +65,14 @@
                 <Form-item label="联系人手机号" class="bill-search-class" prop="contactTel">
                     <i-input 
                         v-model="formItem.contactTel" 
-                        placeholder="请输入客户名称"
+                        placeholder="请输入联系人手机号"
                         style="width: 252px"
                     />
                 </Form-item>
                 <Form-item label="联系人邮箱" class="bill-search-class" prop="contactMail">
                     <i-input 
                         v-model="formItem.contactMail" 
-                        placeholder="请输入客户名称"
+                        placeholder="请输入联系人邮箱"
                         style="width: 252px"
                     />
                 </Form-item>

@@ -2,7 +2,7 @@
 
 <template>  
     <div class="assets-manage">
-        <Form ref="basicInfo" :model="basicInfo" :rules="ruleValidate" class="basic-form" label-position="left">
+       <Form ref="basicInfo" :model="basicInfo" label-position="left">
              <Row>  
               
                 <Col class="col">
@@ -59,9 +59,8 @@
                 
             </Row>
             
-           
+        </Form>   
             
-        </Form>
     </div>
     
 
@@ -69,7 +68,6 @@
 
 <script>
     import utils from '~/plugins/utils';
-import LabelText from '~/components/LabelText';
 import FieldBox from '~/components/FieldBox';
     // import EditInput from '~/components/EditInput'
     // import EditSelect from '~/components/EditSelect'
@@ -77,10 +75,7 @@ import FieldBox from '~/components/FieldBox';
 
     export default {
         components:{
-            // EditInput,
-            LabelText,
             FieldBox,
-            // EditSelect
         },
         data (){
             const validateName = (rule, value, callback) => {
@@ -113,42 +108,17 @@ import FieldBox from '~/components/FieldBox';
             return{
                 canSubmit:true,
                 ruleValidate:{
-                    person:[
-                        { required: true, trigger: 'change' ,validator: validateName},
-                        { required: true, validator: validateName, trigger: 'blur' },
-                    ],
-                    web:[
-                        { trigger: 'change' ,type:'url', message: '请填写正确的公司网址'},
-                    ]
+                    // person:[
+                    //     { required: true, trigger: 'change' ,validator: validateName},
+                    //     { required: true, validator: validateName, trigger: 'blur' },
+                    // ],
+                    // web:[
+                    //     { trigger: 'change' ,type:'url', message: '请填写正确的公司网址'},
+                    // ]
                 },
                 selectData:[],
                 labelWidth:110,
-                basicInfo:{
-                    customerId:'3232',
-                    customerName:'萨达多撒',
-                    phone:'1',
-                    web:'http://dsadasdasd.com',
-                    person:'冯吸臣',
-                    text:'啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦啦'
-                },
-                optionData:[
-                    {
-                        label:'label1',
-                        value:'1'
-                    },
-                    {
-                        label:'label2',
-                        value:'2'
-                    },
-                    {
-                        label:'label3',
-                        value:'3'
-                    },
-                    {
-                        label:'label4',
-                        value:'4'
-                    },
-                ]
+                basicInfo:{},
             }
         },
         methods:{
@@ -162,6 +132,7 @@ import FieldBox from '~/components/FieldBox';
                  }
                 this.$http.get('get-customer-info-detail', param).then( r => {
                     this.basicInfo = r.data
+                    console.log('this.basicInfo====>',this.basicInfo)
                 }).catch( e => {
                     console.log('get-only')
                 })

@@ -86,7 +86,7 @@
     <div class="g-edit-input">
     <FormItem :label="label" :label-width="labelWidth">
 
-        <div class="text">{{value}}</div>
+        <div class="text">{{value || '暂无'}}</div>
                 
     </FormItem>
     </div>
@@ -98,7 +98,9 @@ import http from '~/plugins/http.js';
 
     export default {
         props:{
-            value:String,//数值
+            value:{
+              type:[String, Number],
+            },
             name:String,
             label:String,//名称
             labelWidth:Number,//标题宽度

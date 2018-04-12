@@ -89,6 +89,16 @@
              params:{}
         },
         data (){
+            const validatephone = (rule, value, callback) => {
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                console.log('dsdasdasdasd',value)
+                if (!phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
+                }
+            };
             return{
                 dateError:false,
                 effectError:false,
@@ -120,7 +130,9 @@
                         { required: true, message: '请填写客户联系人'}
                     ],
                     contactTel:[
-                        { required: true, message: '请填写客户联系人电话'}
+                        { required: true, message: '请填写客户联系人电话'},
+                        { required: true, trigger: 'blur' ,validator: validatephone},
+
                     ],
                     sourceId:[
                         { required: true, message: '请选择客户来源'}

@@ -91,7 +91,6 @@
         data (){
             const validatephone = (rule, value, callback) => {
                 let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
-                console.log('dsdasdasdasd',value)
                 if (!phone.test(value)) {
                     callback(new Error('请填写正确的联系方式'));
                 }else{
@@ -99,9 +98,33 @@
 
                 }
             };
+            const validateName = (rule, value, callback) => {
+                if (value === '') {
+                    this.canSubmit = false
+                    callback(new Error('请填写客户联系人'));
+                }else{
+                   
+                    this.$http.get('check-company', {company:value}).then( r => {
+                        this.canSubmit = true;
+                        if(r.message == "ok"){
+                            callback()
+                        }else{
+                           callback(new Error('客户名称不可重复')) 
+                        }
+                        console.log('company',r.data)
+                    }).catch( e => {
+                        this.canSubmit = false;
+                        callback(new Error('客户名称不可重复')) 
+
+                        
+                    })
+
+                }
+            };
             return{
                 dateError:false,
                 effectError:false,
+                canSubmit:true,
                 formItem:{
                 	subSourceId:'',
                 	sourceId:'',
@@ -121,7 +144,8 @@
                         { required: true, message: '请选择社区'}
                     ],
                     company:[
-                        { required: true, message: '请填写客户名称'}
+                        { required: true, message: '请填写客户名称'},
+                        { required: true, trigger: 'blur' ,validator: validateName},
                     ],
                     contactMail:[
                         { required: true, message: '请填写客户联系人邮箱',type:"email"}
@@ -170,8 +194,8 @@
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
-            console.log('newData',data)
-            this.$emit('newData', data);
+            console.log('newData',this.canSubmit)
+            this.$emit('newData', data,this.canSubmit);
         },
 
         methods:{

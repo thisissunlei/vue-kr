@@ -7,13 +7,13 @@
 
 		<div class="content">
 			<LabelText label="客户ID：" type="circle" style="width:30%">
-				{{customerBasic.customerId}}
+				{{customerBasic.id}}
 			</LabelText>
 			<LabelText label="客户名称："  type="circle" style="width:30%">
-				{{customerBasic.customerName}}
+				{{customerBasic.company}}
 			</LabelText>
 			<LabelText label="客户状态："  type="circle" style="width:30%">
-				{{customerBasic.status}}
+				{{customerBasic.stateName}}
 			</LabelText> 
 		</div>
 		<div class="tab-list">
@@ -105,12 +105,8 @@
 				 let param = {
 				 	customerId:params.customer
 				 }
-				this.$http.get('customer-info',param).then((res)=>{
-					this.customerBasic = {
-						status : res.data.status,
-						customerId : res.data.id,
-						customerName : res.data.customerName
-					}
+				this.$http.get('get-customer-info-detail',param).then((res)=>{
+					this.customerBasic = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

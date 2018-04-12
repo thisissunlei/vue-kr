@@ -20,7 +20,6 @@
             :loading="loading1"
             :disabled="disabled"
             @on-change="changeContent"
-            label-in-value='true'
             >
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>

@@ -52,7 +52,7 @@ a, a:hover, a:focus, a:visited {
     content:'\F123';
     font-size: 10px;
  }
-.v-button,.ivu-btn{
+.ivu-btn-primary,.ivu-btn-info,.ivu-btn-success,.ivu-btn-warning,.ivu-btn-error{
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }

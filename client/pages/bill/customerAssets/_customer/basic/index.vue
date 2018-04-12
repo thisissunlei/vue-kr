@@ -9,8 +9,8 @@
             </div>
             <div class="tab-content">
                 <!-- <Annex v-if="selectedTab == 'annex'"/> -->
-                <Waiting v-if="selectedTab != 'basic'" style="width: 794px;"/>
-                <Info v-if="selectedTab == 'basic'" />
+                <Waiting v-if="selectedTab != 'basic'" style="width: 794px;margin:0"/>
+                <Info v-if="selectedTab == 'basic'"  />
             </div>
         </div>
     </div>
@@ -76,7 +76,6 @@
             .tab-list{
                 width: 135px;
                 display: inline-block;
-                margin-right:20px;
                 .tab-span{
                     vertical-align: top;
                     display: block;

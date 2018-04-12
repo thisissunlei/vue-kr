@@ -88,6 +88,7 @@
                 openCreate:false,
                 upperError:'',
                 newPageData:{},
+                canSubmit:true,
 
             params:{
                 pageSize:15,
@@ -229,34 +230,26 @@
                         isSubmit = false
                     }
                 })
-                console.log('submitCreate',isSubmit)
-                if(!isSubmit){
+                console.log('submitCreate',isSubmit,this.canSubmit)
+                if(!isSubmit || !this.canSubmit){
                     return;
                 }
                 console.log('submitCreate-->data',this.newPageData)
-                this.$http.post('add-customer',this.newPageData, r => {
+                this.$http.post('add-customer',this.newPageData).then( r => {
                     this.openCreate = false;
                     this.getListData()
-                }, e => {
-                    this.isNewPageSubmit = false;
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=e.message;
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
                 })
 
             },
-            newCustomer(data){
+            newCustomer(data,submit){
                  if(data){
+                    this.canSubmit = submit;
                     this.newPageData = Object.assign({},data);
-                    var params = Object.assign({},data)
-                    // this.$http.post('post-create-from-field',params, r => {
-                    //     this.isNewPageSubmit = true;
-                    // }, e => {
-                    //     this.isNewPageSubmit = false;
-                    //     this.openMessage=true;
-                    //     this.MessageType="error";
-                    //     this.warn=e.message;
-                    // })   
+                    var params = Object.assign({},data)  
                 }
             }
         }

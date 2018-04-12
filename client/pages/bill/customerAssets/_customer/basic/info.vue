@@ -118,7 +118,8 @@ import FieldBox from '~/components/FieldBox';
                 },
                 selectData:[],
                 labelWidth:110,
-                basicInfo:{},
+                basicInfo:{
+                },
             }
         },
         methods:{

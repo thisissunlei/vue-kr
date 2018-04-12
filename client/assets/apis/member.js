@@ -40,4 +40,9 @@ export default {
         url: '/api/krspace-op-web/customer-center/add',
         method: 'post'
     },
+    //客户名称校验接口
+    'check-company': {
+        url: '/api/krspace-op-web/customer-center/check-company',
+        method: 'get'
+    },
 } 

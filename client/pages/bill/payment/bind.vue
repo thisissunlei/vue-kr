@@ -214,6 +214,7 @@ export default {
                               'ALIWEBPAY':'支付宝网银',
                               'BANKONLINE':'网银',
                               'BANLANCE':'余额支付',
+                              'FUNDS_TRANSFER ':'资金转移',
                               
                             }
                             return payWay[obj.row.payWay]

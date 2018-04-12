@@ -117,12 +117,19 @@ export default {
 				paymentId:params.paymentId
 			};
 			let payType={
-				'ALIAPPPAY':'支付宝app',
-				'ALIWEBPAY':'支付宝网银',
-				'WXPAY':'微信',
-				'BANKONLINE':'网银',
+				'NONE':'社区变更',
 				'BANKTRANSFER':'银行转账',
+				'ALIAPPPAY':'支付宝app',
+				'WXPAY':'微信',
+				'DEP_RENT':'押金转租',
+				'TRANSFER':'转移',
+				'RENT_DEP':'租金转押',
+				'ALIWEBPAY':'支付宝网银',
+				'BANKONLINE':'网银',
+				'BANLANCE':'余额支付',
+				'FUNDS_TRANSFER ':'资金转移'
 			}
+			
 			this.$http.get('get-payment-detail', from).then((res)=>{
 				let data=res.data;
 				this.basicInfo=data;

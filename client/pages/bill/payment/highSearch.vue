@@ -167,6 +167,10 @@ export default{
                 {
                     value:'BANLANCE',
                     label:'余额支付 '
+                },
+                {
+                    value:'FUNDS_TRANSFER',
+                    label:'资金转移'
                 }
             ],
 

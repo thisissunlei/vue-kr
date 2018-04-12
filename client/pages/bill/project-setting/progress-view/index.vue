@@ -577,13 +577,8 @@ export default {
             let leftList=document.getElementById('vue-chart-left-table-list');
             const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
             chartDom.scrollTop = leftList.scrollTop;
-            ganttChartScrollTop = leftList.scrollTop
-            if(isBottom<=0){
-                if(this.isLoading ){
-                   return;
-                }
-                this.getListData(this.params,true)
-            }
+            ganttChartScrollTop = leftList.scrollTop;
+
         },
         rightScroll(){
             if(!this.params.startTime || !this.params.endTime){

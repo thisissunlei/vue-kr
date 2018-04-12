@@ -18,9 +18,9 @@
                 />
             </div>
            
-             <div class="footer">
-                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;">确定</Button>
-                <Button type="text" size="small" @click="clearClick">取消</Button>
+             <div class="footer" style="padding: 3px 0px 5px 0px;">
+                <Button type="primary" size="small" @click="sureClick" style="margin-right:10px;width:60px;height:24px;">确定</Button>
+                <Button type="text" size="small" @click="clearClick" style="width:60px;height:24px;border-radius:4px;background:#fff;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, .2), 0 1px 4px rgba(0, 0, 0, .2);">取消</Button>
             </div>
         </div>
        

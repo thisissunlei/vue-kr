@@ -37,7 +37,7 @@ export default {
         this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
         if(this.tabs=='tab2'){
             this.mask=false;
-            // tabDom.style.overflow = 'visible';
+            tabDom.style.overflow = 'visible';
         }else{
              tabDom.style.overflow = 'hidden';
         }
@@ -47,7 +47,7 @@ export default {
             var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
             if(key=='tab2'){
-                // tabDom.style.overflow = 'visible';
+                tabDom.style.overflow = 'visible';
                 this.mask=false;
                 
             }else{
@@ -65,7 +65,7 @@ export default {
 <style lang="less" >
     .project-setting{
         .ivu-tabs{
-            overflow: hidden;
+            overflow: visible;
         }
         .nav-text.ivu-tabs-nav{
             width: 100%;

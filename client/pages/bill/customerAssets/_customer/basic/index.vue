@@ -22,7 +22,7 @@
     import utils from '~/plugins/utils';
     import Annex from './annex.vue'; 
     import Info from './info.vue'; 
-    import Waiting from '../Waiting.vue'; 
+    import Waiting from '../waiting.vue'; 
 
 
     export default {

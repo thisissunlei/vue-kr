@@ -12,9 +12,9 @@
 			<LabelText label="客户名称："  type="circle" style="width:30%">
 				{{customerBasic.customerName}}
 			</LabelText>
-			<!-- <LabelText label="客户状态："  type="circle" style="width:30%">
+			<LabelText label="客户状态："  type="circle" style="width:30%">
 				{{customerBasic.status}}
-			</LabelText> -->
+			</LabelText> 
 		</div>
 		<div class="tab-list">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
@@ -22,7 +22,8 @@
 		</div>
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
-            	<Waiting v-if="selectedTab!='account'"/>
+            	<Basic v-if="selectedTab=='basic'"/>
+            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'"/>
         </div>
 		
     </div>
@@ -35,6 +36,7 @@
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
     import Waiting from './waiting.vue'; 
+    import Basic from './basic/index.vue'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -42,9 +44,11 @@
 			SectionTitle,
 			LabelText,
 			Assets,
-			Waiting
+			Waiting,
+			Basic
 		},
 		data (){
+
 			return{
 				//一层Tab目录
 				firstTab:[{
@@ -69,7 +73,7 @@
 					name:'更多',
 					code:'more'
 				},],
-				selectedTab:'account',
+				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
 					customerName:'w',
@@ -117,6 +121,9 @@
 		mounted(){
 			this.getBasicInfo()
 			GLOBALSIDESWITCH('false');
+			let hash = window.location.hash.split('#')[1];
+			this.selectedTab = hash || 'basic'
+			GLOBALHEADERSET('客户会员')
 		}
 	
 	}
@@ -133,7 +140,7 @@
 		.tab-list{
 			margin-left: 25px;
 			height: 25px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			.tab-span{
 				font-size:14px;
 				color:#666;
@@ -144,6 +151,7 @@
 			.tab-active{
 				color:#4A90E2;
 				position: relative;
+				font-weight: 500;
 				&:after{
 					content:'';
 					display:inline-block;

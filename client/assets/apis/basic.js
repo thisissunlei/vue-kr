@@ -16,4 +16,9 @@ export default  {
       url: '/api/krspace-sso-web/sys-param/show?',
       method: 'get'
   },
+  // 获取枚举类接口(参数名：enmuKey)
+  'get-enmu-list': {
+      url: '/api/krspace-sso-web/sys/enmu?',
+      method: 'get'
+  },
 }

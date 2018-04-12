@@ -8,7 +8,7 @@
           </p> -->
        </div>
 
-       <div class='chart-detail'  @mouseover='leftOver' id="vue-chart-left-detail-list"> 
+       <div class='chart-detail' v-if="data" @mouseover='leftOver' id="vue-chart-left-detail-list"> 
            <ul>
               <li
                 v-for="(item,index) in data"

@@ -7,6 +7,7 @@
                             placeholder="请输入任务名称"
                             style="width: 252px"
                             @on-change="nameChange"
+                            disabled 
                         />
                     </Form-item>
 

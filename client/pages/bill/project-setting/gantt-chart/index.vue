@@ -370,6 +370,7 @@ export default {
                 month:+endArr[1],
                 day:+endArr[2]
             }
+
             if(endObj.month>12){
                 endObj.month = endObj.month -12;
                 endObj.year = endObj.year +1;
@@ -435,11 +436,10 @@ export default {
             };
             if(type=='week' || type =='day'){
                 var startToWeek = (new Date(start)).getDay();
-
                 var offset = 7+startToWeek-1;
                 if(startObj.day-offset<0){
                     startObj.month -=1;
-                    if(startObj.month<0){
+                    if(startObj.month<=0){
                         startObj.month = 12+ startObj.month;
                         startObj.year -=1;
                     }
@@ -450,7 +450,7 @@ export default {
                 }
             }else{
                 startObj.month -=1;
-                if(startObj.month<0){
+                if(startObj.month<=0){
                     startObj.month = 12+ startObj.month;
                     startObj.year -=1;
                 }

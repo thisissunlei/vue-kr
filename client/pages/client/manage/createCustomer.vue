@@ -224,13 +224,21 @@
             
             firstSourceChange(value){
                 console.log('firstSourceChange=======',value)
-                this.secondSource = this.firstSource.filter(item=>{
+                
+                let secondSource = []
+                let list = []
+                secondSource = this.firstSource.filter(item=>{
                     if(item.id == this.formItem.sourceId){
+                        list = item.subSources;
                         return true;
                     }
                     return false
                 })
-                console.log('secondSource',this.secondSource)
+                this.secondSource =list.map(item=>{
+                    item.value = item.id+'';
+                        item.label = item.name;
+                        return item;
+                });
             },
 
         }

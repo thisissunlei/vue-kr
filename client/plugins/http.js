@@ -21,6 +21,9 @@ axios.interceptors.request.use(config => {
   }
   if(config.url.indexOf('mockjs') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
+  }else if(config.url.indexOf('/st/') !==-1){
+    config.url = config.url.split('/st/')[1]
+    config.baseURL = 'http://st.krspace.cn';
   }else{
     config.baseURL = '/';
   } 

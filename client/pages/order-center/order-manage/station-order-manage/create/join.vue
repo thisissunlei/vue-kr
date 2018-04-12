@@ -1148,6 +1148,7 @@ import utils from '~/plugins/utils';
                 this.formItem.saleAmount = 0;
             },
             onResultChange:function(val){//组件互通数据的触发事件
+                console.log('onResultChange',val)
                 this.stationData = val;
                 
             },
@@ -1303,9 +1304,10 @@ import utils from '~/plugins/utils';
                 let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.guidePrice || item.price || 0;
-                    console.log('guidePrice',item.guidePrice)
+                    obj.guidePrice = item.guidePrice || item.seatPrice || 0;
+
                     obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice);
+
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));

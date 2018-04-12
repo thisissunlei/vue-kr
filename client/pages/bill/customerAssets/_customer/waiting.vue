@@ -2,7 +2,7 @@
 
 <template>	
     <div class="waiting">
-		<span class="text">敬请期待</span>
+		<span class="waiting-text">敬请期待</span>
     </div>
 	
 
@@ -34,7 +34,7 @@
 		height: 90px;
 		line-height: 90px;
 		padding:10px;
-		.text{
+		.waiting-text{
 			display:block;
 			background-color: #F5F6FA;
 			border-radius: 4px;

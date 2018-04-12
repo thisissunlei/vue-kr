@@ -1,7 +1,7 @@
 
 
 <template>  
-    <div class="assets-manage">
+    <div class="assets-manage basic-form">
        <Form ref="basicInfo" :model="basicInfo" label-position="left">
              <Row>  
               
@@ -28,22 +28,22 @@
                 </Col>
                 <Col class="col">
                     <FieldBox label="公司规模：" 
-                        :value="basicInfo.scale" 
+                        :value="basicInfo.scaleName" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="行业分类：" 
-                        :value="basicInfo.industryId" 
+                        :value="basicInfo.industryName" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="融资轮次：" 
-                        :value="basicInfo.roundId" 
+                        :value="basicInfo.roundName" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">
                     <FieldBox label="运营状态：" 
-                        :value="basicInfo.state" 
+                        :value="basicInfo.stateName" 
                         :label-width='labelWidth'/>
                 </Col>
                 <Col class="col">

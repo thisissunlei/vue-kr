@@ -8,7 +8,8 @@
                 :key="index" @click='selectTab(item.code)' :class="{'tab-active':selectedTab==item.code}">{{item.name}}</span>
             </div>
             <div class="tab-content">
-                <Annex v-if="selectedTab == 'annex'"/>
+                <!-- <Annex v-if="selectedTab == 'annex'"/> -->
+                <Waiting v-if="selectedTab != 'basic'" style="width: 794px;"/>
                 <Info v-if="selectedTab == 'basic'" />
             </div>
         </div>
@@ -21,12 +22,14 @@
     import utils from '~/plugins/utils';
     import Annex from './annex.vue'; 
     import Info from './info.vue'; 
+    import Waiting from '../Waiting.vue'; 
 
 
     export default {
         name:'orderManange',
         components:{
             Annex,
+            Waiting,
             Info
         },
         data (){
@@ -65,12 +68,15 @@
 </script>
 <style lang="less" scoped>
     .assets-manage{
+        display: flex;
+        flex-direction:row;
         .asset-content{
             padding-left: 25px;
             display: flex;
             .tab-list{
                 width: 135px;
                 display: inline-block;
+                margin-right:20px;
                 .tab-span{
                     vertical-align: top;
                     display: block;

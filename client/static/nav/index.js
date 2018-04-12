@@ -211,6 +211,7 @@
 
             if (item.menuItems && item.menuItems.length) {
                 href = item.menuItems[0].menuItems[0].router;
+                item.type = item.menuItems[0].menuItems[0].type || ''
             }
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）

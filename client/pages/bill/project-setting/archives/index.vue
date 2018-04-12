@@ -290,6 +290,7 @@ import AddArchives from './add-archives';
                     this.openMessage=true;
                     this.MessageType="error";
                     this.warn=error.message;
+                    this.allowSubmit = true;
                 })
             },
             //信息提示框

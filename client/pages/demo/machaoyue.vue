@@ -7,7 +7,7 @@
 
     <div>
          <Card >
-             <p slot="title">
+            <p slot="title">
                 section1
             </p>
             <Form ref="formItemOne" :model="formItem" :rules="ruleValidateOne" class="demo-m" label-position="left">

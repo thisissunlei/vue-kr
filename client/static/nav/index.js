@@ -74,7 +74,11 @@
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
         var j_li = document.getElementsByName(value)[0];
-        j_li.setAttribute("class", "active");
+        if(j_li){
+            j_li.setAttribute("class", "active");
+        }else{
+            return
+        }
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -394,7 +398,7 @@
     var globalNav = new GlobalNav();
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
-    // global.GLOBALHEADERSET = Router.setDefaultHeader;
+    global.GLOBALHEADERSET = Router.setDefaultHeader;
 
 
     Router.init();

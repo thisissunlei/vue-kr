@@ -391,6 +391,7 @@ export default {
                 }];
                 for (var year = startObj.year; ;) {
                     year++;
+                    console.log("----",year)
                     if(year == endObj.year){
                         yearArr.push({
                             year:endObj.year,
@@ -402,7 +403,7 @@ export default {
                     yearArr.push({
                         year:year,
                         start:year+'-'+1+'-'+1,
-                        end:year+'-'+endObj.month+'-'+endObj.day
+                        end:year+'-'+12+'-'+publicFn.getMonthDayNum(endObj.year,12)
                     });
                 }
 
@@ -410,7 +411,7 @@ export default {
            for (var i = 0; i < yearArr.length; i++) {
                yearArr[i].dayNum = utils.dateDiff(yearArr[i].start,yearArr[i].end)+1;
            }
-
+            
            this.years = [].concat(yearArr);
         },
         //下拉事件被触发

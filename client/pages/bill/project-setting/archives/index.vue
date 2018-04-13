@@ -1,7 +1,7 @@
 <template>
 <div class="archives">
     <div class="u-search" >
-        <Buttons type="primary" label='新建项目' @click="newArchives" checkAction='seat_order_in_export'/>
+        <Button type="primary"  @click="newArchives">新建项目</Button>
     </div>
     
     <div class="u-table">

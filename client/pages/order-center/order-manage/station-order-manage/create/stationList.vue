@@ -81,6 +81,12 @@ import dateUtils from 'vue-dateutils';
                     }
                      
                 });
+                // stationVos = stationVos.map(value=>{
+                //     console.log('======map')
+                //     value.originalPrice = value.guidePrice;
+                //     return value
+                // })
+                console.log("on-station-change", stationVos)
                 this.$emit("on-station-change", stationVos); 
 
             }

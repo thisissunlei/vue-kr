@@ -330,6 +330,7 @@ export default {
                     this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
                 }
                 this.isLoading = false;
+                this.scrollPosititon();
 
             }).catch((error)=>{
                 this.$Notice.error({

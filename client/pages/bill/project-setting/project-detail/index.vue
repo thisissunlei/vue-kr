@@ -331,6 +331,17 @@ export default {
                 }
                 this.isLoading = false;
                 this.scrollPosititon();
+                 setTimeout(() => {
+                    var leftDom=document.getElementById('vue-chart-left-detail-list');
+                    var rightDom = document.getElementById("vue-chart-right-draw-content");
+                    var clientHeight = document.documentElement.clientHeight;
+                    if(leftDom){
+                        leftDom.style.maxHeight = clientHeight - 362+"px";
+                    }
+                    if(rightDom){
+                        rightDom.style.maxHeight = clientHeight - 362 +"px";
+                    }
+                }, 200);
 
             }).catch((error)=>{
                 this.$Notice.error({

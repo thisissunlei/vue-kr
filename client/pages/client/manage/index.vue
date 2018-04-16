@@ -225,32 +225,30 @@
                 var newPageRefs = this.$refs.fromFieldNewPage.$refs;
                 var isSubmit = true;
                 newPageRefs[name].validate((valid,data) => {
-                    if (!valid) {
+                    console.log('======validate',this.canSubmit)
+                    if (!valid || !this.canSubmit) {
 
                         isSubmit = false
+                    }else{
+                       this.$http.post('add-customer',this.newPageData).then( r => {
+                            this.openCreate = false;
+                            this.getListData()
+                        }).catch( e => {
+                            this.$Notice.error({
+                                title:e.message
+                            });
+                        })
                     }
                 })
-                console.log('submitCreate',isSubmit,this.canSubmit)
-                if(!isSubmit || !this.canSubmit){
-                    return;
-                }
-                console.log('submitCreate-->data',this.newPageData)
-                this.$http.post('add-customer',this.newPageData).then( r => {
-                    this.openCreate = false;
-                    this.getListData()
-                }).catch( e => {
-                    this.$Notice.error({
-                        title:e.message
-                    });
-                })
+
+                
 
             },
             newCustomer(data,submit){
-                 if(data){
-                    this.canSubmit = submit;
-                    this.newPageData = Object.assign({},data);
-                    var params = Object.assign({},data)  
-                }
+                console.log('newCustomer',submit)
+                this.canSubmit = submit;
+                this.newPageData = Object.assign({},data);
+                var params = Object.assign({},data)  
             }
         }
     }

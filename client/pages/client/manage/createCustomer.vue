@@ -105,8 +105,9 @@
                 }else{
                    
                     this.$http.get('check-company', {company:value}).then( r => {
-                        this.canSubmit = true;
                         if(r.message == "ok"){
+                            this.canSubmit = true;
+                            console.log('=======this.canSubmit = true;')
                             callback()
                         }else{
                            callback(new Error('客户名称不可重复')) 
@@ -146,6 +147,7 @@
                     company:[
                         { required: true, message: '请填写客户名称'},
                         { required: true, trigger: 'blur' ,validator: validateName},
+                        { required: true, trigger: 'change' ,validator: validateName},
                     ],
                     contactMail:[
                         { required: true, message: '请填写客户联系人邮箱',type:"email"}
@@ -223,13 +225,12 @@
             },
             
             firstSourceChange(value){
-                console.log('firstSourceChange=======',value)
-                
+        
                 let secondSource = []
                 let list = []
                 secondSource = this.firstSource.filter(item=>{
                     if(item.id == this.formItem.sourceId){
-                        list = item.subSources;
+                        list = item.subSources || [];
                         return true;
                     }
                     return false

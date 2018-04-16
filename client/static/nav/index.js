@@ -512,7 +512,7 @@
                             primaryText: '客户管理',
                             router: 'client/manage',
                             type:'vue',
-                            menuCode: 'customer_assets'
+                            menuCode: 'customer_center'
                         },
                         {
                             primaryText: "客户管理员",

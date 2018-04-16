@@ -4,9 +4,13 @@ module.exports = {
         url: '/api/krspace-erp-web/wf/request-attachment/add',
         method: 'post'
     }, 
-    //入驻订单列表
+    
     'get-vue-upload-url': {
         url: '/api/krspace-op-web/sys/upload-policy',
         method: 'get'
     },
+    'get-enum-all-data':{
+        url:'api/krspace-sso-web/sys/enmu',
+        method:'get'
+    }
 }

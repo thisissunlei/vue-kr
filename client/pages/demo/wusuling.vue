@@ -1,72 +1,41 @@
 <template>
-  <section class="container">
     <div>
-     <krInput 
-       :name="params"
-       @onEnter="keyEnter"
-       @onChange="inputChange"
-     />
-     
+       <FlagLabel label="你好中国" 
+            :data="timeObj"
+            :startDate="{
+                year:2018,
+                month:3,
+                dayNum:31
+            }"
+            minCalibration="50"
+        />
     </div>
-  </section>
 </template>
 
 <script>
-import krInput from '~/components/EnglishInput.vue'
-
+import FlagLabel from '~/components/FlagLabel';
+import ToolTip from '~/components/ToolTip';
 export default {
-     transition (to, from) {
-        if (!from) return 'slide-left'
-        return +to.query.page < +from.query.page ? 'slide-right' : 'slide-left'
+    components:{
+        FlagLabel,
+        ToolTip
     },
     data() {
         return{
-           params:{
-              serialNumber:'' 
-           } 
+            timeObj:{
+                actualEndTime:1521590400000,
+                actualStartTime:1520726400000,
+                planEndTime:1521504000000,
+                planStartTime:1520640000000
+            }
         }
     },
-    components: {
-        krInput
-    },
     methods:{
-      keyEnter(ev){
-        console.log(';;;;',ev,this.params);
-      },
-      inputChange(ev){
-        console.log('form-22',this.params);
-      }
+      
     }
 }
 </script>
 
-<style>
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
+<style lang='less' scoped>
+     
 </style>

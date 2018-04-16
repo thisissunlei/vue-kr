@@ -12,7 +12,7 @@
     .ui-reminder{
         text-align: center;
         font-size: 18px;
-        line-height: 18px;
+        line-height: 26px;
         color: #333333;
     }
 }

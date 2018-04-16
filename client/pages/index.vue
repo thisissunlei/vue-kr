@@ -23,10 +23,20 @@
     import Buttons from '~/components/Buttons';
 
     export default {
-         components:{
+        components:{
             Buttons
-         },
-         methods:{
+        },
+        mounted(){
+           
+            // window.onresize = function (params) {
+            //     console.log("000000000")
+            //     dom.style.height = document.documentElement.clientHeight-130 + "px"
+            // }
+            // var dom = document.getElementById('layout-content-main');
+            // dom.style.height = document.documentElement.clientHeight-130 + "px"
+        },
+         
+        methods:{
             buttonClick(){
                 //console.log('--pp',window.resourcesCode);
             }

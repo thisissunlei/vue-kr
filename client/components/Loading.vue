@@ -1,3 +1,21 @@
+
+<template lang="html">
+  <div>
+    <Spin fix style='background:#fff;'>
+        <div class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+    </Spin>
+  </div>
+</template>
+<script>
+
+export default {
+ 
+}
+</script>
+
 <style scoped>
   .spinner {
   width: 60px;
@@ -40,19 +58,3 @@
   }
 }
 </style>
-<template lang="html">
-  <div>
-    <Spin fix style='background:#fff;'>
-        <div class="spinner">
-          <div class="double-bounce1"></div>
-          <div class="double-bounce2"></div>
-        </div>
-    </Spin>
-  </div>
-</template>
-
-<script>
-export default {
- 
-}
-</script>

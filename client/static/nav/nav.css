@@ -2,7 +2,7 @@
     
     .layout{
         min-height:100%;
-        overflow-x: hidden;
+        overflow: hidden;
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
@@ -16,13 +16,12 @@
         margin: 15px;
         overflow: hidden;
         border-radius: 4px;
-        padding-bottom: 50px;
-        padding-top: 65px;
+        padding-bottom: 20px;
+        padding-top: 63px;
     }
     .layout-content-main{
          min-height: 200px;
          background: #fff;
-         padding-bottom: 10px;
     }
     .layout-copy{
         text-align: center;

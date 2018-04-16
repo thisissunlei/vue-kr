@@ -56,7 +56,6 @@ export default {
         tabsClick(key){
            this.key=key;
            sessionStorage.setItem('billMask',key);
-           // utils.addParams({});
         },
          getBillType(){
                 this.$http.get('get-bill-type', '').then((res)=>{

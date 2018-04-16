@@ -155,24 +155,28 @@
                 style="width: 100px"
                 clearable
             >
-                <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
+                <Option v-for="item in discountList" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
         </div>
         <Tabs value="dailyList" :animated="false" @on-click="tabsClick">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
                      <div class="u-table">
                         <Table border :columns="columns" :data="dailyData"></Table>
-                        <div style="margin: 10px;overflow: hidden">
-                            <div style="float: right;">
-                                <Page 
-                                    :current="tabParams.page"
-                                    :total="totalCount"
-                                    :page-size="tabParams.pageSize" 
-                                    show-total 
-                                    show-elevator
-                                    @on-change="changePage"
-                                ></Page>
-                            </div>
+                        <div  class='list-footer'>
+                                <div style="display:inline-block;">
+                                    <Button type='primary' @click='submitExport' style="margin-right:20px;">导出</Button>
+                                    <Button type='primary' @click='submitStatistical'>统计</Button>
+                                </div>
+                                <div style="float: right;">
+                                    <Page 
+                                        :current="tabParams.page"
+                                        :total="totalCount"
+                                        :page-size="tabParams.pageSize" 
+                                        show-total 
+                                        show-elevator
+                                        @on-change="changePage"
+                                   />
+                                </div>
                         </div>
                     </div>
                 </Tab-pane>
@@ -213,13 +217,15 @@ import KrField from '~/components/KrField';
                 MessageType:'',
                 openMessage:false,
 
+                discountList:[],
+
                 tabParams:{
                     page:1,
                     pageSize:1000,
                     customerName:''
                 },
                 formItem:{
-
+                    orderNum:dateUtils.dateToStr("YYYY-MM-DD",new Date())
                 },
                 totalCount:0,
 
@@ -273,24 +279,32 @@ import KrField from '~/components/KrField';
                     {
                         title: '最近可租起始日',
                         key: 'cTime',
-                        align:'center'
+                        align:'center',
+                        render(tag, params){
+                            return params.row.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)):<span>-</span>;
+                        }
                     },
                     {
                         title: '最近可租结束日',
                         key: 'cTime',
-                        align:'center'
+                        align:'center',
+                        render(tag, params){
+                            return params.row.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)):<span>-</span>;
+                        }
                     }
                 ]    
             }
         },
         mounted(){
             this.getTableData(this.tabParams);
+            this.getDiscount();
+            window.addEventListener("scroll",this.onScrollListener)
         },
         methods:{
             //获取列表数据
             getTableData(params){
                 this.$http.get('project-archives-list', params).then((res)=>{
-                    this.dailyData=res.data.items;
+                    this.dailyData=res.data.items.concat(res.data.items);
                     this.totalCount=res.data.totalCount;
                 }).catch((error)=>{
                     this.openMessage=true;
@@ -307,6 +321,25 @@ import KrField from '~/components/KrField';
             changePage(page){
                 this.tabParams.page=page;
                 this.getTableData(this.tabParams);
+            },
+            getDiscount(){
+                var discountArr=[];
+                var index=0.1;
+                for(var i=0;i<100;i++){
+                    discountArr.push({value:index,label:index})
+                    index=index+0.1;
+                }
+                this.discountList=discountArr;
+            },
+            submitExport(){
+
+            },
+            submitStatistical(){
+
+            },
+            onScrollListener(){
+                this.scroll = document.body.scrollTop;
+                console.log('lll',this.scroll)
             }
         }
     }
@@ -331,6 +364,7 @@ import KrField from '~/components/KrField';
         .tab-select{
             position: absolute;
             right:50px;
+            z-index: 100;
         }
         .u-table{
             .ivu-table-tbody{
@@ -339,6 +373,9 @@ import KrField from '~/components/KrField';
                         background:#f6f6f6
                     }
                 }
+            }
+            .list-footer{
+                margin:20px 0;
             }
         }
     }

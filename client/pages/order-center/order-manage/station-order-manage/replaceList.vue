@@ -4,7 +4,8 @@
             <div class='list-banner'>
                     <div class='list-btn'>
                         <Button type="primary" @click="jumpJoin" class='join-btn'>入驻</Button>
-                        <Button type="primary" @click="jumpRenew">续租</Button>
+                        <Button type="primary" @click="jumpRenew" class='join-btn'>续租</Button>
+                        <Button type="primary" @click="jumpReplace">换租</Button>
                     </div>
 
                     <div class='list-search'>
@@ -91,7 +92,7 @@
     
 
     export default {
-        name:'Join',
+        name:'Replace',
         components:{
             HeightSearch,
             Nullify,
@@ -304,7 +305,7 @@
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='join'){
+                    if(nextProps.mask=='replace'){
                        this.getListData(this.switchParams);
                        this.params=this.switchParams; 
                     }
@@ -314,12 +315,11 @@
         
         mounted(){
             let mask=this.$route.query.mask;
-            console.log('join==========',mask)
-            if(!mask||mask=='join'){
-               sessionStorage.setItem('paramsJoin',JSON.stringify(this.$route.query));
+            if(!mask||mask=='replace'){
+               sessionStorage.setItem('paramsReplace',JSON.stringify(this.$route.query));
             }
 
-            let jsonJoin=JSON.parse(sessionStorage.getItem('paramsJoin'));
+            let jsonJoin=JSON.parse(sessionStorage.getItem('paramsReplace'));
             this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15});
             this.getListData(this.switchParams);
             this.params=this.switchParams;
@@ -378,7 +378,7 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
-                this.params.mask='join';
+                this.params.mask='replace';
                 this.params.page=1;
                 this.params.pageSize=15;
                 this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
@@ -389,7 +389,7 @@
             },
 
             submitLowerSearch(){
-                this.params.mask='join';
+                this.params.mask='replace';
                 utils.addParams(this.params);
             },
 
@@ -430,6 +430,9 @@
 
             jumpRenew(){
                 window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
+            },
+            jumpReplace(){
+                window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
             },
 
             jumpView(params){
@@ -506,7 +509,7 @@
             padding:0 0 0 20px;
             .list-btn{
                 display:inline-block;
-                width:20%;
+                width:40%;
                 .join-btn{
                     margin-right:30px;
                 }
@@ -514,7 +517,7 @@
             .list-search{
                 margin-bottom:10px;
                 display:inline-block;
-                width:80%;
+                width:60%;
                 text-align:right;
                 .lower-search{
                     display:inline-block;

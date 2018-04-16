@@ -140,7 +140,7 @@ export default {
 
 <style lang="less" scoped> 
 .g-order-detail{
-		margin:-10px;
+		// margin:-10px;
 		.m-detail-header{
 			height:50px;
 			border-bottom: 1px solid #E8E9E9;

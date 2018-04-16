@@ -77,12 +77,16 @@
                         </Col>
                         
                         <Col >
+                            
                             <Table ref="oldStationTable" :columns="oldColumns" :data="oldStation" @on-selection-change="selectRow" />
                            
                         </Col>
+                        <Col>
+                            <div class="error" v-show="errorObj.oldStation == true">请选择要更换的原工位</div>
+                        </Col>
                     </Row>
                 </Form>
-                <div class="buttons">
+                <div class="buttons" style="margin-top:20px">
 
                     <Button type="ghost" @click="previous">上一步</Button>
                     <span class="between"></span>
@@ -232,11 +236,32 @@
 
     export default {
         data() {
+            const validateChangeTime = (rule, value, callback) => {
+                var today = new Date()
+                today = today.setDate(today.getDate()+1);
+                today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
+                today = new Date(today).getTime()
+                if (value === '') {
+                    callback(new Error('请先选择换租服务开始日'));
+                } else if(value.getTime() < today){
+                    callback(new Error('换租服务开始日不得小于等于今日'));
+                }else if(value.getTime() > this.oldStation[0].endDate){
+                     callback(new Error('换租服务开始日不得大于原结束日期'));
+                }else{
+                     callback();
+                }
+            };
+            console.log('data')
             return {
                 //订单模式（create：创建中；view：预览）
                 orderStatus:'create',
-                status:0,
+                //错误提示
+                errorObj:{
+                    oldStation:false,
+                },
+                status:1,
                 rows:4,
+                oldEndTime:new Date(),
                 //优惠信息
                 saleList:[],
                 salerName:'请选择',
@@ -244,7 +269,8 @@
                 selectedOldStation:[],
                 //表单数据
                 formItem:{
-                    saleTime:new Date()
+                    saleTime:new Date(),
+                    beginTime:''
                 },
                 getFloor:new Date(),
                 //step1校验规则
@@ -267,7 +293,7 @@
                 },
                 ruleValidateTwo:{
                     beginTime:[
-                        { required: true, type: 'date',message: '请选择开始时间', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateChangeTime},
                     ]
                 },
                 communityList:[{
@@ -277,14 +303,53 @@
                 oldStation:[],
                 oldColumns:[
                     {
-                        type: 'selection',
                         width: 60,
                         align: 'center',
+                        renderHeader(h, obj){
+                           return h('Checkbox', {
+                                    on:{
+                                        'on-change':(event)=>{
+                                            this.selectAll()
+                                        },
+                                    }
+                                },'')
+                             
+                        },
+                        render: (h, params) => {
+                            
+                            return h('Checkbox', {
+                                    props: {
+                                        disabled:false
+                                    },
+                                    on:{
+                                        'on-change':(event)=>{
+                                            this.selectRow(params.row._index)
+                                        },
+                                    }
+                                },'')
+                        }
+
                     },
                     {
-                     title: '工位/房间编号',
-                     key: 'seatName',
-                     align:'center' 
+                        title: '工位/房间编号',
+                        key: 'seatName',
+                        align:'center' ,
+                        render(h, obj){
+                            if(obj.row.timeType == 'error'){
+                                return h('span', { 
+                                    style: {
+                                        color:'#FF6868'
+                                    }       
+                                }, obj.row.seatName);
+                            }else{
+                                return h('span', { 
+                                    style: {
+                                        color:'#495060'
+                                    }       
+                                }, obj.row.seatName);
+                            }
+                             
+                        }
                     },
                     {
                             title: '类型',
@@ -298,41 +363,86 @@
                                 }else{
                                     typeName = "开放工位"
                                 }
-                                return typeName
+                                if(params.row.timeType == 'error'){
+                                    return h('span', { 
+                                        style: {
+                                            color:'#FF6868'
+                                        }       
+                                    }, typeName);
+                                }else{
+                                    return h('span', { 
+                                        style: {
+                                            color:'#495060'
+                                        }       
+                                    }, typeName);
+                                }
                             }
-                        },
-                    {
-                        title:'工位可容纳人数',
-                        key:'capacity',
-                        align:'center'  
                     },
                     {
-                     title: '标准单价(元/月)',
-                     key: 'originalPrice',
-                     align:'center' 
-                    },
-                    {
-                     title: '开始日期',
+                     title: '原服务开始日',
                      key: 'startDate',
                      align:'center',
                      render(tag, params){
                          let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
-                         return time;
+                         if(params.row.timeType == 'error'){
+                             return tag('span', { 
+                                 style: {
+                                     color:'#FF6868'
+                                 }       
+                             }, time);
+                         }else{
+                             return tag('span', { 
+                                 style: {
+                                     color:'#495060'
+                                 }       
+                             }, time);
+                         }
                      }  
                     },
                     {
-                     title: '结束日期',
+                     title: '原服务结束日',
                      key: 'endDate',
                      align:'center',
                      render(tag, params){
                          let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
-                         return time;
+                          if(params.row.timeType == 'error'){
+                             return tag('span', { 
+                                 style: {
+                                     color:'#FF6868'
+                                 }       
+                             }, time);
+                         }else{
+                             return tag('span', { 
+                                 style: {
+                                     color:'#495060'
+                                 }       
+                             }, time);
+                         }
                      }  
                     },
                     {
-                     title: '小计',
+                     title: '预更换服务期',
                      key: 'originalAmount',
-                     align:'center' 
+                     align:'center',
+                     render(tag,params){
+                        let time = '--'
+                        if(params.row._checked){
+                            time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.beginTime))+'至'+dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
+                        }
+                        if(params.row.timeType == 'error'){
+                             return tag('span', { 
+                                 style: {
+                                     color:'#FF6868'
+                                 }       
+                             }, time);
+                         }else{
+                             return tag('span', { 
+                                 style: {
+                                     color:'#495060'
+                                 }       
+                             }, time);
+                         }
+                     }
                     }
             ],
 
@@ -353,7 +463,8 @@
         },
          mounted(){
             GLOBALSIDESWITCH("false");
-            GLOBALHEADERSET('订单合同')
+            GLOBALHEADERSET('订单合同');
+            this.getOldStation()
         },
         watch:{
             getFloor(){
@@ -380,7 +491,15 @@
 
                 })
             }
-           }
+           },
+           selectedOldStation(value){
+            if(value.length){
+                this.errorObj.oldStation = false;
+            }else{
+                this.errorObj.oldStation = true;
+
+            }
+           },
         },
         methods: {
             changeSaler(value){
@@ -390,6 +509,10 @@
                 this.formItem.saleTime = value;
             },
             next(name){
+                if(name == 'formItemTwo' && !this.selectedOldStation.length){
+                    this.errorObj.oldStation = true;
+                    return
+                }
                 this.$refs[name].validate((valid) => {
                     if(valid){
                         if(name == 'formItemOne'){
@@ -474,8 +597,6 @@
             getOldStation(){
                 this.$http.get('join-bill-detail', {id:10551}).then( r => {
                     this.oldStation = r.data.orderSeatDetailVo.map(item=>{
-                        item._checked = false;
-                        item._disabled = false
                         return item
                     })
                 }).catch( e => {
@@ -483,31 +604,53 @@
                 })
             },
             changeBeginTime(value){
-                this.oldStation = this.oldStation.map((item,index)=>{
-                    console.log('-----',index,'------index/2',index/2 )
-                    if(index%2 ==0){
-                        //设置为不可选
-                        item._disabled = true
-                         // item._checked = true设置为选中状态
+                //出发更新列表中的欲更换信息
+                var today = new Date()
+                today = today.setDate(today.getDate()+1);
+                today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
+                today = new Date(today).getTime()
+                //选择日期小于当前日+1或大于原服务结束日，否则全部不可选
+                if(new Date(value).getTime()<today || new Date(value).getTime()>this.oldStation[0].endDate){
+                    this.oldStation = this.oldStation.map((item,index)=>{
+                        item.changeBegin = ''
+                        return item
+                    })
+                    return
+                }else{
+                    this.oldStation = this.oldStation.map((item,index)=>{
+                        item.beginTime = value ;
+                        return item
+                    })
+                }
 
-                    }
+                if(this.selectedOldStation.length){
+                    this.oldStation = this.oldStation.map((item,index)=>{
+                        if(this.selectedOldStation.indexOf(item.seatId) != -1){
+                            //判断当前已选工位是否符合开始时间
+                            if(value<item.startDate || value>item.endDate){
+                                item.timeType='error';
+                                this.errorObj.errorRow = true;
+                            }else{
+                                item.timeType='';
+                                this.errorObj.errorRow = false;
+                            }
+                        }
+                        // item._checked = true设置为选中状态
+                        return item
+                    })
 
-                    return item
-                })
+                }
             },
-            changeCheckBox(value){
-                console.log('changeCheckBox',value)
+            selectRow(index){
+                console.log('selectRow',index)
             },
-            selectRow(selection){
-                let selectionList = [];
-                selectionList = selection.map((item)=>{
-                    return item.seatId
-                })
-                this.selectedOldStation = selectionList;
-                console.log('selectionList',selectionList)
+            selectAll(){
+                console.log('selectAll')
             }
         }
     }
+
+
 </script>
 <style lang="less"> 
     .create-order{
@@ -527,6 +670,9 @@
         }
         .ivu-card-head{
             background-color: rgb(247, 247, 247);
+        }
+        .error{
+            color:red;
         }
     }
 </style>

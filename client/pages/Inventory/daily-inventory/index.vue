@@ -1,6 +1,6 @@
 <template>
   <div class="daily-inventory"> 
-    <div class='daily-header'>
+    <div class="daily-header">
            <Form ref="formItem" :model="formItem" label-position="left">
                 <Form-item label="库存日期" class='daily-form'>
                     <DatePicker 
@@ -18,7 +18,7 @@
                 </Form-item>
                 <Form-item label="库存状态" class='daily-form'> 
                     <Select 
-                        v-model="formItem.communityId" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入库存状态" 
                         style="width: 200px"
                         multiple
@@ -29,13 +29,13 @@
                 </Form-item>
                 <Form-item label="社区" class='daily-form' style="width:400px">
                     <Select 
-                        v-model="formItem.orderType" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入城市" 
                         style="width: 100px;margin-right:10px;"
                         clearable
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in communityList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -43,13 +43,13 @@
                         </Option>
                    </Select>
                    <Select 
-                        v-model="formItem.orderType" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入社区" 
                         style="width: 100px;margin-right:10px;"
                         clearable
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in communityList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -57,13 +57,13 @@
                         </Option>
                    </Select>
                    <Select 
-                        v-model="formItem.orderType" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入楼层" 
                         style="width: 100px"
                         clearable
                     >
                         <Option 
-                            v-for="item in typeList" 
+                            v-for="item in communityList" 
                             :value="item.value" 
                             :key="item.value"
                         >
@@ -84,7 +84,7 @@
                 </Form-item>
                 <Form-item label="商品类型" class='daily-form'> 
                     <Select 
-                        v-model="formItem.communityId" 
+                        v-model="formItem.customerName" 
                         placeholder="请输入商品类型" 
                         style="width: 200px"
                         clearable
@@ -94,7 +94,7 @@
                 </Form-item>
                 <Form-item label="价格" class='daily-form' style="width:400px;margin-right:10px;"> 
                     <Select 
-                        v-model="formItem.communityId" 
+                        v-model="formItem.customerName" 
                         style="width: 100px;margin-right:10px;"
                         clearable
                     >
@@ -123,14 +123,14 @@
                 </Form-item>
                 <Form-item label="商品属性" class='daily-form'> 
                     <Select 
-                        v-model="formItem.communityId" 
+                        v-model="formItem.customerName" 
                         style="width: 100px;margin-right:10px;"
                         clearable
                     >
                         <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
                    </Select> 
                    <Select 
-                        v-model="formItem.communityId" 
+                        v-model="formItem.customerName" 
                         style="width: 100px"
                         clearable
                     >
@@ -158,11 +158,11 @@
                 <Option v-for="item in discountList" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
         </div>
-        <Tabs value="dailyList" :animated="false" @on-click="tabsClick">
+        <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
-                     <div class="u-table">
+                     <div class="daily-table">
                         <Table border :columns="columns" :data="dailyData"></Table>
-                        <div  class='list-footer'>
+                        <div  class='list-footer fixed-footer'>
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitExport' style="margin-right:20px;">导出</Button>
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
@@ -218,6 +218,7 @@ import KrField from '~/components/KrField';
                 openMessage:false,
 
                 discountList:[],
+                communityList:[],
 
                 tabParams:{
                     page:1,
@@ -225,7 +226,8 @@ import KrField from '~/components/KrField';
                     customerName:''
                 },
                 formItem:{
-                    orderNum:dateUtils.dateToStr("YYYY-MM-DD",new Date())
+                    orderNum:dateUtils.dateToStr("YYYY-MM-DD",new Date()),
+                    customerName:''
                 },
                 totalCount:0,
 
@@ -298,13 +300,14 @@ import KrField from '~/components/KrField';
         mounted(){
             this.getTableData(this.tabParams);
             this.getDiscount();
-            window.addEventListener("scroll",this.onScrollListener)
+            var dom=document.getElementById('layout-content-main');
+            dom.addEventListener("scroll",this.onScrollListener)
         },
         methods:{
             //获取列表数据
             getTableData(params){
                 this.$http.get('project-archives-list', params).then((res)=>{
-                    this.dailyData=res.data.items.concat(res.data.items);
+                    this.dailyData=res.data.items.concat(res.data.items).concat(res.data.items).concat(res.data.items);
                     this.totalCount=res.data.totalCount;
                 }).catch((error)=>{
                     this.openMessage=true;
@@ -337,9 +340,18 @@ import KrField from '~/components/KrField';
             submitStatistical(){
 
             },
-            onScrollListener(){
-                this.scroll = document.body.scrollTop;
-                console.log('lll',this.scroll)
+            onScrollListener(){    
+                var dom=document.getElementById('layout-content-main');
+                var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                var classVal = headDom.getAttribute("class");
+                if(dom.scrollTop>=294){
+                    headDom.setAttribute("class",'daily-head-class');
+                }else{
+                    if(classVal){
+                        classVal = classVal.replace("daily-head-class","");
+                        headDom.setAttribute("class",classVal);
+                    }
+                }
             }
         }
     }
@@ -366,16 +378,20 @@ import KrField from '~/components/KrField';
             right:50px;
             z-index: 100;
         }
-        .u-table{
-            .ivu-table-tbody{
-                .ivu-table-tbody{
-                    tr:nth-child(2n+1){
-                        background:#f6f6f6
-                    }
-                }
+        .daily-table{
+            padding-bottom: 80px;
+            .daily-head-class{
+                position: fixed;
+                top:60px;
             }
             .list-footer{
-                margin:20px 0;
+                padding:20px 0;
+            }
+            .fixed-footer{
+                position: fixed;
+                background:#fff;
+                z-index:101;
+                bottom:57px;
             }
         }
     }

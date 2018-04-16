@@ -2,13 +2,18 @@
   <div class="daily-inventory"> 
     <div class="daily-header">
            <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
-                <Form-item label="库存日期" class='daily-form'>
-                    <DatePicker 
-                        v-model="formItem.inventoryDate" 
-                        placeholder="请输入库存日期"
-                        style="width: 200px"
-                    />
-                </Form-item>
+                <div class='header-icon'>  
+                    <Form-item label="库存日期" class='daily-form'>
+                        <DatePicker 
+                            v-model="formItem.inventoryDate" 
+                            placeholder="请输入库存日期"
+                            style="width: 200px"
+                        />
+                    </Form-item>
+                    <Tooltip content="查询某一天，商品的库存状态。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询" placement="top">
+                      <span class='icon-tip'></span>
+                    </Tooltip>
+                </div>
 
 
                 <Form-item label="商品名称" class='daily-form' prop="name">
@@ -27,7 +32,6 @@
                         placeholder="请输入库存状态" 
                         style="width: 200px"
                         multiple
-                        clearable
                     >
                         <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                    </Select> 
@@ -184,7 +188,7 @@
     
     <div class='daily-tab'>
         <div class='tab-select'>
-            <RadioGroup v-model="formItem.focus">
+            <RadioGroup v-model="formItem.discount">
                 <Radio label="1">原价</Radio>
                 <Radio label="0">折扣</Radio>
             </RadioGroup>
@@ -326,12 +330,12 @@ import KrField from '~/components/KrField';
 
                 tabParams:{
                     page:1,
-                    pageSize:1000
+                    pageSize:15
                 },
                 formItem:{
                     inventoryDate:dateUtils.dateToStr("YYYY-MM-DD",new Date()),
                     name:'',
-                    statusName:'',
+                    statusName:[],
                     communityId:'',
                     cityId:'',
                     floor:'',
@@ -344,7 +348,8 @@ import KrField from '~/components/KrField';
                     areaMin:'',
                     areaMax:'',
                     locationName:'',
-                    suiteName:''
+                    suiteName:'',
+                    discount:'1'
                 },
                 ruleDaily: {
                     stationsMin: [
@@ -402,7 +407,11 @@ import KrField from '~/components/KrField';
                     {
                         title: '工位单价',
                         key: 'unitPrice',
-                        align:'center'
+                        className:'priceClass',
+                        align:'center',
+                        render(tag, params){
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                        }
                     },
                     {
                         title: '工位数量',
@@ -412,17 +421,28 @@ import KrField from '~/components/KrField';
                     {
                         title: '商品总价',
                         key: 'quotedPrice',
-                        align:'center'
+                        className:'priceClass',
+                        align:'center',
+                        render(tag, params){
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                        }
                     },
                     {
                         title: '当日库存',
                         key: 'status',
-                        align:'center'
+                        align:'center',
+                        render(tag, params){
+                            return <span style={params.row.status=='不可用'?'color:red':''}>{params.row.status}</span>
+                        }
                     },
                     {
                         title: '签约价',
                         key: 'price',
-                        align:'center'
+                        className:'priceClass',
+                        align:'center',
+                        render(tag, params){
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                        }
                     },
                     {
                         title: '最近可租起始日',
@@ -444,7 +464,7 @@ import KrField from '~/components/KrField';
             }
         },
         mounted(){
-            //this.getTableData(this.tabParams);
+            this.getTableData(this.tabParams);
             this.getDiscount();
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-table-list');
@@ -578,6 +598,18 @@ import KrField from '~/components/KrField';
             width:300px;
             display:inline-block;
         }
+        .header-icon{
+            display:inline-block;
+            .icon-tip{
+                display:inline-block;
+                width:14px;
+                height:14px;
+                background:url(img/q.svg) no-repeat center;
+                background-size: 100%;
+                vertical-align: middle;
+                margin-top: 8px;
+            }
+        }
     }
     .daily-tab{
         position: relative;
@@ -604,6 +636,11 @@ import KrField from '~/components/KrField';
                 background:#fff;
                 z-index:101;
                 bottom:57px;
+            }
+            .priceClass{
+                .ivu-table-cell{
+                    padding:0;
+                }
             }
         }
     }

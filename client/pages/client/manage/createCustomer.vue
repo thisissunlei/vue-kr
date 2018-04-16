@@ -99,6 +99,8 @@
                 }
             };
             const validateName = (rule, value, callback) => {
+                value = value.replace(/(^\s+)|(\s+$)/g,"").replace(/\s/g,"");
+                this.formItem.company = value;
                 if (value === '') {
                     this.canSubmit = false
                     callback(new Error('请填写客户联系人'));
@@ -107,12 +109,10 @@
                     this.$http.get('check-company', {company:value}).then( r => {
                         if(r.message == "ok"){
                             this.canSubmit = true;
-                            console.log('=======this.canSubmit = true;')
                             callback()
                         }else{
                            callback(new Error('客户名称不可重复')) 
                         }
-                        console.log('company',r.data)
                     }).catch( e => {
                         this.canSubmit = false;
                         callback(new Error('客户名称不可重复')) 
@@ -196,7 +196,6 @@
             if(!haveNull){
                 data = Object.assign({},this.formItem);
             }
-            console.log('newData',this.canSubmit)
             this.$emit('newData', data,this.canSubmit);
         },
 

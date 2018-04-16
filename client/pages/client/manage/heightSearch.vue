@@ -30,7 +30,7 @@
                             :value="item.value" 
                             :key="item.value"
                         >
-                            {{ item.label }}
+                            {{ item.desc }}
                         </Option>
                    </Select> 
                 </Form-item>
@@ -112,6 +112,7 @@
             this.getCommunity();
             this.getOrderList();
             this.getStatusList()
+            this.getIndustryList()
         },
 
         updated:function(){

@@ -77,8 +77,33 @@
                         </Col>
                         
                         <Col >
+                            <div class="header">
+                                <span class="select">
+                                    <Checkbox v-model="selectAllChecked" @on-change="selectAll"></Checkbox>
+                                </span>
+                                <span class="header-name">
+                                    工位编号/房间名称
+                                </span>
+                                <span class="header-name">产品类型</span>
+                                <span class="header-name">原服务开始日</span>
+                                <span class="header-name">原服务结束日</span>
+                                <span class="header-name">预更换服务期</span>
+                            </div>
+                            <div class="station-table" v-for="(item,index) in oldStation">
+                                <span class="select">
+                                    <Checkbox v-model="item.checked" @on-change="selectRow"></Checkbox>
+                                </span>
+                                <span class="header-name">
+                                    {{item.seatName}}
+                                </span>
+                                <span class="header-name">
+                                {{item.seatType=='SPACE'?'独立办公室':'开放工位'}}</span>
+                                <span class="header-name">{{item.startDate | dateFormat('YYYY-MM-dd')}}</span>
+                                <span class="header-name">{{item.endDate | dateFormat('YYYY-MM-dd')}}</span>
+                                <span class="header-name">预更换服务期</span>
+                            </div>
                             
-                            <Table ref="oldStationTable" :columns="oldColumns" :data="oldStation" @on-selection-change="selectRow" />
+                            <!-- <Table :show-header="showHeader" ref="oldStationTable" :columns="oldColumns" :data="oldStation" @on-selection-change="selectRow" /> -->
                            
                         </Col>
                         <Col>
@@ -251,10 +276,10 @@
                      callback();
                 }
             };
-            console.log('data')
             return {
                 //订单模式（create：创建中；view：预览）
                 orderStatus:'create',
+                showHeader:true,
                 //错误提示
                 errorObj:{
                     oldStation:false,
@@ -273,6 +298,8 @@
                     beginTime:''
                 },
                 getFloor:new Date(),
+                //全选
+                selectAllChecked:false,
                 //step1校验规则
                 ruleValidateOne:{
                     communityId:[
@@ -301,150 +328,7 @@
                     value:'111'
                 }],
                 oldStation:[],
-                oldColumns:[
-                    {
-                        width: 60,
-                        align: 'center',
-                        renderHeader(h, obj){
-                           return h('Checkbox', {
-                                    on:{
-                                        'on-change':(event)=>{
-                                            this.selectAll()
-                                        },
-                                    }
-                                },'')
-                             
-                        },
-                        render: (h, params) => {
-                            
-                            return h('Checkbox', {
-                                    props: {
-                                        disabled:false
-                                    },
-                                    on:{
-                                        'on-change':(event)=>{
-                                            this.selectRow(params.row._index)
-                                        },
-                                    }
-                                },'')
-                        }
-
-                    },
-                    {
-                        title: '工位/房间编号',
-                        key: 'seatName',
-                        align:'center' ,
-                        render(h, obj){
-                            if(obj.row.timeType == 'error'){
-                                return h('span', { 
-                                    style: {
-                                        color:'#FF6868'
-                                    }       
-                                }, obj.row.seatName);
-                            }else{
-                                return h('span', { 
-                                    style: {
-                                        color:'#495060'
-                                    }       
-                                }, obj.row.seatName);
-                            }
-                             
-                        }
-                    },
-                    {
-                            title: '类型',
-                            key: 'seatType',
-                            align:'center',
-                            render:(h, params) => {
-                                let type = params.row.seatType;
-                                let typeName = '开放工位';
-                                if(type =='SPACE'){
-                                    typeName = '独立办公室'
-                                }else{
-                                    typeName = "开放工位"
-                                }
-                                if(params.row.timeType == 'error'){
-                                    return h('span', { 
-                                        style: {
-                                            color:'#FF6868'
-                                        }       
-                                    }, typeName);
-                                }else{
-                                    return h('span', { 
-                                        style: {
-                                            color:'#495060'
-                                        }       
-                                    }, typeName);
-                                }
-                            }
-                    },
-                    {
-                     title: '原服务开始日',
-                     key: 'startDate',
-                     align:'center',
-                     render(tag, params){
-                         let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate));
-                         if(params.row.timeType == 'error'){
-                             return tag('span', { 
-                                 style: {
-                                     color:'#FF6868'
-                                 }       
-                             }, time);
-                         }else{
-                             return tag('span', { 
-                                 style: {
-                                     color:'#495060'
-                                 }       
-                             }, time);
-                         }
-                     }  
-                    },
-                    {
-                     title: '原服务结束日',
-                     key: 'endDate',
-                     align:'center',
-                     render(tag, params){
-                         let time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
-                          if(params.row.timeType == 'error'){
-                             return tag('span', { 
-                                 style: {
-                                     color:'#FF6868'
-                                 }       
-                             }, time);
-                         }else{
-                             return tag('span', { 
-                                 style: {
-                                     color:'#495060'
-                                 }       
-                             }, time);
-                         }
-                     }  
-                    },
-                    {
-                     title: '预更换服务期',
-                     key: 'originalAmount',
-                     align:'center',
-                     render(tag,params){
-                        let time = '--'
-                        if(params.row._checked){
-                            time=dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.beginTime))+'至'+dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate));
-                        }
-                        if(params.row.timeType == 'error'){
-                             return tag('span', { 
-                                 style: {
-                                     color:'#FF6868'
-                                 }       
-                             }, time);
-                         }else{
-                             return tag('span', { 
-                                 style: {
-                                     color:'#495060'
-                                 }       
-                             }, time);
-                         }
-                     }
-                    }
-            ],
+                
 
 
             }
@@ -468,37 +352,29 @@
         },
         watch:{
             getFloor(){
-            let _this = this;
-            if(this.formItem.communityId && this.formItem.customerId){
-                let params = {
-                    communityId:this.formItem.communityId,
-                    customerId:this.formItem.customerId
-                }
-                 this.$http.get('get-community-floor', params, r => {
-                    _this.floors = r.data.floor;
-                    _this.ssoId = r.data.ssoId;
-                    _this.ssoName = r.data.ssoName;
-                    if(!_this.formItem.salerId){
-                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
-                        _this.salerName = r.data.ssoName
-
+                let _this = this;
+                if(this.formItem.communityId && this.formItem.customerId){
+                    let params = {
+                        communityId:this.formItem.communityId,
+                        customerId:this.formItem.customerId
                     }
+                     this.$http.get('get-community-floor', params, r => {
+                        _this.floors = r.data.floor;
+                        _this.ssoId = r.data.ssoId;
+                        _this.ssoName = r.data.ssoName;
+                        if(!_this.formItem.salerId){
+                            _this.formItem.salerId = JSON.stringify(r.data.ssoId);
+                            _this.salerName = r.data.ssoName
 
-                }, e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
+                        }
 
-                })
-            }
-           },
-           selectedOldStation(value){
-            if(value.length){
-                this.errorObj.oldStation = false;
-            }else{
-                this.errorObj.oldStation = true;
+                    }, e => {
+                        _this.$Notice.error({
+                            title:e.message
+                        });
 
-            }
+                    })
+                }
            },
         },
         methods: {
@@ -597,6 +473,7 @@
             getOldStation(){
                 this.$http.get('join-bill-detail', {id:10551}).then( r => {
                     this.oldStation = r.data.orderSeatDetailVo.map(item=>{
+                        item.checked = false;
                         return item
                     })
                 }).catch( e => {
@@ -641,11 +518,18 @@
 
                 }
             },
-            selectRow(index){
-                console.log('selectRow',index)
+            selectRow(status){
+                if(!status){
+                    this.selectAllChecked = false;
+                }
             },
-            selectAll(){
-                console.log('selectAll')
+            selectAll(status){
+                this.selectAllChecked = status;
+                this.oldStation = this.oldStation.map(item=>{
+                    item.checked = status;
+                    return item;
+                })
+                
             }
         }
     }
@@ -673,6 +557,40 @@
         }
         .error{
             color:red;
+        }
+        .header ,.station-table{
+            width: 100%;
+            height: 40px;
+            display: flex;
+            line-height: 40px;
+            background-color:#f8f8f9;
+            border:1px solid #e9eaec;
+            .select{
+                width:60px;
+                display:inline-block;
+                text-align:center;
+            }
+            .header-name{
+                display: inline-block;
+                word-wrap:normal;
+                vertical-align: middle;
+                white-space:nowrap;
+                flex:1;
+                overflow:hidden;
+                text-align: center;
+                font-size: 12px;
+                font-weight: 700;
+                color:#495060;
+
+            }
+        }
+        .station-table{
+            background-color:#fff;
+            border-top:none;
+            .header-name{
+                border-top:none;
+                font-weight: 500;
+            }
         }
     }
 </style>

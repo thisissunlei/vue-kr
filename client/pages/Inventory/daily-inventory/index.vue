@@ -46,11 +46,11 @@
                         clearable
                     >
                         <Option 
-                            v-for="item in communityList" 
-                            :value="item.value" 
-                            :key="item.value"
+                            v-for="item in cityList" 
+                            :value="item.cityId" 
+                            :key="item.cityId"
                         >
-                            {{ item.label }}
+                            {{ item.cityName }}
                         </Option>
                    </Select>
                    <Select 
@@ -61,10 +61,10 @@
                     >
                         <Option 
                             v-for="item in communityList" 
-                            :value="item.value" 
-                            :key="item.value"
+                            :value="item.communityId" 
+                            :key="item.communityId"
                         >
-                            {{ item.label }}
+                            {{ item.communityName }}
                         </Option>
                    </Select>
                    <Select 
@@ -74,11 +74,11 @@
                         clearable
                     >
                         <Option 
-                            v-for="item in communityList" 
-                            :value="item.value" 
-                            :key="item.value"
+                            v-for="item in floorList" 
+                            :value="item.floor" 
+                            :key="item.floor"
                         >
-                            {{ item.label }}
+                            {{ item.floorName }}
                         </Option>
                    </Select> 
                 </Form-item>
@@ -111,7 +111,7 @@
                         style="width: 200px"
                         clearable
                     >
-                        <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                    </Select> 
                 </Form-item>
 
@@ -188,14 +188,15 @@
     
     <div class='daily-tab'>
         <div class='tab-select'>
-            <RadioGroup v-model="formItem.discount">
+            <RadioGroup v-model="formItem.countSelf">
                 <Radio label="1">原价</Radio>
                 <Radio label="0">折扣</Radio>
             </RadioGroup>
             <Select 
-                v-model="formItem.communityId" 
+                v-model="formItem.discount" 
                 style="width: 100px"
                 clearable
+                @on-change="countChange"	
             >
                 <Option v-for="item in discountList" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
@@ -211,9 +212,9 @@
                                 </div>
                                 <div style="float: right;">
                                     <Page 
-                                        :current="tabParams.page"
+                                        :current="formItem.page"
                                         :total="totalCount"
-                                        :page-size="tabParams.pageSize" 
+                                        :page-size="formItem.pageSize" 
                                         show-total 
                                         show-elevator
                                         @on-change="changePage"
@@ -306,6 +307,13 @@ import KrField from '~/components/KrField';
 
                 discountList:[],
                 communityList:[],
+                cityList:[],
+                floorList:[],
+                productList:[
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
+                    {value:'MOVE',label:'移动办公桌'}
+                ],
                 inventoryList:[
                     {value:'AVAILABLE',label:'未租'},
                     {value:'NOT_EFFECT',label:'合同未生效'},
@@ -328,10 +336,7 @@ import KrField from '~/components/KrField';
                 left:'',
                 width:'',
 
-                tabParams:{
-                    page:1,
-                    pageSize:15
-                },
+
                 formItem:{
                     inventoryDate:dateUtils.dateToStr("YYYY-MM-DD",new Date()),
                     name:'',
@@ -349,7 +354,10 @@ import KrField from '~/components/KrField';
                     areaMax:'',
                     locationName:'',
                     suiteName:'',
-                    discount:'1'
+                    discount:'no',
+                    countSelf:'1',
+                    page:1,
+                    pageSize:15
                 },
                 ruleDaily: {
                     stationsMin: [
@@ -383,56 +391,116 @@ import KrField from '~/components/KrField';
                         key: 'name',
                         align:'center',
                         render(tag, params){
-                            return <div>
-                              <div>{params.row.name+' '+params.row.capacity}</div>
-                              <div>{params.row.cityName+' '+params.row.communityName+' '+params.row.floor}</div>
-                            </div>
+                            var renCap=params.row.type=='SPACE'?params.row.capacity:'';
+                            var location=params.row.location?params.row.location:'-'
+                            return h('div', [
+                                       h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: location
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                            },params.row.name+'  '+renCap),
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden'
+                                                }
+                                            },params.row.location),
+                                        ])
+                                 ])
+                            ])
                         }
                     },
                     {
                         title: '商品类型',
                         key: 'type',
-                        align:'center'
+                        align:'center',
+                        width:110,
+                        render(tag, params){
+                            var ren=params.row.type?params.row.type:'-';
+                            return <span>{ren}</span>
+                        }
                     },
                     {
                         title: '商品属性',
                         key: 'property',
-                        align:'center'
+                        align:'center',
+                        render(tag, params){
+                            var desc=params.row.propertyDesc?params.row.propertyDesc:'-'
+                            return h('div', [
+                                       h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: desc
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                            },params.row.property),
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden'
+                                                }
+                                            },params.row.propertyDesc),
+                                        ])
+                                 ])
+                            ])
+                        }
                     },
                     {
                         title: '面积',
                         key: 'area',
-                        align:'center'
+                        align:'center',
+                        width:80,
+                        render(tag, params){
+                            var ren=params.row.area?params.row.area:'-';
+                            return <span>{ren}</span>
+                        }
                     },
                     {
                         title: '工位单价',
                         key: 'unitPrice',
                         className:'priceClass',
                         align:'center',
+                        width:100,
                         render(tag, params){
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.unitPrice}</span>
                         }
                     },
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        align:'center'
+                        align:'center',
+                        width:100,
+                        render(tag, params){
+                            var ren=params.row.capacity?params.row.capacity:'-';
+                            return <span>{ren}</span>
+                        }
                     },
                     {
                         title: '商品总价',
                         key: 'quotedPrice',
                         className:'priceClass',
                         align:'center',
+                        width:100,
                         render(tag, params){
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.quotedPrice}</span>
                         }
                     },
                     {
                         title: '当日库存',
                         key: 'status',
                         align:'center',
+                        width:100,
                         render(tag, params){
-                            return <span style={params.row.status=='不可用'?'color:red':''}>{params.row.status}</span>
+                            var ren=params.row.status?params.row.status:'-'
+                            return <span style={params.row.status=='不可用'?'color:red':''}>{ren}</span>
                         }
                     },
                     {
@@ -440,32 +508,77 @@ import KrField from '~/components/KrField';
                         key: 'price',
                         className:'priceClass',
                         align:'center',
+                        width:80,
                         render(tag, params){
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.orderStatusName}</span>
+                            var ren=params.row.price?params.row.price:'-';
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{ren}</span>
                         }
                     },
                     {
                         title: '最近可租起始日',
                         key: 'recentStart',
                         align:'center',
+                        width:130,
                         render(tag, params){
-                            return params.row.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentStart)):<span>-</span>;
+                            var ren=params.row.recentStart?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentStart)):'-';
+                            return <span>{ren}</span>;
                         }
                     },
                     {
                         title: '最近可租结束日',
                         key: 'recentEnd',
                         align:'center',
+                        width:130,
                         render(tag, params){
-                            return params.row.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentEnd)):<span>-</span>;
+                            var ren=params.row.recentEnd?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentEnd)):'-';
+                            return <span>{ren}</span>;
                         }
                     }
                 ]    
             }
         },
         mounted(){
-            this.getTableData(this.tabParams);
+            //this.getTableData(this.formItem);
+            //this.getCommunityList();
+            //this.getCityList();
+            //this.getFloorList();
             this.getDiscount();
+
+
+            this.communityList=[
+                        {
+                            "communityId":42261,"communityName":"测试内容x3ru"
+                        }
+            ]
+            this.communityList.unshift({communityId:'all',communityName:"全部社区"})
+            this.formItem.communityId=this.communityList[0].communityId;
+            this.cityList=[
+                        {
+                            "cityId":15312,"cityName":"测试内容ji8g"
+                        }
+            ]
+             this.cityList.unshift({cityId:'all',cityName:"全部城市"})
+             this.formItem.cityId=this.cityList[1].cityId;
+             this.floorList=[
+                        {
+                            "floor":42261,"floorName":"测试内容x3ru"
+                        }
+            ]
+            this.floorList.unshift({floor:'all',floorName:"全部楼层"})
+            this.formItem.floor=this.floorList[0].floor;
+            this.dailyData=[
+            {
+                "area":52853,"capacity":84423,"cityName":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"status":61414,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            },
+            {
+                "area":52853,"capacity":84423,"cityName":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"status":61414,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            },
+            {
+                "area":52853,"capacity":84423,"cityName":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            }
+        ];
+
+
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
@@ -475,7 +588,7 @@ import KrField from '~/components/KrField';
         methods:{
             //获取列表数据
             getTableData(params){
-                this.$http.get('join-bill-list', params).then((res)=>{
+                this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((error)=>{
@@ -485,27 +598,44 @@ import KrField from '~/components/KrField';
                 })
                 
             },
+            //社区接口
             getCommunityList(){
                 this.$http.get('getDailyCommunity').then((res)=>{
-                    console.log('res--',res.data);
+                    this.communityList=res.data.items;
+                    if(this.communityList.length>1){
+                        this.communityList.unshift({communityId:'all',communityName:"全部社区"})
+                    }
+                    this.formItem.communityId=this.communityList[0].communityId;
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
                     });
                 })
             },
+            //城市接口
             getCityList(){
                 this.$http.get('getDailyCity', params).then((res)=>{
-                   console.log('res--',res.data);
+                   this.cityList=res.data.items;
+                   if(this.cityList.length>1){
+                       this.cityList.unshift({cityId:'all',cityName:"全部城市"})
+                       this.formItem.cityId=this.cityList[1].cityId;
+                   }else{
+                       this.formItem.cityId=this.cityList[0].cityId;
+                   }   
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
                     });
                 })
             },
+            //楼层接口
             getFloorList(){
                 this.$http.get('getDailyFloor', params).then((res)=>{
-                    console.log('res--',res.data);
+                    this.floorList=res.data.items;
+                    if(this.floorList.length>1){
+                        this.floorList.unshift({floor:'all',floorName:"全部楼层"})                        
+                    }
+                    this.formItem.floor=this.floorList[0].floor;
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
@@ -518,24 +648,30 @@ import KrField from '~/components/KrField';
             },
             //页面发生改变
             changePage(page){
-                this.tabParams.page=page;
-                this.getTableData(this.tabParams);
+                this.formItem.page=page;
+                this.getTableData(this.formItem);
             },
+            //获取折扣价
             getDiscount(){
                 var discountArr=[];
                 var index=0.1;
-                for(var i=0;i<100;i++){
-                    discountArr.push({value:index,label:index})
-                    index=index+0.1;
+                for(var i=0;i<99;i++){
+                    discountArr.push({value:index,label:index+'折'})
+                    index=(index*10000+0.1*10000)/10000;
                 }
+                discountArr.reverse();
+                discountArr.unshift({value:'no',label:'无'})
                 this.discountList=discountArr;
             },
+            //导出
             submitExport(){
-
+                
             },
+            //统计
             submitStatistical(){
 
             },
+            //滚动监听
             onScrollListener(){    
                 var dom=document.getElementById('layout-content-main');
                 var headDom=document.querySelectorAll('div.daily-table table thead')[0];
@@ -553,18 +689,25 @@ import KrField from '~/components/KrField';
                     }
                 }
             },
+            //搜索
             searchClick(){
                 this.$refs['formItemDaily'].validate((valid) => {
                     if (valid) {
-                       console.log('form---',this.formItem); 
+                       this.formItem.cityId=(!this.formItem.cityId||this.formItem.cityId=='all')?'':this.formItem.cityId;
+                       this.formItem.communityId=(!this.formItem.communityId||this.formItem.communityId=='all')?'':this.formItem.communityId;
+                       this.formItem.floor=(!this.formItem.floor||this.formItem.floor=='all')?'':this.formItem.floor;
+                       this.formItem.discount=(this.formItem.discount=='no'||!this.formItem.discount)?'':this.formItem.discount;
+                       this.getTableData(this.formItem);
                     }
                 })
             },
+            //清除
             clearClick(){
                 for(var item in this.formItem){
                     this.formItem[item]='';
                 }
             },
+            //回车
             onKeyEnter(){
                 this.searchClick();
             },
@@ -581,6 +724,19 @@ import KrField from '~/components/KrField';
                     }
                 }
                 return sum;
+            },
+            //折扣价
+            countChange(param){
+                this.formItem.cityId=(!this.formItem.cityId||this.formItem.cityId=='all')?'':this.formItem.cityId;
+                this.formItem.communityId=(!this.formItem.communityId||this.formItem.communityId=='all')?'':this.formItem.communityId;
+                this.formItem.floor=(!this.formItem.floor||this.formItem.floor=='all')?'':this.formItem.floor;
+                if(this.formItem.countSelf=='0'){
+                    this.formItem.discount=(this.formItem.discount=='no'||!this.formItem.discount)?'':this.formItem.discount;
+                    //this.getTableData(this.formItem);
+                }else{
+                    this.formItem.discount='';
+                    //this.getTableData(this.formItem);
+                }
             }
         }
     }
@@ -600,6 +756,14 @@ import KrField from '~/components/KrField';
         }
         .header-icon{
             display:inline-block;
+            .ivu-tooltip-popper{
+                word-break: break-all;
+                word-wrap: break-word;
+                max-width:200px;
+            }
+            .ivu-tooltip-inner{
+                white-space: normal;
+            }
             .icon-tip{
                 display:inline-block;
                 width:14px;
@@ -624,6 +788,20 @@ import KrField from '~/components/KrField';
         }
         .daily-table{
             padding-bottom: 80px;
+            .ivu-tooltip{
+                width:100%
+            }
+            .ivu-tooltip-rel{
+                width:100%
+            }
+            .ivu-tooltip-popper{
+                word-break: break-all;
+                word-wrap: break-word;
+                max-width:200px;
+            }
+            .ivu-tooltip-inner{
+                white-space: normal;
+            }
             .daily-head-class{
                 position: fixed;
                 top:60px;

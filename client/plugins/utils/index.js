@@ -196,7 +196,7 @@ import throttle from './throttle';
     getDaysInOneMonth,
     dateDiff,
     debounce,
-    getScrollBarSize
+    getScrollBarSize,
    }
 
 

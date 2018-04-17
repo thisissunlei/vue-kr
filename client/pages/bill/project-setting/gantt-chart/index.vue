@@ -33,6 +33,13 @@
                                 style="background:#FFD669;vertical-align:middle;"
                             ></span>
                         </div>
+                        <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">逾期风险</span>
+                            <span
+                                class="article"
+                                style="background:#fff;vertical-align:middle;border:1px dashed #FF6D6D"
+                            ></span>
+                        </div>
                     </div>
 
                     <div style="display:inline-block;margin-left:10px;">
@@ -562,7 +569,7 @@ export default {
                 day:min.start + weekObj.start-1,
             }
             if(end.day>publicFn.getMonthDayNum(end.year,end.month)){
-               end.day = end.day -publicFn.getMonthDayNum(end.year,end.month)-1;
+               end.day = end.day -publicFn.getMonthDayNum(end.year,end.month);
                 end.month+=1;
                 if(end.month>12){
                     end.month=end.month-12;

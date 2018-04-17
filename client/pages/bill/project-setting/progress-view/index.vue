@@ -97,18 +97,14 @@ publicFn.getMonthDayNum<template>
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
-
-        <Modal
-                v-model="openEditTask"
-                title="编辑任务"
-                width="660"
-            >
-                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-                <div slot="footer" style="text-align: center;">
-                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
-                </div>
-        </Modal>
+         <Drawer 
+            title="设置企业管理员"
+            :openDrawer="openEditTask"
+            iconType="view-icon"
+            :close="cancelEditTask"
+        >       
+                <ViewTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+        </Drawer>
 
         <Modal
                 v-model="openDelete"
@@ -137,9 +133,11 @@ publicFn.getMonthDayNum<template>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
-import EditTask from '../project-detail/edit-task';
+import ViewTask from './view-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
+import Drawer from '~/components/Drawer';
+
 import publicFn from '../publicFn';
 import Vue from 'vue';
 
@@ -150,8 +148,9 @@ export default {
     components:{
         GanttChart,
         ListTable,
-        EditTask,
-        Message
+        Message,
+        Drawer,
+        ViewTask
     },
     data(){
         return{

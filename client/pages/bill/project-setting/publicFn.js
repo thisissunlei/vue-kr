@@ -237,7 +237,7 @@ function getDivColor(value){
         case 'DELAY':
             return '#fff';
             break;
-        case 'NDERWAY':
+        case 'UNDERWAY':
             return 'rgb(255, 214, 105)';
             break;
        

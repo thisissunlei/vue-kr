@@ -1,6 +1,6 @@
 <template>
   <div class="project-setting">
-        <Tabs size="default" :value="tabs" @on-click="tabsClick">
+        <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="项目档案管理" name="tab1">
                 <Archives v-if="mask"/>
                 

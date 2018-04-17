@@ -52,7 +52,7 @@
                 </div>
         </Modal> -->
 
-        <Modal
+        <!-- <Modal
             v-model="openEditTask"
             title="编辑任务"
             width="660"
@@ -62,7 +62,16 @@
                 <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
                 <Button type="primary" @click="submitEditTask('formItem')" style="height:34px">确认编辑</Button>
             </div>
-        </Modal>
+        </Modal> -->
+        <Drawer 
+            title="设置企业管理员"
+            :openDrawer="openEditTask"
+            iconType="view-icon"
+            :close="cancelEditTask"
+            width="720"
+        >
+            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+        </Drawer>
 
          <Modal
                 v-model="openWatch"
@@ -132,6 +141,7 @@ import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
+import Drawer from '~/components/Drawer';
 var ganttChartScrollTop = 0;
 
 
@@ -142,7 +152,8 @@ export default {
         WatchRecord,
         DetailTaskList,
         GanttChart,
-        Message
+        Message,
+        Drawer
     },
     data(){
         return{
@@ -165,6 +176,8 @@ export default {
                 page:1,
                 pageSize:15
             },
+            
+
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -234,7 +247,7 @@ export default {
         },
         //查看记录页面搜索被点击
         searchClick(params){
-            console.log(params,"oooooo")
+            
             this.getWatchData()
         },
         selectFormat(data){
@@ -378,7 +391,7 @@ export default {
         },
          //获取查看编辑记录
         getWatchData(id){
-            this.$http.get('watch-edit-record',{id:id}).then((response)=>{
+            this.$http.post('watch-edit-record',{id:id}).then((response)=>{
                 this.watchRecord=response.data.items;
             }).catch((error)=>{
                 this.$Notice.error({

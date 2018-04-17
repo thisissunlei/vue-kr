@@ -3,7 +3,7 @@
         <Form ref="params" :model="params" >
             <Form-item label="" class='daily-form'>
                 <DatePicker 
-                    v-model="params.orderNum" 
+                    v-model="params.startTime" 
                     placeholder="开始日期"
                     style="width: 120px"
                 />
@@ -11,17 +11,19 @@
             <span style="padding:0px 10px;display:inline-block;line-height:32px;">至</span>
             <Form-item label="" class='daily-form'>
                 <DatePicker 
-                    v-model="params.orderNum" 
+                    v-model="params.endTime" 
                     placeholder="结束日期"
                     style="width: 120px"
                 />
+               
             </Form-item>
             <Form-item label="" class='daily-form' style="padding:0px 20px;">
-                <i-input 
-                    v-model="params.customerName" 
+                <!-- <i-input 
+                    v-model="params.updator" 
                     placeholder="编辑人姓名"
                     style="width: 150px"
-                />
+                /> -->
+                 <SelectSaler :onchange="changeSaler" placeholder="编辑人姓名" name="formItem.salerId" ></SelectSaler>
             </Form-item>
             <Button style="float:right;" type="primary" @click="seachClick">搜索</Button>
         </Form>
@@ -62,7 +64,11 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import SelectSaler from '~/components/SelectSaler.vue'
 export default {
+    components:{
+        SelectSaler
+    },
     props:{
         watchRecord:Array,
         default:[],
@@ -79,14 +85,17 @@ export default {
             params:{
                 page:1,
                 pageSize:10,
-                customerName:'',
-                orderNum:'',
-                customerName:''
+                updator:'',
+                endTime:'',
+                startTime:''
 
             },
             formItem:{
-                orderNum:'',
-                customerName:''
+                page:1,
+                pageSize:10,
+                updator:'',
+                endTime:'',
+                startTime:''
             },
             columns:[
                 {
@@ -131,8 +140,12 @@ export default {
           
         },
         seachClick(){
-            this.$emit('searchClick',this.params)
-        }
+            this.$emit('searchClick',this.formItem)
+        },
+        changeSaler(value){
+                // 销售员
+            this.formItem.updator = value;
+        },
         // getWatchData(){
 
         //     this.$http.get('watch-edit-record',{id:id}).then((response)=>{

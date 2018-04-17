@@ -122,7 +122,11 @@ function getToolTipContent(thatData) {
         str += '<div class="content">' + '计划周期：' + startDay + ' - ' + endDay + '</div>'
 
     }
-    if (data.taskStatus !== "UNKNOWN" && data.taskStatus !== "UNDERWAY" && data.taskStatus !== "OVERDUE") {
+    if (data.taskStatus !== "UNKNOWN" 
+        && data.taskStatus !== "UNDERWAY" 
+        && data.taskStatus !== "OVERDUE"
+        && data.taskStatus !== "PLANNED"
+    ) {
         var type = 'MM/DD';
         var startYear = (new Date(data.actualStartTime)).getFullYear();
         var endYear = (new Date(data.actualEndTime)).getFullYear();
@@ -255,7 +259,7 @@ function getDivClass(index,obj){
     }
     return divClass;
 }
-//实际的背景色
+
 
 // 实际的字体颜色
 function getActualColor(taskStatus) {

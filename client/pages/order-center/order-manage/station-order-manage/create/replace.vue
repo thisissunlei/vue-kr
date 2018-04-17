@@ -89,9 +89,9 @@
                                 <span class="header-name">原服务结束日</span>
                                 <span class="header-name">预更换服务期</span>
                             </div>
-                            <div class="station-table" v-for="(item,index) in oldStation">
+                            <div class="station-table" v-for="(item,index) in oldStation" :key="item.seatId" v-bind:class="{error: item.timeType=='error' }">
                                 <span class="select">
-                                    <Checkbox v-model="item.checked" @on-change="selectRow"></Checkbox>
+                                    <Checkbox v-model="item.checked" @on-change="selectRow" :disabled="item.disabled"></Checkbox>
                                 </span>
                                 <span class="header-name">
                                     {{item.seatName}}
@@ -100,10 +100,9 @@
                                 {{item.seatType=='SPACE'?'独立办公室':'开放工位'}}</span>
                                 <span class="header-name">{{item.startDate | dateFormat('YYYY-MM-dd')}}</span>
                                 <span class="header-name">{{item.endDate | dateFormat('YYYY-MM-dd')}}</span>
-                                <span class="header-name">预更换服务期</span>
+                                <span class="header-name" v-if="item.checked == false || !formItem.beginTime">--</span>
+                                <span class="header-name" v-if="item.checked == true && formItem.beginTime">{{formItem.beginTime| dateFormat('YYYY-MM-dd')}}至{{item.endDate | dateFormat('YYYY-MM-dd')}}</span>
                             </div>
-                            
-                            <!-- <Table :show-header="showHeader" ref="oldStationTable" :columns="oldColumns" :data="oldStation" @on-selection-change="selectRow" /> -->
                            
                         </Col>
                         <Col>
@@ -184,53 +183,47 @@
                 <p slot="title" class="card-title">
                     服务费信息
                 </p>
-                <Form ref="formItemOne" :model="formItem" :rules="ruleValidateOne" class="demo-m" label-position="top">
+                <Form ref="formItemFour" :model="formItem" :rules="ruleValidateFour" class="demo-m" label-position="top">
                      <Row>  
-                        <!--Col class="col">
-                            <FormItem label="客户名称" class="bill-search-class" prop="company">
-                                <Input 
-                                    v-model="formItem.company" 
-                                    placeholder="请输入客户名称"
-                                    style="width: 252px"
-                                />
+                        <Col>
+                            <FormItem label="旧工位信息">
+                                <Table :columns="oldStationInfo" :data="oldStationData"></Table>
+                            </FormItem>
+                        </Col>
+                        
+                        <Col >
+                            <FormItem label="新工位信息"> 
+                                <Table :columns="newStationInfo" :data="newStationData"></Table>
                             </FormItem>
                         </Col>
                         
                         <Col class="col">
-                            <FormItem label="相关社区" class="bill-search-class" prop="communityId"> 
-                                <Select 
-                                    v-model="formItem.communityId" 
-                                    placeholder="请输入社区名称" 
-                                    style="width: 252px"
-                                    filterable
-                                    clearable
-                                >
-                                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
-                               </Select> 
-                            </FormItem>
-                        </Col>
-                        
-                        <Col class="col">
-                            <FormItem label="销售员" style="width:252px" prop="salerId">
-                            <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
-                            </FormItem>
-                        </Col>
-                        <Col class="col">
-                            <FormItem label="销售时间" style="width:252px" prop="salerId">
-                                <DatePicker type="date" placeholder="开始时间" v-model="formItem.saleTIme" @on-change="changeSaleTime" style="width:252px" ></DatePicker >
-                            </FormItem>
-                        </Col>
-                        <Col class="col">
-                            <FormItem label="换租原因" class="bill-search-class" prop="communityId"> 
+                            <FormItem label="退还服务费" style="width:252px">
                                 <Input 
-                                    v-model="formItem.reason" 
-                                    placeholder="请输入客户名称"
+                                    v-model="formItem.back" 
+                                    placeholder="旧服务保证金转新"
                                     style="width: 252px"
-                                    type="textarea"
-                                    :rows="rows"
                                 />
                             </FormItem>
-                        </Col-->
+                        </Col>
+                        <Col class="col">
+                            <FormItem label="旧服务保证金转新" style="width:252px" prop="oldChangeNew">
+                                 <Input 
+                                    v-model="formItem.money" 
+                                    placeholder="旧服务保证金转新"
+                                    style="width: 252px"
+                                />
+                            </FormItem>
+                        </Col>
+                        <Col class="col">
+                            <FormItem label="扣除服务保证金" class="bill-search-class" > 
+                                <Input 
+                                    v-model="formItem.back" 
+                                    placeholder="扣除服务保证金"
+                                    style="width: 252px"
+                                />
+                            </FormItem>
+                        </Col>
                     </Row>
                 </Form>
                 <div class="buttons">
@@ -282,9 +275,9 @@
                 showHeader:true,
                 //错误提示
                 errorObj:{
-                    oldStation:false,
+                    oldStation:false
                 },
-                status:1,
+                status:0,
                 rows:4,
                 oldEndTime:new Date(),
                 //优惠信息
@@ -323,11 +316,49 @@
                         { required: true, trigger: 'change' ,validator: validateChangeTime},
                     ]
                 },
+                ruleValidateFour:{
+                    oldChangeNew:[
+                        { required: true, message: '请填写', trigger: 'blur' }
+
+                    ]
+                },
                 communityList:[{
                     label:'1',
                     value:'111'
                 }],
                 oldStation:[],
+                oldStationInfo:[
+                    {
+                        title: '减少服务费',
+                        key: 'reduceMoney',
+                        align:'center'
+                    },
+                    {
+                        title: '已交服务费中涉及到更换的金额',
+                        key: 'reduceMoney',
+                        align:'center'
+                    },
+                    {
+                        title: '已交保证金涉及到更换的金额',
+                        key: 'reduceMoney',
+                        align:'center'
+                    },
+                ],
+                oldStationData:[],
+                newStationInfo:[
+                    {
+                        title: '服务费总额',
+                        key: 'reduceMoney',
+                        align:'center'
+                    },
+                    {
+                        title: '服务保证金',
+                        key: 'reduceMoney',
+                        align:'center'
+                    },
+                ],
+                newStationData:[],
+
                 
 
 
@@ -348,7 +379,6 @@
          mounted(){
             GLOBALSIDESWITCH("false");
             GLOBALHEADERSET('订单合同');
-            this.getOldStation()
         },
         watch:{
             getFloor(){
@@ -384,9 +414,25 @@
             changeSaleTime(value){
                 this.formItem.saleTime = value;
             },
+            getSelectedOldStation(){
+                this.selectedOldStation = this.oldStation.filter(item=>{
+                    if(item.checked){
+                        return true;
+                    }
+                    return false
+                })
+            },
             next(name){
-                if(name == 'formItemTwo' && !this.selectedOldStation.length){
-                    this.errorObj.oldStation = true;
+
+                if(name == 'formItemTwo'){
+                    this.getSelectedOldStation()
+                    if(!this.selectedOldStation.length){
+                        this.errorObj.oldStation = true;
+                    }else{
+                        this.errorObj.oldStation = false;
+                    }
+                }
+                if(this.errorObj.oldStation){
                     return
                 }
                 this.$refs[name].validate((valid) => {
@@ -474,6 +520,7 @@
                 this.$http.get('join-bill-detail', {id:10551}).then( r => {
                     this.oldStation = r.data.orderSeatDetailVo.map(item=>{
                         item.checked = false;
+                        item.disabled = true;
                         return item
                     })
                 }).catch( e => {
@@ -481,42 +528,40 @@
                 })
             },
             changeBeginTime(value){
+                //TODO 联调时需修改判断条件
+
                 //出发更新列表中的欲更换信息
                 var today = new Date()
+                this.selectAllChecked = false;
                 today = today.setDate(today.getDate()+1);
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
                 today = new Date(today).getTime()
                 //选择日期小于当前日+1或大于原服务结束日，否则全部不可选
-                if(new Date(value).getTime()<today || new Date(value).getTime()>this.oldStation[0].endDate){
-                    this.oldStation = this.oldStation.map((item,index)=>{
-                        item.changeBegin = ''
-                        return item
-                    })
-                    return
-                }else{
-                    this.oldStation = this.oldStation.map((item,index)=>{
-                        item.beginTime = value ;
-                        return item
-                    })
-                }
+                // if(new Date(value).getTime()<today || new Date(value).getTime()>this.oldStation[0].endDate){
+                //     this.oldStation = this.oldStation.map((item,index)=>{
+                //         item.checked = false;
+                //         return item
+                //     })
+                //     return
+                // }
 
-                if(this.selectedOldStation.length){
                     this.oldStation = this.oldStation.map((item,index)=>{
-                        if(this.selectedOldStation.indexOf(item.seatId) != -1){
+                            item.checked = false;
                             //判断当前已选工位是否符合开始时间
-                            if(value<item.startDate || value>item.endDate){
+                            // if(value<item.startDate || value>item.endDate){
+                            if(new Date(value).getTime()<today  ){
+                                item.disabled = true;
                                 item.timeType='error';
                                 this.errorObj.errorRow = true;
                             }else{
+                                item.disabled = false;
                                 item.timeType='';
                                 this.errorObj.errorRow = false;
                             }
-                        }
                         // item._checked = true设置为选中状态
                         return item
                     })
 
-                }
             },
             selectRow(status){
                 if(!status){
@@ -544,9 +589,10 @@
             margin:10px auto 30px;
         }
         .col{
-            width:50%;
+            width:49%;
             display: inline-block;
             vertical-align: top;
+            padding-right: 1%;
         }
         .between{
             display: inline-block;
@@ -583,6 +629,11 @@
                 color:#495060;
 
             }
+        }
+        .error{
+           .header-name{
+            color:red;
+           }
         }
         .station-table{
             background-color:#fff;

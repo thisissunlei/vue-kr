@@ -230,6 +230,18 @@
         </Tabs> 
     </div>
 
+    <Modal
+        v-model="openStatistical"
+        title="统计信息"
+        class-name="vertical-center-modal"
+        width="500"
+     >
+        <div>
+            <Table border :columns="columnsInner" :data="dailyDataInner"></Table>
+        </div>
+        <p slot="footer" style="opacity:0;"></p>
+    </Modal>
+
     <Message 
         :type="MessageType" 
         :openMessage="openMessage"
@@ -304,6 +316,7 @@ import KrField from '~/components/KrField';
                 warn:'',
                 MessageType:'',
                 openMessage:false,
+                openStatistical:false,
 
                 discountList:[],
                 communityList:[],
@@ -383,6 +396,52 @@ import KrField from '~/components/KrField';
                     ],
                 },
                 totalCount:0,
+
+                columnsInner:[
+                    {
+                        title: '类型',
+                        key: 'orderNum',
+                        align:'center'
+                    },
+                    {
+                        title: '可租个数',
+                        key: 'customerName',
+                        align:'center',
+                        render(tag,params){ 
+                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          return <span>{ren}</span>;
+                        }
+                    },
+                    {
+                        title: '全部个数',
+                        key: 'communityName',
+                        align:'center',
+                        render(tag,params){ 
+                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          return <span>{ren}</span>;
+                        }
+                    },
+                    {
+                        title: '可租工位',
+                        key: 'rentAmount',
+                        align:'center',
+                        render(tag,params){ 
+                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          return <span>{ren}</span>;
+                        }
+                    },
+                    {
+                        title: '全部工位',
+                        key: 'depositAmount',
+                        align:'center',
+                        render(tag,params){ 
+                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          return <span>{ren}</span>;
+                        }
+                    }
+                ],
+                dailyDataInner:[],
+
 
                 dailyData:[],
                 columns: [
@@ -578,6 +637,17 @@ import KrField from '~/components/KrField';
             }
         ];
 
+            this.dailyDataInner=[
+            {
+                "area":52853,"capacity":84423,"orderNum":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"status":61414,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            },
+            {
+                "area":52853,"capacity":84423,"orderNum":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"status":61414,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            },
+            {
+                "area":52853,"capacity":84423,"orderNum":"测试内容62si","communityName":"测试内容22h9","floor":56564,"name":"测试内容25x5","price":70373,"property":"测试内容c7tm","quotedPrice":"测试内容i51w","recentEnd":88601,"recentStart":14786,"type":"测试内容7kd5","unitPrice":"测试内容p9nk"
+            }
+        ];
 
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-table-list');
@@ -669,7 +739,7 @@ import KrField from '~/components/KrField';
             },
             //统计
             submitStatistical(){
-
+                this.openStatistical=!this.openStatistical;
             },
             //滚动监听
             onScrollListener(){    
@@ -743,6 +813,14 @@ import KrField from '~/components/KrField';
 </script>
 
 <style lang="less">
+.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .ivu-modal{
+            top: 0;
+        }
+}
 .daily-inventory{
     .daily-header{
         padding: 30px 20px 10px 20px;

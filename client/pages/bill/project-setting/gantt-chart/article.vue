@@ -125,7 +125,6 @@ export default {
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-
             tirDom.style.opacity = 0;
             angleDom.style.opacity = 0;
         },
@@ -183,6 +182,7 @@ export default {
             }
         },
         getFlagShow(event){
+            return true;
             if(this.data.data){
                 return this.data.data.taskType == event
             }else{

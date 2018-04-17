@@ -195,24 +195,12 @@ export default {
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
-
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
               publicFn.windowResize();
         }, 400);
 
         window.onresize=function(){
             publicFn.windowResize();
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // var dom = document.getElementById('layout-content-main');
-            // dom.style.height = document.documentElement.clientHeight-130 + "px"
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
+           
         }
     },
 
@@ -525,14 +513,7 @@ export default {
                 this.params.page=1;
                 this.getListData(this.params);
             }
-            setTimeout(() => {
-                // var leftDom=document.getElementById('vue-chart-left-table-list');
-                // var rightDom = document.getElementById("vue-chart-right-draw-content");
-                // var clientHeight = document.documentElement.clientHeight;
-                // leftDom.style.maxHeight = clientHeight - 362+"px";
-                // rightDom.style.maxHeight = clientHeight - 362 +"px";
-                publicFn.windowResize();
-            }, 200);
+            
         },
 
         //获取今天日期

@@ -40,14 +40,14 @@
                          甘特图显示任务项
                         </span>
                         <Form label-position="left" style="display:inline-block;">
-                                <KrField
-                                    v-if="mask"
-                                    type="selectTree"
-                                    :data="treeData"
-                                    @okClick="treeClick"
-                                    @checkChange="treeChange"
-                                    :treeIds="treeIds"
-                                />
+                            <KrField
+                                v-if="mask"
+                                type="selectTree"
+                                :data="treeData"
+                                @okClick="treeClick"
+                                @checkChange="treeChange"
+                                :treeIds="treeIds"
+                            />
                         </Form>
                     </div>
 

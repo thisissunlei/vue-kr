@@ -6,7 +6,7 @@
             @mouseout="outHide(data.t_id)"
         >
             <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
-            <div v-if="!this.data.chartType && isInitial()">
+            <div v-if="isInitial()">
                 <div class='col-tool-label'>
                         <div class="article"
                             v-if="getFlagShow('STAGETASK')"
@@ -232,6 +232,7 @@ export default {
 
         },
         getFlagShow(event){
+            return true;
             if(this.data.data){
                 return this.data.data.taskType == event
             }else{
@@ -241,16 +242,16 @@ export default {
 
         },
        getActualBgColor(){
-            if(this.data.data.progressStatus===''){
-                return;
-            }
-            if(this.data.data.progressStatus<0){
+            // if(this.data.data.progressStatus===''){
+            //     return;
+            // }
+            // if(this.data.data.progressStatus<0){
 
-                return 'rgba(246,156,156,0.5)';
-            }else if(this.data.data.progressStatus>=0){
+            //     return 'rgba(246,156,156,0.5)';
+            // }else if(this.data.data.progressStatus>=0){
 
-                return 'rgba(194,233,152,0.6)'
-            }
+            //     return 'rgba(194,233,152,0.6)'
+            // }
        },
        getPlanBgColor(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -263,6 +264,7 @@ export default {
             }
        },
        getBoxWidthAndOffice(){
+          
             var dates =  publicFn.getAllMaxAndMin(this.data);
             var boxDetail={};
             var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
@@ -278,6 +280,7 @@ export default {
                 width:utils.dateDiff(min,max)+1,
                 office:utils.dateDiff(officeStart,min)
             }
+            console.log(this.boxDetail,"oooooooo")
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
                 office:utils.dateDiff(min,planStart)

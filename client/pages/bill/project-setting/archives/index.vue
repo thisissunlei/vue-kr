@@ -5,7 +5,7 @@
     </div>
     
     <div class="u-table">
-        <Table border :columns="columns" :data="billList"></Table>
+        <Table border :columns="columns" @on-sort-change="shortChange" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page 
@@ -54,6 +54,7 @@ import Buttons from '~/components/Buttons';
 import KrField from '~/components/KrField';
 import KrTree from '~/components/KrTree';
 import AddArchives from './add-archives';
+import publicFn from '../publicFn';
 
     export default {
         name: 'Bill',
@@ -79,7 +80,7 @@ import AddArchives from './add-archives';
                 tabParams:{
                     page:1,
                     pageSize:15,
-                    customerName:''
+                    query:'CTIMEDESC'
                 },
                 addData:{},
                 /**
@@ -109,95 +110,96 @@ import AddArchives from './add-archives';
                         align:'center',
                     },
                     {
-                        title: '计划项目周期',
-                        key: 'plannedPeriod',
+                        title: '当前项目计划进度',
+                        key: 'city',
                         align:'center',
-                        render(h, obj){
-                            var label='-';
-                            if(obj.row.status==1){
-                                label='-';
-                            }else{
-                                label=obj.row.plannedPeriod;
-                            }
-                            return label
-                        }
+                        
                     },
+                   
                     {
-                        title: '当前项目阶段',
+                        title: '当前项目实际进度',
+                        className:'current-range',
+                        key: 'taskStatus',
+                        align:'center',
+                        sortable: true,
+                        render(h, obj){
+                            
+                            var row='';
+                            if(!obj.row.tasks){
+                                return  h('div', {
+                                    attrs: {
+                                        class: 'row-current-more current-more-task table-null'
+                                    },
+                                }, '-')
+                            }
+                            let that = this;
+                            if(obj.row.tasks){
+                                row=obj.row.tasks.map((item,index)=>{
+                                    return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: item.currentTask
+                                            }
+                                        }, [
+                                        h('div', {
+                                            attrs: {
+                                                class: publicFn.getDivClass(index,obj),
+                                            },
+                                        }, item.currentTask?`${item.currentTask}`:'-')
+                                    ])
+                                    ]) 
+                                })
+                                return row
+                            }
+                        }
+                       
+                    },
+                   
+                    {
+                        title: '当前项目实际进度状态',
                         className:'current-range',
                         key: 'task',
                         align:'center',
+                       
                         render(h, obj){
                            var row='';
+                           if(!obj.row.tasks){
+                                return  h('div', {
+                                    attrs: {
+                                        class: 'row-current-more current-more-task table-null'
+                                    },
+                                }, '-')
+                            }
                            if(obj.row.tasks){
                                row=obj.row.tasks.map((item,index)=>{
+                                   
+                                   let showVal = !item.taskStatusDesc?'-':item.taskStatusDesc;
                                   return h('div', [
                                        h('Tooltip', {
                                         props: {
                                             placement: 'top',
-                                            content: item.taskName
+                                            content: showVal
                                          }
                                         }, [
                                         h('div', {
                                             attrs: {
-                                             class: index!=obj.row.tasks.length-1?'row-current-more current-more-task':'row-current-more current-more-task noBorder'
-                                            }
-                                        }, item.taskName?`${item.taskName}`:'-')
+                                             class: publicFn.getDivClass(index,obj)
+                                            },
+                                            style:{color:publicFn.getDivColor(item.taskStatus)}
+                                        }, showVal)
                                     ])
                                   ]) 
                                 })
                                 return row
                            }
-                          
-                        }
-                    },
-                    {
-                        title: '当前项目进度状态',
-                        key: 'task',
-                        className:'current-range',
-                        align:'center',
-                        render(h, obj){
-                           var row='';
-                           if(obj.row.tasks){
-                               row=obj.row.tasks.map((item,index)=>{
-                                    let label='';
-                                    let colorStyle='';
-                                    if(item.progressStatus<0){
-                                        label='延期'+Math.abs(item.progressStatus)+'天'
-                                        colorStyle="color: #FF6868;"
-                                    }else if(item.progressStatus===0){
-                                        label='正常'
-                                    }else if(item.progressStatus>0){
-                                        label='提前'+item.progressStatus+'天'
-                                        colorStyle="color: #F5A623"
-                                    }else{
-                                        label='-'
-                                    }
-
-                                    return h('div', [
-                                       h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content:label
-                                         }
-                                        }, [
-                                        h('div', {
-                                            attrs: {
-                                             class: index!=obj.row.tasks.length-1?'row-current-more current-more-task':'row-current-more current-more-task noBorder'
-                                            },
-                                            style:colorStyle
-                                        }, `${label}`)
-                                    ])
-                                  ]) 
-                               })
-                           }
-                           return row
                         }
                     },
                     {
                         title: '创建时间',
                         key: 'cTime',
                         align:'center',
+                        sortable: true,
                         render(h, obj){
                             if(!obj.row.cTime){
                                 return '-'
@@ -236,6 +238,7 @@ import AddArchives from './add-archives';
         },
         created(){
              this.getTableData(this.$route.query);
+
              if(!this.$route.query.customerName){
                  this.$route.query.customerName=""
              }
@@ -243,6 +246,24 @@ import AddArchives from './add-archives';
              
         },
         methods:{
+            //排序按钮
+            shortChange(event){
+                console.log(event,"ppppp")
+                if(event.key === 'cTime'){
+                    if(event.order === 'asc'){
+                        this.tabParams.query = 'TASKASC';
+                    }else{
+                        this.tabParams.query = 'TASKDESC';
+                    }
+                }else{
+                    if(event.order === 'asc'){
+                         this.tabParams.query = 'CTIMEASC';
+                    }else{
+                        this.tabParams.query = 'CTIMEDESC';
+                    }
+                }
+                this.getTableData(this.tabParams)
+            },
             //跳转查看页面
             goView(params){
                 window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
@@ -330,6 +351,9 @@ import AddArchives from './add-archives';
                 cursor:pointer;
 
             }
+    }
+    .table-null{
+        line-height: 47px;
     }
     .current-range{
         //border-bottom: none;

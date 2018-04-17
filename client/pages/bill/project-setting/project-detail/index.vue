@@ -40,7 +40,7 @@
 
         </div>
 
-        <Modal
+        <!-- <Modal
                 v-model="openAddTask"
                 title="添加任务"
                 width="660"
@@ -50,18 +50,18 @@
                     <Button type="primary" @click="submitAddTask('formItem')">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="cancelAddTask">取消</Button>
                 </div>
-        </Modal>
+        </Modal> -->
 
         <Modal
-                v-model="openEditTask"
-                title="编辑任务"
-                width="660"
-            >
-                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-                <div slot="footer" style="text-align: center;">
-                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                    <Button type="primary" @click="submitEditTask('formItem')" style="height:34px">确认编辑</Button>
-                </div>
+            v-model="openEditTask"
+            title="编辑任务"
+            width="660"
+        >
+            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+            <div slot="footer" style="text-align: center;">
+                <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
+                <Button type="primary" @click="submitEditTask('formItem')" style="height:34px">确认编辑</Button>
+            </div>
         </Modal>
 
          <Modal
@@ -69,7 +69,7 @@
                 title="查看记录"
                 width="660"
             >
-                <WatchRecord :watchRecord="watchRecord"/>
+                <WatchRecord :watchRecord="watchRecord" @searchClick="searchClick"/>
                 <div slot="footer" style="text-align:center;">
                     <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
                 </div>
@@ -231,6 +231,11 @@ export default {
                 leftDom.addEventListener('scroll',this.scroll);
                 rightDom.removeEventListener('scroll',this.chartScroll);
             }
+        },
+        //查看记录页面搜索被点击
+        searchClick(params){
+            console.log(params,"oooooo")
+            this.getWatchData()
         },
         selectFormat(data){
             var dataArr =  data.map((item)=>{
@@ -448,15 +453,12 @@ export default {
             var year = +start[0],
                 month = +start[1],
                 day= +start[2];
-
             for(var i=0;i<n;i++){
-
-
                 if(month > 12){
                     month = month-12;
                     year += 1;
                 }
-                month ++
+                month ++;
             }
             if(month > 12){
                 month = month-12;

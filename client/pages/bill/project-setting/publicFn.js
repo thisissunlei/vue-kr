@@ -219,6 +219,41 @@ function compareEndTime(data1, data2){
     data = startData > endData ? startData : endData;
     return dateUtils.dateToStr("YYYY-MM-DD", new Date(data));
 };
+
+function getDivColor(value){
+    switch (value) {
+        case 'NORMAL':
+            return '#fff';
+            break;
+        case 'ADVANCE':
+            return '#fff';
+            break;
+        case 'DELAY':
+            return '#fff';
+            break;
+        case 'NDERWAY':
+            return 'rgb(255, 214, 105)';
+            break;
+       
+        case 'OVERDUE':
+            return 'rgb(246, 156, 156)';
+            break;
+        case 'PLANNED':
+            return '#fff';
+            break;
+        default: 'UNKNOWN'
+            return '#666';
+
+    }
+}
+function getDivClass(index,obj){
+    let divClass = 'row-current-more current-more-task ';
+    if (index === obj.row.tasks.length - 1) {
+        divClass = 'row-current-more current-more-task noBorder';
+    }
+    console.log(divClass,"ppppppppp")
+    return divClass;
+}
 export default {
     getAllMaxAndMin,
     getMonthDayNum,
@@ -226,6 +261,8 @@ export default {
     fontCover,
     windowResize,
     compareEndTime,
-    compareTime
+    compareTime,
+    getDivColor,
+    getDivClass
 
 }

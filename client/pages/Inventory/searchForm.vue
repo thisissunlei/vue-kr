@@ -423,8 +423,7 @@ export default {
         },
         //导出
         submitExport(){
-            this.props=Object.assign({},this.props,this.params);
-            utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
+            this.$emit('submitExport');
         },
         //检查输入字符串字节长度
         fucCheckLength(strTemp) {

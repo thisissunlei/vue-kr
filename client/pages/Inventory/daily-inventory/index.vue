@@ -3,6 +3,7 @@
     <SearchForm 
       @searchClick="searchClick"
       @clearClick="clearClick"
+      @submitExport="submitExport"
       @initData="initData"
       identify='daily'
     />
@@ -330,6 +331,9 @@ import Discount from '../discount';
             clearClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.getTableData(this.tabForms);
+            },
+            submitExport(){
+                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/export');
             },
             //折扣价
             countChange(param){

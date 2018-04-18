@@ -102,20 +102,21 @@ publicFn.getMonthDayNum<template>
             :openDrawer="openEditTask"
             iconType="view-icon"
             :close="cancelEditTask"
+            width="735"
         >       
-                <ViewTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
         </Drawer>
 
         <Modal
-                v-model="openDelete"
-                title="删除任务"
-                width="400"
-            >
-                <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
-                <div slot="footer">
-                    <Button type="primary" @click="submitDelete">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
-                </div>
+            v-model="openDelete"
+            title="删除任务"
+            width="400"
+        >
+            <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
+            <div slot="footer">
+                <Button type="primary" @click="submitDelete">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
+            </div>
         </Modal>
 
         <Message
@@ -133,7 +134,7 @@ publicFn.getMonthDayNum<template>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
-import ViewTask from './view-task';
+import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Drawer from '~/components/Drawer';
@@ -150,7 +151,7 @@ export default {
         ListTable,
         Message,
         Drawer,
-        ViewTask
+        EditTask
     },
     data(){
         return{

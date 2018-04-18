@@ -1,32 +1,28 @@
 <template>
     <div class="edit-task">
-        <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;">
+        <Form  :model="params"   label-position="top" style="margin-top:25px;max-height:556px;">
             <ClassificationBox value="1" title="计划工期" :isBorder="true" type="num">
                 <div slot="content" class="time-box plan-time" > 
-                     
-                        <Form-item label="开始日" class="bill-search" prop="planStartTime">
-                            <DatePicker 
-                                v-model="formItem.planStartTime"
-                                type="date" 
-                                placeholder="开始日期" 
-                                style="width: 245px"
-                                @on-change="planStartChange"
-                            />
-                            <span class="u-date-txt" ></span>
-                        </Form-item>
-                     
-                   
-                        <Form-item label="结束日"  prop="planEndTime" style="display:inline-block;">
-                            <DatePicker 
-                                v-model="formItem.planEndTime"
-                                type="date" 
-                                placeholder="结束日期" 
-                                style="width: 245px"
-                                @on-change="planEndChange"
-                            /> 
-                        </Form-item>
-                       
+                    <Form-item label="开始日" class="bill-search" prop="planStartTime">
+                        <DatePicker 
+                            v-model="params.planStartTime"
+                            type="date" 
+                            placeholder="开始日期" 
+                            style="width: 245px"
+                            @on-change="planStartChange"
+                        />
+                        <span class="u-date-txt" ></span>
+                    </Form-item>
                     
+                    <Form-item label="结束日"  prop="planEndTime" style="display:inline-block;">
+                        <DatePicker 
+                            v-model="params.planEndTime"
+                            type="date" 
+                            placeholder="结束日期" 
+                            style="width: 245px"
+                            @on-change="planEndChange"
+                        /> 
+                    </Form-item>
                     <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                 </div>
             </ClassificationBox>
@@ -36,7 +32,7 @@
                         <Tooltip placement="top">
                             <Form-item label="开始日" class="bill-search">
                                 <DatePicker 
-                                    v-model="formItem.actualStartTime"
+                                    v-model="params.actualStartTime"
                                     type="date" 
                                     placeholder="开始日期" 
                                     style="width: 245px"
@@ -55,7 +51,7 @@
                         <Tooltip placement="top">
                             <Form-item label="结束日"  prop="actualEndTime" style="display:inline-block;">
                                 <DatePicker 
-                                    v-model="formItem.actualEndTime"
+                                    v-model="params.actualEndTime"
                                     type="date" 
                                     placeholder="结束日期" 
                                     style="width: 245px"
@@ -81,23 +77,23 @@
                 <div slot="content"> 
 
                     <LabelText label="管理层关注" >
-                        {{!formItem.focus?'否':'是'}}
+                        {{!params.focus?'否':'是'}}
                     </LabelText>
                     <LabelText label="责任部门" >
                         {{getEdit.department}}
                     </LabelText>
                     <div>
                         <LabelText label="上游任务" >
-                            {{!formItem.downstream?'-':formItem.downstream}}
+                            {{!params.downstream?'-':params.downstream}}
                         </LabelText>
                     </div>
                     <div>
                         <LabelText label="下游任务" >
-                           {{!formItem.upstream?'-':formItem.upstream}}
+                           {{!params.upstream?'-':params.upstream}}
                         </LabelText>
                     </div>
                     <LabelText label="描述" >
-                        {{!formItem.descr?'-':formItem.descr}}
+                        {{!params.descr?'-':params.descr}}
                     </LabelText>
                 </div>
                 
@@ -108,17 +104,17 @@
                         class='record-wrap'
                         v-for="item in getEdit.operLogs" 
                         :key="item.id"
-                        >
-                            <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
-                            <div style="display:inline-block;">
-                                <div class='second'>
-                                    <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
-                                    <span >{{item.comment}}</span>
-                                </div>
-                                <div class='third' v-if="item.descr">
-                                    {{item.descr}}
-                                </div>
+                    >
+                        <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
+                        <div style="display:inline-block;">
+                            <div class='second'>
+                                <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
+                                <span >{{item.comment}}</span>
                             </div>
+                            <div class='third' v-if="item.descr">
+                                {{item.descr}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ClassificationBox>                
@@ -151,101 +147,82 @@ export default {
         return{
             dateError:false,
             cDateError:false,
-            formItem:{
-                name:this.getEdit.name?this.getEdit.name:'',
-                planStartTime:this.getEdit.planStartTime?this.getEdit.planStartTime:'',
-                planEndTime:this.getEdit.planEndTime?this.getEdit.planEndTime:'',
-                actualStartTime:this.getEdit.actualStartTime?this.getEdit.actualStartTime:'',
-                actualEndTime:this.getEdit.actualEndTime?this.getEdit.actualEndTime:'',
-                descr:this.getEdit.descr?this.getEdit.descr:'',
-                operDescr:this.getEdit.operDescr?this.getEdit.operDescr:'',
-                focus:this.getEdit.focus
-            },
-            ruleValidate: {
-                name: [
-                    {  message: '请输入任务名称且最多20个字符', trigger: 'change',max:20 }
-                ],
-                planStartTime:[
-                    { type: 'date', message: '请输入开始日期', trigger: 'change' }
-                ],
-                planEndTime:[
-                    {  type: 'date',message: '请输入结束日期', trigger: 'change' }
-                ],
-                focus:[
-                    {  message: '请选择是否关注', trigger: 'change' }
-                ]
-            },
-
-            actualStart:this.getEdit.actualStartTime,
-            actualEnd:this.getEdit.actualEndTime,
-            planStart:this.getEdit.planStartTime,
-            planEnd:this.getEdit.planEndTime
+            params:this.getFormItem(),
+            // actualStart:this.getEdit.actualStartTime,
+            // actualEnd:this.getEdit.actualEndTime,
+            // planStart:this.getEdit.planStartTime,
+            // planEnd:this.getEdit.planEndTime
         }
     },
     created(){    
-        this.queryData=this.$route.query; 
+        // this.queryData=this.$route.query; 
     },
-    updated:function(){
-        this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
+    mounted(){
+         console.log(this.params,"--------",this.getEdit)
+         
     },
+   
     methods:{
-        nameChange(event){
-            this.formItem.name=event.target.value.trim();
-            if(!this.formItem.name){
-                return ;
-            }
-            let params={
-                name:event.target.value,
-                propertyId:this.queryData.id,
-                id:this.id
-            }
-            this.$http.get('project-name-check',params).then((response)=>{
-                    this.formItem.error=false;
-                 }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                    });
-                    this.formItem.error=true;
-                 })
+        getFormItem(){
+            console.log(this.getEdit,"lllllll")
+            return Object.assign({},this.getEdit)
         },
         selectTodayStart(){
-            this.formItem.actualStartTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            this.actualStartChange( this.formItem.actualStartTime)
+            return;
+            this.params.actualStartTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            this.actualStartChange( this.params.actualStartTime)
         },
         selectTodayEnd(){
-            this.formItem.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
-             this.actualEndChange( this.formItem.actualEndTime)
+            return;
+            this.params.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
+             this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
+            return;
             this.planStart=params;
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
             }else{
                 this.dateError=false;
+                var data = Object.assign({},this.params);
+                this.$emit('dataChange',data)
             }
         },
         planEndChange(params){
+            return;
             this.planEnd=params;
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
             }else{
                 this.dateError=false;
+                this.params.planEndTime = params;
+                var data = Object.assign({},this.params);
+                 
+                  return;
+                this.$emit('dataChange',data)
             }
         },
         actualStartChange(params){
+            return;
             this.actualStart=params;
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
                 this.cDateError=false;
+                var data = Object.assign({},this.params);
+                this.$emit('dataChange',data)
             }
         },
         actualEndChange(params){
+            return;
             this.actualEnd=params;
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
+
                 this.cDateError=false;
+                var data = Object.assign({},this.params);
+                this.$emit('dataChange',data)
             }
         }
     }
@@ -285,7 +262,6 @@ export default {
         cursor: pointer;
     }
     //时间样式修改
-    
     .ivu-date-picker-rel{
         input{
             font-weight: bold;

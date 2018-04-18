@@ -398,7 +398,6 @@ export default {
                 }];
                 for (var year = startObj.year; ;) {
                     year++;
-                    console.log("----",year)
                     if(year == endObj.year){
                         yearArr.push({
                             year:endObj.year,

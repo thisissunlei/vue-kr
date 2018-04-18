@@ -5,7 +5,8 @@
     <div class= "drawer-body" :style="{width:width+'px'}">
         <div class="u-drawer-title">
             <span v-if="iconType" :class="getClassName()">i</span>
-            <div class="title-label"> {{title}}</div>
+            <div v-if="title" class="title-label"> {{title}}</div>
+            <slot name="title"></slot>
             <span class="u-close" @click="onClose"></span>
         </div>
         <slot></slot>

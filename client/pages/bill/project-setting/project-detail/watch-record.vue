@@ -1,5 +1,6 @@
 <template>
     <div class="watch-record">
+         
         <Form ref="params" :model="params" >
             <Form-item label="" class='daily-form'>
                 <DatePicker 
@@ -83,19 +84,13 @@ export default {
             pageSize:15,
             page:1,
             params:{
+              
+                startTime:'',
+                updator:'',
                 page:1,
                 pageSize:10,
-                updator:'',
-                endTime:'',
-                startTime:''
+                totalPages:1,
 
-            },
-            formItem:{
-                page:1,
-                pageSize:10,
-                updator:'',
-                endTime:'',
-                startTime:''
             },
             columns:[
                 {
@@ -140,7 +135,7 @@ export default {
           
         },
         seachClick(){
-            this.$emit('searchClick',this.formItem)
+            this.$emit('searchClick',this.params)
         },
         changeSaler(value){
                 // 销售员

@@ -130,9 +130,11 @@ export default {
         }
     },
     mounted(){
-        if(!this.data.chartType){
+        var data = Object.assign({},this.data.data);
+        if(data &&  data.planStartTime && data.planEndTime){
             this.getBoxWidthAndOffice();
         }
+        
     },
     watch:{
         startDate:{
@@ -144,6 +146,7 @@ export default {
         },
     },
     updated(){
+
         publicFn.fontCover(this.planContentId,this.actualContentId);
     },
     methods:{

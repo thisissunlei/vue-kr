@@ -255,7 +255,7 @@ export default  {
     //查看编辑记录
     'watch-edit-record': {
       url: '/api/krspace-erp-web/pm/operate-log/list',
-      method: 'post'
+      method: 'get'
     },
     //根据项目id查询甘特图显示任务项
     'project-id-search': {

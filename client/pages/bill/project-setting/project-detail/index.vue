@@ -40,44 +40,26 @@
 
         </div>
 
-        <!-- <Modal
-                v-model="openAddTask"
-                title="添加任务"
-                width="660"
-            >
-                <AddTask  :id="addId" @bindData="onAddChange" v-if="openAddTask" ref="fromFieldTask"/>
-                <div slot="footer">
-                    <Button type="primary" @click="submitAddTask('formItem')">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="cancelAddTask">取消</Button>
-                </div>
-        </Modal> -->
-
-        <!-- <Modal
-            v-model="openEditTask"
-            title="编辑任务"
-            width="660"
-        >
-            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-            <div slot="footer" style="text-align: center;">
-                <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                <Button type="primary" @click="submitEditTask('formItem')" style="height:34px">确认编辑</Button>
-            </div>
-        </Modal> -->
         <Drawer 
-            title="设置企业管理员"
             :openDrawer="openEditTask"
             iconType="view-icon"
             :close="cancelEditTask"
             width="735"
-        >
-            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+        >   
+            <ObjectDetailTitle slot="title" :data="getEdit" />
+            <EditTask 
+                :id="editId"  
+                @dataChange="dataChange" 
+                v-if="openEditTask" 
+                :getEdit="Object.assign({},getEdit)"
+            />
         </Drawer>
 
-         <Modal
-                v-model="openWatch"
-                title="查看记录"
-                width="660"
-            >
+        <Modal
+            v-model="openWatch"
+            title="查看记录"
+            width="660"
+        >
                 <WatchRecord :watchRecord="watchRecord" @searchClick="searchClick"/>
                 <div slot="footer" style="text-align:center;">
                     <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
@@ -142,6 +124,7 @@ import Message from '~/components/Message';
 import Vue from 'vue';
 import publicFn from '../publicFn';
 import Drawer from '~/components/Drawer';
+import ObjectDetailTitle from './object-detail-title';
 var ganttChartScrollTop = 0;
 
 
@@ -153,7 +136,8 @@ export default {
         DetailTaskList,
         GanttChart,
         Message,
-        Drawer
+        Drawer,
+        ObjectDetailTitle
     },
     data(){
         return{
@@ -176,8 +160,15 @@ export default {
                 page:1,
                 pageSize:15
             },
-            
-
+            watchParams:{
+                endTime:'',
+                id:0,
+                startTime:'',
+                updator:'',
+                page:1,
+                pageSize:10,
+                totalPages:1,
+            },
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -247,8 +238,9 @@ export default {
         },
         //查看记录页面搜索被点击
         searchClick(params){
-            
-            this.getWatchData()
+            this.watchParams = Object.assign({},params);
+             this.getWatchData(this.watchParams);
+           
         },
         selectFormat(data){
             var dataArr =  data.map((item)=>{
@@ -336,9 +328,7 @@ export default {
                 propertyId:this.queryData.id,
                 departments:ids?ids:''
             }
-
             params.departments = params.departments.replace('-ALL-,','');
-
             this.isLoading = true;
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items;
@@ -390,8 +380,9 @@ export default {
             return endObj;
         },
          //获取查看编辑记录
-        getWatchData(id){
-            this.$http.post('watch-edit-record',{id:id}).then((response)=>{
+        getWatchData(params){
+            var data= Object.assign({},params)
+            this.$http.get('watch-edit-record',data).then((response)=>{
                 this.watchRecord=response.data.items;
             }).catch((error)=>{
                 this.$Notice.error({
@@ -498,12 +489,16 @@ export default {
             this.editId=id;
             this.parentId=parentId;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
-                this.getEdit=response.data;
-                this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-                this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-                this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-                this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-                this.getEdit.focus=this.getEdit.focus==1?'1':'0';
+                var data = Object.assign({},response.data)
+               
+                data.planStartTime=this.timeApplyFox(data.planStartTime,true);
+                data.planEndTime=this.timeApplyFox(data.planEndTime,true);
+                data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
+                data.actualEndTime=this.timeApplyFox(data.actualEndTime,true)
+                data.focus=data.focus==1?'1':'0';
+               
+                this.getEdit=Object.assign({},data);
+                console.log(this.getEdit,"pppppppp")
                 this.cancelEditTask();
             }).catch((error)=>{
                 this.$Notice.error({
@@ -517,7 +512,8 @@ export default {
         },
         //打开查看任务
         watchTask(){
-            this.getWatchData(this.queryData.id);
+            this.watchParams.id = this.queryData.id;
+            this.getWatchData(this.watchParams);
             this.cancelWatch();
         },
         //打开删除任务
@@ -550,103 +546,39 @@ export default {
             this.addData=params;
         },
         //编辑对象传递校验
-        onEditChange(params,error1,error2){
-            this.upperError=(error1||error2)?true:false;
-            this.editData=params;
+        dataChange(params){ 
+            var data = Object.assign({},params);
+            this.submitEditTask(data)
         },
-        //新建任务提交
-        submitAddTask(name){
-                // return;
-                var newPageRefs = this.$refs.fromFieldTask.$refs;
-                var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    if (!valid) {
-                        isSubmit = false
-                    }
-                })
-                if(!isSubmit){
-                    return;
-                }
-                if(this.upperError){
-                    return ;
-                }
-                if(this.addData.error){
-                    this.$Notice.error({
-                        title: '任务名称重复'
-                    });
-                    return ;
-                }
-                this.addData.type="STAGETASK";
-                this.addData.pid=this.addId?this.addId:0;
-                this.addData.planEndTime=this.addData.type=='STAGETASK'?this.addData.planEndTime:this.addData.planStartTime;
-                this.addData.propertyId=this.queryData.id;
-                this.addData.planStartTime=this.addData.planStartTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planStartTime)):'';
-                this.addData.planEndTime=this.addData.planEndTime?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.addData.planEndTime)):'';
-                this.$http.post('project-add-task',this.addData).then((response)=>{
-                     this.ids=this.ids?this.ids+','+response.data.id:'';
-                     this.cancelAddTask();
-                     this.getListData(this.ids);
-
-                     this.MessageType="success";
-                     this.openMessage=true;
-                     this.warn="新建成功";
-                    this.scrollPosititon();
-                 }).catch((error)=>{
-                     this.MessageType="error";
-                     this.openMessage=true;
-                     this.warn=error.message;
-                })
-          },
+        
           //编辑任务提交
-          submitEditTask(name){
-                var newPageRefs = this.$refs.fromFieldTask.$refs;
-                var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    if (!valid) {
-                        isSubmit = false
-                    }
-                })
-                if(!isSubmit){
-                    return;
-                }
-                if(this.upperError){
-                    return ;
-                }
-                if(this.editData.error){
-                    this.$Notice.error({
-                        title: '任务名称重复'
-                    });
-                    return ;
-                }
-                var dataParams=this.editData;
-                dataParams.focus=dataParams.focus=='1'?1:0;
-                dataParams.type='STAGETASK';
+        submitEditTask(params){
+            var dataParams = Object.assign({},params);
                 dataParams.id=this.editId;
-                dataParams.pid=this.parentId?this.parentId:0;
-                dataParams.propertyId=this.queryData.id;
-                dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
-                dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
-                dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
-                dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
-                this.$http.post('project-edit-task',dataParams).then((response)=>{
-                    this.cancelEditTask();
-                    this.getListData(this.ids);
+            dataParams.propertyId=this.queryData.id;
+            dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
+            dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
+            dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
+            dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
+            this.$http.post('project-edit-task',dataParams).then((response)=>{
+                this.cancelEditTask();
+                this.getListData(this.ids);
 
-                    if(response.code>1){
-                        this.cancelSure();
-                    }else{
-                        this.MessageType="success";
-                        this.openMessage=true;
-                        this.warn="编辑成功";
-                    }
-                    this.scrollPosititon();
-                }).catch((error)=>{
-                    this.MessageType="error";
+                if(response.code>1){
+                    this.cancelSure();
+                }else{
+                    this.MessageType="success";
                     this.openMessage=true;
-                    this.warn=error.message;
-                })
-          },
-          timeApplyFox(str,param){
+                    this.warn="编辑成功";
+                }
+                this.scrollPosititon();
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
+        },
+        timeApplyFox(str,param){
             if(str){
                if(str.typeof == 'string'){
                     str = str.replace(/-/g,'/');
@@ -709,6 +641,7 @@ export default {
 
 <style lang="less">
    .edit-left-bar{
+
        width:100%;
        background: #fff;
        display:inline-block;

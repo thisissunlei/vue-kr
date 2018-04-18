@@ -217,7 +217,7 @@ import http from '~/plugins/http.js';
 							obj.canFigureId = item.canFigureId;
 							obj.capacity = item.capacity;
 							obj.type = obj.belongType;
-							obj.price = item.price;
+							obj.seatPrice = item.seatPrice;
 							obj.checked = false;
 							obj.status = item.status || 4;
 							// 编辑带回的数据
@@ -260,7 +260,7 @@ import http from '~/plugins/http.js';
 								select.type = obj.belongType;
 								select.capacity = item.capacity;
 								select.seatType = obj.belongType == 'STATION'?'OPEN':'SPACE';
-								select.price = item.price;
+								select.seatPrice = item.seatPrice;
 
 								startToEnd.push(select)
 							}
@@ -313,6 +313,7 @@ import http from '~/plugins/http.js';
 				this.canvasEles();
 			},
 			dataChange: function(data, allData) {
+				console.log('dataChange====',data)
 				const {
 					selectedObjs,
 					newfloor,
@@ -336,6 +337,9 @@ import http from '~/plugins/http.js';
 						selectedObj['a'+floor].push(item)
 					})
 				}
+
+				console.log('selectedObj',selectedObjs)
+
 				
 				
 				
@@ -369,10 +373,25 @@ import http from '~/plugins/http.js';
 					}
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
+				console.log('allDataObj',allDataObj,'all',submitDataAll)
+				console.log('selectedObj----2',selectedObjs)
 
-				for (let i in selectedObj) {
-					submitDataAll = submitDataAll.concat(selectedObj[i]);
+
+				for (let i in selectedObjs) {
+					console.log('selectedObjs[i]',selectedObjs[i].id)
+					for (let j in submitDataAll){
+						console.log('submitDataAll[i]',submitDataAll[j].id)
+
+						if(selectedObjs[i].name == submitDataAll[j].name){
+							console.log('selectedObjs[i].id == submitDataAll[j].id')
+							submitDataAll[j].originalPrice = selectedObjs[i].originalPrice ;
+						}
+					}
+					// submitDataAll = submitDataAll.concat(selectedObj[i]);
 				}
+
+				console.log('selectedObj',selectedObjs,'all',submitDataAll)
+
 
 				for (let i in delDataObj) {
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
@@ -392,8 +411,10 @@ import http from '~/plugins/http.js';
 					obj1.belongType = belongType;
 					obj1.whereFloor = item.whereFloor || item.floor;
 					obj1.name = item.name;
-					obj1.price = item.price;
+					// obj1.seatPrice = item.seatPrice || item.guidePrice || 0;
+					obj1.seatPrice = item.seatPrice;
 					obj1.capacity = item.capacity;
+					obj1.originalPrice = item.originalPrice || obj1.seatPrice|| '';
 					return obj1
 
 				})

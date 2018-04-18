@@ -175,7 +175,7 @@ export default{
 								var fileResponse = xhrfile.response;
 								if (xhrfile.status === 200) {
 									if (fileResponse && fileResponse.code > 0) {
-										//  that.onSuccess(fileResponse.data,file);
+									
 										var params = {};
 										that.isShowProgress = "none";
 										that.progress = 100;

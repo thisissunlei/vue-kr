@@ -697,7 +697,8 @@ import utils from '~/plugins/utils';
 
                         obj.value =  r.data[i].map(item=>{
                             let obj = item;
-                            obj.oldPrice = item.originalPrice;
+                            obj.oldPrice = item.guidePrice == 0?'':item.guidePrice;
+                            obj.originalPrice = item.guidePrice == 0?'':item.guidePrice;
                             return obj;
                         });
 
@@ -1035,15 +1036,23 @@ import utils from '~/plugins/utils';
                 let val = this.selecedArr;
                 let _this = this;
                 this.config()
+                let originalPrice = false;
+
+
                
                 let station = val.map(item=>{
                     let obj = item;
                     // obj.originalPrice = item.price;
                     obj.seatId = item.seatId;
                     startDate = obj.endDate;
+                    if(item.originalPrice == ''){
+                        originalPrice = true;
+                    }
                     obj.floor = item.whereFloor || item.floor;
                     obj.startDate = this.renewForm.start;
+                    obj.start = this.renewForm.start;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
+                    obj.end =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.renewForm.endDate));
                     return obj;
                 })
                 let params = {
@@ -1051,6 +1060,10 @@ import utils from '~/plugins/utils';
                     leaseBegindate:this.renewForm.start,
                     communityId:this.renewForm.communityId,
                     seats:JSON.stringify(station)
+                }
+                this.selecedStation = station
+                if(originalPrice){
+                    return
                 }
                 if(val.length){
                      this.$http.post('get-station-amount', params, r => {

@@ -167,7 +167,7 @@
                         </Col>
                     </Row>
                     <!-- 设置折扣 -->
-                    <Row>
+                    <Row style="margin-top:30px">
                         <Col class="sale-tactics">
 
                             <div style="display:inline-block">
@@ -181,6 +181,13 @@
                             </div>
 
 
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>
+                            <div class="title">服务费明细</div>
+                            <Table :columns="serviceDetailsColumns" :data="serviceDetailsList"></Table>
                         </Col>
                     </Row>
 
@@ -329,7 +336,6 @@
                 }
             };
             const validateEndDate = (rule, value, callback) => {
-                console.log('validateEndDate---------',value,'==',this.formItem.beginTime)
                 if (value === '') {
                     callback(new Error('请先选择换租服务结束日'));
                 } else if(value < this.formItem.beginTime){
@@ -358,22 +364,22 @@
                     },
                     {
                         title: '指导价(元/月/房间)',
-                        key: 'seatName',
+                        key: 'seatPrice',
                         align: 'center'
                     },
                     {
                         title: '下单价(元/月/房间)',
-                        key: 'seatName',
+                        key: 'seatPrice',
                         align: 'center'
                     },
                     {
                         title: '优惠',
-                        key: 'seatName',
+                        key: 'name',
                         align: 'center'
                     },
                     {
                         title: '签约价',
-                        key: 'seatName',
+                        key: 'name',
                         align: 'center'
                     },
                     {
@@ -397,6 +403,63 @@
                                         }
                                     }
                                 }, '删除'),
+                            ]);
+                        }
+                    }
+                ],
+                serviceDetailsList:[],
+                serviceDetailsColumns:[
+                    {
+                        title: '工位编号/房间名称',
+                        key: 'name',
+                        align: 'center'
+                    },
+                    {
+                        title: '服务开始日',
+                        key: 'seatType',
+                        align: 'center'
+                    },
+                    {
+                        title: '服务结束日',
+                        key: 'seatPrice',
+                        align: 'center'
+                    },
+                    {
+                        title: '不计算服务费区间',
+                        key: 'name',
+                        align: 'center'
+                    },
+                    {
+                        title: '签约价',
+                        key: 'name',
+                        align: 'center'
+                    },
+                    {
+                        title: '金额',
+                        key: 'name',
+                        align: 'center'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.getServiceDetail(params.row)
+                                        }
+                                    }
+                                }, '明细'),
                             ]);
                         }
                     }
@@ -453,7 +516,7 @@
                 //表单数据
                 formItem:{
                     saleTime:new Date(),
-                    beginTime:new Date(),
+                    beginTime:'',
                 },
                 getFloor:new Date(),
                 //全选
@@ -896,7 +959,11 @@
 
             },
             deleteDtation(index){
+                this.selecedStationList.splice(index,1);
                 console.log('deleteDtation',index)
+            },
+            getServiceDetail(item){
+                console.log('getServiceDetail',item)
             }
 
         }

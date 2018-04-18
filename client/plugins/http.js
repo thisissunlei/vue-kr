@@ -86,6 +86,7 @@ export default {
       
     })
     .catch(function (error) {
+      console.log('error',error)
       error = error.response.data
       failure && failure(error)
       reject(error)

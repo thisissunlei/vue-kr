@@ -1,7 +1,7 @@
 <template>
     <div class="create-new-order">
         <SectionTitle title="新建换租订单"  v-if="orderStatus=='create'"></SectionTitle>
-        <div class="create-order" v-if="orderStatus=='create'">
+        <div class="create-order creat-order-form" v-if="orderStatus=='create'">
 
             <Steps :current="status" status="process" style="margin-bottom:20px">
                 <Step :title="returnTitle(0)" content="客户信息页"></Step>
@@ -122,60 +122,97 @@
                 <p slot="title" class="card-title">
                     新工位信息
                 </p>
-                <Form ref="formItemOne" :model="formItem" :rules="ruleValidateOne" class="demo-m" label-position="top">
+                <Form ref="formItemThree" :model="formItem" :rules="ruleValidateThree" class="demo-m" label-position="top">
                      <Row>  
-                        <!--Col class="col">
-                            <FormItem label="客户名称" class="bill-search-class" prop="company">
-                                <Input 
-                                    v-model="formItem.company" 
-                                    placeholder="请输入客户名称"
-                                    style="width: 252px"
-                                />
+                        <Col class="col">
+                            <FormItem label="换租服务开始日" class="bill-search-class" >
+                                <DatePicker type="date" placeholder="换租服务开始日" v-model="formItem.beginTime" style="width:252px" :disabled="disabledValue"></DatePicker >
                             </FormItem>
                         </Col>
                         
                         <Col class="col">
-                            <FormItem label="相关社区" class="bill-search-class" prop="communityId"> 
-                                <Select 
-                                    v-model="formItem.communityId" 
-                                    placeholder="请输入社区名称" 
-                                    style="width: 252px"
-                                    filterable
-                                    clearable
-                                >
-                                    <Option v-for="item in communityList" :value="''+item.id" :key="item.id">{{ item.name }}</Option>
-                               </Select> 
+                            <FormItem label="换租服务结束日" class="bill-search-class" prop="endDate"> 
+                                 <DatePicker type="date" placeholder="换租服务结束日" v-model="formItem.endDate" @on-change="changeEndTime" style="width:252px" ></DatePicker >
                             </FormItem>
                         </Col>
+                    </Row>
+                    <!-- 选择工位 -->
+                    <Row>
+                        <Button type="primary" @click="openPlanMap">选择工位</Button>
+
+                    </Row>
+
+                    
+                    <!-- 设置免租 -->
+                    <Row>
+                        <Col class="sale-tactics">
+
+                            <div style="display:inline-block">
+                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountType==types.sale}">{{ types.sale }}折</span>
+                            </div>
+                            <div style="display:inline-block;vertical-align:top">
+                            <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" ></Input>
+                            <span style="padding:0 15px"> 天</span>
+                            <Button type="primary" @click="setfreeMap">设置</Button>
+
+                            </div>
+
+
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <div class="title">签约价明细</div>
+                            <Table :columns="signPriceColumns" :data="selecedStationList"></Table>
+                        </Col>
+                    </Row>
+                    <!-- 设置折扣 -->
+                    <Row>
+                        <Col class="sale-tactics">
+
+                            <div style="display:inline-block">
+                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeType==types.month}">赠{{ types.month }}个月</span>
+                            </div>
+                            <div style="display:inline-block;vertical-align:top">
+                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" style="width: 120px;" ></Input>
+                            <span style="padding:0 15px"> 天</span>
+                            <Button type="primary" @click="setfreeMap">设置</Button>
+
+                            </div>
+
+
+                        </Col>
+                    </Row>
+
+                    <Row>  
+                        <Col class="col">
+                            <span class="required-label" style="width:252px;padding:11px 12px 10px 4px;color:#666;display:block">付款周期</span>
+                                <div style="display:block;min-width:252px">
+                                    <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
+                                </div>
+                                <div class="pay-error" v-if="errorObj.payType">请选择付款方式</div>
+
+                         </Col>
+                         <Col class="col" style="max-width:560px">
+                            <span class="required-label"  style="width:252px;padding:11px 12px 10px 4px;color:#666;display:block">服务保证金</span>
+                                <div style="display:block;min-width:252px">
+                                    <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" >{{ types.label }}</span>
+                                </div>
+                                <div class="pay-error" v-if="errorObj.deposit">请选择履约保证金总额</div>
+                         </Col>
                         
-                        <Col class="col">
-                            <FormItem label="销售员" style="width:252px" prop="salerId">
-                            <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                        <Col class="col" style="margin-top:10px">
+                            <FormItem label="首付款日期" class="bill-search-class" prop="firstDate"> 
+                                 <DatePicker type="date" placeholder="开始时间" v-model="formItem.firstDate" @on-change="changeFirstTime" style="width:252px" ></DatePicker >
                             </FormItem>
                         </Col>
-                        <Col class="col">
-                            <FormItem label="销售时间" style="width:252px" prop="salerId">
-                                <DatePicker type="date" placeholder="开始时间" v-model="formItem.saleTIme" @on-change="changeSaleTime" style="width:252px" ></DatePicker >
-                            </FormItem>
-                        </Col>
-                        <Col class="col">
-                            <FormItem label="换租原因" class="bill-search-class" prop="communityId"> 
-                                <Input 
-                                    v-model="formItem.reason" 
-                                    placeholder="请输入客户名称"
-                                    style="width: 252px"
-                                    type="textarea"
-                                    :rows="rows"
-                                />
-                            </FormItem>
-                        </Col-->
                     </Row>
                 </Form>
                 <div class="buttons">
 
                     <Button type="ghost" @click="previous">上一步</Button>
                     <span class="between"></span>
-                    <Button type="primary" @click="next">下一步</Button>
+                    <Button type="primary" @click="next('formItemThree')">下一步</Button>
                     
                 </div>
             </Card>
@@ -234,6 +271,19 @@
                 </div>
             </Card>
         </div>
+        <Modal
+            v-model="showMap"
+            title="选择工位"
+            ok-text="保存"
+            cancel-text="取消"
+            width="90%"
+            class-name="vertical-center-modal"
+         >
+            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap"></planMap>
+            <div slot="footer">
+                <Button type="primary" @click="submitStation">确定</Button>
+            </div>
+        </Modal>
         <div class="view" v-if="orderStatus=='view'">
             <ReplaceView @editCards="editCard"/>
         </div>
@@ -247,7 +297,7 @@
     import ReplaceView from '../replaceView.vue'
     import selectCustomers from '~/components/SelectCustomers.vue'
     import dateUtils from 'vue-dateutils';
-
+    import planMap from '~/components/PlanMap.vue';
 
 
 
@@ -269,13 +319,128 @@
                      callback();
                 }
             };
+            const validateFirst = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请先选择首付款日期'));
+                } else if(value > this.formItem.beginTime){
+                    callback(new Error('首付款日期不能大于换租服务开始日'));
+                }else{
+                     callback();
+                }
+            };
+            const validateEndDate = (rule, value, callback) => {
+                console.log('validateEndDate---------',value,'==',this.formItem.beginTime)
+                if (value === '') {
+                    callback(new Error('请先选择换租服务结束日'));
+                } else if(value < this.formItem.beginTime){
+                    callback(new Error('换租服务结束日不能小于换租服务开始日'));
+                }else{
+                     callback();
+                }
+            };
             return {
+                // 新选择的工位
+                stationData:{
+                    submitData:[],
+                    deleteData:[],
+                },
+                selecedStationList:[],
+                signPriceColumns:[
+                    {
+                        title: '工位编号/房间名称',
+                        key: 'name',
+                        align: 'center'
+                    },
+                    {
+                        title: '产品类型',
+                        key: 'seatType',
+                        align: 'center'
+                    },
+                    {
+                        title: '指导价(元/月/房间)',
+                        key: 'seatName',
+                        align: 'center'
+                    },
+                    {
+                        title: '下单价(元/月/房间)',
+                        key: 'seatName',
+                        align: 'center'
+                    },
+                    {
+                        title: '优惠',
+                        key: 'seatName',
+                        align: 'center'
+                    },
+                    {
+                        title: '签约价',
+                        key: 'seatName',
+                        align: 'center'
+                    },
+                    {
+                        title: '操作',
+                        key: 'action',
+                        width: 150,
+                        align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'primary',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.deleteDtation(params.index)
+                                        }
+                                    }
+                                }, '删除'),
+                            ]);
+                        }
+                    }
+                ],
+                showMap:false,
+                params:{},
+                floors:[],//楼层数
+                //付款周期
+                payList:[
+                    {value:'ONE',label:'月付'},
+                    {value:'TWO',label:'两月付'},
+                    {value:'THREE',label:'季付'},
+                    {value:'SIX',label:'半年付'},
+                    {value:'TWELVE',label:'年付'},
+                    {value:'ALL',label:'全款'},
+                ],
+                //付款周期的值
+                installmentType:'',
+                depositAmount:'',
+                //折扣列表
+                discount:{},
+                freeMap:{},
+                freeDays:'',
+                freeType:'',
+                discountType:'',
+                discountNum:'',
+                // 服务保证金
+                depositList:[
+                    {label:'2个月',value:'2'},
+                    {label:'3个月',value:'3'},
+                    {label:'4个月',value:'4'},
+                    {label:'5个月',value:'5'},
+                    {label:'6个月',value:'6'},
+                ],
                 //订单模式（create：创建中；view：预览）
                 orderStatus:'create',
                 showHeader:true,
+                //不可编辑
+                disabledValue:true,
                 //错误提示
                 errorObj:{
-                    oldStation:false
+                    oldStation:false,
+                    payType:false,
+                    deposit:false,
                 },
                 status:0,
                 rows:4,
@@ -288,7 +453,7 @@
                 //表单数据
                 formItem:{
                     saleTime:new Date(),
-                    beginTime:''
+                    beginTime:new Date(),
                 },
                 getFloor:new Date(),
                 //全选
@@ -320,7 +485,17 @@
                     oldChangeNew:[
                         { required: true, message: '请填写', trigger: 'blur' }
 
+                    ],
+
+                },
+                ruleValidateThree:{
+                    endDate:[
+                        { required: true, trigger: 'change',validator:validateEndDate }
+                    ],
+                    firstDate:[
+                        { required: true,  trigger: 'change' ,validator:validateFirst}
                     ]
+
                 },
                 communityList:[{
                     label:'1',
@@ -374,21 +549,26 @@
             SectionTitle,
             SelectSaler,
             selectCustomers,
-            ReplaceView
+            ReplaceView,
+            planMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");
             GLOBALHEADERSET('订单合同');
+            this.getSaleList()
         },
         watch:{
             getFloor(){
                 let _this = this;
                 if(this.formItem.communityId && this.formItem.customerId){
                     let params = {
-                        communityId:this.formItem.communityId,
-                        customerId:this.formItem.customerId
+                        // communityId:this.formItem.communityId || 4,
+                        communityId:4,
+
+                        customerId:1715
+                        // customerId:this.formItem.customerId
                     }
-                     this.$http.get('get-community-floor', params, r => {
+                     this.$http.get('get-community-floor', params).then( r => {
                         _this.floors = r.data.floor;
                         _this.ssoId = r.data.ssoId;
                         _this.ssoName = r.data.ssoName;
@@ -398,7 +578,7 @@
 
                         }
 
-                    }, e => {
+                    }).catch( e => {
                         _this.$Notice.error({
                             title:e.message
                         });
@@ -441,9 +621,35 @@
                             this.getOldStation()
 
                         }
+                        if(name == 'formItemTwo'){
+                            this.getSelectedOldStation()
+                            if(!this.selectedOldStation.length){
+                                this.errorObj.oldStation = true;
+                            }else{
+                                this.errorObj.oldStation = false;
+                            }
+
+                        }
+                        if(name == 'formItemThree'){
+                            if(!this.installmentType){
+                                this.errorObj.payType = true;
+                            }
+                            if(!this.depositAmount){
+                                this.errorObj.deposit = true;
+                            }
+                        }
+                        let next = true;
+                        for(let i in this.errorObj){
+                            if(this.errorObj[i]){
+                                next = false
+                            }
+                        }
 
 
-                        this.status ++ ;
+                        if(next){
+                            this.status ++ ;
+                        }
+                        
                        
 
                     }
@@ -479,8 +685,7 @@
                 // 选择社区
                 if(value){
                     this.formItem.communityId = 64 || value;
-                    // this.getSaleTactics({communityId:value})
-                    this.getSaleTactics({communityId:64})
+                    this.getSaleList()
                 }else{
                     this.formItem.communityId = '';
                 }
@@ -488,32 +693,6 @@
                 //
                 //
                 this.getFloor = +new Date()
-            },
-            getSaleTactics:function(params){//获取优惠信息
-                let list = [];
-                let maxDiscount = {};
-                let _this = this;
-                 this.$http.get('sale-tactics', params).then( r => {
-                    if(r.data.length){
-                        list = r.data.map(item=>{
-                            let obj = item;
-                            obj.label = item.tacticsName;
-                            obj.value = item.tacticsType+'';
-                            obj.id = item.tacticsId;
-                            obj.name = item.tacticsName;
-                            if(item.tacticsType == 1){
-                                maxDiscount[item.tacticsName] = obj.discount;
-                            }
-                            return obj;
-                        })
-                    }else{
-                        list = []
-                    }
-                    _this.saleList = list;
-
-                }).catch( e => {
-                    console.log('error',e)
-                })
             },
             //获取原有工位数据
             getOldStation(){
@@ -575,13 +754,157 @@
                     return item;
                 })
                 
+            },
+            changeEndTime(value){
+                //换租结束时间
+            },
+            selectPayType:function(value){
+                // 选择付款方式
+                this.installmentType = value;
+                this.errorObj.payType = false;
+            },
+            selectDeposit:function(value){
+                // 选择保证金
+                this.depositAmount = value
+                this.errorObj.deposit = false;
+            },
+            changeFirstTime(){
+
+            },
+            getSaleList(){//获取优惠信息
+                var list = [
+                    {
+                        "discountList": [
+                            8,
+                            8.5,
+                            9
+                        ],
+                        "minDiscount": 8.5,
+                        "tacticsType": 1
+                    },
+                    {
+                        "freeMap": {
+                            "1": {
+                                "31": 1546272000000
+                            },
+                            '2':{
+                                "30":1546272000000
+                            }
+                        },
+                        "tacticsType": 3,
+                        "maxDays":61
+                    }
+                ];
+                let discount = []
+                discount = list.filter(item=>{
+                    if(item.discountList){
+                        return true;
+                    }
+                    return false
+                })
+                let freeMap = []
+                freeMap = list.filter(item=>{
+                    if(item.freeMap){
+                        return true;
+                    }
+                    return false
+                })
+                let discountList = discount[0].discountList; 
+                let discountArray = []
+                for(let i in discountList){
+                    let obj = {};
+                    obj.sale = discountList[i];
+                    discountArray.push(obj)
+
+                }
+                //折扣列表
+                this.discount = {
+                    list:discountArray,
+                    minDiscount:discount[0].minDiscount,
+                    tacticsType:discount[0].tacticsType
+                }
+                // 处理免租数据
+                let freeMapList = freeMap[0].freeMap;
+                let freeMapContent = []
+                // let list = []
+                for(let i in freeMapList){
+                    let obj = {}
+                    obj.month = i;
+                    obj.days = Object.keys(freeMapList[i])[0];
+                    obj.date = freeMapList[i][Object.keys(freeMapList[i])[0]]
+                    freeMapContent.push(obj)
+                }
+                //免租列表
+                this.freeMap = {
+                    tacticsType:freeMap[0].tacticsType,
+                    maxDays:freeMap[0].maxDays,
+                    list:freeMapContent
+                }
+                console.log('getSaleList---free',this.freeMap)
+                console.log('getSaleList--discount',this.discount)
+            },
+            selectFree(obj){
+                this.freeType = obj.month;
+                this.freeDays = obj.days;
+
+            },
+            setfreeMap(){
+                //设置免租天数
+            },
+            selectDiscount(obj){
+                this.discountType = obj.sale;
+                this.discountNum = obj.sale
+            },
+            openPlanMap(){
+                if(!this.formItem.endDate){
+                    this.$Notice.error({
+                        title:'请先选择换租服务结束日'
+                    })
+                    return
+                }
+                let floor = this.floors.map(item=>{
+                    return item.value
+                })
+                let params = {
+                    floor:floor.join(','),
+                    // communityId:this.formItem.communityId,
+                    communityId:4,
+                    mainBillId:null,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.beginTime)),
+                    time:+new Date(),
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate))
+                }
+                this.params = params;
+                this.showMap = true;
+            },
+            onResultChange:function(val){//组件互通数据的触发事件
+                this.stationData = val;
+            },
+            cancelStation:function(){//工位弹窗的取消
+                this.stationData = {
+                    submitData:this.selecedStationList,
+                    deleteData:[],
+                };
+                this.showMap = false
+
+            },
+            submitStation:function(){//工位弹窗的提交
+                this.showMap = false;
+                this.selecedStationList = this.stationData.submitData;
+                console.log('submitStation',this.selecedStationList)
+
+
+            },
+            deleteDtation(index){
+                console.log('deleteDtation',index)
             }
+
         }
     }
 
 
 </script>
-<style lang="less"> 
+<style lang="less" scoped> 
     .create-order{
         padding:30px 40px;
         .buttons{
@@ -624,7 +947,7 @@
                 flex:1;
                 overflow:hidden;
                 text-align: center;
-                font-size: 12px;
+                // font-size: 12px;
                 font-weight: 700;
                 color:#495060;
 
@@ -643,5 +966,55 @@
                 font-weight: 500;
             }
         }
+        .required-label{
+            font-size: 12px;
+            position: relative;
+            margin-left: 5px;
+            padding-left: 4px;
+            &:before{
+                content:'*';
+                color: red;
+                position: absolute;
+                font-size: 17px;
+                font-weight: 100;
+                left:-5px;
+                top:11px;
+            }
+       } 
+       .pay-error{
+        color:#ed3f14;
+        font-size: 12px;
+       }
+       .sale-tactics{
+        text-align: right;
+       }
+        .button-list{
+                font-size: 14px;
+                color: #499df1;
+                display: inline-block;
+                border:1px solid #499df1;
+                border-radius: 4px;
+                margin-right: 5px;
+                height: 32px;
+                line-height: 32px;
+                padding:0 14px;
+                cursor: pointer;
+                margin-bottom: 6px;
+            }
+            .active{
+                background-color: #499df1;
+                color: #fff;
+            }
+
     }
+    .vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .ivu-modal{
+            top: 0;
+        }
+    }
+    
 </style>

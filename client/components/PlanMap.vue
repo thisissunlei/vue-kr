@@ -378,7 +378,6 @@ import http from '~/plugins/http.js';
 					deleteDataArr = deleteDataArr.concat(delDataObj[i]);
 				}
 				submitDataAll = submitDataAll.map(function(item, index) {
-					console.log('submitDataAll--map',item)
 					var obj1 = {};
 					let belongType = 1;
 					let type = 'OPEN'

@@ -17,42 +17,46 @@ export default {
            columnsInner:[
                     {
                         title: '类型',
-                        key: 'orderNum',
+                        key: 'name',
                         align:'center'
                     },
                     {
                         title: '可租个数',
-                        key: 'customerName',
+                        key: 'availableSpaces',
                         align:'center',
+                        width:90,
                         render(tag,params){ 
-                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          var ren=params.row.availableSpaces?params.row.availableSpaces:'-';                  
                           return <span>{ren}</span>;
                         }
                     },
                     {
                         title: '全部个数',
-                        key: 'communityName',
+                        key: 'totalSpaces',
                         align:'center',
+                        width:90,
                         render(tag,params){ 
-                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          var ren=params.row.totalSpaces?params.row.totalSpaces:'-';                  
                           return <span>{ren}</span>;
                         }
                     },
                     {
                         title: '可租工位',
-                        key: 'rentAmount',
+                        key: 'availableStations',
                         align:'center',
+                        width:90,
                         render(tag,params){ 
-                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          var ren=params.row.availableStations?params.row.availableStations:'-';                  
                           return <span>{ren}</span>;
                         }
                     },
                     {
                         title: '全部工位',
-                        key: 'depositAmount',
+                        key: 'totalStations',
                         align:'center',
+                        width:90,
                         render(tag,params){ 
-                          var ren=params.row.customerName?params.row.customerName:'-';                  
+                          var ren=params.row.totalStations?params.row.totalStations:'-';                  
                           return <span>{ren}</span>;
                         }
                     }

@@ -4,6 +4,7 @@
       @searchClick="searchClick"
       @clearClick="clearClick"
       @initData="initData"
+      identify='daily'
     />
     <div class='daily-tab'>
         <Discount 
@@ -41,9 +42,9 @@
         v-model="openStatistical"
         title="统计信息"
         class-name="vertical-center-modal"
-        width="500"
+        width="600"
      >
-        <div>
+        <div style="height:500px;overflow:auto;">
             <Statistical :data="dailyInnerData"/>
         </div>
         <p slot="footer" style="opacity:0;"></p>
@@ -259,7 +260,7 @@ import Discount from '../discount';
             //获取列表数据
             getTableData(values){
                 var params=Object.assign({},values);
-                params.inventoryDate=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(params.inventoryDate));
+                params.inventoryDate=this.dateSwitch(params.inventoryDate);
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -282,10 +283,15 @@ import Discount from '../discount';
             cancelStatical(){
                 this.openStatistical=!this.openStatistical;
             },
+            //格式转换
+            dateSwitch(data){
+                return data?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data)):'';
+            },
             //获取统计数据
             getStatistal(){
-                 this.$http.get('getDailyInventory').then((res)=>{
-                    this.dailyInnerData=res.data.items;
+                 this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
+                 this.$http.get('getDailyStatiscal',this.tabForms).then((res)=>{
+                    this.dailyInnerData=res.data;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";

@@ -60,4 +60,10 @@ a, a:hover, a:focus, a:visited {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+.ivu-select-multiple .ivu-select-selection{
+    height: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 /*根据ui全局修改*/

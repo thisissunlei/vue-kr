@@ -3,14 +3,24 @@
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
                     <div class='header-icon'>  
-                        <Form-item label="库存日期" class='iconForm'>
+                        <Form-item label="库存日期" class='iconForm' v-if="identify=='daily'">
                             <DatePicker 
                                 v-model="formItem.inventoryDate" 
                                 placeholder="请输入库存日期"
                                 style="width: 220px"
                             />
                         </Form-item>
-                        <Tooltip content="查询某一天，商品的库存状态。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询" placement="top">
+                        <Form-item label="可租日期" class='iconForm' v-if="identify=='optional'">
+                            <DatePicker 
+                                v-model="formItem.selectDate" 
+                                type="daterange"
+                                format="yyyy/MM/dd"
+                                placeholder="请输入可租日期"
+                                style="width: 220px"
+                                @on-change="selectDateChange"
+                            />
+                        </Form-item>
+                        <Tooltip :content="tipContent" placement="top">
                            <span class='icon-tip'></span>
                         </Tooltip>
                     </div>
@@ -26,15 +36,15 @@
                     </Form-item>
 
 
-                    <Form-item label="库存状态" class='daily-form'> 
+                    <Form-item label="库存状态" class='daily-form' v-if="identify=='daily'"> 
                         <Select 
                             v-model="formItem.statusName" 
-                            placeholder="请输入库存状态" 
+                            placeholder="全部" 
                             style="width: 220px"
                             multiple
                         >
                             <Option v-for="item in inventoryList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select> 
+                       </Select> 
                     </Form-item>
 
 
@@ -43,7 +53,6 @@
                             v-model="formItem.cityId" 
                             placeholder="请输入城市" 
                             style="width: 100px;margin-right:20px;"
-                            clearable
                             @on-change="cityChange"
                         >
                             <Option 
@@ -59,7 +68,6 @@
                                 v-if="communityList && communityList.length !=0"
                                 placeholder="请输入社区" 
                                 style="width: 100px;margin-right:20px;"
-                                clearable
                                 @on-change="communityChange"
                             >
                                 <Option 
@@ -76,7 +84,6 @@
                                 v-if="floorList && floorList.length !=0"
                                 placeholder="请输入楼层" 
                                 style="width: 100px"
-                                clearable
                             >
                                 <Option 
                                     v-for="item in floorList" 
@@ -196,7 +203,14 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import publicFn from './publicFn';
 export default {
+    props:{
+       identify:{
+           type:String,
+           default:''
+       }
+    },
     data() {
         const validateStation = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
@@ -242,9 +256,10 @@ export default {
                     callback();
                 }
             };
-            return {   
+            return {  
+                tipContent:this.identify=='daily'?'查询某一天，商品的库存状态。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询':'查询某个时间段，可租的商品。如需查询所有商品的库存情况，请前往每日库存查询页面', 
                 formItem:{
-                    inventoryDate:this.getToday(),
+                    inventoryDate:publicFn.getToDay(),
                     name:'',
                     statusName:[],
                     communityId:'',
@@ -259,7 +274,8 @@ export default {
                     areaMin:'',
                     areaMax:'',
                     locationName:' ',
-                    suiteName:' '
+                    suiteName:' ',
+                    selectDate:this.getRangeDate()
                 },
                 communityList:[],
                 cityList:[],
@@ -271,7 +287,6 @@ export default {
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
-                    {value:' ',label:'全部(可多选)'},
                     {value:'AVAILABLE',label:'未租'},
                     {value:'NOT_EFFECT',label:'合同未生效'},
                     {value:'IN_RENT',label:'在租'},
@@ -347,6 +362,10 @@ export default {
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
                 }  
+                if(this.identify=='optional'){
+                    this.formItem.startDate=this.formItem.selectDate[0];
+                    this.formItem.endDate=this.formItem.selectDate[1];
+                }
                 this.$emit('initData',this.formItem);
                 this.formItemOld=Object.assign({},this.formItem);
             }).catch((error)=>{
@@ -369,9 +388,21 @@ export default {
                 });
             })
         },
-        getToday(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date());
-            return today
+        getRangeDate(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var dayNum=Number(publicFn.getMonthDayNum());
+            var date=today.split('-');
+            var year=Number(date[0]),month=Number(date[1]),day=Number(date[2]);
+            var endDay=day+7,endYear=year,endMonth=month;
+            if(endDay>dayNum){
+                endMonth+=1;
+                endDay=endDay-dayNum;
+            }
+            if(endMonth>12){
+                endYear+=1;
+                endMonth=endMonth-12;
+            }
+            return [year+'-'+month+'-'+day,endYear+'-'+endMonth+'-'+endDay]
         },
         //搜索
         searchClick(){
@@ -414,6 +445,10 @@ export default {
         },
         communityChange(param){
             this.getFloorList(param);
+        },
+        selectDateChange(param){
+            this.formItem.startDate=param.join(',')[0]?param.join(',')[0]:'';
+            this.formItem.endDate=param.join(',')[1]?param.join(',')[1]:'';
         }
     }
 }

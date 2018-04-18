@@ -2,7 +2,7 @@
 export default  {
     //每日库存列表+查询
     'getDailyInventory': {
-        url: '/mockjsdata/krspace-op-web/inventory/list',
+        url: '/api/krspace-op-web/inventory/list',
         method: 'get'
     },
     //每日库存列表-社区接口
@@ -19,6 +19,6 @@ export default  {
     'getDailyFloor': {
         url: '/api/krspace-finance-web/inventory/community-floor',
         method: 'get'
-    },
+    }
   }
   

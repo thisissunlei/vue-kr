@@ -351,7 +351,6 @@ import Discount from '../discount';
             background-color: #f6f6f6;
         }
         .daily-table{
-            padding-bottom: 80px;
             .ivu-tooltip{
                 width:100%
             }
@@ -372,12 +371,6 @@ import Discount from '../discount';
             }
             .list-footer{
                 padding:20px 0;
-            }
-            .fixed-footer{
-                position: fixed;
-                background:#fff;
-                z-index:101;
-                bottom:57px;
             }
             .priceClass{
                 .ivu-table-cell{

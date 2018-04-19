@@ -9,6 +9,7 @@
                 <a href="#" slot="extra" @click.prevent="editCard(0)">
                 	编辑
 		        </a>
+                <span class="card-header"></span>
                 <LabelText :inline="inline" label="客户名称：">
                     {{formItem.discount}}
                 </LabelText>
@@ -28,11 +29,13 @@
                 <a href="#" slot="extra" @click.prevent="editCard(1)">
                 	编辑
 		        </a>
-                <LabelText :inline="inline" label="换租服务开始日">
+                <span class="card-header"></span>
+
+                <LabelText :inline="inline" label="换租服务开始日：">
                     {{formItem.discount}}
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
-                <Table :columns="oldStatonColumns" style="margin:20px 0"></Table>
+                <Table :columns="oldStatonColumns" style="margin-bottom:20px"></Table>
 
             </Card>
             <span class="space"></span>
@@ -44,22 +47,24 @@
                 <a href="#" slot="extra" @click.prevent="editCard(2)">
                 	编辑
 		        </a>
-                <LabelText :inline="inline" label="优惠折扣">
+                <span class="card-header"></span>
+
+                <LabelText :inline="inline" label="优惠折扣：">
                     {{formItem.discount}}
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
-                <Table :columns="newStatonColumns" style="margin:20px 0"></Table>
-                <LabelText :inline="inline" label="免租开始日">
+                <Table :columns="newStatonColumns" style="margin-bottom:20px"></Table>
+                <LabelText :inline="inline" label="免租开始日：">
                     {{formItem.discount}}
                 </LabelText>
-                <Table :columns="newStatonMoneyColumns"></Table>
-                <LabelText :inline="inline" label="付款周期">
+                <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px"></Table>
+                <LabelText :inline="inline" label="付款周期：">
                     {{formItem.discount}}
                 </LabelText>
-                <LabelText :inline="inline" label="服务保证金">
+                <LabelText :inline="inline" label="服务保证金：">
                     {{formItem.discount}}
                 </LabelText>
-                <LabelText :inline="inline" label="首付款日期">
+                <LabelText :inline="inline" label="首付款日期：">
                     {{formItem.discount}}
                 </LabelText>
             </Card>
@@ -71,15 +76,17 @@
                 <a href="#" slot="extra" @click.prevent="editCard(3)">
                 	编辑
 		        </a>
+                <span class="card-header"></span>
+
                 <Table :columns="oldInfoColumns" style="margin:20px 0"></Table>
                 <Table :columns="newInfoColumns" style="margin:20px 0"></Table>
-                <LabelText  :inline="inline"label="退还服务费">
+                <LabelText  :inline="inline"label="退还服务费：">
                     {{formItem.discount}}
                 </LabelText>
-                <LabelText  :inline="inline"label="旧服务保证金转新">
+                <LabelText  :inline="inline"label="旧服务保证金转新：">
                     {{formItem.discount}}
                 </LabelText>
-                <LabelText :inline="inline" label="扣除服务保证金">
+                <LabelText :inline="inline" label="扣除服务保证金：">
                     {{formItem.discount}}
                 </LabelText>
             </Card>
@@ -113,7 +120,7 @@ export default {
 	},
 	data(){
 		return {
-            inline:true,
+            inline:false,
             oldStatonColumns:[
                 {
                     title: '工位编号/房间名称',
@@ -281,6 +288,14 @@ export default {
         .between{
             display: inline-block;
             width: 20px;
+        }
+        .card-header{
+            display: inline-block;
+            width: 100%;
+            height:10px;
+        }
+        .ui-labeltext{
+            padding-left: 0px;
         }
 	}
 </style>

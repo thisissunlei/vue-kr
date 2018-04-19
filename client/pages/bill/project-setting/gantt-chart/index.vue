@@ -304,8 +304,8 @@ export default {
         this.mask=this.treeData.length?true:false;
     },
     methods:{
-        editClick(id,pid){
-            this.$emit('editClick',id,pid);
+        editClick(id){
+            this.$emit('editClick',id);
         },
         circleId(data,param){
             data.map((item,index)=>{

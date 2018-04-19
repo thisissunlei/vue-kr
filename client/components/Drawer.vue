@@ -54,7 +54,6 @@
         methods:{
             getClassName(){
                 var iconType  = this.iconType;
-                console.log(iconType,"pppppp")
                 var iconClass = "icon";
                 if(iconType){
                     switch (iconType) {

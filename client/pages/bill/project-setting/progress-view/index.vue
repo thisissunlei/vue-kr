@@ -104,7 +104,7 @@ publicFn.getMonthDayNum<template>
             width="735"
         >       
             
-            <ObjectDetailTitle slot="title" :data="getEdit" />
+            <ObjectDetailTitle slot="title" :taskStatus="taskStatus" :data="getEdit" />
             <EditTask 
                 :id="editId"  
                 @dataChange="dataChange" 
@@ -189,7 +189,7 @@ export default {
             scrollWidth:0,
             isLoading:false,
             upperError:false,
-
+            taskStatus:'',
             tabValue:'name1',
 
             treeMiddle:[],
@@ -206,10 +206,7 @@ export default {
               publicFn.windowResize();
         }, 400);
 
-        window.onresize=function(){
-            publicFn.windowResize();
-           
-        }
+        window.addEventListener('resize', publicFn.windowResize,false)
     },
 
     methods:{
@@ -406,17 +403,24 @@ export default {
             return str;
         },
         //打开编辑任务
-        editTask(id,parentId){
+        editTask(id,callback){
             this.editId=id;
-            this.propertyId=parentId;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
-            this.getEdit=response.data;
-            this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-            this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-            this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-            this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-            this.getEdit.focus=this.getEdit.focus==1?'1':'0';
-            this.cancelEditTask();
+                var data = Object.assign({},response.data)
+               
+                data.planStartTime=this.timeApplyFox(data.planStartTime,true);
+                data.planEndTime=this.timeApplyFox(data.planEndTime,true);
+                data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
+                data.actualEndTime=this.timeApplyFox(data.actualEndTime,true)
+                data.focus=data.focus==1?'1':'0';
+                this.getEdit=Object.assign({},data);
+                this.taskStatus = data.taskStatus;
+                console.log(callback,"ppppppp")
+                if(!callback){
+                    this.cancelEditTask();
+                }else{
+
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                 title: error.message,
@@ -429,7 +433,7 @@ export default {
             this.editData=params;
         },
         //编辑任务提交
-        submitEditTask(params){
+        submitEditTask(params,callback){
           
             var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
@@ -446,10 +450,11 @@ export default {
                 if(response.code>1){
                     this.cancelSure();
                 }else{
-                this.MessageType="success";
-                this.openMessage=true;
-                this.warn="编辑成功";
+                    this.MessageType="success";
+                    this.openMessage=true;
+                    this.warn="编辑成功";
                 }
+                this.editTask(this.editId,()=>{});
 
                 this.scrollPosititon();
             }).catch((error)=>{

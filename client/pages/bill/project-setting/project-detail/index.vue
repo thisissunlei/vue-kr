@@ -46,7 +46,7 @@
             :close="cancelEditTask"
             width="735"
         >   
-            <ObjectDetailTitle slot="title" :data="getEdit" />
+            <ObjectDetailTitle slot="title" :taskStatus="taskStatus" :data="getEdit" />
             <EditTask 
                 :id="editId"  
                 @dataChange="dataChange" 
@@ -63,7 +63,10 @@
                 <WatchRecord 
                     :id="queryData.id"
                     :watchRecord="watchRecord" 
-                    @searchClick="searchClick" />
+                    @searchClick="searchClick" 
+                    :watchTotalCount="watchTotalCount"
+                    :watchPage = "watchPage"
+                />
                 <div slot="footer" style="text-align:center;">
                     <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
                 </div>
@@ -178,6 +181,7 @@ export default {
             watchRecord:[],
             startTime:this.getStartDay(),
             isLoading:true,
+            taskStatus:'',
 
             treeData:[],
             signMask:false,
@@ -196,7 +200,9 @@ export default {
             grayStar:0,
             treeMiddle:[],
             //任务项枚举
-            taskList:[]
+            taskList:[],
+            watchTotalCount:1,
+            watchPage:1,
         }
     },
     created(){
@@ -221,7 +227,7 @@ export default {
                 rightDom.style.maxHeight = clientHeight - 362 +"px";
             }
          }, 200);
-         window.onresize=function(){
+         window.addEventListener('resize',()=>{
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom = document.getElementById("vue-chart-right-draw-content");
             var clientHeight = document.documentElement.clientHeight;
@@ -229,7 +235,8 @@ export default {
             dom.style.height = document.documentElement.clientHeight-130 + "px"
             leftDom.style.maxHeight = clientHeight - 362+"px";
             rightDom.style.maxHeight = clientHeight - 362 +"px";
-         }
+         },false)
+    
     },
     methods:{
         leftOver(event){
@@ -389,6 +396,9 @@ export default {
             var data= Object.assign({},params)
             this.$http.get('watch-edit-record',data).then((response)=>{
                 this.watchRecord=response.data.items;
+                this.watchPage = response.data.page;
+                this.watchTotalCount = response.data.totalCount;
+                
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -490,9 +500,8 @@ export default {
             this.openEditTask=!this.openEditTask;
         },
         //打开编辑任务
-        editTask(id,parentId){
+        editTask(id,callback){
             this.editId=id;
-            this.parentId=parentId;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                 var data = Object.assign({},response.data)
                
@@ -501,9 +510,15 @@ export default {
                 data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
                 data.actualEndTime=this.timeApplyFox(data.actualEndTime,true)
                 data.focus=data.focus==1?'1':'0';
-               
                 this.getEdit=Object.assign({},data);
-                this.cancelEditTask();
+                this.taskStatus = data.taskStatus;
+                console.log(this.taskStatus,"pppppp");
+                if(!callback){
+                    this.cancelEditTask();
+                }else{
+
+                }
+                
             }).catch((error)=>{
                 this.$Notice.error({
                     title: error.message,
@@ -512,6 +527,8 @@ export default {
         },
         //取消查看任务
         cancelWatch(){
+           
+            
             this.openWatch=!this.openWatch;
         },
         //打开查看任务
@@ -553,11 +570,12 @@ export default {
         dataChange(params){ 
             var data = Object.assign({},params);
             this.submitEditTask(data)
+        
+           
         },
         
           //编辑任务提交
         submitEditTask(params){
-            console.log("----======",params,"===")
             var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
             dataParams.propertyId=this.queryData.id;
@@ -566,7 +584,6 @@ export default {
             dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
             dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
             this.$http.post('project-edit-task',dataParams).then((response)=>{
-                // this.cancelEditTask();
                 this.getListData(this.ids);
 
                 if(response.code>1){
@@ -576,6 +593,7 @@ export default {
                     this.openMessage=true;
                     this.warn="编辑成功";
                 }
+                this.editTask(this.editId,()=>{});
                 this.scrollPosititon();
             }).catch((error)=>{
                 this.MessageType="error";

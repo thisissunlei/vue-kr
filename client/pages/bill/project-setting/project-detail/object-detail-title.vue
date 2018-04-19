@@ -27,9 +27,23 @@
 import publicFn from '../publicFn'
 export default{
    props:{
-       data:{
-           type:Object
-       },
+        data:{
+            type:Object
+        },
+        taskStatus:{
+            type:String,
+        }
+   },
+   data(){
+       return {
+           status:this.taskStatus,
+       }
+   },
+   watch:{
+       taskStatus:function (params) {
+           console.log("--------")
+           this.status = this.taskStatus;
+       }
    },
    methods:{
        getActualBgColor(){

@@ -55,6 +55,14 @@ export default {
         id:{
             type:[String,Number],
 
+        },
+        watchTotalCount:{
+            type:[String,Number],
+            default:1,
+        },
+        watchPage:{
+            type:[String,Number],
+            default:1,
         }
     },
     data(){
@@ -65,10 +73,10 @@ export default {
             params:{
                 startTime:'',
                 updator:'',
-                page:1,
+                page:this.watchPage,
                 id:this.id,
                 pageSize:10,
-                totalPages:1,
+                totalPages:this.watchTotalCount,
 
             },
             columns:[
@@ -105,8 +113,13 @@ export default {
             ]
         }
     },
+    watch:{
+        watchTotalCount:function(){
+            this.totalCount = this.watchTotalCount;
+        }
+    },
     methods:{
-        changePage(){
+        changePage(page){
             // 页面发生改变
             this.params.page=page;
             this.page=page;

@@ -262,7 +262,7 @@ import Loading from '~/components/Loading';
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:1000});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:15});
                 this.getTableData(this.tabForms); 
             },
             //获取列表数据

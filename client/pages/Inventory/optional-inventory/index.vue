@@ -75,6 +75,7 @@ import KrField from '~/components/KrField';
 import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
+import Loading from '~/components/Loading';
 
     export default {
         name: 'Daily',
@@ -83,7 +84,8 @@ import Discount from '../discount';
             KrField,
             SearchForm,
             Statistical,
-            Discount
+            Discount,
+            Loading
         },
         data () {
             return {   
@@ -207,29 +209,7 @@ import Discount from '../discount';
                         }
                     },
                     {
-                        title: '当日库存',
-                        key: 'statusName',
-                        align:'center',
-                        width:100,
-                        render(tag, params){
-                            var ren=params.row.statusName?params.row.statusName:'-'
-                            return <span style={params.row.statusName=='不可用'?'color:red':''}>{ren}</span>
-                        }
-                    },
-                    {
-                        title: '签约价',
-                        key: 'price',
-                        className:'priceClass',
-                        align:'center',
-                        width:80,
-                        render(tag, params){
-                            var status=params.row.status;
-                            var renEnd=(status=='AVAILABLE'||status=='DISABLE')?'-':params.row.price
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{renEnd}</span>
-                        }
-                    },
-                    {
-                        title: '最近可租起始日',
+                        title: '可租起始日',
                         key: 'recentStart',
                         align:'center',
                         width:130,
@@ -239,7 +219,7 @@ import Discount from '../discount';
                         }
                     },
                     {
-                        title: '最近可租结束日',
+                        title: '可租结束日',
                         key: 'recentEnd',
                         align:'center',
                         width:130,

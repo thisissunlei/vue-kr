@@ -213,4 +213,14 @@ export default  {
         url: '/api/krspace-op-web/order-seat-detail/seat-combin',
         method: 'post'
     },
+    // 输入免租天数以后获取免租开始时间
+    'get-free-start-date': {
+        url: '/api/krspace-op-web/free-start-date',
+        method: 'post'
+    },
+    // step4->换租详情
+    'get-seat-replace-detail': {
+        url: '/api/krspace-op-web/order-seat-replace-detail/serviceFee',
+        method: 'post'
+    },
 }

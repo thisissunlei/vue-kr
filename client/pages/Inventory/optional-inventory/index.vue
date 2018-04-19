@@ -19,7 +19,8 @@
                                <Loading/>
                             </div> 
                         </Table>
-                        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:left+'px',width:width+'px'}" v-if="dailyData.length">
+                        <SlotHead v-if="theHead" indentify="optional"/>
+                        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
                                 </div>
@@ -76,6 +77,7 @@ import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
 import Loading from '~/components/Loading';
+import SlotHead from '../slotHead';
 import publicFn from '../publicFn';
 
     export default {
@@ -86,7 +88,8 @@ import publicFn from '../publicFn';
             SearchForm,
             Statistical,
             Discount,
-            Loading
+            Loading,
+            SlotHead
         },
         data () {
             return {   
@@ -96,6 +99,8 @@ import publicFn from '../publicFn';
                 openStatistical:false,
                 loading:true,
                 theEnd:true,
+                theHead:false,
+                sideBar:true,
                 left:'',
                 width:'',
 
@@ -119,7 +124,7 @@ import publicFn from '../publicFn';
                                         }, [
                                         h('div', [
                                             h('div',{
-                                            },params.row.name+'  '+params.row.capacity),
+                                            },params.row.name),
                                             h('div',{
                                                 style:{
                                                     textOverflow:'ellipsis',
@@ -233,17 +238,28 @@ import publicFn from '../publicFn';
                 ]    
             }
         },
-        mounted(){
-           
+        mounted(){        
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('optional-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
             this.width=dailyTableDom.getBoundingClientRect().width;
-            dom.addEventListener("scroll",this.onScrollListener)
+            dom.addEventListener("scroll",this.onScrollListener);
+            var _this=this;
+            LISTENSIDEBAROPEN(function (params) {
+                _this.sideBar=params;
+            })  
+        },
+        watch:{
+           sideBar:function(val){
+               var dailyTableDom=document.getElementById('optional-inventory-table-list');
+               this.left=dailyTableDom.getBoundingClientRect().left;
+               this.width=dailyTableDom.getBoundingClientRect().width;
+               this.onScrollListener();
+           } 
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:1000});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:50});
                 delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
@@ -298,23 +314,17 @@ import publicFn from '../publicFn';
             },
             //滚动监听
             onScrollListener(){    
-                var dom=document.getElementById('layout-content-main');    
-                /*var headDom=document.querySelectorAll('div.daily-table table thead')[0];
-                var trDom=document.querySelectorAll('div.daily-table table thead tr')[0];
-                headDom.style.left=this.left+'px';
-                headDom.style.width=this.width+'px';
-                trDom.style.width=this.width+'px';
-                var classVal = headDom.getAttribute("class");
-                if(dom.scrollTop>292){
-                     if(!classVal){
-                         headDom.setAttribute("class",'daily-head-class');
-                     }
+                var dom=document.getElementById('layout-content-main');
+                var headDom=document.getElementById('slot-head-optional-inventory');
+                if(headDom){
+                    headDom.style.left=this.left+'px';
+                    headDom.style.width=this.width+'px';
+                }
+                if(dom.scrollTop>330){
+                    this.theHead=true;
                 }else{
-                    if(classVal){
-                        classVal = classVal.replace("daily-head-class","");
-                        headDom.setAttribute("class",classVal);
-                    }
-                }*/
+                    this.theHead=false;
+                }
                 if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
                     this.theEnd=true;
                 }
@@ -364,6 +374,7 @@ import publicFn from '../publicFn';
             background-color: #f6f6f6;
         }
         .daily-table{
+            padding-bottom:77px; 
             .ivu-tooltip{
                 width:100%
             }
@@ -378,13 +389,10 @@ import publicFn from '../publicFn';
             .ivu-tooltip-inner{
                 white-space: normal;
             }
-            .daily-head-class{
-                position: fixed;
-                top:60px;
-                z-index: 999;
-            }
             .list-footer{
-                padding:20px 0 24px 0;
+                padding:20px 0 20px 0;
+                position: absolute;
+                bottom: 0px;
             }
             .on-export-middle{
                 position: fixed;
@@ -392,6 +400,7 @@ import publicFn from '../publicFn';
                 z-index: 999;
                 left: 20px;
                 background:#fff;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{

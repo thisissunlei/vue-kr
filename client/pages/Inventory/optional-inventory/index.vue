@@ -219,8 +219,9 @@ import Discount from '../discount';
                         align:'center',
                         width:80,
                         render(tag, params){
-                            var ren=params.row.price?params.row.price:'-';
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{ren}</span>
+                            var status=params.row.status;
+                            var renEnd=(status=='AVAILABLE'||status=='DISABLE')?'-':params.row.price
+                            return <span style="text-align:right;width: 100%;display: inline-block;">{renEnd}</span>
                         }
                     },
                     {

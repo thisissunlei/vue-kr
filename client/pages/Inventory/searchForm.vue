@@ -26,7 +26,7 @@
                     </div>
 
 
-                    <Form-item label="商品名称" class='daily-form'>
+                    <Form-item label="商品名称" class='daily-form' prop="name">
                         <i-input 
                             v-model="formItem.name" 
                             placeholder="请输入商品名称"
@@ -250,7 +250,7 @@ export default {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
                     callback('名称最多20个字节');
-                }else if(value&&!this.formItem.communityId){
+                }else if(value&&!(this.formItem.communityId.toString().trim())){
                     callback('请先选择社区');
                 }else{
                     callback();

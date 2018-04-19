@@ -98,13 +98,19 @@ publicFn.getMonthDayNum<template>
             </div>
         </Modal>
          <Drawer 
-            title="设置企业管理员"
             :openDrawer="openEditTask"
             iconType="view-icon"
             :close="cancelEditTask"
             width="735"
         >       
-            <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
+            
+            <ObjectDetailTitle slot="title" :data="getEdit" />
+            <EditTask 
+                :id="editId"  
+                @dataChange="dataChange" 
+                v-if="openEditTask" 
+                :getEdit="Object.assign({},getEdit)"
+            />
         </Drawer>
 
         <Modal
@@ -134,6 +140,7 @@ publicFn.getMonthDayNum<template>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
+import ObjectDetailTitle from '../project-detail/object-detail-title'
 import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
@@ -151,7 +158,8 @@ export default {
         ListTable,
         Message,
         Drawer,
-        EditTask
+        EditTask,
+        ObjectDetailTitle
     },
     data(){
         return{
@@ -212,6 +220,11 @@ export default {
                 leftDom.addEventListener('scroll',this.scroll);
                 rightDom.removeEventListener('scroll',this.rightScroll);
             }
+        },
+         //编辑对象传递校验
+        dataChange(params){ 
+            var data = Object.assign({},params);
+            this.submitEditTask(data)
         },
         rightOver(event){
             var rightDom=document.getElementById('vue-chart-right-draw-content');
@@ -416,32 +429,10 @@ export default {
             this.editData=params;
         },
         //编辑任务提交
-        submitEditTask(name){
-            var newPageRefs = this.$refs.fromFieldTask.$refs;
-            var isSubmit = true;
-            newPageRefs[name].validate((valid,data) => {
-                if (!valid) {
-                    isSubmit = false
-                }
-            })
-            if(!isSubmit){
-                return;
-            }
-            if(this.upperError){
-                return ;
-            }
-            if(this.editData.error){
-                this.$Notice.error({
-                    title: '任务名称重复'
-                });
-                return ;
-            }
-            var dataParams=this.editData;
-            dataParams.focus=dataParams.focus=='1'?1:0;
-            dataParams.type='STAGETASK';
+        submitEditTask(params){
+          
+            var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
-            dataParams.pid=0;
-            dataParams.propertyId=this.propertyId;
             dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
             dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
             dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
@@ -460,7 +451,7 @@ export default {
                 this.warn="编辑成功";
                 }
 
-                this.scrollPosititon();
+                // this.scrollPosititon();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

@@ -503,7 +503,6 @@ export default {
                 data.focus=data.focus==1?'1':'0';
                
                 this.getEdit=Object.assign({},data);
-                console.log(this.getEdit,"pppppppp")
                 this.cancelEditTask();
             }).catch((error)=>{
                 this.$Notice.error({
@@ -558,6 +557,7 @@ export default {
         
           //编辑任务提交
         submitEditTask(params){
+            console.log("----======",params,"===")
             var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
             dataParams.propertyId=this.queryData.id;

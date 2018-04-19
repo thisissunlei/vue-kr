@@ -82,14 +82,15 @@
                     <LabelText label="责任部门" >
                         {{getEdit.department}}
                     </LabelText>
+                   
                     <div>
                         <LabelText label="上游任务" >
-                            {{!params.downstream?'-':params.downstream}}
+                           {{!params.upstream?'-':params.upstream}}
                         </LabelText>
                     </div>
-                    <div>
+                     <div>
                         <LabelText label="下游任务" >
-                           {{!params.upstream?'-':params.upstream}}
+                            {{!params.downstream?'-':params.downstream}}
                         </LabelText>
                     </div>
                     <LabelText label="描述" >
@@ -98,7 +99,7 @@
                 </div>
                 
             </ClassificationBox>
-            <ClassificationBox value="4" title="基本信息" :isBorder="false" type="num">
+            <ClassificationBox value="4" title="编辑记录" :isBorder="false" type="num">
                 <div class="edit-record" slot="content">
                     <div
                         class='record-wrap'
@@ -186,7 +187,7 @@ export default {
                 this.dateError=false;
                 this.params.planStartTime = params;
                 var data = Object.assign({},this.params);
-                 console.log(data,"ooooooooo")
+               
                 this.$emit('dataChange',data)
             }
         },
@@ -251,10 +252,13 @@ export default {
         .ui-label{
             width: 100px;
             text-align: left;
+            float: left;
+           
         }
         .ui-text{
             width: 450px;
             vertical-align: top;
+            line-height: 1.5;
         }
     }
     
@@ -277,7 +281,11 @@ export default {
         }
     }
     .actual-time{
+        .ivu-tooltip, .ivu-tooltip .ivu-tooltip-rel{
+             width: auto;
+        }
        .ivu-date-picker-rel{
+
             input{
                 color: #999999;
                 font-size: 14px;

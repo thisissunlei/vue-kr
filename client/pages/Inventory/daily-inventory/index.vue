@@ -248,6 +248,10 @@ import Discount from '../discount';
             }
         },
         mounted(){
+            console.log("----------")
+            LISTENSIDEBAROPEN(function (params) {
+                console.log("==============",params)
+            })
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;

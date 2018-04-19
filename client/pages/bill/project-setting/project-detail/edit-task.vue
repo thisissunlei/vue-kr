@@ -249,11 +249,11 @@ export default {
         height: auto;
         width: auto;
         .ui-label{
-           
+            width: 100px;
             text-align: left;
         }
         .ui-text{
-             width: 450px;
+            width: 450px;
             vertical-align: top;
         }
     }

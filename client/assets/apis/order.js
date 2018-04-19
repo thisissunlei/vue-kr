@@ -188,4 +188,29 @@ export default  {
         url: '/api/krspace-op-web/seat-deposit-detail/free',
         method: 'get'
     },
+    // 换租列表
+    'get-replace-list': {
+        url: '/api/krspace-op-web/order-seat-replace/list',
+        method: 'get'
+    },
+    // 根据客户id获取社区列表
+    'get-community-from-cusList': {
+        url: '/api/krspace-op-web/cmt/community/cusList',
+        method: 'get'
+    },
+    // 获取可换租工位列表
+    'get-order-seat': {
+        url: '/api/krspace-op-web/order-seat-replace-detail/list',
+        method: 'get'
+    },
+    // 获取社区优惠信息接口
+    'get-free-sale': {
+        url: '/api/krspace-op-web/cmt-free-sale',
+        method: 'get'
+    },
+    // step3->服务费明细(免租下列表)
+    'get-seat-combin': {
+        url: '/api/krspace-op-web/order-seat-detail/seat-combin',
+        method: 'post'
+    },
 }

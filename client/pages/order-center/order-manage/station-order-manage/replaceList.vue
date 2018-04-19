@@ -38,7 +38,7 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch mask='join' @bindData="onUpperChange" :keys="mask" :params="switchParams"/>
+                <HeightSearch mask='replace' @bindData="onUpperChange" :keys="mask" :params="switchParams"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitUpperSearch">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
@@ -110,9 +110,12 @@
                     page:1,
                     pageSize:15,
                     customerName:"",
+                    orderType:'REPLACE'
                 },
 
-                switchParams:{},
+                switchParams:{
+                     orderType:'REPLACE'
+                },
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -148,78 +151,90 @@
                         title: '服务费总额',
                         key: 'rentAmount',
                         align:'center',
-                        render(tag,params){ 
-                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;                  
-                          return <span class="u-txt">{money}</span>;
+                        render(h,params){ 
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                  
                         }
                     },
                     {
-                        title: '履约保证金',
+                        title: '服务保证金',
                         key: 'depositAmount',
                         align:'center',
-                        render(tag,params){ 
-                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;                  
-                          return <span class="u-txt">{money}</span>;
+                        render(h,params){ 
+                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
                         }
                     },
                     {
-                        title: '订单类型',
-                        key: 'orderType',
-                        align:'center',
-                        render(tag,params){
-                            var orderType={
-                               'IN':'入驻服务订单',
-                               'INCREASE':'增租服务订单',
-                               'CONTINUE':'续租服务订单'
-                            }
-                            for(var item in orderType){
-                                if(item==params.row.orderType){
-                                    return <span class="u-txt">{orderType[item]}</span>;
-                                }
-                            }
-                        }
-                    },
-                    {
-                        title: '租赁期限',
-                        key: 'ctime',
+                        title: '服务期限',
+                        key: 'startDate',
                         align:'center',
                          width:100,
-                        render(tag, params){
-                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate)) +'  至  '+ dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate));
+                        render(h, params){
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                        }
+                    },
+                    {
+                        title: '旧服务费退还',
+                        key: 'refundRentAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.refundRentAmount?utils.thousand(params.row.refundRentAmount):params.row.refundRentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
+                        }
+                    },
+                    {
+                        title: '保证金旧转新',
+                        key: 'transferDepositAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.transferDepositAmount?utils.thousand(params.row.transferDepositAmount):params.row.transferDepositAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
+                        }
+                    },
+                     {
+                        title: '扣除保证金',
+                        key: 'deductRentAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.deductRentAmount?utils.thousand(params.row.deductRentAmount):params.row.deductRentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
                         }
                     },
                     {
                         title: '订单状态',
-                        key: 'orderStatus',
+                        key: 'orderStatusName',
                         align:'center',
-                        render(tag, params){
-                            var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废'
-                            }
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    var style={};
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                                }
-                            }
-                        }
-                    },
-                    {
-                        title: '创建时间',
-                        key: 'ctime',
-                        align:'center',
-                        render(tag, params){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
-                            return time;
-                        }
                     },
                     {
                         title: '生效时间',
@@ -320,7 +335,7 @@
             }
 
             let jsonJoin=JSON.parse(sessionStorage.getItem('paramsReplace'));
-            this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15});
+            this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15, orderType:'REPLACE'});
             this.getListData(this.switchParams);
             this.params=this.switchParams;
         },
@@ -394,7 +409,8 @@
             },
 
             getListData(params){
-                 this.$http.get('join-bill-list', params).then((response)=>{
+                console.log('======',params)
+                 this.$http.get('get-replace-list', params).then((response)=>{
                      this.totalCount=response.data.totalCount;
                      this.joinData=response.data.items;
                      this.openSearch=false;

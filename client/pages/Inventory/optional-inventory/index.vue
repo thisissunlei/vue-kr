@@ -336,7 +336,9 @@ import Discount from '../discount';
                 this.getTableData(this.tabForms);
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/export-available');
+                this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
+                this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
+                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export-available');
             },
             //折扣价
             countChange(param){

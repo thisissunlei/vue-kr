@@ -100,7 +100,6 @@ import Discount from '../discount';
                         key: 'name',
                         align:'center',
                         render(tag, params){
-                            var renCap=params.row.type=='SPACE'?params.row.capacity:'';
                             var location=params.row.location?params.row.location:'-'
                             return h('div', [
                                        h('Tooltip', {
@@ -111,7 +110,7 @@ import Discount from '../discount';
                                         }, [
                                         h('div', [
                                             h('div',{
-                                            },params.row.name+'  '+renCap),
+                                            },params.row.name+'  '+params.row.capacity),
                                             h('div',{
                                                 style:{
                                                     textOverflow:'ellipsis',

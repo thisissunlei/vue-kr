@@ -251,15 +251,15 @@ import publicFn from '../publicFn';
                 console.log(event,"ppppp")
                 if(event.key === 'cTime'){
                     if(event.order === 'asc'){
-                        this.tabParams.query = 'TASKASC';
+                        this.tabParams.query = 'CTIMEASC';
                     }else{
-                        this.tabParams.query = 'TASKDESC';
+                        this.tabParams.query = 'CTIMEDESC';
                     }
                 }else{
                     if(event.order === 'asc'){
-                         this.tabParams.query = 'CTIMEASC';
+                         this.tabParams.query = 'TASKASC';
                     }else{
-                        this.tabParams.query = 'CTIMEDESC';
+                        this.tabParams.query = 'TASKDESC';
                     }
                 }
                 this.getTableData(this.tabParams)

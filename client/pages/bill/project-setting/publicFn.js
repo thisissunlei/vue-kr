@@ -294,7 +294,7 @@ function getActualBgColor(taskStatus){
             return 'transparent';
             break;
         default: //进度未知 灰色红边
-            return '#FFE9AF'
+            return 'transparent'
     }
 }
 //实际的边框颜色

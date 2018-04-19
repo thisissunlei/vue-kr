@@ -60,7 +60,10 @@
             title="查看记录"
             width="660"
         >
-                <WatchRecord :watchRecord="watchRecord" @searchClick="searchClick"/>
+                <WatchRecord 
+                    :id="queryData.id"
+                    :watchRecord="watchRecord" 
+                    @searchClick="searchClick" />
                 <div slot="footer" style="text-align:center;">
                     <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
                 </div>
@@ -156,6 +159,7 @@ export default {
             addId:'',
             editId:'',
             parentId:'',
+            objectId:'',
             params:{
                 page:1,
                 pageSize:15
@@ -238,8 +242,9 @@ export default {
         },
         //查看记录页面搜索被点击
         searchClick(params){
+           
             this.watchParams = Object.assign({},params);
-             this.getWatchData(this.watchParams);
+            this.getWatchData(this.watchParams);
            
         },
         selectFormat(data){
@@ -381,6 +386,7 @@ export default {
         },
          //获取查看编辑记录
         getWatchData(params){
+            console.log(params,"ppppppppp")
             var data= Object.assign({},params)
             this.$http.get('watch-edit-record',data).then((response)=>{
                 this.watchRecord=response.data.items;

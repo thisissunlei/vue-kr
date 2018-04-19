@@ -16,15 +16,10 @@
                     placeholder="结束日期"
                     style="width: 120px"
                 />
-               
             </Form-item>
+
             <Form-item label="" class='daily-form' style="padding:0px 20px;">
-                <!-- <i-input 
-                    v-model="params.updator" 
-                    placeholder="编辑人姓名"
-                    style="width: 150px"
-                /> -->
-                 <SelectSaler :onchange="changeSaler" placeholder="编辑人姓名" name="formItem.salerId" ></SelectSaler>
+                <SelectSaler :onchange="changeSaler" placeholder="编辑人姓名" name="formItem.updator" ></SelectSaler>
             </Form-item>
             <Button style="float:right;" type="primary" @click="seachClick">搜索</Button>
         </Form>
@@ -41,24 +36,7 @@
                 ></Page>
             </div>
         </div>
-        <!-- <div class='m-watch-record' style="max-height: 400px;overflow-y: scroll;">
-             <ul
-               class='record-wrap'
-               v-for="item in watchRecord" 
-               :key="item.uTime"
-             >
-                 <li class='first'>{{item.uTime|dateFormat('MM-dd HH:mm')}}</li>
-                 <li class='second'>
-                        <div class='seconds'>
-                            <span style="padding-right: 10px;">{{item.updator}}</span>
-                            <span>{{item.comment}}</span>
-                        </div>
-                        <div class='thirds' style="font-weight:500">
-                            {{item.detail}}
-                        </div>
-                 </li>
-             </ul>
-        </div> -->
+      
     </div>
 </template>
 
@@ -66,6 +44,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import SelectSaler from '~/components/SelectSaler.vue'
+import publicFn from '../publicFn';
 export default {
     components:{
         SelectSaler
@@ -84,10 +63,10 @@ export default {
             pageSize:15,
             page:1,
             params:{
-              
                 startTime:'',
                 updator:'',
                 page:1,
+                id:this.id,
                 pageSize:10,
                 totalPages:1,
 
@@ -128,29 +107,27 @@ export default {
     },
     methods:{
         changePage(){
-              //页面发生改变
+            //页面发生改变
             // this.tabParams.page=page;
             // this.page=page;
             // this.getTableData(this.tabParams);
           
         },
         seachClick(){
-            this.$emit('searchClick',this.params)
+            
+            var data = Object.assign({},this.params);
+            data.startTime = publicFn.timeToStr(data.startTime);
+            data.endTime = publicFn.timeToStr(data.endTime);
+            // console.log(data,"pppp")
+            // return;
+            this.$emit('searchClick',data)
         },
+     
         changeSaler(value){
                 // 销售员
-            this.formItem.updator = value;
+            this.params.updator = value;
         },
-        // getWatchData(){
-
-        //     this.$http.get('watch-edit-record',{id:id}).then((response)=>{
-        //         this.watchRecord=response.data.items;
-        //     }).catch((error)=>{
-        //         this.$Notice.error({
-        //            title: error.message,
-        //         });
-        //     })
-        // },  
+       
     }
 }
 </script>

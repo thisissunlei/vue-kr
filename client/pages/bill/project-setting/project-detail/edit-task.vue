@@ -148,48 +148,48 @@ export default {
             dateError:false,
             cDateError:false,
             params:this.getFormItem(),
-            // actualStart:this.getEdit.actualStartTime,
-            // actualEnd:this.getEdit.actualEndTime,
-            // planStart:this.getEdit.planStartTime,
-            // planEnd:this.getEdit.planEndTime
+            actualStart:this.getEdit.actualStartTime,
+            actualEnd:this.getEdit.actualEndTime,
+            planStart:this.getEdit.planStartTime,
+            planEnd:this.getEdit.planEndTime
         }
     },
     created(){    
         // this.queryData=this.$route.query; 
     },
     mounted(){
-         console.log(this.params,"--------",this.getEdit)
+      
          
     },
    
     methods:{
         getFormItem(){
-            console.log(this.getEdit,"lllllll")
+          
             return Object.assign({},this.getEdit)
         },
         selectTodayStart(){
-            return;
+           
             this.params.actualStartTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             this.actualStartChange( this.params.actualStartTime)
         },
         selectTodayEnd(){
-            return;
+        
             this.params.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
-             this.actualEndChange( this.params.actualEndTime)
+            this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
-            return;
+        
             this.planStart=params;
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
             }else{
                 this.dateError=false;
+                console.log(this.params,"ooooooooo")
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
             }
         },
         planEndChange(params){
-            return;
             this.planEnd=params;
             if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
@@ -197,8 +197,7 @@ export default {
                 this.dateError=false;
                 this.params.planEndTime = params;
                 var data = Object.assign({},this.params);
-                 
-                  return;
+                
                 this.$emit('dataChange',data)
             }
         },

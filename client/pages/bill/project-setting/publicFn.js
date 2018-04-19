@@ -317,6 +317,20 @@ function getLabelColor(taskStatus){
     }
 
 }
+function timeToStr(time) {
+    var type = Object.prototype.toString.call(time)
+    if(!time){
+        return '';
+    }
+   
+    if (type === "[object Date]"){
+        return dateUtils.dateToStr('YYYY-MM-DD HH:mm:SS', new Date(time))
+    }
+    if (type === '[object String]'){
+        return time+ ' 00:00:00';
+    }
+    
+}
 export default {
     getAllMaxAndMin,
     getMonthDayNum,
@@ -330,6 +344,7 @@ export default {
     getActualColor,
     getActualBgColor,
     getActualBorder,
-    getLabelColor
+    getLabelColor,
+    timeToStr
 
 }

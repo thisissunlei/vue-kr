@@ -382,7 +382,7 @@ export default {
                 if(this.floorList.length>1){
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
                 }
-                this.formItem.floor=this.floorList[0].floor; 
+                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

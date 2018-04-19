@@ -66,4 +66,7 @@ a, a:hover, a:focus, a:visited {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+.layout-content{
+    padding-bottom:24px;
+}
 /*根据ui全局修改*/

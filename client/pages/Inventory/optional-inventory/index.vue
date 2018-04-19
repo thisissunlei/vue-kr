@@ -13,13 +13,13 @@
         />
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
-                     <div class="daily-table" id="optional-table-list">
+                     <div class="daily-table" id="optional-inventory-table-list">
                         <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
                             <div slot="loading">
                                <Loading/>
                             </div> 
                         </Table>
-                        <div  class='list-footer fixed-footer' :style="{left:left+'px',width:width+'px'}">
+                        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:left+'px',width:width+'px'}" v-if="dailyData.length">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
                                 </div>
@@ -76,6 +76,7 @@ import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
 import Loading from '~/components/Loading';
+import publicFn from '../publicFn';
 
     export default {
         name: 'Daily',
@@ -94,6 +95,7 @@ import Loading from '~/components/Loading';
                 openMessage:false,
                 openStatistical:false,
                 loading:true,
+                theEnd:true,
                 left:'',
                 width:'',
 
@@ -233,7 +235,7 @@ import Loading from '~/components/Loading';
         },
         mounted(){
             var dom=document.getElementById('layout-content-main');
-            var dailyTableDom=document.getElementById('optional-table-list');
+            var dailyTableDom=document.getElementById('optional-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
             this.width=dailyTableDom.getBoundingClientRect().width;
             dom.addEventListener("scroll",this.onScrollListener)
@@ -295,12 +297,14 @@ import Loading from '~/components/Loading';
             },
             //滚动监听
             onScrollListener(){    
-                var dom=document.getElementById('layout-content-main');
-                var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                var dom=document.getElementById('layout-content-main');    
+                /*var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                var trDom=document.querySelectorAll('div.daily-table table thead tr')[0];
                 headDom.style.left=this.left+'px';
                 headDom.style.width=this.width+'px';
+                trDom.style.width=this.width+'px';
                 var classVal = headDom.getAttribute("class");
-                if(dom.scrollTop>=294){
+                if(dom.scrollTop>292){
                      if(!classVal){
                          headDom.setAttribute("class",'daily-head-class');
                      }
@@ -309,8 +313,15 @@ import Loading from '~/components/Loading';
                         classVal = classVal.replace("daily-head-class","");
                         headDom.setAttribute("class",classVal);
                     }
+                }*/
+                if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
+                    this.theEnd=true;
+                }
+                if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
+                    this.theEnd=false;
                 }
             },
+
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
@@ -369,9 +380,17 @@ import Loading from '~/components/Loading';
             .daily-head-class{
                 position: fixed;
                 top:60px;
+                z-index: 999;
             }
             .list-footer{
-                padding:20px 0;
+                padding:20px 0 24px 0;
+            }
+            .on-export-middle{
+                position: fixed;
+                bottom: 53px;
+                z-index: 999;
+                left: 20px;
+                background:#fff;
             }
             .priceClass{
                 .ivu-table-cell{

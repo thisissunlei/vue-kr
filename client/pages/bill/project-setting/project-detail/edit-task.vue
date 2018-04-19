@@ -342,16 +342,17 @@ export default {
                 color: #666666;
             }
             .third{
-                padding:0px 10px;
+                padding:5px 10px;
                 width: 330px;
                 background: #F6F6F6;
-                margin-top: 10px;
+              
                 font-family: PingFang-SC-Regular;
                 font-size: 12px;
                 color: #666;
                 border: 1px solid #EEEEEE;
                 box-sizing: border-box;
                 border-radius: 4px;
+                line-height: 18px;
             }
         }
     }

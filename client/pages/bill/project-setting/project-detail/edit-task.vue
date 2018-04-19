@@ -1,10 +1,11 @@
 <template>
     <div class="edit-task">
-        <Form  :model="params"   label-position="top" style="margin-top:25px;max-height:556px;">
+        <Form  :model="params"   label-position="top" style="margin-top:25px;">
             <ClassificationBox value="1" title="计划工期" :isBorder="true" type="num">
                 <div slot="content" class="time-box plan-time" > 
                     <Form-item label="开始日" class="bill-search" prop="planStartTime">
                         <DatePicker 
+                        
                             v-model="params.planStartTime"
                             type="date" 
                             placeholder="开始日期" 
@@ -29,8 +30,8 @@
             <ClassificationBox value="2" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
-                        <Tooltip placement="top">
-                            <Form-item label="开始日" class="bill-search">
+                        <Tooltip placement="top" class="start">
+                            <Form-item label="开始日" class="bill-search ">
                                 <DatePicker 
                                     v-model="params.actualStartTime"
                                     type="date" 
@@ -48,8 +49,8 @@
                                 今天开始的？
                             </div>
                         </Tooltip>
-                        <Tooltip placement="top">
-                            <Form-item label="结束日"  prop="actualEndTime" style="display:inline-block;">
+                        <Tooltip placement="top" class="end">
+                            <Form-item class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
                                 <DatePicker 
                                     v-model="params.actualEndTime"
                                     type="date" 
@@ -62,7 +63,7 @@
                                 slot="content" 
                                 class="actual-select-today"
                                 @click="selectTodayEnd"
-                            >今天完成的</div>
+                            >今天完成的?</div>
                         </Tooltip>   
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
                     </div>
@@ -99,7 +100,7 @@
                 </div>
                 
             </ClassificationBox>
-            <ClassificationBox value="4" title="编辑记录" :isBorder="false" type="num">
+            <ClassificationBox value="4" title="编辑记录" :isBorder="true" :isEnd="true" type="num">
                 <div class="edit-record" slot="content">
                     <div
                         class='record-wrap'
@@ -113,7 +114,12 @@
                                 <span >{{item.comment}}</span>
                             </div>
                             <div class='third' v-if="item.descr">
+                                 <div class="mod-triangle">
+                                    <div class="t-border"></div>
+                                    <div class="t-inset"></div>
+                                </div>
                                 {{item.descr}}
+                               
                             </div>
                         </div>
                     </div>
@@ -239,6 +245,7 @@ export default {
         display:inline-block;
         width:50%;
         padding-left:32px;
+        padding-bottom: 20px;
     }
     .dep-class{
         .ivu-form-item-content{
@@ -285,36 +292,36 @@ export default {
              width: auto;
         }
        .ivu-date-picker-rel{
-
             input{
                 color: #999999;
                 font-size: 14px;
             }
         } 
+        .start .ivu-tooltip-popper{
+            left: 775px !important;
+            top: 325px !important;
+           
+        }
+        .end .ivu-tooltip-popper{
+            left: 1055px !important;
+            top: 325px !important;
+        }
+        .ivu-tooltip-arrow{
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            bottom: 3px;
+            border-width: 5px;
+            border-right-color: rgba(70,76,91,.9);
+            margin-left: auto;
+            top: 50%;
+            left: -10px;
+            margin-top: -5px;
+        }
     }
-    .pop-position{
-        .ivu-poptip-popper{
-            .ivu-poptip-arrow{
-            border-top-color: rgba(0,0,0,0.7);
-            }
-            .ivu-poptip-arrow:after{
-                border-top-color: rgba(0,0,0,0.1);
-            }
-            .ivu-poptip-inner{
-                background-color: rgba(0,0,0,0.7);
-            }
-            .ivu-poptip-body-content-inner{
-                color:#fff;
-            }
-        }
-        .single-radio-ok{
-            display:inline-block;
-            margin-right:40px;
-        }
-        .single-radio-no{
-            display:inline-block;
-        }
-    }
+    
     .bill-search{
         display:inline-block;
         // padding-left:32px;
@@ -361,7 +368,37 @@ export default {
                 box-sizing: border-box;
                 border-radius: 4px;
                 line-height: 18px;
+                position: relative;
+               .mod-triangle {
+                    display:block;
+                    position: absolute;
+                    left:5px;
+                    top:-13px;
+                    z-index:20;
+                    .t-border,
+                    .t-inset{
+                        left:0px;
+                        top:0px;
+                        width:0;
+                        height:0;
+                        font-size:0;
+                        overflow:hidden;
+                        position:absolute;
+                        border-width:8px;
+                        /*可在此处更改小三角方向：上-右-下-左（solid的位置）*/
+                        border-style: solid;
+                    }
+                    .t-border{
+                        border-color:transparent  transparent #EEEEEE transparent;
+                        top:-1px;
+                    }
+                    .t-inset{
+                        border-color: transparent  transparent #F6F6F6 transparent;
+                    }       
+                }
             }
+           
+
         }
     }
 }

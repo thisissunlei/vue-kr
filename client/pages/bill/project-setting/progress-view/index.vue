@@ -438,7 +438,7 @@ export default {
             dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
             dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
             this.$http.post('project-edit-task',dataParams).then((response)=>{
-                this.cancelEditTask();
+                // this.cancelEditTask();
                 this.params.page=1;
                 this.getListData(this.params);
                 this.getTreeData();
@@ -451,7 +451,7 @@ export default {
                 this.warn="编辑成功";
                 }
 
-                // this.scrollPosititon();
+                this.scrollPosititon();
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

@@ -1,13 +1,15 @@
 <template>
   <div class="classification-box">
-      <div class="hander">
-          <div class="icon"><span v-if="value && type=='num'">{{value}}</span><span v-if="!value || type=='icon'" class="circle"></span></div>
-         
-          <div class="title"><span>{{title}}</span></div>
-      </div>
-      <div class="content" :style="{borderWidth:isBorder?'1px':'0px'}">
-          <slot name="content"></slot>
-      </div>
+        <div class="hander">
+            <div class="icon"><span v-if="value && type=='num'">{{value}}</span><span v-if="!value || type=='icon'" class="circle"></span></div>
+            
+            <div class="title"><span>{{title}}</span></div>
+        </div>
+        <div class="content" :style="{borderWidth:isBorder?'1px':'0px'}">
+            <slot name="content"></slot>
+            <div class="tag" :style="tagStyle()"></div>
+        </div>
+     
   </div>
 </template>
 
@@ -27,6 +29,10 @@
         isBorder:{
             type:Boolean,
             default:true
+        },
+        isEnd:{
+            type:Boolean,
+            default:false,
         }
     },
     data(){
@@ -35,9 +41,13 @@
         }
     },
     methods:{
-        handleClick(event){
-        this.$emit('click',event)
-        }
+        tagStyle(event){
+            if(this.isEnd){
+                return {top:'auto',bottom:'-8px',marginTop:'0px'};
+            }
+            return {};
+        },
+
     },
     mounted(){
         this.showText = this.$slots.default !== undefined;
@@ -49,6 +59,7 @@
 .classification-box {
     line-height: 40px;
     vertical-align: middle;
+   
     .icon{
         display: inline-block;
         height: 40px;
@@ -109,6 +120,21 @@
         padding-bottom:15px;  
         border-left:1px  dashed #499DF1;
         margin-left: 20px;
+        position: relative;
+        .tag{
+            display: inline-block;
+            position: absolute;
+            left: -8px;
+            width: 16px;
+            background: #fff;
+            height: 16px;
+            border-radius: 50%;
+            // bottom: -8px;
+            top: 50%;
+            margin-top: -8px;
+            background-image:url(images/end_icon.svg); 
+            background-size: 100% 100%;
+        }
     }
 }
 

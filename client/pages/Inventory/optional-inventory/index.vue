@@ -14,7 +14,11 @@
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
                      <div class="daily-table" id="optional-table-list">
-                        <Table border stripe :columns="columns" :data="dailyData"></Table>
+                        <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
+                            <div slot="loading">
+                               <Loading/>
+                            </div> 
+                        </Table>
                         <div  class='list-footer fixed-footer' :style="{left:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
@@ -87,6 +91,7 @@ import Discount from '../discount';
                 MessageType:'',
                 openMessage:false,
                 openStatistical:false,
+                loading:true,
                 left:'',
                 width:'',
 
@@ -255,7 +260,7 @@ import Discount from '../discount';
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:15});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:1000});
                 delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
@@ -267,6 +272,7 @@ import Discount from '../discount';
                 this.$http.get('getOptionalInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.loading=false;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -390,6 +396,7 @@ import Discount from '../discount';
             .priceClass{
                 .ivu-table-cell{
                     padding:0;
+                    padding-right:5px;
                 }
             }
         }

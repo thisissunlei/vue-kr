@@ -14,7 +14,11 @@
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
                      <div class="daily-table" id="daily-table-list">
-                        <Table border stripe :columns="columns" :data="dailyData"></Table>
+                        <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
+                           <div slot="loading">
+                               <Loading/>
+                           </div> 
+                        </Table>
                         <div  class='list-footer fixed-footer' :style="{left:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
@@ -71,6 +75,7 @@ import KrField from '~/components/KrField';
 import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
+import Loading from '~/components/Loading';
 
     export default {
         name: 'Daily',
@@ -79,7 +84,8 @@ import Discount from '../discount';
             KrField,
             SearchForm,
             Statistical,
-            Discount
+            Discount,
+            Loading
         },
         data () {
             return {   
@@ -87,6 +93,7 @@ import Discount from '../discount';
                 MessageType:'',
                 openMessage:false,
                 openStatistical:false,
+                loading:true,
                 left:'',
                 width:'',
 
@@ -265,6 +272,7 @@ import Discount from '../discount';
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.loading=false;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -387,6 +395,7 @@ import Discount from '../discount';
             .priceClass{
                 .ivu-table-cell{
                     padding:0;
+                    padding-right:5px;
                 }
             }
         }

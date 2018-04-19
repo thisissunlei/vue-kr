@@ -386,7 +386,6 @@ export default {
         },
          //获取查看编辑记录
         getWatchData(params){
-            console.log(params,"ppppppppp")
             var data= Object.assign({},params)
             this.$http.get('watch-edit-record',data).then((response)=>{
                 this.watchRecord=response.data.items;
@@ -560,14 +559,14 @@ export default {
           //编辑任务提交
         submitEditTask(params){
             var dataParams = Object.assign({},params);
-                dataParams.id=this.editId;
+            dataParams.id=this.editId;
             dataParams.propertyId=this.queryData.id;
             dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
             dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
             dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
             dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
             this.$http.post('project-edit-task',dataParams).then((response)=>{
-                this.cancelEditTask();
+                // this.cancelEditTask();
                 this.getListData(this.ids);
 
                 if(response.code>1){

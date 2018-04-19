@@ -107,10 +107,14 @@ export default {
     },
     methods:{
         changePage(){
-            //页面发生改变
-            // this.tabParams.page=page;
-            // this.page=page;
-            // this.getTableData(this.tabParams);
+            // 页面发生改变
+            this.params.page=page;
+            this.page=page;
+            var data = Object.assign({},this.params);
+            data.startTime = publicFn.timeToStr(data.startTime);
+            data.endTime = publicFn.timeToStr(data.endTime);
+            
+            this.$emit('searchClick',data)
           
         },
         seachClick(){

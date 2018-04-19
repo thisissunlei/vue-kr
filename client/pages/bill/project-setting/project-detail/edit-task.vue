@@ -184,8 +184,9 @@ export default {
                 this.dateError=true;
             }else{
                 this.dateError=false;
-                console.log(this.params,"ooooooooo")
+                this.params.planStartTime = params;
                 var data = Object.assign({},this.params);
+                 console.log(data,"ooooooooo")
                 this.$emit('dataChange',data)
             }
         },
@@ -202,24 +203,26 @@ export default {
             }
         },
         actualStartChange(params){
-            return;
+          
             this.actualStart=params;
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
                 this.cDateError=false;
+                this.params.actualStartTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
             }
         },
         actualEndChange(params){
-            return;
+            
             this.actualEnd=params;
             if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
                 this.cDateError=true;
             }else{
 
                 this.cDateError=false;
+                this.params.actualEndTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
             }
@@ -243,9 +246,15 @@ export default {
     }
     .ui-labeltext{
         display: block;
+        height: auto;
+        width: auto;
         .ui-label{
-            width: 100px;
+           
             text-align: left;
+        }
+        .ui-text{
+             width: 450px;
+            vertical-align: top;
         }
     }
     

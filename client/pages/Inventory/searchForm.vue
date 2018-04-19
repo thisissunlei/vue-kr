@@ -38,7 +38,7 @@
 
                     <Form-item label="库存状态" class='daily-form' v-if="identify=='daily'"> 
                         <Select 
-                            v-model="formItem.statusName" 
+                            v-model="formItem.status" 
                             placeholder="全部" 
                             style="width: 220px"
                             multiple
@@ -212,13 +212,13 @@ export default {
        }
     },
     data() {
-        const validateStation = (rule, value, callback) => {
+            const validateStation = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
                 }else if(value&&value>999){
                     callback('最大999个工位');
-                }else if (this.formItem.stationsMin&&this.formItem.stationsMax&&this.formItem.stationsMin>this.formItem.stationsMax) {
+                }else if (this.formItem.stationsMin&&this.formItem.stationsMax&&Number(this.formItem.stationsMin)>Number(this.formItem.stationsMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
@@ -230,17 +230,17 @@ export default {
                     callback('请输入正整数');
                 }else if(value&&value>9999999){
                     callback('单价最高9999999');
-                }else if (this.formItem.priceMin&&this.formItem.priceMax&&this.formItem.priceMin>this.formItem.priceMax) {
+                }else if (this.formItem.priceMin&&this.formItem.priceMax&&Number(this.formItem.priceMin)>Number(this.formItem.priceMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
             };
             const validateArea = (rule, value, callback) => {
-                var reg=/^(([1-9]{1}[0-9]{0,2})|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,2}\.\d{1,2}))$/;
+                var reg=/^(([1-9]{1}[0-9]{0,2})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,2}\.\d{1,2}))$/;
                 if(value&&!reg.test(value)){
                     callback('请输入整数位最多3位,小数位最多2位');
-                }else if (this.formItem.areaMin&&this.formItem.areaMax&&this.formItem.areaMin>this.formItem.areaMax) {
+                }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
@@ -261,10 +261,11 @@ export default {
                 formItem:{
                     inventoryDate:publicFn.getToDay(),
                     name:'',
-                    statusName:[],
-                    communityId:'',
+                    status:[],
+                    communityId:' ',
+                    statusName:'',
                     cityId:'',
-                    floor:'',
+                    floor:' ',
                     stationsMax:'',
                     stationsMin:'',
                     seatType:' ',
@@ -381,7 +382,7 @@ export default {
                 if(this.floorList.length>1){
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
                 }
-                this.formItem.floor=this.floorList[0].floor; 
+                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -408,6 +409,11 @@ export default {
         searchClick(){
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
+                    var str='';
+                    this.formItem.status.map((item,index)=>{
+                            str=str?str+','+item:item;
+                    })
+                    this.formItem.statusName=str;
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -415,6 +421,7 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
+            this.formItem.status=[];
             this.$emit('clearClick',this.formItem);
         },
         //回车

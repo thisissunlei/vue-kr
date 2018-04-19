@@ -13,9 +13,13 @@
         />
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
-                     <div class="daily-table" id="daily-table-list">
-                        <Table border stripe :columns="columns" :data="dailyData"></Table>
-                        <div  class='list-footer fixed-footer' :style="{left:left+'px',width:width+'px'}">
+                     <div class="daily-table" id="daily-inventory-table-list">
+                        <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
+                           <div slot="loading">
+                               <Loading/>
+                           </div> 
+                        </Table>
+                        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
                                 </div>
@@ -71,6 +75,7 @@ import KrField from '~/components/KrField';
 import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
+import Loading from '~/components/Loading';
 
     export default {
         name: 'Daily',
@@ -79,7 +84,8 @@ import Discount from '../discount';
             KrField,
             SearchForm,
             Statistical,
-            Discount
+            Discount,
+            Loading
         },
         data () {
             return {   
@@ -87,6 +93,8 @@ import Discount from '../discount';
                 MessageType:'',
                 openMessage:false,
                 openStatistical:false,
+                loading:true,
+                theEnd:true,
                 left:'',
                 width:'',
 
@@ -100,7 +108,6 @@ import Discount from '../discount';
                         key: 'name',
                         align:'center',
                         render(tag, params){
-                            var renCap=params.row.type=='SPACE'?params.row.capacity:'';
                             var location=params.row.location?params.row.location:'-'
                             return h('div', [
                                        h('Tooltip', {
@@ -111,7 +118,7 @@ import Discount from '../discount';
                                         }, [
                                         h('div', [
                                             h('div',{
-                                            },params.row.name+'  '+renCap),
+                                            },params.row.name+'  '+params.row.capacity),
                                             h('div',{
                                                 style:{
                                                     textOverflow:'ellipsis',
@@ -253,14 +260,14 @@ import Discount from '../discount';
                 console.log("==============",params)
             })
             var dom=document.getElementById('layout-content-main');
-            var dailyTableDom=document.getElementById('daily-table-list');
+            var dailyTableDom=document.getElementById('daily-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
             this.width=dailyTableDom.getBoundingClientRect().width;
             dom.addEventListener("scroll",this.onScrollListener)
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:15});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:1000});
                 this.getTableData(this.tabForms); 
             },
             //获取列表数据
@@ -270,6 +277,7 @@ import Discount from '../discount';
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.loading=false;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -312,7 +320,7 @@ import Discount from '../discount';
             //滚动监听
             onScrollListener(){    
                 var dom=document.getElementById('layout-content-main');
-                var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                /*var headDom=document.querySelectorAll('div.daily-table table thead')[0];
                 headDom.style.left=this.left+'px';
                 headDom.style.width=this.width+'px';
                 var classVal = headDom.getAttribute("class");
@@ -325,6 +333,12 @@ import Discount from '../discount';
                         classVal = classVal.replace("daily-head-class","");
                         headDom.setAttribute("class",classVal);
                     }
+                }*/
+                if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
+                    this.theEnd=true;
+                }
+                if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
+                    this.theEnd=false;
                 }
             },
             //搜索
@@ -337,8 +351,10 @@ import Discount from '../discount';
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.getTableData(this.tabForms);
             },
+            //导出
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/export');
+                this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
+                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export');
             },
             //折扣价
             countChange(param){
@@ -385,11 +401,19 @@ import Discount from '../discount';
                 top:60px;
             }
             .list-footer{
-                padding:20px 0;
+                padding:20px 0 24px 0;
+            }
+            .on-export-middle{
+                position: fixed;
+                bottom: 53px;
+                z-index: 999;
+                left: 20px;
+                background:#fff;
             }
             .priceClass{
                 .ivu-table-cell{
                     padding:0;
+                    padding-right:5px;
                 }
             }
         }

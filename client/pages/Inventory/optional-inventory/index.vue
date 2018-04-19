@@ -13,9 +13,13 @@
         />
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
-                     <div class="daily-table" id="optional-table-list">
-                        <Table border stripe :columns="columns" :data="dailyData"></Table>
-                        <div  class='list-footer fixed-footer' :style="{left:left+'px',width:width+'px'}">
+                     <div class="daily-table" id="optional-inventory-table-list">
+                        <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
+                            <div slot="loading">
+                               <Loading/>
+                            </div> 
+                        </Table>
+                        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:left+'px',width:width+'px'}" v-if="dailyData.length">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
                                 </div>
@@ -71,6 +75,8 @@ import KrField from '~/components/KrField';
 import SearchForm from '../searchForm';
 import Statistical from '../statistical';
 import Discount from '../discount';
+import Loading from '~/components/Loading';
+import publicFn from '../publicFn';
 
     export default {
         name: 'Daily',
@@ -79,7 +85,8 @@ import Discount from '../discount';
             KrField,
             SearchForm,
             Statistical,
-            Discount
+            Discount,
+            Loading
         },
         data () {
             return {   
@@ -87,6 +94,8 @@ import Discount from '../discount';
                 MessageType:'',
                 openMessage:false,
                 openStatistical:false,
+                loading:true,
+                theEnd:true,
                 left:'',
                 width:'',
 
@@ -100,7 +109,6 @@ import Discount from '../discount';
                         key: 'name',
                         align:'center',
                         render(tag, params){
-                            var renCap=params.row.type=='SPACE'?params.row.capacity:'';
                             var location=params.row.location?params.row.location:'-'
                             return h('div', [
                                        h('Tooltip', {
@@ -111,7 +119,7 @@ import Discount from '../discount';
                                         }, [
                                         h('div', [
                                             h('div',{
-                                            },params.row.name+'  '+renCap),
+                                            },params.row.name+'  '+params.row.capacity),
                                             h('div',{
                                                 style:{
                                                     textOverflow:'ellipsis',
@@ -203,29 +211,7 @@ import Discount from '../discount';
                         }
                     },
                     {
-                        title: '当日库存',
-                        key: 'statusName',
-                        align:'center',
-                        width:100,
-                        render(tag, params){
-                            var ren=params.row.statusName?params.row.statusName:'-'
-                            return <span style={params.row.statusName=='不可用'?'color:red':''}>{ren}</span>
-                        }
-                    },
-                    {
-                        title: '签约价',
-                        key: 'price',
-                        className:'priceClass',
-                        align:'center',
-                        width:80,
-                        render(tag, params){
-                            var status=params.row.status;
-                            var renEnd=(status=='AVAILABLE'||status=='DISABLE')?'-':params.row.price
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{renEnd}</span>
-                        }
-                    },
-                    {
-                        title: '最近可租起始日',
+                        title: '可租起始日',
                         key: 'recentStart',
                         align:'center',
                         width:130,
@@ -235,7 +221,7 @@ import Discount from '../discount';
                         }
                     },
                     {
-                        title: '最近可租结束日',
+                        title: '可租结束日',
                         key: 'recentEnd',
                         align:'center',
                         width:130,
@@ -250,14 +236,14 @@ import Discount from '../discount';
         mounted(){
            
             var dom=document.getElementById('layout-content-main');
-            var dailyTableDom=document.getElementById('optional-table-list');
+            var dailyTableDom=document.getElementById('optional-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
             this.width=dailyTableDom.getBoundingClientRect().width;
             dom.addEventListener("scroll",this.onScrollListener)
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:15});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:1000});
                 delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
@@ -269,6 +255,7 @@ import Discount from '../discount';
                 this.$http.get('getOptionalInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
+                    this.loading=false;
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -311,12 +298,14 @@ import Discount from '../discount';
             },
             //滚动监听
             onScrollListener(){    
-                var dom=document.getElementById('layout-content-main');
-                var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                var dom=document.getElementById('layout-content-main');    
+                /*var headDom=document.querySelectorAll('div.daily-table table thead')[0];
+                var trDom=document.querySelectorAll('div.daily-table table thead tr')[0];
                 headDom.style.left=this.left+'px';
                 headDom.style.width=this.width+'px';
+                trDom.style.width=this.width+'px';
                 var classVal = headDom.getAttribute("class");
-                if(dom.scrollTop>=294){
+                if(dom.scrollTop>292){
                      if(!classVal){
                          headDom.setAttribute("class",'daily-head-class');
                      }
@@ -325,8 +314,15 @@ import Discount from '../discount';
                         classVal = classVal.replace("daily-head-class","");
                         headDom.setAttribute("class",classVal);
                     }
+                }*/
+                if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
+                    this.theEnd=true;
+                }
+                if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
+                    this.theEnd=false;
                 }
             },
+
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
@@ -338,7 +334,9 @@ import Discount from '../discount';
                 this.getTableData(this.tabForms);
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/export-available');
+                this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
+                this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
+                utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export-available');
             },
             //折扣价
             countChange(param){
@@ -383,13 +381,22 @@ import Discount from '../discount';
             .daily-head-class{
                 position: fixed;
                 top:60px;
+                z-index: 999;
             }
             .list-footer{
-                padding:20px 0;
+                padding:20px 0 24px 0;
+            }
+            .on-export-middle{
+                position: fixed;
+                bottom: 53px;
+                z-index: 999;
+                left: 20px;
+                background:#fff;
             }
             .priceClass{
                 .ivu-table-cell{
                     padding:0;
+                    padding-right:5px;
                 }
             }
         }

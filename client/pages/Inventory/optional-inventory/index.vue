@@ -99,7 +99,10 @@ var layoutScrollHeight=0;
                 left:'',
                 width:'',
 
-                tabForms:{},
+                tabForms:{
+                    page:1,
+                    pageSize:100,
+                },
                 totalCount:0,
                 dailyData:[],
                 dailyOldData:[],
@@ -255,7 +258,7 @@ var layoutScrollHeight=0;
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:100});
+                this.tabForms=Object.assign({},formItem,this.tabForms);
                 delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
@@ -365,10 +368,16 @@ var layoutScrollHeight=0;
                 utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export-available');
             },
             //折扣价
-            countChange(param){
+            countChange(param,countRadio){
                 this.getCommonParam();
-                this.tabForms.discount=param;
-                localStorage.setItem('optional-inventory-discount',param);
+                if(countRadio==1){
+                    this.tabForms.discount='';
+                }else{
+                    this.tabForms.discount=param;
+                }
+                if(!this.tabForms.cityId){
+                    return ;
+                }
                 this.getTableData(this.tabForms);
             }
         }

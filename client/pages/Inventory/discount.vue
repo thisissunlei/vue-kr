@@ -36,24 +36,35 @@ export default {
         this.getDiscount();
         var dailyCount=localStorage.getItem('daily-inventory-discount');
         var optionalCount=localStorage.getItem('optional-inventory-discount');
+        var dailySelf=localStorage.getItem('daily-inventory-countSelf');
+        var optionalSelf=localStorage.getItem('optional-inventory-countSelf');
         if(this.identify=='daily'){
-            this.params.discount=dailyCount?Number(dailyCount):' '
+            this.params.discount=dailyCount?Number(dailyCount):' ';
+            this.params.countSelf=dailySelf;
         }else{
-            this.params.discount=optionalCount?Number(optionalCount):' ' 
+            this.params.discount=optionalCount?Number(optionalCount):' ';
+            this.params.countSelf=optionalSelf; 
         }
-        this.params.countSelf=(typeof this.params.discount)=='number'?'0':'1';  
     },
     methods:{
         radioChange(param){
-            this.params.discount=param==1?' ':this.params.discount;
-            if(param==1){
-                this.$emit('countChange',this.params.discount);
+            var discount='';
+            discount=param==1?'':this.params.discount;
+            this.$emit('countChange',discount,param);
+            if(this.identify=='daily'){
+                localStorage.setItem('daily-inventory-countSelf',param);
+            }else{
+                localStorage.setItem('optional-inventory-countSelf',param);' ' 
             }
         },
         //折扣价
         countChange(param){
-            this.params.countSelf=(typeof param)=='number'?'0':'1';
-            this.$emit('countChange',param);
+            if(this.identify=='daily'){
+                localStorage.setItem('daily-inventory-discount',param);
+            }else{
+                localStorage.setItem('optional-inventory-discount',param);' ' 
+            }
+            this.$emit('countChange',param,this.params.countSelf);
         },
         //获取折扣价
         getDiscount(){

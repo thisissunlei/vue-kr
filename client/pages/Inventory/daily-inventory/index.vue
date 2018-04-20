@@ -32,7 +32,7 @@
                     </div>
                 </Tab-pane>
 
-                <Tab-pane label="以时间轴方式展示" name="dailyTime">
+                <Tab-pane label="以时间轴方式展示" name="dailyTime" disabled>
                     
                 </Tab-pane>
         </Tabs> 

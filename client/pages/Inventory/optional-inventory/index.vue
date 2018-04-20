@@ -342,19 +342,21 @@ var layoutScrollHeight=0;
             },
             //提取公共
             getCommonParam(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.tabForms.page=1;
                 this.dailyOldData=[];
                 this.loading=true;
             },
             //搜索
             searchClick(formItem){
-                this.getCommonParam(formItem);
+                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.getCommonParam();
+                console.log('tab[[',this.tabForms);
                 this.getTableData(this.tabForms);
             },
             //清空
             clearClick(formItem){
-                this.getCommonParam(formItem);
+                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.getCommonParam();
                 this.getTableData(this.tabForms);
             },
             submitExport(){
@@ -364,8 +366,7 @@ var layoutScrollHeight=0;
             },
             //折扣价
             countChange(param){
-                this.dailyOldData=[];
-                this.tabForms.page=1;
+                this.getCommonParam();
                 this.tabForms.discount=param;
                 localStorage.setItem('optional-inventory-discount',param);
                 this.getTableData(this.tabForms);

@@ -98,24 +98,23 @@
                         </Select> 
                     </Form-item>
 
-                    <div style="display:inline-block;margin-right:20px;vertical-align: middle;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
-                        <Form-item class='priceForm'  prop="areaMin">
-                            <i-input 
-                                v-model="formItem.areaMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                        <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                        <Form-item  class='priceForm' prop="areaMax">
-                            <i-input 
-                                v-model="formItem.areaMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
+                    <Form-item label="商品属性" class='daily-form'> 
+                        <Select 
+                            v-model="formItem.locationName" 
+                            style="width: 90px;margin-right:20px;"
+                            clearable
+                        >
+                            <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select> 
+                    <Select 
+                            v-model="formItem.suiteName" 
+                            style="width: 90px"
+                            clearable
+                        >
+                            <Option v-for="item in suiteList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </Form-item>
+
 
                     <Form-item label="商品类型" class='daily-form'> 
                         <Select 
@@ -179,23 +178,24 @@
                         </Form-item>
                     </div>
 
-
-                    <Form-item label="商品属性" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.locationName" 
-                            style="width: 90px;margin-right:20px;"
-                            clearable
-                        >
-                            <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select> 
-                    <Select 
-                            v-model="formItem.suiteName" 
-                            style="width: 90px"
-                            clearable
-                        >
-                            <Option v-for="item in suiteList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </Form-item>
+                     <div style="display:inline-block;margin-right:20px;">
+                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
+                        <Form-item class='priceForm'  prop="areaMin">
+                            <i-input 
+                                v-model="formItem.areaMin" 
+                                style="width: 90px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+                        <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                        <Form-item  class='priceForm' prop="areaMax">
+                            <i-input 
+                                v-model="formItem.areaMax" 
+                                style="width: 90px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+                    </div>
                     
                     <Button type="primary" @click="searchClick">搜索</Button>
                 </div>
@@ -453,8 +453,8 @@ export default {
             this.getFloorList(param);
         },
         selectDateChange(param){
-            this.formItem.startDate=param.join(',')[0]?param.join(',')[0]:'';
-            this.formItem.endDate=param.join(',')[1]?param.join(',')[1]:'';
+            this.formItem.startDate=param[0]?param[0]:'';
+            this.formItem.endDate=param[1]?param[1]:'';
         }
     }
 }
@@ -463,7 +463,7 @@ export default {
 <style lang='less'>
      .daily-search-form{
          .daily-header{
-            padding: 30px 20px 10px 20px;
+            padding: 30px 10px 10px 20px;
             .ivu-form .ivu-form-item-label{
                 color:#333;
                 font-weight: 500;
@@ -511,9 +511,9 @@ export default {
                 }
                 .icon-tip{
                     display:inline-block;
-                    width:14px;
-                    height:14px;
-                    background:url(img/q.svg) no-repeat center;
+                    width:16px;
+                    height:16px;
+                    background:url(img/q1.svg) no-repeat center;
                     background-size: 100%;
                     vertical-align: middle;
                     margin-top: 8px;

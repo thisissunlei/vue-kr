@@ -3,7 +3,6 @@
     <SearchForm 
       @searchClick="searchClick"
       @clearClick="clearClick"
-      @submitExport="submitExport"
       @initData="initData"
       identify='daily'
     />
@@ -25,7 +24,8 @@
                         </div>
                         <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
-                                    <Button type='primary' @click='submitStatistical'>统计</Button>
+                                    <Button type='primary' @click='submitStatistical' style="margin-right:10px;">统计</Button>
+                                    <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
                                 </div>
                         </div>
                     </div>
@@ -133,11 +133,11 @@ var layoutScrollHeight=0;
                     },
                     {
                         title: '商品类型',
-                        key: 'type',
+                        key: 'goodsType',
                         align:'center',
                         width:110,
                         render(tag, params){
-                            var ren=params.row.type?params.row.type:'-';
+                            var ren=params.row.goodsType?params.row.goodsType:'-';
                             return <span>{ren}</span>
                         }
                     },
@@ -302,11 +302,6 @@ var layoutScrollHeight=0;
             onMessageChange(data){
                 this.openMessage=data;
             },
-            //页面发生改变
-            changePage(page){
-                this.tabForms.page=page;
-                this.getTableData(this.tabForms);
-            },
             //统计开关
             cancelStatical(){
                 this.openStatistical=!this.openStatistical;
@@ -362,14 +357,21 @@ var layoutScrollHeight=0;
                     this.getTableData(this.tabForms);
                 }
             },
+            //提取公共
+            getCommonParam(formItem){
+                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.tabForms.page=1;
+                this.dailyOldData=[];
+                this.loading=true;
+            },
             //搜索
             searchClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.getCommonParam(formItem);
                 this.getTableData(this.tabForms);
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.getCommonParam(formItem);
                 this.getTableData(this.tabForms);
             },
             //导出
@@ -379,6 +381,8 @@ var layoutScrollHeight=0;
             },
             //折扣价
             countChange(param){
+                this.dailyOldData=[];
+                this.tabForms.page=1;
                 this.tabForms.discount=param;
                 this.getTableData(this.tabForms);
             }
@@ -436,7 +440,6 @@ var layoutScrollHeight=0;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                background:#fff;
                 padding:17px 0 20px 0;
             }
             .priceClass{

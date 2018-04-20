@@ -48,7 +48,7 @@
                     </Form-item>
 
 
-                    <Form-item label="社区" class='daily-form'>
+                    <Form-item label="社区" class='daily-form community-form'>
                         <Select 
                             v-model="formItem.cityId" 
                             placeholder="请输入城市" 
@@ -473,6 +473,13 @@ export default {
                 margin-right:40px;
                 .ivu-form-item-content{
                     display:inline-block;
+                }
+            }
+            .community-form{
+                .ivu-select-dropdown{
+                    min-width:100px;
+                    width:auto !important;
+                    left:auto !important;
                 }
             }
             .priceForm{

@@ -233,7 +233,7 @@ import Loading from '~/components/Loading';
                         render(tag, params){
                             var status=params.row.status;
                             var renEnd=(status=='AVAILABLE'||status=='DISABLE')?'-':params.row.price
-                            return <span style="text-align:right;width: 100%;display: inline-block;">{renEnd}</span>
+                            return <span>{renEnd}</span>
                         }
                     },
                     {

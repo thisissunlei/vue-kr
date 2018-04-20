@@ -1,6 +1,6 @@
 <template>
        <div class='tab-select'>
-            <RadioGroup v-model="params.countSelf" @on-change="radioChange">
+            <RadioGroup v-model="params.countSelf">
                 <Radio label="1">原价</Radio>
                 <Radio label="0">折扣</Radio>
             </RadioGroup>
@@ -17,6 +17,12 @@
 
 <script>
 export default {
+    props:{
+       identify:{
+           type:String,
+           default:''
+       }
+    },
     data() {
         return{
            params:{
@@ -28,16 +34,20 @@ export default {
     },
     mounted(){
         this.getDiscount();
+        var dailyCount=localStorage.getItem('daily-inventory-discount');
+        var optionalCount=localStorage.getItem('optional-inventory-discount');
+        if(this.identify=='daily'){
+            this.params.discount=dailyCount?Number(dailyCount):' '
+        }else{
+            this.params.discount=optionalCount?Number(optionalCount):' ' 
+        }
+        this.params.countSelf=(typeof this.params.discount)=='number'?'0':'1';  
     },
     methods:{
         //折扣价
         countChange(param){
-            this.params.discount=this.params.countSelf=='0'?param:'';
-            this.$emit('countChange',this.params.discount);
-        },
-        radioChange(param){
-            var discount=param==1?'':this.params.discount;
-            this.$emit('countChange',discount);
+            this.params.countSelf=(typeof param)=='number'?'0':'1';
+            this.$emit('countChange',param);
         },
         //获取折扣价
         getDiscount(){

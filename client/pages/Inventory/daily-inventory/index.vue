@@ -9,6 +9,7 @@
     <div class='daily-tab'>
         <Discount 
            @countChange="countChange"
+           identify='daily'
         />
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
@@ -184,7 +185,7 @@ var layoutScrollHeight=0;
                         key: 'unitPrice',
                         className:'priceClass',
                         align:'center',
-                        width:100,
+                        width:80,
                         render(tag, params){
                             return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.unitPrice}</span>
                         }
@@ -193,7 +194,7 @@ var layoutScrollHeight=0;
                         title: '工位数量',
                         key: 'capacity',
                         align:'center',
-                        width:100,
+                        width:90,
                         render(tag, params){
                             var ren=params.row.capacity?params.row.capacity:'-';
                             return <span>{ren}</span>
@@ -204,7 +205,7 @@ var layoutScrollHeight=0;
                         key: 'quotedPrice',
                         className:'priceClass',
                         align:'center',
-                        width:100,
+                        width:80,
                         render(tag, params){
                             return <span style="text-align:right;width: 100%;display: inline-block;">{params.row.quotedPrice}</span>
                         }
@@ -213,7 +214,7 @@ var layoutScrollHeight=0;
                         title: '当日库存',
                         key: 'statusName',
                         align:'center',
-                        width:100,
+                        width:90,
                         render(tag, params){
                             var ren=params.row.statusName?params.row.statusName:'-'
                             return <span style={params.row.statusName=='不可用'?'color:red':''}>{ren}</span>
@@ -234,8 +235,9 @@ var layoutScrollHeight=0;
                     {
                         title: '最近可租起始日',
                         key: 'recentStart',
+                        className:'daily-here-date',
                         align:'center',
-                        width:130,
+                        width:120,
                         render(tag, params){
                             var ren=params.row.recentStart?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentStart)):'-';
                             return <span>{ren}</span>;
@@ -244,8 +246,9 @@ var layoutScrollHeight=0;
                     {
                         title: '最近可租结束日',
                         key: 'recentEnd',
+                        className:'daily-here-date',
                         align:'center',
-                        width:130,
+                        width:120,
                         render(tag, params){
                             var ren=params.row.recentEnd?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.recentEnd)):'-';
                             return <span>{ren}</span>;
@@ -384,6 +387,7 @@ var layoutScrollHeight=0;
                 this.dailyOldData=[];
                 this.tabForms.page=1;
                 this.tabForms.discount=param;
+                localStorage.setItem('daily-inventory-discount',param);
                 this.getTableData(this.tabForms);
             }
         }
@@ -446,6 +450,11 @@ var layoutScrollHeight=0;
                 .ivu-table-cell{
                     padding:0;
                     padding-right:5px;
+                }
+            }
+            .daily-here-date{
+                .ivu-table-cell{
+                    padding:0 10px;
                 }
             }
         }

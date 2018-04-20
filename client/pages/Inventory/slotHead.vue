@@ -48,11 +48,14 @@
         &:nth-child(4),&:nth-child(9){
             width:80px;
         }
-        &:nth-child(5),&:nth-child(6),&:nth-child(7),&:nth-child(8){
-            width:100px;
+        &:nth-child(5),&:nth-child(7){
+            width:80px;
+        }
+        &:nth-child(6),&:nth-child(8){
+            width:90px;
         }
         &:nth-child(10),&:nth-child(11){
-            width:130px;
+            width:120px;
         }
         &:nth-child(1){
             width:100%;

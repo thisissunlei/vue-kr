@@ -9,6 +9,7 @@
     <div class='daily-tab'>
         <Discount 
            @countChange="countChange"
+           identify='optional'
         />
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
@@ -366,6 +367,7 @@ var layoutScrollHeight=0;
                 this.dailyOldData=[];
                 this.tabForms.page=1;
                 this.tabForms.discount=param;
+                localStorage.setItem('optional-inventory-discount',param);
                 this.getTableData(this.tabForms);
             }
         }

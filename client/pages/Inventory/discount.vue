@@ -40,10 +40,10 @@ export default {
         var optionalSelf=localStorage.getItem('optional-inventory-countSelf');
         if(this.identify=='daily'){
             this.params.discount=dailyCount?Number(dailyCount):' ';
-            this.params.countSelf=dailySelf;
+            this.params.countSelf=dailySelf?dailySelf:'1';
         }else{
             this.params.discount=optionalCount?Number(optionalCount):' ';
-            this.params.countSelf=optionalSelf; 
+            this.params.countSelf=optionalSelf?optionalSelf:'1'; 
         }
     },
     methods:{

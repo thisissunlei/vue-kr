@@ -5,7 +5,7 @@
     </div>
 
     <div id="object-seting-archives" class="u-table" style="position:relative;">
-        <Table border :columns="columns" @on-sort-change="shortChange" :data="billList"></Table>
+        <Table border :columns="columns" :data="billList"></Table>
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page
@@ -247,23 +247,33 @@ import Loading from '~/components/Loading'
                  this.$route.query.customerName=""
              }
              this.tabParams=Object.assign({},this.$route.query,{page:1,pageSize:15});
-             this.$nextTick(()=>{
-                this.colspan();
-             })
+          
             
             
+        },
+        mounted(){
+               this.$nextTick(()=>{
+                    let tableDom = document.querySelectorAll('#object-seting-archives table')[0];
+                    this.colspan();
+                    
+                    utils.tableSort(tableDom,this.shortChange);
+                    
+                    
+                })
         },
         methods:{
             colspan(){
                 var thDom = document.querySelectorAll('#object-seting-archives table .current-range');
-                console.log(thDom,"ppppppp")
-                thDom[0].colSpan = 2;
-                thDom[1].parentNode.removeChild( thDom[1]);
+                if(thDom && thDom.length!=0){
+                    thDom[0].colSpan = 2;
+                    thDom[1].parentNode.removeChild( thDom[1]);
+                }
             },
+            
             //排序按钮
             shortChange(event){
                 console.log(event,"ppppp")
-                if(event.key === 'cTime'){
+                if(event.label === '创建时间 '){
                     if(event.order === 'asc'){
                         this.tabParams.query = 'CTIMEASC';
                     }else{

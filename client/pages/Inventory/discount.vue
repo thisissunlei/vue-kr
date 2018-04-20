@@ -55,7 +55,7 @@ export default {
             if(this.identify=='daily'){
                 localStorage.setItem('daily-inventory-countSelf',param);
             }else{
-                localStorage.setItem('optional-inventory-countSelf',param);' ' 
+                localStorage.setItem('optional-inventory-countSelf',param);
             }
         },
         //折扣价
@@ -66,8 +66,10 @@ export default {
             }
             if(this.identify=='daily'){
                 localStorage.setItem('daily-inventory-discount',param);
+                localStorage.setItem('daily-inventory-countSelf',this.params.countSelf);
             }else{
-                localStorage.setItem('optional-inventory-discount',param);' ' 
+                localStorage.setItem('optional-inventory-discount',param); 
+                localStorage.setItem('optional-inventory-countSelf',this.params.countSelf); 
             }
             this.$emit('countChange',param,this.params.countSelf);
         },

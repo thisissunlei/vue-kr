@@ -1,6 +1,6 @@
 <template>
        <div class='tab-select'>
-            <RadioGroup v-model="params.countSelf">
+            <RadioGroup v-model="params.countSelf" @on-change="radioChange">
                 <Radio label="1">原价</Radio>
                 <Radio label="0">折扣</Radio>
             </RadioGroup>
@@ -44,6 +44,12 @@ export default {
         this.params.countSelf=(typeof this.params.discount)=='number'?'0':'1';  
     },
     methods:{
+        radioChange(param){
+            this.params.discount=param==1?' ':this.params.discount;
+            if(param==1){
+                this.$emit('countChange',this.params.discount);
+            }
+        },
         //折扣价
         countChange(param){
             this.params.countSelf=(typeof param)=='number'?'0':'1';

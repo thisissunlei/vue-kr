@@ -134,11 +134,11 @@ var layoutScrollHeight=0;
                     },
                     {
                         title: '商品类型',
-                        key: 'goodsType',
+                        key: 'type',
                         align:'center',
                         width:110,
                         render(tag, params){
-                            var ren=params.row.goodsType?params.row.goodsType:'-';
+                            var ren=params.row.type?params.row.type:'-';
                             return <span>{ren}</span>
                         }
                     },

@@ -118,7 +118,7 @@
 
                     <Form-item label="商品类型" class='daily-form'> 
                         <Select 
-                            v-model="formItem.seatType" 
+                            v-model="formItem.goodsType" 
                             placeholder="请输入商品类型" 
                             style="width: 200px"
                             clearable
@@ -272,7 +272,7 @@ export default {
                     floor:' ',
                     stationsMax:'',
                     stationsMin:'',
-                    seatType:' ',
+                    goodsType:' ',
                     priceType:'UNIT_PRICE',
                     priceMin:'',
                     priceMax:'',

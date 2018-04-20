@@ -30,6 +30,7 @@ export default {
                discount:' '
            },
            discountList:[],
+           num:0
         }
     },
     mounted(){
@@ -59,6 +60,10 @@ export default {
         },
         //折扣价
         countChange(param){
+            this.num=this.num+1;
+            if(this.num!=1){
+                this.params.countSelf=(typeof param)=='number'?'0':'1';
+            }
             if(this.identify=='daily'){
                 localStorage.setItem('daily-inventory-discount',param);
             }else{

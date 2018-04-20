@@ -14,25 +14,18 @@
         <Tabs value="dailyList" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
                      <div class="daily-table" id="optional-inventory-table-list">
-                        <Table :loading="loading" border stripe :columns="columns" :data="dailyData">
+                        <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">
                             <div slot="loading">
                                <Loading/>
                             </div> 
                         </Table>
                         <SlotHead v-if="theHead" indentify="optional"/>
+                        <div class='spin-position-fix' v-if="spinLoading">
+                            <Spin fix size="large"></Spin>
+                        </div>
                         <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
                                 <div style="display:inline-block;">
                                     <Button type='primary' @click='submitStatistical'>统计</Button>
-                                </div>
-                                <div style="float: right;">
-                                    <Page 
-                                        :current="tabForms.page"
-                                        :total="totalCount"
-                                        :page-size="tabForms.pageSize" 
-                                        show-total 
-                                        show-elevator
-                                        @on-change="changePage"
-                                   />
                                 </div>
                         </div>
                     </div>
@@ -79,7 +72,7 @@ import Discount from '../discount';
 import Loading from '~/components/Loading';
 import SlotHead from '../slotHead';
 import publicFn from '../publicFn';
-
+var layoutScrollHeight=0;
     export default {
         name: 'Daily',
         components:{
@@ -97,6 +90,7 @@ import publicFn from '../publicFn';
                 MessageType:'',
                 openMessage:false,
                 openStatistical:false,
+                spinLoading:false,
                 loading:true,
                 theEnd:true,
                 theHead:false,
@@ -107,6 +101,7 @@ import publicFn from '../publicFn';
                 tabForms:{},
                 totalCount:0,
                 dailyData:[],
+                dailyOldData:[],
                 dailyInnerData:[],
                 columns: [
                     {
@@ -259,7 +254,7 @@ import publicFn from '../publicFn';
         },
         methods:{
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,{page:1,pageSize:50});
+                this.tabForms=Object.assign({},formItem,{page:1,pageSize:100});
                 delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
@@ -272,6 +267,12 @@ import publicFn from '../publicFn';
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.loading=false;
+                    this.spinLoading=false;
+                    this.dailyOldData=this.dailyOldData.concat(this.dailyData);
+                    this.$nextTick(() => {
+                        var div = document.getElementById('layout-content-main')
+                        div.scrollTop = layoutScrollHeight
+                    }) 
                 }).catch((error)=>{
                     this.openMessage=true;
                     this.MessageType="error";
@@ -331,6 +332,17 @@ import publicFn from '../publicFn';
                 if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
                     this.theEnd=false;
                 }
+
+                layoutScrollHeight=dom.scrollTop;
+                var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
+                if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
+                    if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    this.spinLoading=true;
+                    this.tabForms.page=Number(this.tabForms.page)+1;
+                    this.getTableData(this.tabForms);
+                }
             },
 
             //搜索
@@ -388,6 +400,14 @@ import publicFn from '../publicFn';
             }
             .ivu-tooltip-inner{
                 white-space: normal;
+            }
+            .spin-position-fix {
+                position: relative;
+                .ivu-spin-fix{
+                    height: 50px;
+                    bottom:60px;
+                    background-color:transparent;
+                }
             }
             .list-footer{
                 padding:20px 0 20px 0;

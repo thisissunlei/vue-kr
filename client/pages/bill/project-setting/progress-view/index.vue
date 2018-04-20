@@ -1,7 +1,8 @@
-publicFn.getMonthDayNum<template>
+<template>
     <div >
 
         <!-- 甘特图部分 -->
+
         <GanttChart
             v-if = "!isLoading"
             type='view'
@@ -86,6 +87,8 @@ publicFn.getMonthDayNum<template>
             </div>
         </GanttChart>
         <!-- 左侧切换部分内容 -->
+      
+
         <Modal
             v-model="openSure"
             title="提示"
@@ -97,18 +100,18 @@ publicFn.getMonthDayNum<template>
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
-         <Drawer 
+         <Drawer
             :openDrawer="openEditTask"
             iconType="view-icon"
             :close="cancelEditTask"
             width="735"
-        >       
-            
+        >
+
             <ObjectDetailTitle slot="title" :taskStatus="taskStatus" :data="getEdit" />
-            <EditTask 
-                :id="editId"  
-                @dataChange="dataChange" 
-                v-if="openEditTask" 
+            <EditTask
+                :id="editId"
+                @dataChange="dataChange"
+                v-if="openEditTask"
                 :getEdit="Object.assign({},getEdit)"
             />
         </Drawer>
@@ -145,6 +148,7 @@ import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
 import Drawer from '~/components/Drawer';
+import Loading from '~/components/Loading';
 
 import publicFn from '../publicFn';
 import Vue from 'vue';
@@ -159,7 +163,8 @@ export default {
         Message,
         Drawer,
         EditTask,
-        ObjectDetailTitle
+        ObjectDetailTitle,
+        Loading
     },
     data(){
         return{
@@ -219,7 +224,7 @@ export default {
             }
         },
          //编辑对象传递校验
-        dataChange(params){ 
+        dataChange(params){
             var data = Object.assign({},params);
             this.submitEditTask(data)
         },
@@ -407,7 +412,7 @@ export default {
             this.editId=id;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
                 var data = Object.assign({},response.data)
-               
+
                 data.planStartTime=this.timeApplyFox(data.planStartTime,true);
                 data.planEndTime=this.timeApplyFox(data.planEndTime,true);
                 data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
@@ -434,7 +439,7 @@ export default {
         },
         //编辑任务提交
         submitEditTask(params,callback){
-          
+
             var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
             dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
@@ -509,7 +514,7 @@ export default {
                 this.params.page=1;
                 this.getListData(this.params);
             }
-            
+
         },
 
         //获取今天日期

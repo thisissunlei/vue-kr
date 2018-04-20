@@ -391,9 +391,17 @@ export default {
             }
             return endObj;
         },
+         startAndEndSame(data){
+            if(!data.startTime || !data.endTime){
+                return data;
+            }
+            
+            data.endTime = data.endTime.split(' ')[0] + ' 23:59:59';
+            return data;
+        },
          //获取查看编辑记录
         getWatchData(params){
-            var data= Object.assign({},params)
+            var data = Object.assign({},this.startAndEndSame(params));
             this.$http.get('watch-edit-record',data).then((response)=>{
                 this.watchRecord=response.data.items;
                 this.watchPage = response.data.page;
@@ -499,6 +507,7 @@ export default {
         cancelEditTask(){
             this.openEditTask=!this.openEditTask;
         },
+       
         //打开编辑任务
         editTask(id,callback){
             this.editId=id;

@@ -1,4 +1,4 @@
-<style lang="less"> 
+<style lang="less">
    .com-select-saler{
     ::-webkit-input-placeholder { color:#666; }
     ::-moz-placeholder { color:#666; } /* firefox 19+ */
@@ -20,7 +20,7 @@
             :loading="loading1"
             :disabled="disabled"
             @on-change="changeContent">
-            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
     </div>
 </template>
@@ -52,7 +52,7 @@ import http from '~/plugins/http.js';
                     setTimeout(() => {
                         this.getSalerList(query)
                     }, 200);
-                } 
+                }
 
             },
             getSalerList:function(name){
@@ -77,8 +77,8 @@ import http from '~/plugins/http.js';
                 })
 
             }
-                    
-               
+
+
         }
     }
 </script>

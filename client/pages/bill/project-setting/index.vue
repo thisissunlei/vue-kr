@@ -3,10 +3,10 @@
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="项目档案管理" name="tab1">
                 <Archives v-if="mask"/>
-                
+
             </TabPane>
             <TabPane label="开业进度总览" name="tab2">
-                 
+
                 <ProgressView v-if="!mask"/>
 
             </TabPane>
@@ -49,7 +49,7 @@ export default {
             if(key=='tab2'){
                 tabDom.style.overflow = 'visible';
                 this.mask=false;
-                
+
             }else{
                 tabDom.style.overflow = 'hidden';
                 this.mask=true;
@@ -75,7 +75,7 @@ export default {
             height: 4px;
         }
         .ivu-tabs-nav .ivu-tabs-tab{
-            width: 50%;
+            
             text-align: center;
             line-height: 35px;
         }

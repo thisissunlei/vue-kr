@@ -1,4 +1,4 @@
-publicFn.getMonthDayNum<template>
+<template>
     <div >
 
         <!-- 甘特图部分 -->

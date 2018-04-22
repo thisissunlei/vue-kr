@@ -1,4 +1,4 @@
-publicFn.getMonthDayNum<template>
+<template>
     <div >
 
         <!-- 甘特图部分 -->
@@ -99,18 +99,6 @@ publicFn.getMonthDayNum<template>
         </Modal>
 
         <Modal
-                v-model="openEditTask"
-                title="编辑任务"
-                width="660"
-            >
-                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-                <div slot="footer" style="text-align: center;">
-                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
-                </div>
-        </Modal>
-
-        <Modal
                 v-model="openDelete"
                 title="删除任务"
                 width="400"
@@ -137,8 +125,7 @@ publicFn.getMonthDayNum<template>
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
-import EditTask from '../project-detail/edit-task';
-import GanttChart from '../gantt-chart';
+import GanttChart from './gantt-chart';
 import Message from '~/components/Message';
 import publicFn from '../publicFn';
 import Vue from 'vue';
@@ -150,7 +137,6 @@ export default {
     components:{
         GanttChart,
         ListTable,
-        EditTask,
         Message
     },
     data(){
@@ -190,6 +176,7 @@ export default {
 
     },
     mounted(){
+         GLOBALSIDESWITCH("false");
         this.getTreeData();
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();

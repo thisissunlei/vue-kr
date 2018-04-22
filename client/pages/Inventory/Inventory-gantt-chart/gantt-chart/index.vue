@@ -4,64 +4,44 @@
         <div class='chart-ul-wrap' >
 
                 <div class="hander" >
+                    <!-- 工位类型 -->
                     <div class='header-left'>
-                        <div style="display:inline-block;margin-top: 6px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">任务计划</span>
-                            <span
-                                class="article"
-                                style="background:#DBE1E8;vertical-align:middle;"
-                            ></span>
-                        </div>
-                        <div style="display:inline-block;margin-left:20px;margin-top: 6px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">准时或提前完成</span>
-                            <span
-                                class="article"
-                                style="background: #A8DD6F;vertical-align:middle;"
-                            ></span>
-                        </div>
-                         <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">延期完成</span>
-                            <span
-                                class="article"
-                                style="background:#F69C9C;vertical-align:middle;"
-                            ></span>
-                        </div>
-                         <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进度未知</span>
-                            <span
-                                class="article"
-                                style="background:#FFD669;vertical-align:middle;"
-                            ></span>
-                        </div>
+                        <ColorType 
+                            v-for="(item,index) in colorTypes" 
+                            :title="item.title" 
+                            :color="item.color" 
+                            :key="index" 
+                        />
                     </div>
-
+                    <!-- 类型选择 -->
                     <div style="display:inline-block;margin-left:10px;">
                         <span style="margin-top:8px;margin-right:15px;font-size:14px;color:#333333;">
                          甘特图显示任务项
                         </span>
                         <Form label-position="left" style="display:inline-block;">
-                                <KrField
-                                    v-if="mask"
-                                    type="selectTree"
-                                    :data="treeData"
-                                    @okClick="treeClick"
-                                    @checkChange="treeChange"
-                                    :treeIds="treeIds"
-                                />
+                            <KrField
+                                v-if="mask"
+                                type="selectTree"
+                                :data="treeData"
+                                @okClick="treeClick"
+                                @checkChange="treeChange"
+                                :treeIds="treeIds"
+                            />
                         </Form>
                     </div>
 
+                    <!-- 刻度选择 -->
                     <div style="display:inline-block;">
-                            <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
-                                时间轴最小刻度
-                            </span>
-                            <Select
-                                v-model="barType"
-                                @on-change="selectChange"
-                                style="width:100px;margin-right:20px;text-align:left;"
-                            >
-                                <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                            </Select>
+                        <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
+                            时间轴最小刻度
+                        </span>
+                        <Select
+                            v-model="barType"
+                            @on-change="selectChange"
+                            style="width:100px;margin-right:20px;text-align:left;"
+                        >
+                            <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
                     </div>
 
                 </div>
@@ -80,6 +60,7 @@
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
 
+                       <div class="add-left"></div>
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year"
@@ -96,7 +77,8 @@
                                         left:tagToLeft+'px',
                                         width:minCalibration+'px'
                                     }"
-                                    ></div>
+                                >
+                                </div>
                                 <DrawMonth
                                     v-for="( item ) in showData"
                                     :key="item.id"
@@ -107,7 +89,6 @@
                                     :type="barType"
 
                                 />
-
                                 <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
 
                             </div>
@@ -139,7 +120,9 @@
 
                                 <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
                             </div>
+                           
                         </div>
+                        <div class="add-right" :style="{right:scrollWidth+'px'}"></div>
                     </div>
 
                  </div>
@@ -149,25 +132,15 @@
                     @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
+                
                     <div
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
                     >
-                        <EditArticle
-                            v-if="leftEndpoint.year && type== 'edit'"
-                            :minCalibration="minCalibration"
-                            :startDate="leftEndpoint"
-                            :data="item"
-                            v-for="(item,index) in data"
-                            :key="item.id"
-                            :type="type"
-                            :index="index"
-                            :todayDetail="{width:minCalibration,left:tagToLeft}"
-                            @editClick="editClick"
-                        />
-
+                    <div class="add-left">左侧</div>
+                       
                         <ViewArticle
-                            v-if="leftEndpoint.year && type== 'view'"
+                            v-if="leftEndpoint.year"
                             v-for="item in listData"
                             :data="item"
                             :key="item.id"
@@ -177,7 +150,8 @@
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                             @editClick="editClick"
                         />
-                        <div class='today-flag' :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                         <div class="add-right">右侧侧</div>
+                        <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -195,18 +169,18 @@ import dateUtils from 'vue-dateutils';
 import DrawDay from './draw-day';
 import DrawMonth from './draw-month';
 import DrawWeek from './draw-week';
-import EditArticle from './edit-article';
 import ViewArticle from './view-article';
 import publicFn from '../publicFn';
 import KrField from '~/components/KrField';
+import ColorType from './color-type'
 export default {
     components:{
         DrawDay,
         DrawMonth,
         DrawWeek,
-        EditArticle,
         KrField,
-        ViewArticle
+        ViewArticle,
+        ColorType
     },
     props:{
         data:{
@@ -279,6 +253,24 @@ export default {
             mask:false,
             scrollWidth:0,
             tagToLeft:0,
+            colorTypes:[
+                {
+                    title:'任务计划',
+                    color:"#ccc"
+                },
+                {
+                    title:'准时或提前完成',
+                    color:"#ccc"
+                },
+                {
+                    title:'延期完成',
+                    color:"#ccc"
+                },
+                {
+                    title:'进度位置',
+                    color:"#ccc"
+                }
+            ]
         }
     },
     mounted(){
@@ -616,6 +608,7 @@ export default {
             if(type == 'month'){
                topShaftDomArr = document.querySelectorAll('.year-bar .year');
             }
+            let contentLeft = contentDom.scrollLeft;
             for (let i = 0; i < topShaftDomArr.length; i++) {
                 let thatDom = topShaftDomArr[i];
                 let thatDomDetail = thatDom.getBoundingClientRect();
@@ -630,6 +623,9 @@ export default {
                     }
                     break;
                 }
+            }
+            if(contentLeft<50){
+                timeShaftFixed.style.left = 50 -contentLeft + 'px';
             }
         },
         //每周的具体内容校正
@@ -689,6 +685,7 @@ export default {
             }
             .content{
                 font-size: 12px;
+                padding: 0px;
                 background: transparent;
             }
         }
@@ -697,6 +694,7 @@ export default {
         }
         .bottom-triangle{
             border-color: transparent transparent rgba(70,76,91,.9)  transparent;
+          
 
         }
         #gantt-chart-tool-tip-triangle{
@@ -713,6 +711,7 @@ export default {
             left: 10px;
             transition: all .1s;
             z-index: 999;
+             
 
         }
 
@@ -762,6 +761,11 @@ export default {
                 padding-left: 20px;
                 line-height: 50px;
                 font-size: 16px;
+               
+            }
+            .bar{
+                padding: 0px 50px;
+                box-sizing: content-box;
             }
 
             .calibration  {
@@ -775,6 +779,7 @@ export default {
             }
 
         }
+        
         #vue-chart-right-draw-content{
             max-height:500px;
             width: 100%;
@@ -791,12 +796,35 @@ export default {
             }
 
         }
+         .add-left{
+                position: absolute;
+                width: 50px;
+                height: 100%;
+                background: red;
+                left: 0px;
+                top: 0px;
+            }
+            .add-right{
+                position: absolute;
+                width: 50px;
+                height: 100%;
+                background: red;
+                right: 0px;
+                top: 0px;
+            }
+         
         .content{
             position: relative;
             background: #F6F6F6;
+            padding-left: 50px;
+            padding-right: 50px;
+            margin-top: -5px;
+            box-sizing: content-box;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
             }
+           
+           
         }
         .hander{
             margin-top:20px;
@@ -815,6 +843,7 @@ export default {
                 margin-left: 10px;
             }
         }
+       
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;

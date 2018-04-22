@@ -5,19 +5,16 @@
    >
         <div 
             class="view-channel"
-            v-if="channels.length>1 || (channels.length==1&&channels[0].data.planStartTime)"
-            v-for="(channels,index) in showData"
-            :key="channels.id"
+            v-if="data && data.tasks && data.tasks.length"
         >
             
             <Article 
                 v-if="leftEndpoint.year"
                 :minCalibration="minCalibration"
                 :startDate="leftEndpoint"
-                v-for="item in channels"
+                 v-for="item in data.tasks"
                 :data="item"
                 :key="item.id"
-                :index="index"
                 :todayDetail="todayDetail"
                 @editClick="editClick"
             />
@@ -63,6 +60,7 @@ export default {
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
         } 
+        console.log(this.data,"ppppppp")
         setTimeout(() => {
             var leftDom = document.querySelectorAll('div[data-box-id="'+this.showData.id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];

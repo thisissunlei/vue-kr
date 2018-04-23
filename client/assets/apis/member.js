@@ -22,7 +22,7 @@ export default {
     },
     //客户信息列表请求
     'get-client-list': {
-        url: '/api/krspace-op-web/customer-center/list',
+        url: '/st/api/krspace-op-web/customer-center/list',
         method: 'get'
     },
     //客户来源
@@ -32,7 +32,7 @@ export default {
     },
     //客户基本信息详情
     'get-customer-info-detail': {
-        url: '/api/krspace-op-web/customer-center/info-detail',
+        url: '/st/api/krspace-op-web/customer-center/info-detail',
         method: 'get'
     },
     //新增客户
@@ -50,4 +50,30 @@ export default {
         url: '/api/krspace-op-web/customer-center/customer',
         method: 'get'
     },
+    
+    //客户列表－转移客户
+    'customer-list-switch': {
+        url: '/st/api/krspace-op-web/customer-center/transfer',
+        method: 'post'
+    },
+    //客户列表－按钮权限接口
+    'customer-permission-btn': {
+        url: '/st/api/krspace-op-web/customer-center/authority',
+        method: 'get'
+    },
+    //客户转移－领取人下拉列表
+    'customer-switch-leader': {
+        url: '/st/api/krspace-op-web/customer-center/transfer/receive-list',
+        method: 'get'
+    },
+    //客户转移－获取社区下拉数据
+    'customer-switch-community': {
+        url: '/st/api/krspace-op-web/customer-center/transfer/community-list',
+        method: 'get'
+    },
+    //客户转移－入驻信息接口
+    'customer-join-info': {
+        url: '/st/api/krspace-op-web/seat-lock-detail/info/list',
+        method: 'get'
+    }
 } 

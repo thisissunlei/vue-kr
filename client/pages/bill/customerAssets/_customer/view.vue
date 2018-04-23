@@ -23,7 +23,8 @@
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
-            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'"/>
+				<JoinInfo v-if="selectedTab=='join'"/>
+            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'&& selectedTab!='join' "/>
         </div>
 		
     </div>
@@ -36,7 +37,8 @@
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
     import Waiting from './waiting.vue'; 
-    import Basic from './basic/index.vue'; 
+	import Basic from './basic/index.vue'; 
+	import JoinInfo from './joinInfo.vue'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -45,7 +47,8 @@
 			LabelText,
 			Assets,
 			Waiting,
-			Basic
+			Basic,
+			JoinInfo
 		},
 		data (){
 

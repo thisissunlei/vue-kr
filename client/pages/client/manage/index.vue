@@ -3,8 +3,9 @@
    <SectionTitle title="客户中心"></SectionTitle>
         
             <div class='list-banner'>
-                    <div class='list-btn'>
-                        <Button type="primary" @click="createNew" class='join-btn'>新建</Button>
+                    <div class='list-btn' v-if="isBtn">
+                        <Button type="primary"  @click="createNew" class='join-btn'>新建</Button>
+                        <Button type="primary"  @click="newSwitch">转移</Button>
                     </div>
 
                     <div class='list-search'>
@@ -23,7 +24,12 @@
                    </div>
             </div>
         <div class="table-list">
-            <Table  border :columns="columns" :data="accountList" />
+            <Table  
+             border 
+             :columns="columns" 
+             :data="accountList"
+             @on-selection-change="selectTabel" 
+             />
              <div style="margin: 10px 0 ;overflow: hidden">
                 <div style="float: right;">
                     <Page 
@@ -59,6 +65,20 @@
                 <Button type="ghost" style="margin-left:8px" @click="createNew">取消</Button>
             </div>
         </Modal>
+
+        <Modal
+            v-model="openSwitch"
+            title="转移客户"
+            width="445"
+        >
+           <SwitchCustomer @bindData="getSwitchData" v-if="openSwitch" :switchIds="switchIds"/>
+            <div slot="footer">
+                <Button type="primary" @click="submitSwitch">确定</Button>
+                <Button type="ghost" @click="newSwitch">取消</Button>
+            </div>
+        </Modal>
+
+
 </div>
 </template>
 
@@ -69,6 +89,7 @@
     import HeightSearch from './heightSearch';
     import CreateCustomer from './createCustomer';
     import dateUtils from 'vue-dateutils';
+    import SwitchCustomer from './switchCustomer';
 
     export default {
         name: 'customerAssets',
@@ -76,7 +97,8 @@
             SectionTitle,
             Buttons,
             CreateCustomer,
-            HeightSearch
+            HeightSearch,
+            SwitchCustomer
         },
         data () {
             return {
@@ -84,11 +106,17 @@
                 page:1,
                 pageSize:15,
                 openSearch:false,
+                openSwitch:false,
                 switchParams:{},
                 openCreate:false,
                 upperError:'',
                 newPageData:{},
                 canSubmit:true,
+            /*转移客户*/
+            isBtn:false,
+            switchIds:'',
+            switchForm:{},
+            /*转移客户*/
 
             params:{
                 pageSize:15,
@@ -96,7 +124,8 @@
             accountList:[],
             columns: [
                     
-                    {
+                    {   
+                        type: 'selection',
                         title: '客户ID',
                         key: 'id',
                         align:'center',
@@ -168,7 +197,9 @@
           this.getListData(params);
           this.params=params; 
         },
-
+        mounted(){
+            this.btnPermissions();
+        },
         methods:{
             lowerSubmit(){
                 this.params.page = 1;
@@ -249,6 +280,51 @@
                 this.canSubmit = submit;
                 this.newPageData = Object.assign({},data);
                 var params = Object.assign({},data)  
+            },
+
+            //新增和转移按钮权限
+            btnPermissions(){
+                this.$http.get('customer-permission-btn').then((response)=>{   
+                    this.isBtn=response.code==1?true:false;
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })    
+            },
+
+
+            //获取form数据
+            getSwitchData(formItem){
+                this.switchForm=formItem;
+            },
+            //转移客户打开
+            newSwitch(){
+                this.openSwitch=!this.openSwitch;
+            }, 
+            //转移客户提交
+            submitSwitch(){
+                var params=Object.assign({},this.switchForm);
+                params.ids=this.switchIds;
+                this.$http.get('customer-list-switch',params).then((response)=>{  
+                    this.newSwitch();
+                    this.getListData()
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })  
+            },
+            //复选框选择
+            selectTabel(selection){
+                this.isSwitch=selection.length!=0?true:false;
+                if(selection.length){
+                    var strArr=[];
+                    selection.map((item,index)=>{
+                        strArr.push(item.id);
+                    })
+                    this.switchIds=strArr.join();
+                }
             }
         }
     }

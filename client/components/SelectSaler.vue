@@ -20,7 +20,7 @@
             :loading="loading1"
             :disabled="disabled"
             @on-change="changeContent">
-            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="index">{{option.label}}</Option>
+            <Option v-for="(option, index) in salerOptions" :value="option.value" :key="option.label">{{option.label}}</Option>
         </Select>
     </div>
 </template>

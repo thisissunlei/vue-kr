@@ -17,7 +17,7 @@
                      <Row>  
                         <Col class="col">
                             <FormItem style="width:252px" label="客户名称" class="bill-search-class" prop="customerId">
-                            <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                            <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :labelInValue="labelInValue"></selectCustomers>
                             </FormItem>
                         </Col>
                         
@@ -29,6 +29,7 @@
                                     style="width: 252px"
                                     filterable
                                     clearable
+                                    :label-in-value='labelInValue'
                                     @on-change="changeCommunity"
                                 >
                                     <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -42,18 +43,19 @@
                             </FormItem>
                         </Col>
                         <Col class="col">
-                            <FormItem label="销售时间" style="width:252px" prop="saleTime">
-                                <DatePicker type="date" placeholder="开始时间" v-model="formItem.saleTime" @on-change="changeSaleTime" style="width:252px" ></DatePicker >
+                            <FormItem label="销售时间" style="width:252px" prop="signDate">
+                                <DatePicker type="date" placeholder="开始时间" v-model="formItem.signDate" @on-change="changeSaleTime" style="width:252px"></DatePicker >
                             </FormItem>
                         </Col>
                         <Col class="col">
-                            <FormItem label="换租原因" class="bill-search-class" prop="reason"> 
+                            <FormItem label="换租原因" class="bill-search-class"> 
                                 <Input 
-                                    v-model="formItem.reason" 
+                                    v-model="formItem.replaceMemo" 
                                     placeholder="请输入客户名称"
                                     style="width: 252px"
                                     type="textarea"
                                     :rows="rows"
+                                    :maxlength="replaceMemoLength"
                                 />
                             </FormItem>
                         </Col>
@@ -64,7 +66,7 @@
                     
                 </div>
             </Card>
-            <Card id="step-two" v-if="status==1">
+            <Card id="step-two" v-show="status==1">
                 <p slot="title" class="card-title">
                    原工位信息
                 </p>
@@ -118,7 +120,7 @@
                     
                 </div>
             </Card>
-            <Card id="step-three" v-if="status==2">
+            <Card id="step-three" v-show="status==2">
                 <p slot="title" class="card-title">
                     新工位信息
                 </p>
@@ -155,7 +157,7 @@
                             </div>
                             <div style="display:inline-block;vertical-align:top">
                             <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
-                            <span style="padding:0 15px"> 天</span>
+                            <span style="padding:0 15px"> 折</span>
                             <Button type="primary" @click="setDiscountNum">设置</Button>
 
                             </div>
@@ -200,7 +202,7 @@
                         <Col class="col">
                             <span class="required-label" style="width:252px;padding:11px 12px 10px 4px;color:#666;display:block">付款周期</span>
                                 <div style="display:block;min-width:252px">
-                                    <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types.value)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
+                                    <span v-for="types in payList" :key="types.value" class="button-list" v-on:click="selectPayType(types)" v-bind:class="{active:installmentType==types.value}">{{ types.label }}</span>
                                 </div>
                                 <div class="pay-error" v-if="errorObj.payType">请选择付款方式</div>
 
@@ -208,14 +210,14 @@
                          <Col class="col" style="max-width:560px">
                             <span class="required-label"  style="width:252px;padding:11px 12px 10px 4px;color:#666;display:block">服务保证金</span>
                                 <div style="display:block;min-width:252px">
-                                    <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:depositAmount==types.value}" >{{ types.label }}</span>
+                                    <span v-for="types in depositList" :key="types.value" class="button-list" v-on:click="selectDeposit(types.value)" v-bind:class="{active:deposit==types.value}" >{{ types.label }}</span>
                                 </div>
                                 <div class="pay-error" v-if="errorObj.deposit">请选择履约保证金总额</div>
                          </Col>
                         
                         <Col class="col" style="margin-top:10px">
-                            <FormItem label="首付款日期" class="bill-search-class" prop="firstDate"> 
-                                 <DatePicker type="date" placeholder="开始时间" v-model="formItem.firstDate" @on-change="changeFirstTime" style="width:252px" ></DatePicker >
+                            <FormItem label="首付款日期" class="bill-search-class" prop="firstPayTime"> 
+                                 <DatePicker type="date" placeholder="开始时间" v-model="formItem.firstPayTime" @on-change="changeFirstTime" style="width:252px" ></DatePicker >
                             </FormItem>
                         </Col>
                     </Row>
@@ -228,7 +230,7 @@
                     
                 </div>
             </Card>
-            <Card id="step-four" v-if="status==3">
+            <Card id="step-four" v-show="status==3">
                 <p slot="title" class="card-title">
                     服务费信息
                 </p>
@@ -250,16 +252,16 @@
                             <FormItem label="退还服务费" style="width:252px">
                                 <Input 
                                     v-model="formItem.changeServiceFee" 
-                                    placeholder="旧服务保证金转新"
+                                    placeholder="退还服务费"
                                     style="width: 252px"
                                     :disabled="disabledValue"
                                 />
                             </FormItem>
                         </Col>
                         <Col class="col">
-                            <FormItem label="旧服务保证金转新" style="width:252px" prop="money">
+                            <FormItem label="旧服务保证金转新" style="width:252px" prop="transferDepositAmount">
                                  <Input 
-                                    v-model="formItem.money" 
+                                    v-model="formItem.transferDepositAmount" 
                                     placeholder="旧服务保证金转新"
                                     style="width: 252px"
                                     @on-blur="getBack"
@@ -269,7 +271,7 @@
                         <Col class="col">
                             <FormItem label="扣除服务保证金" class="bill-search-class" > 
                                 <Input 
-                                    v-model="formItem.back" 
+                                    v-model="back" 
                                     placeholder="扣除服务保证金"
                                     style="width: 252px"
                                     :disabled="disabledValue"
@@ -281,7 +283,7 @@
                 <div class="buttons">
                     <Button type="ghost" @click="previous">上一步</Button>
                     <span class="between"></span>
-                    <Button type="primary" @click="submit">提交</Button>
+                    <Button type="primary" @click="submit('formItemFour')">提交</Button>
                     
                 </div>
             </Card>
@@ -300,7 +302,7 @@
             </div>
         </Modal>
         <div class="view" v-if="orderStatus=='view'">
-            <ReplaceView @editCards="editCard"/>
+            <ReplaceView @editCards="editCard" :data.sync="overViewData"/>
         </div>
     </div>
 </template>
@@ -364,6 +366,9 @@
                 }
             };
             return {
+                labelInValue:true,
+                replaceMemoLength:500,
+                overViewData:{},
                 maxlength:3,
                 selectAllAbled:false,
                 // 新选择的工位
@@ -381,7 +386,16 @@
                     {
                         title: '产品类型',
                         key: 'seatType',
-                        align: 'center'
+                        align: 'center',
+                        render:(h,params)=>{
+                            let type = '开放工位';
+                            if(params.row.seatType == 'SPACE'){
+                                type = '独立房间';
+                            }else{
+                                type = '开放工位';
+                            }
+                            return type;
+                        }
                     },
                     {
                         title: '指导价(元/月/房间)',
@@ -548,7 +562,7 @@
                 ],
                 //付款周期的值
                 installmentType:'',
-                depositAmount:'',
+                deposit:'',
                 //折扣列表
                 discount:{
                     list:[]
@@ -590,7 +604,7 @@
                 selectedOldStation:[],
                 //表单数据
                 formItem:{
-                    saleTime:new Date(),
+                    signDate:new Date(),
                     leaseBegindate:'',
                 },
                 getFloor:new Date(),
@@ -607,10 +621,10 @@
                     salerId:[
                         { required: true, message: '请选择销售员', trigger: 'change' }
                     ],
-                    saleTime:[
+                    signDate:[
                         { required: true, type: 'date',message: '请选择销售时间', trigger: 'change' }
                     ],
-                    reason:[
+                    replaceMemo:[
                         { required: true, message: '请填写换租原因', trigger: 'blur' }
                     ]
                 },
@@ -620,7 +634,7 @@
                     ]
                 },
                 ruleValidateFour:{
-                    money:[
+                    transferDepositAmount:[
                         { required: true, message: '请填写', trigger: 'blur' }
 
                     ],
@@ -630,7 +644,7 @@
                     leaseEnddate:[
                         { required: true, trigger: 'change',validator:validateEndDate }
                     ],
-                    firstDate:[
+                    firstPayTime:[
                         { required: true,  trigger: 'change' ,validator:validateFirst}
                     ]
 
@@ -640,17 +654,17 @@
                 oldStationInfo:[
                     {
                         title: '减少服务费',
-                        key: 'reduceMoney',
+                        key: 'reduceServiceFee',
                         align:'center'
                     },
                     {
                         title: '已交服务费中涉及到更换的金额',
-                        key: 'reduceMoney',
+                        key: 'changeServiceFee',
                         align:'center'
                     },
                     {
                         title: '已交保证金涉及到更换的金额',
-                        key: 'reduceMoney',
+                        key: 'changeDeposit',
                         align:'center'
                     },
                 ],
@@ -658,18 +672,20 @@
                 newStationInfo:[
                     {
                         title: '服务费总额',
-                        key: 'reduceMoney',
+                        key: 'totalServiceFee',
                         align:'center'
                     },
                     {
                         title: '服务保证金',
-                        key: 'reduceMoney',
+                        key: 'totalDeposit',
                         align:'center'
                     },
                 ],
                 newStationData:[],
                 watchServiceDetail:new Date(),
                 freeStartDate:'',
+                back:0,
+                changeThree:new Date(),
 
                 
 
@@ -724,6 +740,9 @@
            },
            watchServiceDetail(){
             this.getSeatCombin()
+           },
+           changeThree(){
+            this.clearFormFour()
            }
         },
         methods: {
@@ -731,16 +750,17 @@
                 this.formItem.salerId = value;
             },
             changeSaleTime(value){
-                this.formItem.saleTime = value;
+                this.formItem.signDate = value;
             },
             getSelectedOldStation(){
                 this.selectedOldStation = this.oldStation.filter(item=>{
+
                     if(item.checked){
+                        item.changeBegin = this.formItem.leaseBegindate;
                         return true;
                     }
                     return false
                 })
-                console.log('getSelectedOldStation=====',this.selectedOldStation)
             },
             next(name){
                 if(name == 'formItemTwo'){
@@ -753,6 +773,7 @@
                 if(this.errorObj.oldStation){
                     return
                 }
+                console.log('next',this.$refs.formItemThree)
 
                 this.$refs[name].validate((valid) => {
 
@@ -764,6 +785,7 @@
                         }
                         if(name == 'formItemTwo'){
                             this.getSelectedOldStation()
+
                             if(!this.selectedOldStation.length){
                                 this.errorObj.oldStation = true;
                             }else{
@@ -776,7 +798,7 @@
                             if(!this.installmentType){
                                 this.errorObj.payType = true;
                             }
-                            if(!this.depositAmount){
+                            if(!this.deposit){
                                 this.errorObj.deposit = true;
                             }
 
@@ -820,16 +842,62 @@
                 }
                 return title;
             },
-            submit(){
-                this.orderStatus = 'view'
+            resetForm(name){
+                this.$refs[name].resetFields()
+                if(name == 'formItemThree'){
+                    this.clearFormThree()
+                }
+            },
+            submit(name){
+                //合并表单数据
+                let overViewData = Object.assign({},this.formItem);
+                // 新选工位选择后的线管数据（step4表格相关内容）
+                overViewData.newStationData = this.newStationData;
+                // 开始，结束日期字段转换
+                overViewData.endDate = this.formItem.leaseEnddate
+                overViewData.startDate = this.formItem.leaseBegindate;
+                // 要更换的旧工位
+                overViewData.oldSeatList = this.selectedOldStation;
+                // 优惠列表
+                overViewData.saleList = this.saleList;
+
+                //**付款周期，保证金月数
+                overViewData.installmentType = this.installmentType;
+                overViewData.installmentName = this.installmentName;
+
+                overViewData.deposit = this.deposit;
+                // 新选工位
+                overViewData.seats= this.selecedStationList;
+
+                overViewData.signDate=this.formItem.signDate;
+                overViewData.discount = this.discountNum;
+                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseBegindate;
+                overViewData.firstPayTime = this.formItem.firstPayTime;
+                overViewData.back = this.back;//扣除服务保证金
+                // step3第二个table数据 
+                let serviceDetailsList =this.serviceDetailsList.map(item=>{
+                    item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
+                    item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
+                    return item;
+                })
+                overViewData.serviceDetailsList = serviceDetailsList;
+                this.$refs[name].validate((valid) => {
+                    if(valid){
+                        this.orderStatus = 'view'
+                        this.overViewData = overViewData
+                    }
+                })
+                
             },
             editCard(value){
                 this.orderStatus = 'create';
                 this.status = value;
             },
             changeCustomer(value){
-                this.formItem.customerId = value;
-                if(value){
+                console.log('changeCustomer',value)
+                this.formItem.customerId = value.value;
+                this.formItem.customerName = value.label;
+                if(value.value){
                     this.getCustomerToCom()
                 }
             },
@@ -858,10 +926,12 @@
             },
             changeCommunity(value){
                 // 选择社区
-                if(value){
-                    this.formItem.communityId =value;
+                if(value.value){
+                    this.formItem.communityId =value.value;
+                    this.formItem.communityName =value.label;
                 }else{
                     this.formItem.communityId = '';
+                    this.formItem.communityName = '';
                 }
                 //清除step1以后所有内容
                 //清除step2数据
@@ -924,6 +994,9 @@
                             }
                         return item
                     })
+                //清除step3的数据
+                // this.resetForm('formItemThree')
+                this.clearFormThree()
 
             },
             selectRow(status){
@@ -942,17 +1015,40 @@
                 
             },
             changeEndTime(value){
+                if(!value){
+                    return;
+                }
                 //换租结束时间
                 this.getSaleList(value)
+                this.changeThree = new Date()
+                if(this.selecedStationList.length){
+                    this.clearFormThree()
+
+                }
+            },
+            clearFormThree(){
+                this.selecedStationList = [];
+                this.discountType = '';
+                this.freeType = '';
+                this.discountNum = '';
+                this.freeDays = '';
+                this.serviceDetailsList = []
+            },
+            clearFormFour(){
+                this.back = '';
+                this.formItem.transferDepositAmount = ''
             },
             selectPayType:function(value){
                 // 选择付款方式
-                this.installmentType = value;
+                this.installmentType = value.value;
+                this.changeThree = new Date()
+                this.installmentName = value.label;
                 this.errorObj.payType = false;
             },
             selectDeposit:function(value){
                 // 选择保证金
-                this.depositAmount = value
+                this.deposit = value
+                this.changeThree = new Date()
                 this.errorObj.deposit = false;
             },
             changeFirstTime(){
@@ -969,7 +1065,7 @@
                     this.dealSale(r.data)
                     console.log('list',r.data)
                 }, e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
 
@@ -1152,6 +1248,8 @@
                     saleList:JSON.stringify(list || [])
                 }
                 let _this = this;
+                this.changeThree = new Date()
+
                 this.$http.post('count-sale', params).then( r => {
                     _this.selecedStationList = r.data.seats.map(item=>{
                         let obj = item;
@@ -1164,7 +1262,6 @@
                         obj.floor = item.whereFloor || item.floor;
                         obj.seatPrice = item.guidePrice || item.seatPrice;
                         obj.discountedPrice = item.discountedPrice;
-                        console.log('=====obj',obj)
                         return obj;
                     });
 
@@ -1233,6 +1330,7 @@
                     return item;;
                 });
                 this.watchServiceDetail = new Date();
+                this.changeThree = new Date()
                 this.saleList = []
                 this.discountNum = '';
                 this.freeDays = ''
@@ -1246,6 +1344,7 @@
                     saleList:JSON.stringify(this.saleList || []),
                     seats:JSON.stringify(this.selecedStationList)
                 }
+
                 this.$http.post('get-seat-combin', params).then( r => {
                     this.serviceDetailsList = r.data.items.map(item=>{
                         item.freeStartDate = this.freeStartDate || '';
@@ -1253,7 +1352,7 @@
                     });
 
                 }).catch( e => {
-                    _this.$Notice.error({
+                    this.$Notice.error({
                         title:e.message
                     });
 
@@ -1309,6 +1408,8 @@
                     seats:JSON.stringify(station),
                     saleList:JSON.stringify(this.saleList)
                 }
+                this.changeThree = new Date()
+
                 this.$http.post('count-sale', params).then( r => {
                     this.selecedStationList = r.data.seats.map(item=>{
                         let obj = item;
@@ -1372,16 +1473,18 @@
                 if(!this.freeStartDate){
                     time = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
                 }else{
-                    let time = new Date(this.freeStartDate);
+                    time = new Date(this.freeStartDate);
                     time = time.setDate(time.getDate()-1);
+
                     time = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(time))
+
 
                 }
                 let params = {
-                    deposit:this.depositAmount,
+                    deposit:this.deposit,
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
                     newSeats:JSON.stringify(list),
-                    oldSeats:JSON.stringify(this.oldStation),
+                    oldSeats:JSON.stringify(this.selectedOldStation),
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     realEndDate:time,
                     orderId:10718
@@ -1394,7 +1497,6 @@
                     this.newStationData =list;
                     this.formItem.changeServiceFee = response.data.changeServiceFee;
 
-
                 }).catch( (error) => {
                     this.status = 2;
                     this.$Notice.error({
@@ -1404,9 +1506,39 @@
                 })
             },
             getBack(){
-                //此处缺少数字校验
-                this.formItem.back = this.formItem.changeServiceFee -this.formItem.money;
-            }
+                let value = this.formItem.transferDepositAmount;
+                let changeDeposit = this.newStationData[0].changeDeposit;
+                if(isNaN(value)){
+                    this.$Notice.error({
+                        title:'旧服务保证金转新金额必须为数字'
+                    })
+                    this.formItem.transferDepositAmount ='';
+                    this.back = ''
+                    return;
+                }
+
+                var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                if(value && !pattern.test(value)){
+                    this.$Notice.error({
+                        title:'旧服务保证金转新金额不得多余小数点后两位'
+                    })
+                    this.formItem.transferDepositAmount = '';
+                    this.back = ''
+                    return;
+
+                }
+                if(value>=changeDeposit){
+                    this.$Notice.error({
+                        title:'旧服务保证金转新金额不得大于'+changeDeposit
+                    })
+                    this.formItem.transferDepositAmount = '';
+                    this.back = ''
+                    return;
+                }
+                let back = (changeDeposit -this.formItem.transferDepositAmount).toFixed(2);
+                this.back = back;
+                
+            },
         }
     }
 

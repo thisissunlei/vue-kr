@@ -223,4 +223,14 @@ export default  {
         url: '/api/krspace-op-web/order-seat-replace-detail/serviceFee',
         method: 'post'
     },
+    // 换租提交
+    'save-replace': {
+        url: '/api/krspace-op-web/order-seat-replace/add',
+        method: 'post'
+    },
+    //换租详情获取接口
+    'get-replace-detail': {
+        url: '/api/krspace-op-web/order-seat-replace/view',
+        method: 'get'
+    },
 }

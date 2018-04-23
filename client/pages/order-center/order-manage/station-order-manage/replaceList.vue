@@ -452,13 +452,7 @@
             },
 
             jumpView(params){
-                var viewName='';
-                if(params.row.orderType=='CONTINUE'){
-                    viewName='renewView';  
-                }else{
-                    viewName='joinView';   
-                }
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/${viewName}`,'_blank');
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/replaceView`,'_blank');
             },
 
             jumpEdit(values){
@@ -467,22 +461,7 @@
                     orderId:values.row.id
                 }
                 this.$http.get('order-first-payed', params).then((response)=>{
-                    let type = '';
-                    switch (values.row.orderType){
-                        case 'IN':
-                            type = 'join';
-                            break;
-                        case 'INCREASE':
-                            type = 'join';
-                            break;
-                        case 'CONTINUE':
-                            type = 'renew';
-                            break;
-                        default:
-                            type = 'join';
-                            break;
-                    }
-                    popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/${type}`;
+                    popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/replace`;
                  }).catch((error)=>{
                      popup.close();
                      this.openMessage=true;

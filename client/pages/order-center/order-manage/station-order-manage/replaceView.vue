@@ -11,13 +11,13 @@
 		        </a>
                 <span class="card-header"></span>
                 <LabelText :inline="inline" label="客户名称：">
-                    {{formItem.discount}}
+                    {{formItem.customerName}}
                 </LabelText>
-                <LabelText  :inline="inline" label="客户名称：">
-                    {{formItem.discount}}
+                <LabelText  :inline="inline" label="社区名称：">
+                    {{formItem.communityName}}
                 </LabelText>
-                <LabelText :inline="inline" label="客户名称：">
-                    {{formItem.discount}}
+                <LabelText :inline="inline" label="换租原因：">
+                    {{formItem.replaceMemo}}
                 </LabelText>
 
             </Card>
@@ -32,10 +32,10 @@
                 <span class="card-header"></span>
 
                 <LabelText :inline="inline" label="换租服务开始日：">
-                    {{formItem.discount}}
+                    {{formItem.startDate |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
-                <Table :columns="oldStatonColumns" style="margin-bottom:20px"></Table>
+                <Table :columns="oldStatonColumns" style="margin-bottom:20px" :data="formItem.oldSeatList"></Table>
 
             </Card>
             <span class="space"></span>
@@ -49,23 +49,23 @@
 		        </a>
                 <span class="card-header"></span>
 
-                <LabelText :inline="inline" label="优惠折扣：">
+                <LabelText :inline="inline" label="优惠折扣：" v-if="formItem.discount">
                     {{formItem.discount}}
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
-                <Table :columns="newStatonColumns" style="margin-bottom:20px"></Table>
-                <LabelText :inline="inline" label="免租开始日：">
-                    {{formItem.discount}}
+                <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table>
+                <LabelText :inline="inline" label="免租开始日：" v-if="formItem.freeStartDate !== formItem.startDate" >
+                    {{formItem.freeStartDate |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
-                <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px"></Table>
+                <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px" :data="formItem.serviceDetailsList"></Table>
                 <LabelText :inline="inline" label="付款周期：">
-                    {{formItem.discount}}
+                    {{formItem.installmentName}}
                 </LabelText>
                 <LabelText :inline="inline" label="服务保证金：">
-                    {{formItem.discount}}
+                    {{formItem.newStationData[0].totalDeposit}}
                 </LabelText>
                 <LabelText :inline="inline" label="首付款日期：">
-                    {{formItem.discount}}
+                    {{formItem.firstPayTime  |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
             </Card>
             <span class="space"></span>
@@ -78,16 +78,16 @@
 		        </a>
                 <span class="card-header"></span>
 
-                <Table :columns="oldInfoColumns" style="margin:20px 0"></Table>
-                <Table :columns="newInfoColumns" style="margin:20px 0"></Table>
+                <Table :columns="oldInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
+                <Table :columns="newInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <LabelText  :inline="inline"label="退还服务费：">
-                    {{formItem.discount}}
+                    {{formItem.changeServiceFee}}
                 </LabelText>
                 <LabelText  :inline="inline"label="旧服务保证金转新：">
-                    {{formItem.discount}}
+                    {{formItem.transferDepositAmount}}
                 </LabelText>
                 <LabelText :inline="inline" label="扣除服务保证金：">
-                    {{formItem.discount}}
+                    {{formItem.back}}
                 </LabelText>
             </Card>
             <div class="buttons">
@@ -106,6 +106,7 @@
 
     import SectionTitle from '~/components/SectionTitle.vue'
     import LabelText from '~/components/LabelText';
+    import dateUtils from 'vue-dateutils';
 
 export default {
 	name:'JoinView',
@@ -114,38 +115,62 @@ export default {
             title:'换租订单详情'
         }
     },
+    props:{
+        data:Object,
+    },
 	components:{
 		SectionTitle,
         LabelText
 	},
 	data(){
+        console.log('detail',this.data)
 		return {
             inline:false,
+            formItem:this.data,
             oldStatonColumns:[
                 {
                     title: '工位编号/房间名称',
-                    key: 'name',
+                    key: 'seatNum',
                     align: 'center'
                 },
                 {
                     title: '产品类型',
-                    key: 'name',
-                    align: 'center'
+                    key: 'seatType',
+                    align: 'center',
+                    render:(h,params)=>{
+                        let type = '开放工位';
+                        if(params.row.seatType == 'SPACE'){
+                            type = '独立房间';
+                        }else{
+                            type = '开放工位';
+                        }
+                        return type;
+                    }
                 },
                 {
                     title: '原服务开始日',
-                    key: 'name',
-                    align: 'center'
+                    key: 'startDate',
+                    align: 'center',
+                    render:(h,params)=>{
+                        return dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.startDate))
+                    }
                 },
                 {
                     title: '原服务结束日',
-                    key: 'name',
-                    align: 'center'
+                    key: 'endDate',
+                    align: 'center',
+                    render:(h,params)=>{
+                        return dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate))
+                    }
                 },
                 {
                     title: '欲更换服务日',
                     key: 'name',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        console.log('欲更换服务日',params.row)
+                        return dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.changeBegin)) +'至'+ dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate))
+                    }
                 },
             ],
             newStatonColumns:[
@@ -156,27 +181,36 @@ export default {
                 },
                 {
                     title: '产品类型',
-                    key: 'name',
-                    align: 'center'
+                    key: 'seatType',
+                    align: 'center',
+                    render:(h,params)=>{
+                        let type = '开放工位';
+                        if(params.row.seatType == 'SPACE'){
+                            type = '独立房间';
+                        }else{
+                            type = '开放工位';
+                        }
+                        return type;
+                    }
                 },
                 {
                     title: '指导价',
-                    key: 'name',
+                    key: 'guidePrice',
                     align: 'center'
                 },
                 {
                     title: '下单价',
-                    key: 'name',
+                    key: 'originalPrice',
                     align: 'center'
                 },
                 {
                     title: '优惠',
-                    key: 'name',
+                    key: 'saleNum',
                     align: 'center'
                 },
                 {
                     title: '签约价',
-                    key: 'name',
+                    key: 'signPrice',
                     align: 'center'
                 },
             ],
@@ -188,27 +222,35 @@ export default {
                 },
                 {
                     title: '服务开始日',
-                    key: 'name',
+                    key: 'startDate',
                     align: 'center'
                 },
                 {
                     title: '服务结束日',
-                    key: 'name',
+                    key: 'endDate',
                     align: 'center'
                 },
                 {
                     title: '不计算服务费区间',
                     key: 'name',
-                    align: 'center'
+                    align: 'center',
+                    render:(h,params)=>{
+                        if(params.row.freeStartDate){
+                           return dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.freeStartDate))+'至'+params.row.endDate  
+                       }else{
+                        return '暂无免租'
+                       }
+                        
+                    }
                 },
                 {
                     title: '签约价',
-                    key: 'name',
+                    key: 'signPrice',
                     align: 'center'
                 },
                 {
                     title: '金额',
-                    key: 'name',
+                    key: 'totalRent',
                     align: 'center'
                 },
                 {
@@ -220,35 +262,32 @@ export default {
             newInfoColumns:[
                 {
                     title: '服务费总额',
-                    key: 'name',
+                    key: 'totalServiceFee',
                     align: 'center'
                 },
                 {
                     title: '服务保证金',
-                    key: 'name',
+                    key: 'totalDeposit',
                     align: 'center'
                 },
             ],
             oldInfoColumns:[
                 {
                     title: '减少服务费',
-                    key: 'name',
+                    key: 'reduceServiceFee',
                     align: 'center'
                 },
                 {
                     title: '已交服务费中涉及到更换的金额',
-                    key: 'name',
+                    key: 'changeServiceFee',
                     align: 'center'
                 },
                 {
                     title: '已交保证金涉及到更换的金额',
-                    key: 'name',
+                    key: 'changeDeposit',
                     align: 'center'
                 },
             ],
-            formItem:{
-                discount:'222'
-            }
 
 		}
 	},
@@ -263,7 +302,28 @@ export default {
 			this.$emit("editCards", value); 
 		},
 		submit(){
-			console.log('submit')
+            let formData = Object.assign({},this.data);
+            formData.paidDepositAmount = this.data.newStationData[0].changeDeposit;
+            formData.reduceRentAmount = this.data.newStationData[0].reduceServiceFee;
+            formData.refundRentAmount =this.data.newStationData[0].changeServiceFee;
+            formData.rentAmount = this.data.newStationData[0].totalServiceFee
+            formData.oldSeatList = JSON.stringify(formData.oldSeatList);
+            formData.seats = JSON.stringify(formData.seats);
+            formData.saleList = JSON.stringify(formData.saleList);
+            formData.serviceDetailsList = JSON.stringify(formData.serviceDetailsList)
+            formData.endDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.endDate))
+            formData.signDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.signDate))
+            formData.startDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.startDate))
+            formData.firstPayTime = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.firstPayTime))
+            this.$http.post('save-replace', formData).then( r => {
+                console.log('list',r.data)
+
+            }).catch( e => {
+                this.$Notice.error({
+                    title:e.message
+                });
+
+            })
 		}
 
 	}

@@ -17,12 +17,13 @@
 </template>
 
 <script>
+import dateUtils from 'vue-dateutils';
 export default {
     data() {
         return{
            totalCount:0,
            params:{
-               pageSize:15,
+               pageSize:20,
                page:1
            },
     
@@ -30,6 +31,11 @@ export default {
                     {   
                         title: '工位编号',
                         key: 'code',
+                        align:'center',
+                    },
+                    {
+                        title: '工位类型',
+                        key: 'seatTypeName',
                         align:'center',
                     },
                     {
@@ -49,13 +55,8 @@ export default {
                         }
                     },
                     {
-                        title: '工位类型',
-                        key: 'seatType',
-                        align:'center',
-                    },
-                    {
                         title: '入住状态',
-                        key: 'state',
+                        key: 'status',
                         align:'center',
                     }
            ],
@@ -67,7 +68,7 @@ export default {
     },
     methods:{
        getListData(){
-           this.$http.get('customer-join-info').then((res)=>{
+           this.$http.get('customer-join-info',this.params).then((res)=>{
                 this.joinData=res.data.items;
                 this.totalCount=res.data.totalCount;
             }).catch((err)=>{

@@ -1,27 +1,28 @@
  <template> 
         <div>        
-            <Form ref="switchForm" :model="switchForm" label-position="top">
-                   <Form-item label="新负责人" class="switch-class"> 
+            <Form ref="switchForm" :model="switchForm" label-position="top" :rules="ruleValidate">
+                   <Form-item label="新负责人" class="switch-class" prop="newReceiveId"> 
                         <Select 
-                            v-model="switchForm.receiveId" 
+                            v-model="switchForm.newReceiveId" 
                             placeholder="请输入新负责人" 
                             style="width: 252px"
                             filterable
                             clearable
                         >
-                            <Option v-for="item in leaderList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            <Option v-for="item in leaderList" :value="''+item.value" :key="item.value">{{ item.label }}</Option>
                     </Select> 
                 </Form-item>
-                <Form-item label="转移社区" class="switch-class" v-if="communityList&&communityList.length!=0"> 
+                <!-- <Form-item label="转移社区" class="switch-class" v-if="communityList&&communityList.length!=0" prop="communityIds"> 
                         <Select 
                             v-model="switchForm.communityIds" 
                             placeholder="请输入转移社区" 
                             style="width: 252px"
                             multiple
+                            @on-change="communityChange"
                         >
-                            <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            <Option v-for="item in communityList" :value="item.communityId" :key="item.communityId">{{ item.communityName }}</Option>
                     </Select> 
-                </Form-item>
+                </Form-item> -->
             </Form>
         </div>
 </template>
@@ -38,16 +39,20 @@
         data (){
             return{
                 switchForm:{
-                    receiveId:'',
-                    communityIds:[]
+                    newReceiveId:''
                 },
                 leaderList:[],
-                communityList:[]
+                communityList:[],
+                ruleValidate: {
+                    newReceiveId:[
+                        { required: true, message: '请选择新负责人', trigger: 'change' }
+                    ]
+                }
             }
         },
         mounted:function(){
            this.getLeaderList();
-           this.getCommunityList();
+           //this.getCommunityList();
         },
         updated:function(){
             this.$emit('bindData',this.switchForm);
@@ -63,13 +68,20 @@
                     })
             },
             getCommunityList(){
-                this.$http.get('customer-switch-community',{ids:this.switchIds}).then((response)=>{    
+                this.$http.get('customer-switch-community',{customerIds:this.switchIds}).then((response)=>{    
                         this.communityList=response.data
                     }).catch((error)=>{
                         this.$Notice.error({
                             title:error.message
                         });
                     })
+            },
+            communityChange(params){
+                var str='';
+                if(params.length){
+                  str=params.join();
+                }
+                this.switchForm.customerIds=str;
             }
         }
     }

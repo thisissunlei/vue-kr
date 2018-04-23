@@ -5,7 +5,7 @@
             <div class='list-banner'>
                     <div class='list-btn' v-if="isBtn">
                         <Button type="primary"  @click="createNew" class='join-btn'>新建</Button>
-                        <Button type="primary"  @click="newSwitch" v-if="isSwitch">转移</Button>
+                        <Button type="primary"  @click="createSwitch" v-if="isSwitch">转移</Button>
                     </div>
 
                     <div class='list-search'>
@@ -71,12 +71,19 @@
             title="转移客户"
             width="445"
         >
-           <SwitchCustomer @bindData="getSwitchData" v-if="openSwitch" :switchIds="switchIds"/>
+           <SwitchCustomer @bindData="getSwitchData" v-if="openSwitch" ref="fromFieldSwitch" :switchIds="switchIds"/>
             <div slot="footer">
-                <Button type="primary" @click="submitSwitch">确定</Button>
+                <Button type="primary" @click="submitSwitch('switchForm')">确定</Button>
                 <Button type="ghost" @click="newSwitch">取消</Button>
             </div>
         </Modal>
+
+        <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onMessageChange"
+        />
 
 
 </div>
@@ -90,6 +97,7 @@
     import CreateCustomer from './createCustomer';
     import dateUtils from 'vue-dateutils';
     import SwitchCustomer from './switchCustomer';
+    import Message from '~/components/Message';
 
     export default {
         name: 'customerAssets',
@@ -98,7 +106,8 @@
             Buttons,
             CreateCustomer,
             HeightSearch,
-            SwitchCustomer
+            SwitchCustomer,
+            Message
         },
         data () {
             return {
@@ -117,6 +126,9 @@
             isSwitch:false,
             switchIds:'',
             switchForm:{},
+            MessageType:'',
+            openMessage:false,
+            warn:'',
             /*转移客户*/
 
             params:{
@@ -299,22 +311,44 @@
             getSwitchData(formItem){
                 this.switchForm=formItem;
             },
-            //转移客户打开
+            //转移开关
             newSwitch(){
                 this.openSwitch=!this.openSwitch;
             }, 
+            //打开转移
+            createSwitch(){
+                this.$http.get('customer-is-switch',{customerIds:this.switchIds}).then((response)=>{  
+                    this.newSwitch();
+                }).catch((error)=>{
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                }) 
+            },
             //转移客户提交
-            submitSwitch(){
+            submitSwitch(name){
+                var newPageRefs = this.$refs.fromFieldSwitch.$refs;
+                var isSubmit = true;
+                newPageRefs[name].validate((valid,data) => {
+                    if (!valid) {
+                        isSubmit = false
+                    }
+                })
+                if(!isSubmit){
+                    return;
+                }
                 var params=Object.assign({},this.switchForm);
-                params.ids=this.switchIds;
+                params.customerIds=this.switchIds;
                 this.$http.get('customer-list-switch',params).then((response)=>{  
                     this.newSwitch();
-                    this.getListData()
+                    this.getListData();
+                    this.switchIds='';
+                    this.isSwitch=false;
                 }).catch((error)=>{
                     this.$Notice.error({
                         title:error.message
                     });
-                })  
+                }) 
             },
             //复选框选择
             selectTabel(selection){
@@ -326,6 +360,10 @@
                     })
                     this.switchIds=strArr.join();
                 }
+            },
+            //信息提示框
+            onMessageChange(data){
+                this.openMessage=data;
             }
         }
     }

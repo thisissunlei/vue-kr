@@ -27,6 +27,7 @@
         ok-text="确定"
         cancel-text="取消"
         width="373"
+        className="vertical-center-modal"
      >
         <AddArchives @bindData="onAddArchives" ref="fromFieldArchives" v-if="openNewArchives"/>
         <div slot="footer" style="text-align:center;">

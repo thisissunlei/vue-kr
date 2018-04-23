@@ -69,9 +69,7 @@
                     :watchTotalCount="watchTotalCount"
                     :watchPage = "watchPage"
                 />
-                <div slot="footer" style="text-align:center;">
-                    <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
-                </div>
+              
         </Modal>
 
         <Modal

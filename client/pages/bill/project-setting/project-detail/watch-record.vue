@@ -19,7 +19,7 @@
             </Form-item>
 
             <Form-item label="" class='daily-form' style="padding:0px 20px;">
-                <SelectSaler :clearable="true" :onchange="changeSaler" placeholder="编辑人姓名" name="formItem.updator" ></SelectSaler>
+                <SelectSaler :clearable="true" :onchange="changeSaler" value="编辑人姓名" name="formItem.updator" ></SelectSaler>
             </Form-item>
             <Button style="float:right;" type="primary" @click="seachClick">搜索</Button>
         </Form>

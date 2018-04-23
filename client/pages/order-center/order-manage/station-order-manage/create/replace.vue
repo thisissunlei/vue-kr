@@ -51,10 +51,9 @@
                             <FormItem label="换租原因" class="bill-search-class"> 
                                 <Input 
                                     v-model="formItem.replaceMemo" 
-                                    placeholder="请输入客户名称"
+                                    placeholder="请输入换租原因"
                                     style="width: 252px"
                                     type="textarea"
-                                    :rows="rows"
                                     :maxlength="replaceMemoLength"
                                 />
                             </FormItem>
@@ -91,7 +90,7 @@
                                 <span class="header-name">原服务结束日</span>
                                 <span class="header-name">预更换服务期</span>
                             </div>
-                            <div class="station-table" v-for="(item,index) in oldStation" :key="item.seatId" v-bind:class="{error: item.timeType=='error' }">
+                            <div class="station-table" v-for="(item,index) in oldStation" :key="item.seatId+index">
                                 <span class="select">
                                     <Checkbox v-model="item.checked" @on-change="selectRow" :disabled="item.disabled"></Checkbox>
                                 </span>
@@ -595,7 +594,6 @@
                     selecedStation:false,
                 },
                 status:0,
-                rows:4,
                 oldEndTime:new Date(),
                 //优惠信息
                 saleList:[],
@@ -714,11 +712,11 @@
                 let _this = this;
                 if(this.formItem.communityId && this.formItem.customerId){
                     let params = {
-                        // communityId:this.formItem.communityId || 4,
-                        communityId:4,
+                        communityId:this.formItem.communityId,
+                        // communityId:4,
 
-                        customerId:1715
-                        // customerId:this.formItem.customerId
+                        // customerId:1715
+                        customerId:this.formItem.customerId
                     }
                      this.$http.get('get-community-floor', params).then( r => {
                         _this.floors = r.data.floor;

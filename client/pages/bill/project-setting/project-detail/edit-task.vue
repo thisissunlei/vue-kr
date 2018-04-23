@@ -78,7 +78,7 @@
                 <div slot="content"> 
 
                     <LabelText label="管理层关注" >
-                        {{!params.focus?'否':'是'}}
+                        {{params.focus=="0"?'否':'是'}}
                     </LabelText>
                     <LabelText label="责任部门" >
                         {{getEdit.department}}
@@ -165,7 +165,6 @@ export default {
         // this.queryData=this.$route.query; 
     },
     mounted(){
-      
          
     },
    
@@ -290,21 +289,24 @@ export default {
     .actual-time{
         .ivu-tooltip, .ivu-tooltip .ivu-tooltip-rel{
              width: auto;
+             position: relative;
         }
        .ivu-date-picker-rel{
             input{
-                color: #999999;
+                color: #333;
                 font-size: 14px;
             }
         } 
         .start .ivu-tooltip-popper{
-            left: 775px !important;
-            top: 325px !important;
+            position: absolute !important;
+            left: 50px !important;
+            top: -10px !important;
            
         }
         .end .ivu-tooltip-popper{
-            left: 1055px !important;
-            top: 325px !important;
+            position: absolute !important;
+            left: 50px !important;
+            top: -10px !important;
         }
         .ivu-tooltip-arrow{
             position: absolute;

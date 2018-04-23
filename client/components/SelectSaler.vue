@@ -15,6 +15,7 @@
             :v-model="saler"
             filterable
             remote
+            :clearable="clearable"
             :placeholder="value"
             :remote-method="remoteSaler"
             :loading="loading1"
@@ -33,7 +34,11 @@ import http from '~/plugins/http.js';
         props:{
             onchange :Function,
             value:String,
-            disabled:Boolean
+            disabled:Boolean,
+            clearable:{
+                type:Boolean,
+                default:false,
+            }
         },
         data () {
             return {

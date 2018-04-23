@@ -56,11 +56,13 @@
         </Drawer>
 
         <Modal
+           
             v-model="openWatch"
             title="查看记录"
             width="660"
         >
                 <WatchRecord 
+                    v-if="openWatch"
                     :id="queryData.id"
                     :watchRecord="watchRecord" 
                     @searchClick="searchClick" 
@@ -550,6 +552,10 @@ export default {
         //打开查看任务
         watchTask(){
             this.watchParams.id = this.queryData.id;
+            this.watchParams.endTime = '';
+            this.watchParams.startTime = '';
+            this.watchParams.updator = '';
+            this.watchParams.page = 1;
             this.getWatchData(this.watchParams);
             this.cancelWatch();
         },

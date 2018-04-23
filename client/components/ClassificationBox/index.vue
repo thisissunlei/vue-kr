@@ -111,7 +111,7 @@
         height: 1px;
         background: #499DF1;
         position: relative;
-        top: -5px;
+        top: -6px;
 
     }
     .content{
@@ -121,6 +121,7 @@
         border-left:1px  dashed #499DF1;
         margin-left: 20px;
         position: relative;
+        margin-top: -2px;
         .tag{
             display: inline-block;
             position: absolute;

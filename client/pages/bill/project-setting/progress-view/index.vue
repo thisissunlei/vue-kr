@@ -18,7 +18,7 @@
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
-                    <Tabs size="small" :value="tabValue" @on-click="tabsClick">
+                    <Tabs size="small" :value="tabValue" :animated="false" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
 
                             <div class='chart-left-table' v-if="mask">

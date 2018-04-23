@@ -5,7 +5,7 @@
             <div class='list-banner'>
                     <div class='list-btn' v-if="isBtn">
                         <Button type="primary"  @click="createNew" class='join-btn'>新建</Button>
-                        <Button type="primary"  @click="newSwitch">转移</Button>
+                        <Button type="primary"  @click="newSwitch" v-if="isSwitch">转移</Button>
                     </div>
 
                     <div class='list-search'>
@@ -114,6 +114,7 @@
                 canSubmit:true,
             /*转移客户*/
             isBtn:false,
+            isSwitch:false,
             switchIds:'',
             switchForm:{},
             /*转移客户*/

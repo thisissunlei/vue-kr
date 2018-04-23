@@ -27,7 +27,7 @@
                             ></span>
                         </div>
                          <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进度未知</span>
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进行中</span>
                             <span
                                 class="article"
                                 style="background:#FFD669;vertical-align:middle;"

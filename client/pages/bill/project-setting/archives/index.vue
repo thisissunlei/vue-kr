@@ -114,7 +114,7 @@ import Loading from '~/components/Loading'
                     },
                     {
                         title: '当前项目计划进度',
-                        key: 'city',
+                        key: 'plannedTask',
                         align:'center',
 
                     },

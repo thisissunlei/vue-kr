@@ -346,9 +346,15 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items;
                 if(response.data.hasTime){
-                    this.startTime = publicFn.compareTime(this.startTime,response.data.firstStartTime);
-                    var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    if(response.data.firstStartTime){
+                        this.startTime = publicFn.compareTime(this.startTime,response.data.firstStartTime);
+                    }
+                    if(response.data.lastEndTime){
+                        var endObj = this.monthAdd(response.data.lastEndTime);
+                        this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    }
+                    
+                   
                 }
                 this.isLoading = false;
                 this.scrollPosititon();

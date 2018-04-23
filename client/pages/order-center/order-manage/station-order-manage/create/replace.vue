@@ -17,7 +17,7 @@
                      <Row>  
                         <Col class="col">
                             <FormItem style="width:252px" label="客户名称" class="bill-search-class" prop="customerId">
-                            <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :labelInValue="labelInValue"></selectCustomers>
+                            <selectCustomers name="formItem.customerId" :onchange="changeCustomer" :labelInValue="labelInValue" :value="formItem.customerName"></selectCustomers>
                             </FormItem>
                         </Col>
                         
@@ -153,7 +153,7 @@
                         <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
 
                             <div style="display:inline-block">
-                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountType==types.sale}">{{ types.sale }}折</span>
+                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountNum==types.sale }">{{ types.sale }}折</span>
                             </div>
                             <div style="display:inline-block;vertical-align:top">
                             <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
@@ -178,7 +178,7 @@
                         <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.list.length && selecedStationList.length">
 
                             <div style="display:inline-block">
-                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeType==types.month}">赠{{ types.month }}个月</span>
+                                <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
                             </div>
                             <div style="display:inline-block;vertical-align:top">
                             <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" style="width: 120px;" ></Input>
@@ -412,7 +412,7 @@
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
-                                        value:params.row.originalPrice ||params.row.guidePrice ,
+                                        value:params.row.originalPrice 
                                     },
                                     on:{
                                         'on-change':(event)=>{
@@ -1238,6 +1238,22 @@
             },
             //设置优惠后，获取签约价明细
             getSaleAmount(list){
+                let originalPrice = false;
+                let val = this.selecedStationList;
+                let station = val.map(item=>{
+                    let obj = item;
+                    if(item.originalPrice === ''){
+                        originalPrice = true;
+                    }
+                    return obj;
+                })
+                if(originalPrice){
+                    this.$Notice.error({
+                        title:'工位单价不能为空'
+                    })
+                    return
+                }
+
 
                 this.watchServiceDetail = new Date()
                 let params = {
@@ -1320,7 +1336,7 @@
                 this.showMap = false;
                 console.log('submitStation',this.stationData.submitData)
                 this.selecedStationList = this.stationData.submitData.map(item=>{
-                    item.guidePrice = item.seatPrice || item.guidePrice;
+                    item.guidePrice = item.seatPrice || item.guidePrice || 0;
                     item.discountedPrice = item.seatPrice;
                     item.floor = item.whereFloor || item.floor;
                     item.seatId = item.id;

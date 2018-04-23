@@ -1,5 +1,5 @@
 <template>
-   <div class="g-order-detail">
+   <div class="g-replace-order-detail">
 		<SectionTitle title="换租订单详情" ></SectionTitle>
 		<div class="create-order">
             <Card id="step-one">
@@ -16,8 +16,8 @@
                 <LabelText  :inline="inline" label="社区名称：">
                     {{formItem.communityName}}
                 </LabelText>
-                <LabelText :inline="inline" label="换租原因：">
-                    {{formItem.replaceMemo}}
+                <LabelText :inline="inline" label="换租原因：" class='reason'>
+                    {{formItem.replaceMemo || '无'}}
                 </LabelText>
 
             </Card>
@@ -317,6 +317,8 @@ export default {
             formData.firstPayTime = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.firstPayTime))
             this.$http.post('save-replace', formData).then( r => {
                 console.log('list',r.data)
+                 window.close();
+                window.opener.location.reload();
 
             }).catch( e => {
                 this.$Notice.error({
@@ -331,8 +333,20 @@ export default {
 </script>
 
 
-<style lang="less" scoped>  
-	.g-order-detail{
+<style lang="less">  
+	.g-replace-order-detail{
+        .reason{
+            width: 100%;
+            .ui-label{
+                vertical-align: top;
+                display: inline-block;
+                width: 75px;
+            }
+            .ui-text{
+                display: inline-block;
+                width: 80%;
+            }
+        }
 		.create-order{
 			padding:30px;
 		}

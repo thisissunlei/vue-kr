@@ -209,6 +209,7 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
+        // return;
          this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
          this.signMask=this.queryData.status==1?true:false;

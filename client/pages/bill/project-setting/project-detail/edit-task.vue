@@ -68,9 +68,9 @@
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
                     </div>
 
-                    <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                    <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                         <div>需要填写档案10项，尚未完成3箱，<span style="color:#499DF1;">去填写&nbsp;>></span></div>
-                    </div>
+                    </div> -->
                 </div>
             </ClassificationBox>
             

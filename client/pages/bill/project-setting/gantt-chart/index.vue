@@ -289,6 +289,7 @@ export default {
         }
     },
     mounted(){
+        // return;
         this.scrollWidth = utils.getScrollBarSize()
         this.limitDay(this.barType);
         setTimeout(() => {

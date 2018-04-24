@@ -1,6 +1,7 @@
 <template>
 	<div class="g-order-detail">
-            <ReplaceView @editCards="editCard" :data.sync="overViewData" v-if="editCard"/>
+            <ReplaceView @editCards="editCard" :data.sync="overViewData" type="view"
+            v-if="show"/>
 		
 	</div>	
 </template>
@@ -25,14 +26,20 @@ export default {
 		return{
 			editCard:false,
 			overViewData:{
-				newStationData:[]
-			}
+			},
+			show:false
 		}
 	},
 
 	mounted:function(){
 		GLOBALSIDESWITCH('false');
 		this.getDetailData();
+	},
+	watch:{
+		overViewData(){
+			this.show = true
+			console.log('====>')
+		}
 	},
 
 	methods:{
@@ -42,8 +49,27 @@ export default {
 				id:params.watchView
 			};
 			this.$http.get('get-replace-detail', from).then((response)=>{  
-					console.log('======',response.data)
-					this.overViewData = response.data;
+					let overViewData = response.data;
+					overViewData.oldSeatList = response.data.oldSeatInfo.map(item=>{
+						let obj = item;
+						obj.startDate = item.prepStartDate;
+						obj.endDate = item.prepEndDate;
+						obj.changeBegin = item.startDate;
+						return obj;
+					});
+					overViewData.seats = response.data.newSeatInfo.map(item=>{
+						item.originalPrice = item.marketPrice;
+						return item;
+					})
+					let array = [];
+					array.push(response.data.feeResultVO)
+					overViewData.newStationData = array;
+					overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
+						item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
+						item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
+						return item;
+					});
+					this.overViewData = overViewData
 				}).catch((error)=>{
 					this.$Notice.error({
 						title:error.message

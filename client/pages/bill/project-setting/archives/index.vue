@@ -273,7 +273,6 @@ import Loading from '~/components/Loading'
             
             //排序按钮
             shortChange(event){
-                console.log(event,"ppppp")
                 if(event.label === '创建时间'){
                     if(event.order === 'asc'){
                         this.tabParams.query = 'CTIMEASC';
@@ -442,10 +441,12 @@ import Loading from '~/components/Loading'
          background-color: #FAFCFF;
     }
 }
+.ivu-modal-footer{
+    padding-top:10px; 
+}
 
 .ivu-tooltip{
     width:100%;
-    //border-bottom: 1px solid #e9eaec;
     .ivu-tooltip-rel{
        width:100%;
     }

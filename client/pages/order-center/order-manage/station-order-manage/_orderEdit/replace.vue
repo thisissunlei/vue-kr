@@ -823,6 +823,7 @@
                 this.selectedOldStation = this.oldStation.filter(item=>{
 
                     if(item.checked){
+                        item.orderSeatId = item.orderId;
                         item.changeBegin = this.formItem.leaseBegindate;
                         return true;
                     }
@@ -951,6 +952,7 @@
                     item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
                     return item;
                 })
+                console.log('=======',overViewData)
                 overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
                     if(valid){
@@ -982,6 +984,7 @@
                             item.label = item.name;
                             return item
                         });
+                        console.log('getCustomerToCom',this.communityList)
                 }).catch( (error) => {
                     this.communityList = []
                     this.$Notice.error({
@@ -997,13 +1000,11 @@
                 this.formItem.oldSeatInfo = []
             },
             changeCommunity(value){
+                 console.log('communityName',value)
                 // 选择社区
                 if(value.value){
                     this.formItem.communityId =value.value;
                     this.formItem.communityName =value.label;
-                }else{
-                    this.formItem.communityId = '';
-                    this.formItem.communityName = '';
                 }
                 if(value.value != this.formItem.communityId){
                     this.clearStepData() //清除step2数据
@@ -1733,6 +1734,7 @@
                     this.back  = response.data.feeResultVO.lockDeposit;
                     this.installmentType = response.data.installmentType
                     this.formItem.communityId = response.data.communityId+'';
+                    this.formItem.communityName = response.data.communityName;
                     let _this = this;
                     console.log('获取编辑的基础数据',this.formItem)
                     setTimeout(function(){

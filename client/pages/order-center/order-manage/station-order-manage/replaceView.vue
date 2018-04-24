@@ -400,6 +400,9 @@ export default {
             formData.signDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.signDate))
             formData.startDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.startDate))
             formData.firstPayTime = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.firstPayTime))
+
+            formData.oldDepositAmount = this.data.newStationData[0].changeDeposit
+            
             this.$http.post('save-replace', formData).then( r => {
                 console.log('list',r.data)
                  window.close();

@@ -452,7 +452,8 @@
             },
 
             jumpView(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/replaceView`,'_blank');
+                let edit = params.row.orderStatus ==='EFFECTIVE'?false:true
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/replaceView?edit=${edit}`,'_blank');
             },
 
             jumpEdit(values){

@@ -1,6 +1,6 @@
 <template>
 	<div class="g-order-detail">
-            <ReplaceView :editCard="editCard" :data.sync="overViewData" type="view"
+            <ReplaceView  :showEdit="editCardabled":data.sync="overViewData" type="view"
             v-if="show"/>
 		
 	</div>	
@@ -24,9 +24,10 @@ export default {
 	},
 	data(){
 		return{
-			editCard:false,
+			editCardabled:false,
 			overViewData:{
 			},
+			edit:false,
 			show:false,
 			payList:[
                 {value:'ONE',label:'月付'},
@@ -46,11 +47,17 @@ export default {
 	watch:{
 		overViewData(){
 			this.show = true
+		},
+		edit(value){
+			this.editCardabled = value;
 		}
 	},
 
 	methods:{
 		getDetailData(){
+			let edit =window.location.search.split('=')[1];
+			console.log(edit)
+			this.edit  = edit==='false'?false:true;
 			let {params}=this.$route;
 			let from={
 				id:params.watchView

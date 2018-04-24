@@ -821,6 +821,7 @@
                 this.selectedOldStation = this.oldStation.filter(item=>{
 
                     if(item.checked){
+                        item.orderSeatId = item.orderId;
                         item.changeBegin = this.formItem.leaseBegindate;
                         return true;
                     }

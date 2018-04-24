@@ -89,6 +89,9 @@ export default {
       return{
         basicInfo:{},
         couponList:[],
+        pageSize:15,
+        page:1,
+        totalCount:0,
         columns:[
           {
               title: '序号',
@@ -154,6 +157,11 @@ export default {
             });
         });
       },
+      changePage(page){
+        this.tabParams.page=page;
+        this.page=page;
+        this.getTableData(this.tabParams);
+     }
 
 	}
 

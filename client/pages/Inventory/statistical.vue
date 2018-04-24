@@ -21,7 +21,7 @@ export default {
                         align:'center'
                     },
                     {
-                        title: '可租个数',
+                        title: '未租个数',
                         key: 'availableSpaces',
                         align:'center',
                         width:90,
@@ -41,7 +41,7 @@ export default {
                         }
                     },
                     {
-                        title: '可租工位',
+                        title: '未租工位',
                         key: 'availableStations',
                         align:'center',
                         width:90,

@@ -85,6 +85,7 @@
             width: 40px;
             text-align: center;
             line-height: 40px;
+            vertical-align: middle;
         }
         .circle{
             height: 20px;

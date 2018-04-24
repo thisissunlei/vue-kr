@@ -29,26 +29,12 @@
                     <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                 </div>
             </ClassificationBox>
-            <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
+            <ClassificationBox value="2" :promptText="editActualEndTime('title')?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
-                        <Form-item 
-                            v-if="actualStart"
-                            label="开始日" 
-                            class="bill-search ">
-                                <DatePicker 
-                                    v-model="params.actualStartTime"
-                                    type="date" 
-                                    :clearable="false"
-                                    placeholder="开始日期" 
-                                    style="width: 245px"
-                                    @on-change="actualStartChange"
-                                />
-                                <span class="u-date-txt"></span>
-                            </Form-item>
-
+                        
                         <!-- <Tooltip v-if="!actualStart" placement="top" class="start"> -->
-                            <Form-item v-if="!actualStart" label="开始日" class="bill-search ">
+                            <Form-item label="开始日" class="bill-search ">
                                 <DatePicker 
                                     v-model="params.actualStartTime"
                                     type="date" 
@@ -60,32 +46,19 @@
                                
                                 <span class="u-date-txt"></span>
                                 <div 
-                                    v-if="editActualEndTime()" 
+                                    v-if="editActualEndTime('start') && !this.actualStart" 
                                     class="actual-select-today" 
                                     @click="selectTodayStart"
                                 >
                                     今天开始的？
                                 </div>
+                                <div v-if="!editActualEndTime('start')" class="mask"></div>
                             </Form-item>
                             
                         <!-- </Tooltip> -->
-                        <Form-item 
-                            v-if="actualEnd"
-                            class="end" 
-                            label="结束日"  
-                            prop="actualEndTime" 
-                            style="display:inline-block;">
-                            <DatePicker 
-                                v-model="params.actualEndTime"
-                                type="date" 
-                                :clearable="false"
-                                placeholder="结束日期" 
-                                style="width: 245px"
-                                @on-change="actualEndChange"
-                            /> 
-                        </Form-item>
+                       
                         <!-- <Tooltip v-if="!actualEnd" placement="top" class="end"> -->
-                            <Form-item v-if="!actualEnd" class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
+                            <Form-item  class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
                                 <DatePicker 
                                     v-model="params.actualEndTime"
                                     type="date" 
@@ -95,16 +68,17 @@
                                     @on-change="actualEndChange"
                                 /> 
                                 <div 
-                                    v-if="editActualEndTime()" 
+                                    v-if="editActualEndTime('end')&&!this.actualEnd" 
                                     class="actual-select-today"
                                     @click="selectTodayEnd"
                                 >今天完成的?</div>
+                                 <div v-if="!editActualEndTime('end')" class="mask"></div>
                             </Form-item>
                           
                         <!-- </Tooltip>    -->
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
                         <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
-                        <div v-if="!editActualEndTime()" class="mask"></div>
+                       
                     </div>
 
                     <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
@@ -209,8 +183,15 @@ export default {
     },
    
     methods:{
-        editActualEndTime(){
-            if(this.planStart && this.planEnd && this.planStart<=this.planEnd){
+        editActualEndTime(value){
+            
+            if(value == "start" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
+                return true;
+            }
+            if(value=="end"&& this.planStart && this.planEnd && this.planStart<=this.planEnd && this.actualStart){
+                return true;
+            }
+            if(value == "title" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
                 return true;
             }
             return false;

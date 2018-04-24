@@ -10,6 +10,7 @@
                             type="date" 
                             placeholder="开始日期" 
                             style="width: 245px"
+                            :clearable="false"
                             @on-change="planStartChange"
                         />
                         <span class="u-date-txt" ></span>
@@ -21,6 +22,7 @@
                             type="date" 
                             placeholder="结束日期" 
                             style="width: 245px"
+                            :clearable="false"
                             @on-change="planEndChange"
                         /> 
                     </Form-item>
@@ -35,6 +37,7 @@
                                 <DatePicker 
                                     v-model="params.actualStartTime"
                                     type="date" 
+                                    :clearable="false"
                                     placeholder="开始日期" 
                                     style="width: 245px"
                                     @on-change="actualStartChange"
@@ -54,6 +57,7 @@
                                 <DatePicker 
                                     v-model="params.actualEndTime"
                                     type="date" 
+                                    :clearable="false"
                                     placeholder="结束日期" 
                                     style="width: 245px"
                                     @on-change="actualEndChange"
@@ -66,6 +70,7 @@
                             >今天完成的?</div>
                         </Tooltip>   
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
+                        <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
                     </div>
 
                     <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
@@ -154,6 +159,7 @@ export default {
         return{
             dateError:false,
             cDateError:false,
+            cDateError1:false,
             params:this.getFormItem(),
             actualStart:this.getEdit.actualStartTime,
             actualEnd:this.getEdit.actualEndTime,
@@ -184,53 +190,74 @@ export default {
             this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
-        
-            this.planStart=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+            this.planStart=params;  
+
+            if(this.planStart ||
+                this.planStart && this.planEnd ||
+                this.planStart && this.planEnd && this.actualStart ||
+                this.planStart && this.planEnd && this.actualStart && this.actualEnd
+                
+            ){
+                if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+                    this.dateError=true;
+                }else{
+                    this.dateError=false;
+                    this.cDateError=false;
+                    this.params.planStartTime = params;
+                    var data = Object.assign({},this.params);
+                
+                    this.$emit('dataChange',data)
+                }
+            }else {
                 this.dateError=true;
-            }else{
-                this.dateError=false;
-                this.params.planStartTime = params;
-                var data = Object.assign({},this.params);
-               
-                this.$emit('dataChange',data)
             }
+
         },
         planEndChange(params){
             this.planEnd=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-                this.dateError=true;
-            }else{
+
+            if((this.planStart && this.planStart>this.planEnd) &&
+                ((this.actualStart&&this.actualEnd&&this.actualStart<this.actualEnd)||this.actualStart && !this.actualEnd)){
                 this.dateError=false;
+                this.cDateError=false;
                 this.params.planEndTime = params;
                 var data = Object.assign({},this.params);
                 
                 this.$emit('dataChange',data)
+            }else {
+                this.dateError=true;
             }
+
         },
         actualStartChange(params){
-          
-            this.actualStart=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
-                this.cDateError=true;
-            }else{
+             this.actualStart=params;
+            if(this.planStart&&this.planEnd && this.planStart<this.planEnd && 
+                ((!this.actualEnd)||
+                (this.actualStart<this.actualEnd))){
+                this.cDateError=false;
                 this.cDateError=false;
                 this.params.actualStartTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
-            }
-        },
-        actualEndChange(params){
-            
-            this.actualEnd=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
+            }else {
                 this.cDateError=true;
-            }else{
+            }
+           
+           
+        },
+        
+        actualEndChange(params){
+             
+            this.actualEnd=params;
 
+            if(this.planStart&&this.planEnd&&this.actualStart&&this.actualEnd&&this.planStart<=this.planEnd&&this.actualStart<=this.actualEnd){
+                this.cDateError=false;
                 this.cDateError=false;
                 this.params.actualEndTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
+            }else {
+                this.cDateError=true;
             }
         }
     }
@@ -267,6 +294,7 @@ export default {
             line-height: 1.5;
         }
     }
+  
     
     .ivu-form-item{
         margin-bottom: 0px;
@@ -285,6 +313,7 @@ export default {
             font-weight: bold;
             font-size: 16px;
         }
+        
     }
     .actual-time{
         .ivu-tooltip, .ivu-tooltip .ivu-tooltip-rel{

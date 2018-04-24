@@ -73,11 +73,16 @@ export default {
         .ivu-tabs-ink-bar{
             top:0px;
             height: 4px;
+            border: 20px solid #fff;
+            border-top: 0px;
+            border-bottom: 0px;
+            box-sizing: border-box;
         }
         .ivu-tabs-nav .ivu-tabs-tab{
             
             text-align: center;
             line-height: 35px;
+            padding: 8px 20px;
         }
         .ivu-tabs-bar{
             margin: 0px;

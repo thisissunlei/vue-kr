@@ -528,7 +528,6 @@ export default {
                 data.focus=data.focus==1?'1':'0';
                 this.getEdit=Object.assign({},data);
                 this.taskStatus = data.taskStatus;
-                console.log(this.taskStatus,"pppppp");
                 if(!callback){
                     this.cancelEditTask();
                 }else{

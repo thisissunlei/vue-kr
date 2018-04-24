@@ -32,7 +32,21 @@
             <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
-                        <Tooltip placement="top" class="start">
+                        <Form-item 
+                            v-if="actualStart"
+                            label="开始日" 
+                            class="bill-search ">
+                                <DatePicker 
+                                    v-model="params.actualStartTime"
+                                    type="date" 
+                                    :clearable="false"
+                                    placeholder="开始日期" 
+                                    style="width: 245px"
+                                    @on-change="actualStartChange"
+                                />
+                                <span class="u-date-txt"></span>
+                            </Form-item>
+                        <Tooltip v-if="!actualStart" placement="top" class="start">
                             <Form-item label="开始日" class="bill-search ">
                                 <DatePicker 
                                     v-model="params.actualStartTime"
@@ -52,7 +66,22 @@
                                 今天开始的？
                             </div>
                         </Tooltip>
-                        <Tooltip placement="top" class="end">
+                        <Form-item 
+                            v-if="actualEnd"
+                            class="end" 
+                            label="结束日"  
+                            prop="actualEndTime" 
+                            style="display:inline-block;">
+                            <DatePicker 
+                                v-model="params.actualEndTime"
+                                type="date" 
+                                :clearable="false"
+                                placeholder="结束日期" 
+                                style="width: 245px"
+                                @on-change="actualEndChange"
+                            /> 
+                        </Form-item>
+                        <Tooltip v-if="!actualEnd" placement="top" class="end">
                             <Form-item class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
                                 <DatePicker 
                                     v-model="params.actualEndTime"

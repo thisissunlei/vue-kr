@@ -38,7 +38,6 @@ export default {
 	watch:{
 		overViewData(){
 			this.show = true
-			console.log('====>')
 		}
 	},
 
@@ -51,10 +50,9 @@ export default {
 			this.$http.get('get-replace-detail', from).then((response)=>{  
 					let overViewData = response.data;
 					overViewData.oldSeatList = response.data.oldSeatInfo.map(item=>{
-						let obj = item;
-						obj.startDate = item.prepStartDate;
+						let obj = Object.assign({},item);
 						obj.endDate = item.prepEndDate;
-						obj.changeBegin = item.startDate;
+						obj.changeBegin = item.prepStartDate;
 						return obj;
 					});
 					overViewData.seats = response.data.newSeatInfo.map(item=>{
@@ -69,6 +67,8 @@ export default {
 						item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
 						return item;
 					});
+					overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+					overViewData.startDate = response.data.realStartDate
 					this.overViewData = overViewData
 				}).catch((error)=>{
 					this.$Notice.error({

@@ -287,6 +287,32 @@
                 </div>
             </Card>
         </div>
+        
+        <Modal
+            v-model="openService"
+            title="服务费明细"
+            ok-text="保存"
+            cancel-text="取消"
+            width="90%"
+            class-name="vertical-center-modal"
+         >
+           <div class="content">
+               
+               <div class="header" style="font-size:14px;">
+                   <span class="left">
+                      {{detailService.seatType =='SPACE'?'独立房间':'独立工位'}} {{detailService.codeName}}
+                   </span>
+                   <span class="right" style="float:right">
+                       ￥{{detailService.totalAmount}}
+                   </span>
+               </div>
+               <Table :columns="serviceColumns" style="margin:10px 0" :data="detailService.details"></Table>
+           </div>
+            <div slot="footer">
+                <Button type="primary" @click="cancel">确定</Button>
+            </div>
+        </Modal>
+
         <Modal
             v-model="showMap"
             title="选择工位"
@@ -365,6 +391,7 @@
                 }
             };
             return {
+                openService:false,
                 labelInValue:true,
                 replaceMemoLength:500,
                 overViewData:{},
@@ -684,6 +711,45 @@
                 freeStartDate:'',
                 back:0,
                 changeThree:new Date(),
+                detailService:{
+                codeName:'',
+                details:[],
+                totalAmount:'',
+                seatType:''
+            },
+            serviceColumns:[
+                {
+                    title: '服务期',
+                    key: 'reduceServiceFee',
+                    align: 'center',
+                    render:(h,params)=>{
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.start_date)) +'~'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.end_date))
+                    }
+                },
+                {
+                    title: '服务费计算说明',
+                    key: 'calculat_descr',
+                    align: 'center'
+                },
+                {
+                    title: '单价',
+                    key: 'unit_price',
+                    align: 'center'
+                },
+                {
+                    title: '数量',
+                    key: 'count',
+                    align: 'center'
+                },
+                {
+                    title: '小计',
+                    key: 'amount',
+                    align: 'right',
+                    render:(h,params)=>{
+                        return '￥'+params.row.amount;
+                    }
+                },
+            ]
 
                 
 
@@ -771,7 +837,6 @@
                 if(this.errorObj.oldStation){
                     return
                 }
-                console.log('next',this.$refs.formItemThree)
 
                 this.$refs[name].validate((valid) => {
 
@@ -892,7 +957,6 @@
                 this.status = value;
             },
             changeCustomer(value){
-                console.log('changeCustomer',value)
                 this.formItem.customerId = value.value;
                 this.formItem.customerName = value.label;
                 if(value.value){
@@ -955,7 +1019,9 @@
                         return item
                     })
                 }).catch( e => {
-                    console.log('error',e)
+                    this.$Notice.error({
+                        title:e.message
+                    })
                 })
             },
             changeBeginTime(value){
@@ -981,14 +1047,13 @@
 
                     this.oldStation = this.oldStation.map((item,index)=>{
                             item.checked = false;
+                            let time = new Date(value).getTime();
                             //判断当前已选工位是否符合开始时间
-                            if(value<item.startDate || value>item.endDate){
+                            if(time<item.startDate || time>item.endDate){
                                 item.disabled = true;
                                 this.selectAllAbled = true;
-                                this.errorObj.errorRow = true;
                             }else{
                                 item.disabled = false;
-                                this.errorObj.errorRow = false;
                             }
                         return item
                     })
@@ -1061,7 +1126,6 @@
                 }
                 this.$http.post('get-free-sale', params, r => {
                     this.dealSale(r.data)
-                    console.log('list',r.data)
                 }, e => {
                     this.$Notice.error({
                         title:e.message
@@ -1134,14 +1198,12 @@
             setfreeMap(){
                 let free = this.freeDays;
                 let checkResult = this.checkFreeMap() //1.数字2.小于最大天数
-                // if(!checkResult){
-                //     return
-                // }
                 let params = {
                     communityId:this.formItem.communityId,
                     days:this.freeDays,
                     end:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
+                    tacticsId:this.freeMap.tacticsId,
                 }
                
                 //3.获取免租开始日期
@@ -1151,6 +1213,9 @@
                     //4.设置优惠列表（saleList）
                     this.setFreeDays(r.data.freeStartDate)
                 }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    })
 
                 })
                 
@@ -1175,7 +1240,7 @@
                 }
                 if(value>this.freeMap.maxDays){
                     this.$Notice.error({
-                        title:'免租天数不得大于9.9'
+                        title:'免租天数不得大于'+this.freeMap.maxDays
                     })
                     this.freeDays = this.freeMap.maxDays;
                     return false;
@@ -1272,6 +1337,7 @@
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                         obj.belongType = item.seatType;
+                        obj.seatNum = item.name;
                         obj.saleNum = this.discountNum || '-';
                         obj.floor = item.whereFloor || item.floor;
                         obj.seatPrice = item.guidePrice || item.seatPrice;
@@ -1315,7 +1381,6 @@
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
                 }
                 this.params = params;
-                console.log('open',this.selecedStationList )
                 this.stationData.submitData = this.selecedStationList || []
                 this.showMap = true;
             },
@@ -1332,12 +1397,12 @@
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;
-                console.log('submitStation',this.stationData.submitData)
                 this.selecedStationList = this.stationData.submitData.map(item=>{
                     item.guidePrice = item.seatPrice || item.guidePrice || 0;
                     item.discountedPrice = item.seatPrice;
                     item.floor = item.whereFloor || item.floor;
                     item.seatId = item.id;
+                    item.seatNum = item.name;
                     item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     item.saleNum = this.discountNum || '--'
                     item.endDate=dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
@@ -1378,7 +1443,31 @@
                 this.getStationAmount()
             },
             getServiceDetail(item){
-                console.log('getServiceDetail',item)
+                let list = item.seatIds.map(value=>{
+                    let obj = {};
+                    obj.seatId = value;
+                    obj.seatType = item.seatType;
+                    return obj;
+                })
+                let price = item.signPrice.split('元')[0]
+                let params = {
+                    codeName:item.name,
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
+                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.freeStartDate || item.startDate)),
+                    seats:JSON.stringify(list),
+                    signPrice:price,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                }
+                this.$http.post('get-seat-combin-detail', params).then( r => {
+                    this.openService = true;
+                    this.detailService = r.data
+
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+
+                })
             },
             changePrice(index,price){
                 this.selecedStationList = this.selecedStationList.map((item,i)=>{
@@ -1448,7 +1537,6 @@
             },
             checkDiscount(){
                 let value = this.discountNum;
-                console.log('checkDiscount======',value,typeof value)
                 if(isNaN(value)){
                     this.$Notice.error({
                         title:'折扣必须为数字'
@@ -1553,6 +1641,9 @@
                 this.back = back;
                 
             },
+            cancel(){
+                this.openService = false;
+            }
         }
     }
 

@@ -98,6 +98,30 @@
                     
             </div>
         </div>
+        <Modal
+            v-model="openService"
+            title="服务费明细"
+            ok-text="保存"
+            cancel-text="取消"
+            width="90%"
+            class-name="vertical-center-modal"
+         >
+           <div class="content">
+               
+               <div class="header" style="font-size:14px;">
+                   <span class="left">
+                      {{detailService.seatType =='SPACE'?'独立房间':'独立工位'}} {{detailService.codeName}}
+                   </span>
+                   <span class="right" style="float:right">
+                       ￥{{detailService.totalAmount}}
+                   </span>
+               </div>
+               <Table :columns="serviceColumns" style="margin:10px 0" :data="detailService.details"></Table>
+           </div>
+            <div slot="footer">
+                <Button type="primary" @click="cancel">确定</Button>
+            </div>
+        </Modal>
    </div>	
 </template>
 
@@ -107,6 +131,7 @@
     import SectionTitle from '~/components/SectionTitle.vue'
     import LabelText from '~/components/LabelText';
     import dateUtils from 'vue-dateutils';
+    import Buttons from '~/components/Buttons';
 
 export default {
 	name:'JoinView',
@@ -126,6 +151,7 @@ export default {
 	data(){
         console.log('detail',this.data)
 		return {
+            openService:false,
             inline:false,
             formItem:this.data,
             oldStatonColumns:[
@@ -257,7 +283,22 @@ export default {
                 {
                     title: '操作',
                     key: 'name',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                            return  h(Buttons, {
+                                    props: {
+                                        type: 'text',
+                                        label:'明细',
+                                        checkAction:'seat_order_view',
+                                        styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                    },
+                                    on: {
+                                        click: () => {
+                                           this.getServiceDetail(params.row)
+                                        }
+                                    }
+                                })
+                        }
                 },
             ],
             newInfoColumns:[
@@ -289,6 +330,45 @@ export default {
                     align: 'center'
                 },
             ],
+            detailService:{
+                codeName:'',
+                details:[],
+                totalAmount:'',
+                seatType:''
+            },
+            serviceColumns:[
+                {
+                    title: '服务期',
+                    key: 'reduceServiceFee',
+                    align: 'center',
+                    render:(h,params)=>{
+                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.start_date)) +'~'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.end_date))
+                    }
+                },
+                {
+                    title: '服务费计算说明',
+                    key: 'calculat_descr',
+                    align: 'center'
+                },
+                {
+                    title: '单价',
+                    key: 'unit_price',
+                    align: 'center'
+                },
+                {
+                    title: '数量',
+                    key: 'count',
+                    align: 'center'
+                },
+                {
+                    title: '小计',
+                    key: 'amount',
+                    align: 'right',
+                    render:(h,params)=>{
+                        return '￥'+params.row.amount;
+                    }
+                },
+            ]
 
 		}
 	},
@@ -327,7 +407,39 @@ export default {
                 });
 
             })
-		}
+		},
+        getServiceDetail(item){
+                console.log('getServiceDetail',item)
+                let list = item.seatIds.map(value=>{
+                    let obj = {};
+                    obj.seatId = value;
+                    obj.seatType = item.seatType;
+                    return obj;
+                })
+                let price = item.signPrice.split('元')[0]
+                let params = {
+                    codeName:item.name,
+                    endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
+                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.freeStartDate || item.startDate)),
+                    seats:JSON.stringify(list),
+                    signPrice:price,
+                    startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                }
+                this.$http.post('get-seat-combin-detail', params).then( r => {
+                    console.log('get-seat-combin-detail',r.data)
+                    this.openService = true;
+                    this.detailService = r.data
+                }).catch( e => {
+                    this.$Notice.error({
+                        title:e.message
+                    });
+
+                })
+                console.log('getServiceDetail',item)
+            },
+        cancel(){
+            this.openService = false;
+        }
 
 	}
 }

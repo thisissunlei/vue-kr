@@ -233,4 +233,9 @@ export default  {
         url: '/api/krspace-op-web/order-seat-replace/view',
         method: 'get'
     },
+    // 获取服务费明细
+    'get-seat-combin-detail': {
+        url: '/api/krspace-op-web/order-seat-detail/charge-detail',
+        method: 'post'
+    },
 }

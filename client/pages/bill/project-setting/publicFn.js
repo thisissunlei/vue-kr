@@ -167,6 +167,8 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
 }
 //计划于实际文字覆盖计算
 function fontCover(planContentId, actualContentId) {
+
+    console.log(planContentId, actualContentId,"ppppp")
     let planDom = document.getElementById(planContentId);
     let actualDom = document.getElementById(actualContentId);
     if (!planDom || !actualDom) {
@@ -238,11 +240,11 @@ function getDivColor(value){
             return '#fff';
             break;
         case 'UNDERWAY':
-            return 'rgb(255, 214, 105)';
+            return '#F5A623';
             break;
        
         case 'OVERDUE':
-            return 'rgb(246, 156, 156)';
+            return '#FF6868';
             break;
         case 'PLANNED':
             return '#fff';

@@ -69,7 +69,7 @@
                     :watchTotalCount="watchTotalCount"
                     :watchPage = "watchPage"
                 />
-              
+              <div slot="footer"></div>
         </Modal>
 
         <Modal

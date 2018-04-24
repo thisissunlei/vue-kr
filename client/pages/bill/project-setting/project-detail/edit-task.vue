@@ -29,7 +29,7 @@
                     <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                 </div>
             </ClassificationBox>
-            <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请填写计划工期）'" title="执行情况" :isBorder="true" type="num">
+            <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
                         <Tooltip placement="top" class="start">
@@ -281,12 +281,14 @@ export default {
             width: 100px;
             text-align: left;
             float: left;
+            font-weight: normal;
            
         }
         .ui-text{
             width: 450px;
             vertical-align: top;
             line-height: 1.5;
+            font-weight: bold;
         }
     }
   
@@ -411,7 +413,6 @@ export default {
                         overflow:hidden;
                         position:absolute;
                         border-width:8px;
-                        /*可在此处更改小三角方向：上-右-下-左（solid的位置）*/
                         border-style: solid;
                     }
                     .t-border{

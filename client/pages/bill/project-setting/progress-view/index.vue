@@ -602,6 +602,7 @@ export default {
                     // width:58px !important;
                     // left: 56px;
                     top: auto;
+                    border:0px;
                 }
             }
             .chart-left-table{

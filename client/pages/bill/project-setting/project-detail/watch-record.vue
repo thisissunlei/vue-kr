@@ -68,7 +68,7 @@ export default {
     },
     data(){
         return{
-            totalCount:0,
+            totalCount:this.watchTotalCount,
             pageSize:15,
             page:1,
             params:{

@@ -259,12 +259,12 @@ var layoutScrollHeight=0;
         methods:{
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
-                delete this.tabForms.inventoryDate;
                 this.getTableData(this.tabForms); 
             },
             //获取列表数据
             getTableData(values){
                 var params=Object.assign({},values);
+                params.inventoryDate=this.dateSwitch(params.inventoryDate);
                 params.startDate=this.dateSwitch(params.startDate);
                 params.endDate=this.dateSwitch(params.endDate);
                 this.$http.get('getOptionalInventory', params).then((res)=>{
@@ -297,6 +297,7 @@ var layoutScrollHeight=0;
             },
             //获取统计数据
             getStatistal(){
+                this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
                 this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
                 this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                  this.$http.get('getOptionalStatiscal',this.tabForms).then((res)=>{

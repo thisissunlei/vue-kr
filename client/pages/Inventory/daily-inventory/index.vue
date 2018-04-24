@@ -216,6 +216,7 @@ var layoutScrollHeight=0;
                     {
                         title: '当日库存',
                         key: 'statusName',
+                        className:'statusClass',
                         align:'center',
                         width:90,
                         render(tag, params){
@@ -288,6 +289,8 @@ var layoutScrollHeight=0;
             getTableData(values){
                 var params=Object.assign({},values);
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
+                params.startDate=this.dateSwitch(params.startDate);
+                params.endDate=this.dateSwitch(params.endDate);
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -319,6 +322,8 @@ var layoutScrollHeight=0;
             //获取统计数据
             getStatistal(){
                  this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
+                 this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
+                 this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                  this.$http.get('getDailyStatiscal',this.tabForms).then((res)=>{
                     this.dailyInnerData=res.data;
                 }).catch((error)=>{
@@ -459,6 +464,11 @@ var layoutScrollHeight=0;
                 .ivu-table-cell{
                     padding:0;
                     padding-right:5px;
+                }
+            }
+            .statusClass{
+                .ivu-table-cell{
+                    padding:0 5px;
                 }
             }
             .daily-here-date{

@@ -44,7 +44,7 @@ function getScrollHeight(){
 }
 //获取今天的日期
 function getToDay() {
-    var today = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date());
+    var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
     return today; 
 }
 //日期转毫秒

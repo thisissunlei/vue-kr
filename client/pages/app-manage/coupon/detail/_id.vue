@@ -54,8 +54,22 @@
                   </LabelText>
              </DetailStyle>
             <DetailStyle info="领取记录">
-            
-            </DetailStyle>
+               <div class="u-table">
+                    <Table  border :columns="columns" :data="couponList"/>
+                    <div class="u-page">
+                        <div style="float: right;">
+                            <Page 
+                                :current="page"
+                                :total="totalCount"
+                                :page-size="pageSize" 
+                                show-total 
+                                show-elevator
+                                @on-change="changePage"
+                            />
+                        </div>
+                    </div>
+                </div>
+              </DetailStyle>
         </div>
   </div>
 </template>
@@ -73,12 +87,51 @@ export default {
     },
     data(){
       return{
-        basicInfo:{}
+        basicInfo:{},
+        couponList:[],
+        columns:[
+          {
+              title: '序号',
+              key: 'mbrName',
+              align:'center'
+          },
+          {
+              title: '姓名',
+              key: 'mbrName',
+              align:'center'
+          },
+          {
+              title: '手机号',
+              key: 'mbrName',
+              align:'center'
+          },
+          {
+              title: '所在社区',
+              key: 'mbrName',
+              align:'center'
+          },
+          {
+              title: '所属团队',
+              key: 'mbrName',
+              align:'center'
+          },
+          {
+              title: '领取时间',
+              key: 'mbrName',
+              align:'center'
+          },
+        ]
       }
     },
     mounted:function(){
         //this.getInfo();
-        GLOBALSIDESWITCH("false")
+        GLOBALSIDESWITCH("false");
+        this.couponList=[
+          {
+            mbrName:111
+          }
+        ]
+
 	 },
    methods:{
 		
@@ -127,6 +180,15 @@ export default {
             margin-bottom:30px;
         }
     }
+    .u-table{
+        padding:0 20px;
+        .u-page{
+          margin:10px ;
+          padding-bottom:5px;
+          overflow: hidden;
+
+        }
+    } 
     
 }
 

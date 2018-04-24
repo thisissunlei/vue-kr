@@ -25,7 +25,7 @@
                             <FormItem label="相关社区" class="bill-search-class" prop="communityId"> 
                                 <Select 
                                     v-model="formItem.communityId" 
-                                    placeholder="请输入社区名称" 
+                                    :placeholder="formItem.communityName" 
                                     style="width: 252px"
                                     filterable
                                     clearable
@@ -327,7 +327,7 @@
             </div>
         </Modal>
         <div class="view" v-if="orderStatus=='view'">
-            <ReplaceView @editCards="editCard" :showEdit="editCardabled"  :data.sync="overViewData"/>
+            <ReplaceView @editCards="editCard" :showEdit="editCardabled" :data.sync="overViewData"/>
         </div>
     </div>
 </template>
@@ -362,11 +362,12 @@
                 today = today.setDate(today.getDate()+1);
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
                 today = new Date(today).getTime()
+                value = new Date(value).getTime()
                 if (value === '') {
                     callback(new Error('请先选择换租服务开始日'));
-                } else if(value.getTime() < today){
+                } else if(value < today){
                     callback(new Error('换租服务开始日不得小于等于今日'));
-                }else if(value.getTime() > this.oldStation[0].leaseEnddate){
+                }else if(value > this.oldStation[0].leaseEnddate){
                      callback(new Error('换租服务开始日不得大于原结束日期'));
                 }else{
                      callback();
@@ -661,7 +662,7 @@
                 },
                 ruleValidateFour:{
                     transferDepositAmount:[
-                        { required: true, message: '请填写', trigger: 'blur' }
+                        { required: true, message: '请填写正确的金额', trigger: 'blur' }
 
                     ],
 
@@ -760,7 +761,7 @@
 
         head() {
             return {
-                title: '新建换租订单'
+                title: '编辑换租订单'
             }
         },
         components: {
@@ -773,6 +774,7 @@
          mounted(){
             GLOBALSIDESWITCH("false");
             GLOBALHEADERSET('订单合同');
+            this.getDetailData()
         },
         watch:{
             getFloor(){
@@ -826,6 +828,7 @@
                     }
                     return false
                 })
+                console.log('selectedOldStation',this.selectedOldStation)
             },
             next(name){
                 if(name == 'formItemTwo'){
@@ -845,11 +848,15 @@
 
                         if(name == 'formItemOne'){
                             this.getOldStation()
+                            console.log('leaseBegindate',this.formItem.leaseBegindate)
 
                         }
                         if(name == 'formItemTwo'){
                             this.getSelectedOldStation()
-
+                            if(this.formItem.oldSeatInfo.length){
+                                this.getSaleList(this.formItem.leaseEnddate)
+                            }
+                            console.log('====')
                             if(!this.selectedOldStation.length){
                                 this.errorObj.oldStation = true;
                             }else{
@@ -964,6 +971,7 @@
                     this.getCustomerToCom()
                 }
             },
+            //获取客户对应的社区
             getCustomerToCom(){
                 let params = {
                     customerId:this.formItem.customerId
@@ -975,7 +983,6 @@
                             return item
                         });
                 }).catch( (error) => {
-                    alert('社区错了')
                     this.communityList = []
                     this.$Notice.error({
                         title:error.message
@@ -984,8 +991,10 @@
                 })
             },
             clearStepData(){
-                this.formItem.leaseBegindate     = '';
+                console.log('清除time')
+                this.formItem.leaseBegindate = '';
                 this.selectedOldStation=[];
+                this.formItem.oldSeatInfo = []
             },
             changeCommunity(value){
                 // 选择社区
@@ -996,11 +1005,10 @@
                     this.formItem.communityId = '';
                     this.formItem.communityName = '';
                 }
-                //清除step1以后所有内容
-                //清除step2数据
-                this.clearStepData()
-                //
-                //
+                if(value.value != this.formItem.communityId){
+                    this.clearStepData() //清除step2数据
+                }
+               
                 this.getFloor = +new Date()
             },
             //获取原有工位数据
@@ -1012,6 +1020,7 @@
                 if(this.selectedOldStation.length){
                     return;
                 }
+                
                 this.$http.get('get-order-seat', params).then( r => {
                     this.selectAllAbled = true;
                     this.oldStation = r.data.map(item=>{
@@ -1019,15 +1028,44 @@
                         item.disabled = true;
                         return item
                     })
+                    if(this.formItem.oldSeatInfo.length){
+                        this.setOldSeatInfo()
+                    }
                 }).catch( e => {
                     this.$Notice.error({
                         title:e.message
                     })
                 })
             },
+            // 编辑第一次回显旧工位实际
+            setOldSeatInfo(){
+                console.log('旧工位回显',this.oldStation)
+                let list = []
+                let time = new Date(this.formItem.leaseBegindate).getTime()
+                this.formItem.oldSeatInfo.map((value)=>{
+                    list = this.oldStation.map(item=>{
+                        if(value.seatNum == item.seatNum && value.startDate == item.startDate){
+                            item.checked = true;
+                            item.disabled = false;
+                            
+                        }
+                        if(time<item.startDate || time>item.endDate){
+                                item.disabled = true;
+                                this.selectAllAbled = true;
+                            }else{
+                                item.disabled = false;
+                            }
+                        return item
+                    })
+                })
+                this.oldStation = list;
+                this.getSelectedOldStation()
+                console.log('回显结果',list)
+
+            },
             changeBeginTime(value){
                 //TODO 联调时需修改判断条件
-
+                console.log('changeBeginTime',value)
                 //出发更新列表中的欲更换信息
                 var today = new Date()
                 this.selectAllChecked = false;
@@ -1059,7 +1097,6 @@
                         return item
                     })
                 //清除step3的数据
-                // this.resetForm('formItemThree')
                 this.clearFormThree()
 
             },
@@ -1091,6 +1128,7 @@
                 }
             },
             clearFormThree(){
+                console.log('clearFormThree')
                 this.selecedStationList = [];
                 this.discountType = '';
                 this.freeType = '';
@@ -1099,6 +1137,7 @@
                 this.serviceDetailsList = []
             },
             clearFormFour(){
+                console.log('clearFormFour')
                 this.back = '';
                 this.formItem.transferDepositAmount = ''
             },
@@ -1417,12 +1456,17 @@
             },
             // 获取step3的服务费用明细
             getSeatCombin(){
+                let list = this.selecedStationList.map(item=>{
+                    item.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
+                    item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
+                    return item
+                })
                 let params = {
                     communityId:this.formItem.communityId,
                     leaseBegindate :dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     leaseEnddate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate)),
                     saleList:JSON.stringify(this.saleList || []),
-                    seats:JSON.stringify(this.selecedStationList)
+                    seats:JSON.stringify(list)
                 }
 
                 this.$http.post('get-seat-combin', params).then( r => {
@@ -1609,6 +1653,7 @@
                 })
             },
             getBack(){
+                console.log('getback')
                 let value = this.formItem.transferDepositAmount;
                 let changeDeposit = this.newStationData[0].changeDeposit;
                 if(isNaN(value)){
@@ -1630,7 +1675,7 @@
                     return;
 
                 }
-                if(value>changeDeposit){
+                if(value>=changeDeposit){
                     this.$Notice.error({
                         title:'旧服务保证金转新金额不得大于'+changeDeposit
                     })
@@ -1644,7 +1689,64 @@
             },
             cancel(){
                 this.openService = false;
-            }
+            },
+            getDetailData(){
+            let {params}=this.$route;
+            let from={
+                id:params.orderEdit
+            };
+            this.$http.get('get-replace-detail', from).then((response)=>{  
+                    let overViewData = response.data;
+
+                    this.selecedStationList = response.data.newSeatInfo.map(item=>{
+                        item.originalPrice = item.marketPrice;
+                        item.name = item.seatNum;
+                        item.saleNum = response.data.discount || '-';
+                        item.discountedPrice = item.signPrice;
+                        item.startDate = response.data.realStartDate;
+                        item.endDate = response.data.newSeatCombin[0].endDate
+                        return item;
+                    })
+
+                    this.serviceDetailsList = response.data.newSeatCombin
+                    let array = [];
+                    array.push(response.data.feeResultVO)
+                    overViewData.newStationData = array;
+                    overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
+                        item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
+                        item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
+                        return item;
+                    });
+
+                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                    overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit
+                    
+
+                    overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
+                    overViewData.startDate = response.data.realStartDate
+                    overViewData.back = response.data.feeResultVO.lockDeposit
+                    this.formItem = overViewData;
+                    this.formItem.signDate = new Date();
+                    this.formItem.leaseBegindate = response.data.realStartDate;
+                    this.formItem.leaseEnddate = response.data.newSeatCombin[0].endDate;
+                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit;
+                    this.back  = response.data.feeResultVO.lockDeposit;
+                    this.installmentType = response.data.installmentType
+                    this.formItem.communityId = response.data.communityId+'';
+                    let _this = this;
+                    console.log('获取编辑的基础数据',this.formItem)
+                    setTimeout(function(){
+                        _this.getCustomerToCom()
+                    },200)
+                    
+                    
+
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+            })
+        },
         }
     }
 

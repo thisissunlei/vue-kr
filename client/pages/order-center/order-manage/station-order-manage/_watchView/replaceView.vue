@@ -1,6 +1,6 @@
 <template>
 	<div class="g-order-detail">
-            <ReplaceView @editCards="editCard" :data.sync="overViewData" type="view"
+            <ReplaceView :editCard="editCard" :data.sync="overViewData" type="view"
             v-if="show"/>
 		
 	</div>	
@@ -84,6 +84,7 @@ export default {
 							overViewData.installmentName = item.label
 						}
 					})
+					overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit
 					
 
 					overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;

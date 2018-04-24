@@ -6,7 +6,7 @@
                 <p slot="title" class="card-title">
                    基本信息
                 </p>
-                <a v-if="editCard == true" href="#" slot="extra" @click.prevent="editCard(0)">
+                <a v-if="showEdit == true" href="#" slot="extra" @click.prevent="editCard(0)">
                 	编辑
 		        </a>
                 <span class="card-header"></span>
@@ -26,7 +26,7 @@
                 <p slot="title" class="card-title">
                    原工位信息
                 </p>
-                <a v-if="editCard == true" href="#" slot="extra" @click.prevent="editCard(1)">
+                <a v-if="showEdit == true" href="#" slot="extra" @click.prevent="editCard(1)">
                 	编辑
 		        </a>
                 <span class="card-header"></span>
@@ -44,7 +44,7 @@
                 <p slot="title" class="card-title">
                     新工位信息
                 </p>
-                <a v-if="editCard == true" href="#" slot="extra" @click.prevent="editCard(2)">
+                <a v-if="showEdit == true" href="#" slot="extra" @click.prevent="editCard(2)">
                 	编辑
 		        </a>
                 <span class="card-header"></span>
@@ -73,7 +73,7 @@
                 <p slot="title" class="card-title">
                     服务费信息
                 </p>
-                <a v-if="editCard == true" href="#" slot="extra" @click.prevent="editCard(3)">
+                <a v-if="showEdit == true" href="#" slot="extra" @click.prevent="editCard(3)">
                 	编辑
 		        </a>
                 <span class="card-header"></span>
@@ -142,7 +142,11 @@ export default {
     },
     props:{
         data:Object,
-        type:String
+        type:String,
+        showEdit:{
+            type:Boolean,
+            default:true
+        }
     },
 	components:{
 		SectionTitle,

@@ -390,6 +390,9 @@ import Loading from '~/components/Loading'
     .table-null{
         line-height: 47px;
     }
+    .ivu-modal-footer{
+    padding-top:10px; 
+}
     .current-range{
         //border-bottom: none;
         .ivu-table-cell{

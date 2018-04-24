@@ -29,24 +29,11 @@
                     <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                 </div>
             </ClassificationBox>
-            <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
+            <ClassificationBox value="2" :promptText="editActualEndTime('title')?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
-                        <Form-item 
-                            v-if="actualStart"
-                            label="开始日" 
-                            class="bill-search ">
-                                <DatePicker 
-                                    v-model="params.actualStartTime"
-                                    type="date" 
-                                    :clearable="false"
-                                    placeholder="开始日期" 
-                                    style="width: 245px"
-                                    @on-change="actualStartChange"
-                                />
-                                <span class="u-date-txt"></span>
-                            </Form-item>
-                        <Tooltip v-if="!actualStart" placement="top" class="start">
+                        
+                        <!-- <Tooltip v-if="!actualStart" placement="top" class="start"> -->
                             <Form-item label="开始日" class="bill-search ">
                                 <DatePicker 
                                     v-model="params.actualStartTime"
@@ -56,33 +43,22 @@
                                     style="width: 245px"
                                     @on-change="actualStartChange"
                                 />
+                               
                                 <span class="u-date-txt"></span>
+                                <div 
+                                    v-if="editActualEndTime('start') && !this.actualStart" 
+                                    class="actual-select-today" 
+                                    @click="selectTodayStart"
+                                >
+                                    今天开始的？
+                                </div>
+                                <div v-if="!editActualEndTime('start')" class="mask"></div>
                             </Form-item>
-                            <div 
-                                slot="content" 
-                                class="actual-select-today" 
-                                @click="selectTodayStart"
-                            >
-                                今天开始的？
-                            </div>
-                        </Tooltip>
-                        <Form-item 
-                            v-if="actualEnd"
-                            class="end" 
-                            label="结束日"  
-                            prop="actualEndTime" 
-                            style="display:inline-block;">
-                            <DatePicker 
-                                v-model="params.actualEndTime"
-                                type="date" 
-                                :clearable="false"
-                                placeholder="结束日期" 
-                                style="width: 245px"
-                                @on-change="actualEndChange"
-                            /> 
-                        </Form-item>
-                        <Tooltip v-if="!actualEnd" placement="top" class="end">
-                            <Form-item class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
+                            
+                        <!-- </Tooltip> -->
+                       
+                        <!-- <Tooltip v-if="!actualEnd" placement="top" class="end"> -->
+                            <Form-item  class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
                                 <DatePicker 
                                     v-model="params.actualEndTime"
                                     type="date" 
@@ -91,16 +67,18 @@
                                     style="width: 245px"
                                     @on-change="actualEndChange"
                                 /> 
+                                <div 
+                                    v-if="editActualEndTime('end')&&!this.actualEnd" 
+                                    class="actual-select-today"
+                                    @click="selectTodayEnd"
+                                >今天完成的?</div>
+                                 <div v-if="!editActualEndTime('end')" class="mask"></div>
                             </Form-item>
-                            <div 
-                                slot="content" 
-                                class="actual-select-today"
-                                @click="selectTodayEnd"
-                            >今天完成的?</div>
-                        </Tooltip>   
+                          
+                        <!-- </Tooltip>    -->
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
                         <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
-                        <div v-if="!editActualEndTime()" class="mask"></div>
+                       
                     </div>
 
                     <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
@@ -205,8 +183,15 @@ export default {
     },
    
     methods:{
-        editActualEndTime(){
-            if(this.planStart && this.planEnd && this.planStart<=this.planEnd){
+        editActualEndTime(value){
+            
+            if(value == "start" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
+                return true;
+            }
+            if(value=="end"&& this.planStart && this.planEnd && this.planStart<=this.planEnd && this.actualStart){
+                return true;
+            }
+            if(value == "title" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
                 return true;
             }
             return false;
@@ -329,9 +314,34 @@ export default {
         background:#F6F6F6;
         padding:10px;
         border-radius:4px; 
+        position: relative;
     }
     .actual-select-today{
+        position: absolute;
+        top: -43px;
+        left: 50px;
         cursor: pointer;
+        max-width: 250px;
+        min-height: 34px;
+        padding: 0px 12px;
+        color: #fff;
+        text-align: left;
+        text-decoration: none;
+        background-color: rgba(70,76,91,.9);
+        border-radius: 4px;
+        box-shadow: 0 1px 6px rgba(0,0,0,.2);
+        white-space: nowrap;
+    }
+    .actual-select-today::before{
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -5px;
+        top: 50%;
+        margin-top: -3px;
+        border-width: 5px 5px 5px 0;
+        border-right-color: rgba(70,76,91,.9);
+        border-style: solid;
     }
     //时间样式修改
     .ivu-date-picker-rel{
@@ -356,12 +366,14 @@ export default {
             position: absolute !important;
             left: 50px !important;
             top: -10px !important;
+            display: block !important;
            
         }
         .end .ivu-tooltip-popper{
             position: absolute !important;
             left: 50px !important;
             top: -10px !important;
+            display: block !important;
         }
         .ivu-tooltip-arrow{
             position: absolute;
@@ -380,6 +392,7 @@ export default {
     }
     
     .bill-search{
+        position: relative;;
         display:inline-block;
         // padding-left:32px;
         .u-date-txt{

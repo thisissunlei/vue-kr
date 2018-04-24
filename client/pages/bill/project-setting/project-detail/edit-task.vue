@@ -1,115 +1,151 @@
 <template>
-  <div class="edit-task">
-      <Form ref="formItem" :model="formItem"  :rules="ruleValidate" label-position="top" style="margin-top:25px;max-height:556px;overflow-y:scroll;overflow-x:hidden;">
-                    <Form-item label="任务名称"  class="bill-search-class" prop="name" style="width:100%;">
-                        <i-input 
-                            v-model="formItem.name" 
-                            placeholder="请输入任务名称"
-                            style="width: 252px"
-                            @on-change="nameChange"
-                            disabled 
-                        />
-                    </Form-item>
-
-                    <Form-item label="管理层关注"  class="bill-search-class pop-position" prop="focus">
-                            <RadioGroup v-model="formItem.focus">
-                                <div class='single-radio-ok'><Poptip  content="设置为“管理层关注”任务后，该任务会在项目总览中显示">
-                                    <Radio label="1">是</Radio>
-                                </Poptip></div>
-                                <div class='single-radio-no'><Poptip  content="取消设置“管理层关注”任务后，该任务不会在项目总览中显示">
-                                    <Radio label="0">否</Radio>
-                                </Poptip></div>
-                            </RadioGroup>
-                    </Form-item>
-
-                    <Form-item label="责任部门"  class="bill-search-class dep-class">
-                        <span>{{getEdit.department}}</span>
-                    </Form-item>
-
-                    <Form-item label="计划起止日期" class="bill-search" prop="planStartTime">
+    <div class="edit-task">
+        <Form  :model="params"   label-position="top" style="margin-top:25px;">
+            <ClassificationBox value="1" title="计划工期" :isBorder="true" type="num">
+                <div slot="content" class="time-box plan-time" > 
+                    <Form-item label="开始日" class="bill-search" prop="planStartTime">
                         <DatePicker 
-                            v-model="formItem.planStartTime"
+                        
+                            v-model="params.planStartTime"
                             type="date" 
                             placeholder="开始日期" 
-                            style="width: 252px"
+                            style="width: 245px"
+                            :clearable="false"
                             @on-change="planStartChange"
                         />
-                        <span class="u-date-txt" >至</span>
+                        <span class="u-date-txt" ></span>
                     </Form-item>
-                    <Form-item prop="planEndTime" style="display:inline-block;vertical-align: middle;margin-top: 22px;padding-left: 0px;">
+                    
+                    <Form-item label="结束日"  prop="planEndTime" style="display:inline-block;">
                         <DatePicker 
-                            v-model="formItem.planEndTime"
+                            v-model="params.planEndTime"
                             type="date" 
                             placeholder="结束日期" 
-                            style="width: 252px"
+                            style="width: 245px"
+                            :clearable="false"
                             @on-change="planEndChange"
                         /> 
-                   </Form-item>
-                   <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
-              
-
-                   <Form-item label="完成起止日期" class="bill-search">
-                        <DatePicker 
-                            v-model="formItem.actualStartTime"
-                            type="date" 
-                            placeholder="开始日期" 
-                            style="width: 252px"
-                            @on-change="actualStartChange"
-                        />
-                        <span class="u-date-txt">至</span>
-                        <DatePicker 
-                            v-model="formItem.actualEndTime"
-                            type="date" 
-                            placeholder="结束日期" 
-                            style="width: 252px"
-                            @on-change="actualEndChange"
-                        /> 
-                   </Form-item>
-                   <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
-        
-
-                    <FormItem label="任务描述"  class="bill-search-class" style="width:575px;margin-bottom: 5px;">
-                            <Input v-model="formItem.descr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入任务描述..."/>
-                            <div style="text-align:right">{{formItem.descr?formItem.descr.length+"/500":0+"/500"}}</div>
-                    </FormItem>
-
-
-              <div class='edit-record'>
-                    <FormItem label="内部备注" style="width:545px;margin-left:10px;">
-                            <Input v-model="formItem.operDescr" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入内部备注..."/>
-                            <div style="text-align:right">{{formItem.operDescr?formItem.operDescr.length+"/500":0+"/500"}}</div>
-                    </FormItem>
-   
-                    <div class='title-wrap'>
-                        <span class='title-record'>编辑记录</span>
-                        <div
-                            class='record-wrap'
-                            v-for="item in getEdit.operLogs" 
-                            :key="item.id"
+                    </Form-item>
+                    <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
+                </div>
+            </ClassificationBox>
+            <ClassificationBox value="2" title="执行情况" :isBorder="true" type="num">
+                <div slot="content" > 
+                    <div class="time-box actual-time" >
+                        <Tooltip placement="top" class="start">
+                            <Form-item label="开始日" class="bill-search ">
+                                <DatePicker 
+                                    v-model="params.actualStartTime"
+                                    type="date" 
+                                    :clearable="false"
+                                    placeholder="开始日期" 
+                                    style="width: 245px"
+                                    @on-change="actualStartChange"
+                                />
+                                <span class="u-date-txt"></span>
+                            </Form-item>
+                            <div 
+                                slot="content" 
+                                class="actual-select-today" 
+                                @click="selectTodayStart"
                             >
-                                <div class='first'><span class='circle'></span>{{item.uTime|dateFormat('MM-dd HH:mm')}}</div>
-                                <div style="display:inline-block;">
-                                    <div class='second'>
-                                        <span style="padding-right: 10px;">{{item.updatorName}}</span>
-                                        <span>{{item.comment}}</span>
-                                    </div>
-                                    <div class='third' v-if="item.descr">
-                                        {{item.descr}}
-                                    </div>
+                                今天开始的？
+                            </div>
+                        </Tooltip>
+                        <Tooltip placement="top" class="end">
+                            <Form-item class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
+                                <DatePicker 
+                                    v-model="params.actualEndTime"
+                                    type="date" 
+                                    :clearable="false"
+                                    placeholder="结束日期" 
+                                    style="width: 245px"
+                                    @on-change="actualEndChange"
+                                /> 
+                            </Form-item>
+                            <div 
+                                slot="content" 
+                                class="actual-select-today"
+                                @click="selectTodayEnd"
+                            >今天完成的?</div>
+                        </Tooltip>   
+                        <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
+                        <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
+                    </div>
+
+                    <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                        <div>需要填写档案10项，尚未完成3箱，<span style="color:#499DF1;">去填写&nbsp;>></span></div>
+                    </div> -->
+                </div>
+            </ClassificationBox>
+            
+            <ClassificationBox value="3" title="基本信息" :isBorder="true" type="num">
+                <div slot="content"> 
+
+                    <LabelText label="管理层关注" >
+                        {{params.focus=="0"?'否':'是'}}
+                    </LabelText>
+                    <LabelText label="责任部门" >
+                        {{getEdit.department}}
+                    </LabelText>
+                   
+                    <div>
+                        <LabelText label="上游任务" >
+                           {{!params.upstream?'-':params.upstream}}
+                        </LabelText>
+                    </div>
+                     <div>
+                        <LabelText label="下游任务" >
+                            {{!params.downstream?'-':params.downstream}}
+                        </LabelText>
+                    </div>
+                    <LabelText label="描述" >
+                        {{!params.descr?'-':params.descr}}
+                    </LabelText>
+                </div>
+                
+            </ClassificationBox>
+            <ClassificationBox value="4" title="编辑记录" :isBorder="true" :isEnd="true" type="num">
+                <div class="edit-record" slot="content">
+                    <div
+                        class='record-wrap'
+                        v-for="item in getEdit.operLogs" 
+                        :key="item.id"
+                    >
+                        <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
+                        <div style="display:inline-block;">
+                            <div class='second'>
+                                <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
+                                <span >{{item.comment}}</span>
+                            </div>
+                            <div class='third' v-if="item.descr">
+                                 <div class="mod-triangle">
+                                    <div class="t-border"></div>
+                                    <div class="t-inset"></div>
                                 </div>
+                                {{item.descr}}
+                               
+                            </div>
                         </div>
                     </div>
                 </div>
-
-         </Form>
-  </div>
+            </ClassificationBox>                
+        </Form>
+    </div>
 </template>
 
 
 <script>
 import dateUtils from 'vue-dateutils';
+import ClassificationBox from '~/components/ClassificationBox'
+import LabelText from '~/components/LabelText'
+
 import Vue from 'vue';
 export default {
+    components:{
+        ClassificationBox,
+        LabelText
+    },
     props:{
         id:{
             type:[Number,String]
@@ -123,31 +159,8 @@ export default {
         return{
             dateError:false,
             cDateError:false,
-            formItem:{
-                name:this.getEdit.name?this.getEdit.name:'',
-                planStartTime:this.getEdit.planStartTime?this.getEdit.planStartTime:'',
-                planEndTime:this.getEdit.planEndTime?this.getEdit.planEndTime:'',
-                actualStartTime:this.getEdit.actualStartTime?this.getEdit.actualStartTime:'',
-                actualEndTime:this.getEdit.actualEndTime?this.getEdit.actualEndTime:'',
-                descr:this.getEdit.descr?this.getEdit.descr:'',
-                operDescr:this.getEdit.operDescr?this.getEdit.operDescr:'',
-                focus:this.getEdit.focus
-            },
-            ruleValidate: {
-                name: [
-                    { required: true, message: '请输入任务名称且最多20个字符', trigger: 'change',max:20 }
-                ],
-                planStartTime:[
-                    { required: true,type: 'date', message: '请输入开始日期', trigger: 'change' }
-                ],
-                planEndTime:[
-                    { required: true, type: 'date',message: '请输入结束日期', trigger: 'change' }
-                ],
-                focus:[
-                    { required: true, message: '请选择是否关注', trigger: 'change' }
-                ]
-            },
-
+            cDateError1:false,
+            params:this.getFormItem(),
             actualStart:this.getEdit.actualStartTime,
             actualEnd:this.getEdit.actualEndTime,
             planStart:this.getEdit.planStartTime,
@@ -155,61 +168,96 @@ export default {
         }
     },
     created(){    
-        this.queryData=this.$route.query; 
+        // this.queryData=this.$route.query; 
     },
-    updated:function(){
-        this.$emit('bindData',this.formItem,this.dateError,this.cDateError);
+    mounted(){
+         
     },
+   
     methods:{
-        nameChange(event){
-            this.formItem.name=event.target.value.trim();
-            if(!this.formItem.name){
-                return ;
-            }
-            let params={
-                name:event.target.value,
-                propertyId:this.queryData.id,
-                id:this.id
-            }
-            this.$http.get('project-name-check',params).then((response)=>{
-                    this.formItem.error=false;
-                 }).catch((error)=>{
-                     this.$Notice.error({
-                        title: error.message,
-                    });
-                    this.formItem.error=true;
-                 })
+        getFormItem(){
+          
+            return Object.assign({},this.getEdit)
+        },
+        selectTodayStart(){
+           
+            this.params.actualStartTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            this.actualStartChange( this.params.actualStartTime)
+        },
+        selectTodayEnd(){
+        
+            this.params.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
+            this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
-            this.planStart=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+            this.planStart=params;  
+
+            if(this.planStart ||
+                this.planStart && this.planEnd ||
+                this.planStart && this.planEnd && this.actualStart ||
+                this.planStart && this.planEnd && this.actualStart && this.actualEnd
+                
+            ){
+                if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+                    this.dateError=true;
+                }else{
+                    this.dateError=false;
+                    this.cDateError=false;
+                    this.params.planStartTime = params;
+                    var data = Object.assign({},this.params);
+                
+                    this.$emit('dataChange',data)
+                }
+            }else {
                 this.dateError=true;
-            }else{
-                this.dateError=false;
             }
+
         },
         planEndChange(params){
             this.planEnd=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-                this.dateError=true;
-            }else{
+
+            if((this.planStart && this.planStart>this.planEnd) &&
+                ((this.actualStart&&this.actualEnd&&this.actualStart<this.actualEnd)||this.actualStart && !this.actualEnd)){
                 this.dateError=false;
+                this.cDateError=false;
+                this.params.planEndTime = params;
+                var data = Object.assign({},this.params);
+                
+                this.$emit('dataChange',data)
+            }else {
+                this.dateError=true;
             }
+
         },
         actualStartChange(params){
-            this.actualStart=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
-                this.cDateError=true;
-            }else{
+             this.actualStart=params;
+            if(this.planStart&&this.planEnd && this.planStart<this.planEnd && 
+                ((!this.actualEnd)||
+                (this.actualStart<this.actualEnd))){
                 this.cDateError=false;
+                this.cDateError=false;
+                this.params.actualStartTime = params;
+                var data = Object.assign({},this.params);
+                this.$emit('dataChange',data)
+            }else {
+                this.cDateError=true;
             }
+           
+           
         },
+        
         actualEndChange(params){
+             
             this.actualEnd=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
-                this.cDateError=true;
-            }else{
+
+            if(this.planStart&&this.planEnd&&this.actualStart&&this.actualEnd&&this.planStart<=this.planEnd&&this.actualStart<=this.actualEnd){
                 this.cDateError=false;
+                this.cDateError=false;
+                this.params.actualEndTime = params;
+                var data = Object.assign({},this.params);
+                this.$emit('dataChange',data)
+            }else {
+                this.cDateError=true;
             }
         }
     }
@@ -223,40 +271,93 @@ export default {
         display:inline-block;
         width:50%;
         padding-left:32px;
+        padding-bottom: 20px;
     }
     .dep-class{
         .ivu-form-item-content{
             line-height:34px;
         }
     }
-    .pop-position{
-        .ivu-poptip-popper{
-            .ivu-poptip-arrow{
-            border-top-color: rgba(0,0,0,0.7);
-            }
-            .ivu-poptip-arrow:after{
-                border-top-color: rgba(0,0,0,0.1);
-            }
-            .ivu-poptip-inner{
-                background-color: rgba(0,0,0,0.7);
-            }
-            .ivu-poptip-body-content-inner{
-                color:#fff;
-            }
+    .ui-labeltext{
+        display: block;
+        height: auto;
+        width: auto;
+        .ui-label{
+            width: 100px;
+            text-align: left;
+            float: left;
+           
         }
-        .single-radio-ok{
-            display:inline-block;
-            margin-right:40px;
-        }
-        .single-radio-no{
-            display:inline-block;
+        .ui-text{
+            width: 450px;
+            vertical-align: top;
+            line-height: 1.5;
         }
     }
+  
+    
+    .ivu-form-item{
+        margin-bottom: 0px;
+    }
+    .time-box{
+        background:#F6F6F6;
+        padding:10px;
+        border-radius:4px; 
+    }
+    .actual-select-today{
+        cursor: pointer;
+    }
+    //时间样式修改
+    .ivu-date-picker-rel{
+        input{
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+    }
+    .actual-time{
+        .ivu-tooltip, .ivu-tooltip .ivu-tooltip-rel{
+             width: auto;
+             position: relative;
+        }
+       .ivu-date-picker-rel{
+            input{
+                color: #333;
+                font-size: 14px;
+            }
+        } 
+        .start .ivu-tooltip-popper{
+            position: absolute !important;
+            left: 50px !important;
+            top: -10px !important;
+           
+        }
+        .end .ivu-tooltip-popper{
+            position: absolute !important;
+            left: 50px !important;
+            top: -10px !important;
+        }
+        .ivu-tooltip-arrow{
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            bottom: 3px;
+            border-width: 5px;
+            border-right-color: rgba(70,76,91,.9);
+            margin-left: auto;
+            top: 50%;
+            left: -10px;
+            margin-top: -5px;
+        }
+    }
+    
     .bill-search{
         display:inline-block;
-        padding-left:32px;
+        // padding-left:32px;
         .u-date-txt{
-            padding:0 13px;
+            padding:0 20px;
             font-size: 14px;
             color: #666;
         }
@@ -266,23 +367,12 @@ export default {
         margin-left: 12px;
         width:600px;
         display:inline-block;
-        background: #F6F6F6;
         border-radius: 4px;
         box-sizing: border-box;
-        // max-height: 240px;
-        // overflow: scroll;
-        .title-wrap{
-            padding-left: 20px;
-        }
-        .title-record{
-            font-family: PingFang-SC-Medium;
-            font-size: 14px;
-            color: #333333;
-            display:inline-block;
-            margin-bottom:20px;
-        }
         .record-wrap{
-            margin-bottom:20px;
+            width: 540px;
+            padding-bottom:15px;
+            border-bottom:1px solid #EFEFEF;
             .first{
                 font-family: PingFang-SC-Regular;
                 font-size: 14px;
@@ -290,16 +380,6 @@ export default {
                 display:inline-block;
                 padding-right:30px;
                 vertical-align: top;
-                .circle{
-                    width:2px;
-                    height:2px;
-                    border-radius: 50%;
-                    background:#666;
-                    display:inline-block;
-                    vertical-align: middle;
-                    margin-right:10px;
-                    margin-top: -2px;
-                }
             }
             .second{
                 display:inline-block;
@@ -308,14 +388,48 @@ export default {
                 color: #666666;
             }
             .third{
-                padding:10px;
+                padding:5px 10px;
                 width: 330px;
-                background: #fff;
-                margin-top: 10px;
+                background: #F6F6F6;
+              
                 font-family: PingFang-SC-Regular;
                 font-size: 12px;
                 color: #666;
+                border: 1px solid #EEEEEE;
+                box-sizing: border-box;
+                border-radius: 4px;
+                line-height: 18px;
+                position: relative;
+               .mod-triangle {
+                    display:block;
+                    position: absolute;
+                    left:5px;
+                    top:-13px;
+                    z-index:20;
+                    .t-border,
+                    .t-inset{
+                        left:0px;
+                        top:0px;
+                        width:0;
+                        height:0;
+                        font-size:0;
+                        overflow:hidden;
+                        position:absolute;
+                        border-width:8px;
+                        /*可在此处更改小三角方向：上-右-下-左（solid的位置）*/
+                        border-style: solid;
+                    }
+                    .t-border{
+                        border-color:transparent  transparent #EEEEEE transparent;
+                        top:-1px;
+                    }
+                    .t-inset{
+                        border-color: transparent  transparent #F6F6F6 transparent;
+                    }       
+                }
             }
+           
+
         }
     }
 }

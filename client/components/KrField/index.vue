@@ -102,6 +102,7 @@
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
+            :inputWidth="inputWidth"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
@@ -148,6 +149,9 @@ export default {
         form:{
             type:String,
             default:''
+        },
+        inputWidth:{
+            type:[String,Number]
         },
         prop:{
             default:'',

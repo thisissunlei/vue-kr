@@ -2,6 +2,7 @@ import thousand from './thousand';
 import addEvent from './addEvent';
 import dataType from './dataType';
 import throttle from './throttle';
+import tableSort from './tableSort';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -196,7 +197,8 @@ import throttle from './throttle';
     getDaysInOneMonth,
     dateDiff,
     debounce,
-    getScrollBarSize
+    getScrollBarSize,
+    tableSort
    }
 
 

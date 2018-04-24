@@ -15,10 +15,10 @@
             <div
                 class="plan"
                 :style="{
-                    background:getPlanBgColor(),
+                    background:'#EEEEEE',
                     width:planDetail.width * minCalibration + 'px',
                     left:planDetail.office * minCalibration + 'px',
-                    color:getPlanColor()
+                    color:'#666666'
                 }"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
@@ -27,13 +27,14 @@
                 {{getActualLabel(data.label)}}
             </div>
             <div
-                v-if="data.data.actualStartTime && data.data.actualEndTime"
+               
                 class="actual"
                 :style="{
                     width:actualDetail.width * minCalibration+'px',
                     left:actualDetail.office * minCalibration + 'px',
                     background:getActualBgColor(),
-                    color:getActualColor()
+                    color:getActualColor(),
+                    border:getActualBorder()
                 }"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
@@ -125,38 +126,18 @@ export default {
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
             var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-
             tirDom.style.opacity = 0;
             angleDom.style.opacity = 0;
         },
         getLabelColor(){
-            var planColor = this.getPlanBgColor();
-            var actualColor = this.getActualBgColor();
-            if(planColor == '#FFE9AF'){
-                return '#BE8525';
-            }else if(actualColor=='rgba(194,233,152,0.6)'){
-                return '#5A8C23';
-            }else {
-                return '#666666';
-            }
+            let taskStatus = this.data.data.taskStatus;
+            return publicFn.getLabelColor(taskStatus);
         },
-        getPlanColor(){
-            var bgColor = this.getPlanBgColor();
-            if(bgColor=='#EEEEEE'){
-                return '#666666';
-            }else {
-                return '#BE8525';
-            }
-
-        },
+        
 
         getActualColor(){
-            var bgColor = this.getActualBgColor();
-            if(bgColor == 'rgba(246,156,156,0.5)'){
-                return '#666666';
-            }else {
-                return '#5A8C23'
-            }
+            let taskStatus = this.data.data.taskStatus;
+            return publicFn.getActualColor(taskStatus);
         },
         getLabel(label,data){
             if(this.data.data.planEndTime<this.data.data.actualStartTime ||
@@ -183,40 +164,34 @@ export default {
             }
         },
         getFlagShow(event){
+            return true;
             if(this.data.data){
                 return this.data.data.taskType == event
             }else{
                 var type = 'STAGETASK';
                 return type == event;
             }
-
         },
-       getActualBgColor(){
-
-            if(this.data.data.progressStatus<0){
-                return 'rgba(246,156,156,0.5)';
-            }else if(this.data.data.progressStatus>=0){
-
-                return 'rgba(194,233,152,0.6)'
-            }
-       },
-       getPlanBgColor(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var nowTime = (new Date(today+' 00:00:00')).getTime();
-
-            if(!this.data.data.actualEndTime&&this.data.data.planStartTime<nowTime ){
-                return '#FFE9AF';
-            }else{
-                return '#EEEEEE';
-            }
-       },
+        getActualBgColor(){
+            let taskStatus = this.data.data.taskStatus;
+            return publicFn.getActualBgColor(taskStatus);
+        },
+        getActualBorder(){
+            let taskStatus = this.data.data.taskStatus;
+            return publicFn.getActualBorder(taskStatus);
+        },
        getBoxWidthAndOffice(){
-            var dates = publicFn.getAllMaxAndMin(this.data);
+            var  data = Object.assign({},this.data.data);
+            if(!data.actualStartTime && !data.actualEndTime){
+                data.actualStartTime = data.planStartTime;
+                data.actualEndTime = data.planEndTime; 
+            }      
+            var dates = publicFn.getAllMaxAndMin(data);
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.planEndTime));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+this.data.data.actualEndTime));
+            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planStartTime));
+            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planEndTime));
+            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
+            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
             var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
@@ -237,15 +212,15 @@ export default {
             //  console.log(officeStart,min,"pppp",this.planDetail)
             var lineOffice = 0;
             var lineWidth = 0;
-            if(this.data.data.planEndTime<this.data.data.actualStartTime){
+            if(data.planEndTime<data.actualStartTime){
                 lineOffice = this.planDetail.width+this.planDetail.office;
                 lineWidth = this.actualDetail.office - this.planDetail.office-this.planDetail.width;
             }
-            if(this.data.data.actualEndTime<this.data.data.planStartTime){
+            if(data.actualEndTime<data.planStartTime){
                 lineOffice = this.actualDetail.width+this.actualDetail.office;
                 lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
             }
-            if(!this.data.data.actualEndTime || !this.data.data.actualStartTime){
+            if(!data.actualEndTime || !data.actualStartTime){
                 lineOffice = this.planDetail.office;
                 lineWidth = this.planDetail.width;
             }

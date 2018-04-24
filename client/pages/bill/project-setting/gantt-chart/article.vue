@@ -105,8 +105,7 @@ export default {
         }
     },
     updated(){
-        console.log("--------")
-        // return ;
+      
         publicFn.fontCover(this.planContentId,this.actualContentId);
     },
     mounted(){

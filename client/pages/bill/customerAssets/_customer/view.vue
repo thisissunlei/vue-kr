@@ -23,7 +23,7 @@
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
-				<JoinInfo v-if="selectedTab=='join'"/>
+				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'&& selectedTab!='join' "/>
         </div>
 		
@@ -91,7 +91,9 @@
 				},{
 					value:'ENTERED',
 					status:'已入驻'
-				}]
+				}],
+
+				customerId:''
 
 				
 			}
@@ -104,6 +106,7 @@
 			getBasicInfo(){
 				// 获取客户进本信息
 				let {params}=this.$route;
+				this.customerId=params.customer;
 				 console.log('route',params.customer)
 				 let param = {
 				 	customerId:params.customer

@@ -19,27 +19,44 @@
 <script>
 import dateUtils from 'vue-dateutils';
 export default {
+    props:{
+        customerId:{
+            type:[Number,String]
+        }
+    },
     data() {
         return{
            totalCount:0,
            params:{
                pageSize:20,
-               page:1
+               page:1,
+               customerId:this.customerId
            },
     
-           joinColumns:[       
+           joinColumns:[   
                     {   
-                        title: '工位编号',
+                        title: '社区',
+                        key: 'communityName',
+                        align:'center',
+                    },    
+                    {   
+                        title: '工位/房间编号',
                         key: 'code',
                         align:'center',
                     },
                     {
-                        title: '工位类型',
+                        title: '类型',
                         key: 'seatTypeName',
                         align:'center',
                     },
                     {
-                        title: '入驻开始日期',
+                        title: '可容纳人数',
+                        key: 'capacity',
+                        width:200,
+                        align:'center',
+                    },
+                    {
+                        title: '占用开始时间',
                         key: 'startDate',
                         align:'center',
                         render(tag, params){
@@ -47,7 +64,7 @@ export default {
                         }
                     },
                     {
-                        title: '入驻结束日期',
+                        title: '占用结束时间',
                         key: 'endDate',
                         align:'center',
                         render(tag, params){
@@ -55,8 +72,9 @@ export default {
                         }
                     },
                     {
-                        title: '入住状态',
+                        title: '状态',
                         key: 'status',
+                        width:200,
                         align:'center',
                     }
            ],

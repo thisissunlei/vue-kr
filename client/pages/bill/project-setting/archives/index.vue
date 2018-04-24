@@ -274,7 +274,7 @@ import Loading from '~/components/Loading'
             //排序按钮
             shortChange(event){
                 console.log(event,"ppppp")
-                if(event.label === '创建时间 '){
+                if(event.label === '创建时间'){
                     if(event.order === 'asc'){
                         this.tabParams.query = 'CTIMEASC';
                     }else{

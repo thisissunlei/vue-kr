@@ -322,8 +322,9 @@ export default {
 
     .col-tool-label{
         .ivu-tooltip-popper{
+          
             .ivu-tooltip-arrow{
-                display:none;
+                display: none;
             }
         }
     }

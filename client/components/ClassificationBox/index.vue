@@ -78,6 +78,7 @@
         margin: 0px;
         padding: 0px;
         background-image:url(images/tuxing.png); 
+<<<<<<< HEAD
         background-size: auto 100%;
         .title-num{
             display: block;
@@ -85,6 +86,16 @@
             width: 40px;
             text-align: center;
             line-height: 40px;
+=======
+        background-size: 100% 100%;
+        .title-num{
+            display: block;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            line-height: 40px;
+            vertical-align: middle;
+>>>>>>> feature/资料二期和项目二期
         }
         .circle{
             height: 20px;
@@ -117,7 +128,20 @@
             display: inline-block;
         }
     }
+<<<<<<< HEAD
     
+=======
+    // .title:before{
+    //     content: '';
+    //     display: inline-block;
+    //     width: 22px;
+    //     height: 1px;
+    //     background: #499DF1;
+    //     position: relative;
+    //     top: -6px;
+
+    // }
+>>>>>>> feature/资料二期和项目二期
     .content{
         padding-left: 40px;
         padding-top:15px;

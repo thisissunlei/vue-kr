@@ -1,35 +1,34 @@
 <style lang="less">
     .upload-phote-box{
-        border:1px dashed #dddee1;
-        padding:5px;
-        padding-bottom: 0;
-        border-radius: 4px;
+        width: 300px;
+        height: 186px;
+        border-radius: 8px;
         display: inline-block;
+        .ivu-upload-drag{
+            border:1px solid #DFDFDF;
+        }
         &:hover{
-            // border:1px dashed #499df1;
             .ivu-upload-drag{
-                border:1px dashed #dddee1;
+                border:1px solid #DFDFDF;
             }
         }
     }
     .demo-upload-list{
         display: inline-block;
-        width: 200px;
-        height: 200px;
+        width: 300px;
+        height: 186px;
         text-align: center;
         line-height: 60px;
-        border: 1px dashed #dddee1;
-
-        border-radius: 4px;
+        border: 1px solid #DFDFDF;
+        border-radius: 8px;
         overflow: hidden;
         background: #fff;
         position: relative;
-        // box-shadow: 0 1px 1px rgba(0,0,0,.2);
     }
     .demo-upload-list{
         background-position: center;
-        width:200px;
-        height: 200px;
+        width:300px;
+        height: 186px;
         line-height: 200px;
         img{
             width: 100%;
@@ -50,7 +49,6 @@
         background: rgba(0,0,0,.4);
     }
     .demo-upload-list-cover i{
-        // color: #fff;
         font-size: 20px;
         cursor: pointer;
         margin: 0 10px;
@@ -62,20 +60,20 @@
         background-color: #fff;
     }
     .upload-box{
-        background:#f6f6f6;
         position: relative;
         background-position: center;
-        width:200px;
-        height: 200px;
-        line-height: 220px;
-        .icon-add{
-            position: relative;
-            &:before{
-                position: absolute;
-                top:-30px;
-                left: 10px;
-                font-size: 27px;
-            }
+        width: 300px;
+        height: 186px;
+        
+        .upload-text{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 36px;
+            background: rgba(0,0,0,0.50);
+            color:#fff;
+            line-height: 36px;
         }
         .box-pic{
             position: absolute;
@@ -102,9 +100,8 @@
         action="/api/krspace-finance-web/activity/upload-pic/"
         style="display: inline-block">
         <div class="upload-box">
-            <img :src="negative" class="box-pic">
-            
-            <span class="icon-add">上传图片</span>
+            <img :src="negative" v-if='!!negative' class="box-pic" />
+            <span class="upload-text">点击上传</span>
         </div>
         
     </Upload>
@@ -125,6 +122,7 @@
         props:{
             defaultImg:String,
             photeUrl:String,
+            onSuccess:Function
         },
         data () {
             return {
@@ -146,17 +144,14 @@
             },
             handleSuccess (res, file) {
                 // 上传成功后执行的内容
-                console.log('res',res)
                 this.phote = res.data;
-                console.log('file',file)
+                this.onSuccess(res.data)
             },
             handleFormatError (file) {
                 // 格式校验失败执行内容
-                console.log('格式校验')
-                
                 this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+                    title: '上传文件格式不正确',
+                    desc: '上传文件格式不正确，请选择jpg挥着png格式的文件'
                 });
             },
             handleMaxSize (file) {

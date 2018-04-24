@@ -399,7 +399,7 @@
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
     global.GLOBALHEADERSET = Router.setDefaultHeader;
-
+    
 
     Router.init();
     //第一级菜单
@@ -510,7 +510,7 @@
                         },
                         {
                             primaryText: '客户管理',
-                            router: 'client/manage',
+                            router: 'customer-manage/manage',
                             type:'vue',
                             menuCode: 'customer_center'
                         },

@@ -19,15 +19,26 @@
 <script>
 import dateUtils from 'vue-dateutils';
 export default {
+    props:{
+        customerId:{
+            type:[Number,String]
+        }
+    },
     data() {
         return{
            totalCount:0,
            params:{
                pageSize:20,
-               page:1
+               page:1,
+               customerId:this.customerId
            },
     
-           joinColumns:[       
+           joinColumns:[   
+                    {   
+                        title: '社区名称',
+                        key: 'communityName',
+                        align:'center',
+                    },    
                     {   
                         title: '工位编号',
                         key: 'code',
@@ -36,6 +47,12 @@ export default {
                     {
                         title: '工位类型',
                         key: 'seatTypeName',
+                        align:'center',
+                    },
+                    {
+                        title: '可容纳人数',
+                        key: 'capacity',
+                        width:200,
                         align:'center',
                     },
                     {
@@ -57,6 +74,7 @@ export default {
                     {
                         title: '入住状态',
                         key: 'status',
+                        width:200,
                         align:'center',
                     }
            ],

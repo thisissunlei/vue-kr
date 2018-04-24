@@ -12,7 +12,7 @@
                             />
                         </Form-item>
                         <div class='iconForm' v-if="identify=='optional'">
-                            <Form-item label="可租时段" class='priceForm'>
+                            <Form-item label="可租时段" class='priceForm' prop="startDate">
                                 <DatePicker 
                                     v-model="formItem.startDate" 
                                     placeholder="请输入开始日期"
@@ -20,7 +20,7 @@
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm'>
+                            <Form-item  class='priceForm' prop="endDate">
                                 <DatePicker 
                                     v-model="formItem.endDate" 
                                     placeholder="请输入结束日期"
@@ -257,6 +257,13 @@ export default {
                     callback();
                 }
             };
+            const validateDate = (rule, value, callback) => {
+                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            };
             const validateName = (rule, value, callback) => {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
@@ -343,6 +350,12 @@ export default {
                     ],
                     areaMax: [
                         { validator: validateArea, trigger: 'change' }
+                    ],
+                    startDate: [
+                        { validator: validateDate, trigger: 'change' }
+                    ],
+                    endDate: [
+                        { validator: validateDate, trigger: 'change' }
                     ]
                 }
             }

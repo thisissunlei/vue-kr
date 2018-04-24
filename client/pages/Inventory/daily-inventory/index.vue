@@ -180,7 +180,8 @@ var layoutScrollHeight=0;
                         width:80,
                         render(tag, params){
                             var ren=params.row.area?params.row.area:'-';
-                            return <span>{ren}</span>
+                            var renEnd=(params.row.type=='固定办公桌'||params.row.type=='移动办公桌')?'-':ren;
+                            return <span>{renEnd}</span>
                         }
                     },
                     {

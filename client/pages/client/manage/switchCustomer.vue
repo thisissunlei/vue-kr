@@ -12,9 +12,9 @@
                             <Option v-for="item in leaderList" :value="''+item.value" :key="item.value">{{ item.label }}</Option>
                     </Select> 
                 </Form-item>
-                <!-- <Form-item label="转移社区" class="switch-class" v-if="communityList&&communityList.length!=0" prop="communityIds"> 
+                <Form-item label="转移社区" class="switch-class" v-if="communityList&&communityList.length>1" prop="ids"> 
                         <Select 
-                            v-model="switchForm.communityIds" 
+                            v-model="switchForm.ids" 
                             placeholder="请输入转移社区" 
                             style="width: 252px"
                             multiple
@@ -22,7 +22,7 @@
                         >
                             <Option v-for="item in communityList" :value="item.communityId" :key="item.communityId">{{ item.communityName }}</Option>
                     </Select> 
-                </Form-item> -->
+                </Form-item>
             </Form>
         </div>
 </template>
@@ -39,20 +39,25 @@
         data (){
             return{
                 switchForm:{
-                    newReceiveId:''
+                    newReceiveId:'',
+                    ids:[],
+                    communityIds:''
                 },
                 leaderList:[],
                 communityList:[],
                 ruleValidate: {
                     newReceiveId:[
                         { required: true, message: '请选择新负责人', trigger: 'change' }
+                    ],
+                    ids:[
+                        { required: true, type: 'array',message: '请选择社区', trigger: 'change' }
                     ]
                 }
             }
         },
         mounted:function(){
            this.getLeaderList();
-           //this.getCommunityList();
+           this.getCommunityList();
         },
         updated:function(){
             this.$emit('bindData',this.switchForm);
@@ -81,7 +86,7 @@
                 if(params.length){
                   str=params.join();
                 }
-                this.switchForm.customerIds=str;
+                this.switchForm.communityIds=str;
             }
         }
     }

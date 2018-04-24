@@ -3,7 +3,7 @@
         <div class="hander">
             <div class="icon"><span v-if="value && type=='num'">{{value}}</span><span v-if="!value || type=='icon'" class="circle"></span></div>
             
-            <div class="title"><span>{{title}}</span></div>
+            <div class="title"><span>{{title}}</span><span v-if="promptText" style="font-size:14px;color:red;">{{promptText}}</span></div>
         </div>
         <div class="content" :style="{borderWidth:isBorder?'1px':'0px'}">
             <slot name="content"></slot>
@@ -33,6 +33,10 @@
         isEnd:{
             type:Boolean,
             default:false,
+        },
+        promptText:{
+            type:String,
+            default:'',
         }
     },
     data(){

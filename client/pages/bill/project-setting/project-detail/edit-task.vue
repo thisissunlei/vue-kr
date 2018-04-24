@@ -29,7 +29,7 @@
                     <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
                 </div>
             </ClassificationBox>
-            <ClassificationBox value="2" title="执行情况" :isBorder="true" type="num">
+            <ClassificationBox value="2" :promptText="editActualEndTime()?'':'（请填写计划工期）'" title="执行情况" :isBorder="true" type="num">
                 <div slot="content" > 
                     <div class="time-box actual-time" >
                         <Tooltip placement="top" class="start">
@@ -71,6 +71,7 @@
                         </Tooltip>   
                         <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
                         <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
+                        <div v-if="!editActualEndTime()" class="mask"></div>
                     </div>
 
                     <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
@@ -175,6 +176,12 @@ export default {
     },
    
     methods:{
+        editActualEndTime(){
+            if(this.planStart && this.planEnd && this.planStart<=this.planEnd){
+                return true;
+            }
+            return false;
+        },
         getFormItem(){
           
             return Object.assign({},this.getEdit)
@@ -190,74 +197,53 @@ export default {
             this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
-            this.planStart=params;  
-
-            if(this.planStart ||
-                this.planStart && this.planEnd ||
-                this.planStart && this.planEnd && this.actualStart ||
-                this.planStart && this.planEnd && this.actualStart && this.actualEnd
-                
-            ){
-                if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-                    this.dateError=true;
-                }else{
-                    this.dateError=false;
-                    this.cDateError=false;
-                    this.params.planStartTime = params;
-                    var data = Object.assign({},this.params);
-                
-                    this.$emit('dataChange',data)
-                }
-            }else {
+        
+            this.planStart=params;
+            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
                 this.dateError=true;
+            }else{
+                this.dateError=false;
+                this.params.planStartTime = params;
+                var data = Object.assign({},this.params);
+               
+                this.$emit('dataChange',data)
             }
-
         },
         planEndChange(params){
             this.planEnd=params;
-
-            if((this.planStart && this.planStart>this.planEnd) &&
-                ((this.actualStart&&this.actualEnd&&this.actualStart<this.actualEnd)||this.actualStart && !this.actualEnd)){
+            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+                this.dateError=true;
+            }else{
                 this.dateError=false;
-                this.cDateError=false;
                 this.params.planEndTime = params;
                 var data = Object.assign({},this.params);
                 
                 this.$emit('dataChange',data)
-            }else {
-                this.dateError=true;
             }
-
         },
         actualStartChange(params){
-             this.actualStart=params;
-            if(this.planStart&&this.planEnd && this.planStart<this.planEnd && 
-                ((!this.actualEnd)||
-                (this.actualStart<this.actualEnd))){
-                this.cDateError=false;
+          
+            this.actualStart=params;
+            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
+                this.cDateError=true;
+            }else{
                 this.cDateError=false;
                 this.params.actualStartTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
-            }else {
-                this.cDateError=true;
             }
-           
-           
         },
-        
         actualEndChange(params){
-             
+            
             this.actualEnd=params;
+            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
+                this.cDateError=true;
+            }else{
 
-            if(this.planStart&&this.planEnd&&this.actualStart&&this.actualEnd&&this.planStart<=this.planEnd&&this.actualStart<=this.actualEnd){
-                this.cDateError=false;
                 this.cDateError=false;
                 this.params.actualEndTime = params;
                 var data = Object.assign({},this.params);
                 this.$emit('dataChange',data)
-            }else {
-                this.cDateError=true;
             }
         }
     }
@@ -267,6 +253,15 @@ export default {
 
 <style lang='less'>
 .edit-task{
+    .mask{
+        position: absolute;
+        cursor: not-allowed;
+        top: 0px;
+        bottom: 0px;
+        width: 100%;
+        z-index: 10;
+
+    }
     .bill-search-class{
         display:inline-block;
         width:50%;

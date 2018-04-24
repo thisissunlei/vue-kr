@@ -23,7 +23,7 @@
                         :page-size="pageSize" 
                         show-total 
                         show-elevator
-                        @on-change="onPageChange"
+                        @on-change="changePage"
                     />
                 </div>
             </div>
@@ -39,6 +39,9 @@ export default {
   },
   data(){
       return{
+           pageSize:15,
+           page:1,
+           totalCount:0,
            tableList:[],
            welfareColumns:[
                 {
@@ -128,23 +131,29 @@ export default {
   mounted(){
       this.tableList=[
           {
-              mbrName:1111
+              mbrName:1111,
+              id:1
           }
       ]
   },
   methods:{
      jumpCreate(){
+          window.open(`/app-manage/member-welfare/create`,'_blank');
+     },
+     jumpView(params){
+          window.open(`/app-manage/member-welfare/detail/${params.id}`,'_blank');
+     },
+     jumpEdit(params){
+         window.open(`/app-manage/member-welfare/edit/${params.id}`,'_blank');
+     },
+     openDelete(params){
 
      },
-     jumpView(){
-
-     },
-     jumpEdit(){
-
-     },
-     openDelete(){
-
-     }
+    changePage(page){
+        this.tabParams.page=page;
+        this.page=page;
+        this.getTableData(this.tabParams);
+    }
   }
 
 

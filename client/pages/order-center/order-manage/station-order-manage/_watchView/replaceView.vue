@@ -27,7 +27,15 @@ export default {
 			editCard:false,
 			overViewData:{
 			},
-			show:false
+			show:false,
+			payList:[
+                {value:'ONE',label:'月付'},
+                {value:'TWO',label:'两月付'},
+                {value:'THREE',label:'季付'},
+                {value:'SIX',label:'半年付'},
+                {value:'TWELVE',label:'年付'},
+                {value:'ALL',label:'全款'},
+            ],
 		}
 	},
 
@@ -49,6 +57,7 @@ export default {
 			};
 			this.$http.get('get-replace-detail', from).then((response)=>{  
 					let overViewData = response.data;
+
 					overViewData.oldSeatList = response.data.oldSeatInfo.map(item=>{
 						let obj = Object.assign({},item);
 						obj.endDate = item.prepEndDate;
@@ -57,6 +66,7 @@ export default {
 					});
 					overViewData.seats = response.data.newSeatInfo.map(item=>{
 						item.originalPrice = item.marketPrice;
+						item.saleNum = response.data.discount || '-';
 						return item;
 					})
 					let array = [];
@@ -67,8 +77,18 @@ export default {
 						item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
 						return item;
 					});
+
 					overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+					this.payList.map(item=>{
+						if(item.value == response.data.installmentType){
+							overViewData.installmentName = item.label
+						}
+					})
+					
+
+					overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
 					overViewData.startDate = response.data.realStartDate
+					overViewData.back = response.data.feeResultVO.lockDeposit
 					this.overViewData = overViewData
 				}).catch((error)=>{
 					this.$Notice.error({

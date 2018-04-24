@@ -124,7 +124,6 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
-
 export default {
     components:{
       KrCascader,

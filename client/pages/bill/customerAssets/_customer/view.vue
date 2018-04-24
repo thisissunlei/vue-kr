@@ -7,14 +7,14 @@
 
 		<div class="content">
 			<LabelText label="客户ID：" type="circle" style="width:30%">
-				{{customerBasic.customerId}}
+				{{customerBasic.id}}
 			</LabelText>
 			<LabelText label="客户名称："  type="circle" style="width:30%">
-				{{customerBasic.customerName}}
+				{{customerBasic.company}}
 			</LabelText>
-			<!-- <LabelText label="客户状态："  type="circle" style="width:30%">
+			<LabelText label="客户状态："  type="circle" style="width:30%">
 				{{customerBasic.status}}
-			</LabelText> -->
+			</LabelText> 
 		</div>
 		<div class="tab-list">
 			<span class="tab-span"  v-for="(item, index) in firstTab"
@@ -22,7 +22,9 @@
 		</div>
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
-            	<Waiting v-if="selectedTab!='account'"/>
+            	<Basic v-if="selectedTab=='basic'"/>
+				<JoinInfo v-if="selectedTab=='join'"/>
+            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'&& selectedTab!='join' "/>
         </div>
 		
     </div>
@@ -35,6 +37,8 @@
 	import LabelText from '~/components/LabelText'; 
 	import Assets from './assets.vue'; 
     import Waiting from './waiting.vue'; 
+	import Basic from './basic/index.vue'; 
+	import JoinInfo from './joinInfo.vue'; 
 
 	export default {
 		name:'customerAssetsDetail',
@@ -42,9 +46,12 @@
 			SectionTitle,
 			LabelText,
 			Assets,
-			Waiting
+			Waiting,
+			Basic,
+			JoinInfo
 		},
 		data (){
+
 			return{
 				//一层Tab目录
 				firstTab:[{
@@ -69,7 +76,7 @@
 					name:'更多',
 					code:'more'
 				},],
-				selectedTab:'account',
+				selectedTab:'basic',
 				customerBasic:{
 					customerId:'w',
 					customerName:'w',
@@ -101,12 +108,8 @@
 				 let param = {
 				 	customerId:params.customer
 				 }
-				this.$http.get('customer-info',param).then((res)=>{
-					this.customerBasic = {
-						status : res.data.status,
-						customerId : res.data.id,
-						customerName : res.data.customerName
-					}
+				this.$http.get('top-customer',param).then((res)=>{
+					this.customerBasic = res.data;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -117,6 +120,9 @@
 		mounted(){
 			this.getBasicInfo()
 			GLOBALSIDESWITCH('false');
+			let hash = window.location.hash.split('#')[1];
+			this.selectedTab = hash || 'basic'
+			GLOBALHEADERSET('客户会员')
 		}
 	
 	}
@@ -133,7 +139,7 @@
 		.tab-list{
 			margin-left: 25px;
 			height: 25px;
-			margin-bottom: 20px;
+			margin-bottom: 30px;
 			.tab-span{
 				font-size:14px;
 				color:#666;
@@ -144,6 +150,7 @@
 			.tab-active{
 				color:#4A90E2;
 				position: relative;
+				font-weight: 500;
 				&:after{
 					content:'';
 					display:inline-block;

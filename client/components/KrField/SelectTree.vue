@@ -107,7 +107,6 @@ export default {
             this.$emit('checkChange',event)
         },
         inputClick(){
-
             this.clearClick();
         },
         toggleExpand(event){

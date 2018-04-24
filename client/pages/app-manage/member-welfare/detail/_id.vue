@@ -101,10 +101,10 @@ export default {
    .u-img-content{
         width:100%;
         display: inline-block;
+        margin-bottom:6px;
         .u-img-title{
             float:left;
-            font-weight: 500;
-            color: #666666;
+            color: #333;
             margin-left:14px;
         }
         .u-img-url{

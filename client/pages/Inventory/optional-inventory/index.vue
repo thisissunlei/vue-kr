@@ -403,6 +403,7 @@ var layoutScrollHeight=0;
         }
         .daily-table{
             padding-bottom:77px; 
+            margin-top: 30px;
             .ivu-tooltip{
                 width:100%
             }

@@ -186,7 +186,7 @@
                     </div>
 
                      <div style="display:inline-block;margin-right:20px;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
+                        <span style="font-weight:bold;display:inline-block;margin-right:13px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
                         <Form-item class='priceForm'  prop="areaMin">
                             <i-input 
                                 v-model="formItem.areaMin" 

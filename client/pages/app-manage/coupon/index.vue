@@ -28,6 +28,21 @@
                 </div>
             </div>
         </div>
+         <Modal
+            v-model="openCancel"
+            title="下线"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div style="text-align:center;font-size:14px;margin-top:20px;">
+               下线后，该福利会即时从APP端隐藏，并且会员不可领取
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitDown">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDown">取消</Button>
+            </div>
+        </Modal>
 
  </div>
 </template>
@@ -43,6 +58,7 @@ export default {
            page:1,
            totalCount:0,
            tableList:[],
+           openCancel:false,
            couponColumns:[
                 {
                     title: '福利标题',
@@ -123,7 +139,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openDelete(params.row)
+                                            this.openDown(params.row)
                                         }
                                     }
                                 }, '下线')
@@ -151,14 +167,34 @@ export default {
      jumpEdit(params){
          window.open(`/app-manage/coupon/edit/${params.id}`,'_blank');
      },
-     openDelete(params){
-
+     openDown(params){
+           this.openCancel=!this.openCancel;
+           if(params){
+               //this.notificationId=params.notificationId
+            }
      },
     changePage(page){
         this.tabParams.page=page;
         this.page=page;
         this.getTableData(this.tabParams);
-    }
+    },
+     submitDown(){
+            let params={
+                    notificationId: this.notificationId
+                }
+                // this.$http.post('delete-notification', params).then((res)=>{
+                //     this.$Notice.success({
+                //         title:'删除成功'
+                //     });  
+                //     this.openDelete();
+                //     this.getTableData(this.Params);
+                // }).catch((err)=>{
+                //     this.$Notice.error({
+                //         title:err.message
+                //     });
+                // })
+                 
+    },
   }
 
 

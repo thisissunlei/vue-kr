@@ -7,6 +7,7 @@
                 v-model="treeInput" 
                 :placeholder="placeholder"     
             />
+            <div class="div-input"></div>
             <span 
                 class="select-tree-icon ivu-icon ivu-icon-arrow-down-b ivu-select-arrow"
                 :style="{ transform: mask?'rotateZ(180deg)':'rotateZ(0deg)'}"
@@ -202,9 +203,17 @@ export default {
             transform: rotateX(180deg);
             transform-origin:  center center;
         }
+        .div-input{
+            display: inline-block;
+            // background: red;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: pointer;
+        }
         .select{
-           
-           
             .tree-content{
                 min-width: 200px;
                 max-height: 250px;

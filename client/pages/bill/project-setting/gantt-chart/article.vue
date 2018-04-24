@@ -14,41 +14,43 @@
         >
             <div
                 class="plan"
-                :style="{
-                    background:'#EEEEEE',
-                    width:planDetail.width * minCalibration + 'px',
-                    left:planDetail.office * minCalibration + 'px',
-                    color:'#666666'
-                }"
+                @click="editClick(data.value,data.pid)"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
-                @click="editClick(data.value)"
+                :style="{
+                    background:'rgb(238, 238, 238)',
+                    width:planDetail.width * minCalibration + 'px',
+                    left:planDetail.office * minCalibration + 'px',
+                    color:'rgb(102, 102, 102)',
+                    cursor:'pointer'
+                }"
             >
-                {{getActualLabel(data.label)}}
+                <div :id="this.planContentId" class="plan-content">{{getActualLabel(data.label)}}</div>
             </div>
             <div
-               
+                
                 class="actual"
+                @click="editClick(data.value,data.pid)"
+                @mouseover="toolOver"
+                @mouseout="toolOut"
                 :style="{
                     width:actualDetail.width * minCalibration+'px',
                     left:actualDetail.office * minCalibration + 'px',
                     background:getActualBgColor(),
                     color:getActualColor(),
+                    cursor:'pointer',
                     border:getActualBorder()
                 }"
-                @mouseover="toolOver"
-                @mouseout="toolOut"
-                @click="editClick(data.value)"
             >
-                {{getActualLabel(data.label)}}
+                <div :id="this.actualContentId" class="actual-content">{{getActualLabel(data.label)}}</div>
             </div>
             <div v-if="lineShow()" class="line" :style="{width:lineDetail.width*minCalibration+'px',left:lineDetail.office*minCalibration+'px'}"></div>
             <div
                 class="label"
-                :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px'}"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
-                @click="editClick(data.value)"
+                @click="editClick(data.value,data.pid)"
+                :style="{color:getLabelColor(),width:boxDetail.width*minCalibration+'px',cursor:'pointer'}"
             >
                 {{this.getLabel(data.label)}}
             </div>
@@ -97,8 +99,15 @@ export default {
             leftEndpoint:this.startDate,
             secondObj:{},
             picColor:'',
-            lineDetail:{}
+            lineDetail:{},
+            planContentId:'plan-content' + this.data.t_id,
+            actualContentId:'actual-content' + this.data.t_id
         }
+    },
+    updated(){
+        console.log("--------")
+        // return ;
+        publicFn.fontCover(this.planContentId,this.actualContentId);
     },
     mounted(){
         if(!this.data.chartType){
@@ -293,10 +302,10 @@ export default {
             line-height: 30px;
             padding-left: 6px;
             z-index: 3;
-            overflow: hidden;
+            // overflow: hidden;
             width: 100%;
-            overflow: hidden;
-            text-overflow:ellipsis;
+            // overflow: hidden;
+            // text-overflow:ellipsis;
             white-space: nowrap;
             background: transparent;
             font-weight:bold;
@@ -313,8 +322,8 @@ export default {
             position: absolute;
             cursor: pointer;
             top: 2px;
-            overflow: hidden;
-            text-overflow:ellipsis;
+            // overflow: hidden;
+            // text-overflow:ellipsis;
             white-space: nowrap;
             font-weight:bold;
             z-index: 2;
@@ -328,11 +337,17 @@ export default {
             position: absolute;
             cursor: pointer;
             top: 2px;
-            overflow: hidden;
-            text-overflow:ellipsis;
+            // overflow: hidden;
+            // text-overflow:ellipsis;
             white-space: nowrap;
             font-weight:bold;
             z-index: 2;
+        }
+        .plan-content,.actual-content{
+            display: inline-block;
+             overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
         }
     }
 }

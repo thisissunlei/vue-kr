@@ -1,11 +1,11 @@
 <template>
   <div class="project-setting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
-            <TabPane label="项目档案管理" name="tab1">
+            <TabPane label="列表视图" name="tab1">
                 <Archives v-if="mask"/>
 
             </TabPane>
-            <TabPane label="开业进度总览" name="tab2">
+            <TabPane label="日历视图" name="tab2">
 
                 <ProgressView v-if="!mask"/>
 

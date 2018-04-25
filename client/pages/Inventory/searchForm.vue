@@ -3,7 +3,7 @@
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
                 <div>    
-                    <div class='header-icon' style="margin-right:113px;">  
+                    <div class='header-icon' :style="identify=='daily'?'margin-right:113px;':'margin-right:20px;'">  
                         <Form-item label="库存日期" class='iconForm' v-if="identify=='daily'">
                             <DatePicker 
                                 v-model="formItem.inventoryDate" 
@@ -11,18 +11,25 @@
                                 style="width: 200px"
                             />
                         </Form-item>
-                        <Form-item label="可租日期" class='iconForm' v-if="identify=='optional'">
-                            <DatePicker 
-                                v-model="formItem.selectDate" 
-                                type="daterange"
-                                format="yyyy/MM/dd"
-                                placeholder="请输入可租日期"
-                                style="width: 200px"
-                                @on-change="selectDateChange"
-                            />
-                        </Form-item>
+                        <div class='iconForm' v-if="identify=='optional'">
+                            <Form-item label="可租时段" class='priceForm' prop="startDate">
+                                <DatePicker 
+                                    v-model="formItem.startDate" 
+                                    placeholder="请输入开始日期"
+                                    style="width: 136px"
+                                />
+                            </Form-item>
+                            <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                            <Form-item  class='priceForm' prop="endDate">
+                                <DatePicker 
+                                    v-model="formItem.endDate" 
+                                    placeholder="请输入结束日期"
+                                    style="width: 136px"
+                                />
+                            </Form-item>
+                        </div>
                         <Tooltip :content="tipContent" placement="top">
-                           <span class='icon-tip'></span>
+                           <span class='icon-tip' :style="identify=='daily'?'margin-top:8px;':''"></span>
                         </Tooltip>
                     </div>
 
@@ -179,7 +186,7 @@
                     </div>
 
                      <div style="display:inline-block;margin-right:20px;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
+                        <span style="font-weight:bold;display:inline-block;margin-right:13px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
                         <Form-item class='priceForm'  prop="areaMin">
                             <i-input 
                                 v-model="formItem.areaMin" 
@@ -250,6 +257,13 @@ export default {
                     callback();
                 }
             };
+            const validateDate = (rule, value, callback) => {
+                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            };
             const validateName = (rule, value, callback) => {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
@@ -280,7 +294,8 @@ export default {
                     areaMax:'',
                     locationName:' ',
                     suiteName:' ',
-                    selectDate:this.getRangeDate()
+                    startDate:publicFn.getToDay(),
+                    endDate:this.getEndDate()
                 },
                 communityList:[],
                 cityList:[],
@@ -335,6 +350,12 @@ export default {
                     ],
                     areaMax: [
                         { validator: validateArea, trigger: 'change' }
+                    ],
+                    startDate: [
+                        { validator: validateDate, trigger: 'change' }
+                    ],
+                    endDate: [
+                        { validator: validateDate, trigger: 'change' }
                     ]
                 }
             }
@@ -367,10 +388,6 @@ export default {
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
                 }  
-                if(this.identify=='optional'){
-                    this.formItem.startDate=this.formItem.selectDate[0];
-                    this.formItem.endDate=this.formItem.selectDate[1];
-                }
                 this.$emit('initData',this.formItem);
                 this.formItemOld=Object.assign({},this.formItem);
             }).catch((error)=>{
@@ -392,22 +409,6 @@ export default {
                     title:error.message
                 });
             })
-        },
-        getRangeDate(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            var dayNum=Number(publicFn.getMonthDayNum());
-            var date=today.split('-');
-            var year=Number(date[0]),month=Number(date[1]),day=Number(date[2]);
-            var endDay=day+7,endYear=year,endMonth=month;
-            if(endDay>dayNum){
-                endMonth+=1;
-                endDay=endDay-dayNum;
-            }
-            if(endMonth>12){
-                endYear+=1;
-                endMonth=endMonth-12;
-            }
-            return [year+'-'+month+'-'+day,endYear+'-'+endMonth+'-'+endDay]
         },
         //搜索
         searchClick(){
@@ -452,9 +453,21 @@ export default {
         communityChange(param){
             this.getFloorList(param);
         },
-        selectDateChange(param){
-            this.formItem.startDate=param[0]?param[0]:'';
-            this.formItem.endDate=param[1]?param[1]:'';
+        getEndDate(){
+            var today=publicFn.getToDay();
+            var date=today.split('-');
+            var year=Number(date[0]),month=Number(date[1]),day=Number(date[2]);
+            var dayNum=Number(publicFn.getMonthDayNum(year,month));
+            var endDay=day+7,endYear=year,endMonth=month;
+            if(endDay>dayNum){
+                endMonth+=1;
+                endDay=endDay-dayNum;
+            }
+            if(endMonth>12){
+                endYear+=1;
+                endMonth=endMonth-12;
+            }
+            return endYear+'-'+endMonth+'-'+endDay
         }
     }
 }
@@ -516,7 +529,10 @@ export default {
                     background:url(img/q1.svg) no-repeat center;
                     background-size: 100%;
                     vertical-align: middle;
-                    margin-top: 8px;
+                }
+                .dateForm{
+                    display:inline-block;
+                    margin-right:4px;
                 }
             }
         }

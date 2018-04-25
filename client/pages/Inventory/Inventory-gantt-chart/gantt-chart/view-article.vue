@@ -1,22 +1,19 @@
 <template>
   <div class="view-article" :data-article-id="id"
-    @mouseover="overShow(id)"
-    @mouseout="outHide(id)"
    >
         <div 
             class="view-channel"
-            v-if="data && data.tasks && data.tasks.length"
+            v-if="data && data.timeLine && data.timeLine.length"
         >
             
             <Article 
                 v-if="leftEndpoint.year"
                 :minCalibration="minCalibration"
                 :startDate="leftEndpoint"
-                 v-for="item in data.tasks"
+                 v-for="item in data.timeLine"
                 :data="item"
-                :key="item.id"
+                :key="item.status"
                 :todayDetail="todayDetail"
-                @editClick="editClick"
             />
             
             
@@ -60,7 +57,6 @@ export default {
         if(this.data.tasks && this.data.tasks.length){
             this.showData = [].concat(this.allDataFor(this.data.tasks));
         } 
-        console.log(this.data,"ppppppp")
         setTimeout(() => {
             var leftDom = document.querySelectorAll('div[data-box-id="'+this.showData.id+'"]')[0];
             var rightDom= document.querySelectorAll('div[data-article-id="'+this.showData.id+'"]')[0];
@@ -74,14 +70,9 @@ export default {
         },100);
     },
     methods:{
-        editClick(id){
-            this.$emit('editClick',id,this.id);
-        },
-       
         //每一个任务的所有数据
         allDataFor(data){
-            
-         
+                   
             //获取所有数据
             var allData = [].concat(this.allArrSort(data));
             //所有通道数据
@@ -187,22 +178,22 @@ export default {
                 max:max
             }
         },
-        overShow(id){
-            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
-            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
-            if(leftDom&&rightDom){
-                leftDom.style.background="#F7F9FB";
-                rightDom.style.background="#F7F9FB";
-            }
-        },
-        outHide(id){
-            var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
-            var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
-             if(leftDom&&rightDom){
-                 leftDom.style.background="#fff";
-                 rightDom.style.background="#fff";
-             }
-        }
+        // overShow(id){
+        //     var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+        //     var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+        //     if(leftDom&&rightDom){
+        //         leftDom.style.background="#F7F9FB";
+        //         rightDom.style.background="#F7F9FB";
+        //     }
+        // },
+        // outHide(id){
+        //     var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
+        //     var rightDom= document.querySelectorAll('div[data-article-id="'+id+'"]')[0];
+        //      if(leftDom&&rightDom){
+        //          leftDom.style.background="#fff";
+        //          rightDom.style.background="#fff";
+        //      }
+        // }
     }
 }
 </script>

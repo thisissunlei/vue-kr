@@ -308,12 +308,14 @@ function getActualBorder(taskStatus) {
 }
 //label的字体的颜色
 function getLabelColor(taskStatus) {
-    if (taskStatus === 'UNDERWAY' || taskStatus === 'OVERDUE' || taskStatus === 'UNKNOWN') {
-        return '#BE8525';
-    } else if (taskStatus === 'NORMAL' || taskStatus === 'ADVANCE') {
-        return '#5A8C23';
+    if (taskStatus === '未租') {
+        return '#BCE590';
+    } else if (taskStatus === '在租') {
+        return '#FDAFAF';
+    }else if (taskStatus === '合同未生效') {
+        return '#FFE08F';
     } else {
-        return '#666666'
+        return '#E4E4E4'
     }
 
 }

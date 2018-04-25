@@ -4,42 +4,34 @@
         <!-- 甘特图部分 -->
         <GanttChart
             v-if = "!isLoading"
-            type='view'
             :start="params.startTime"
             :end="params.endTime"
             :listData="listData"
             @rightOver="rightOver"
         >
-             <div class='chart-tab-left' slot="leftBar">
-                <div class='chart-left'>
-                            <div class='chart-left-table'>
-                                 <div class='view-table-list'>
-                                    <p>项目名称</p>
-                                    <p style="border-right:none;">城市</p>
-                                </div>
-                                <div
-                                    @mouseover='leftOver'
-                                    class='view-table-detail'
-                                    id="vue-chart-left-table-list"
-                                >
-                                    <div
-                                        v-if="!isLoading"
-                                    >
-                                        <ListTable
-
-                                        v-for="item in listData"
-                                        :key="item.id"
-                                        :data="item"
-                                        test="PREPARE"
-
-                                    />
-                                    </div>
-
-                                    <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
-
-                                </div>
+             <div class='chart-inventory-left' slot="leftBar">
+                    <div class='chart-left-table'>
+                        <div class='view-table-list'>
+                                 
+                        </div>
+                        <div
+                            @mouseover='leftOver'
+                            class='view-table-detail'
+                            id="vue-chart-left-table-list"
+                        >
+                            <div
+                                v-if="!isLoading"
+                            >
+                                <ListTable
+                                    v-for="item in listData"
+                                    :key="item.id"
+                                    :data="item"
+                                    test="PREPARE"
+                                />
                             </div>
-                </div>
+                            <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
+                        </div>
+                    </div>
             </div>
         </GanttChart>
 
@@ -87,7 +79,7 @@ export default {
                 pageSize:15,
                 page:nowPage,
                 status:2,
-                taskTemplateIds:''
+                taskTemplateIds:'0,2,3,7,9,12,15,20,19,21,23,24,26,27,28,36,40,41,47'
             },
             minDay:'',
             maxDay:'',
@@ -100,7 +92,7 @@ export default {
         }
     },
     mounted(){
-        this.getListData();
+        this.getListData(this.params);
         GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
@@ -135,15 +127,30 @@ export default {
         getListData(params,type){
             this.listData=[
                 {
-                    "cityName":"","id":1,"name":"","tasks":[
+                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
                     {
-                        "data":
-                        {
-                            "actualEndTime":1,"actualStartTime":1,"focus":84543,"planEndTime":1,"planStartTime":1,"taskStatus":"测试内容817k"
-                        }
-                        ,"label":"value","t_id":"","value":1
+                        "endDate":"1525017600000","startDate":"1524499200000","status":"未租"
+                    },
+                    {
+                        "endDate":"1526140800000","startDate":"1525104000000","status":"在租"
+                    },
+                    {
+                        "endDate":"1545017600000","startDate":"1526227200000","status":"合同未生效"
                     }
-                    ]
+                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
+                },
+                {
+                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
+                    {
+                        "endDate":"1525017600000","startDate":"1524499200000","status":"未租"
+                    },
+                    {
+                        "endDate":"1526140800000","startDate":"1525104000000","status":"在租"
+                    },
+                    {
+                        "endDate":"1545017600000","startDate":"1526227200000","status":"合同未生效"
+                    }
+                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
                 }
             ];
             return ;
@@ -287,55 +294,24 @@ export default {
 }
 </script>
 
-<style lang="less">
-    .sure-sign{
-        text-align: center;
-        max-width: 300px;
-        margin: 0 auto;
-        line-height: 26px;
-        font-size: 14px;
-    }
-    .chart-tab-left{
-        width:346px;
+<style lang="less" scoped>
+    .chart-inventory-left{
+        width:150px;
         border: 1px solid #F6F6F6;
         display:inline-block;
         border-bottom: none;
-        .chart-left{
-            .ivu-tabs-nav{
-                width:100%;
-                height: 51px;
-                padding-top: 8px;
-                .ivu-tabs-ink-bar{
-                    // width:58px !important;
-                    // left: 56px;
-                    top: auto;
-                }
-            }
             .chart-left-table{
                 .view-table-list{
-                    width:100%;
-                    height:49px;
-                    line-height:49px;
+                    height:101px;
                     border: 1px solid #F6F6F6;
                     border-right:none;
                     border-top: none;
                     border-left:none;
                     font-family: PingFangSC-Medium;
                     font-size: 14px;
-                    color: #666666;
+                    color: #333333;
                     font-weight: 500;
-                    display:table;
-                    background:#FAFCFF;
-                    p{
-                        display:inline-block;
-                        border-right:1px solid #F6F6F6;
-                        width:50%;
-                        text-align: center;
-                        display:table-cell;
-                        &:nth-child(3){
-                            border-right:none;
-                        }
-                    }
+                    background:#fff;
                 }
                 .view-table-detail{
                     width:100%;
@@ -351,22 +327,6 @@ export default {
                     background:#fff;
                 }
             }
-        }
-        .ivu-tabs-mini .ivu-tabs-tab{
-            width:50%;
-            text-align: center;
-            font-family: PingFangSC-Medium;
-            font-size: 14px;
-            color: #666;
-        }
-       .ivu-tabs-mini .ivu-tabs-tab-active{
-           font-weight:bolder;
-        }
-
-        .ivu-tabs-nav .ivu-tabs-tab-active{
-            color: #4A90E2;
-
-        }
         .bar{
             border-top: 1px solid #F6F6F6;
         }

@@ -1,32 +1,13 @@
 <template>
-    <div class="every-view-col" :data-chart="data.t_id"
+    <div class="every-view-col"
         :style="{
             width:boxDetail.width * minCalibration+'px',
             left:boxDetail.office * minCalibration+'px',
-
+            background:this.getLabelColor()
         }"
-
+        @mouseover="toolOver"
+        @mouseout="toolOut"
     >
-        <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
-        <div class="article"
-            v-if="getFlagShow('STAGETASK')"
-        >
-            <div
-                class="plan"
-                :style="{
-                    background:'#EEEEEE',
-                    width:planDetail.width * minCalibration + 'px',
-                    left:planDetail.office * minCalibration + 'px',
-                    color:'#666666'
-                }"
-                @mouseover="toolOver"
-                @mouseout="toolOut"
-                @click="editClick(data.value)"
-            >
-                {{getActualLabel(data.label)}}
-            </div>
-           
-        </div>
     </div>
 </template>
 
@@ -50,9 +31,6 @@ export default {
         data:{
             type:Object,
         },
-        treeKey:{
-            type:[Number,String]
-        },
         type:{
             type:String,
         },
@@ -72,10 +50,7 @@ export default {
         }
     },
     mounted(){
-        if(!this.data.chartType){
-            this.getBoxWidthAndOffice();
-        }
-
+        this.getBoxWidthAndOffice();
     },
     watch:{
         startDate:{
@@ -83,16 +58,12 @@ export default {
                 this.leftEndpoint = this.startDate;
                 this.getBoxWidthAndOffice();
             }
-
         },
     },
     methods:{
-        editClick(id){
-            this.$emit('editClick',id);
-        },
         toolOver(event){
+            console.log('-----',event,this.data);
             publicFn.poptipOver(event,this.data)
-
         },
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -101,107 +72,21 @@ export default {
             angleDom.style.opacity = 0;
         },
         getLabelColor(){
-            let taskStatus = this.data.data.taskStatus;
+            let taskStatus = this.data.status;
             return publicFn.getLabelColor(taskStatus);
         },
         
-
-        getActualColor(){
-            let taskStatus = this.data.data.taskStatus;
-            return publicFn.getActualColor(taskStatus);
-        },
-        getLabel(label,data){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
-                this.data.data.actualEndTime<this.data.data.planStartTime){
-                    return '';
-            }else {
-                return label;
-            }
-        },
-        getActualLabel(label){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
-                this.data.data.actualEndTime<this.data.data.planStartTime){
-                    return label;
-            }else {
-                return '';
-            }
-        },
-        lineShow(){
-            if(this.data.data.planEndTime<this.data.data.actualStartTime ||
-                this.data.data.actualEndTime<this.data.data.planStartTime){
-                return true;
-            }else {
-                return false;
-            }
-        },
-        getFlagShow(event){
-            return true;
-            if(this.data.data){
-                return this.data.data.taskType == event
-            }else{
-                var type = 'STAGETASK';
-                return type == event;
-            }
-        },
-        getActualBgColor(){
-            let taskStatus = this.data.data.taskStatus;
-            return publicFn.getActualBgColor(taskStatus);
-        },
-        getActualBorder(){
-            let taskStatus = this.data.data.taskStatus;
-            return publicFn.getActualBorder(taskStatus);
-        },
        getBoxWidthAndOffice(){
-            var  data = Object.assign({},this.data.data);
-            if(!data.actualStartTime && !data.actualEndTime){
-                data.actualStartTime = data.planStartTime;
-                data.actualEndTime = data.planEndTime; 
-            }      
-            var dates = publicFn.getAllMaxAndMin(data);
+            var  data = Object.assign({},this.data);
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planEndTime));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualEndTime));
-            var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
-            var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
-            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
-            var officeEnd = min;
-
+            var startDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate));
+            var endDate = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate));
+            var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;          
             this.boxDetail={
-                width:utils.dateDiff(min,max)+1,
-                office:utils.dateDiff(officeStart,min)
+                width:utils.dateDiff(startDate,endDate)+1,
+                office:utils.dateDiff(officeStart,startDate)
             }
-            this.planDetail={
-                width:utils.dateDiff(planStart,planEnd)+1,
-                office:utils.dateDiff(min,planStart)
-            };
-            this.actualDetail={
-                width:utils.dateDiff(actualStart,actualEnd)+1,
-                office:utils.dateDiff(min,actualStart)
-            }
-            //  console.log(officeStart,min,"pppp",this.planDetail)
-            var lineOffice = 0;
-            var lineWidth = 0;
-            if(data.planEndTime<data.actualStartTime){
-                lineOffice = this.planDetail.width+this.planDetail.office;
-                lineWidth = this.actualDetail.office - this.planDetail.office-this.planDetail.width;
-            }
-            if(data.actualEndTime<data.planStartTime){
-                lineOffice = this.actualDetail.width+this.actualDetail.office;
-                lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
-            }
-            if(!data.actualEndTime || !data.actualStartTime){
-                lineOffice = this.planDetail.office;
-                lineWidth = this.planDetail.width;
-            }
-            this.lineDetail = {
-                width:lineWidth,
-                office:lineOffice
-            }
-
-       },
-
+       }
     }
 }
 </script>

@@ -62,7 +62,7 @@
                     {{formItem.installmentName}}
                 </LabelText>
                 <LabelText :inline="inline" label="服务保证金：">
-                    {{formItem.newStationData[0].totalDeposit | thousand}}
+                    ￥{{formItem.newStationData[0].totalDeposit | thousand }}
                 </LabelText>
                 <LabelText :inline="inline" label="首付款日期：">
                     {{formItem.firstPayTime  |dateFormat('YYYY-MM-dd')}}
@@ -81,13 +81,13 @@
                 <Table :columns="oldInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <Table :columns="newInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <LabelText  :inline="inline"label="退还服务费：">
-                    {{formItem.changeServiceFee | thousand}}
+                    ￥{{formItem.changeServiceFee | thousand}}
                 </LabelText>
                 <LabelText  :inline="inline"label="旧服务保证金转新：">
-                    {{formItem.transferDepositAmount | thousand}}
+                    ￥{{formItem.transferDepositAmount | thousand}}
                 </LabelText>
                 <LabelText :inline="inline" label="扣除服务保证金：">
-                    {{formItem.back | thousand}}
+                    ￥{{formItem.back | thousand}}
                 </LabelText>
             </Card>
             <div class="buttons" v-if="type != 'view'">
@@ -437,6 +437,7 @@ export default {
             formData.feeResultVO = '';
             formData.oldSeatInfo = '';
             formData.newSeatInfo = '';
+            formData.tacticsVOs = ''
             console.log('submit',formData);
 
 

@@ -1686,6 +1686,7 @@
                 }
                 let back = (changeDeposit -this.formItem.transferDepositAmount).toFixed(2);
                 this.back = back;
+                console.log('getback=========end')
                 
             },
             cancel(){
@@ -1709,6 +1710,8 @@
                         return item;
                     })
 
+                    overViewData.id = params.orderEdit;
+
                     this.serviceDetailsList = response.data.newSeatCombin
                     let array = [];
                     array.push(response.data.feeResultVO)
@@ -1731,12 +1734,14 @@
                     this.formItem.leaseBegindate = response.data.realStartDate;
                     this.formItem.leaseEnddate = response.data.newSeatCombin[0].endDate;
                     this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit;
+                    this.freeDays = response.data.freeDays;
                     this.back  = response.data.feeResultVO.lockDeposit;
                     this.installmentType = response.data.installmentType
                     this.formItem.communityId = response.data.communityId+'';
                     this.formItem.communityName = response.data.communityName;
                     this.discountNum = response.data.discount;
                     this.deposit = response.data.deposit;
+                    this.saleList = response.data.tacticsVOs;
                     let _this = this;
                     console.log('获取编辑的基础数据',this.formItem)
                     setTimeout(function(){

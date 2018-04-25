@@ -32,8 +32,8 @@
                     </div>
                 </Tab-pane>
 
-                <Tab-pane label="以时间轴方式展示" name="dailyTime" disabled>
-                    
+                <Tab-pane label="以时间轴方式展示" name="dailyTime">
+                     <GanttChart />
                 </Tab-pane>
         </Tabs> 
     </div>
@@ -72,6 +72,7 @@ import Statistical from '../statistical';
 import Discount from '../discount';
 import SlotHead from '../slotHead';
 import Loading from '~/components/Loading';
+import GanttChart from '../Inventory-gantt-chart';
 var layoutScrollHeight=0;
     export default {
         name: 'Daily',
@@ -82,7 +83,8 @@ var layoutScrollHeight=0;
             Statistical,
             Discount,
             Loading,
-            SlotHead
+            SlotHead,
+            GanttChart
         },
         data () {
             return {   

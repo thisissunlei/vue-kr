@@ -7,20 +7,12 @@
             type='view'
             :start="params.startTime"
             :end="params.endTime"
-            :treeData="treeData"
             :listData="listData"
-            :treeIds="treeIds"
-            @treeClick="treeClick"
-            @treeChange="treeChange"
             @rightOver="rightOver"
-            @editClick="editTask"
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
-                    <Tabs size="small" :value="tabValue" @on-click="tabsClick">
-                        <TabPane label="待开业项目" name="name1">
-
-                            <div class='chart-left-table' v-if="mask">
+                            <div class='chart-left-table'>
                                  <div class='view-table-list'>
                                     <p>项目名称</p>
                                     <p style="border-right:none;">城市</p>
@@ -39,7 +31,6 @@
                                         :key="item.id"
                                         :data="item"
                                         test="PREPARE"
-                                        @rowClick="rowClick"
 
                                     />
                                     </div>
@@ -48,67 +39,9 @@
 
                                 </div>
                             </div>
-
-                        </TabPane>
-                        <TabPane label="投拓期项目" name="name2">
-
-                            <div class='chart-left-table' v-if="!mask">
-                                <div class='view-table-list'>
-                                    <p>项目名称</p>
-                                    <p>城市</p>
-                                    <!-- <p style="width:136px;">操作</p> -->
-                                </div>
-                                <div
-                                    @mouseover='leftOver'
-                                    class='view-table-detail'
-                                    id="vue-chart-left-table-list"
-                                >
-                                    <div
-                                        v-if="!isLoading"
-                                    >
-                                        <ListTable
-
-                                            v-for="item in listData"
-                                            :key="item.id"
-                                            :data="item"
-                                            test="INVEST"
-                                            @rowClick="rowClick"
-                                            @operationClick="operationClick"
-                                        />
-                                    </div>
-                                    <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
-                                </div>
-                            </div>
-
-                        </TabPane>
-                    </Tabs>
                 </div>
             </div>
         </GanttChart>
-        <!-- 左侧切换部分内容 -->
-        <Modal
-            v-model="openSure"
-            title="提示"
-            width="440"
-            >
-            <div class='sure-sign'>“确认已签署合同”后，该项目进入“待开业项目”列表并自动固化后续任务计划时间</div>
-            <div slot="footer">
-                <Button type="primary" @click="submitSure()">确定</Button>
-                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
-            </div>
-        </Modal>
-
-        <Modal
-                v-model="openDelete"
-                title="删除任务"
-                width="400"
-            >
-                <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
-                <div slot="footer">
-                    <Button type="primary" @click="submitDelete">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
-                </div>
-        </Modal>
 
         <Message
             :type="MessageType"
@@ -141,9 +74,6 @@ export default {
     },
     data(){
         return{
-            openSure:false,
-            openEditTask:false,
-            openDelete:false,
             MessageType:'',
             openMessage:false,
             warn:'',
@@ -162,44 +92,24 @@ export default {
             minDay:'',
             maxDay:'',
             listData:[],
-            treeData:[],
-            mask:true,
             scrollWidth:0,
             isLoading:false,
             upperError:false,
 
-            tabValue:'name1',
-
-            treeMiddle:[],
-            treeIds:''
+            tabValue:'name1'
         }
-
     },
     mounted(){
-         GLOBALSIDESWITCH("false");
-        this.getTreeData();
+        this.getListData();
+        GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
-
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
               publicFn.windowResize();
         }, 400);
-
         window.onresize=function(){
             publicFn.windowResize();
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // var dom = document.getElementById('layout-content-main');
-            // dom.style.height = document.documentElement.clientHeight-130 + "px"
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
         }
     },
 
@@ -223,6 +133,20 @@ export default {
 
         //获取进度列表数据
         getListData(params,type){
+            this.listData=[
+                {
+                    "cityName":"","id":1,"name":"","tasks":[
+                    {
+                        "data":
+                        {
+                            "actualEndTime":1,"actualStartTime":1,"focus":84543,"planEndTime":1,"planStartTime":1,"taskStatus":"测试内容817k"
+                        }
+                        ,"label":"value","t_id":"","value":1
+                    }
+                    ]
+                }
+            ];
+            return ;
             if(allPage<params.page){
                 return;
             }
@@ -270,76 +194,6 @@ export default {
             }
             return endObj;
         },
-        //获取甘特图任务数据
-        getTreeData(){
-            this.$http.get('project-status-search').then((response)=>{
-                var array=[];
-                array.push(
-                    {
-                        label:'全部任务',
-                        value:0,
-                        t_id:0,
-                        children:response.data.items
-                    }
-                );
-                this.treeData=array;
-                this.recursiveFn(this.treeData);
-                this.params.taskTemplateIds=this.treeMiddle.join(',');
-                this.treeIds=this.params.taskTemplateIds;
-                this.getListData(this.params);
-            }).catch((error)=>{
-                this.$Notice.error({
-                   title: error.message,
-                });
-            })
-        },
-        //递归甘特图任务赋值
-        recursiveFn(data){
-            data.map((item,index)=>{
-                item.title=item.label;
-                Vue.set(item,"checked",true);
-                Vue.set(item,"expand",true);
-                this.treeMiddle.push(item.value)
-                if(item.children&&item.children.length){
-                    this.recursiveFn(item.children);
-                }
-            })
-            return data;
-        },
-        //列表跳转详情
-        rowClick(item){
-            window.location.href=`./project-setting/project-detail?name=${item.name}&id=${item.id}&status=${this.params.status}`;
-        },
-        //树
-        treeClick(params){
-            var treeArray=[];
-            if(!params.length){
-                treeArray=this.treeData[0].checked?this.treeMiddle:[];
-            }else{
-                params.map((item,index)=>{
-                  treeArray.push(item.value);
-                })
-            }
-            this.params.taskTemplateIds=treeArray.join(',');
-            this.treeIds=this.params.taskTemplateIds?this.params.taskTemplateIds:'no';
-            this.params.page=1;
-            this.getListData(this.params);
-        },
-        treeChange(selectArr){
-            this.nodeChecked(selectArr);
-        },
-        nodeChecked(selectArr){
-            var treeData = [].concat(this.treeData);
-            for (let i = 0; i < treeData.length; i++) {
-                const element = treeData[i];
-                if(this.isHaver(selectArr,element.value)){
-                    Vue.set(treeData[i],"checked",true);
-                }else{
-                    Vue.set(treeData[i],"checked",false);
-                }
-            }
-            this.treeData = [].concat(treeData);
-        },
         isHaver(arr,val){
             for(var i=0;i<arr.length;i++){
                 if(arr[i].value==val){
@@ -347,38 +201,6 @@ export default {
                 }
             }
             return false;
-        },
-        operationClick(item){
-            this.cancelSure();
-            this.id=item.id;
-        },
-        submitSure(){
-            let params={
-                id:this.editId,
-                propertyId:this.propertyId
-            }
-            this.$http.post('sure-sign-project',params).then((response)=>{
-                this.tabValue='name1';
-                this.mask=true;
-                this.params.page=1;
-                this.params.status=2;
-                this.getListData(this.params);
-                this.cancelSure();
-            }).catch((error)=>{
-                this.$Notice.error({
-                   title: error.message,
-                });
-            })
-        },
-        cancelSure(){
-            this.openSure=!this.openSure;
-        },
-        cancelEditTask(){
-            this.openEditTask=!this.openEditTask;
-        },
-        //打开删除任务
-        cancelTask(){
-           this.openDelete=!this.openDelete;
         },
         timeApplyFox(str,param){
             if(str){
@@ -391,100 +213,6 @@ export default {
             }
             return str;
         },
-        //打开编辑任务
-        editTask(id,parentId){
-            this.editId=id;
-            this.propertyId=parentId;
-            this.$http.get('project-get-task',{id:id}).then((response)=>{
-            this.getEdit=response.data;
-            this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-            this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-            this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-            this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-            this.getEdit.focus=this.getEdit.focus==1?'1':'0';
-            this.cancelEditTask();
-            }).catch((error)=>{
-                this.$Notice.error({
-                title: error.message,
-                });
-            })
-        },
-         //编辑对象传递校验
-        onEditChange(params,error1,error2){
-            this.upperError=(error1||error2)?true:false;
-            this.editData=params;
-        },
-        //编辑任务提交
-        submitEditTask(name){
-            var newPageRefs = this.$refs.fromFieldTask.$refs;
-            var isSubmit = true;
-            newPageRefs[name].validate((valid,data) => {
-                if (!valid) {
-                    isSubmit = false
-                }
-            })
-            if(!isSubmit){
-                return;
-            }
-            if(this.upperError){
-                return ;
-            }
-            if(this.editData.error){
-                this.$Notice.error({
-                    title: '任务名称重复'
-                });
-                return ;
-            }
-            var dataParams=this.editData;
-            dataParams.focus=dataParams.focus=='1'?1:0;
-            dataParams.type='STAGETASK';
-            dataParams.id=this.editId;
-            dataParams.pid=0;
-            dataParams.propertyId=this.propertyId;
-            dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
-            dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
-            dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
-            dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
-            this.$http.post('project-edit-task',dataParams).then((response)=>{
-                this.cancelEditTask();
-                this.params.page=1;
-                this.getListData(this.params);
-                this.getTreeData();
-
-                if(response.code>1){
-                    this.cancelSure();
-                }else{
-                this.MessageType="success";
-                this.openMessage=true;
-                this.warn="编辑成功";
-                }
-
-                this.scrollPosititon();
-            }).catch((error)=>{
-                this.MessageType="error";
-                this.openMessage=true;
-                this.warn=error.message;
-            })
-        },
-        //提交删除任务
-        submitDelete(){
-            var params={
-                id:this.editId
-            }
-            this.$http.delete('project-delete-task',params).then((response)=>{
-                this.cancelTask();
-                this.cancelEditTask();
-                this.getListData(this.params);
-                this.MessageType="success";
-                this.openMessage=true;
-                this.warn="删除成功";
-                this.scrollPosititon();
-            }).catch((error)=>{
-                this.MessageType="error";
-                this.openMessage=true;
-                this.warn=error.message;
-            })
-        },
         scrollPosititon(){
             setTimeout(() => {
                 var leftDom=document.getElementById('vue-chart-left-table-list');
@@ -495,33 +223,6 @@ export default {
                 }
             },50);
         },
-
-
-        //tab切换
-        tabsClick(key){
-            if(key=='name2'){
-                this.tabValue=key;
-                this.mask=false;
-                this.params.status = 1;
-                this.params.page=1;
-                this.getListData(this.params);
-            }else{
-                this.tabValue=key;
-                this.mask=true;
-                this.params.status =2;
-                this.params.page=1;
-                this.getListData(this.params);
-            }
-            setTimeout(() => {
-                // var leftDom=document.getElementById('vue-chart-left-table-list');
-                // var rightDom = document.getElementById("vue-chart-right-draw-content");
-                // var clientHeight = document.documentElement.clientHeight;
-                // leftDom.style.maxHeight = clientHeight - 362+"px";
-                // rightDom.style.maxHeight = clientHeight - 362 +"px";
-                publicFn.windowResize();
-            }, 200);
-        },
-
         //获取今天日期
         getStartDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());

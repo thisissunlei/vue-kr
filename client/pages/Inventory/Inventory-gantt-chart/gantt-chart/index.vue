@@ -13,22 +13,6 @@
                             :key="index" 
                         />
                     </div>
-                    <!-- 类型选择 -->
-                    <div style="display:inline-block;margin-left:10px;">
-                        <span style="margin-top:8px;margin-right:15px;font-size:14px;color:#333333;">
-                         甘特图显示任务项
-                        </span>
-                        <Form label-position="left" style="display:inline-block;">
-                            <KrField
-                                v-if="mask"
-                                type="selectTree"
-                                :data="treeData"
-                                @okClick="treeClick"
-                                @checkChange="treeChange"
-                                :treeIds="treeIds"
-                            />
-                        </Form>
-                    </div>
 
                     <!-- 刻度选择 -->
                     <div style="display:inline-block;">
@@ -148,7 +132,6 @@
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
-                            @editClick="editClick"
                         />
                          <div class="add-right">右侧侧</div>
                         <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
@@ -197,17 +180,9 @@ export default {
         end:{
             type:String
         },
-        treeData:{
-            default:()=>[],
-            type:Array,
-        },
         listData:{
             default:()=>[],
             type:Array,
-        },
-        treeIds:{
-            default:'',
-            type:String
         }
     },
     data(){
@@ -250,7 +225,6 @@ export default {
             //下拉的默认值
             barType: 'week',
             isLoading:true,
-            mask:false,
             scrollWidth:0,
             tagToLeft:0,
             colorTypes:[
@@ -285,13 +259,8 @@ export default {
         }
     },
 
-    updated(){
-        this.mask=this.treeData.length?true:false;
-    },
+
     methods:{
-        editClick(id,pid){
-            this.$emit('editClick',id,pid);
-        },
         circleId(data,param){
             data.map((item,index)=>{
                 item.pid=param?param:'';
@@ -340,12 +309,6 @@ export default {
 
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;
-        },
-        treeClick(params){
-            this.$emit('treeClick',params);
-        },
-        treeChange(event){
-            this.$emit('treeChange',event);
         },
         //获取年数组
         getYears(startTime,endTime){

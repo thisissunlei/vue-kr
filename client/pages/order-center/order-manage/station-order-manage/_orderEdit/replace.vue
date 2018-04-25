@@ -1449,7 +1449,7 @@
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:null,
+                    mainBillId:this.$route.params.orderEdit,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
@@ -1749,6 +1749,7 @@
                     this.selecedStationList = response.data.newSeatInfo.map(item=>{
                         item.originalPrice = item.marketPrice;
                         item.name = item.seatNum;
+                        item.whereFloor = item.floor;
                         item.saleNum = response.data.discount || '-';
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;
@@ -1787,7 +1788,9 @@
                     this.formItem.communityName = response.data.communityName;
                     this.discountNum = response.data.discount;
                     this.deposit = response.data.deposit;
-                    this.saleList = response.data.tacticsVOs;
+                    this.saleList = response.data.tacticsVOs || [];
+                    this.stationData.submitData = this.selecedStationList;
+
                     let _this = this;
                     console.log('获取编辑的基础数据',this.formItem)
                     setTimeout(function(){

@@ -327,7 +327,7 @@
             </div>
         </Modal>
         <div class="view" v-if="orderStatus=='view'">
-            <ReplaceView @editCards="editCard" :showEdit="editCardabled" :data.sync="overViewData"/>
+            <ReplaceView @editCards="editCard" :showEdit="editCardabled" :data.sync="overViewData" :showSubmit="showSubmit"/>
         </div>
     </div>
 </template>
@@ -392,6 +392,7 @@
                 }
             };
             return {
+                showSubmit:false,
                 editCardabled:true,
                 openService:false,
                 labelInValue:true,
@@ -780,7 +781,7 @@
             	this.editCardabled = this.edit;
             	this.getOverView()
 
-            	this.getDetailData()
+            	// this.getDetailData()
         },
         watch:{
             getFloor(){
@@ -838,7 +839,6 @@
                     }
                     return false
                 })
-                console.log('selectedOldStation',this.selectedOldStation)
             },
             next(name){
                 if(name == 'formItemTwo'){
@@ -961,6 +961,7 @@
                     item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
                     return item;
                 })
+                this.showSubmit = true;
                 console.log('=======',overViewData)
                 overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
@@ -1069,8 +1070,9 @@
                     })
                 })
                 this.oldStation = list;
-                this.getSelectedOldStation()
                 console.log('回显结果',list)
+                this.getSelectedOldStation()
+                
 
             },
             changeBeginTime(value){
@@ -1447,6 +1449,10 @@
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;
+                this.saleList = []
+                this.discountNum = '';
+                this.freeDays = ''
+                this.freeStartDate = ''
                 this.selecedStationList = this.stationData.submitData.map(item=>{
                     item.guidePrice = item.seatPrice || item.guidePrice || 0;
                     item.discountedPrice = item.seatPrice;
@@ -1460,9 +1466,7 @@
                 });
                 this.watchServiceDetail = new Date();
                 this.changeThree = new Date()
-                this.saleList = []
-                this.discountNum = '';
-                this.freeDays = ''
+                
             },
             // 获取step3的服务费用明细
             getSeatCombin(){
@@ -1498,6 +1502,16 @@
                 this.getStationAmount()
             },
             getServiceDetail(item){
+                var endTime = ''
+                if(item.freeStartDate){
+                    endTime = new Date(item.freeStartDate)
+                    endTime = endTime.setDate(endTime.getDate()-1);
+                    endTime = new Date(endTime).getTime()
+                }else{
+                    endTime = item.endDate;
+                }
+
+
                 let list = item.seatIds.map(value=>{
                     let obj = {};
                     obj.seatId = value;
@@ -1508,7 +1522,7 @@
                 let params = {
                     codeName:item.name,
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
-                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.freeStartDate || item.startDate)),
+                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(endTime)),
                     seats:JSON.stringify(list),
                     signPrice:price,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
@@ -1700,116 +1714,127 @@
             cancel(){
                 this.openService = false;
             },
-            getDetailData(){
-            	
-
-	            let {params}=this.$route;
-	            let from={
-	                id:params.watchView
-	            };
-	            this.$http.get('get-replace-detail', from).then((response)=>{  
-	                    let overViewData = response.data;
-
-	                    this.selecedStationList = response.data.newSeatInfo.map(item=>{
-	                        item.originalPrice = item.marketPrice;
-	                        item.name = item.seatNum;
-	                        item.saleNum = response.data.discount || '-';
-	                        item.discountedPrice = item.signPrice;
-	                        item.startDate = response.data.realStartDate;
-	                        item.endDate = response.data.newSeatCombin[0].endDate
-	                        return item;
-	                    })
-
-	                    this.serviceDetailsList = response.data.newSeatCombin
-	                    let array = [];
-	                    array.push(response.data.feeResultVO)
-	                    overViewData.newStationData = array;
-	                    overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
-	                        item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
-	                        item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
-	                        return item;
-	                    });
-
-	                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
-	                    overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit
-	                    
-
-	                    overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
-	                    overViewData.startDate = response.data.realStartDate
-	                    overViewData.back = response.data.feeResultVO.lockDeposit
-	                    this.formItem = overViewData;
-	                    this.formItem.signDate = new Date();
-	                    this.formItem.leaseBegindate = response.data.realStartDate;
-	                    this.formItem.leaseEnddate = response.data.newSeatCombin[0].endDate;
-	                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit;
-	                    this.back  = response.data.feeResultVO.lockDeposit;
-	                    this.installmentType = response.data.installmentType
-	                    this.formItem.communityId = response.data.communityId+'';
-	                    this.formItem.communityName = response.data.communityName;
-	                    let _this = this;
-	                    this.getFloor = new Date()
-	                    console.log('获取编辑的基础数据',this.formItem)
-	                    setTimeout(function(){
-	                        _this.getCustomerToCom()
-	                    },200)
-	                    
-	                    
-
-	                }).catch((error)=>{
-	                	console.log(error)
-	                    this.$Notice.error({
-	                        title:error.message
-	                    });
-	            })
-        	},
         	getOverView(){
 				let {params}=this.$route;
 				let from={
 					id:params.watchView
 				};
-				this.$http.get('get-replace-detail', from).then((response)=>{  
-						let overViewData = response.data;
+				this.$http.get('get-replace-detail', from).then((response)=>{ 
 
-						overViewData.oldSeatList = response.data.oldSeatInfo.map(item=>{
-							let obj = Object.assign({},item);
-							obj.endDate = item.prepEndDate;
-							obj.changeBegin = item.prepStartDate;
-							return obj;
-						});
-						overViewData.seats = response.data.newSeatInfo.map(item=>{
-							item.originalPrice = item.marketPrice;
-							item.saleNum = response.data.discount || '-';
-							return item;
-						})
-						let array = [];
-						array.push(response.data.feeResultVO)
-						overViewData.newStationData = array;
-						overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
-							item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
-							item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
-							return item;
-						});
+                    let overViewData = response.data;
+                    this.formItem.id = params.watchView;
+                    // 查看版
+                    // step1页内数据（overViewData有）
+                    
+                    // 编辑版
+                    
+                    this.formItem.communityId = response.data.communityId+'';
+                    this.formItem.communityName = response.data.communityName;
+                    this.getFloor = new Date()
+                    this.formItem.signDate = response.data.saleDate;
+                    let _this = this;
+                    setTimeout(function(){
+                        _this.getCustomerToCom()
+                    },200)
 
-						overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
-						this.payList.map(item=>{
-							if(item.value == response.data.installmentType){
-								overViewData.installmentName = item.label
-							}
-						})
-						overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit
-						
+                    // step2数据
+                    // 编辑版
+                    this.formItem.startDate = response.data.realStartDate;
+                    this.formItem.endDate = response.data.realEndDate;
+                    //已选旧工位
+                    overViewData.oldSeatList = response.data.oldSeatInfo.map(item=>{
+                            let obj = Object.assign({},item);
+                            obj.endDate = item.prepEndDate;
+                            obj.changeBegin = item.prepStartDate;
+                            return obj;
+                    });
+                    overViewData.startDate = response.data.realStartDate
 
-						overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
-						overViewData.startDate = response.data.realStartDate
-						overViewData.back = response.data.feeResultVO.lockDeposit
-						this.overViewData = overViewData
-						this.orderStatus = 'view';
+
+
+                    // step3数据
+                    this.freeStartDate = response.data.freeStartDate || '';
+                    this.discountNum = response.data.discount;
+                    this.deposit = response.data.deposit;
+                    this.saleList = response.data.tacticsVOs || [];
+                    // 欲更换工位
+                    this.selecedStationList = response.data.newSeatInfo.map(item=>{
+                        item.originalPrice = item.marketPrice;
+                        item.name = item.seatNum;
+                        item.saleNum = response.data.discount || '-';
+                        item.discountedPrice = item.signPrice;
+                        item.startDate = response.data.realStartDate;
+                        item.endDate = response.data.realEndDate
+                        return item;
+                    })
+
+                    this.freeDays = response.data.freeDays;
+                    overViewData.firstPayTime = response.data.firstPayTime;
+                    this.formItem.firstPayTime = response.data.firstPayTime;
+
+                    
+                    // 明细信息
+                    this.serviceDetailsList = response.data.newSeatCombin
+                    
+                    this.payList.map(item=>{
+                        if(item.value == response.data.installmentType){
+                            overViewData.installmentName = item.label
+                        }
+                    })
+                    this.installmentType = response.data.installmentType
+                    // 提交格式的与更换工位信息
+                    overViewData.seats = response.data.newSeatInfo.map(item=>{
+                        item.originalPrice = item.marketPrice;
+                        item.saleNum = response.data.discount || '-';
+                        return item;
+                    })
+
+                    // step4里数据
+                    let array = [];
+                    array.push(response.data.feeResultVO)
+                    overViewData.newStationData = array;//step4里的table数据
+                    this.oldStationData = array;
+                    this.newStationData = array;
+                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                    overViewData.back = response.data.feeResultVO.lockDeposit
+                    overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit + ''
+
+                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
+                    this.back  = response.data.feeResultVO.lockDeposit;
+
+
+                    // 待定
+                    overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
+                        item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
+                        item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
+                        return item;
+                    });
+
+                    
+                    this.formItem = Object.assign({},overViewData,this.formItem);
+                    this.formItem.leaseBegindate = response.data.realStartDate;
+                    this.formItem.leaseEnddate = response.data.realEndDate;
+                    
+                    
+					this.overViewData = overViewData
+					this.orderStatus = 'view';
+                    console.log('----->',this.formItem)
+                        
+                        if(this.edit){
+                           this.getBasicData()
+                        }
 					}).catch((error)=>{
 						this.$Notice.error({
 							title:error.message
 						});
 				})
 			},
+            getBasicData(){
+                this.getOldStation()//获取旧工位的数据
+                this.getSaleList(this.formItem.endDate)
+                this.getSelectedOldStation()
+
+            },
         }
     }
 

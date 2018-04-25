@@ -90,7 +90,7 @@
                     ￥{{formItem.back | thousand}}
                 </LabelText>
             </Card>
-            <div class="buttons" v-if="type != 'view'">
+            <div class="buttons" v-if="showSubmit">
 
                 <Button type="ghost" @click="editCard(3)">取消</Button>
                 <span class="between"></span>
@@ -145,6 +145,10 @@ export default {
         data:Object,
         type:String,
         showEdit:{
+            type:Boolean,
+            default:true
+        },
+        showSubmit:{
             type:Boolean,
             default:true
         }

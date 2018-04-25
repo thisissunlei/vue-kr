@@ -461,8 +461,8 @@ export default {
                 // 计算得出免租后真正的结束日期
                 var endTime = ''
                 if(item.freeStartDate){
-                    endTime = item.freeStartDate
-                    endTime = endTime.setDate(today.getDate()-1);
+                    endTime = new Date(item.freeStartDate)
+                    endTime = endTime.setDate(endTime.getDate()-1);
                     endTime = new Date(endTime).getTime()
                 }else{
                     endTime = item.endDate;

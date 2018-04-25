@@ -1464,14 +1464,14 @@
             getServiceDetail(item){
                 var endTime = ''
                 if(item.freeStartDate){
-                    endTime = item.freeStartDate
-                    endTime = endTime.setDate(today.getDate()-1);
+                    endTime = new Date(item.freeStartDate)
+                    endTime = endTime.setDate(endTime.getDate()-1);
                     endTime = new Date(endTime).getTime()
                 }else{
                     endTime = item.endDate;
                 }
                 
-                
+
                 let list = item.seatIds.map(value=>{
                     let obj = {};
                     obj.seatId = value;

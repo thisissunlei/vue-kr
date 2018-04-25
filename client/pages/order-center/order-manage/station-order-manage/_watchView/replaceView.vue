@@ -1427,12 +1427,13 @@
                 let params = {
                     floor:floor.join(','),
                     communityId:this.formItem.communityId,
-                    mainBillId:null,
+                    mainBillId:this.$route.params.watchView,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     time:+new Date(),
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
                 }
                 this.params = params;
+                console.log('getPlanMap',this.selecedStationList)
                 this.stationData.submitData = this.selecedStationList || []
                 this.showMap = true;
             },
@@ -1761,6 +1762,12 @@
                     this.selecedStationList = response.data.newSeatInfo.map(item=>{
                         item.originalPrice = item.marketPrice;
                         item.name = item.seatNum;
+                        item.seatName = item.seatNum;
+                        item.floor = item.floor;
+                        item.whereFloor = item.floor;
+                        item.id = item.seatId;
+                        
+                        item.belongType = item.seatType;
                         item.saleNum = response.data.discount || '-';
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;

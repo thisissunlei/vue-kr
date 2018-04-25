@@ -1750,6 +1750,11 @@
                         item.originalPrice = item.marketPrice;
                         item.name = item.seatNum;
                         item.whereFloor = item.floor;
+                        item.seatName = item.seatNum;
+                        item.id = item.seatId;
+                        item.floor = item.floor;
+                        item.whereFloor = item.floor;
+                        item.belongType = item.seatType;
                         item.saleNum = response.data.discount || '-';
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;

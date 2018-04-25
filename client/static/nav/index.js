@@ -510,12 +510,12 @@
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
-                        {
-                            primaryText: '客户管理',
-                            router: 'customer-manage/manage',
-                            type:'vue',
-                            menuCode: 'customer_center'
-                        },
+                        // {
+                        //     primaryText: '客户管理',
+                        //     router: 'customer-manage/manage',
+                        //     type:'vue',
+                        //     menuCode: 'customer_center'
+                        // },
                         {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',

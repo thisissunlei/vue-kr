@@ -1462,6 +1462,16 @@
                 
             },
             getServiceDetail(item){
+                var endTime = ''
+                if(item.freeStartDate){
+                    endTime = item.freeStartDate
+                    endTime = endTime.setDate(today.getDate()-1);
+                    endTime = new Date(endTime).getTime()
+                }else{
+                    endTime = item.endDate;
+                }
+                
+                
                 let list = item.seatIds.map(value=>{
                     let obj = {};
                     obj.seatId = value;
@@ -1472,7 +1482,7 @@
                 let params = {
                     codeName:item.name,
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate)),
-                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.freeStartDate || item.startDate)),
+                    realEndDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(endTime)),
                     seats:JSON.stringify(list),
                     signPrice:price,
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))

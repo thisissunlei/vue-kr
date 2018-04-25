@@ -401,12 +401,17 @@ export default {
             formData.startDate = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.startDate))
             formData.firstPayTime = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(formData.firstPayTime))
             formData.newStationData = '';
+            formData.depositAmount = this.data.newStationData[0].totalDeposit
+
             formData.oldDepositAmount = this.data.newStationData[0].changeDeposit
             //清除无用数据
             formData.newSeatCombin = '';
             formData.feeResultVO = '';
             formData.oldSeatInfo = '';
             formData.newSeatInfo = '';
+            console.log('submit',formData)
+
+            return ;
             this.$http.post('save-replace', formData).then( r => {
                 console.log('list',r.data)
                  window.close();

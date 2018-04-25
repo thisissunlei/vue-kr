@@ -770,12 +770,12 @@
                             type: 'vue',
                             router: 'app-manage/member-welfare'
                         }, 
-                        {
-                            primaryText: '免费额度优惠券',
-                            menuCode: 'op_member_coupon_internal',
-                            type: 'vue',
-                            router: 'app-manage/coupon'
-                        },   
+                        // {
+                        //     primaryText: '免费额度优惠券',
+                        //     menuCode: 'op_member_coupon_internal',
+                        //     type: 'vue',
+                        //     router: 'app-manage/coupon'
+                        // },   
                     ]
                 },
                 {

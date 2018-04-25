@@ -455,9 +455,9 @@ export default {
         },
         getEndDate(){
             var today=publicFn.getToDay();
-            var dayNum=Number(publicFn.getMonthDayNum());
             var date=today.split('-');
             var year=Number(date[0]),month=Number(date[1]),day=Number(date[2]);
+            var dayNum=Number(publicFn.getMonthDayNum(year,month));
             var endDay=day+7,endYear=year,endMonth=month;
             if(endDay>dayNum){
                 endMonth+=1;

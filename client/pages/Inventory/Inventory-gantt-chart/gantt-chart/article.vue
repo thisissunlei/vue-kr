@@ -62,7 +62,6 @@ export default {
     },
     methods:{
         toolOver(event){
-            console.log('-----',event,this.data);
             publicFn.poptipOver(event,this.data)
         },
         toolOut(event){

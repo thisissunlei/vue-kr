@@ -19,7 +19,7 @@
                                  <Loading/>
                             </div> 
                         </Table>
-                        <SlotHead v-if="theHead" indentify="daily"/>
+                        <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
                         <div class='spin-position-fix' v-if="spinLoading">
                             <Spin fix size="large"></Spin>
                         </div>
@@ -477,6 +477,13 @@ var layoutScrollHeight=0;
                 .ivu-table-cell{
                     padding:0 10px;
                 }
+            }
+            .header-here{
+                opacity:1;
+            }
+            .header-no{
+                transition: opacity 0.2 ease;
+                opacity: 0;
             }
         }
     }

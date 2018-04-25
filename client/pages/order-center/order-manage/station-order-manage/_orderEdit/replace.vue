@@ -264,6 +264,7 @@
                                     placeholder="旧服务保证金转新"
                                     style="width: 252px"
                                     @on-blur="getBack"
+                                    @on-change="getBack"
                                 />
                             </FormItem>
                         </Col>
@@ -834,6 +835,7 @@
             this.getSeatCombin()
            },
            changeThree(){
+            console.log('changeThree')
             this.clearFormFour()
            }
         },
@@ -975,9 +977,9 @@
                 let serviceDetailsList =this.serviceDetailsList.map(item=>{
                     item.startDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseBegindate));
                     item.endDate = dateUtils.dateToStr('YYYY-MM-DD',new Date(this.formItem.leaseEnddate));
+
                     return item;
                 })
-                console.log('=======',overViewData)
                 overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
                     if(valid){
@@ -1029,7 +1031,7 @@
                 // 选择社区
                 if(value.value){
                     this.formItem.communityId =value.value;
-                    this.formItem.communityName =value.label;
+                    this.formItem.communityName =value.label || this.formItem.communityName;
                 }
                 if(value.value != this.formItem.communityId){
                     this.clearStepData() //清除step2数据
@@ -1168,6 +1170,7 @@
                 this.formItem.transferDepositAmount = ''
             },
             selectPayType:function(value){
+                console.log('选择付款方式')
                 // 选择付款方式
                 this.installmentType = value.value;
                 this.changeThree = new Date()
@@ -1175,6 +1178,8 @@
                 this.errorObj.payType = false;
             },
             selectDeposit:function(value){
+                console.log('选择保证金')
+
                 // 选择保证金
                 this.deposit = value
                 this.changeThree = new Date()
@@ -1335,11 +1340,13 @@
                     tacticsId:this.freeMap.tacticsId
                 }
                 list.push(freeObj);
+                console.log('setFreeDays',list)
                 this.saleList = list;
                 //设置折扣后，更新列表
                 this.getSaleAmount(list)
             },
             setDiscountNum(){
+                console.log('setDiscountNum---saleList',this.saleList,'===',this.discount.tacticsType)
                 if(!this.discountNum){
                     this.$Notice.error({
                         title:'请先选择折扣'
@@ -1361,6 +1368,7 @@
                     tacticsId:this.discount.tacticsId
                 }
                 list.push(discountObj);
+                console.log('setDiscountNum',list)
                 this.saleList = list;
                 //设置折扣后，更新列表
                 this.getSaleAmount(list)
@@ -1683,6 +1691,7 @@
             getBack(){
                 console.log('getback')
                 let value = this.formItem.transferDepositAmount;
+                console.log('value',value)
                 let changeDeposit = this.newStationData[0].changeDeposit;
                 if(isNaN(value)){
                     this.$Notice.error({
@@ -1713,7 +1722,7 @@
                 }
                 let back = (changeDeposit -this.formItem.transferDepositAmount).toFixed(2);
                 this.back = back;
-                console.log('getback=========end')
+                console.log('getback=========end',this.formItem.transferDepositAmount)
                 
             },
             cancel(){
@@ -1733,7 +1742,7 @@
                         item.saleNum = response.data.discount || '-';
                         item.discountedPrice = item.signPrice;
                         item.startDate = response.data.realStartDate;
-                        item.endDate = response.data.newSeatCombin[0].endDate
+                        item.endDate = response.data.realEndDate
                         return item;
                     })
 
@@ -1750,17 +1759,17 @@
                     });
 
                     overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
-                    overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit
-                    
 
                     overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
+                    this.freeStartDate = response.data.freeStartDate || '';
                     overViewData.startDate = response.data.realStartDate
                     overViewData.back = response.data.feeResultVO.lockDeposit
                     this.formItem = overViewData;
                     this.formItem.signDate = new Date();
                     this.formItem.leaseBegindate = response.data.realStartDate;
-                    this.formItem.leaseEnddate = response.data.newSeatCombin[0].endDate;
-                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit;
+                    this.formItem.leaseEnddate = response.data.realEndDate;
+                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
+                    console.log( ' this.formItem.transferDepositAmount',this.formItem.transferDepositAmount)
                     this.freeDays = response.data.freeDays;
                     this.back  = response.data.feeResultVO.lockDeposit;
                     this.installmentType = response.data.installmentType

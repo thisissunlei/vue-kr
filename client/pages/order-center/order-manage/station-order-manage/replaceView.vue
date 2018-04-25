@@ -62,7 +62,7 @@
                     {{formItem.installmentName}}
                 </LabelText>
                 <LabelText :inline="inline" label="服务保证金：">
-                    {{formItem.newStationData[0].totalDeposit}}
+                    {{formItem.newStationData[0].totalDeposit | thousand}}
                 </LabelText>
                 <LabelText :inline="inline" label="首付款日期：">
                     {{formItem.firstPayTime  |dateFormat('YYYY-MM-dd')}}
@@ -81,13 +81,13 @@
                 <Table :columns="oldInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <Table :columns="newInfoColumns" style="margin:20px 0" :data="formItem.newStationData"></Table>
                 <LabelText  :inline="inline"label="退还服务费：">
-                    {{formItem.changeServiceFee}}
+                    {{formItem.changeServiceFee | thousand}}
                 </LabelText>
                 <LabelText  :inline="inline"label="旧服务保证金转新：">
-                    {{formItem.transferDepositAmount}}
+                    {{formItem.transferDepositAmount | thousand}}
                 </LabelText>
                 <LabelText :inline="inline" label="扣除服务保证金：">
-                    {{formItem.back}}
+                    {{formItem.back | thousand}}
                 </LabelText>
             </Card>
             <div class="buttons" v-if="type != 'view'">
@@ -132,6 +132,7 @@
     import LabelText from '~/components/LabelText';
     import dateUtils from 'vue-dateutils';
     import Buttons from '~/components/Buttons';
+    import utils from '~/plugins/utils';
 
 export default {
 	name:'JoinView',
@@ -227,12 +228,18 @@ export default {
                 {
                     title: '指导价',
                     key: 'guidePrice',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                    }
                 },
                 {
                     title: '下单价',
                     key: 'originalPrice',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.originalPrice)+'(元/月/房间)'
+                    }
                 },
                 {
                     title: '优惠',
@@ -242,7 +249,10 @@ export default {
                 {
                     title: '签约价',
                     key: 'signPrice',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return utils.thousand(params.row.signPrice)+'(元/月/房间)'
+                    }
                 },
             ],
             newStatonMoneyColumns:[
@@ -282,7 +292,10 @@ export default {
                 {
                     title: '金额',
                     key: 'totalRent',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.totalRent)
+                    }
                 },
                 {
                     title: '操作',
@@ -309,29 +322,44 @@ export default {
                 {
                     title: '服务费总额',
                     key: 'totalServiceFee',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.totalServiceFee)
+                    }
                 },
                 {
                     title: '服务保证金',
                     key: 'totalDeposit',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.totalDeposit)
+                    }
                 },
             ],
             oldInfoColumns:[
                 {
                     title: '减少服务费',
                     key: 'reduceServiceFee',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.reduceServiceFee)
+                    }
                 },
                 {
                     title: '已交服务费中涉及到更换的金额',
                     key: 'changeServiceFee',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.changeServiceFee)
+                    }
                 },
                 {
                     title: '已交保证金涉及到更换的金额',
                     key: 'changeDeposit',
-                    align: 'center'
+                    align: 'center',
+                    render: (h, params) => {
+                        return '￥'+utils.thousand(params.row.changeDeposit)
+                    }
                 },
             ],
             detailService:{

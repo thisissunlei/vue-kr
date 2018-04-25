@@ -341,7 +341,7 @@
     import dateUtils from 'vue-dateutils';
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
-
+    import utils from '~/plugins/utils';
     // 新建换租订单步骤说明
     // step：1
     // 选择客户名称->根据客户带出相对应的社区；其他为必填项；
@@ -425,9 +425,12 @@
                         }
                     },
                     {
-                        title: '指导价(元/月/房间)',
+                        title: '指导价',
                         key: 'guidePrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '下单价(元/月/房间)',
@@ -478,7 +481,10 @@
                     {
                         title: '签约价',
                         key: 'discountedPrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.discountedPrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '操作',
@@ -547,7 +553,10 @@
                     {
                         title: '金额',
                         key: 'totalRent',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.totalRent)
+                        }
                     },
                     {
                         title: '操作',

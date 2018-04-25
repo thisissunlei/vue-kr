@@ -238,11 +238,11 @@ function getDivColor(value){
             return '#fff';
             break;
         case 'UNDERWAY':
-            return '#F5A623';
+            return '#E03B3B';
             break;
        
         case 'OVERDUE':
-            return '#FF6868';
+            return '#E58F00';
             break;
         case 'PLANNED':
             return '#fff';

@@ -1442,10 +1442,11 @@
             },
             deleteDtation(index){
                 this.selecedStationList.splice(index,1);
-                if(!this.selecedStationList.length){
+                console.log('deleteDtation',this.selecedStationList)
+                if(this.selecedStationList.length){
                     this.getStationAmount();
+                }else{
                     this.serviceDetailsList = []
-
                 }
                 
             },

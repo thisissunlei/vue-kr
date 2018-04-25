@@ -409,7 +409,6 @@ export default {
             formData.newSeatInfo = '';
             this.$http.post('save-replace', formData).then( r => {
                 console.log('list',r.data)
-                return
                  window.close();
                 window.opener.location.reload();
 

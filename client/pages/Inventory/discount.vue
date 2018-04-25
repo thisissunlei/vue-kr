@@ -4,7 +4,7 @@
                 <Radio label="1">原价</Radio>
                 <Radio label="0">折扣</Radio>
             </RadioGroup>
-            <div style="display:inline-block;margin:0 7px 0 2px;position:relative;">
+            <div style="display:inline-block;margin:0 7px 0 2px;">
                 <Tooltip content="表中的价格均不显示小数，选择折扣的功能仅为方便计算折后价，是否能以此折扣成交以及签约价以合同与订单为准" placement="top">
                   <span class='icon-tip'></span>
                 </Tooltip>
@@ -103,7 +103,9 @@ export default {
         .ivu-tooltip-popper{
             word-break: break-all;
             word-wrap: break-word;
-            width:300px;
+            max-width:300px;
+            left: -2px !important;
+            top: -95px !important;
         }
         .ivu-tooltip-inner{
             white-space: normal;

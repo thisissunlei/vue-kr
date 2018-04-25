@@ -140,7 +140,7 @@
                 this.lowerSubmit();
             },
             showDetail(item){
-                let url = '/bill/customerAssets/'+item.customerId+'/view'
+                let url = '/bill/customerAssets/'+item.customerId+'/view#account'
                 window.open(url,'_blank');
             },
             changePage(page){

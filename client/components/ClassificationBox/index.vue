@@ -1,9 +1,9 @@
 <template>
   <div class="classification-box">
         <div class="hander">
-            <div class="icon"><span v-if="value && type=='num'">{{value}}</span><span v-if="!value || type=='icon'" class="circle"></span></div>
+            <div class="icon"><span class="title-num" v-if="value && type=='num'">{{value}}</span><span v-if="!value || type=='icon'" class="circle"></span></div>
             
-            <div class="title"><span>{{title}}</span></div>
+            <div class="title"><span>{{title}}</span><span v-if="promptText" style="font-size:14px;color:red;">{{promptText}}</span></div>
         </div>
         <div class="content" :style="{borderWidth:isBorder?'1px':'0px'}">
             <slot name="content"></slot>
@@ -33,6 +33,10 @@
         isEnd:{
             type:Boolean,
             default:false,
+        },
+        promptText:{
+            type:String,
+            default:'',
         }
     },
     data(){
@@ -63,8 +67,8 @@
     .icon{
         display: inline-block;
         height: 40px;
-        width: 40px;
-        border: 1px solid #499DF1;
+        width: 60px;
+        // border: 1px solid #499DF1;
         border-radius: 20px;
         text-align: center;
         line-height: 40px;
@@ -73,6 +77,17 @@
         box-sizing: border-box;
         margin: 0px;
         padding: 0px;
+        background-image:url(images/tuxing.png); 
+
+        background-size: 100% 100%;
+        .title-num{
+            display: block;
+            height: 40px;
+            width: 40px;
+            text-align: center;
+            line-height: 40px;
+            vertical-align: middle;
+        }
         .circle{
             height: 20px;
             width: 20px;
@@ -104,16 +119,7 @@
             display: inline-block;
         }
     }
-    .title:before{
-        content: '';
-        display: inline-block;
-        width: 22px;
-        height: 1px;
-        background: #499DF1;
-        position: relative;
-        top: -5px;
 
-    }
     .content{
         padding-left: 40px;
         padding-top:15px;
@@ -121,6 +127,7 @@
         border-left:1px  dashed #499DF1;
         margin-left: 20px;
         position: relative;
+        margin-top: -2px;
         .tag{
             display: inline-block;
             position: absolute;

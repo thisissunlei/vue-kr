@@ -60,6 +60,16 @@ a, a:hover, a:focus, a:visited {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        
+}
+.vertical-center-modal .ivu-modal{
+    top: 0;
+}
 /*根据ui全局修改*/
 
 /* sort默认样式 */

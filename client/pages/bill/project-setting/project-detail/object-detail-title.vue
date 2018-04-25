@@ -91,6 +91,7 @@ export default{
                 border-radius: 15px;
                 text-align: center;
                 font-size: 12px;
+                font-weight: bold;
                 
             }
         }

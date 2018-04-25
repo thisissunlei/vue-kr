@@ -27,6 +27,7 @@
         ok-text="确定"
         cancel-text="取消"
         width="373"
+        className="vertical-center-modal"
      >
         <AddArchives @bindData="onAddArchives" ref="fromFieldArchives" v-if="openNewArchives"/>
         <div slot="footer" style="text-align:center;">
@@ -272,8 +273,7 @@ import Loading from '~/components/Loading'
             
             //排序按钮
             shortChange(event){
-                console.log(event,"ppppp")
-                if(event.label === '创建时间 '){
+                if(event.label === '创建时间'){
                     if(event.order === 'asc'){
                         this.tabParams.query = 'CTIMEASC';
                     }else{
@@ -389,6 +389,9 @@ import Loading from '~/components/Loading'
     .table-null{
         line-height: 47px;
     }
+    .ivu-modal-footer{
+    padding-top:10px; 
+}
     .current-range{
         //border-bottom: none;
         .ivu-table-cell{
@@ -441,10 +444,12 @@ import Loading from '~/components/Loading'
          background-color: #FAFCFF;
     }
 }
+.ivu-modal-footer{
+    padding-top:10px; 
+}
 
 .ivu-tooltip{
     width:100%;
-    //border-bottom: 1px solid #e9eaec;
     .ivu-tooltip-rel{
        width:100%;
     }

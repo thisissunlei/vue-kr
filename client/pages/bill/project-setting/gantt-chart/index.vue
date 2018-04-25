@@ -54,11 +54,12 @@
                                 @okClick="treeClick"
                                 @checkChange="treeChange"
                                 :treeIds="treeIds"
+                                :inputWidth="150"
                             />
                         </Form>
                     </div>
 
-                    <div style="display:inline-block;">
+                    <div style="display:inline-block;padding-left:30px;">
                             <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
                                 时间轴最小刻度
                             </span>
@@ -289,6 +290,7 @@ export default {
         }
     },
     mounted(){
+        // return;
         this.scrollWidth = utils.getScrollBarSize()
         this.limitDay(this.barType);
         setTimeout(() => {

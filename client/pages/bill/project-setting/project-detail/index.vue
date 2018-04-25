@@ -56,20 +56,20 @@
         </Drawer>
 
         <Modal
+           
             v-model="openWatch"
             title="查看记录"
             width="660"
         >
                 <WatchRecord 
+                    v-if="openWatch"
                     :id="queryData.id"
                     :watchRecord="watchRecord" 
                     @searchClick="searchClick" 
                     :watchTotalCount="watchTotalCount"
                     :watchPage = "watchPage"
                 />
-                <div slot="footer" style="text-align:center;">
-                    <Button type="primary" @click="cancelWatch" style="width: 90px;height: 34px;">确定</Button>
-                </div>
+              <div slot="footer"></div>
         </Modal>
 
         <Modal
@@ -209,6 +209,7 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
+        // return;
          this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
          this.signMask=this.queryData.status==1?true:false;
@@ -345,9 +346,15 @@ export default {
             this.$http.get('project-list-task',params).then((response)=>{
                 this.listData=response.data.items;
                 if(response.data.hasTime){
-                    this.startTime = publicFn.compareTime(this.startTime,response.data.firstStartTime);
-                    var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    if(response.data.firstStartTime){
+                        this.startTime = publicFn.compareTime(this.startTime,response.data.firstStartTime);
+                    }
+                    if(response.data.lastEndTime){
+                        var endObj = this.monthAdd(response.data.lastEndTime);
+                        this.endTime=publicFn.compareEndTime(this.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
+                    }
+                    
+                   
                 }
                 this.isLoading = false;
                 this.scrollPosititon();
@@ -521,7 +528,6 @@ export default {
                 data.focus=data.focus==1?'1':'0';
                 this.getEdit=Object.assign({},data);
                 this.taskStatus = data.taskStatus;
-                console.log(this.taskStatus,"pppppp");
                 if(!callback){
                     this.cancelEditTask();
                 }else{
@@ -543,6 +549,10 @@ export default {
         //打开查看任务
         watchTask(){
             this.watchParams.id = this.queryData.id;
+            this.watchParams.endTime = '';
+            this.watchParams.startTime = '';
+            this.watchParams.updator = '';
+            this.watchParams.page = 1;
             this.getWatchData(this.watchParams);
             this.cancelWatch();
         },

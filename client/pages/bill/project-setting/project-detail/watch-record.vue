@@ -19,7 +19,7 @@
             </Form-item>
 
             <Form-item label="" class='daily-form' style="padding:0px 20px;">
-                <SelectSaler :onchange="changeSaler" placeholder="编辑人姓名" name="formItem.updator" ></SelectSaler>
+                <SelectSaler :clearable="true" :onchange="changeSaler" value="编辑人姓名" name="formItem.updator" ></SelectSaler>
             </Form-item>
             <Button style="float:right;" type="primary" @click="seachClick">搜索</Button>
         </Form>
@@ -27,6 +27,7 @@
         <div style="margin: 10px;overflow: hidden">
             <div style="float: right;">
                 <Page 
+                    v-if="watchRecord && watchRecord.length"
                     :current="page"
                     :total="totalCount"
                     :page-size="pageSize" 
@@ -67,7 +68,7 @@ export default {
     },
     data(){
         return{
-            totalCount:0,
+            totalCount:this.watchTotalCount,
             pageSize:15,
             page:1,
             params:{
@@ -118,6 +119,7 @@ export default {
             this.totalCount = this.watchTotalCount;
         }
     },
+
     methods:{
         changePage(page){
             // 页面发生改变

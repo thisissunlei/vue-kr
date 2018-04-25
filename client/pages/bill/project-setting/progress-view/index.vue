@@ -18,7 +18,7 @@
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
-                    <Tabs size="small" :value="tabValue" @on-click="tabsClick">
+                    <Tabs size="small" :value="tabValue" :animated="false" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
 
                             <div class='chart-left-table' v-if="mask">
@@ -420,7 +420,6 @@ export default {
                 data.focus=data.focus==1?'1':'0';
                 this.getEdit=Object.assign({},data);
                 this.taskStatus = data.taskStatus;
-                console.log(callback,"ppppppp")
                 if(!callback){
                     this.cancelEditTask();
                 }else{
@@ -603,6 +602,7 @@ export default {
                     // width:58px !important;
                     // left: 56px;
                     top: auto;
+                    border:0px;
                 }
             }
             .chart-left-table{

@@ -1399,6 +1399,10 @@
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;
+                this.saleList = []
+                this.discountNum = '';
+                this.freeDays = ''
+                this.freeStartDate = ''
                 this.selecedStationList = this.stationData.submitData.map(item=>{
                     item.guidePrice = item.seatPrice || item.guidePrice || 0;
                     item.discountedPrice = item.seatPrice;
@@ -1412,9 +1416,7 @@
                 });
                 this.watchServiceDetail = new Date();
                 this.changeThree = new Date()
-                this.saleList = []
-                this.discountNum = '';
-                this.freeDays = ''
+                
             },
             // 获取step3的服务费用明细
             getSeatCombin(){

@@ -409,9 +409,9 @@ export default {
             formData.feeResultVO = '';
             formData.oldSeatInfo = '';
             formData.newSeatInfo = '';
-            console.log('submit',formData)
+            console.log('submit',formData);
 
-            return ;
+
             this.$http.post('save-replace', formData).then( r => {
                 console.log('list',r.data)
                  window.close();

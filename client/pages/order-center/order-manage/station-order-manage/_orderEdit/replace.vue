@@ -341,6 +341,7 @@
     import dateUtils from 'vue-dateutils';
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
+    import utils from '~/plugins/utils';
 
     // 新建换租订单步骤说明
     // step：1
@@ -426,9 +427,12 @@
                         }
                     },
                     {
-                        title: '指导价(元/月/房间)',
+                        title: '指导价',
                         key: 'guidePrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '下单价(元/月/房间)',
@@ -479,7 +483,10 @@
                     {
                         title: '签约价',
                         key: 'discountedPrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.discountedPrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '操作',
@@ -548,7 +555,10 @@
                     {
                         title: '金额',
                         key: 'totalRent',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.totalRent)
+                        }
                     },
                     {
                         title: '操作',
@@ -682,17 +692,26 @@
                     {
                         title: '减少服务费',
                         key: 'reduceServiceFee',
-                        align:'center'
+                        align:'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.reduceServiceFee)
+                        }
                     },
                     {
                         title: '已交服务费中涉及到更换的金额',
                         key: 'changeServiceFee',
-                        align:'center'
+                        align:'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.changeServiceFee)
+                        }
                     },
                     {
                         title: '已交保证金涉及到更换的金额',
                         key: 'changeDeposit',
-                        align:'center'
+                        align:'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.changeDeposit)
+                        }
                     },
                 ],
                 oldStationData:[],
@@ -700,12 +719,18 @@
                     {
                         title: '服务费总额',
                         key: 'totalServiceFee',
-                        align:'center'
+                        align:'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.totalServiceFee)
+                        }
                     },
                     {
                         title: '服务保证金',
                         key: 'totalDeposit',
-                        align:'center'
+                        align:'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.totalDeposit)
+                        }
                     },
                 ],
                 newStationData:[],
@@ -1438,6 +1463,10 @@
             },
             submitStation:function(){//工位弹窗的提交
                 this.showMap = false;
+                this.saleList = []
+                this.discountNum = '';
+                this.freeDays = '';
+                this.freeStartDate = '';
                 this.selecedStationList = this.stationData.submitData.map(item=>{
                     item.guidePrice = item.seatPrice || item.guidePrice || 0;
                     item.discountedPrice = item.seatPrice;
@@ -1451,9 +1480,7 @@
                 });
                 this.watchServiceDetail = new Date();
                 this.changeThree = new Date()
-                this.saleList = []
-                this.discountNum = '';
-                this.freeDays = ''
+                
             },
             // 获取step3的服务费用明细
             getSeatCombin(){

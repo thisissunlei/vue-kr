@@ -439,9 +439,13 @@ export default {
             formData.newSeatInfo = '';
             formData.tacticsVOs = ''
             console.log('submit',formData);
+            let url = 'save-replace';
 
+            if(formData.id){
+                url = 'save-edit-replace'
+            }
 
-            this.$http.post('save-replace', formData).then( r => {
+            this.$http.post(url, formData).then( r => {
                 console.log('list',r.data)
                  window.close();
                 window.opener.location.reload();

@@ -228,6 +228,11 @@ export default  {
         url: '/api/krspace-op-web/order-seat-replace/add',
         method: 'post'
     },
+    // 编辑换租提交
+    'save-edit-replace': {
+        url: '/api/krspace-op-web/order-seat-replace/edit',
+        method: 'post'
+    },
     //换租详情获取接口
     'get-replace-detail': {
         url: '/api/krspace-op-web/order-seat-replace/view',

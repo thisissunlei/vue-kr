@@ -92,6 +92,7 @@ function poptipOver(event, data) {
         left: e.clientX,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
+    console.log('detail',e.clientY,detail.top,detail.height)
     var obj = getToolTipContent(data);
     tirDom.innerHTML = obj.str;
     tirDom.style.left = tirLocation.left - 30 + 'px';

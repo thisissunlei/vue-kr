@@ -1735,6 +1735,8 @@
                     this.installmentType = response.data.installmentType
                     this.formItem.communityId = response.data.communityId+'';
                     this.formItem.communityName = response.data.communityName;
+                    this.discountNum = response.data.discount;
+                    this.deposit = response.data.deposit;
                     let _this = this;
                     console.log('获取编辑的基础数据',this.formItem)
                     setTimeout(function(){

@@ -1442,7 +1442,12 @@
             },
             deleteDtation(index){
                 this.selecedStationList.splice(index,1);
-                this.getStationAmount()
+                if(!this.selecedStationList.length){
+                    this.getStationAmount();
+                    this.serviceDetailsList = []
+
+                }
+                
             },
             getServiceDetail(item){
                 let list = item.seatIds.map(value=>{
@@ -1499,7 +1504,6 @@
                     if(item.originalPrice === ''){
                         originalPrice = true;
                     }
-                    obj.floor = item.whereFloor;
                     return obj;
                 })
                 if(originalPrice){
@@ -1514,10 +1518,12 @@
                     saleList:JSON.stringify(this.saleList)
                 }
                 this.changeThree = new Date()
-
+                console.log('station====',station)
                 this.$http.post('count-sale', params).then( r => {
+                    console.log('http--->',r.data.seats)
                     this.selecedStationList = r.data.seats.map(item=>{
                         let obj = item;
+                        obj.floor = item.whereFloor || item.floor;
                         //TODO 周一联调删除
                         obj.guidePrice = item.guidePrice;
                         obj.seatPrice = item.guidePrice;
@@ -1529,6 +1535,7 @@
                         obj.discountedPrice = item.discountedPrice;
                         return obj;
                     });
+                    console.log('http--->end',this.selecedStationList)
 
                 }).catch( e => {
                         this.$Notice.error({

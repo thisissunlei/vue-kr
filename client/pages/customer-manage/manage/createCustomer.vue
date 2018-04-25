@@ -145,9 +145,8 @@
                         { required: true, message: '请选择社区'}
                     ],
                     company:[
-                        { required: true, message: '请填写客户名称'},
+                        { required: true, message: '请填写客户名称',trigger: 'change'},
                         { required: true, trigger: 'blur' ,validator: validateName},
-                        { required: true, trigger: 'change' ,validator: validateName},
                     ],
                     contactMail:[
                         { required: true, message: '请填写客户联系人邮箱',type:"email"}

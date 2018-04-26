@@ -12,20 +12,12 @@
 			
 			<div class="view" v-for="(item, index ) in fileArr" :key="item.id">
 
-				<img v-if="item.url" :src="item.url" alt="">
-				<div class="view-mask">
-					
-					<span 
-						class="ivu-icon ivu-icon-eye" 
-						style="font-size:20px;margin:5px;color:#fff;"
-						@click="eyePhotoAlbum(index,$event)"
-					></span>
-					<span 
-						class="ivu-icon ivu-icon-trash-a" 
-						style="font-size:20px;margin:5px;color:#fff;"
-						@click="delImg(index,$event)"
-					></span>
-				</div>
+				<img v-if="item.url" :src="item.url" alt="" @click="eyePhotoAlbum(index,$event)">
+				
+                <span 
+                    class="delete-icon" 
+                    @click="delImg(index,$event)"
+                ></span>
 				
 			</div>
 
@@ -34,7 +26,7 @@
 				+
 			</div>
 			</EditLabel>
-			<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
+			<PhotoAlbum :data="fileArr" @downImage="downImage" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	
 	</div>
 	
@@ -42,7 +34,8 @@
 
 <script>
 import PhotoAlbum from '../PhotoAlbum';
-import EditLabel from './EditLabel'
+import EditLabel from './EditLabel';
+import utils from '~/plugins/utils';
 export default{
 	components:{
 		PhotoAlbum,
@@ -76,11 +69,13 @@ export default{
 		this.fileArr = [].concat(this.value)
 	},
 	methods:{
+        downImage(url){
+            utils.downFile(url)
+        },
 		close(){
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		okClick(){
-			
             this.$emit("okClick",this.fileArr)
 		},
 		eyeImg(index){
@@ -95,8 +90,10 @@ export default{
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		delImg(index,event){
-			
-			// this.fileArr.split(index,1);
+            let urls = [].concat(this.fileArr);
+            
+            urls.splice(index,1);
+            this.fileArr = [].concat(urls)
 		},
 		addFileClick(){
 			var inputDom = document.getElementById(this.inputId);
@@ -218,8 +215,7 @@ export default{
 	width: 845px;
 	min-height: 198px;
 	background:  #EEEEEE;
-    padding: 30px;
-    
+    padding-bottom: 10px;
 	.edit-label{
 		width: 100%;
 	}
@@ -228,7 +224,7 @@ export default{
 		display: inline-block;
 		width: 180px;
 		height: 135px;
-		
+		margin-left: 20px;
 		text-align: center;
 		cursor: pointer;
 		vertical-align: middle;
@@ -242,42 +238,52 @@ export default{
 		position: relative;
 		overflow: hidden;
 		transition: border-color .2s ease;
-		font-size: 40px;
+        font-size: 40px;
+		margin: 30px 30px 10px;        
 
 	}
 	.up-icon:hover{
 		border: 1px dashed #2d8cf0;
-	}
+    }
+    
 	.view{
 		display: inline-block;
 		width: auto;
 		height: 135px;
 		text-align: center;
-		line-height: 135px;
-		border: 1px solid transparent;
-		border-radius: 4px;
-		overflow: hidden;
+        line-height: 135px;
+		margin: 30px 30px 10px;        
+		
+		// overflow: hidden;
 		background: #fff;
 		position: relative;
-		box-shadow: 0 1px 1px rgba(0,0,0,.2);
+		
 		margin-right: 4px;
 		vertical-align: middle;
-		position: relative;
+        position: relative;
+        margin-right: 20px;
 		img{
 			display: inline-block;
-			height: 100%;
+            height: 100%;
+            cursor: pointer;
+            box-shadow: 0 1px 1px rgba(0,0,0,.2);
+            display: block;
+            margin: 0px;
 		}
-		.view-mask{
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
+		.delete-icon{
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            background-image: url(../images/close.svg);
+            background-size:100%;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            background-color:#fff; 
+            cursor: pointer;
 
-			display: none;
-			background: rgba(0,0,0,.6);
-			cursor: pointer;
-		}
+        }
 	
 
 	}

@@ -103,10 +103,12 @@ export default {
 		color: #FF6868;
 		font-size: 18px;
 		border-radius: 4px 4px 0 4px 4px;
+		margin: 30px 30px 10px;
 	}
 	.record-icon{
 		background-image: url(./images/record.svg);
 		background-size:100%; 
+		background-repeat: no-repeat;
 		position: absolute;
 		right: -60px;
 		width: 16px;
@@ -119,6 +121,7 @@ export default {
 		background-image: url(./images/edit.svg);
 		background-size:100%; 
 		position: absolute;
+		background-repeat: no-repeat;
 		right: -30px;
 		width: 16px;
 		height: 16px;
@@ -134,11 +137,13 @@ export default {
 	}
 	.kr-ui-ok-icon{
 		background-image: url(./images/ok.svg);
+		background-repeat: no-repeat;		
 		background-size:100%; 
 		right:-30px;
 	}
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
+		background-repeat: no-repeat;
 		background-size:100%; 
 		right:-60px;
 	}
@@ -168,6 +173,7 @@ export default {
 		margin-right: 4px;
 		vertical-align: middle;
 		position: relative;
+		margin: 30px 30px 10px;		
 	}
 }
 </style>

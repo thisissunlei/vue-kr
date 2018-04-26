@@ -1,38 +1,28 @@
 <template>
   <div class="photo-album">
-      <div class="mask"></div>
+      <div class="mask"  @click="close"></div>
       
      
       <div>
            
             <div class="view-img-box" style="padding:0px 40px;">
-                <span class="close-btn ivu-icon ivu-icon-close-round" @click="close"></span>
+               
                 <img :src="data[urlIndex].url" alt="">
                 <div 
                     class="back"
-                    style="left:0px;"
+                    style="left:-60px;"
                     @click="backClick"
                 >
-                    <span 
-                        class=" ivu-icon ivu-icon-ios-arrow-back"
-                    >
-                    
-                    </span>
                 </div>
 
                 <div
                     class="forward"
-                    style="right:0px;"
+                    style="right:-60px;"
                     @click="forwardClick"
                 >
-                    <span
-                        class="ivu-icon ivu-icon-ios-arrow-forward"
-                        
-                    >
-                    
-                    </span>
                 </div>
-
+                <span class="close-btn " @click="close"></span>
+                <Button class="down-img" @click="downImage(data[urlIndex].url)" type="primary">下载原图</Button>
             </div>
             
       </div>
@@ -82,6 +72,10 @@
             },
             close(){
                 this.$emit('close')
+            },
+            downImage(url){
+                this.$emit('downImage',url)
+                console.log(url,"pppppppp")
             }
         },
         mounted(){
@@ -101,17 +95,30 @@
     bottom: 0px;
     text-align: center;
     z-index: 999;
+    .down-img{
+        position: absolute;
+        left: 50%;
+        bottom: 30px;
+        width: 130px;
+        transform: translateX(-50%);
+    }
     .close-btn{
         position: absolute;
         top: 30px;
         width: 36px;
         height: 36px;
+        background-image: url(./images/close.svg);
+        background-size:101%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #ffffff;
 
-        right: 18px;
+        right: 25px;
         top: -18px;
         color: #fff;
         font-size: 36px;
-        background: brown;
+        // background: brown;
+        border-radius: 50%;
         cursor: pointer;
     }
     .view-img-box{
@@ -123,15 +130,9 @@
         text-align: center;
     }
     img{
-        // width: 80%;
-       
         max-width: 1200px;
         height: 100%;
-        // height: 790px;
-        
-      
-        
-        
+        border-radius:6px;
     }
     .mask{
         background: rgba(0,0,0,.3);
@@ -152,11 +153,20 @@
         color: #fff;
         top: 50%;
         transform: translateY(-50%);
+        background-size:90%;
+        background-repeat: no-repeat;
     }
-    .back:hover,.forward:hover{
-        background: #ccc;
-        cursor: pointer;
+    .back{
+        background-image: url(./images/arrow_left.svg);
+        
     }
+    .forward{
+        background-image: url(./images/arrow_right.svg);
+    }
+    // .back:hover,.forward:hover{
+    //     background: #ccc;
+    //     cursor: pointer;
+    // }
 }
 </style>
 

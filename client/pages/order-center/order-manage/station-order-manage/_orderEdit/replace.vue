@@ -1197,7 +1197,7 @@
 
                 }
                 this.$http.post('get-free-sale', params, r => {
-                    if(r.data.discountList){
+                    if(r.data.length){
                         this.dealSale(r.data)
                     }
                     

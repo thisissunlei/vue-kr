@@ -442,7 +442,9 @@ export default {
             formData.oldSeatInfo = '';
             formData.newSeatInfo = '';
             formData.tacticsVOs = ''
+
             console.log('submit',formData);
+
             let url = 'save-replace';
 
             if(formData.id){

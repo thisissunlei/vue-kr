@@ -670,7 +670,7 @@
                 },
                 ruleValidateFour:{
                     transferDepositAmount:[
-                        { required: true, message: '请填写', trigger: 'blur' }
+                        { required: true, message: '请填写正确的金额', trigger: 'blur' }
 
                     ],
 
@@ -1136,7 +1136,7 @@
 
                 }
                 this.$http.post('get-free-sale', params, r => {
-                    if(r.data.discountList){
+                    if(r.data.length){
                         this.dealSale(r.data)
                     }
                 }, e => {

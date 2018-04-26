@@ -289,9 +289,9 @@ var layoutScrollHeight=0;
             //获取列表数据
             getTableData(values){
                 var params=Object.assign({},values);
+                delete params.startDate;
+                delete params.endDate;
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
-                params.startDate=this.dateSwitch(params.startDate);
-                params.endDate=this.dateSwitch(params.endDate);
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -326,9 +326,9 @@ var layoutScrollHeight=0;
             },
             //获取统计数据
             getStatistal(){
+                 delete this.tabForms.startDate;
+                 delete this.tabForms.endDate;
                  this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
-                 this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
-                 this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                  this.$http.get('getDailyStatiscal',this.tabForms).then((res)=>{
                     this.dailyInnerData=res.data;
                 }).catch((error)=>{
@@ -393,9 +393,9 @@ var layoutScrollHeight=0;
             },
             //导出
             submitExport(){
+                delete this.tabForms.startDate;
+                delete this.tabForms.endDate;
                 this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
-                this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
-                this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                 utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export');
             },
             //折扣价

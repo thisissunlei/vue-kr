@@ -52,6 +52,7 @@
                                     <span>{{item.year}}</span>
                                 </div>
                             </div>
+                        
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <div
                                     v-if="barType=='month'"
@@ -62,6 +63,9 @@
                                     }"
                                 >
                                 </div>
+                                <div  v-if="barType=='month'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='month'"  class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='month'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
                                 <DrawMonth
                                     v-for="( item ) in showData"
                                     :key="item.id"
@@ -76,7 +80,10 @@
 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
-                                <div v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                 <div  v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                 <div  v-if="barType=='week'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                 <div  v-if="barType=='week'" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                 <div  v-if="barType=='week'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
                                 <DrawWeek
                                     :ref = "'ganttChartTimeShaft'+index"
@@ -91,7 +98,10 @@
                             </div>
 
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
-                                <div v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                <div  v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                <div  v-if="barType=='day'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='day'" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='day'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
                                 <DrawDay
                                     v-for="( item ) in showData"
@@ -132,10 +142,11 @@
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
-                         <div class="add-right">右侧侧</div>
+                        <div class="add-right">右侧侧</div>
                         <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
-                        <div class='start-flag' :style="{left:startRentLeft+50+'px',width:minCalibration+'px'}"></div>
-                        <div class='end-flag' :style="{left:endRentLeft+50+'px',width:minCalibration+'px'}"></div>
+                        <div class='start-flag' :style="{left:startRentLeft+50+'px',width:2+'px'}"></div>
+                        <div class='end-flag' :style="{left:endRentLeft+50+'px',width:2+'px'}"></div>
+                        <div class='start-to-end' :style="{left:startRentLeft+50+'px',width:endRentLeft-startRentLeft+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -254,8 +265,6 @@ export default {
         setTimeout(() => {
             this.scroolFix(this.showData)          
         }, 100);
-        this.getStartLeft(this.showData);
-        this.getEndLeft(this.showData);
     },
 
 
@@ -478,6 +487,8 @@ export default {
             //获取周的具体数据
             this.getWeekStartAndEnd(showData);
             this.getTodayTOLeft(showData);
+            this.getStartLeft(showData);
+            this.getEndLeft(showData);
             this.getYears(startTime,endTime);
 
         },
@@ -729,20 +740,30 @@ export default {
                 z-index:3;
             }
             .start-flag{
-                background:red;
+                background:#499DF1;
                 height: 100%;
                 position: absolute;
                 top: 0px;
                 width: 10px;
                 pointer-events:none;
                 z-index:3;
+                box-shadow: 2px 0 4px 0 #499DF1;
             }
             .end-flag{
-                background:blue;
+                background:#499DF1;
                 height: 100%;
                 position: absolute;
                 top: 0px;
                 width: 10px;
+                pointer-events:none;
+                z-index:3;
+                box-shadow: 2px 0 4px 0 #499DF1;
+            }
+            .start-to-end{
+                background: rgba(73,157,241,0.10);
+                height: 100%;
+                position: absolute;
+                top: 0px;
                 pointer-events:none;
                 z-index:3;
             }
@@ -844,7 +865,18 @@ export default {
             top: 0px;
             background: #499DF1;
             opacity: 0.3;
-
+        }
+        .rent-line{
+            box-shadow: 2px 0 4px 0 #499DF1;
+            opacity: 1;
+        }
+        .start-to-end{
+            background: rgba(73,157,241,0.10);
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            pointer-events:none;
+            z-index:3;
         }
    }
    .tab-second-title{

@@ -5,14 +5,14 @@
    >
         <div 
             class="view-channel"
-            v-if="data && data.tasks && data.tasks.length"
+            v-if="data && data.timeLine && data.timeLine.length"
         >
             
             <Article 
                 v-if="leftEndpoint.year"
                 :minCalibration="minCalibration"
                 :startDate="leftEndpoint"
-                 v-for="item in data.tasks"
+                 v-for="item in data.timeLine"
                 :data="item"
                 :key="item.id"
                 :todayDetail="todayDetail"

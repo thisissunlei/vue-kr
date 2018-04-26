@@ -3,9 +3,10 @@
         :style="{
             width:boxDetail.width * minCalibration+'px',
             left:boxDetail.office * minCalibration+'px',
-
+            background:data.status=='DISABLE'?'#E4E4E4':'#BCE590'
         }"
-
+        @mouseover="toolOver"
+        @mouseout="toolOut"
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article"
@@ -14,7 +15,7 @@
             <div
                 class="plan"
                 :style="{
-                    background:'#EEEEEE',
+                    background:this.getLabelColor(),
                     width:planDetail.width * minCalibration + 'px',
                     left:planDetail.office * minCalibration + 'px',
                     color:'#666666'
@@ -23,7 +24,7 @@
                 @mouseout="toolOut"
                 @click="editClick(data.value)"
             >
-                {{getActualLabel(data.label)}}
+               
             </div>
            
         </div>
@@ -101,7 +102,7 @@ export default {
             angleDom.style.opacity = 0;
         },
         getLabelColor(){
-            let taskStatus = this.data.data.taskStatus;
+            let taskStatus = this.data.status;
             return publicFn.getLabelColor(taskStatus);
         },
         
@@ -152,15 +153,15 @@ export default {
             return publicFn.getActualBorder(taskStatus);
         },
        getBoxWidthAndOffice(){
-            var  data = Object.assign({},this.data.data);
+            var  data = Object.assign({},this.data);
             if(!data.actualStartTime && !data.actualEndTime){
                 data.actualStartTime = data.planStartTime;
                 data.actualEndTime = data.planEndTime; 
             }      
             var dates = publicFn.getAllMaxAndMin(data);
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planStartTime));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.planEndTime));
+            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate));
+            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate));
             var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
             var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
@@ -174,7 +175,7 @@ export default {
             }
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
-                office:utils.dateDiff(min,planStart)
+                office:utils.dateDiff(officeStart,planStart)
             };
             this.actualDetail={
                 width:utils.dateDiff(actualStart,actualEnd)+1,
@@ -275,15 +276,15 @@ export default {
 
         }
         .plan{
-            height: 29px;
-            background: #E9F0F6;
-            border-radius: 7px 7px 8px 8px;
-            line-height: 30px;
+            height: 32px;
+            //background: #E9F0F6;
+            //border-radius: 7px 7px 8px 8px;
+            line-height: 32px;
             padding-left:6px;
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top: 2px;
+            top: 1px;
             overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;

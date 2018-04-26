@@ -11,7 +11,7 @@
            @countChange="countChange"
            identify='daily'
         />
-        <Tabs value="dailyList" :animated="false">
+        <Tabs value="dailyTime" :animated="false">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
                     <div class="daily-table" id="daily-inventory-table-list">
                         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
@@ -286,7 +286,7 @@ var layoutScrollHeight=0;
         methods:{
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
-                this.getTableData(this.tabForms); 
+                //this.getTableData(this.tabForms); 
             },
             //获取列表数据
             getTableData(values){

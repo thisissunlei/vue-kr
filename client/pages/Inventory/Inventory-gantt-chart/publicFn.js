@@ -94,10 +94,10 @@ function poptipOver(event, data) {
     var obj = getToolTipContent(data);
     tirDom.innerHTML = obj.str;
     tirDom.style.left = tirLocation.left - 30 + 'px';
-    tirDom.style.top = tirLocation.top + 10 - 130 + 'px';
+    tirDom.style.top = tirLocation.top + 10 - 345 + 'px';
     tirDom.style.width = obj.width + 'px';
     angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-    angleDom.style.top = tirLocation.top - 130 + 'px';
+    angleDom.style.top = tirLocation.top - 345 + 'px';
     locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width)
     tirDom.style.opacity = 1;
     angleDom.style.opacity = 1;
@@ -157,7 +157,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    if (detail.top + detail.height < parseInt(tirDom.style.top) + 155 + 100) {
+    if (detail.top + detail.height < parseInt(tirDom.style.top) + 264 + 100) {
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 + 'px';
         angleDom.className = 'top-triangle';
         angleDom.style.top = parseInt(angleDom.style.top) - 35 + "px";
@@ -308,14 +308,11 @@ function getActualBorder(taskStatus) {
 }
 //label的字体的颜色
 function getLabelColor(taskStatus) {
-    if (taskStatus === 'UNDERWAY' || taskStatus === 'OVERDUE' || taskStatus === 'UNKNOWN') {
-        return '#BE8525';
-    } else if (taskStatus === 'NORMAL' || taskStatus === 'ADVANCE') {
-        return '#5A8C23';
-    } else {
-        return '#666666'
-    }
-
+    if (taskStatus === '0') {
+        return '#FFE08F';
+    } else if(taskStatus === '1'){
+        return '#FDAFAF';
+    } 
 }
 function timeToStr(time) {
     var type = Object.prototype.toString.call(time)

@@ -107,7 +107,7 @@ export default {
                     key: 'effective',
                     align:'center',
                     render:(h,params)=>{
-                        if(params.row.couponType==1){
+                        if(params.row.effective==1){
                             return h('div', [
                                h('Button', {
                                     props: {
@@ -194,8 +194,9 @@ export default {
       this.getTableData();
       this.tableList=[
           {
-              mbrName:1111,
-              id:1
+              title:1111,
+              couponId:1,
+              effective:1,
           }
       ]
   },
@@ -204,10 +205,10 @@ export default {
           window.open(`/app-manage/member-welfare/create`,'_blank');
      },
      jumpView(params){
-          window.open(`/app-manage/member-welfare/detail/${params.id}`,'_blank');
+          window.open(`/app-manage/member-welfare/detail/${params.couponId}`,'_blank');
      },
      jumpEdit(params){
-         window.open(`/app-manage/member-welfare/edit/${params.id}`,'_blank');
+         window.open(`/app-manage/member-welfare/edit/${params.couponId}`,'_blank');
      },
      openDown(params){
            this.openCancel=!this.openCancel;

@@ -1,12 +1,7 @@
 
 <template>
   <div>
-    <FormItem
-        :label="label"
-        :prop="prop"
-        :label-width="labelWidth"
-        :showMessage="showMessage"
-    >
+   
         <KrInput
             v-if="type==='text'"
             :value="value"
@@ -110,7 +105,12 @@
             :value = 'value'
             @okClick="okClick"
         />
-    </FormItem>
+        <UpImage 
+            v-if="type==='upImage'"  
+            :readOrEdit="readOrEdit" 
+            :value = 'value'
+            @okClick="okClick"
+        />
   </div>
 </template>
 
@@ -124,6 +124,7 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
+import UpImage from './UpImage'
 export default {
     components:{
       KrCascader,
@@ -134,7 +135,8 @@ export default {
       KrTime,
       KrTextarea,
       UpFiles,
-      KrTimeDate
+      KrTimeDate,
+      UpImage
     },
     props:{
         label:{

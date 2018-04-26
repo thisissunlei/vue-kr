@@ -1,6 +1,6 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-date">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
@@ -71,7 +71,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-date{
+      position: relative;
 	.edit-icon{
 		
 		position: absolute;

@@ -14,29 +14,44 @@
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
                 <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
             </div>
-            <GanttChart
-                v-if="!isLoading "
-                :data="listData"
-                :treeData="treeData"
-                type="edit"
-                :start="startTime"
-                :end="endTime"
-                :treeIds="taskIds"
-                @rightOver="rightOver"
-                @treeClick="treeClick"
-                @editClick="editTask"
-            >
-                <div class='detail-detail' slot="leftBar">
-                    <DetailTaskList
-                        :data="listData"
-                        @addClick="addTask"
-                        @editClick="editTask"
-                        @leftOver="leftOver"
-                        @iconClick="iconClick"
-                        :scrollWidth="scrollWidth"
-                    />
-                </div>
-            </GanttChart>
+            <Tabs size="default"  :animated="false">
+                <TabPane label="物业档案" name="tab1">
+                    <ArchivesManagement/>
+
+                </TabPane>
+                <TabPane label="产品档案" name="tab2">
+
+                    
+                    <ArchivesManagement/>
+                </TabPane>
+                 <TabPane label="项目进度" name="tab3">
+                        <GanttChart
+                            v-if="!isLoading "
+                            :data="listData"
+                            :treeData="treeData"
+                            type="edit"
+                            :start="startTime"
+                            :end="endTime"
+                            :treeIds="taskIds"
+                            @rightOver="rightOver"
+                            @treeClick="treeClick"
+                            @editClick="editTask"
+                        >
+                            <div class='detail-detail' slot="leftBar">
+                                <DetailTaskList
+                                    :data="listData"
+                                    @addClick="addTask"
+                                    @editClick="editTask"
+                                    @leftOver="leftOver"
+                                    @iconClick="iconClick"
+                                    :scrollWidth="scrollWidth"
+                                />
+                            </div>
+                        </GanttChart>
+
+                </TabPane>
+            </Tabs>
+         
 
         </div>
 
@@ -131,6 +146,7 @@ import Vue from 'vue';
 import publicFn from '../publicFn';
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from './object-detail-title';
+import ArchivesManagement from '../archives-management';
 var ganttChartScrollTop = 0;
 
 
@@ -143,7 +159,8 @@ export default {
         GanttChart,
         Message,
         Drawer,
-        ObjectDetailTitle
+        ObjectDetailTitle,
+        ArchivesManagement
     },
     data(){
         return{
@@ -687,6 +704,9 @@ export default {
        width:100%;
        background: #fff;
        display:inline-block;
+       .ivu-tabs-bar{
+            margin-bottom:0px;
+        }
        .detail-title{
            background: #F5F6FA;
            height:50px;

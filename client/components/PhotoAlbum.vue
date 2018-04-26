@@ -1,34 +1,40 @@
 <template>
   <div class="photo-album">
-      <span class="close-btn ivu-icon ivu-icon-close-round" @click="close"></span>
+      <div class="mask"></div>
+      
      
       <div>
-            <div 
-                class="back"
-                style="left:0px;"
-                @click="backClick"
-            >
-                <span 
-                    class=" ivu-icon ivu-icon-ios-arrow-back"
-                >
-                
-                </span>
-            </div>
-            <div style="padding:0px 40px;">
+           
+            <div class="view-img-box" style="padding:0px 40px;">
+                <span class="close-btn ivu-icon ivu-icon-close-round" @click="close"></span>
                 <img :src="data[urlIndex].url" alt="">
-            </div>
-            <div
-                class="forward"
-                style="right:0px;"
-                @click="forwardClick"
-            >
-                <span
-                    class="ivu-icon ivu-icon-ios-arrow-forward"
-                    
+                <div 
+                    class="back"
+                    style="left:0px;"
+                    @click="backClick"
                 >
-                
-                </span>
+                    <span 
+                        class=" ivu-icon ivu-icon-ios-arrow-back"
+                    >
+                    
+                    </span>
+                </div>
+
+                <div
+                    class="forward"
+                    style="right:0px;"
+                    @click="forwardClick"
+                >
+                    <span
+                        class="ivu-icon ivu-icon-ios-arrow-forward"
+                        
+                    >
+                    
+                    </span>
+                </div>
+
             </div>
+            
       </div>
      
   </div>
@@ -94,20 +100,41 @@
     right: 0px;
     bottom: 0px;
     text-align: center;
+    z-index: 999;
     .close-btn{
         position: absolute;
         top: 30px;
-        right: 100px;
+        width: 36px;
+        height: 36px;
+
+        right: 18px;
+        top: -18px;
         color: #fff;
-        font-size: 40px;
+        font-size: 36px;
+        background: brown;
         cursor: pointer;
     }
+    .view-img-box{
+        position: absolute;
+        height: 70%;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        text-align: center;
+    }
     img{
-        max-width: 80%;
+        // width: 80%;
+       
+        max-width: 1200px;
+        height: 100%;
+        // height: 790px;
+        
+      
+        
         
     }
     .mask{
-        background: rgba(0,0,0,.6);
+        background: rgba(0,0,0,.3);
         position: absolute;
         top: 0px;
         left: 0px;
@@ -118,10 +145,13 @@
         font-size:40px;
         position:absolute;
         padding: 0 10px;
-        line-height:100vh;
+        width: 36px;
+        height: 36px;
         top:0px;
         cursor: pointer;
         color: #fff;
+        top: 50%;
+        transform: translateY(-50%);
     }
     .back:hover,.forward:hover{
         background: #ccc;

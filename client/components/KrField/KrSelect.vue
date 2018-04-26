@@ -1,6 +1,6 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-select">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
@@ -98,7 +98,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-select{
+      position: relative;
 	.edit-icon{
 		
 		position: absolute;

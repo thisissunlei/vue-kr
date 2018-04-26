@@ -5,25 +5,32 @@
 			<div v-if="!isEdit && labeType=='label'" >
 				<div class="label-text">{{value}}</div>
 				<span class="edit-icon" @click="editClick">
-					<Icon type="ios-compose-outline "></Icon>
+					<!-- <Icon type="ios-compose-outline "></Icon> -->
+				</span>
+				<span class="record-icon" @click="editClick">
+					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
 				
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
+				<div v-if="!value || !value.length" class="to-upload">待上传</div>
 				<img :src="item.url" alt="" v-for="(item, index ) in value" :key="item.id" @click="eyeImg(index)"/>
 				<span class="edit-icon" @click="editClick">
-					<Icon type="ios-compose-outline "></Icon>
+					<!-- <Icon type="ios-compose-outline "></Icon> -->
+				</span>
+				<span class="record-icon" @click="editClick">
+					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
 			</div>
 			<div v-if="isEdit">
 				<slot></slot>
 				<div class="operation">
-					<span @click="cancelClick">
-						<Icon type="close-round"></Icon>
+					<span class="kr-ui-x-icon" @click="cancelClick">
+					
 					</span>
 					
-					<span @click="okClick">
-						<Icon type="checkmark-round"></Icon>
+					<span class="kr-ui-ok-icon" @click="okClick">
+						
 					</span>
 					
 				</div>
@@ -84,16 +91,60 @@ export default {
 
 <style lang="less" scoped>
 .edit-label{
-	.edit-icon{
-		
+	position: relative;
+	display: inline-block;
+	// background: red;
+	.to-upload{
+		width: 210px;
+		height: 135px;
+		background: #fff;
+		line-height: 135px;
+		text-align: center;
+		color: #FF6868;
+		font-size: 18px;
+		border-radius: 4px 4px 0 4px 4px;
+	}
+	.record-icon{
+		background-image: url(./images/record.svg);
+		background-size:100%; 
 		position: absolute;
-		right: 0;
-		top: 0px;
+		right: -60px;
+		width: 16px;
+		height: 16px;
+		top: 10px;
 		line-height: 32px;
 		cursor: pointer;
 	}
+	.edit-icon{
+		background-image: url(./images/edit.svg);
+		background-size:100%; 
+		position: absolute;
+		right: -30px;
+		width: 16px;
+		height: 16px;
+		top: 10px;
+		cursor: pointer;
+	}
+	.kr-ui-ok-icon,.kr-ui-x-icon{
+		position: absolute;
+		width: 16px;
+		height: 16px;
+		top: 10px;
+		cursor: pointer;
+	}
+	.kr-ui-ok-icon{
+		background-image: url(./images/ok.svg);
+		background-size:100%; 
+		right:-30px;
+	}
+	.kr-ui-x-icon{
+		background-image: url(./images/x.svg);
+		background-size:100%; 
+		right:-60px;
+	}
 	.label-text{
 		padding-right: 20px;
+		font-size: 14px;
 	}
 	.operation{
 		position: absolute;
@@ -105,9 +156,9 @@ export default {
 	img{
 		display: inline-block;
 		width: auto;
-		height: 60px;
+		height: 135px;
 		text-align: center;
-		line-height: 60px;
+		line-height: 135px;
 		border: 1px solid transparent;
 		border-radius: 4px;
 		overflow: hidden;

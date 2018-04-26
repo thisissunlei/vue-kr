@@ -1,5 +1,5 @@
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-input">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
@@ -88,7 +88,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-input{
+      position: relative;
+    display: inline-block;
 	.edit-icon{
 		
 		position: absolute;

@@ -1,6 +1,6 @@
 <template>
 	
-	<div class="up-files">
+	<div class="up-image">
 		<EditLabel 
 			:readOrEdit="readOrEdit" 
 			:value="fileArr"
@@ -213,25 +213,26 @@ export default{
 </script>
 
 <style lang="less" scoped>
-.up-files{
+.up-image{
 	display: inline-block;
 	width: 845px;
 	min-height: 198px;
 	background:  #EEEEEE;
-	padding: 30px;
+    padding: 30px;
+    
 	.edit-label{
 		width: 100%;
 	}
 	
 	.up-icon{
 		display: inline-block;
-		width: 60px;
-		height: 60px;
+		width: 180px;
+		height: 135px;
 		
 		text-align: center;
 		cursor: pointer;
 		vertical-align: middle;
-		line-height: 60px;
+		line-height: 135px;
 		vertical-align: middle;
 		background: #fff;
 		border: 1px dashed #dddee1;
@@ -250,9 +251,9 @@ export default{
 	.view{
 		display: inline-block;
 		width: auto;
-		height: 60px;
+		height: 135px;
 		text-align: center;
-		line-height: 60px;
+		line-height: 135px;
 		border: 1px solid transparent;
 		border-radius: 4px;
 		overflow: hidden;

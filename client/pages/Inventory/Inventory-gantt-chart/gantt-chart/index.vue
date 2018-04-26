@@ -134,6 +134,8 @@
                         />
                          <div class="add-right">右侧侧</div>
                         <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
+                        <div class='start-flag' :style="{left:startRentLeft+50+'px',width:minCalibration+'px'}"></div>
+                        <div class='end-flag' :style="{left:endRentLeft+50+'px',width:minCalibration+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -174,7 +176,13 @@ export default {
         listData:{
             default:()=>[],
             type:Array,
-        }
+        },
+        rentStart:{
+            type:String,
+        },
+        rentEnd:{
+            type:String
+        },
     },
     data(){
         return{
@@ -218,6 +226,8 @@ export default {
             isLoading:true,
             scrollWidth:0,
             tagToLeft:0,
+            startRentLeft:0,
+            endRentLeft:0,
             colorTypes:[
                 {
                     title:'未租',
@@ -242,8 +252,10 @@ export default {
         this.scrollWidth = utils.getScrollBarSize()
         this.limitDay(this.barType);
         setTimeout(() => {
-            this.scroolFix(this.showData)
+            this.scroolFix(this.showData)          
         }, 100);
+        this.getStartLeft(this.showData);
+        this.getEndLeft(this.showData);
     },
 
 
@@ -287,6 +299,20 @@ export default {
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
 
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
+            return utils.dateDiff(today,startTime)*this.minCalibration;
+        },
+        getStartLeft(data){
+            var today ='2018-4-26';
+            var startMonth = data[0];
+            var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
+            this.startRentLeft=utils.dateDiff(today,startTime)*this.minCalibration;
+            return utils.dateDiff(today,startTime)*this.minCalibration;
+        },
+        getEndLeft(data){
+            var today ='2018-5-03';
+            var startMonth = data[0];
+            var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
+            this.endRentLeft=utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;
         },
         //获取年数组
@@ -699,6 +725,24 @@ export default {
                 position: absolute;
                 top: 0px;
                 width: 50px;
+                pointer-events:none;
+                z-index:3;
+            }
+            .start-flag{
+                background:red;
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                width: 10px;
+                pointer-events:none;
+                z-index:3;
+            }
+            .end-flag{
+                background:blue;
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                width: 10px;
                 pointer-events:none;
                 z-index:3;
             }

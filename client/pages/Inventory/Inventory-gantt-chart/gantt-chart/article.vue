@@ -1,8 +1,6 @@
 <template>
     <div class="every-view-col"
         :style="{
-            width:boxDetail.width * minCalibration+'px',
-            left:boxDetail.office * minCalibration+'px',
             background:data.status=='DISABLE'?'#E4E4E4':'#BCE590'
         }"
         @mouseover="toolOver"
@@ -10,7 +8,6 @@
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article"
-            v-if="getFlagShow('STAGETASK')"
         >
             <div
                 class="plan"
@@ -22,7 +19,6 @@
                 }"
                 @mouseover="toolOver"
                 @mouseout="toolOut"
-                @click="editClick(data.value)"
             >
                
             </div>
@@ -112,10 +108,10 @@ export default {
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
             var officeEnd = min;
 
-            this.boxDetail={
-                width:utils.dateDiff(startDate,endDate)+1,
-                office:utils.dateDiff(officeStart,startDate)
-            }
+            // this.boxDetail={
+            //     width:utils.dateDiff(startDate,endDate)+1,
+            //     office:utils.dateDiff(officeStart,startDate)
+            // }
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
                 office:utils.dateDiff(officeStart,planStart)

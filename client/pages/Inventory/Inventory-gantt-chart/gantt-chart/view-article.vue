@@ -12,7 +12,7 @@
                 :startDate="leftEndpoint"
                  v-for="item in data.timeLine"
                 :data="item"
-                :key="item.status"
+                :key="item.startDate"
                 :todayDetail="todayDetail"
             />
             

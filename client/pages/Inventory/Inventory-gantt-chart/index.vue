@@ -6,6 +6,8 @@
             v-if = "!isLoading"
             :start="params.startTime"
             :end="params.endTime"
+            :rentStart="rentStart"
+            :rentEnd="rentEnd"
             :listData="listData"
             @rightOver="rightOver"
         >
@@ -59,6 +61,14 @@ var allPage = 1;
 var nowPage = 1;
 var ganttChartScrollTop = 0;
 export default {
+    props:{
+        rentStart:{
+            type:String,
+        },
+        rentEnd:{
+            type:String
+        }
+    },
     components:{
         GanttChart,
         ListTable,

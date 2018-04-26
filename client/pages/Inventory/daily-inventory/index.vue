@@ -33,7 +33,10 @@
                 </Tab-pane>
 
                 <Tab-pane label="以时间轴方式展示" name="dailyTime">
-                     <GanttChart />
+                     <GanttChart 
+                       :rentStart='tabForms.startDate'
+                       :rentEnd='tabForms.endDate'
+                     />
                 </Tab-pane>
         </Tabs> 
     </div>

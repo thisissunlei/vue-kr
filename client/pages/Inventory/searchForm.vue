@@ -58,7 +58,7 @@
 
                 <div>
                     <Form-item class='daily-form community-form'>
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;">社&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区</span>
+                        <span style="font-weight:bold;display:inline-block;margin-right:12px;">社<span style="display:inline-block;width:27px;"></span>区</span>
                         <Select 
                             v-model="formItem.cityId" 
                             placeholder="请输入城市" 
@@ -138,8 +138,8 @@
                 </div>
 
                 <div>
-                    <div style="display:inline-block;margin-right:20px;vertical-align: top;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</span>
+                    <div style="display:inline-block;margin-right:19px;vertical-align: top;">
+                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">价<span style="display:inline-block;width:27px;"></span>格</span>
                         <Form-item class='priceForm'> 
                             <Select 
                                 v-model="formItem.priceType" 
@@ -167,7 +167,7 @@
                     </div>
 
                     <div style="display:inline-block;margin-right:20px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:10px;">工位数量</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
                                 v-model="formItem.stationsMin" 
@@ -185,8 +185,8 @@
                         </Form-item>
                     </div>
 
-                     <div style="display:inline-block;margin-right:20px;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:13px;padding-top:7px;">面&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;积</span>
+                     <div style="display:inline-block;margin-right:19px;">
+                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面<span style="display:inline-block;width:25px;"></span>积</span>
                         <Form-item class='priceForm'  prop="areaMin">
                             <i-input 
                                 v-model="formItem.areaMin" 
@@ -194,7 +194,7 @@
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
-                        <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                        <span style="display:inline-block;margin: 7px 3px 0 4px;">至</span>
                         <Form-item  class='priceForm' prop="areaMax">
                             <i-input 
                                 v-model="formItem.areaMax" 

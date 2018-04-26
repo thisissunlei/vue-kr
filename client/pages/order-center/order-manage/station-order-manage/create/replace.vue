@@ -1136,7 +1136,9 @@
 
                 }
                 this.$http.post('get-free-sale', params, r => {
-                    this.dealSale(r.data)
+                    if(r.data.discountList){
+                        this.dealSale(r.data)
+                    }
                 }, e => {
                     this.$Notice.error({
                         title:e.message

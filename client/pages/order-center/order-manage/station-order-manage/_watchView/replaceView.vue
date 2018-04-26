@@ -1504,7 +1504,11 @@
             },
             deleteDtation(index){
                 this.selecedStationList.splice(index,1);
-                this.getStationAmount()
+                if(this.selecedStationList.length){
+                    this.getStationAmount();
+                }else{
+                    this.serviceDetailsList = []
+                }
             },
             getServiceDetail(item){
                 var endTime = ''

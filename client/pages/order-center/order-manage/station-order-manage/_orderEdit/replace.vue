@@ -1028,14 +1028,16 @@
                 this.formItem.oldSeatInfo = []
             },
             changeCommunity(value){
-                 console.log('communityName',value)
+                 console.log('changeCommunity',value,'==',value.value, this.formItem.communityId)
                 // 选择社区
                 if(value.value){
                     this.formItem.communityId =value.value;
                     this.formItem.communityName =value.label || this.formItem.communityName;
                 }
-                if(value.value != this.formItem.communityId){
+                if(value.label){
                     this.clearStepData() //清除step2数据
+                    this.clearFormThree()
+                    this.formItem.leaseEnddate = ''
                 }
                
                 this.getFloor = +new Date()
@@ -1157,13 +1159,16 @@
                 }
             },
             clearFormThree(){
-                console.log('clearFormThree')
                 this.selecedStationList = [];
                 this.discountType = '';
                 this.freeType = '';
                 this.discountNum = '';
                 this.freeDays = '';
-                this.serviceDetailsList = []
+                this.serviceDetailsList = [];
+                this.installmentType = '';
+                this.installmentName = '';
+                this.deposit = '';
+                this.formItem.firstPayTime = ''
             },
             clearFormFour(){
                 console.log('clearFormFour')
@@ -1525,7 +1530,11 @@
             },
             deleteDtation(index){
                 this.selecedStationList.splice(index,1);
-                this.getStationAmount()
+                if(this.selecedStationList.length){
+                    this.getStationAmount();
+                }else{
+                    this.serviceDetailsList = []
+                }
             },
             getServiceDetail(item){
                 var endTime = ''

@@ -180,7 +180,7 @@
                                 <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
                             </div>
                             <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" style="width: 120px;" ></Input>
+                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" @on-blur="checkFreeMap"  style="width: 120px;" ></Input>
                             <span style="padding:0 15px"> 天</span>
                             <Button type="primary" @click="setfreeMap">设置</Button>
 
@@ -1219,6 +1219,11 @@
                     tacticsId:this.freeMap.tacticsId,
                 }
                
+               if(free == 0){
+                    this.freeStartDate = ''
+                    this.setFreeDays(this.formItem.leaseEnddate)
+                    return;
+               }
                 //3.获取免租开始日期
                 
                 this.$http.post('get-free-start-date', params).then( r => {
@@ -1243,7 +1248,7 @@
                     this.freeDays = this.freeMap.maxDays;
                     return false;
                 }
-                var pattern =/^[0-9]*[1-9][0-9]*$/;
+                var pattern =/^(0|\+?[1-9][0-9]*)$/;
                 if(value && !pattern.test(value)){
                     this.$Notice.error({
                         title:'免租天数必须是整数'
@@ -1579,7 +1584,7 @@
                     this.discountNum = this.discount.minDiscount;
                     return;
                 }
-                var pattern =/^[1-9]+(.[0-9]{1})?$/;
+                var pattern =/^[0-9]+(.[0-9]{1})?$/;
                 if(value && !pattern.test(value)){
                     this.$Notice.error({
                         title:'折扣不得多余小数点后一位'
@@ -1588,14 +1593,14 @@
                 }
                 if(value<this.discount.minDiscount){
                     this.$Notice.error({
-                        title:'单价不得小于'+this.discount.minDiscount
+                        title:'折扣不得小于'+this.discount.minDiscount
                     })
                     this.discountNum = this.discount.minDiscount;
                     return;
                 }
                 if(value>9.9){
                     this.$Notice.error({
-                        title:'单价不得大于9.9'
+                        title:'折扣不得大于9.9'
                     })
                     this.discountNum = this.discount.minDiscount;
                     return;

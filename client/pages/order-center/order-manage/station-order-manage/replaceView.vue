@@ -54,7 +54,7 @@
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
                 <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table>
-                <LabelText :inline="inline" label="免租开始日：" v-if="formItem.freeStartDate !== formItem.startDate" >
+                <LabelText :inline="inline" label="免租开始日：" v-if="formItem.freeStartDate !== formItem.endDate" >
                     {{formItem.freeStartDate |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
                 <Table :columns="newStatonMoneyColumns" style="margin-bottom:20px" :data="formItem.serviceDetailsList"></Table>

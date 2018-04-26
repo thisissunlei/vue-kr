@@ -1196,7 +1196,10 @@
 
                 }
                 this.$http.post('get-free-sale', params, r => {
-                    this.dealSale(r.data)
+                    if(r.data.discountList){
+                        this.dealSale(r.data)
+                    }
+                    
                 }, e => {
                     this.$Notice.error({
                         title:e.message
@@ -1562,6 +1565,7 @@
             },
             changePrice(index,price){
                 this.selecedStationList = this.selecedStationList.map((item,i)=>{
+                    item.seatNum = item.name;
                     if(i == index){
                         item.originalPrice = price;
                     }else{
@@ -1582,6 +1586,7 @@
                     obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice);
 
                     obj.seatId = item.id || item.seatId;
+                    obj.seatNum = item.name;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate));
                     obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate));
@@ -1613,6 +1618,7 @@
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                         obj.belongType = item.seatType;
+                        obj.seatNum = item.name;
                         obj.saleNum = this.discountNum || '-';
                         obj.floor = item.whereFloor || item.floor;
                         obj.discountedPrice = item.discountedPrice;

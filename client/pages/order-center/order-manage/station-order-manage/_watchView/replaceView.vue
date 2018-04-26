@@ -1176,9 +1176,12 @@
                     communityId:this.formItem.communityId
 
                 }
-                this.$http.post('get-free-sale', params, r => {
-                    this.dealSale(r.data)
-                }, e => {
+                this.$http.post('get-free-sale', params).then( r => {
+                    if(r.data.discountList){
+                        this.dealSale(r.data)
+                    }
+                    
+                }).catch( e => {
                     this.$Notice.error({
                         title:e.message
                     });
@@ -1732,7 +1735,7 @@
                     this.formItem.communityId = response.data.communityId+'';
                     this.formItem.communityName = response.data.communityName;
                     this.getFloor = new Date()
-                    this.formItem.signDate = response.data.saleDate;
+                    this.formItem.signDate = new Date(response.data.saleDate);
                     let _this = this;
                     setTimeout(function(){
                         _this.getCustomerToCom()

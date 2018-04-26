@@ -1500,6 +1500,7 @@
             },
             changePrice(index,price){
                 this.selecedStationList = this.selecedStationList.map((item,i)=>{
+                    item.seatNum = item.name;
                     if(i == index){
                         item.originalPrice = price;
                     }else{
@@ -1552,6 +1553,7 @@
                         obj.startDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                         obj.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                         obj.belongType = item.seatType;
+                        obj.seatNum = item.name;
                         obj.saleNum = this.discountNum || '-';
                         obj.floor = item.whereFloor || item.floor;
                         obj.discountedPrice = item.discountedPrice;

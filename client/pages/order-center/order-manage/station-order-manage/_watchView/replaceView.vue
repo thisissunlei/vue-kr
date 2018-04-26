@@ -180,7 +180,7 @@
                                 <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>
                             </div>
                             <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" style="width: 120px;" ></Input>
+                            <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'"  @on-blur="checkFreeMap" style="width: 120px;" ></Input>
                             <span style="padding:0 15px"> 天</span>
                             <Button type="primary" @click="setfreeMap">设置</Button>
 
@@ -953,7 +953,7 @@
 
                 overViewData.signDate=this.formItem.signDate;
                 overViewData.discount = this.discountNum;
-                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseBegindate;
+                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseEnddate;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
                 // step3第二个table数据 
@@ -1261,7 +1261,11 @@
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     tacticsId:this.freeMap.tacticsId,
                 }
-               
+                if(free == 0){
+                    this.freeStartDate = ''
+                    this.setFreeDays(this.formItem.leaseEnddate)
+                    return;
+                }
                 //3.获取免租开始日期
                 
                 this.$http.post('get-free-start-date', params).then( r => {
@@ -1286,7 +1290,7 @@
                     this.freeDays = this.freeMap.maxDays;
                     return false;
                 }
-                var pattern =/^[0-9]*[1-9][0-9]*$/;
+                var pattern =/^(0|\+?[1-9][0-9]*)$/;
                 if(value && !pattern.test(value)){
                     this.$Notice.error({
                         title:'免租天数必须是整数'
@@ -1317,6 +1321,11 @@
                     }
                     return true;
                 })
+                if(this.freeDays == 0){
+                    this.saleList = list;
+                    this.getSaleAmount(list)
+                    return;
+                }
                 let freeObj = {
                     discount:'',
                     tacticsType:this.freeMap.tacticsType,
@@ -1802,6 +1811,11 @@
                         item.originalPrice = item.marketPrice;
                         item.saleNum = response.data.discount || '-';
                         return item;
+                    })
+                    this.payList.map(item=>{
+                        if(item.value == response.data.installmentType){
+                            this.installmentName = item.label;
+                        }
                     })
 
                     // step4里数据

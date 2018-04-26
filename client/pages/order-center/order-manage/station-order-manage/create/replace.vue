@@ -945,7 +945,7 @@
 
                 overViewData.signDate=this.formItem.signDate;
                 overViewData.discount = this.discountNum;
-                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseBegindate;
+                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseEnddate;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
                 // step3第二个table数据 
@@ -1279,6 +1279,11 @@
                     }
                     return true;
                 })
+                if(this.freeDays == 0){
+                    this.saleList = list;
+                    this.getSaleAmount(list)
+                    return;
+                }
                 let freeObj = {
                     discount:'',
                     tacticsType:this.freeMap.tacticsType,

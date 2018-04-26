@@ -1,11 +1,11 @@
 <template>
-  <div class="photo-album">
+  <div v-if="data && data.length" class="photo-album">
       <div class="mask"  @click="close"></div>
       
      
       <div>
            
-            <div class="view-img-box" style="padding:0px 40px;">
+            <div  class="view-img-box" style="padding:0px 40px;">
                
                 <img :src="data[urlIndex].url" alt="">
                 <div 
@@ -22,7 +22,7 @@
                 >
                 </div>
                 <span class="close-btn " @click="close"></span>
-                <Button class="down-img" @click="downImage(data[urlIndex].url)" type="primary">下载原图</Button>
+                <Button class="down-img" @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
             </div>
             
       </div>
@@ -73,12 +73,13 @@
             close(){
                 this.$emit('close')
             },
-            downImage(url){
-                this.$emit('downImage',url)
+            downFile(url){
+                
+                this.$emit('downFile',url)
             }
         },
         mounted(){
-            console.log(this.urlIndex,this.eyeIndex)
+            // console.log(this.urlIndex,this.eyeIndex)
             this.urlIndex = this.eyeIndex;
 
         }

@@ -9,26 +9,39 @@
 			labeType="file"
 			@eyeImg="eyeImg"
 			@recordClick="recordClick"
-
+			@eyePhotoAlbum="eyePhotoAlbum"
 		>
 			
 			<div class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-				<!-- <img v-if="item.url" :src="item.url" alt=""/> -->
+				<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
 				<div 
+					v-if="!getIsPhoto(item.url)"
 					:class="{
 						'file-type-style':true, 
-						'file-icon-other':getTyep('other',index),
-						'file-icon-word':getTyep('word',index),
-						'file-icon-excel':getTyep('excel',index),
-						'file-icon-ppt':getTyep('ppt',index),
+						'file-color-other':getTyep('other',index),
+						'file-color-word':getTyep('word',index),
+						'file-color-excel':getTyep('excel',index),
+						'file-color-ppt':getTyep('ppt',index),
 					}"
 				>
-
+					<div 
+						:class="{
+							'file-icon':true,
+							'file-icon-other':getTyep('other',index),
+							'file-icon-word':getTyep('other',index),
+							'file-icon-excel':getTyep('other',index),
+							'file-icon-ppt':getTyep('other',index),
+							
+						}"
+					></div>
 				</div>
-				<div class="file-name">
-					什么鬼
-					<div class="down-file"></div>
+				<div 
+					v-if="!getIsPhoto(item.url)"
+					class="file-name"
+				>
+					{{getFileName(index)}}
+					<div class="down-file" @click="downFile(item.url)"></div>
 				</div>
 				 <span 
                     class="delete-icon" 
@@ -47,7 +60,7 @@
                 <div class="add-text">上传文件</div>
 			</div>
 		</EditLabel>
-		<PhotoAlbum :data="fileArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
+		<PhotoAlbum @downFile="downFile" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	
 	</div>
 	
@@ -55,7 +68,8 @@
 
 <script>
 import PhotoAlbum from '../PhotoAlbum';
-import EditLabel from './EditLabel'
+import EditLabel from './EditLabel';
+import utils from '~/plugins/utils';
 export default{
 	components:{
 		PhotoAlbum,
@@ -66,6 +80,7 @@ export default{
             default:false,
             type:Boolean
 		},
+		
 		value:{
 			default:()=>[],
 			type:Array
@@ -80,6 +95,7 @@ export default{
         return {
 			upUrl:'',
 			fileArr:[],
+			imagesArr:[],
 			inputId:'inputId'+this._uid,
 			openPhotoAlbum:false,
 			eyeIndex:0,
@@ -96,16 +112,41 @@ export default{
 			}
 			return false;
 		},
+		getFileName(index){
+			var fileArr = this.fileArr[index].url.split('?')[0].split('/')
+			var filename  =fileArr[fileArr.length-1];
+			return filename;
+		},
+		downFile(url){
+			utils.downFile(url)
+		},
+		getIsPhoto(url){
+			var img="png,jpg,jpeg";
+			url = url.split('?')[0];
+			var index= url.lastIndexOf(".");
+			var ext = url.substr(index+1);
+			if(img.indexOf(ext)>0){
+				return true;
+			}
+			return false;
+		},
 		getExt(url){
 			var word="doc,docx,docm,dotx,dotm";
 			var excel="xls,xlsx,xlsm,xltm,xlsb,xlam";
 			var ppt="pptx,pptm,ppsx,ppsm,potx,potm,ppam";
+			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
 			if(word.indexOf(ext)>0){
 				return 'word';
 			}
-			return ext;
+			if(excel.indexOf(ext)>0){
+				return 'excel';
+			}
+			if(ppt.indexOf(ext)>0){
+				return 'ppt';
+			}
+			return 'other';
 		},
 		recordClick(value){
             this.$emit('recordClick',value)
@@ -124,8 +165,25 @@ export default{
         cancelClick(event){
             // this.inputValue = event
         },
-		eyePhotoAlbum(index,event){
-			this.eyeIndex = index;
+		eyePhotoAlbum(url,event){
+			let urlArr = [];
+			for (var i = 0; i < this.fileArr.length; i++) {
+				let everyUrl = this.fileArr[i].url;
+				if(this.getIsPhoto(everyUrl)){
+					urlArr.push(this.fileArr[i]);
+
+				}
+				
+			}
+			for (var i = 0; i < urlArr.length; i++) {
+				
+				if(urlArr[i].url == url){
+					this.eyeIndex = i;
+				}
+			}
+
+			console.log(urlArr,"ooooooooooo")
+			this.imagesArr = [].concat(urlArr);
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		delFile(index,event){
@@ -277,7 +335,8 @@ export default{
 		margin-right: 4px;
 		vertical-align: middle;
         position: relative;
-        margin-right: 20px;
+		margin-right: 20px;
+		border-radius: 4px 4px 4px 4px;
 		.file-type-style{
 			display: inline-block;
             height: 100%;
@@ -288,6 +347,26 @@ export default{
 			width: 210px;
 			height: 100px;
 			background: red;
+			border-radius: 4px 4px 4px 4px;
+		}
+		.img-mask{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			background: #ffffff;
+		}
+		img{
+			display: inline-block;
+            height: 100%;
+            cursor: pointer;
+            box-shadow: 0 1px 1px rgba(0,0,0,.2);
+            display: block;
+			margin: auto;
+			border-radius:0px;
+			border:0px;
+			
 		}
 		.file-name{
 			height: 35px;
@@ -296,6 +375,27 @@ export default{
 			box-sizing: border-box;
 			text-align: left;
 			padding-left: 10px;
+			position: relative;
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+			width: 210px;
+			.down-file{
+				width: 16px;
+				height: 16px;
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				cursor: pointer;
+				background-image: url(./images/down_init.svg);
+				background-size:100%;
+				
+				background-repeat: no-repeat;
+			}
+			.down-file:hover{
+				background-image: url(./images/down_active.svg);
+				
+			}
 		}
 		.delete-icon{
             position: absolute;
@@ -312,24 +412,52 @@ export default{
 
 		}
 		.file-icon-word{
+			background-image: url(./images/icon_word.svg);
+			
+		}
+		.file-color-word{
 			background-image: linear-gradient(46deg, #81C8FA 0%, #468CDF 100%);
 			border: 1px solid #EFEFEF;
-			border-radius: 4px 4px 0 4px 4px;
+			border-radius: 4px 4px 0px 0px;
+			
+		
 		}
-		.file-icon-excel{
+		.file-color-excel{
 			background-image: linear-gradient(45deg, #75C9C3 0%, #33AC99 100%);
 			border: 1px solid #EFEFEF;
-			border-radius: 4px 4px 0 4px 4px;
+			border-radius: 4px 4px 0px 0px;
+			
 		}
-		.file-icon-ppt{
+		.file-icon-excel{
+			background-image: url(./images/icon_excel.svg);
+		
+		}
+		.file-color-ppt{
 			background-image: linear-gradient(52deg, #FFAC96 0%, #FF6868 100%);
 			border: 1px solid #EFEFEF;
-			border-radius: 4px 4px 0 4px 4px;
+			border-radius: 4px 4px 0px 0px;
+			
 		}
-		.file-icon-other{
+		.file-icon-ppt{
+			background-image: url(./images/icon_ppt.svg);
+			
+		}
+		.file-color-other{
 			background-image: linear-gradient(45deg, #B4ABE5 0%, #7C6FD7 100%);
 			border: 1px solid #EFEFEF;
-			border-radius: 4px 4px 0 4px 4px;
+			border-radius: 4px 4px 0px 0px;
+			
+		}
+		.file-icon-other{
+			background-image: url(./images/icon_other.svg);
+			
+		}
+		.file-icon{
+			display: inline-block;
+			background-size:45px auto;
+			background-repeat: no-repeat;
+			width: 45px;
+			height: 45px;
 		}
 	
 

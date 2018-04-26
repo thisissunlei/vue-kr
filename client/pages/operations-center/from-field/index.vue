@@ -327,7 +327,6 @@
             },
 
             newPageDataChange(data){
-                  console.log(data,"=======")
                 if(data){
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
                     this.newPageData = Object.assign({},data);

@@ -51,6 +51,9 @@ export default {
 		}
 	},
 	methods:{
+         recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },

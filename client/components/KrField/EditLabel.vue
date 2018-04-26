@@ -7,7 +7,7 @@
 				<span class="edit-icon" @click="editClick">
 					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
-				<span class="record-icon" @click="editClick">
+				<span class="record-icon" @click="recordClick">
 					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
 				
@@ -18,7 +18,7 @@
 				<span class="edit-icon" @click="editClick">
 					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
-				<span class="record-icon" @click="editClick">
+				<span class="record-icon" @click="recordClick">
 					<!-- <Icon type="ios-compose-outline "></Icon> -->
 				</span>
 			</div>
@@ -67,6 +67,9 @@ export default {
 		}
 	},
 	methods:{
+		recordClick(){
+			this.$emit('recordClick',this.value)
+		},
 		editClick(){
 			this.isEdit = !this.isEdit;
 			

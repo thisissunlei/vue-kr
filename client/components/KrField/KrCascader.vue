@@ -5,6 +5,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Cascader
                 :data="data"
@@ -71,6 +72,10 @@ export default {
         this.cityValue = this.cityValue.reverse();
     },
 	methods:{
+        recordClick(value){
+            console.log("-------")
+            this.$emit('recordClick',value)
+        },
         change(value){
             this.labelValue=(value&&value.length) ? this.fnTreeId(value[2],this.data) : '';
             this.$emit('change',value);

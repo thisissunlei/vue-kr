@@ -75,7 +75,6 @@
             },
             downImage(url){
                 this.$emit('downImage',url)
-                console.log(url,"pppppppp")
             }
         },
         mounted(){

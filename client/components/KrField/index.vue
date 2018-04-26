@@ -17,6 +17,7 @@
             @on-keydown="keydown"
             @on-keypress="keypress"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
         <KrSelect
@@ -31,6 +32,7 @@
             :selectData="selectData"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
         <KrDate
@@ -42,6 +44,7 @@
             :format="format"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
         <KrTimeDate
@@ -53,6 +56,7 @@
             :format="format"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
         <KrTime
@@ -63,6 +67,7 @@
             :readOrEdit="readOrEdit"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
         <KrTextarea
@@ -74,6 +79,7 @@
             :readOrEdit="readOrEdit"
             @change="selectChange"
             @okClick="okClick"
+            @recordClick="recordClick"
         />
 
 
@@ -86,6 +92,7 @@
             :placeholder="placeholder"
             :readOrEdit="readOrEdit"
             @change="change"
+            @recordClick="recordClick"
             @visibleChange="visibleChange"
             @okClick="okClick"
         />
@@ -104,12 +111,14 @@
             :readOrEdit="readOrEdit" 
             :value = 'value'
             @okClick="okClick"
+            @recordClick="recordClick"
         />
         <UpImage 
             v-if="type==='upImage'"  
             :readOrEdit="readOrEdit" 
             :value = 'value'
             @okClick="okClick"
+            @recordClick="recordClick"
         />
   </div>
 </template>
@@ -225,6 +234,9 @@ export default {
         }
     },
     methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         click(event){
             this.$emit('click',event);
         },

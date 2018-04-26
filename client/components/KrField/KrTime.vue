@@ -6,6 +6,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <TimePicker 
                 :open="open"
@@ -63,6 +64,9 @@ export default {
 		}
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         handleClick(){
             this.open = !this.open;
         },

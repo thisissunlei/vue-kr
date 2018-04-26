@@ -6,6 +6,7 @@
 			:value="fileArr"
 			@okClick="okClick"
 			@cancelClick="cancelClick"
+            @recordClick="recordClick"
 			labeType="file"
 			@eyeImg="eyeImg"
 		>
@@ -21,9 +22,16 @@
 				
 			</div>
 
-			<input :id="inputId" type="file" style="display:none;" @change="fileChange">
+			<input 
+                :id="inputId" 
+                type="file" 
+                style="display:none;" 
+                accept=".jpg, .jpeg, .png"
+                @change="fileChange"
+            >
 			<div class="up-icon" @click="addFileClick">
-				+
+				<div class="add-icon"></div>
+                <div class="add-text">上传文件</div>
 			</div>
 			</EditLabel>
 			<PhotoAlbum :data="fileArr" @downImage="downImage" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
@@ -74,6 +82,9 @@ export default{
         },
 		close(){
 			this.openPhotoAlbum = !this.openPhotoAlbum;
+        },
+        recordClick(value){
+			this.$emit('recordClick',value)
 		},
 		okClick(){
             this.$emit("okClick",this.fileArr)
@@ -102,33 +113,12 @@ export default{
 		fileChange(event){
 			
 			var that = this;
-			var file = event.target.files[0];
+            var file = event.target.files[0];
+            console.log(file.type.match('image.*'),"llllll")
+            if (!file.type.match('image.*')) {
+                return false;
+            }
 			that.getUpFileUrl(file);
-			return ;
-			var reader = new FileReader(); 
-			reader.readAsDataURL(file);
-			// console.log("pppooooo",reader)
-				reader.onloadstart = function() { 
-					// 这个事件在读取开始时触发
-					console.log("onloadstart"); 
-				}
-				reader.onprogress = function() { 
-					// 这个事件在读取进行中定时触发
-					console.log("onprogress"); 
-				} 
-			   	reader.onload = function(e){
-					   // 这个事件在读取成功结束后触发
-					that.getUpFileUrl(e);
-					// that.fileArr.push({url:e.target.result})
-					// document.getElementById(divPreviewId).innerHTML="<img src='"+e.target.result+"'>";
-				}  
-				reader.onloadend = function() { 
-					if (reader.error) { 
-						console.log(reader.error); 
-					}else {
-						that.getUpFileUrl(event);
-					}
-				}
 				
 		},
 		upfile(form,serverUrl){
@@ -229,21 +219,35 @@ export default{
 		cursor: pointer;
 		vertical-align: middle;
 		line-height: 135px;
-		vertical-align: middle;
+		
 		background: #fff;
 		border: 1px dashed #dddee1;
 		border-radius: 4px;
-		text-align: center;
-		cursor: pointer;
+		
+	
 		position: relative;
 		overflow: hidden;
 		transition: border-color .2s ease;
-        font-size: 40px;
 		margin: 30px 30px 10px;        
-
+        .add-icon{
+            width: 38px;
+            height: 38px;
+            margin: auto;
+            background-image: url(./images/add_icon.svg);
+            background-size:100%;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            margin-top: 35px;
+        }
+        .add-text{
+            text-align: center;
+            color: #4F9EED;
+            height: 30px;
+            line-height: 30px;
+        }
 	}
 	.up-icon:hover{
-		border: 1px dashed #2d8cf0;
+        border: 1px dashed #2d8cf0;
     }
     
 	.view{

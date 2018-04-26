@@ -6,6 +6,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <DatePicker 
                 v-model="dateValue"
@@ -56,6 +57,9 @@ export default {
 		}
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         change(value){
             this.$emit('change',value);
         },

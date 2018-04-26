@@ -6,6 +6,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Select
                 :placeholder="placeholder"
@@ -73,6 +74,9 @@ export default {
       this.getLabel(this.selectValue); 
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         getLabel(value){
             var label='';
             this.selectData.map((item,index)=>{

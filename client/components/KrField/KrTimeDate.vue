@@ -6,6 +6,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <DatePicker 
                 :open="open"
@@ -64,6 +65,9 @@ export default {
 		}
     },
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
         handleClick(){
             this.open = !this.open;
         },

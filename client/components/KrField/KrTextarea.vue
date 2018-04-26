@@ -6,6 +6,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Input
                 v-model="areaValue"
@@ -63,6 +64,9 @@ export default {
 		}
 	},
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },

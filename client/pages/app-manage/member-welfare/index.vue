@@ -63,6 +63,7 @@ export default {
               pageSize:15,
               page:1, 
            },
+           couponId:'',
            welfareColumns:[
                 {
                     title: '福利标题',
@@ -213,7 +214,7 @@ export default {
      openDown(params){
            this.openCancel=!this.openCancel;
            if(params){
-               //this.notificationId=params.notificationId
+               this.couponId=params.couponId
             }
      },
     changePage(page){
@@ -223,7 +224,7 @@ export default {
     },
     submitDown(){
             let params={
-                    notificationId: this.notificationId
+                    couponId: this.couponId
                 }
                 // this.$http.post('delete-notification', params).then((res)=>{
                 //     this.$Notice.success({

@@ -1,12 +1,17 @@
 
 <template lang="html">
   <div class="select-tree">
-        <div style="width:200px" @click="inputClick">
+        <div :style="{width:inputWidth+'px'}" @click="inputClick">
             <Input 
                 @on-change="inputSearch"  
                 v-model="treeInput" 
                 :placeholder="placeholder"     
             />
+            <div class="div-input"></div>
+            <span 
+                class="select-tree-icon ivu-icon ivu-icon-arrow-down-b ivu-select-arrow"
+                :style="{ transform: mask?'rotateZ(180deg)':'rotateZ(0deg)'}"
+            ></span>
         </div>
         <div  class="select" v-if="mask" v-click-outside="clickedOutside">
             <div class="tree-content">
@@ -43,6 +48,9 @@ export default {
         treeIds:{
             default:'',
             type:String
+        },
+        inputWidth:{
+            type:[String,Number]
         }
     },
     data(){
@@ -51,7 +59,8 @@ export default {
             mask:false,
             checkValue:[],
             nowData:this.data,
-            num:0
+            num:0,
+            isUp:false
 		}
     },
     mounted(){
@@ -177,11 +186,33 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
     .select-tree{
+        .ivu-icon-arrow-down-b::before{
+            content: "\F123" !important;
+            font-size: 10px;
+        }
         text-align: left;
+        .select-tree-icon{
+            position: absolute;
+            display: inline-block;
+            width: 10px;
+            height: 16px;
+            margin-left: -20px;
+            transform: rotateX(180deg);
+            transform-origin:  center center;
+        }
+        .div-input{
+            display: inline-block;
+            // background: red;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            cursor: pointer;
+        }
         .select{
-
             .tree-content{
                 min-width: 200px;
                 max-height: 250px;

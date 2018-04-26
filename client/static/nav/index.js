@@ -73,8 +73,11 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value)[0];
-        j_li.setAttribute("class", "active");
+        var j_li = document.getElementsByName(value);
+        if(j_li.length){
+            j_li[0].setAttribute("class", "active");
+        }
+        
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -208,6 +211,7 @@
 
             if (item.menuItems && item.menuItems.length) {
                 href = item.menuItems[0].menuItems[0].router;
+                item.type = item.menuItems[0].menuItems[0].type || ''
             }
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）
@@ -394,8 +398,8 @@
     var globalNav = new GlobalNav();
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
-    // global.GLOBALHEADERSET = Router.setDefaultHeader;
-
+    global.GLOBALHEADERSET = Router.setDefaultHeader;
+    
 
     Router.init();
     //第一级菜单
@@ -473,7 +477,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),objecrSetting()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
 
         return arr;
     }
@@ -506,6 +510,12 @@
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
+                        // {
+                        //     primaryText: '客户管理',
+                        //     router: 'customer-manage/manage',
+                        //     type:'vue',
+                        //     menuCode: 'customer_center'
+                        // },
                         {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',

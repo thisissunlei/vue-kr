@@ -40,7 +40,7 @@
 
     <Modal
         v-model="openStatistical"
-        title="统计信息"
+        :title="'统计信息  (统计自当前筛选结果共'+totalCount+'条)'"
         class-name="vertical-center-modal"
         width="600"
      >
@@ -365,6 +365,7 @@ var layoutScrollHeight=0;
                 this.getTableData(this.tabForms);
             },
             submitExport(){
+                this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
                 this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
                 this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                 utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export-available');

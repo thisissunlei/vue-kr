@@ -294,7 +294,11 @@ var layoutScrollHeight=0;
             },
             //格式转换
             dateSwitch(data){
-                return data?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data)):'';
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
             },
             //获取统计数据
             getStatistal(){

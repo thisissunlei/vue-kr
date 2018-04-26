@@ -83,6 +83,7 @@ function lineShow(data) {
 function poptipOver(event, data) {
     var e = event || window.event;
     var dom = event.target;
+
     var detail = dom.getBoundingClientRect();
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -91,6 +92,7 @@ function poptipOver(event, data) {
         left: e.clientX,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
+    console.log('detail',e.clientY,detail.top,detail.height)
     var obj = getToolTipContent(data);
     tirDom.innerHTML = obj.str;
     tirDom.style.left = tirLocation.left - 30 + 'px';

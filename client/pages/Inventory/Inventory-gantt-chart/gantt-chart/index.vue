@@ -32,7 +32,6 @@
             <div
 
                 class="right-draw"
-                :style="{left:type=='edit'?'271px':'371px'}"
             >
                 <div class="calibration" id="gantt-chart-calibration">
                  <div  style="position:relative;overflow:hidden;"  >
@@ -166,14 +165,6 @@ export default {
         ColorType
     },
     props:{
-        data:{
-            type:Array,
-            default:()=>[]
-        },
-        type:{
-            type:String,
-            default:'view'
-        },
         start:{
             type:String,
         },
@@ -229,20 +220,20 @@ export default {
             tagToLeft:0,
             colorTypes:[
                 {
-                    title:'任务计划',
-                    color:"#ccc"
+                    title:'未租',
+                    color:"#BCE590"
                 },
                 {
-                    title:'准时或提前完成',
-                    color:"#ccc"
+                    title:'在租',
+                    color:"#FDAFAF"
                 },
                 {
-                    title:'延期完成',
-                    color:"#ccc"
+                    title:'合同未生效',
+                    color:"#FFE08F"
                 },
                 {
-                    title:'进度位置',
-                    color:"#ccc"
+                    title:'不可用',
+                    color:"#E4E4E4"
                 }
             ]
         }
@@ -253,22 +244,10 @@ export default {
         setTimeout(() => {
             this.scroolFix(this.showData)
         }, 100);
-
-        if(this.data.length){
-            this.circleId(this.data);
-        }
     },
 
 
     methods:{
-        circleId(data,param){
-            data.map((item,index)=>{
-                item.pid=param?param:'';
-                if(item.children&&item.children.length){
-                    this.circleId(item.children,item.value);
-                }
-            })
-        },
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             var offerLeft = 0;
@@ -346,7 +325,6 @@ export default {
                 }];
                 for (var year = startObj.year; ;) {
                     year++;
-                    console.log("----",year)
                     if(year == endObj.year){
                         yearArr.push({
                             year:endObj.year,
@@ -665,7 +643,7 @@ export default {
             opacity: 0;
             position: absolute;
             display:block;
-            // margin:10px;
+            //margin:10px;
             width:0;
             height:0;
             border-style:solid;
@@ -674,44 +652,11 @@ export default {
             left: 10px;
             transition: all .1s;
             z-index: 999;
-             
-
-        }
-
-        .chart-tab-left{
-            width:346px;
-            border: 1px solid #F6F6F6;
-            border-right:5px solid #F6F6F6;
-            display:inline-block;
-            border-bottom: none;
-            .chart-left{
-                overflow: hidden;
-                .ivu-tabs-nav{
-                   width:100%;
-                   height: 51px;
-                   line-height: 51px;
-                   .ivu-tabs-ink-bar{
-                        height: 2px;
-                   }
-                }
-            }
-            .ivu-tabs-mini .ivu-tabs-tab{
-                width:50%;
-                text-align: center;
-                font-family: PingFangSC-Medium;
-                font-size: 14px;
-                line-height: 20px;
-                position: relative;
-                top: -10px;
-            }
-            .ivu-tabs-nav .ivu-tabs-tab-active{
-                color: #4A90E2;
-            }
         }
         .right-draw{
             position: absolute;
             overflow:auto;
-            left: 371px;
+            left: 175px;
             right: 0px;
             .time-shaft-fixed{
                 position: absolute;

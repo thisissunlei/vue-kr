@@ -59,43 +59,56 @@ export default {
            totalCount:0,
            tableList:[],
            openCancel:false,
+           tabParams:{
+              pageSize:15,
+              page:1, 
+           },
            welfareColumns:[
                 {
                     title: '福利标题',
-                    key: 'mbrName',
+                    key: 'title',
                     align:'center'
                 },
                 {
                     title: '福利类型',
-                    key: 'mbrName',
-                    align:'center'
+                    key: 'couponType',
+                    align:'center',
+                    render(h, obj){
+                         let type={
+                              'OFFLINESTORE':'线下门店',
+                              'USERLIFE':'会员生活',
+                              'ENTERPRISESERVICE':'企业服务',
+                            }
+                        return type[obj.row.couponType];
+                    }
                 },
                 {
                     title: '优惠面值',
-                    key: 'mbrName',
+                    key: 'faceValue',
                     align:'center'
                 },
                 {
                     title: '福利范围',
-                    key: 'mbrName',
+                    key: 'scopeCitys',
                     align:'center'
                 },
                 {
                     title: '领取有效期',
-                    key: 'mbrName',
+                    key: 'indate',
                     align:'center'
                 },
                 {
                     title: '创建人',
-                    key: 'mbrName',
+                    key: 'createName',
                     align:'center'
                 },
                 {
                     title: '操作',
-                    key: 'mbrName',
+                    key: 'effective',
                     align:'center',
                     render:(h,params)=>{
-                           return h('div', [
+                        if(params.row.couponType==1){
+                            return h('div', [
                                h('Button', {
                                     props: {
                                         type: 'text',
@@ -138,13 +151,47 @@ export default {
                                         }
                                     }
                                 }, '下线')
-                            ]);  
+                            ]); 
+                        }else{
+                             return h('div', [
+                               h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpView(params.row)
+                                        }
+                                    }
+                                }, '详情'),
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpEdit(params.row)
+                                        }
+                                    }
+                                }, '编辑')
+                            ]);
                         }
+                            
+                 }
                 },
            ]
       }
   },
   mounted(){
+      this.getTableData();
       this.tableList=[
           {
               mbrName:1111,
@@ -190,6 +237,17 @@ export default {
                 // })
                  
     },
+    getTableData(params){
+            this.$http.get('get-coupon-page', params).then((res)=>{
+                this.tableList=res.data.items;
+                this.totalCount=res.data.totalCount;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        
+      },
 
 
 

@@ -182,7 +182,17 @@
                                     @on-clear="endHourClear"
                                 />
                       </FormItem>
-                    
+                      <FormItem 
+                                label="领取链接"  
+                                style="width:294px" 
+                                v-if="formItem.couponType!='OFFLINESTORE'"
+                                prop="jumpType"
+                         >
+                                <Input 
+                                    v-model="formItem.title" 
+                                    placeholder="请输入URL"
+                                />
+                      </FormItem>
                 </DetailStyle>
                 
                 <FormItem  style="margin:0 24px; height:60px;">

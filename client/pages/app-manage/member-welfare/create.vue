@@ -4,19 +4,19 @@
       <div class="u-form">
             <Form ref="formItems" :model="formItem" :rules="ruleCustom" :label-width="100" >
               <DetailStyle info="福利展示信息">
-                    <FormItem label="福利类型" style="width:400px" prop="couponType">
+                    <FormItem label="福利类型" style="width:700px" prop="couponType">
                             <RadioGroup 
                                 v-model="formItem.couponType" 
                             >
                                 <Radio 
                                     label="OFFLINESTORE" 
-                                    style="margin-right:60px;"
+                                    style="margin-right:120px;"
                                 >
                                     线下门店
                                 </Radio>
                                 <Radio 
                                     label="USERLIFE" 
-                                    style="margin-right:60px;"
+                                    style="margin-right:120px;"
                                 >
                                     会员生活
                                 </Radio>

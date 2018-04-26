@@ -321,7 +321,7 @@
             width="90%"
             class-name="vertical-center-modal"
          >
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap"></planMap>
+            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
             </div>
@@ -392,6 +392,7 @@
                 }
             };
             return {
+                originStationList:[],
                 showSubmit:false,
                 editCardabled:true,
                 openService:false,
@@ -1828,6 +1829,7 @@
                     
 					this.overViewData = overViewData
 					this.orderStatus = 'view';
+                    this.originStationList = this.selecedStationList
                     console.log('----->',this.formItem)
                         
                         if(this.edit){

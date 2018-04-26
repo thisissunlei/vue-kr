@@ -322,7 +322,7 @@
             width="90%"
             class-name="vertical-center-modal"
          >
-            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap"></planMap>
+            <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap>
             <div slot="footer">
                 <Button type="primary" @click="submitStation">确定</Button>
             </div>
@@ -407,6 +407,7 @@
                     deleteData:[],
                 },
                 selecedStationList:[],
+                originStationList:[],
                 signPriceColumns:[
                     {
                         title: '工位编号/房间名称',
@@ -1801,7 +1802,7 @@
                     this.deposit = response.data.deposit;
                     this.saleList = response.data.tacticsVOs || [];
                     this.stationData.submitData = this.selecedStationList;
-
+                    this.originStationList = this.selecedStationList
                     let _this = this;
                     console.log('获取编辑的基础数据',this.formItem)
                     setTimeout(function(){

@@ -125,5 +125,35 @@ export default  {
         url: '/api/krspace-finance-web/app/notification/target-count',
         method: 'get'
     },
+    //app管理--会员福利--福利分页
+    'get-coupon-page': {
+        url: '/api/krspace-finance-web/coupon/page',
+        method: 'get'
+    },
+    //app管理--会员福利--福利详情
+    'get-coupon-detail': {
+        url: '/api/krspace-finance-web/coupon/detail',
+        method: 'get'
+    },
+    //app管理--会员福利--上传组件
+    'file-img-upload': {
+        url: '/api/krspace-finance-web/mobile/file/img/upload',
+        method: 'post'
+    },
+    //app管理--会员福利--新建福利
+    'create-coupon': {
+        url: '/api/krspace-finance-web/coupon/create',
+        method: 'post'
+    },
+    //app管理--会员福利--新建标签
+    'create-tag': {
+        url: '/api/krspace-finance-web/coupon/tag/create',
+        method: 'post'
+    },
+    //app管理--会员福利--入驻城市列表
+    'coupon-city-list': {
+        url: '/api/krspace-finance-web/coupon/city-list',
+        method: 'get'
+    },
 }
   

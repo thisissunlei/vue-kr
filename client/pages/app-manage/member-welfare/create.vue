@@ -103,6 +103,28 @@
                                     图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
                                 </div>
                         </div>
+                        <div class="u-welfare-tag">
+                             <FormItem label="福利标签" style="width:516px" >
+                                 <Input 
+                                        v-model="formItem.title" 
+                                        placeholder="5个字符以内"
+                                        :maxlength="titleLength"
+                                        style="width:278px"
+                                 />
+                                 <span class="u-add-tag-btn">添加</span>
+                                 <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
+                                 <div class="u-tag-content">
+                                     <div 
+                                        class="u-tag" 
+                                        v-for="(item,index) in tagList"
+                                        :key="index"
+                                      >
+                                         <span class="u-tag-close"></span>
+                                         会议室
+                                     </div>
+                                 </div>
+                             </FormItem>
+                        </div>
                          <FormItem 
                                 label="商户详细地址"  
                                 style="width:294px" 
@@ -112,6 +134,7 @@
                                     v-model="formItem.title" 
                                     placeholder="30个字符以内"
                                     :maxlength="titleLength"
+                                    
                                 />
                       </FormItem>
                 </DetailStyle>
@@ -146,6 +169,16 @@
                                       >
                                       <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
                                   </Select>
+                                  <div class="u-tag-content u-tag-top">
+                                     <div 
+                                        class="u-tag" 
+                                        v-for="(item,index) in tagList"
+                                        :key="index"
+                                      >
+                                         <span class="u-tag-close"></span>
+                                         会议室
+                                     </div>
+                                 </div>
                               </FormItem>
                           </div>
                       </div>
@@ -221,7 +254,8 @@ export default {
           formItem:{
               couponType:'OFFLINESTORE'
           },
-           ruleCustom:{
+          tagList:['会议室','会议室','会议室','会议室','会议室','会议室','会议室','会议室'],
+          ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
             ],
@@ -318,11 +352,14 @@ export default {
     }
     .u-community-content{
         width:284px;
-        height:114px;
+        min-height:114px;
         margin-top: -10px;
+        display: inline-block;
          .u-community-select{
-              width:284px;
-              height:100px;
+              min-width:284px;
+              min-height:100px;
+             // max-width:284px;
+              display: inline-block;
               padding-top:20px;
               padding-left:10px;
               background:#F6F6F6;
@@ -358,6 +395,47 @@ export default {
             text-align: center
         }
         
+    }
+    .u-welfare-tag{
+        .u-add-tag-btn{
+            padding-left:10px;
+            color:#499DF1;
+            font-size: 14px;
+            line-height:32px;
+        }
+        .u-tag-tip{
+            color:#999999;
+            text-indent: 8px;
+            margin-bottom:10px;
+        }
+    }
+    .u-tag-content{
+        padding-left:10px;
+        display: inline;
+       .u-tag{
+           padding:0 10px;
+           height:32px;
+           line-height:32px;
+           border:1px solid #499DF1;
+           border-radius: 4px;
+           text-align: center;
+           display: inline-block;
+           position: relative;
+           color:#499DF1;
+           margin-right:20px;
+           .u-tag-close{
+               height:16px;
+               width:16px;
+               position: absolute;
+               background: url('~/assets/images/icon_close.svg') no-repeat center center;
+               background-size:100% 100%;
+               top:-8px;
+               right:-8px;
+           }
+       } 
+    }
+    .u-tag-top{
+        margin-top:18px;
     }
 
   

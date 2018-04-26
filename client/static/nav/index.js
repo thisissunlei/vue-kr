@@ -212,6 +212,7 @@
 
             if (item.menuItems && item.menuItems.length) {
                 href = item.menuItems[0].menuItems[0].router;
+                item.type = item.menuItems[0].menuItems[0].type || ''
             }
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）
@@ -400,7 +401,6 @@
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
     global.GLOBALHEADERSET = Router.setDefaultHeader;
 
-
     Router.init();
     //第一级菜单
     function firstMenus(firstData) {
@@ -477,7 +477,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),objecrSetting()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
 
         return arr;
     }
@@ -510,6 +510,12 @@
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
+                        // {
+                        //     primaryText: '客户管理',
+                        //     router: 'customer-manage/manage',
+                        //     type:'vue',
+                        //     menuCode: 'customer_center'
+                        // },
                         {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',

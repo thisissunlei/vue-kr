@@ -1,12 +1,12 @@
 <template>
   <div class="project-setting">
-        <Tabs size="default" :value="tabs" @on-click="tabsClick">
-            <TabPane label="项目档案管理" name="tab1">
+        <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
+            <TabPane label="列表视图" name="tab1">
                 <Archives v-if="mask"/>
-                
+
             </TabPane>
-            <TabPane label="开业进度总览" name="tab2">
-                 
+            <TabPane label="日历视图" name="tab2">
+
                 <ProgressView v-if="!mask"/>
 
             </TabPane>
@@ -49,7 +49,7 @@ export default {
             if(key=='tab2'){
                 tabDom.style.overflow = 'visible';
                 this.mask=false;
-                
+
             }else{
                 tabDom.style.overflow = 'hidden';
                 this.mask=true;
@@ -73,11 +73,16 @@ export default {
         .ivu-tabs-ink-bar{
             top:0px;
             height: 4px;
+            border: 20px solid #fff;
+            border-top: 0px;
+            border-bottom: 0px;
+            box-sizing: border-box;
         }
         .ivu-tabs-nav .ivu-tabs-tab{
-            width: 50%;
+            
             text-align: center;
             line-height: 35px;
+            padding: 8px 20px;
         }
         .ivu-tabs-bar{
             margin: 0px;

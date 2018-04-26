@@ -27,10 +27,17 @@
                             ></span>
                         </div>
                          <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
-                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进度未知</span>
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">进行中</span>
                             <span
                                 class="article"
                                 style="background:#FFD669;vertical-align:middle;"
+                            ></span>
+                        </div>
+                        <div style="display:inline-block;margin-top: 6px;margin-left:20px;">
+                            <span style="vertical-align:middle;color:#999;font-size:14px;font-family: PingFangSC-Medium;">逾期风险</span>
+                            <span
+                                class="article"
+                                style="background:#fff;vertical-align:middle;border:1px dashed #FF6D6D"
                             ></span>
                         </div>
                     </div>
@@ -40,18 +47,19 @@
                          甘特图显示任务项
                         </span>
                         <Form label-position="left" style="display:inline-block;">
-                                <KrField
-                                    v-if="mask"
-                                    type="selectTree"
-                                    :data="treeData"
-                                    @okClick="treeClick"
-                                    @checkChange="treeChange"
-                                    :treeIds="treeIds"
-                                />
+                            <KrField
+                                v-if="mask"
+                                type="selectTree"
+                                :data="treeData"
+                                @okClick="treeClick"
+                                @checkChange="treeChange"
+                                :treeIds="treeIds"
+                                :inputWidth="150"
+                            />
                         </Form>
                     </div>
 
-                    <div style="display:inline-block;">
+                    <div style="display:inline-block;padding-left:30px;">
                             <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
                                 时间轴最小刻度
                             </span>
@@ -282,6 +290,7 @@ export default {
         }
     },
     mounted(){
+        // return;
         this.scrollWidth = utils.getScrollBarSize()
         this.limitDay(this.barType);
         setTimeout(() => {
@@ -297,8 +306,8 @@ export default {
         this.mask=this.treeData.length?true:false;
     },
     methods:{
-        editClick(id,pid){
-            this.$emit('editClick',id,pid);
+        editClick(id){
+            this.$emit('editClick',id);
         },
         circleId(data,param){
             data.map((item,index)=>{
@@ -391,7 +400,6 @@ export default {
                 }];
                 for (var year = startObj.year; ;) {
                     year++;
-                    console.log("----",year)
                     if(year == endObj.year){
                         yearArr.push({
                             year:endObj.year,
@@ -562,7 +570,7 @@ export default {
                 day:min.start + weekObj.start-1,
             }
             if(end.day>publicFn.getMonthDayNum(end.year,end.month)){
-               end.day = end.day -publicFn.getMonthDayNum(end.year,end.month)-1;
+               end.day = end.day -publicFn.getMonthDayNum(end.year,end.month);
                 end.month+=1;
                 if(end.month>12){
                     end.month=end.month-12;

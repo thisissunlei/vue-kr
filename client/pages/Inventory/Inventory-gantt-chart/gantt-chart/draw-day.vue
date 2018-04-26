@@ -1,9 +1,9 @@
 
 <template>
 	<div class="draw-day" >
-        <div class="day" v-for="item in monthDay" :key="item.id" :style="{backgorund:item=='今天'?'#F3F2F7':''}">
-            {{item}}
-           
+        <div class="day" v-for="item in monthList" :key="item.id" :style="{backgorund:item.day=='今天'?'#F3F2F7':''}">
+            <div style="height:25px;line-height: 39px;">{{item.day}}</div>
+            <div style="height:25px;">{{item.weekName}}</div>
         </div>
 	</div>
 </template>
@@ -23,10 +23,26 @@ export default {
     },
     data(){
         return {
-            monthDay:this.getDayNum()
+            monthDay:this.getDayNum(),
+            monthList:[]
         }
     },
+    mounted(){
+        this.getWeekText();   
+    },
     methods:{
+        getWeekText(){
+            var weekArr=['日','一','二','三','四','五','六'];
+            this.monthList=[];
+            this.monthDay.map((item,index)=>{
+                var list={};
+                var week=this.data.year+'/'+this.data.month+'/'+item;
+                list.day=item;
+                list.week=(new Date(week)).getDay();
+                list.weekName='周'+weekArr[list.week];
+                this.monthList.push(list)
+            })
+        },
         getDayNum(){
             var num = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
@@ -61,7 +77,6 @@ export default {
     display: inline-block;
     .day{
         height: 50px;
-        line-height: 50px;
         width: 50px;
         text-align: center;
         display: inline-block;

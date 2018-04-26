@@ -953,7 +953,7 @@
 
                 overViewData.signDate=this.formItem.signDate;
                 overViewData.discount = this.discountNum;
-                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseEnddate;
+                overViewData.freeStartDate = this.freeStartDate ;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
                 // step3第二个table数据 

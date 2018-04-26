@@ -282,5 +282,6 @@ export default  {
       url: '/api/krspace-pay/bill/wait/list',
       method: 'get'
     },
+
   }
   

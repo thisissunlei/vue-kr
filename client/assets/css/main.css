@@ -69,4 +69,40 @@ a, a:hover, a:focus, a:visited {
 .layout-content{
     padding-bottom:24px;
 }
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        
+}
+.vertical-center-modal .ivu-modal{
+    top: 0;
+}
 /*根据ui全局修改*/
+
+/* sort默认样式 */
+.kr-table-sort-icon-init{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_init.svg');
+    background-size: 100% 100%;
+}
+/* sort升序样式 */
+.kr-table-sort-icon-asc{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_asc.svg');
+    background-size: 100% 100%;    
+
+}
+/* sort降序序样式 */
+.kr-table-sort-icon-desc{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_desc.svg');
+    background-size: 100% 100%;
+    
+}

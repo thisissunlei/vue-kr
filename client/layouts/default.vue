@@ -36,6 +36,13 @@
            
             this.bodyStyle.height = document.documentElement.clientHeight-130 + "px";
             var that = this;
+            window.onresize=function(){
+                var dom = document.getElementById('layout-content-main');
+                if(dom){
+                    dom.style.height = document.documentElement.clientHeight - 130 + "px"
+                }
+            
+            }
         
         },
         

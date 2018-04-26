@@ -618,18 +618,6 @@
                             router: 'product/communityAllocation/communityPlanList'
                         },
                         {
-                            primaryText: "每日库存",
-                            router: 'inventory/daily-inventory',
-                            type: 'vue',
-                            menuCode: 'seat_order_list',
-                        },
-                        {
-                            primaryText: "可租库存",
-                            router: 'inventory/optional-inventory',
-                            type: 'vue',
-                            menuCode: 'seat_order_list',
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -638,6 +626,18 @@
                             primaryText: '工位',
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
+                        },
+                        {
+                            primaryText: "每日库存查询",
+                            router: 'inventory/daily-inventory',
+                            type: 'vue',
+                            menuCode: 'public',
+                        },
+                        {
+                            primaryText: "可租商品查询",
+                            router: 'inventory/optional-inventory',
+                            type: 'vue',
+                            menuCode: 'public',
                         },
                         {
                             primaryText: '注册地址',

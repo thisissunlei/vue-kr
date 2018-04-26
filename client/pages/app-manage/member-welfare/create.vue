@@ -32,21 +32,21 @@
                               :maxlength="titleLength"
                           />
                       </FormItem>
-                      <FormItem label="福利描述"  style="width:516px" prop="title">
+                      <FormItem label="福利描述"  style="width:516px" prop="descr">
                           <Input 
-                              v-model="formItem.title" 
+                              v-model="formItem.descr" 
                               placeholder="20个字符以内,建议填写门店详细地址"
-                              :maxlength="titleLength"
+                              :maxlength="descrLength"
                           />
                       </FormItem>
-                       <FormItem label="福利面值"  style="width:294px" prop="title">
+                       <FormItem label="福利面值"  style="width:294px" prop="faceValue">
                           <Input 
-                              v-model="formItem.title" 
+                              v-model="formItem.faceValue" 
                               placeholder="10个字符以内,如“9折”"
-                              :maxlength="titleLength"
+                              :maxlength="faceValueLength"
                           />
                       </FormItem>
-                       <FormItem label="福利封面" style="width:516px" >
+                       <FormItem label="福利封面" style="width:516px" prop="couponCover">
                             <div class="demo-upload-list" v-if="this.imgUrl">
                                 <img :src="this.imgUrl">
                                 <div class="demo-upload-list-cover">
@@ -55,7 +55,7 @@
                             </div>
                             <Upload
                                 ref="upload"
-                                name="imgUrl"
+                                name="couponCover"
                                 v-if="!this.imgUrl"
                                 :show-upload-list="false"
                                 :format="['jpg','gif','png']"
@@ -75,7 +75,7 @@
                         </div>
                         <div class="u-upload-logo" v-if="formItem.couponType=='OFFLINESTORE'">
                                 <IconTip style="left:85px;top:9px;">用于到店凭证展示给店主</IconTip>
-                                <FormItem label="商户LOGO" style="width:516px" >
+                                <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
                                     <div class="demo-upload-list" v-if="this.imgUrl">
                                         <img :src="this.imgUrl">
                                         <div class="demo-upload-list-cover">
@@ -84,7 +84,7 @@
                                     </div>
                                     <Upload
                                         ref="upload"
-                                        name="imgUrl"
+                                        name="merchantLogo"
                                         v-if="!this.imgUrl"
                                         :show-upload-list="false"
                                         :format="['jpg','gif','png']"
@@ -106,9 +106,9 @@
                         <div class="u-welfare-tag">
                              <FormItem label="福利标签" style="width:516px" >
                                  <Input 
-                                        v-model="formItem.title" 
+                                        v-model="formItem.tag" 
                                         placeholder="5个字符以内"
-                                        :maxlength="titleLength"
+                                        :maxlength="tagLength"
                                         style="width:278px"
                                  />
                                  <span class="u-add-tag-btn">添加</span>
@@ -139,7 +139,7 @@
                       </FormItem>
                 </DetailStyle>
                 <DetailStyle info="福利领取信息">
-                    <FormItem label="福利范围" style="width:400px" prop="jumpType">
+                    <FormItem label="福利范围" style="width:400px" prop="couponScope">
                             <RadioGroup 
                                 v-model="formItem.targetType" 
                             >
@@ -182,7 +182,7 @@
                               </FormItem>
                           </div>
                       </div>
-                       <FormItem label="领取有效期"  class="u-date" prop="jumpType">
+                       <FormItem label="领取有效期"  class="u-date" prop="getTime">
                                 <DatePicker
                                     type="date"
                                     v-model="formItem.startTime"
@@ -219,10 +219,10 @@
                                 label="领取链接"  
                                 style="width:294px" 
                                 v-if="formItem.couponType!='OFFLINESTORE'"
-                                prop="jumpType"
+                                prop="getUrl"
                          >
                                 <Input 
-                                    v-model="formItem.title" 
+                                    v-model="formItem.getUrl" 
                                     placeholder="请输入URL"
                                 />
                       </FormItem>
@@ -252,21 +252,36 @@ export default {
   data(){
       return{
           formItem:{
-              couponType:'OFFLINESTORE'
+              couponType:'OFFLINESTORE',
+              title:'',
+              
           },
+          titleLength:15,
+          descrLength:20,
+          faceValueLength:20,
+          tagLength:5,
           tagList:['会议室','会议室','会议室','会议室','会议室','会议室','会议室','会议室'],
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
             ],
-            content:[
-                { required: true, message: '请输入推送内容', trigger:'change' }
+            title:[
+                { required: true, message: '请输入福利标题', trigger:'change' }
             ],
-            targetType:[
-                { required: true, message: '请选择是否启用', trigger: 'change' }
+            descr:[
+                { required: true, message: '请输入福利描述', trigger: 'change' }
             ],
-            jumpType:[
-                { required: true, message: '请选择图标类型', trigger:'change' }
+            faceValue:[
+                { required: true, message: '请输入福利面值', trigger:'change' }
+            ],
+            couponScope:[
+                { required: true, message: '请输入福利范围', trigger:'change' }
+            ],
+            getUrl:[
+                { required: true, message: '请输入领取链接', trigger:'change' }
+            ],
+            getTime:[
+                { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
           }
 

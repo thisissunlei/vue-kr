@@ -499,9 +499,9 @@ export default {
       submitCreate(){
           console.log(this.formItem,this.formItem)
           //return
-            this.$http.post('create-coupon', this.formItem).then((res)=>{
+            this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
-                        title:'新建成功'
+                        title:'编辑成功'
                     });
                     setTimeout(function(){
                         window.close();

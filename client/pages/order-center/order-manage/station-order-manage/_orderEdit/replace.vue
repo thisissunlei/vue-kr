@@ -154,10 +154,10 @@
                         <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
 
                             <div style="display:inline-block">
-                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountNum==types.sale }">{{ types.sale }}折</span>
+                                <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale }">{{ types.sale }}折</span>
                             </div>
                             <div style="display:inline-block;vertical-align:top">
-                            <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
+                            <Input v-model="discountCon" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
                             <span style="padding:0 15px"> 折</span>
                             <Button type="primary" @click="setDiscountNum">设置</Button>
                             <span style="padding:0 5px"> </span>
@@ -418,6 +418,7 @@
                 }
             };
             return {
+                discountCon:'',
                 entryPriceList:[],
                 price:'',
                 priceError:'',
@@ -1395,6 +1396,7 @@
                 this.getSaleAmount(list)
             },
             setDiscountNum(){
+                this.discountNum = this.discountCon;
                 if(!this.discountNum){
                     this.$Notice.error({
                         title:'请先选择折扣'
@@ -1475,7 +1477,7 @@
             },
             selectDiscount(obj){
                 this.discountType = obj.sale;
-                this.discountNum = obj.sale
+                this.discountCon = obj.sale
             },
             openPlanMap(){
                 if(!this.formItem.leaseEnddate){
@@ -1867,6 +1869,7 @@
             },
             cancleDiscount(){
                 this.discountNum = ''
+                this.discountCon = ''
                 let list = this.saleList;
                 list = list.filter(item=>{
                     if(item.tacticsType == this.discount.tacticsType){

@@ -135,11 +135,6 @@ export default  {
         url: '/api/krspace-finance-web/coupon/detail',
         method: 'get'
     },
-    //app管理--会员福利--上传组件
-    'file-img-upload': {
-        url: '/api/krspace-finance-web/mobile/file/img/upload',
-        method: 'post'
-    },
     //app管理--会员福利--新建福利
     'create-coupon': {
         url: '/api/krspace-finance-web/coupon/create',

@@ -55,7 +55,7 @@
                             </div>
                             <Upload
                                 ref="upload"
-                                name="couponCover"
+                                name="img"
                                 v-if="!this.imgCoverUrl"
                                 :show-upload-list="false"
                                 :format="['jpg','gif','png']"
@@ -85,7 +85,7 @@
                                     </div>
                                     <Upload
                                         ref="upload"
-                                        name="merchantLogo"
+                                        name="img"
                                         v-if="!this.imgLogoUrl"
                                         :show-upload-list="false"
                                         :format="['jpg','gif','png']"
@@ -142,7 +142,7 @@
                       </FormItem> -->
                 </DetailStyle>
                 <DetailStyle info="福利领取信息">
-                    <FormItem label="福利范围" style="width:400px" prop="couponScope">
+                    <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required">
                             <RadioGroup 
                                 v-model="formItem.couponScope" 
                             >
@@ -218,6 +218,7 @@
                                     @on-change="endHourChange"
                                     @on-clear="endHourClear"
                                 />
+                             <div v-if="isTimeError" class="u-error">请选择领取有效期</div>
                       </FormItem>
                       <FormItem 
                                 label="领取链接"  
@@ -261,6 +262,8 @@ export default {
               descr:'',
               faceValue:'',
               couponScope:0,
+              beginTime:'',
+              endTime:'',
           },
           id:'',
           imgCoverUrl:'',
@@ -273,6 +276,7 @@ export default {
           tagList:[],
           isCoverError:false,
           isLogoError:false,
+          isTimeError:false,
           startDate:'',
           endDates:'',
           startHour:'',
@@ -293,9 +297,6 @@ export default {
             ],
             faceValue:[
                 { required: true, message: '请输入福利面值', trigger:'change' }
-            ],
-            couponScope:[
-                { required: true, message: '请输入福利范围', trigger:'change' }
             ],
             getUrl:[
                 { required: true, message: '请输入领取链接', trigger:'change' }
@@ -345,21 +346,36 @@ export default {
         },
         startChange(date){
             this.startDate=date;
+            this.changeTime();
         },
         endChange(date){
             this.endDates=date;
+             this.changeTime();
         },
         startHourChange(date){
             this.startHour=date;
+            this.changeTime();
         },
         endHourChange(date){
             this.endHour=date;
+            this.changeTime();
         },
         startHourClear(){
             this.startHour='00:00:00';
         },
         endHourClear(){
             this.endHour='00:00:00';
+        },
+        changeTime(){
+            if(this.startDate && this.startHour){
+                this.formItem.beginTime=`${this.startDate} ${this.startHour}:00`
+            }
+            if(this.endDates && this.endHour){
+                this.formItem.endTime=`${this.endDates} ${this.endHour}:00`
+            }
+            if(this.formItem.beginTime && this.formItem.endTime){
+                this.isTimeError=false;
+            }
         },
         coverSuccess(res,file){
             if(res.code==1){
@@ -403,25 +419,31 @@ export default {
                     top: 80,
                     duration: 3
                 });
+                let flag=[];
                 let _this = this;
-            //    if(this.formItem.jumpType=='ACTIVITY'){
-            //         if(!this.formItem.jumpId){
-            //             this.$Notice.error({
-            //                 title:'请输入要跳转的活动'
-            //             });
-            //             return;
-            //         }
-            //    }
-            //    if(this.formItem.jumpType=='HTML'){
-            //         if(!this.formItem.jumpUrl){
-            //             this.$Notice.error({
-            //                 title:'请输入要跳转链接'
-            //             });
-            //               return;
-            //         }
-            //    }
+               
+               if(!this.formItem.beginTime ){
+                   flag.push(false);
+                   this.isTimeError=true;
+               }
+               if(!this.formItem.endTime){
+                   flag.push(false);
+                   this.isTimeError=true;
+               }
+              
+               if(!this.formItem.couponCover){
+                  flag.push(false);
+                   this.isCoverError=true;
+               }
+               if(this.formItem.couponType=="OFFLINESTORE"){
+                    if(!this.formItem.merchantLogo){
+                          flag.push(false)
+                          this.isLogoError=true;
+                    }
+               }
+               
                 this.$refs[name].validate((valid) => {
-                    if (valid && this.formItem.cmtId) {
+                    if (valid && (flag.indexOf(false)!=-1)) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -431,6 +453,8 @@ export default {
                 })
       },
       submitCreate(){
+          console.log(this.formItem,this.formItem)
+          return
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'

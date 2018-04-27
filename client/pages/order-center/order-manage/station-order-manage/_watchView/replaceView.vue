@@ -1881,9 +1881,9 @@
                     this.newStationData = array;
                     overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
                     overViewData.back = response.data.feeResultVO.lockDeposit
-                    overViewData.transferDepositAmount = response.data.feeResultVO.changeDeposit + ''
+                    overViewData.transferDepositAmount = response.data.feeResultVO.transferDeposit+''
 
-                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
+                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+''
                     this.back  = response.data.feeResultVO.lockDeposit;
 
 

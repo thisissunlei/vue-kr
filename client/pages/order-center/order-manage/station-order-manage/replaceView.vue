@@ -50,7 +50,7 @@
                 <span class="card-header"></span>
 
                 <LabelText :inline="inline" label="优惠折扣：" v-if="formItem.discount">
-                    {{formItem.discount}}
+                    {{formItem.discount}}折
                 </LabelText>
                 <!-- <Table :columns="oldStatonColumns" :data="formItem.oldStation"></Table> -->
                 <Table :columns="newStatonColumns" style="margin-bottom:20px" :data="formItem.seats"></Table>
@@ -246,7 +246,14 @@ export default {
                 {
                     title: '优惠',
                     key: 'saleNum',
-                    align: 'center'
+                    align: 'center',
+                    render:(h,params)=>{
+                        if(params.row.saleNum){
+                            return params.row.saleNum+'折'
+                        }else{
+                            return '-'
+                        }
+                    }
                 },
                 {
                     title: '签约价',

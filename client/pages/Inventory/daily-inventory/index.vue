@@ -106,6 +106,7 @@ var layoutScrollHeight=0;
                 dailyData:[],
                 dailyOldData:[],
                 dailyInnerData:[],
+                dailyIndentify:[],
                 columns: [
                     {
                         title: '商品',
@@ -288,12 +289,14 @@ var layoutScrollHeight=0;
             },
             //获取列表数据
             getTableData(values){
+                this.dailyIndentify=[];
                 var params=Object.assign({},values);
                 delete params.startDate;
                 delete params.endDate;
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
                 this.$http.get('getDailyInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
+                    this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.loading=false;
                     this.spinLoading=false;
@@ -366,6 +369,9 @@ var layoutScrollHeight=0;
                 var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
                 if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
                     if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    if(!this.dailyIndentify.length){
                         return ;
                     }
                     this.spinLoading=true;

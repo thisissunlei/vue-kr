@@ -106,6 +106,7 @@ var layoutScrollHeight=0;
                 totalCount:0,
                 dailyData:[],
                 dailyOldData:[],
+                optionalIndentify:[],
                 dailyInnerData:[],
                 columns: [
                     {
@@ -238,7 +239,7 @@ var layoutScrollHeight=0;
                 ]    
             }
         },
-        mounted(){        
+        mounted(){      
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('optional-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
@@ -264,12 +265,14 @@ var layoutScrollHeight=0;
             },
             //获取列表数据
             getTableData(values){
+                this.optionalIndentify=[];
                 var params=Object.assign({},values);
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
                 params.startDate=this.dateSwitch(params.startDate);
                 params.endDate=this.dateSwitch(params.endDate);
                 this.$http.get('getOptionalInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
+                    this.optionalIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.loading=false;
                     this.spinLoading=false;
@@ -319,7 +322,7 @@ var layoutScrollHeight=0;
                 this.getStatistal();
             },
             //滚动监听
-            onScrollListener(){    
+            onScrollListener(){  
                 var dom=document.getElementById('layout-content-main');
                 var headDom=document.getElementById('slot-head-optional-inventory');
                 if(headDom){
@@ -342,6 +345,9 @@ var layoutScrollHeight=0;
                 var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
                 if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
                     if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    if(!this.optionalIndentify.length){
                         return ;
                     }
                     this.spinLoading=true;

@@ -248,7 +248,7 @@ export default {
                     key: 'saleNum',
                     align: 'center',
                     render:(h,params)=>{
-                        if(params.row.saleNum){
+                        if(params.row.saleNum && params.row.saleNum != '-'){
                             return params.row.saleNum+'折'
                         }else{
                             return '-'

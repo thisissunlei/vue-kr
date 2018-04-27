@@ -1,15 +1,15 @@
 
 <template>
-	<div class="g-edit-label">
-		<div v-show="readOrEdit">        
-			<div v-show="!isEdit && labeType=='label'" >
+	<div class="edit-label">
+		<div v-if="readOrEdit">        
+			<div v-if="!isEdit && labeType=='label'" >
 				<div class="label-text">{{value}}</div>
 				<span class="edit-icon" @click="editClick">
-					<Icon class="icon-edit"></Icon>
+					<Icon type="ios-compose-outline "></Icon>
 				</span>
 				
 			</div>
-			<div v-show="!isEdit && labeType=='file'">
+			<div v-if="!isEdit && labeType=='file'">
 				<img :src="item.url" alt="" v-for="(item, index ) in value" :key="item.id" @click="eyeImg(index)"/>
 				<span class="edit-icon" @click="editClick">
 					<Icon type="ios-compose-outline "></Icon>
@@ -18,15 +18,12 @@
 			<div v-if="isEdit">
 				<slot></slot>
 				<div class="operation">
-					
-					
-					<span @click="okClick" >
-						<Icon class="icon-right"></Icon>
-					</span>
-
 					<span @click="cancelClick">
-						<Icon  class="icon-error"></Icon>
-
+						<Icon type="close-round"></Icon>
+					</span>
+					
+					<span @click="okClick">
+						<Icon type="checkmark-round"></Icon>
 					</span>
 					
 				</div>
@@ -72,7 +69,6 @@ export default {
 			this.isEdit = !this.isEdit;
 		},
 		okClick(){
-			console.log('label')
 			this.$emit('okClick')
 			this.isEdit = !this.isEdit;
 		},
@@ -87,49 +83,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.g-edit-label{
-	display: inline-block;
-	line-height: 34px;
-	// padding:7px 12px 10px 0;
-	max-width:75%;
-	min-width: 55%;
+.edit-label{
 	.edit-icon{
-		display: inline;
+		
+		position: absolute;
+		right: 0;
+		top: 0px;
+		line-height: 32px;
 		cursor: pointer;
-		font-size: 13px;
 	}
 	.label-text{
-		padding-right: 5px;
-		display: inline;
-		
+		padding-right: 20px;
 	}
 	.operation{
-		display: inline-block;
 		position: absolute;
-		top: 50%;
-		// height: 100%;
-		transform:translateY(-50%);
-		padding:0 6px;
-		&>span{
-			display: inline-block;
-		}
-
-	}
-	.icon-error ,.icon-right{
-		display: inline-block;
-		line-height: 34px;
-	}
-	.icon-edit:before{
-		color:#4A90E2;
-	}
-	.icon-error:before{
-		color:#999;
-		font-size: 16px;
-	}
-	.icon-right:before{
-		color:#FF6868;
-		font-size: 16px;
-		padding-right:4px;
+		top: 0px;
+		right: 0px;
+		line-height: 32px;
 
 	}
 	img{

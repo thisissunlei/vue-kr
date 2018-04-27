@@ -1,5 +1,8 @@
-import thousand from './thousand' 
+import thousand from './thousand'; 
 import addEvent from './addEvent';
+import dataType from './dataType';
+import throttle from './throttle';
+import tableSort from './tableSort';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -119,7 +122,66 @@ import addEvent from './addEvent';
         a.click();
      
     }
-   
+
+    function getDaysInOneMonth(year, month){  
+        month = parseInt(month, 10);  
+        var d= new Date(year, month, 0);  
+        return d.getDate();  
+    }  
+    //计算天数差
+    function dateDiff(sDate1, sDate2) {
+        var aDate, oDate1, oDate2, iDays
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+       
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays  
+    }
+
+    function debounce(delay, atBegin, callback) {
+        return callback === undefined ? throttle(delay, atBegin, false) : throttle(delay, callback, atBegin !== false);
+    };
+    //获取滚动条的宽度
+    function getScrollBarSize() {
+       
+        var cached = 0;
+        const inner = document.createElement('div');
+        inner.style.width = '100%';
+        inner.style.height = '200px';
+
+        const outer = document.createElement('div');
+        const outerStyle = outer.style;
+
+        outerStyle.position = 'absolute';
+        outerStyle.top = 0;
+        outerStyle.left = 0;
+        outerStyle.pointerEvents = 'none';
+        outerStyle.visibility = 'hidden';
+        outerStyle.width = '200px';
+        outerStyle.height = '150px';
+        outerStyle.overflow = 'hidden';
+
+        outer.appendChild(inner);
+
+        document.body.appendChild(outer);
+
+        const widthContained = inner.offsetWidth;
+        outer.style.overflow = 'scroll';
+        let widthScroll = inner.offsetWidth;
+
+        if (widthContained === widthScroll) {
+            widthScroll = outer.clientWidth;
+        }
+
+        document.body.removeChild(outer);
+
+        cached = widthContained - widthScroll;
+        
+        return cached;
+    }
+
    export default{
     smalltoBIG,
     clearForm,
@@ -130,7 +192,13 @@ import addEvent from './addEvent';
     arrayCompare,
     thousand,
     downFile,
-    addEvent
+    addEvent,
+    dataType,
+    getDaysInOneMonth,
+    dateDiff,
+    debounce,
+    getScrollBarSize,
+    tableSort
    }
 
 

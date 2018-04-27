@@ -607,7 +607,7 @@
                 }, (error) => {
                     this.openMessage=true;
                     this.MessageType="error";
-                    this.warn="下载失败";
+                    this.warn=error.message;
                 })   
             },
             

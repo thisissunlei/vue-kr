@@ -128,6 +128,7 @@
  
   mounted() {
     let vm = this
+    // return ;、
     PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_,demo) { //初始化pdf
       vm.pdfDoc = pdfDoc_;
       vm.page_count = vm.pdfDoc.numPages;

@@ -9,9 +9,7 @@
             <Input
                 :placeholder="placeholder"
                 type="text"
-                size='default'
-                v-model="labelValue"
-                name='name'
+                v-model="inputValue"
                 @on-click="click"
                 @on-enter="enter"
                 @on-change="change"
@@ -20,7 +18,6 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
-                class="input-class"
             />
         </EditLabel>
 	</div>
@@ -41,11 +38,6 @@ export default {
 			type:[Number,String],
 			default:''
         },
-        name:{
-            type:String,
-            default:''
-        },
-
         readOrEdit:{
             type:Boolean,
             default:false,
@@ -66,7 +58,7 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
-            console.log('=====change',event)
+         
             this.$emit('change',event);
         },
         focus(event){
@@ -84,17 +76,12 @@ export default {
         keypress(event){
             this.$emit('keypress',event);
         },
-        okClick(event){
-            console.log('okClick--',event)
-            console.log('labelValue--',this.labelValue)
-            console.log('inputValue--',this.inputValue)
-            this.inputValue = this.labelValue;
-            console.log('krInput=======>',this.labelValue)
-            this.$emit("submitClick",this.labelValue)
+        okClick(){
+            this.labelValue = this.inputValue;
+            this.$emit("okClick",this.labelValue)
         },
         cancelClick(event){
-            this.labelValue = this.inputValue;
-
+            this.inputValue = event
         }
 	}
 }
@@ -120,9 +107,5 @@ export default {
 		line-height: 32px;
 
 	}
-    .edit-label .input-class{
-        width:170px;
-
-    }
 }
 </style>

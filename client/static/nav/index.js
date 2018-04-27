@@ -477,7 +477,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOperationNav(),getUserNav(), getProductNav(),  getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
 
         return arr;
     }
@@ -495,7 +495,9 @@
     function getUserNav() {
         return {
             primaryText: "客户会员",
-            router: 'member/setting-manager',
+            router:'customer',
+            type:'vue',
+           
             menuItems: [
                 {
                     primaryText: '客户',
@@ -508,12 +510,12 @@
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
-                        {
-                            primaryText: '客户管理',
-                            router: 'customer-manage/manage',
-                            type:'vue',
-                            menuCode: 'customer_center'
-                        },
+                        // {
+                        //     primaryText: '客户管理',
+                        //     router: 'customer-manage/manage',
+                        //     type:'vue',
+                        //     menuCode: 'customer_center'
+                        // },
                         {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',
@@ -613,6 +615,24 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
+                        
+                        {
+                            primaryText: '门禁权限组管理',
+                            menuCode: 'auth_user_group_list',
+                            router: 'doorpermission/doorgroupmanage',
+                        }, {
+                            primaryText: "企业门禁授权",
+                            router: 'member/memberManage/doormanage',
+                            menuCode: 'door_base',
+                        }
+                    ]
+                },
+                {
+                    primaryText: '社区经营',
+                    iconName: 'icon-com',
+                    iconColor: '#79859a',
+                    router: 'community',
+                    menuItems: [
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -1159,5 +1179,31 @@
                 },
         ]
         }
+        
     }
+    function objecrSetting() {
+        return {
+            primaryText: "项目管理",
+            router: 'project',
+            type: 'vue',
+            menuItems: [
+                {
+                    primaryText: "项目管理",
+                    iconName: 'icon-money',
+                    iconColor: '#79859a',
+                    type: 'vue',
+                    menuItems: [
+                        {
+                            primaryText: "项目管理",
+                            router: 'bill/project-setting',
+                            type: 'vue',
+                            menuCode: 'pm_manage_list'
+                        }
+                    ]
+                }
+               
+            ]
+        }
+    }
+
 })(window);

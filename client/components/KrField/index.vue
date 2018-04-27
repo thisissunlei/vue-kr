@@ -1,27 +1,6 @@
-<style lang="less">
-    .kr-field .ivu-form-item .ivu-form-item-label{
-        font-size: 14px;
-        color:#666;
-        font-weight: 500;
-    }
-    .ivu-form-item{
-        margin-bottom: 12px;
-    }
-    .label-text{
-        font-size: 14px;
-        color: #666;
-    }
-    .ivu-form-item-label{
-        &:before{
-            content:'';
-            width:7px;
-            margin-right: 4px;
-            display: inline-block;
-        }
-    }
-</style>
+
 <template>
-  <div class="kr-field">
+  <div>
     <FormItem
         :label="label"
         :prop="prop"
@@ -33,7 +12,6 @@
             :value="value"
             :placeholder="placeholder"
             :type='type'
-            :name="name"
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
@@ -43,7 +21,7 @@
             @on-keyup="keyup"
             @on-keydown="keydown"
             @on-keypress="keypress"
-            @submitClick="submitClick"
+            @okClick="okClick"
         />
 
         <KrSelect
@@ -124,6 +102,7 @@
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
+            :inputWidth="inputWidth"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
@@ -145,7 +124,6 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
-//表单项的排列方式。在form上设置label-position，一共三个值：left;right;top
 export default {
     components:{
       KrCascader,
@@ -163,10 +141,6 @@ export default {
             default:'',
             type:String
         },
-        name:{
-            default:'',
-            type:String
-        },
         value:{
 			type:[Number,String,Array],
             default:''
@@ -174,6 +148,9 @@ export default {
         form:{
             type:String,
             default:''
+        },
+        inputWidth:{
+            type:[String,Number]
         },
         prop:{
             default:'',
@@ -253,7 +230,6 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
-            console.log('======',event)
             this.$emit('change',event);
         },
        
@@ -290,16 +266,11 @@ export default {
             this.$emit("toggleChange",event)
         },
         okClick(event){
-            console.log('krField',event)
             this.$emit("okClick",event);
         },
         radioChange(event){
             this.$emit("radioChange",event)
         },
-        submitClick(value){
-            this.$emit("onClick",value)
-            console.log('submitClick==========',value)
-        }
       
     }
 }

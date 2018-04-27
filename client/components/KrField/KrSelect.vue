@@ -15,7 +15,6 @@
                 :clearable='clearable'
                 :filterable='filterable'
                 @on-change="change"
-                style="width:170px"
             >
             <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
         </Select>
@@ -102,22 +101,20 @@ export default {
 .edit-label{
 	.edit-icon{
 		
-		// position: absolute;
-		// right: 0;
-		// top: 0px;
+		position: absolute;
+		right: 0;
+		top: 0px;
 		line-height: 32px;
 		cursor: pointer;
-        display: inline-block;
 	}
 	.label-text{
 		padding-right: 20px;
 	}
 	.operation{
-		// position: absolute;
-		// top: 0px;
-		// right: 0px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
 		line-height: 32px;
-        display: inline-block;
 
 	}
 }

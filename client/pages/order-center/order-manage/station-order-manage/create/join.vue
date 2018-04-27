@@ -344,11 +344,8 @@ import utils from '~/plugins/utils';
                                             price = e;
                                         },
                                         'on-blur':()=>{
-                                            if(!price){
-                                                return
-                                            }
                                             var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                            if(!pattern.test(price)){
+                                            if(price && !pattern.test(price)){
                                                 this.$Notice.error({
                                                     title:'单价不得多余小数点后两位'
                                                 })
@@ -747,7 +744,7 @@ import utils from '~/plugins/utils';
                  this.$http.post('count-sale', params, r => {
                     
                     _this.stationList = r.data.seats;
-                    let money = r.data.originalTotalrent - r.data.totalrent;
+                    let money = this.formItem.stationAmount - r.data.totalrent;
                     _this.saleAmount = Math.round(money*100)/100;
                     _this.saleAmounts = utils.smalltoBIG(Math.round(money*100)/100);
                     _this.formItem.rentAmount = r.data.totalrent;
@@ -1148,6 +1145,7 @@ import utils from '~/plugins/utils';
                 this.formItem.saleAmount = 0;
             },
             onResultChange:function(val){//组件互通数据的触发事件
+                console.log('onResultChange',val)
                 this.stationData = val;
                 
             },
@@ -1303,9 +1301,10 @@ import utils from '~/plugins/utils';
                 let val = list || this.stationList;
                 let station = val.map(item=>{
                     let obj = item;
-                    obj.guidePrice = item.guidePrice || item.price || 0;
-                    console.log('guidePrice',item.guidePrice)
+                    obj.guidePrice = item.guidePrice || item.seatPrice || 0;
+
                     obj.originalPrice = (!item.originalPrice && item.originalPrice !==0 && obj.guidePrice == 0)?'':(item.originalPrice || obj.guidePrice);
+
                     obj.seatId = item.id || item.seatId;
                     obj.floor = item.whereFloor || item.floor;
                     obj.endDate =dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.endDate));

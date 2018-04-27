@@ -1,18 +1,14 @@
 <template>
  <div class="g-member-welfare">
        <SectionTitle title="会员福利管理" />
-        <div class="u-search" >
-            <Button type="primary" @click="jumpCreate">新建</Button>
-            <!-- <div style='display:inline-block;float:right;padding-right:20px;'>
-                    <Input 
-                        v-model="Params.stewardName" 
-                        placeholder="请输入管家名称"
-                        style="width: 240px"
-                    />
-                    <div class='m-search' @click="submitLower">搜索</div>
-            </div> -->
-            
-        </div>
+            <div class="u-search" >
+                 <Button type="primary" @click="jumpCreate">新建</Button>
+                <span class="u-high-search" @click="showSearch"></span>  
+                <SearchForm 
+                        :searchFilter="searchFilter"
+                        :onSubmit="onSubmit"
+                /> 
+            </div>
           <div class="u-table">
             <Table  border :columns="welfareColumns" :data="tableList"/>
             <div style="margin: 10px;overflow: hidden">
@@ -48,9 +44,13 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import SearchForm from '~/components/SearchForm';
+import utils from '~/plugins/utils';
+
 export default {
   components:{
-      SectionTitle
+      SectionTitle,
+      SearchForm
   },
   data(){
       return{
@@ -64,6 +64,16 @@ export default {
               page:1, 
            },
            couponId:'',
+           searchFilter:[
+               {
+                   label:'福利标题',
+                   value:'title'
+               },
+               {
+                   label:'创建人',
+                   value:'createName'
+               }
+           ],
            welfareColumns:[
                 {
                     title: '福利标题',
@@ -193,10 +203,35 @@ export default {
            ]
       }
   },
-  mounted(){
-      this.getTableData(this.Params);
+  created(){
+      let query=this.$route.query;
+        if (Object.keys(query).length !== 0) {
+            this.getTableData(query);
+            this.Params=query;
+          
+        }else{
+            this.getTableData(this.Params)
+        }
+         
   },
+//   mounted(){
+//       this.getTableData(this.Params);
+//   },
   methods:{
+      onSubmit(form){ 
+          if(this.Params.title){
+            this.Params.title="";
+          }
+          if(this.Params.createName){
+            this.Params.createName="";
+          }
+          let params=Object.assign(form,this.Params);
+          utils.addParams(params);
+      },
+       showSearch (params) {
+        utils.clearForm(this.searchData);
+        this.openSearch=!this.openSearch;
+      },
      jumpCreate(){
           window.open(`/app-manage/member-welfare/create`,'_blank');
      },
@@ -254,9 +289,17 @@ export default {
 <style lang="less">
 .g-member-welfare{
     .u-search{
-        height:32px;
-        margin:16px 0;
-        padding:0 20px;
+            height:32px;
+            margin:16px 0;
+            padding:0 20px;
+            .u-high-search{
+                width:22px;
+                height:22px;
+                background:url('~/assets/images/upperSearch.png') no-repeat center;
+                background-size: contain;  
+                float:right;
+                margin-left:20px;
+            }
     }
     .u-table{
         padding:0 20px;

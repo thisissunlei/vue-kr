@@ -202,18 +202,15 @@ export default {
     .view-article{
        position: relative;
         background:#fff;
-        margin-top:5px;
         &:first-child{
             margin-top:0px;
-            border-top:none;
-           
+            border-top:none; 
         }
         .view-channel{
             border-bottom:1px solid #F1F1F1;
             position: relative;
             width: 100%;
-            height: 32px;
-           
+            height: 54px;  
         }
     }
    

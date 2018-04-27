@@ -256,7 +256,10 @@ export default {
                     title:'不可用',
                     color:"#E4E4E4"
                 }
-            ]
+            ],
+
+            //一年默认开始
+            yearStartDay:''
         }
     },
     mounted(){
@@ -325,10 +328,10 @@ export default {
             return utils.dateDiff(today,startTime)*this.minCalibration;
         },
         lastTurnPage(){
-            
+           this.$emit('lastTurnPage',this.yearStartDay);
         },
         nextTurnPage(){
-
+           this.$emit('nextTurnPage',this.end);
         },
         //获取年数组
         getYears(startTime,endTime){
@@ -404,6 +407,16 @@ export default {
         limitDay(type){
             var start = this.startTime;
             var startArr = start.split('-');
+
+            /*向前三个月*/
+            var dayMonth=+startArr[1]-3;
+            var dayYear=+startArr[0];
+            if(dayMonth<=0){
+                dayYear-=1;
+                dayMonth=dayMonth+12;
+            }
+            /*向前三个月*/
+
             var startObj= {
                 year:+startArr[0],
                 month:+startArr[1],
@@ -431,8 +444,10 @@ export default {
                 }
                 startObj.day =1;
             }
+            
+            this.yearStartDay=dayYear+'-'+dayMonth+ '-' +1;
 
-            this.init(startObj.year+'-'+startObj.month+ '-' +startObj.day,this.endTime);
+            this.init(dayYear+'-'+dayMonth+ '-' +1,this.endTime);
 
             this.scroolFix(this.showData);
         },
@@ -797,7 +812,6 @@ export default {
             background: #F6F6F6;
             padding-left: 50px;
             padding-right: 50px;
-            margin-top: -5px;
             box-sizing: content-box;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;

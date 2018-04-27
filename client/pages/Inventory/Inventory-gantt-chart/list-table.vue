@@ -3,11 +3,8 @@
          @mouseover="overShow(data.id)"
          @mouseout="outHide(data.id)"
         >
-            <p @click="rowClick(data)">{{data.name}}</p>
-            <p :class="noRight">{{data.cityName}}</p>
-            <!-- <p v-if="test=='INVEST'" style="border-right:none;">
-                <Button type="primary" @click="operationClick(data)" style="cursor:pointer;">确认已签署合同</Button>
-            </p> -->
+            <div>{{data.name}}</div>
+            <div>{{data.name}}</div>
         </div>
 </template>
 
@@ -19,21 +16,14 @@ export default {
        data:{
            type:Object,
            default:{}
-       },
-       test:{
-           type:String,
-           default:''
        }
     },
     data(){
         return {
-            noRight:''
+           
         }
     },
     mounted(){
-        if(this.test=='PREPARE'){
-            this.noRight='noRight';
-        }
         setTimeout(() => {
             this.nameAndContentHright();
         },100);
@@ -49,12 +39,6 @@ export default {
                     leftDom.style.height=rightDom.offsetHeight+'px';
                 }
             }    
-        },
-        rowClick(item){
-            this.$emit('rowClick',item);
-        },
-        operationClick(item){
-            this.$emit('operationClick',item);
         },
         overShow(id){
             var leftDom = document.querySelectorAll('div[data-box-id="'+id+'"]')[0];
@@ -79,39 +63,32 @@ export default {
 <style lang="less" scoped>
         .detail-li{
            width:100%;
-           height:32px;
-           border: 1px solid  #F6F6F6;
+           height:54px;
+           border: 1px solid  #F1F1F1;
            border-right:none;
            border-left:none;
-           display:table;   
-           background:#fff; 
-           margin-top: 5px;
+           border-bottom: none;
+           background:#fff;
+           padding:0 5px; 
            &:first-child{
-               margin-top:0px;
                border-top: none;
            }
-           p{
-                display:inline-block;
-                border-right:1px solid  #F6F6F6;
-                width:50%;
-                // padding:10px;
-                height:100%;
-                display:table-cell;
-                vertical-align:middle;
-                word-break:break-all;    
+           &:last-child{
+               border-bottom:1px solid  #F1F1F1;
+           }
+           div{
+                height:50%;
                 text-align: center;
                 font-family: PingFang-SC-Medium;
-                font-size: 14px;
-                color:#333333;
-                line-height: 16px;
+                font-size: 12px;
+                color: #333333;
                 font-weight: 400;
-                &:nth-child(1){
-                    cursor: pointer;
-                    font-weight: bold;
+                &:first-child{
+                    padding-top: 8px;
                 }
-            }
-            .noRight{
-                border-right:none;
+                &:last-child{
+                    padding-bottom: 8px;
+                }
             }
         }
 </style>

@@ -10,6 +10,8 @@
             :rentEnd="rentEnd"
             :listData="listData"
             @rightOver="rightOver"
+            @lastTurnPage="lastTurnPage"
+            @nextTurnPage="nextTurnPage"
         >
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
@@ -84,7 +86,7 @@ export default {
             propertyId:'',
             getEdit:{},
             params:{
-                endTime:this.getEndDay(11),
+                endTime:this.getEndDay(8),
                 startTime:this.getStartDay(),
                 pageSize:15,
                 page:nowPage,
@@ -96,9 +98,7 @@ export default {
             listData:[],
             scrollWidth:0,
             isLoading:false,
-            upperError:false,
-
-            tabValue:'name1'
+            upperError:false
         }
     },
     mounted(){
@@ -135,6 +135,19 @@ export default {
                         "endDate":"1525017600000","startDate":"1524499200000","status":"DISABLE"
                     }
                     ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
+                },
+                {
+                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
+                    {
+                        "endDate":"1525017600000","startDate":"1524499200000","status":"1"
+                    },
+                    {
+                        "endDate":"1526140800000","startDate":"1525104000000","status":"0"
+                    },
+                    {
+                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
+                    }
+                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
                 }
             ];
         //this.getListData(this.params);
@@ -167,6 +180,54 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
+
+
+        lastTurnPage(start){
+            var dayTime=start.split('-');
+            var dayYear=+dayTime[0],dayMonth=+dayTime[1],dayDay=+dayTime[2];
+            var yearRender,monthRender,dayRender;
+            if(dayMonth==1){
+                monthRender=12;
+                yearRender=dayYear-1;
+                dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
+            }else{
+                monthRender=dayMonth-1;
+                yearRender=dayYear;
+                dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
+            }
+            this.params.endTime=yearRender+'-'+monthRender+'-'+dayRender;
+            this.params.startTime=this.getLastTime(11,yearRender,monthRender,dayRender);
+            console.log('-----start-',this.params);
+        },
+        getLastTime(n,year,month,day){
+            for(var i=0;i<n;i++){
+                if(month <=0){
+                    month = month+12;
+                    year -= 1;
+                }
+                month --;
+            }
+            day= publicFn.getMonthDayNum(year,month);
+            return year+"-"+month+"-"+day;
+        },
+        nextTurnPage(end){
+            var dayTime=end.split('-');
+            var dayYear=+dayTime[0],dayMonth=+dayTime[1],dayDay=+dayTime[2];
+            var yearRender,monthRender,dayRender;
+            if(dayMonth==12){
+                monthRender=1;
+                yearRender=dayYear+1;
+                dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
+            }else{
+                monthRender=dayMonth+1;
+                yearRender=dayYear;
+                dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
+            }
+            this.params.startTime=yearRender+'-'+monthRender+'-'+dayRender;
+            this.params.endTime=this.getEndDay(11,this.params.startTime);
+            console.log('-----end-',this.params);
+        },
+
 
         //获取进度列表数据
         getListData(params,type){
@@ -252,8 +313,8 @@ export default {
             return today;
         },
         //结束日期
-        getEndDay(n){
-            var today =this.getStartDay();
+        getEndDay(n,startParam){
+            var today =startParam?startParam:this.getStartDay();
             var start = today.split("-");
             var year = +start[0],
                 month = +start[1],
@@ -321,7 +382,7 @@ export default {
                     width:100%;
                     height:100px;
                     line-height:100px;
-                    border: 1px solid #F6F6F6;
+                    border: 1px solid #f1f1f1;
                     border-right:none;
                     border-top: none;
                     border-left:none;

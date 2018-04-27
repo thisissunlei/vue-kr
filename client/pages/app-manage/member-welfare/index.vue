@@ -192,14 +192,7 @@ export default {
       }
   },
   mounted(){
-      this.getTableData();
-      this.tableList=[
-          {
-              title:1111,
-              couponId:1,
-              effective:1,
-          }
-      ]
+      this.getTableData(this.Params);
   },
   methods:{
      jumpCreate(){

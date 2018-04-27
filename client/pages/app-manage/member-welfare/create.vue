@@ -128,18 +128,18 @@
                                  </div>
                              </FormItem>
                         </div>
-                         <!-- <FormItem 
+                         <FormItem 
                                 label="商户详细地址"  
-                                style="width:294px" 
+                                style="width:294px;margin-top:-20px;" 
                                 v-if="formItem.couponType=='OFFLINESTORE'"
                          >
                                 <Input 
-                                    v-model="formItem.title" 
+                                    v-model="formItem.merchantAddress" 
                                     placeholder="30个字符以内"
-                                    :maxlength="titleLength"
+                                    :maxlength="addressLength"
                                     
                                 />
-                      </FormItem> -->
+                      </FormItem>
                 </DetailStyle>
                 <DetailStyle info="福利领取信息">
                     <FormItem label="福利范围" style="width:400px" class="ivu-form-item-required">
@@ -264,6 +264,7 @@ export default {
               couponScope:0,
               beginTime:'',
               endTime:'',
+              merchantAddress:'',
           },
           id:'',
           imgCoverUrl:'',
@@ -285,6 +286,7 @@ export default {
           cityList:[],
           checkCity:[],
           cityIds:[],
+          addressLength:30,
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
@@ -441,7 +443,7 @@ export default {
                           this.isLogoError=true;
                     }
                }
-               
+               this.formItem.cityIds=this.cityIds;
                 this.$refs[name].validate((valid) => {
                     if (valid && (flag.indexOf(false)!=-1)) {
                         _this.submitCreate();
@@ -551,7 +553,6 @@ export default {
         width:100%;
         margin-top:30px;
         padding-bottom:45px;
-        //position: relative;
         form{
             width:100%;
         }

@@ -350,7 +350,7 @@
             </div>
         </Modal>
 
-        
+
         <div class="view" v-if="orderStatus=='view'">
             <ReplaceView @editCards="editCard" :showEdit="editCardabled"  :data.sync="overViewData"/>
         </div>
@@ -917,6 +917,14 @@
                                 })
                             }else{
                                 this.errorObj.selecedStation = false;
+                            }
+                            if(!this.serviceDetailsList.length){
+                                this.errorObj.serviceDetail = true;
+                                this.$Notice.error({
+                                    title:'请核对新工位信息'
+                                })
+                            }else{
+                                this.errorObj.serviceDetail = false;
                             }
                             this.getSeatReplaceDetail()
                         }

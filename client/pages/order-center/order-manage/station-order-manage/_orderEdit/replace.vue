@@ -938,6 +938,14 @@
                             }else{
                                 this.errorObj.selecedStation = false;
                             }
+                            if(!this.serviceDetailsList.length){
+                                this.errorObj.serviceDetail = true;
+                                this.$Notice.error({
+                                    title:'请核对新工位信息'
+                                })
+                            }else{
+                                this.errorObj.serviceDetail = false;
+                            }
                             this.getSeatReplaceDetail()
                         }
                         let next = true;

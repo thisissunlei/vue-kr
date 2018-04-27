@@ -46,9 +46,9 @@
                               :maxlength="faceValueLength"
                           />
                       </FormItem>
-                       <FormItem label="福利封面" style="width:516px" prop="couponCover">
-                            <div class="demo-upload-list" v-if="this.imgUrl">
-                                <img :src="this.imgUrl">
+                       <FormItem label="福利封面" style="width:516px" class="ivu-form-item-required">
+                            <div class="demo-upload-list" v-if="this.imgCoverUrl">
+                                <img :src="this.imgCoverUrl">
                                 <div class="demo-upload-list-cover">
                                     <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
                                 </div>
@@ -56,7 +56,7 @@
                             <Upload
                                 ref="upload"
                                 name="couponCover"
-                                v-if="!this.imgUrl"
+                                v-if="!this.imgCoverUrl"
                                 :show-upload-list="false"
                                 :format="['jpg','gif','png']"
                                 with-credentials
@@ -69,15 +69,16 @@
                                     <Icon type="camera" size="40"></Icon>
                                 </div>
                             </Upload>
+                             <div v-if="isCoverError" class="u-error">请选择要上传的图片</div>
                         </FormItem>
                         <div class="u-upload-tip">
                             图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
                         </div>
                         <div class="u-upload-logo" v-if="formItem.couponType=='OFFLINESTORE'">
-                                <IconTip style="left:85px;top:9px;">用于到店凭证展示给店主</IconTip>
-                                <FormItem label="商户LOGO" style="width:516px"  prop="merchantLogo">
-                                    <div class="demo-upload-list" v-if="this.imgUrl">
-                                        <img :src="this.imgUrl">
+                                <IconTip style="left:95px;top:9px;">用于到店凭证展示给店主</IconTip>
+                                <FormItem label="商户LOGO" style="width:516px" class="ivu-form-item-required">
+                                    <div class="demo-upload-list" v-if="this.imgLogoUrl">
+                                        <img :src="this.imgLogoUrl">
                                         <div class="demo-upload-list-cover">
                                             <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
                                         </div>
@@ -85,7 +86,7 @@
                                     <Upload
                                         ref="upload"
                                         name="merchantLogo"
-                                        v-if="!this.imgUrl"
+                                        v-if="!this.imgLogoUrl"
                                         :show-upload-list="false"
                                         :format="['jpg','gif','png']"
                                         with-credentials
@@ -98,6 +99,7 @@
                                             <Icon type="camera" size="40"></Icon>
                                         </div>
                                     </Upload>
+                                     <div v-if="isLogoError" class="u-error">请选择要上传的图片</div>
                                 </FormItem>
                                 <div class="u-upload-tip">
                                     图片小于300KB，格式为JPG，PNG，GIF；配图比例建议为正方形，不符合此比例系统会自动居中裁剪显示。（上传图片后，即为APP中用户可见效果）
@@ -106,26 +108,26 @@
                         <div class="u-welfare-tag">
                              <FormItem label="福利标签" style="width:516px" >
                                  <Input 
-                                        v-model="formItem.tag" 
+                                        v-model="tag" 
                                         placeholder="5个字符以内"
                                         :maxlength="tagLength"
                                         style="width:278px"
                                  />
-                                 <span class="u-add-tag-btn">添加</span>
+                                 <span class="u-add-tag-btn" @click="addTags">添加</span>
                                  <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
-                                 <div class="u-tag-content">
+                                 <div class="u-tag-content" v-if="tagList.length>0">
                                      <div 
                                         class="u-tag" 
                                         v-for="(item,index) in tagList"
                                         :key="index"
                                       >
                                          <span class="u-tag-close"></span>
-                                         会议室
+                                        {{item.name}}
                                      </div>
                                  </div>
                              </FormItem>
                         </div>
-                         <FormItem 
+                         <!-- <FormItem 
                                 label="商户详细地址"  
                                 style="width:294px" 
                                 v-if="formItem.couponType=='OFFLINESTORE'"
@@ -136,7 +138,7 @@
                                     :maxlength="titleLength"
                                     
                                 />
-                      </FormItem>
+                      </FormItem> -->
                 </DetailStyle>
                 <DetailStyle info="福利领取信息">
                     <FormItem label="福利范围" style="width:400px" prop="couponScope">
@@ -254,13 +256,20 @@ export default {
           formItem:{
               couponType:'OFFLINESTORE',
               title:'',
-              
+              descr:'',
+              faceValue:'',
+
           },
+          imgCoverUrl:'',
+          tag:'',
+          imgLogoUrl:'',
           titleLength:15,
           descrLength:20,
           faceValueLength:20,
           tagLength:5,
-          tagList:['会议室','会议室','会议室','会议室','会议室','会议室','会议室','会议室'],
+          tagList:[],
+          isCoverError:false,
+          isLogoError:false,
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
@@ -292,7 +301,9 @@ export default {
    
   },
   methods:{
+      addTags(){
 
+      }
   }
 
 }
@@ -308,6 +319,21 @@ export default {
             width:100%;
         }
   }
+
+
+.u-error{
+    color: #ed3f14;
+    font-size: 12px;
+}
+.ivu-form-item-required .ivu-form-item-label:before{
+    content: '*';
+    display: inline-block;
+    margin-right: 4px;
+    line-height: 1;
+    font-family: SimSun;
+    font-size: 12px;
+    color: #ed3f14;
+}
 .ivu-form-item{
     margin-top:-4px;
 }

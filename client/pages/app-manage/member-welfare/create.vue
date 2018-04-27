@@ -377,7 +377,60 @@ export default {
             this.$Notice.error({
                 title:error.message
             });
-        }
+        },
+        cancelSubmit(){
+            window.close();
+            window.opener.location.reload();
+        },
+        handleSubmit(name){
+          let message = '请填写完表单';
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+                let _this = this;
+            //    if(this.formItem.jumpType=='ACTIVITY'){
+            //         if(!this.formItem.jumpId){
+            //             this.$Notice.error({
+            //                 title:'请输入要跳转的活动'
+            //             });
+            //             return;
+            //         }
+            //    }
+            //    if(this.formItem.jumpType=='HTML'){
+            //         if(!this.formItem.jumpUrl){
+            //             this.$Notice.error({
+            //                 title:'请输入要跳转链接'
+            //             });
+            //               return;
+            //         }
+            //    }
+                this.$refs[name].validate((valid) => {
+                    if (valid && this.formItem.cmtId) {
+                        _this.submitCreate();
+                    } else {
+                        _this.$Notice.error({
+                            title:message
+                        });
+                    }
+                })
+      },
+      submitCreate(){
+            this.$http.post('create-coupon', this.formItem).then((res)=>{
+                this.$Notice.success({
+                        title:'新建成功'
+                    });
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
+      },
+
   }
 
 }

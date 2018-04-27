@@ -416,6 +416,7 @@
                 }
             };
             return {
+                discountCon:'',
                 entryPriceList:[],
                 openPrice:false,
                 priceError:'',

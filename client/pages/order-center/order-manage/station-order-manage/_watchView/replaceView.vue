@@ -1900,6 +1900,7 @@
                     this.formItem = Object.assign({},overViewData,this.formItem);
                     this.formItem.leaseBegindate = response.data.realStartDate;
                     this.formItem.leaseEnddate = response.data.realEndDate;
+                    this.discountCon = response.data.discount;
                     
                     
 					this.overViewData = overViewData

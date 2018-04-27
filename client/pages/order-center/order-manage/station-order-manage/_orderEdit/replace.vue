@@ -1850,6 +1850,7 @@
                         this.formItem.communityId = response.data.communityId+'';
                         this.formItem.communityName = response.data.communityName;
                         this.discountNum = response.data.discount;
+                        this.discountCon = response.data.discount;
                         this.deposit = response.data.deposit;
                         this.saleList = response.data.tacticsVOs || [];
                         this.stationData.submitData = this.selecedStationList;

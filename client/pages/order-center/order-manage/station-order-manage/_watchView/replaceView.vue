@@ -356,6 +356,9 @@
         <div class="view" v-if="orderStatus=='view'">
             <ReplaceView @editCards="editCard" :showEdit="editCardabled" :data.sync="overViewData" :showSubmit="showSubmit"/>
         </div>
+        <div class="view" v-if="orderStatus=='errorview'">
+            <ErrorView />
+        </div>
     </div>
 </template>
 
@@ -364,6 +367,7 @@
     import SectionTitle from '~/components/SectionTitle.vue'
     import SelectSaler from '~/components/SelectSaler.vue'
     import ReplaceView from '../replaceView.vue'
+    import ErrorView from '../errorView.vue'
     import selectCustomers from '~/components/SelectCustomers.vue'
     import dateUtils from 'vue-dateutils';
     import planMap from '~/components/PlanMap.vue';
@@ -659,7 +663,7 @@
                     {label:'6个月',value:'6'},
                 ],
                 //订单模式（create：创建中；view：预览）
-                orderStatus:'create',
+                orderStatus:'errorview',
                 showHeader:true,
                 //不可编辑
                 disabledValue:true,
@@ -817,7 +821,8 @@
             SelectSaler,
             selectCustomers,
             ReplaceView,
-            planMap
+            planMap,
+            ErrorView
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -1869,7 +1874,9 @@
                     // step4里数据
                     let array = [];
                     array.push(response.data.feeResultVO)
+
                     overViewData.newStationData = array;//step4里的table数据
+
                     this.oldStationData = array;
                     this.newStationData = array;
                     overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
@@ -1901,6 +1908,21 @@
                            this.getBasicData()
                         }
 					}).catch((error)=>{
+                        let errorData = {};
+                        errorData.newStationData = [
+                            {
+                                totalDeposit:'',
+                                changeDeposit:'',
+                                totalServiceFee:'',
+                                changeServiceFee:'',
+                                reduceServiceFee:'',
+                            }
+                        ]
+
+                        errorData.serviceDetailsList = []
+                        this.formItem = Object.assign({},errorData);
+                        this.overViewData = errorData;
+                        console.log('======',this.overViewData)
 						this.$Notice.error({
 							title:error.message
 						});

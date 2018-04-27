@@ -122,7 +122,7 @@
                                         v-for="(item,index) in tagList"
                                         :key="index"
                                       >
-                                         <span class="u-tag-close"></span>
+                                         <span class="u-tag-close" @click="deleteTag(index)"></span>
                                         {{item.name}}
                                      </div>
                                  </div>
@@ -178,7 +178,7 @@
                                         v-for="(item,index) in tagList"
                                         :key="index"
                                       >
-                                         <span class="u-tag-close"></span>
+                                         <span class="u-tag-close" ></span>
                                          会议室
                                      </div>
                                  </div>
@@ -309,15 +309,20 @@ export default {
             });
              return;
          }
+
          this.$http.get('create-tag', {name:this.tag}).then((res)=>{
              this.tagList=res.data;
              this.tag='';
-
         }).catch((error)=>{
           this.$Notice.error({
               title:error.message
             });
         });
+      },
+      deleteTag(index){
+          let tagList=this.tagList
+          tagList.splice(index, 1);
+          this.tagList=tagList;
       }
   }
 

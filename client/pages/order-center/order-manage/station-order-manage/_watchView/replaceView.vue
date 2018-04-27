@@ -1933,17 +1933,25 @@
             submitPrice(){
                 let priceError = false;
                 let stationIdList = [];
+                let price = ''
+                var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
+                if(isNaN(this.price)){
+                    priceError = true
+                    price = '工位单价必须是数字'
+                }else if(!pattern.test(this.price)){
+                    priceError = true
+                    price = '工位单价不得多于三位小数'
+                }
 
-                console.log('submitPrice',this.entryPriceList)
                 this.entryPriceList.map(item=>{
                     stationIdList.push(item.seatId);
                     if(item.guidePrice> this.price){
                         priceError = true
+                        price = '录入单价不得小于指导价。'
                     }
                 })
-                console.log('price',priceError)
                 if(priceError){
-                    this.priceError = '录入单价不得小于指导价。'
+                    this.priceError = price
                     return
                 }
                 this.priceError = ''

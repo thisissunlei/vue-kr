@@ -43,7 +43,7 @@
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
 
-                       <div class="add-left"></div>
+                        <div class="add-left" @click="lastTurnPage"></div>
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year"
@@ -115,7 +115,7 @@
                             </div>
                            
                         </div>
-                        <div class="add-right" :style="{right:scrollWidth+'px'}"></div>
+                        <div class="add-right" @click="nextTurnPage" :style="{right:scrollWidth+'px'}"></div>
                     </div>
 
                  </div>
@@ -130,7 +130,7 @@
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
                     >
-                    <div class="add-left">左侧</div>
+                    <div class="add-left" @click="lastTurnPage">左侧</div>
                        
                         <ViewArticle
                             v-if="leftEndpoint.year"
@@ -142,7 +142,7 @@
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
-                        <div class="add-right">右侧侧</div>
+                        <div class="add-right" @click="nextTurnPage">右侧侧</div>
                         <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
                         <div class='start-flag' :style="{left:startRentLeft+50+'px',width:2+'px'}"></div>
                         <div class='end-flag' :style="{left:endRentLeft+50+'px',width:2+'px'}"></div>
@@ -323,6 +323,12 @@ export default {
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
             this.endRentLeft=utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;
+        },
+        lastTurnPage(){
+            
+        },
+        nextTurnPage(){
+
         },
         //获取年数组
         getYears(startTime,endTime){

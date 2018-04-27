@@ -409,7 +409,6 @@
             },
 
             getListData(params){
-                console.log('======',params)
                  this.$http.get('get-replace-list', params).then((response)=>{
                      this.totalCount=response.data.totalCount;
                      this.joinData=response.data.items;

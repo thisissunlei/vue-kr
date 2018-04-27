@@ -158,7 +158,6 @@ export default {
         LabelText
 	},
 	data(){
-        console.log('detail',this.data)
 		return {
             openService:false,
             inline:false,
@@ -204,7 +203,6 @@ export default {
                     key: 'name',
                     align: 'center',
                     render: (h, params) => {
-                        console.log('欲更换服务日',params.row)
                         return dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.changeBegin)) +'至'+ dateUtils.dateToStr('YYYY-MM-DD',new Date(params.row.endDate))
                     }
                 },
@@ -443,7 +441,6 @@ export default {
             formData.newSeatInfo = '';
             formData.tacticsVOs = ''
 
-            console.log('submit',formData);
 
             let url = 'save-replace';
 
@@ -452,7 +449,6 @@ export default {
             }
 
             this.$http.post(url, formData).then( r => {
-                console.log('list',r.data)
                  window.close();
                 window.opener.location.reload();
 
@@ -492,7 +488,6 @@ export default {
                     startDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.startDate))
                 }
                 this.$http.post('get-seat-combin-detail', params).then( r => {
-                    console.log('get-seat-combin-detail',r.data)
                     this.openService = true;
                     this.detailService = r.data
                 }).catch( e => {
@@ -501,7 +496,6 @@ export default {
                     });
 
                 })
-                console.log('getServiceDetail',item)
             },
         cancel(){
             this.openService = false;

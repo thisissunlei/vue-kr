@@ -1423,7 +1423,6 @@
             //设置优惠后，获取签约价明细
             getSaleAmount(list){
                 let originalPrice = false;
-                console.log('getSaleAmount--1',this.freeStartDate)
                 let val = this.selecedStationList;
                 let station = val.map(item=>{
                     let obj = item;
@@ -1450,7 +1449,6 @@
                 }
                 let _this = this;
                 this.changeThree = new Date()
-                console.log('getSaleAmount---2',this.freeStartDate)
 
                 this.$http.post('count-sale', params).then( r => {
                     _this.selecedStationList = r.data.seats.map(item=>{
@@ -1546,7 +1544,6 @@
                     item.endDate = dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(item.endDate))
                     return item
                 })
-                console.log('getSeatCombin---1',this.freeStartDate)
 
                 let params = {
                     communityId:this.formItem.communityId,
@@ -1557,10 +1554,8 @@
                 }
 
                 this.$http.post('get-seat-combin', params).then( r => {
-                console.log('getSeatCombin---1',this.freeStartDate)
 
                     this.serviceDetailsList = r.data.items.map(item=>{
-                        console.log('get-seat-combin',this.freeStartDate)
                         item.freeStartDate = this.freeStartDate || '';
                         return item;
                     });

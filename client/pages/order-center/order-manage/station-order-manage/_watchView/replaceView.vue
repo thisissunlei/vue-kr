@@ -1922,7 +1922,6 @@
                         errorData.serviceDetailsList = []
                         this.formItem = Object.assign({},errorData);
                         this.overViewData = errorData;
-                        console.log('======',this.overViewData)
 						this.$Notice.error({
 							title:error.message
 						});

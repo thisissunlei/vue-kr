@@ -440,11 +440,10 @@
                     },
                     {
                         title: '下单价(元/月/房间)',
-                        key: 'guidePrice',
+                        key: 'originalPrice',
                         align: 'center',
                         render: (h, params) => {
-                            let price = params.row.guidePrice;
-                            
+                            let price = params.row.originalPrice;;
                             return h('Input', {
                                     props: {
                                         min:params.row.guidePrice,
@@ -838,7 +837,6 @@
             this.getSeatCombin()
            },
            changeThree(){
-            console.log('changeThree')
             this.clearFormFour()
            }
         },
@@ -859,7 +857,6 @@
                     }
                     return false
                 })
-                console.log('selectedOldStation',this.selectedOldStation)
             },
             next(name){
                 if(name == 'formItemTwo'){
@@ -879,7 +876,6 @@
 
                         if(name == 'formItemOne'){
                             this.getOldStation()
-                            console.log('leaseBegindate',this.formItem.leaseBegindate)
 
                         }
                         if(name == 'formItemTwo'){
@@ -887,7 +883,6 @@
                             if(this.formItem.oldSeatInfo.length){
                                 this.getSaleList(this.formItem.leaseEnddate)
                             }
-                            console.log('====')
                             if(!this.selectedOldStation.length){
                                 this.errorObj.oldStation = true;
                             }else{
@@ -1014,7 +1009,6 @@
                             item.label = item.name;
                             return item
                         });
-                        console.log('getCustomerToCom',this.communityList)
                 }).catch( (error) => {
                     this.communityList = []
                     this.$Notice.error({
@@ -1024,13 +1018,11 @@
                 })
             },
             clearStepData(){
-                console.log('清除time')
                 this.formItem.leaseBegindate = '';
                 this.selectedOldStation=[];
                 this.formItem.oldSeatInfo = []
             },
             changeCommunity(value){
-                 console.log('changeCommunity',value,'==',value.value, this.formItem.communityId)
                 // 选择社区
                 if(value.value){
                     this.formItem.communityId =value.value;
@@ -1072,7 +1064,6 @@
             },
             // 编辑第一次回显旧工位实际
             setOldSeatInfo(){
-                console.log('旧工位回显',this.oldStation)
                 let list = []
                 let time = new Date(this.formItem.leaseBegindate).getTime()
                 this.formItem.oldSeatInfo.map((value)=>{
@@ -1093,12 +1084,10 @@
                 })
                 this.oldStation = list;
                 this.getSelectedOldStation()
-                console.log('回显结果',list)
 
             },
             changeBeginTime(value){
                 //TODO 联调时需修改判断条件
-                console.log('changeBeginTime',value)
                 //出发更新列表中的欲更换信息
                 var today = new Date()
                 this.selectAllChecked = false;
@@ -1173,12 +1162,10 @@
                 this.formItem.firstPayTime = ''
             },
             clearFormFour(){
-                console.log('clearFormFour')
                 this.back = '';
                 this.formItem.transferDepositAmount = ''
             },
             selectPayType:function(value){
-                console.log('选择付款方式')
                 // 选择付款方式
                 this.installmentType = value.value;
                 this.changeThree = new Date()
@@ -1186,7 +1173,6 @@
                 this.errorObj.payType = false;
             },
             selectDeposit:function(value){
-                console.log('选择保证金')
 
                 // 选择保证金
                 this.deposit = value
@@ -1391,7 +1377,6 @@
                     tacticsId:this.discount.tacticsId
                 }
                 list.push(discountObj);
-                console.log('setDiscountNum',list)
                 this.saleList = list;
                 //设置折扣后，更新列表
                 this.getSaleAmount(list)
@@ -1729,9 +1714,7 @@
                 })
             },
             getBack(){
-                console.log('getback')
                 let value = this.formItem.transferDepositAmount;
-                console.log('value',value)
                 let changeDeposit = this.newStationData[0].changeDeposit;
                 if(isNaN(value)){
                     this.$Notice.error({
@@ -1805,7 +1788,7 @@
 
                         overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
 
-                        overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
+                        overViewData.freeStartDate = response.data.freeStartDate || '';
                         this.freeStartDate = response.data.freeStartDate || '';
                         overViewData.startDate = response.data.realStartDate
                         overViewData.back = response.data.feeResultVO.lockDeposit
@@ -1814,7 +1797,6 @@
                         this.formItem.leaseBegindate = response.data.realStartDate;
                         this.formItem.leaseEnddate = response.data.realEndDate;
                         this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
-                        console.log( ' this.formItem.transferDepositAmount',this.formItem.transferDepositAmount)
                         this.freeDays = response.data.freeDays;
                         this.back  = response.data.feeResultVO.lockDeposit;
                         this.installmentType = response.data.installmentType
@@ -1831,7 +1813,6 @@
                         this.stationData.submitData = this.selecedStationList;
                         this.originStationList = this.selecedStationList
                         let _this = this;
-                        console.log('获取编辑的基础数据',this.formItem)
                         setTimeout(function(){
                             _this.getCustomerToCom()
                         },200)

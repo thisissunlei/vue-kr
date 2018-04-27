@@ -439,7 +439,7 @@
                         key: 'guidePrice',
                         align: 'center',
                         render: (h, params) => {
-                            let price = params.row.guidePrice;
+                            let price = params.row.originalPrice;
                             
                             return h('Input', {
                                     props: {
@@ -861,7 +861,6 @@
 
                         if(name == 'formItemOne'){
                             this.getOldStation()
-                            console.log('leaseBegindate',this.formItem.leaseBegindate)
 
                         }
                         if(name == 'formItemTwo'){
@@ -869,7 +868,6 @@
                             if(this.formItem.oldSeatInfo.length){
                                 this.getSaleList(this.formItem.leaseEnddate)
                             }
-                            console.log('====')
                             if(!this.selectedOldStation.length){
                                 this.errorObj.oldStation = true;
                             }else{
@@ -965,7 +963,6 @@
                     return item;
                 })
                 this.showSubmit = true;
-                console.log('=======',overViewData)
                 overViewData.serviceDetailsList = serviceDetailsList;
                 this.$refs[name].validate((valid) => {
                     if(valid){
@@ -997,7 +994,6 @@
                             item.label = item.name;
                             return item
                         });
-                        console.log('getCustomerToCom',this.communityList)
                 }).catch( (error) => {
                     this.communityList = []
                     this.$Notice.error({
@@ -1007,13 +1003,11 @@
                 })
             },
             clearStepData(){
-                console.log('清除time')
                 this.formItem.leaseBegindate = '';
                 this.selectedOldStation=[];
                 this.formItem.oldSeatInfo = []
             },
             changeCommunity(value){
-                 console.log('communityName',value)
                 // 选择社区
                 if(value.value){
                     this.formItem.communityId =value.value;
@@ -1053,7 +1047,6 @@
             },
             // 编辑第一次回显旧工位实际
             setOldSeatInfo(){
-                console.log('旧工位回显',this.oldStation)
                 let list = []
                 let time = new Date(this.formItem.leaseBegindate).getTime()
                 this.formItem.oldSeatInfo.map((value)=>{
@@ -1073,14 +1066,12 @@
                     })
                 })
                 this.oldStation = list;
-                console.log('回显结果',list)
                 this.getSelectedOldStation()
                 
 
             },
             changeBeginTime(value){
                 //TODO 联调时需修改判断条件
-                console.log('changeBeginTime',value)
                 //出发更新列表中的欲更换信息
                 var today = new Date()
                 this.selectAllChecked = false;
@@ -1143,7 +1134,6 @@
                 }
             },
             clearFormThree(){
-                console.log('clearFormThree')
                 this.selecedStationList = [];
                 this.discountType = '';
                 this.freeType = '';
@@ -1152,7 +1142,6 @@
                 this.serviceDetailsList = []
             },
             clearFormFour(){
-                console.log('clearFormFour')
                 this.back = '';
                 this.formItem.transferDepositAmount = ''
             },
@@ -1196,7 +1185,6 @@
                 
             },
             dealSale(list){
-                console.log('dealSale',list)
                 let discount = []
                 discount = list.filter(item=>{
                     if(item.discountList){
@@ -1456,7 +1444,6 @@
                     endDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseEnddate))
                 }
                 this.params = params;
-                console.log('getPlanMap',this.selecedStationList)
                 this.stationData.submitData = this.selecedStationList || []
                 this.showMap = true;
             },
@@ -1705,7 +1692,6 @@
                 })
             },
             getBack(){
-                console.log('getback')
                 let value = this.formItem.transferDepositAmount;
                 let changeDeposit = this.newStationData[0].changeDeposit;
                 if(isNaN(value)){
@@ -1858,7 +1844,6 @@
 					this.overViewData = overViewData
 					this.orderStatus = 'view';
                     this.originStationList = this.selecedStationList
-                    console.log('----->',this.formItem)
                         
                         if(this.edit){
                            this.getBasicData()

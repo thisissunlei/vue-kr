@@ -439,7 +439,7 @@
                         key: 'guidePrice',
                         align: 'center',
                         render: (h, params) => {
-                            let price = params.row.guidePrice;
+                            let price = params.row.originalPrice;
                             
                             return h('Input', {
                                     props: {
@@ -1471,7 +1471,6 @@
             },
             deleteDtation(index){
                 this.selecedStationList.splice(index,1);
-                console.log('deleteDtation',this.selecedStationList)
                 if(this.selecedStationList.length){
                     this.getStationAmount();
                 }else{
@@ -1559,9 +1558,7 @@
                     saleList:JSON.stringify(this.saleList)
                 }
                 this.changeThree = new Date()
-                console.log('station====',station)
                 this.$http.post('count-sale', params).then( r => {
-                    console.log('http--->',r.data.seats)
                     this.selecedStationList = r.data.seats.map(item=>{
                         let obj = item;
                         obj.floor = item.whereFloor || item.floor;
@@ -1577,7 +1574,6 @@
                         obj.discountedPrice = item.discountedPrice;
                         return obj;
                     });
-                    console.log('http--->end',this.selecedStationList)
 
                 }).catch( e => {
                         this.$Notice.error({

@@ -30,20 +30,28 @@
                       <div><img :src="basicInfo.couponCover" class="u-img-url">{{basicInfo.couponCover?'':'无'}}</div>
                   </div>
                   <LabelText label="福利标签：" style="width:1100px;">
-                      <span 
+                     <div v-if="basicInfo.tags.length>0">
+                         <span 
                           v-for="(item,index) in basicInfo.tags" 
                           class="u-tag"
                           :key="index"
-                      >{{item.name}}</span>
+                        >{{item.name}}</span>
+                     </div>
+                    <div v-if="basicInfo.tags.length<=0">
+                      无
+                    </div>
                   </LabelText>
             </DetailStyle>
              <DetailStyle info="领取限制">
                  <LabelText label="福利范围：" style="width:1100px;">
-                     <span 
-                          v-for="(item,index) in basicInfo.citys" 
-                          class="u-tag"
-                          :key="index"
-                      >{{item.name}}</span>
+                    <span v-if="basicInfo.couponScope==1">不限</span>
+                    <div v-if="basicInfo.couponScope!=1">
+                         <span 
+                              v-for="(item,index) in basicInfo.citys" 
+                              class="u-tag"
+                              :key="index"
+                          >{{item.name}}</span>
+                    </div>
                   </LabelText>
                    <LabelText label="领取有效期：" style="width:1100px;">
                     {{basicInfo.indate}}
@@ -66,7 +74,9 @@ export default {
     },
     data(){
       return{
-        basicInfo:{}
+        basicInfo:{
+          tags:[],
+        }
       }
     },
     mounted:function(){

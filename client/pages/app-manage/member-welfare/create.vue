@@ -456,7 +456,7 @@ export default {
       },
       submitCreate(){
           console.log(this.formItem,this.formItem)
-          return
+          //return
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'新建成功'

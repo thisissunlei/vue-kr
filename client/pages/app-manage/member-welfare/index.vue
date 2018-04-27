@@ -96,12 +96,14 @@ export default {
                 {
                     title: '领取有效期',
                     key: 'indate',
-                    align:'center'
+                    align:'center',
+                    width:260,
                 },
                 {
                     title: '创建人',
                     key: 'createName',
-                    align:'center'
+                    align:'center',
+                    width:80,
                 },
                 {
                     title: '操作',

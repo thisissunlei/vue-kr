@@ -158,6 +158,8 @@
                             <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
                             <span style="padding:0 15px"> 折</span>
                             <Button type="primary" @click="setDiscountNum">设置</Button>
+                            <span style="padding:0 5px"> </span>
+                            <Button type="ghost" @click="cancleDiscount">取消折扣</Button>
 
                             </div>
 
@@ -945,7 +947,7 @@
 
                 overViewData.signDate=this.formItem.signDate;
                 overViewData.discount = this.discountNum;
-                overViewData.freeStartDate = this.freeStartDate || this.formItem.leaseEnddate;
+                overViewData.freeStartDate = this.freeStartDate;
                 overViewData.firstPayTime = this.formItem.firstPayTime;
                 overViewData.back = this.back;//扣除服务保证金
                 // step3第二个table数据 
@@ -1688,6 +1690,19 @@
             },
             cancel(){
                 this.openService = false;
+            },
+            cancleDiscount(){
+                this.discountNum = ''
+                let list = this.saleList;
+                list = list.filter(item=>{
+                    if(item.tacticsType == this.discount.tacticsType){
+                        return false;
+                    }
+                    return true;
+                })
+                this.saleList = list;
+                //设置折扣后，更新列表
+                this.getSaleAmount(list)
             }
         }
     }

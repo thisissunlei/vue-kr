@@ -158,6 +158,8 @@
                             <Input v-model="discountNum" :placeholder="'最大折扣'+discount.minDiscount+'折'" style="width: 120px;" @on-blur="checkDiscount" :maxlength="maxlength"></Input>
                             <span style="padding:0 15px"> 折</span>
                             <Button type="primary" @click="setDiscountNum">设置</Button>
+                            <span style="padding:0 5px"> </span>
+                            <Button type="ghost" @click="cancleDiscount">取消折扣</Button>
 
                             </div>
 
@@ -1763,82 +1765,95 @@
                 this.openService = false;
             },
             getDetailData(){
-            let {params}=this.$route;
-            let from={
-                id:params.orderEdit
-            };
-            this.$http.get('get-replace-detail', from).then((response)=>{  
-                    let overViewData = response.data;
+                let {params}=this.$route;
+                let from={
+                    id:params.orderEdit
+                };
+                this.$http.get('get-replace-detail', from).then((response)=>{  
+                        let overViewData = response.data;
 
-                    this.selecedStationList = response.data.newSeatInfo.map(item=>{
-                        item.originalPrice = item.marketPrice;
-                        item.name = item.seatNum;
-                        item.whereFloor = item.floor;
-                        item.seatName = item.seatNum;
-                        item.id = item.seatId;
-                        item.floor = item.floor;
-                        item.whereFloor = item.floor;
-                        item.belongType = item.seatType;
-                        item.saleNum = response.data.discount || '-';
-                        item.discountedPrice = item.signPrice;
-                        item.startDate = response.data.realStartDate;
-                        item.endDate = response.data.realEndDate
-                        return item;
-                    })
+                        this.selecedStationList = response.data.newSeatInfo.map(item=>{
+                            item.originalPrice = item.marketPrice;
+                            item.name = item.seatNum;
+                            item.whereFloor = item.floor;
+                            item.seatName = item.seatNum;
+                            item.id = item.seatId;
+                            item.floor = item.floor;
+                            item.whereFloor = item.floor;
+                            item.belongType = item.seatType;
+                            item.saleNum = response.data.discount || '-';
+                            item.discountedPrice = item.signPrice;
+                            item.startDate = response.data.realStartDate;
+                            item.endDate = response.data.realEndDate
+                            return item;
+                        })
 
-                    overViewData.id = params.orderEdit;
+                        overViewData.id = params.orderEdit;
 
-                    this.serviceDetailsList = response.data.newSeatCombin
-                    let array = [];
-                    array.push(response.data.feeResultVO)
-                    overViewData.newStationData = array;
-                    overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
-                        item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
-                        item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
-                        return item;
-                    });
+                        this.serviceDetailsList = response.data.newSeatCombin
+                        let array = [];
+                        array.push(response.data.feeResultVO)
+                        overViewData.newStationData = array;
+                        overViewData.serviceDetailsList = response.data.newSeatCombin.map(item=>{
+                            item.startDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.startDate)) 
+                            item.endDate =dateUtils.dateToStr('YYYY-MM-DD',new Date(item.endDate)) 
+                            return item;
+                        });
 
-                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                        overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
 
-                    overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
-                    this.freeStartDate = response.data.freeStartDate || '';
-                    overViewData.startDate = response.data.realStartDate
-                    overViewData.back = response.data.feeResultVO.lockDeposit
-                    this.formItem = overViewData;
-                    this.formItem.signDate = new Date();
-                    this.formItem.leaseBegindate = response.data.realStartDate;
-                    this.formItem.leaseEnddate = response.data.realEndDate;
-                    this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
-                    console.log( ' this.formItem.transferDepositAmount',this.formItem.transferDepositAmount)
-                    this.freeDays = response.data.freeDays;
-                    this.back  = response.data.feeResultVO.lockDeposit;
-                    this.installmentType = response.data.installmentType
-                    this.payList.map(item=>{
-                        if(item.value == response.data.installmentType){
-                            this.installmentName = item.label;
-                        }
-                    })
-                    this.formItem.communityId = response.data.communityId+'';
-                    this.formItem.communityName = response.data.communityName;
-                    this.discountNum = response.data.discount;
-                    this.deposit = response.data.deposit;
-                    this.saleList = response.data.tacticsVOs || [];
-                    this.stationData.submitData = this.selecedStationList;
-                    this.originStationList = this.selecedStationList
-                    let _this = this;
-                    console.log('获取编辑的基础数据',this.formItem)
-                    setTimeout(function(){
-                        _this.getCustomerToCom()
-                    },200)
-                    
-                    
+                        overViewData.freeStartDate = response.data.freeStartDate || response.data.realStartDate;
+                        this.freeStartDate = response.data.freeStartDate || '';
+                        overViewData.startDate = response.data.realStartDate
+                        overViewData.back = response.data.feeResultVO.lockDeposit
+                        this.formItem = overViewData;
+                        this.formItem.signDate = new Date();
+                        this.formItem.leaseBegindate = response.data.realStartDate;
+                        this.formItem.leaseEnddate = response.data.realEndDate;
+                        this.formItem.transferDepositAmount = response.data.feeResultVO.transferDeposit+'';
+                        console.log( ' this.formItem.transferDepositAmount',this.formItem.transferDepositAmount)
+                        this.freeDays = response.data.freeDays;
+                        this.back  = response.data.feeResultVO.lockDeposit;
+                        this.installmentType = response.data.installmentType
+                        this.payList.map(item=>{
+                            if(item.value == response.data.installmentType){
+                                this.installmentName = item.label;
+                            }
+                        })
+                        this.formItem.communityId = response.data.communityId+'';
+                        this.formItem.communityName = response.data.communityName;
+                        this.discountNum = response.data.discount;
+                        this.deposit = response.data.deposit;
+                        this.saleList = response.data.tacticsVOs || [];
+                        this.stationData.submitData = this.selecedStationList;
+                        this.originStationList = this.selecedStationList
+                        let _this = this;
+                        console.log('获取编辑的基础数据',this.formItem)
+                        setTimeout(function(){
+                            _this.getCustomerToCom()
+                        },200)
+                        
+                        
 
-                }).catch((error)=>{
-                    this.$Notice.error({
-                        title:error.message
-                    });
-            })
-        },
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                })
+            },
+            cancleDiscount(){
+                this.discountNum = ''
+                let list = this.saleList;
+                list = list.filter(item=>{
+                    if(item.tacticsType == this.discount.tacticsType){
+                        return false;
+                    }
+                    return true;
+                })
+                this.saleList = list;
+                //设置折扣后，更新列表
+                this.getSaleAmount(list)
+            }
         }
     }
 

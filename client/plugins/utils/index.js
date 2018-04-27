@@ -2,6 +2,7 @@ import thousand from './thousand';
 import addEvent from './addEvent';
 import dataType from './dataType';
 import throttle from './throttle';
+import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
@@ -198,6 +199,7 @@ import tableSort from './tableSort';
     dateDiff,
     debounce,
     getScrollBarSize,
+    dateCompatible,
     tableSort
    }
 

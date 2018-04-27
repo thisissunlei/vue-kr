@@ -4,41 +4,49 @@
         <div class="m-detail-content">
             <DetailStyle info="基本信息">
                   <LabelText label="创建人：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.createName}}
                   </LabelText>
                   <LabelText label="创建时间：" style="width:1100px;">
-                    {{basicInfo.incomeType}}
+                    {{basicInfo.ctime}}
                   </LabelText>
             </DetailStyle>
              <DetailStyle info="领取情况">
                   <LabelText label="会员点击次数：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.getCount}}
                   </LabelText>
             </DetailStyle>
              <DetailStyle info="展示信息">
                   <LabelText label="福利类型：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.couponType}}
                   </LabelText>
                   <LabelText label="福利描述：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.descr}}
                   </LabelText>
                   <LabelText label="福利面值：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.faceValue}}
                   </LabelText>
                   <div class="u-img-content">
                       <div class="u-img-title">福利封面：</div>
-                      <div><img :src="basicInfo.imgUrl" class="u-img-url">{{basicInfo.imgUrl?'':'无'}}</div>
+                      <div><img :src="basicInfo.couponCover" class="u-img-url">{{basicInfo.couponCover?'':'无'}}</div>
                   </div>
                   <LabelText label="福利标签：" style="width:1100px;">
-                    {{basicInfo.id}}
+                      <span 
+                          v-for="(item,index) in basicInfo.tags" 
+                          class="u-tag"
+                          :key="index"
+                      >{{item.name}}</span>
                   </LabelText>
             </DetailStyle>
              <DetailStyle info="领取限制">
                  <LabelText label="福利范围：" style="width:1100px;">
-                    {{basicInfo.id}}
+                     <span 
+                          v-for="(item,index) in basicInfo.citys" 
+                          class="u-tag"
+                          :key="index"
+                      >{{item.name}}</span>
                   </LabelText>
                    <LabelText label="领取有效期：" style="width:1100px;">
-                    {{basicInfo.id}}
+                    {{basicInfo.indate}}
                   </LabelText>
              </DetailStyle>
         </div>
@@ -62,7 +70,7 @@ export default {
       }
     },
     mounted:function(){
-        //this.getInfo();
+        this.getInfo();
         GLOBALSIDESWITCH("false")
 	 },
    methods:{
@@ -71,17 +79,20 @@ export default {
         var _this=this;
         let {params}=this.$route;
         let from={
-          notificationId:params.notificationId
+          couponId:params.couponId
         };
+        let type={
+              'OFFLINESTORE':'线下门店',
+              'USERLIFE':'会员生活',
+              'ENTERPRISESERVICE':'企业服务',
+            }
 
-        this.$http.get('get-notification-detail', from).then((res)=>{
+        this.$http.get('get-coupon-detail', from).then((res)=>{
                   let data = res.data;
-                  data.jump=jumplist[data.jumpType];
-                  this.targetDetail=data.targetDetail || '';
-                 
-                  
-                
+                  data.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.ctime));
+                  data.couponType=type[data.couponType];
                   this.basicInfo = data;
+
         }).catch((error)=>{
           this.$Notice.error({
               title:error.message
@@ -113,6 +124,9 @@ export default {
             float: left;
             margin-bottom:30px;
         }
+    }
+    .u-tag{
+        padding:0 5px;
     }
     
 }

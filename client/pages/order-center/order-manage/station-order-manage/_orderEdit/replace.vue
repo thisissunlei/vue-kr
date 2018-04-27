@@ -1776,7 +1776,7 @@
                     return;
 
                 }
-                if(value>=changeDeposit){
+                if(value>changeDeposit){
                     this.$Notice.error({
                         title:'旧服务保证金转新金额不得大于'+changeDeposit
                     })

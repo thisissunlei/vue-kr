@@ -631,13 +631,13 @@
                             primaryText: "每日库存查询",
                             router: 'inventory/daily-inventory',
                             type: 'vue',
-                            menuCode: 'public',
+                            menuCode: 'daily_inventory',
                         },
                         {
                             primaryText: "可租商品查询",
                             router: 'inventory/optional-inventory',
                             type: 'vue',
-                            menuCode: 'public',
+                            menuCode: 'inventory',
                         },
                         {
                             primaryText: '注册地址',

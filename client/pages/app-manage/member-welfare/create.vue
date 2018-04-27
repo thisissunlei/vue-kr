@@ -113,7 +113,8 @@
                                         :maxlength="tagLength"
                                         style="width:278px"
                                  />
-                                 <span class="u-add-tag-btn" @click="addTags">添加</span>
+                                 <span v-if="tagList.length<3" class="u-add-tag-btn" @click="addTags">添加</span>
+                                  <span v-if="tagList.length>=3" class="u-tag-btn" >添加</span>
                                  <div class="u-tag-tip">上限三个，用以描述该福利的适用类型</div>
                                  <div class="u-tag-content" v-if="tagList.length>0">
                                      <div 
@@ -302,7 +303,21 @@ export default {
   },
   methods:{
       addTags(){
+         if(!this.tag){
+            this.$Notice.error({
+              title:'福利标签不能为空'
+            });
+             return;
+         }
+         this.$http.get('create-tag', {name:this.tag}).then((res)=>{
+             this.tagList=res.data;
+             this.tag='';
 
+        }).catch((error)=>{
+          this.$Notice.error({
+              title:error.message
+            });
+        });
       }
   }
 
@@ -441,6 +456,12 @@ export default {
         .u-add-tag-btn{
             padding-left:10px;
             color:#499DF1;
+            font-size: 14px;
+            line-height:32px;
+        }
+        .u-tag-btn{
+            padding-left:10px;
+            color:#cccccc;
             font-size: 14px;
             line-height:32px;
         }

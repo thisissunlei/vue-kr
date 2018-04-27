@@ -176,7 +176,7 @@
                         <Col style='display:inline-block;width:30%'>
                              <div class="title">服务费明细</div>
                         </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.list.length && selecedStationList.length">
+                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="freeMap.maxDays && selecedStationList.length">
 
                             <div style="display:inline-block">
                                 <span v-for="types in freeMap.list" :key="types.month" class="button-list" v-on:click="selectFree(types)" v-bind:class="{active:freeDays==types.days}">赠{{ types.month }}个月</span>

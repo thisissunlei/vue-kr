@@ -1180,6 +1180,7 @@
 
                 }
                 this.$http.post('get-free-sale', params).then( r => {
+
                     if(r.data.length){
                         this.dealSale(r.data)
                     }
@@ -1195,6 +1196,7 @@
                 
             },
             dealSale(list){
+                console.log('dealSale',list)
                 let discount = []
                 discount = list.filter(item=>{
                     if(item.discountList){
@@ -1209,21 +1211,27 @@
                     }
                     return false
                 })
-                let discountList = discount[0].discountList; 
-                let discountArray = []
-                for(let i in discountList){
-                    let obj = {};
-                    obj.sale = discountList[i];
-                    discountArray.push(obj)
 
+                if(discount.length){
+                    let discountList = discount[0].discountList; 
+                    let discountArray = []
+                    for(let i in discountList){
+                        let obj = {};
+                        obj.sale = discountList[i];
+                        discountArray.push(obj)
+
+                    }
+                    //折扣列表
+                    this.discount = {
+                        list:discountArray,
+                        minDiscount:discount[0].minDiscount,
+                        tacticsType:discount[0].tacticsType,
+                        tacticsId:discount[0].tacticsId
+                    }
+                
                 }
-                //折扣列表
-                this.discount = {
-                    list:discountArray,
-                    minDiscount:discount[0].minDiscount,
-                    tacticsType:discount[0].tacticsType,
-                    tacticsId:discount[0].tacticsId
-                }
+                 
+                
                 if(!freeMap.length){
                     return
                 }

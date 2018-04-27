@@ -140,7 +140,8 @@
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
                         <Button type="primary" @click="openPlanMap">选择工位</Button>
-
+                        <span style="padding:0 5px"> </span>
+                        <Button type="primary" @click="entryPrice">录入单价</Button>
                     </Row>
 
                     
@@ -168,7 +169,7 @@
                     </Row>
                     <Row >
                         <Col>
-                            <Table :columns="signPriceColumns" :data.sync="selecedStationList"></Table>
+                            <Table :columns="signPriceColumns" :data.sync="selecedStationList" @on-selection-change="selectStationEvent"></Table>
                         </Col>
                     </Row>
                     <!-- 设置免租 -->
@@ -328,6 +329,28 @@
                 <Button type="primary" @click="submitStation">确定</Button>
             </div>
         </Modal>
+
+         <Modal
+            v-model="openPrice"
+            title="录入单价"
+            ok-text="保存"
+            cancel-text="取消"
+            width="300px"
+            class-name="vertical-center-modal"
+         >
+           <div v-if="openPrice">
+                <span style="display:inline-block;height:32px;line-height:32px"> 工位单价： </span>
+                <Input v-model="price" placeholder="工位单价" style="width:150px" ></Input>
+                <span style="display:block;height:32px;line-height:32px;color:red" v-if="priceError">{{priceError}}</span>
+                    
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitPrice">确定</Button>
+                <Button  @click="cancelPrice">取消</Button>
+            </div>
+        </Modal>
+
+        
         <div class="view" v-if="orderStatus=='view'">
             <ReplaceView @editCards="editCard" :showEdit="editCardabled"  :data.sync="overViewData"/>
         </div>
@@ -393,6 +416,10 @@
                 }
             };
             return {
+                entryPriceList:[],
+                openPrice:false,
+                priceError:'',
+                price:'',
                 editCardabled:true,
                 openService:false,
                 labelInValue:true,
@@ -407,6 +434,11 @@
                 },
                 selecedStationList:[],
                 signPriceColumns:[
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
                     {
                         title: '工位编号/房间名称',
                         key: 'name',
@@ -1703,6 +1735,51 @@
                 this.saleList = list;
                 //设置折扣后，更新列表
                 this.getSaleAmount(list)
+            },
+            entryPrice(){
+                // 确认录入单价的工位，打开弹窗，输入单价，遍历单价最小金额，确认添加
+                if(!this.entryPriceList.length){
+                    this.$Notice.error({
+                        title:'请先选择录入单价的工位'
+                    })
+                    return 
+                }
+                this.openPrice = true;
+            },
+            selectStationEvent(select){
+                this.entryPriceList = select;
+            },
+            submitPrice(){
+                let priceError = false;
+                let stationIdList = [];
+
+                console.log('submitPrice',this.entryPriceList)
+                this.entryPriceList.map(item=>{
+                    stationIdList.push(item.seatId);
+                    if(item.guidePrice> this.price){
+                        priceError = true
+                    }
+                })
+                console.log('price',priceError)
+                if(priceError){
+                    this.priceError = '录入单价不得小于指导价。'
+                    return
+                }
+                this.priceError = ''
+                this.selecedStationList = this.selecedStationList.map(item=>{
+                    if(stationIdList.indexOf(item.seatId) != -1){
+                        item.originalPrice = this.price;
+                    }
+                    return item;
+                })
+                this.getStationAmount()
+                this.openPrice = false;
+                this.price = ''
+                this.entryPriceList = []
+            },
+            cancelPrice(){
+                this.price = '';
+                this.openPrice = false;
             }
         }
     }

@@ -457,17 +457,17 @@ export default {
       },
        //社区
       getCityList(name){
-           let params = {
-                    cmtName:name
-                }
+        //    let params = {
+        //             cmtName:name
+        //         }
             let list = [];
             let _this = this;
-            this.$http.get('get-community-new-list', params).then((res)=>{
-                list = res.data.cmts;
+            this.$http.get('coupon-city-list', '').then((res)=>{
+                list = res.data.cityList;
                 list.map((item)=>{
                     let obj =item;
-                    obj.label = item.cmtName;
-                    obj.value = item.cmtId;
+                    obj.label = item.name;
+                    obj.value = item.id;
                     return obj;
                 });
                 _this.cityList = list;

@@ -50,7 +50,7 @@
                             <div class="demo-upload-list" v-if="this.imgCoverUrl">
                                 <img :src="this.imgCoverUrl">
                                 <div class="demo-upload-list-cover">
-                                    <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+                                    <Icon type="ios-trash-outline" @click.native="coverRemove()"></Icon>
                                 </div>
                             </div>
                             <Upload
@@ -60,8 +60,8 @@
                                 :show-upload-list="false"
                                 :format="['jpg','gif','png']"
                                 with-credentials
-                                :on-success="handleSuccess"
-                                :on-error="handleError"
+                                :on-success="coverSuccess"
+                                :on-error="coverError"
                                 type="drag"
                                 action="/api/krspace-finance-web/app/notification/upload"
                                 style="display: inline-block;width:148px;">
@@ -90,8 +90,8 @@
                                         :show-upload-list="false"
                                         :format="['jpg','gif','png']"
                                         with-credentials
-                                        :on-success="handleSuccess"
-                                        :on-error="handleError"
+                                        :on-success="logoSuccess"
+                                        :on-error="logoError"
                                         type="drag"
                                         action="/api/krspace-finance-web/app/notification/upload"
                                         style="display: inline-block;width:148px;">
@@ -271,6 +271,10 @@ export default {
           tagList:[],
           isCoverError:false,
           isLogoError:false,
+          startDate:'',
+          endDates:'',
+          startHour:'',
+          endHour:'',
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
@@ -302,28 +306,78 @@ export default {
    
   },
   methods:{
-      addTags(){
-         if(!this.tag){
-            this.$Notice.error({
-              title:'福利标签不能为空'
-            });
-             return;
-         }
+        addTags(){
+                if(!this.tag){
+                    this.$Notice.error({
+                    title:'福利标签不能为空'
+                    });
+                    return;
+                }
 
-         this.$http.get('create-tag', {name:this.tag}).then((res)=>{
-             this.tagList=res.data;
-             this.tag='';
-        }).catch((error)=>{
-          this.$Notice.error({
-              title:error.message
+                this.$http.get('create-tag', {name:this.tag}).then((res)=>{
+                    this.tagList=res.data;
+                    this.tag='';
+                }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                    });
+                });
+        },
+        deleteTag(index){
+            let tagList=this.tagList
+            tagList.splice(index, 1);
+            this.tagList=tagList;
+        },
+        startChange(date){
+            this.startDate=date;
+        },
+        endChange(date){
+            this.endDates=date;
+        },
+        startHourChange(date){
+            this.startHour=date;
+        },
+        endHourChange(date){
+            this.endHour=date;
+        },
+        startHourClear(){
+            this.startHour='00:00:00';
+        },
+        endHourClear(){
+            this.endHour='00:00:00';
+        },
+        coverSuccess(res,file){
+            if(res.code==1){
+                this.isCoverError=false;
+                this.formItem.couponCover=res.data.imgUrl;
+                this.imgCoverUrl=res.data.imgUrl
+            }
+        },
+        logoSuccess(res,file){
+            if(res.code==1){
+                this.isLogoError=false;
+                this.formItem.merchantLogo=res.data.imgUrl;
+                this.imgLogoUrl=res.data.imgUrl
+            }
+        },
+        coverRemove(){
+            this.formItem.couponCover="";
+            this.imgCoverUrl="" 
+        },
+        logoRemove(){
+            this.formItem.merchantLogo="";
+            this.imgLogoUrl="" 
+        },
+        coverError(error,file){
+            this.$Notice.error({
+                title:error.message
             });
-        });
-      },
-      deleteTag(index){
-          let tagList=this.tagList
-          tagList.splice(index, 1);
-          this.tagList=tagList;
-      }
+        },
+        logoError(error,file){
+            this.$Notice.error({
+                title:error.message
+            });
+        }
   }
 
 }

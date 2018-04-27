@@ -305,7 +305,7 @@
                       {{detailService.seatType =='SPACE'?'独立房间':'独立工位'}} {{detailService.codeName}}
                    </span>
                    <span class="right" style="float:right">
-                       ￥{{detailService.totalAmount}}
+                       ￥{{detailService.totalAmount | thousand}}
                    </span>
                </div>
                <Table :columns="serviceColumns" style="margin:10px 0" :data="detailService.details"></Table>
@@ -343,6 +343,7 @@
     import dateUtils from 'vue-dateutils';
     import planMap from '~/components/PlanMap.vue';
     import Buttons from '~/components/Buttons';
+    import utils from '~/plugins/utils';
 
     // 新建换租订单步骤说明
     // step：1
@@ -432,7 +433,10 @@
                     {
                         title: '指导价(元/月/房间)',
                         key: 'guidePrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '下单价(元/月/房间)',
@@ -483,7 +487,10 @@
                     {
                         title: '签约价',
                         key: 'discountedPrice',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return utils.thousand(params.row.discountedPrice)+'(元/月/房间)'
+                        }
                     },
                     {
                         title: '操作',
@@ -547,12 +554,15 @@
                     {
                         title: '签约价',
                         key: 'signPrice',
-                        align: 'center'
+                        align: 'center',
                     },
                     {
                         title: '金额',
                         key: 'totalRent',
-                        align: 'center'
+                        align: 'center',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.totalRent)
+                        }
                     },
                     {
                         title: '操作',
@@ -752,7 +762,7 @@
                     key: 'amount',
                     align: 'right',
                     render:(h,params)=>{
-                        return '￥'+params.row.amount;
+                        return '￥'+utils.thousand(params.row.amount);
                     }
                 },
             ]

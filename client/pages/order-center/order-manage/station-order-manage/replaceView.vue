@@ -113,7 +113,7 @@
                       {{detailService.seatType =='SPACE'?'独立房间':'独立工位'}} {{detailService.codeName}}
                    </span>
                    <span class="right" style="float:right">
-                       ￥{{detailService.totalAmount}}
+                       ￥{{detailService.totalAmount |thousand}}
                    </span>
                </div>
                <Table :columns="serviceColumns" style="margin:10px 0" :data="detailService.details"></Table>
@@ -401,7 +401,7 @@ export default {
                     key: 'amount',
                     align: 'right',
                     render:(h,params)=>{
-                        return '￥'+params.row.amount;
+                        return '￥'+utils.thousand(params.row.amount);
                     }
                 },
             ]

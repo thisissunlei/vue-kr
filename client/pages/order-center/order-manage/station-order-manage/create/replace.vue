@@ -305,7 +305,7 @@
                       {{detailService.seatType =='SPACE'?'独立房间':'独立工位'}} {{detailService.codeName}}
                    </span>
                    <span class="right" style="float:right">
-                       ￥{{detailService.totalAmount}}
+                       ￥{{detailService.totalAmount | thousand}}
                    </span>
                </div>
                <Table :columns="serviceColumns" style="margin:10px 0" :data="detailService.details"></Table>
@@ -724,44 +724,44 @@
                 back:0,
                 changeThree:new Date(),
                 detailService:{
-                codeName:'',
-                details:[],
-                totalAmount:'',
-                seatType:''
-            },
-            serviceColumns:[
-                {
-                    title: '服务期',
-                    key: 'reduceServiceFee',
-                    align: 'center',
-                    render:(h,params)=>{
-                        return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.start_date)) +'~'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.end_date))
-                    }
+                    codeName:'',
+                    details:[],
+                    totalAmount:'',
+                    seatType:''
                 },
-                {
-                    title: '服务费计算说明',
-                    key: 'calculat_descr',
-                    align: 'center'
-                },
-                {
-                    title: '单价',
-                    key: 'unit_price',
-                    align: 'center'
-                },
-                {
-                    title: '数量',
-                    key: 'count',
-                    align: 'center'
-                },
-                {
-                    title: '小计',
-                    key: 'amount',
-                    align: 'right',
-                    render:(h,params)=>{
-                        return '￥'+params.row.amount;
-                    }
-                },
-            ]
+                serviceColumns:[
+                    {
+                        title: '服务期',
+                        key: 'reduceServiceFee',
+                        align: 'center',
+                        render:(h,params)=>{
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.start_date)) +'~'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.end_date))
+                        }
+                    },
+                    {
+                        title: '服务费计算说明',
+                        key: 'calculat_descr',
+                        align: 'center'
+                    },
+                    {
+                        title: '单价',
+                        key: 'unit_price',
+                        align: 'center'
+                    },
+                    {
+                        title: '数量',
+                        key: 'count',
+                        align: 'center'
+                    },
+                    {
+                        title: '小计',
+                        key: 'amount',
+                        align: 'right',
+                        render: (h, params) => {
+                            return '￥'+utils.thousand(params.row.amount)
+                        }
+                    },
+                ]   
 
                 
 

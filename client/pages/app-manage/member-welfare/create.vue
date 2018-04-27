@@ -160,26 +160,26 @@
                       <div class="u-community-content" v-if="formItem.targetType=='1'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
-                              <FormItem label="选择社区"  style="width:250px;" >
+                              <FormItem label="选择城市"  style="width:250px;" >
                                   <Select
                                       v-model="formItem.cmtId"
                                       filterable
-                                      :remote-method="remoteCommunityMethod"
-                                      :loading="communityLoading"
+                                      :remote-method="remoteCityMethod"
+                                      :loading="cityLoading"
                                       placeholder="请选择"
                                       clearable
-                                      @on-change="communityChange"
+                                      @on-change="cityChange"
                                       >
-                                      <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
+                                      <Option v-for="(option, index) in cityList" :value="option.value" :key="index">{{option.label}}</Option>
                                   </Select>
                                   <div class="u-tag-content u-tag-top">
                                      <div 
                                         class="u-tag" 
-                                        v-for="(item,index) in tagList"
+                                        v-for="(item,index) in checkCity"
                                         :key="index"
                                       >
-                                         <span class="u-tag-close" ></span>
-                                         会议室
+                                         <span class="u-tag-close" @click="deleteCity(index)"></span>
+                                         {{item.label}}
                                      </div>
                                  </div>
                               </FormItem>
@@ -275,6 +275,9 @@ export default {
           endDates:'',
           startHour:'',
           endHour:'',
+          cityLoading:false,
+          cityList:[],
+          checkCity:[],
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
@@ -303,6 +306,7 @@ export default {
   },
   mounted:function(){
     GLOBALSIDESWITCH("false");
+    this.getCityList()
    
   },
   methods:{
@@ -327,6 +331,11 @@ export default {
             let tagList=this.tagList
             tagList.splice(index, 1);
             this.tagList=tagList;
+        },
+        deleteCity(index){
+            let checkCity=this.checkCity
+            checkCity.splice(index, 1);
+            this.checkCity=checkCity;
         },
         startChange(date){
             this.startDate=date;
@@ -429,6 +438,46 @@ export default {
                         title:err.message
                     });
             })
+      },
+      cityChange(form){
+           
+      },
+       //社区
+      remoteCityMethod(query){
+        if (query!== '') {
+            this.cityLoading = true;
+            setTimeout(() => {
+                this.cityLoading = false;
+                this.getCommunityList(query)
+            }, 200);
+        } else {
+            this.getCommunityList(' ')
+
+        }
+      },
+       //社区
+      getCityList(name){
+           let params = {
+                    cmtName:name
+                }
+            let list = [];
+            let _this = this;
+            this.$http.get('get-community-new-list', params).then((res)=>{
+                list = res.data.cmts;
+                list.map((item)=>{
+                    let obj =item;
+                    obj.label = item.cmtName;
+                    obj.value = item.cmtId;
+                    return obj;
+                });
+                _this.cityList = list;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            return list;
+            
       },
 
   }

@@ -80,7 +80,7 @@ function lineShow(data) {
     }
 }
 //鼠标滑过气泡的位置
-function poptipOver(event, data) {
+function poptipOver(event, data,param) {
     var e = event || window.event;
     var dom = event.target;
 
@@ -92,7 +92,8 @@ function poptipOver(event, data) {
         left: e.clientX,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
-    var obj = getToolTipContent(data);
+
+    var obj = getToolTipContent(data,param);
     tirDom.innerHTML = obj.str;
     tirDom.style.left = tirLocation.left - 30 + 'px';
     tirDom.style.top = tirLocation.top + 10 - 345 + 'px';
@@ -104,26 +105,36 @@ function poptipOver(event, data) {
     angleDom.style.opacity = 1;
 }
 //气泡的具体内容
-function getToolTipContent(thatData) {
-    var str = '<div class="title">' + thatData.label + '</div>';
-    var data = Object.assign({}, thatData.data);
+function getToolTipContent(thatData,param) {
+    var label='';
+    if(param=='0'){
+        label='合同未生效';
+    }else if(param=='1'){
+        label='在租';
+    }else if(thatData.status=='DISABLE'&&param=='2'){
+        label="不可用";
+    }else if(thatData.status!='DISABLE'&&param=='2'){
+        label="在租";
+    } 
+    var str = '<div class="title">' + label + '</div>';
+    var data = Object.assign({}, thatData);
     var width = 155;
-    if (data.planEndTime && data.planStartTime) {
+    if (data.endDate && data.startDate) {
         var type = 'MM/DD';
 
-        var startYear = (new Date(data.planStartTime)).getFullYear();
-        var endYear = (new Date(data.planEndTime)).getFullYear();
+        var startYear = (new Date(data.startDate)).getFullYear();
+        var endYear = (new Date(data.endDate)).getFullYear();
         if (startYear !== endYear) {
             type = 'YYYY/MM/DD';
             width = 220;
         }
-
-        var startDay = data.planStartTime ? dateUtils.dateToStr(type, new Date(data.planStartTime)) : '';
-        var endDay = data.planEndTime ? dateUtils.dateToStr(type, new Date(data.planEndTime)) : '';
-        str += '<div class="content">' + '计划周期：' + startDay + ' - ' + endDay + '</div>'
+        
+        var startDay = data.startDate ? dateUtils.dateToStr(type, new Date(data.startDate)) : '';
+        var endDay = data.endDate ? dateUtils.dateToStr(type, new Date(data.endDate)) : '';
+        str += '<div class="content">' + startDay + ' - ' + endDay + '</div>'
 
     }
-    if (data.taskStatus !== "UNKNOWN"
+    /*if (data.taskStatus !== "UNKNOWN"
         && data.taskStatus !== "UNDERWAY"
         && data.taskStatus !== "OVERDUE"
         && data.taskStatus !== "PLANNED"
@@ -139,7 +150,7 @@ function getToolTipContent(thatData) {
         var endDay = data.actualEndTime ? dateUtils.dateToStr(type, new Date(data.actualEndTime)) : '';
 
         str += '<div class="content" >' + '完成周期：' + startDay + ' - ' + endDay + '</div>'
-    }
+    }*/
     return {
         str: str,
         width: width

@@ -200,17 +200,19 @@ export default {
 
 <style lang="less" scoped>
     .view-article{
-       position: relative;
+        position: relative;
         background:#fff;
+        height: 54.3px;  
+        border-bottom:1px solid #F1F1F1;
         &:first-child{
             margin-top:0px;
             border-top:none; 
         }
         .view-channel{
-            border-bottom:1px solid #F1F1F1;
+            //border-bottom:1px solid #F1F1F1;
             position: relative;
             width: 100%;
-            height: 54px;  
+            //height: 54px;  
         }
     }
    

@@ -3,8 +3,12 @@
         :style="{
             background:data.status=='DISABLE'?'#E4E4E4':'#BCE590'
         }"
-        @mouseover="toolOver"
-        @mouseout="toolOut"
+        @mouseover="((event)=>{
+            this.toolOver(event,'2')
+        })"
+        @mouseout="((event)=>{
+            this.toolOut(event,'2')
+        })"
     >
         <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
         <div class="article"
@@ -17,8 +21,12 @@
                     left:planDetail.office * minCalibration + 'px',
                     color:'#666666'
                 }"
-                @mouseover="toolOver"
-                @mouseout="toolOut"
+                @mouseover="((event)=>{
+                    this.toolOver(event,data.status)
+                })"
+                @mouseout="((event)=>{
+                    this.toolOut(event,data.status)
+                })"
             >
                
             </div>
@@ -77,8 +85,9 @@ export default {
         },
     },
     methods:{
-        toolOver(event){
-            publicFn.poptipOver(event,this.data)
+        toolOver(event,param){
+            event.cancelBubble = true;
+            publicFn.poptipOver(event,this.data,param)
         },
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -150,11 +159,10 @@ export default {
 .every-view-col{
     height: 32px;
     position: absolute;
-    top: 0px;
+    top: 11px;
     width: 100%;
     left: 0px;
-
-    border-bottom: 1px solid #F1F1F1;
+    //border-bottom: 1px solid #F1F1F1;
     .tag{
         width: 50px;
         position: absolute;

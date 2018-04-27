@@ -148,6 +148,19 @@ export default {
                         "endDate":"1545017600000","startDate":"1526227200000","status":"0"
                     }
                     ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
+                },
+                {
+                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
+                    {
+                        "endDate":"1525017600000","startDate":"1524499200000","status":"1"
+                    },
+                    {
+                        "endDate":"1526140800000","startDate":"1525104000000","status":"0"
+                    },
+                    {
+                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
+                    }
+                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
                 }
             ];
         //this.getListData(this.params);

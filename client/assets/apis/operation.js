@@ -155,5 +155,20 @@ export default  {
         url: '/api/krspace-finance-web/coupon/city-list',
         method: 'get'
     },
+    //app管理--会员福利--下线福利
+    'coupon-offline': {
+        url: '/api/krspace-finance-web/coupon/offline',
+        method: 'post'
+    },
+    //app管理--会员福利--编辑福利
+    'edit-coupon': {
+        url: '/api/krspace-finance-web/coupon/edit',
+        method: 'post'
+    },
+    //app管理--会员福利--获取福利类型和范围
+    'get-city-and-type': {
+        url: '/api/krspace-finance-web/coupon/city-and-type',
+        method: 'get'
+    },
 }
   

@@ -336,7 +336,8 @@ export default {
                           })
                         }
                         
-                        
+                        this.imgCoverUrl=data.couponCover;
+                        this.imgLogoUrl=data.merchantLogo;
                         this.tagList=data.tags;
 
               }).catch((error)=>{

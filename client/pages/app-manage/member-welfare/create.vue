@@ -147,17 +147,17 @@
                                 v-model="formItem.couponScope" 
                             >
                                 <Radio 
-                                    label="0" 
+                                    label="1" 
                                     style="margin-right:120px;"
                                 >
                                     不限
                                 </Radio>
-                                <Radio label="1">
+                                <Radio label="0">
                                     部分城市
                                 </Radio>
                             </RadioGroup> 
                       </FormItem>
-                      <div class="u-community-content" v-if="formItem.couponScope=='1'">
+                      <div class="u-community-content" v-if="formItem.couponScope=='0'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
                               <FormItem label="选择城市"  style="width:250px;" >
@@ -205,7 +205,7 @@
                                 <span class="u-date-txt">至</span>
                             <DatePicker
                                     type="date"
-                                    v-model="formItem.endTime"
+                                    v-model="formItem.endtime"
                                     placeholder="请选择截止日期"
                                     style="width: 150px;margin-right:4px;"
                                     @on-change="endChange"
@@ -261,7 +261,7 @@ export default {
               title:'',
               descr:'',
               faceValue:'',
-              couponScope:0,
+              couponScope:1,
               beginTime:'',
               endTime:'',
               merchantAddress:'',
@@ -286,6 +286,7 @@ export default {
           cityList:[],
           checkCity:[],
           cityIds:[],
+          tagIds:[],
           addressLength:30,
           ruleCustom:{
             couponType:[
@@ -300,9 +301,9 @@ export default {
             faceValue:[
                 { required: true, message: '请输入福利面值', trigger:'change' }
             ],
-            getUrl:[
-                { required: true, message: '请输入领取链接', trigger:'change' }
-            ],
+            // getUrl:[
+            //     { required: true, message: '请输入领取链接', trigger:'change' }
+            // ],
             getTime:[
                 { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
@@ -326,6 +327,7 @@ export default {
                 
                 this.$http.post('create-tag', {name:this.tag}).then((res)=>{
                    this.tagList.push(res.data)
+                   this.tagIds.push(res.data.id)
                    this.tag='';
                 }).catch((error)=>{
                 this.$Notice.error({
@@ -334,9 +336,12 @@ export default {
                 });
         },
         deleteTag(index){
-            let tagList=this.tagList
+            let tagList=this.tagList;
+            let tagIds=this.tagIds;
             tagList.splice(index, 1);
+            tagIds.splice(index, 1);
             this.tagList=tagList;
+            this.tagIds=tagIds;
         },
         deleteCity(index){
             let checkCity=this.checkCity;
@@ -352,7 +357,7 @@ export default {
         },
         endChange(date){
             this.endDates=date;
-             this.changeTime();
+            this.changeTime();
         },
         startHourChange(date){
             this.startHour=date;
@@ -364,9 +369,11 @@ export default {
         },
         startHourClear(){
             this.startHour='00:00:00';
+            this.changeTime();
         },
         endHourClear(){
             this.endHour='00:00:00';
+            this.changeTime();
         },
         changeTime(){
             if(this.startDate && this.startHour){
@@ -378,6 +385,7 @@ export default {
             if(this.formItem.beginTime && this.formItem.endTime){
                 this.isTimeError=false;
             }
+           
         },
         coverSuccess(res,file){
             if(res.code==1){
@@ -443,9 +451,14 @@ export default {
                           this.isLogoError=true;
                     }
                }
-               this.formItem.cityIds=this.cityIds;
+               
+               this.formItem.cityIds=this.cityIds.join(',');
+               this.formItem.tagIds=this.tagIds.join(',');
+                
                 this.$refs[name].validate((valid) => {
-                    if (valid && (flag.indexOf(false)!=-1)) {
+                   // && (flag.length>0 && flag.indexOf(false)!=-1)
+                     console.log('flag---',flag,'valid',valid)
+                    if (valid ) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({

@@ -144,7 +144,7 @@
                 <DetailStyle info="福利领取信息">
                     <FormItem label="福利范围" style="width:400px" prop="couponScope">
                             <RadioGroup 
-                                v-model="formItem.targetType" 
+                                v-model="formItem.couponScope" 
                             >
                                 <Radio 
                                     label="0" 
@@ -157,22 +157,24 @@
                                 </Radio>
                             </RadioGroup> 
                       </FormItem>
-                      <div class="u-community-content" v-if="formItem.targetType=='1'">
+                      <div class="u-community-content" v-if="formItem.couponScope=='1'">
                           <div class="u-community-select">
                               <div class="u-small-trigon"></div>
                               <FormItem label="选择城市"  style="width:250px;" >
                                   <Select
-                                      v-model="formItem.cmtId"
+                                      v-model="id"
                                       filterable
                                       :remote-method="remoteCityMethod"
                                       :loading="cityLoading"
                                       placeholder="请选择"
                                       clearable
+                                      label-in-value
                                       @on-change="cityChange"
                                       >
                                       <Option v-for="(option, index) in cityList" :value="option.value" :key="index">{{option.label}}</Option>
                                   </Select>
-                                  <div class="u-tag-content u-tag-top">
+                              </FormItem>
+                              <div class="u-tag-content">
                                      <div 
                                         class="u-tag" 
                                         v-for="(item,index) in checkCity"
@@ -182,10 +184,9 @@
                                          {{item.label}}
                                      </div>
                                  </div>
-                              </FormItem>
                           </div>
                       </div>
-                       <FormItem label="领取有效期"  class="u-date" prop="getTime">
+                       <FormItem label="领取有效期"  class="u-date ivu-form-item-required" >
                                 <DatePicker
                                     type="date"
                                     v-model="formItem.startTime"
@@ -259,8 +260,9 @@ export default {
               title:'',
               descr:'',
               faceValue:'',
-
+              couponScope:0,
           },
+          id:'',
           imgCoverUrl:'',
           tag:'',
           imgLogoUrl:'',
@@ -278,6 +280,7 @@ export default {
           cityLoading:false,
           cityList:[],
           checkCity:[],
+          cityIds:[],
           ruleCustom:{
             couponType:[
                 { required: true, message: '请选择福利类型', trigger:'change' }
@@ -317,10 +320,10 @@ export default {
                     });
                     return;
                 }
-
-                this.$http.get('create-tag', {name:this.tag}).then((res)=>{
-                    this.tagList=res.data;
-                    this.tag='';
+                
+                this.$http.post('create-tag', {name:this.tag}).then((res)=>{
+                   this.tagList.push(res.data)
+                   this.tag='';
                 }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -333,9 +336,12 @@ export default {
             this.tagList=tagList;
         },
         deleteCity(index){
-            let checkCity=this.checkCity
+            let checkCity=this.checkCity;
+            let cityIds=this.cityIds;
             checkCity.splice(index, 1);
+            cityIds.splice(index, 1);
             this.checkCity=checkCity;
+            this.cityIds=cityIds;
         },
         startChange(date){
             this.startDate=date;
@@ -440,8 +446,38 @@ export default {
             })
       },
       cityChange(form){
-           
+          if(Object.keys(form).length === 0){
+              return;
+          }
+          let flag;
+           if(this.checkCity.length<=0){
+               this.checkCity.push(form);
+               this.cityIds.push(form.value)
+           }else{
+               flag=this.checkDup(this.checkCity,form);
+               if(!flag){
+                   this.checkCity.push(form);
+                   this.cityIds.push(form.value)
+               }
+
+           }
+         
       },
+       checkDup(array,obj){
+                var value= obj.value;
+                for (var i=0;i<array.length;i++){
+                    if(obj ){
+                        if(array[i]){
+                            var value1 = array[i].value;
+                            if(value === value1){
+                                return true;
+                            }
+                        }
+                    }
+                }
+            return false;
+        },
+      
        //社区
       remoteCityMethod(query){
         if (query!== '') {
@@ -470,6 +506,7 @@ export default {
                     obj.value = item.id;
                     return obj;
                 });
+
                 _this.cityList = list;
             }).catch((err)=>{
                 this.$Notice.error({
@@ -568,14 +605,15 @@ export default {
         
     }
     .u-community-content{
-        width:284px;
         min-height:114px;
         margin-top: -10px;
-        display: inline-block;
+        min-width:284px;
+        max-width:600px;
+    
          .u-community-select{
               min-width:284px;
               min-height:100px;
-             // max-width:284px;
+              max-width:540px;
               display: inline-block;
               padding-top:20px;
               padding-left:10px;
@@ -634,7 +672,8 @@ export default {
     }
     .u-tag-content{
         padding-left:10px;
-        display: inline;
+        display: inline-block;
+        width:540px;
        .u-tag{
            padding:0 10px;
            height:32px;
@@ -646,6 +685,7 @@ export default {
            position: relative;
            color:#499DF1;
            margin-right:20px;
+           margin-bottom:10px;
            .u-tag-close{
                height:16px;
                width:16px;
@@ -657,10 +697,7 @@ export default {
            }
        } 
     }
-    .u-tag-top{
-        margin-top:18px;
-    }
-
+   
   
 }
 </style>

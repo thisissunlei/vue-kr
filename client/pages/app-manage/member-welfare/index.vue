@@ -59,7 +59,7 @@ export default {
            totalCount:0,
            tableList:[],
            openCancel:false,
-           tabParams:{
+           Params:{
               pageSize:15,
               page:1, 
            },
@@ -218,25 +218,25 @@ export default {
             }
      },
     changePage(page){
-        this.tabParams.page=page;
+        this.Params.page=page;
         this.page=page;
-        this.getTableData(this.tabParams);
+        this.getTableData(this.Params);
     },
     submitDown(){
             let params={
                     couponId: this.couponId
                 }
-                // this.$http.post('delete-notification', params).then((res)=>{
-                //     this.$Notice.success({
-                //         title:'删除成功'
-                //     });  
-                //     this.openDelete();
-                //     this.getTableData(this.Params);
-                // }).catch((err)=>{
-                //     this.$Notice.error({
-                //         title:err.message
-                //     });
-                // })
+                this.$http.post('coupon-offline', params).then((res)=>{
+                    this.$Notice.success({
+                        title:'下线成功'
+                    });  
+                    this.openDown();
+                    this.getTableData(this.Params);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
                  
     },
     getTableData(params){

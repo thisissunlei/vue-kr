@@ -39,6 +39,19 @@
                 <Button type="ghost" style="margin-left: 8px" @click="openDown">取消</Button>
             </div>
         </Modal>
+        <Modal
+                v-model="openSearch"
+                title="高级查询"
+                ok-text="确定"
+                cancel-text="取消"
+                width="660"
+        >
+                <HighSearch @formData="getSearchData"></HighSearch>
+                <div slot="footer">
+                    <Button type="primary" @click="searchSubmit">确定</Button>
+                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                </div>
+        </Modal>
 
  </div>
 </template>
@@ -46,11 +59,13 @@
 import SectionTitle from '~/components/SectionTitle';
 import SearchForm from '~/components/SearchForm';
 import utils from '~/plugins/utils';
+import HighSearch from './highSearch';
 
 export default {
   components:{
       SectionTitle,
-      SearchForm
+      SearchForm,
+      HighSearch
   },
   data(){
       return{
@@ -59,6 +74,7 @@ export default {
            totalCount:0,
            tableList:[],
            openCancel:false,
+           openSearch:false,
            Params:{
               pageSize:15,
               page:1, 
@@ -218,7 +234,7 @@ export default {
 //       this.getTableData(this.Params);
 //   },
   methods:{
-      onSubmit(form){ 
+    onSubmit(form){ 
           if(this.Params.title){
             this.Params.title="";
           }
@@ -228,7 +244,7 @@ export default {
           let params=Object.assign(form,this.Params);
           utils.addParams(params);
       },
-       showSearch (params) {
+    showSearch (params) {
         utils.clearForm(this.searchData);
         this.openSearch=!this.openSearch;
       },
@@ -279,6 +295,17 @@ export default {
                 });
             })
         
+      },
+       getSearchData(form){
+            this.searchData=form;
+      },
+       searchSubmit(){
+            let params=Object.assign(this.Params,this.searchData);
+            utils.addParams(params);
+      },
+       showSearch (params) {
+        utils.clearForm(this.searchData);
+        this.openSearch=!this.openSearch;
       },
 
 

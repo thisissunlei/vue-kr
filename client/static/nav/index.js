@@ -98,13 +98,17 @@
     }
     //导航渲染
     var GlobalNav = function () {
+       
+        
         this.state = {
             navs: [],
             user: {
                 nickname: ''
             },
             salidNav: [],
+            
         };
+        this.menuBtnBacks = [];
         this.isInit = false;
         this.html = '<div class="app-header">' +
 
@@ -136,16 +140,6 @@
 
             '<div id="j_sidebar" class="sidebar" style = "display:none;"> ${sidebar} </div> ' +
             '<div id="j_nav-loading" class="nav-loading" style="display:none;">' +
-
-            // '<div class="item-loader-container">'+
-
-            //     '<div class="la-2x" >'+
-            //         '<div></div>'+
-            //         '<div></div>'+
-
-            //     '</div >'+
-            //     '<span>加载中...<span>'+
-            // '</div >'+
             '</div>' +
             '</div>' +
 
@@ -187,7 +181,14 @@
         return html;
 
     }
-
+    //侧边栏开关监听
+    GlobalNav.prototype.listenSidebarOpen= function (callback) {
+        if (!callback){
+            return;
+        }
+        console.log(this,"pppppppp")
+        globalNav.menuBtnBacks.push(callback);
+    }
     //用户名
     GlobalNav.prototype.getUserHtmlStr = function () {
         return this.state.user.nickname;
@@ -235,7 +236,17 @@
         }
         return html;
     }
-
+    GlobalNav.prototype.menuBtnBackRender = function (flag) {
+        if (!this.menuBtnBacks || !this.menuBtnBacks.length){
+            return;
+        }
+        for (var i = 0; i < this.menuBtnBacks.length; i++) {
+            var everyCallback = this.menuBtnBacks[i];
+            if (everyCallback){
+                everyCallback(flag);
+            }
+        }
+    }
 
 
     GlobalNav.prototype.allSwitch = function (isOpen) {
@@ -275,8 +286,15 @@
             var j_account_list = document.querySelectorAll('.j_account_list');
             var j_account_detail_mask = document.getElementById('j_account_detail_mask');
             var j_more_id = document.getElementById('more-id')
+            //===按钮被点击
             j_menu_btn.addEventListener('click', function () {
                 if (!navUtils.isHome) {
+                    console.log(j_menu_btn.className)
+                    var open = true;
+                    if (j_menu_btn.className.indexOf('menu-btn-open')>0){
+                        open = false;
+                    }
+                    globalNav.menuBtnBackRender(open);
                     globalNav.allSwitch()
                 }
             });
@@ -398,6 +416,10 @@
     var globalNav = new GlobalNav();
     var Router = new GlobalRouter();
     global.GLOBALSIDESWITCH = Router.pushCloseRoutrs;
+    // global.GLOBALHEADERSET = Router.setDefaultHeader;
+    // global.listenSidebarOpen = Router.listenSidebarOpen;
+    global.LISTENSIDEBAROPEN = globalNav.listenSidebarOpen;
+
     global.GLOBALHEADERSET = Router.setDefaultHeader;
     
 
@@ -510,12 +532,12 @@
                             type:'vue',
                             menuCode: 'customer_assets'
                         },
-                        // {
-                        //     primaryText: '客户管理',
-                        //     router: 'customer-manage/manage',
-                        //     type:'vue',
-                        //     menuCode: 'customer_center'
-                        // },
+                        {
+                            primaryText: '客户管理',
+                            router: 'customer-manage/manage',
+                            type:'vue',
+                            menuCode: 'customer_center'
+                        },
                         {
                             primaryText: "客户管理员",
                             router: 'member/setting-manager',
@@ -604,6 +626,18 @@
                             primaryText: '工位',
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
+                        },
+                        {
+                            primaryText: "每日库存查询",
+                            router: 'inventory/daily-inventory',
+                            type: 'vue',
+                            menuCode: 'daily_inventory',
+                        },
+                        {
+                            primaryText: "可租商品查询",
+                            router: 'inventory/optional-inventory',
+                            type: 'vue',
+                            menuCode: 'inventory',
                         },
                         {
                             primaryText: '注册地址',

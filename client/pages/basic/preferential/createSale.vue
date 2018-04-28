@@ -25,9 +25,20 @@
         data () {
             const validateDiscount = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.formItem.startDate)<new Date(value)){
-                    callback(new Error('首付款日期不得晚于起始日期'));
+                    callback(new Error('请先填写折扣'));
+                } else if(!(/^(\d|[0-9])(\.\d)?$/.test(value))){
+                    callback(new Error('折扣只能为一位小数或整数'));
+                }else{
+                     callback();
+                }
+            };
+            const validatemonth = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请填写免租期限'));
+                } else if(isNaN(value)){
+                    callback(new Error('免租期限只能是整数'));
+                }else if(value>12 || value<1){
+
                 }else{
                      callback();
                 }
@@ -56,7 +67,7 @@
                         { required: true,message: '请填写免租天数', trigger: 'change' }
                     ],
                     discount: [
-                        { required: true,message: '请填写折扣', trigger: 'change' }
+                        { required: true, trigger: 'change' ,validator: validateDiscount }
                     ],
                 }
                 

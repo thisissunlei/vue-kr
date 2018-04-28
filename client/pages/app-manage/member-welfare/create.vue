@@ -456,7 +456,6 @@ export default {
                this.formItem.tagIds=this.tagIds.join(',');
                 
                 this.$refs[name].validate((valid) => {
-                     console.log('flag---',flag,'valid',valid)
                     if (valid && flag.indexOf('no')==-1) {
                         _this.submitCreate();
                     } else {

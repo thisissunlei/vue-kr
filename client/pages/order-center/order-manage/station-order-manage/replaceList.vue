@@ -27,7 +27,7 @@
 
             <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
             <div  class='list-footer'>
-                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
+                    <!-- <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/> -->
                     <div style="float: right;">
                         <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>

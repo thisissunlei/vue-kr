@@ -301,9 +301,9 @@ export default {
             faceValue:[
                 { required: true, message: '请输入福利面值', trigger:'change' }
             ],
-            // getUrl:[
-            //     { required: true, message: '请输入领取链接', trigger:'change' }
-            // ],
+            getUrl:[
+                { required: true, message: '请输入领取链接', trigger:'change' }
+            ],
             getTime:[
                 { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
@@ -433,21 +433,21 @@ export default {
                 let _this = this;
                
                if(!this.formItem.beginTime ){
-                   flag.push(false);
+                   flag.push('no');
                    this.isTimeError=true;
                }
                if(!this.formItem.endTime){
-                   flag.push(false);
+                   flag.push('no');
                    this.isTimeError=true;
                }
               
                if(!this.formItem.couponCover){
-                  flag.push(false);
+                  flag.push('no');
                    this.isCoverError=true;
                }
                if(this.formItem.couponType=="OFFLINESTORE"){
                     if(!this.formItem.merchantLogo){
-                          flag.push(false)
+                          flag.push('no')
                           this.isLogoError=true;
                     }
                }
@@ -456,9 +456,8 @@ export default {
                this.formItem.tagIds=this.tagIds.join(',');
                 
                 this.$refs[name].validate((valid) => {
-                   // && (flag.length>0 && flag.indexOf(false)!=-1)
                      console.log('flag---',flag,'valid',valid)
-                    if (valid ) {
+                    if (valid && flag.indexOf('no')==-1) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({
@@ -468,7 +467,7 @@ export default {
                 })
       },
       submitCreate(){
-          console.log(this.formItem,this.formItem)
+          console.log('this.formItem',this.formItem)
           //return
             this.$http.post('create-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({

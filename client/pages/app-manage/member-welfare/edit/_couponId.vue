@@ -511,9 +511,9 @@ export default {
                this.formItem.tagIds=this.tagIds.join(',');
                 
                 this.$refs[name].validate((valid) => {
-                   // && (flag.length>0 && flag.indexOf(false)!=-1)
+                 
                      console.log('flag---',flag,'valid',valid)
-                    if (valid ) {
+                    if (valid && flag.indexOf('no')==-1) {
                         _this.submitCreate();
                     } else {
                         _this.$Notice.error({

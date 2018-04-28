@@ -247,6 +247,7 @@
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import IconTip from '~/components/IconTip';
+import dateUtils from 'vue-dateutils';
 
 export default {
   components:{
@@ -335,10 +336,35 @@ export default {
                               return item;
                           })
                         }
-                        
                         this.imgCoverUrl=data.couponCover;
                         this.imgLogoUrl=data.merchantLogo;
                         this.tagList=data.tags;
+                        this.formItem.startTime=data.beginTime;
+                        this.formItem.endtime=data.endTime;
+                        let starttime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.beginTime));
+                        let endtime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.endTime));
+                        this.formItem.beginTime=starttime;
+                        this.formItem.endTime=endtime;
+                        let startHour=starttime.substr(11,5)
+                        let endHour=endtime.substr(11,5)
+                        this.formItem.startHour=startHour;
+                        this.formItem.endHour=endHour;
+                        let tagIds=[],cityIds=[];
+                        if(data.tags){
+                            data.tags.map((item,index)=>{
+                              tagIds.push(item.id)
+                            })
+                             this.tagIds=tagIds;
+                            this.formItem.tagIds=tagIds.join(',');
+                        }
+                        if(data.citys){
+                            data.citys.map((item,index)=>{
+                              cityIds.push(item.id)
+                            })
+                            this.cityIds=cityIds;
+                            this.formItem.cityIds=cityIds.join(',');
+                        }
+                        
 
               }).catch((error)=>{
                 this.$Notice.error({
@@ -498,7 +524,7 @@ export default {
       },
       submitCreate(){
           console.log(this.formItem,this.formItem)
-          //return
+         
             this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'

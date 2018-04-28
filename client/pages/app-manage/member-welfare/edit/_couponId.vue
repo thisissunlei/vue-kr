@@ -302,9 +302,9 @@ export default {
             faceValue:[
                 { required: true, message: '请输入福利面值', trigger:'change' }
             ],
-            // getUrl:[
-            //     { required: true, message: '请输入领取链接', trigger:'change' }
-            // ],
+            getUrl:[
+                { required: true, message: '请输入领取链接', trigger:'change' }
+            ],
             getTime:[
                 { required: true, message: '请选择领取有效期', trigger:'change' }
             ],
@@ -345,10 +345,15 @@ export default {
                         let endtime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.endTime));
                         this.formItem.beginTime=starttime;
                         this.formItem.endTime=endtime;
-                        let startHour=starttime.substr(11,5)
-                        let endHour=endtime.substr(11,5)
+                        
+                        let startHour=starttime.substr(11,5);
+                        let endHour=endtime.substr(11,5);
                         this.formItem.startHour=startHour;
                         this.formItem.endHour=endHour;
+                        this.startDate = starttime.substr(0,11)
+                        this.startHour = startHour;
+                        this.endDates = endtime.substr(0,11);
+                        this.endHour = endHour;
                         let tagIds=[],cityIds=[];
                         if(data.tags){
                             data.tags.map((item,index)=>{
@@ -411,8 +416,10 @@ export default {
             this.changeTime();
         },
         endChange(date){
+            
             this.endDates=date;
             this.changeTime();
+           
         },
         startHourChange(date){
             this.startHour=date;
@@ -440,7 +447,6 @@ export default {
             if(this.formItem.beginTime && this.formItem.endTime){
                 this.isTimeError=false;
             }
-           
         },
         coverSuccess(res,file){
             if(res.code==1){
@@ -509,7 +515,7 @@ export default {
                
                this.formItem.cityIds=this.cityIds.join(',');
                this.formItem.tagIds=this.tagIds.join(',');
-                
+               
                 this.$refs[name].validate((valid) => {
                     if (valid && flag.indexOf('no')==-1) {
                         _this.submitCreate();
@@ -521,8 +527,6 @@ export default {
                 })
       },
       submitCreate(){
-          console.log(this.formItem,this.formItem)
-         
             this.$http.post('edit-coupon', this.formItem).then((res)=>{
                 this.$Notice.success({
                         title:'编辑成功'

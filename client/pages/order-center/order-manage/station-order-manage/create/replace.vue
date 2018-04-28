@@ -1625,12 +1625,12 @@
                 })
             },
             checkDiscount(){
-                let value = this.discountNum;
+                let value = this.discountCon;
                 if(isNaN(value)){
                     this.$Notice.error({
                         title:'折扣必须为数字'
                     })
-                    this.discountNum = this.discount.minDiscount;
+                    this.discountCon = this.discount.minDiscount;
                     return;
                 }
                 var pattern =/^[0-9]+(.[0-9]{1})?$/;
@@ -1644,14 +1644,14 @@
                     this.$Notice.error({
                         title:'折扣不得小于'+this.discount.minDiscount
                     })
-                    this.discountNum = this.discount.minDiscount;
+                    this.discountCon = this.discount.minDiscount;
                     return;
                 }
                 if(value>9.9){
                     this.$Notice.error({
                         title:'折扣不得大于9.9'
                     })
-                    this.discountNum = this.discount.minDiscount;
+                    this.discountCon = this.discount.minDiscount;
                     return;
                 }
             },

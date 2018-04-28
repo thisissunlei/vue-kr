@@ -894,16 +894,17 @@
                 })
             },
             next(name){
+                this.errorObj = {}
                 if(name == 'formItemTwo'){
                     if(!this.selectedOldStation.length){
                         this.errorObj.oldStation = true;
                     }else{
                         this.errorObj.oldStation = false;
                     }
+                }else{
+                    this.errorObj.oldStation = false;
                 }
-                if(this.errorObj.oldStation){
-                    return
-                }
+                
 
                 this.$refs[name].validate((valid) => {
 

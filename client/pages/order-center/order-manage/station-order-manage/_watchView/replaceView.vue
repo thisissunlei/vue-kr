@@ -1091,8 +1091,18 @@
                 this.$http.get('get-order-seat', params).then( r => {
                     this.selectAllAbled = true;
                     this.oldStation = r.data.map(item=>{
+                        if(this.formItem.leaseBegindate){
+                            let time = new Date(this.formItem.leaseBegindate).getTime();
+                             //判断当前已选工位是否符合开始时间
+                            if(time<item.startDate || time>item.endDate){
+                                item.disabled = true;
+                                this.selectAllAbled = true;
+                            }else{
+                                item.disabled = false;
+                            }       
+                        }
                         item.checked = false;
-                        item.disabled = true;
+                        // item.disabled = true;
                         return item
                     })
                     if(this.formItem.oldSeatInfo.length){
@@ -1135,6 +1145,7 @@
                 var today = new Date()
                 this.selectAllChecked = false;
                 this.selectAllAbled = false;
+                this.formItem.oldSeatInfo = []
                 today = today.setDate(today.getDate()+1);
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
                 today = new Date(today).getTime()

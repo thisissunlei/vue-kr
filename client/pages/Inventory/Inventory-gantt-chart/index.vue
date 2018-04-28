@@ -27,10 +27,11 @@
                                 v-if="!isLoading"
                             >
                                 <ListTable
-                                    v-for="item in listData"
-                                    :key="item.id"
+                                    v-for="(item,index) in listData"
+                                    :key="index"
                                     :data="item"
-                                    test="PREPARE"
+                                    :index="index"
+                                    :allData="listData"
                                 />
                             </div>
                             <div class='view-bottom-more' v-if="listData.length" :style="{height:scrollWidth+'px'}"></div>
@@ -386,7 +387,7 @@ export default {
 
 <style lang="less" scoped>
     .chart-inventory-left{
-        width:150px;
+        width:185px;
         border: 1px solid #F6F6F6;
         display:inline-block;
         border-bottom: none;

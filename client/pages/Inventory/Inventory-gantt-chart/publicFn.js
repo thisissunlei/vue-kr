@@ -114,24 +114,25 @@ function getToolTipContent(thatData,param) {
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
     }else if(thatData.status!='DISABLE'&&param=='2'){
-        label="在租";
+        label="未租";
     } 
-    var str = '<div class="title">' + label + '</div>';
+    var str = '<div class="title">' + label + ':</div>';
     var data = Object.assign({}, thatData);
-    var width = 155;
+    //var width = 155;
+    var width = 280;
     if (data.endDate && data.startDate) {
-        var type = 'MM/DD';
+        /*var type = 'MM-DD';
 
         var startYear = (new Date(data.startDate)).getFullYear();
         var endYear = (new Date(data.endDate)).getFullYear();
         if (startYear !== endYear) {
-            type = 'YYYY/MM/DD';
+            type = 'YYYY-MM-DD';
             width = 220;
-        }
-        
-        var startDay = data.startDate ? dateUtils.dateToStr(type, new Date(data.startDate)) : '';
-        var endDay = data.endDate ? dateUtils.dateToStr(type, new Date(data.endDate)) : '';
-        str += '<div class="content">' + startDay + ' - ' + endDay + '</div>'
+        }*/
+
+        var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) : '';
+        var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) : '';
+        str += '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
 
     }
     /*if (data.taskStatus !== "UNKNOWN"
@@ -169,7 +170,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    if (detail.top + detail.height < parseInt(tirDom.style.top) + 264 + 100) {
+    if (detail.top + detail.height < parseInt(tirDom.style.top) + 290 + 100) {
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 + 'px';
         angleDom.className = 'top-triangle';
         angleDom.style.top = parseInt(angleDom.style.top) - 35 + "px";

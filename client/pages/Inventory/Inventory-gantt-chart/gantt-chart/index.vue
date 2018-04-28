@@ -666,7 +666,7 @@ export default {
         padding-left:25px;
         #gantt-chart-tool-tip{
             width: 250px;
-            min-height: 50px;
+            //min-height: 50px;
             opacity: 0;
             background: rgba(70,76,91,.9);
             position: absolute;
@@ -681,11 +681,13 @@ export default {
             .title{
                 font-size: 14px;
                 background: transparent;
+                display:inline-block;
             }
             .content{
-                font-size: 12px;
+                font-size: 14px;
                 padding: 0px;
                 background: transparent;
+                display:inline-block;
             }
         }
         .top-triangle{
@@ -714,7 +716,7 @@ export default {
         .right-draw{
             position: absolute;
             overflow:auto;
-            left: 175px;
+            left: 210px;
             right: 0px;
             .time-shaft-fixed{
                 position: absolute;

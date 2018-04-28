@@ -202,7 +202,7 @@ export default {
     .view-article{
         position: relative;
         background:#fff;
-        height: 54.3px;  
+        height: 54px;  
         border-bottom:1px solid #F1F1F1;
         &:first-child{
             margin-top:0px;

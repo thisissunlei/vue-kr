@@ -1,11 +1,20 @@
-<template>   
-        <div class='detail-li' :data-box-id="data.id"
-         @mouseover="overShow(data.id)"
-         @mouseout="outHide(data.id)"
-        >
-            <div>{{data.name}}</div>
-            <div>{{data.name}}</div>
-        </div>
+<template> 
+    <div class='inventory-gatt-left-list'>
+        <Tooltip  :placement="index==allData.length-1?'top':'bottom'">
+            <div slot="content" class='list-content'>
+                <p>工位单价：{{data.unitPrice}}</p>
+                <p>商品总价：{{data.quotedPrice}}</p>
+                <p>补充描述：{{data.propertyDesc}}</p>
+            </div>
+            <div class='detail-li' :data-box-id="data.id"
+            @mouseover="overShow(data.id)"
+            @mouseout="outHide(data.id)"
+            >
+                <div>{{data.name}}</div>
+                <div>{{data.location}}</div>
+            </div>
+        </Tooltip>
+    </div>
 </template>
 
 
@@ -16,6 +25,13 @@ export default {
        data:{
            type:Object,
            default:{}
+       },
+       index:{
+           type:[String,Number],
+       },
+       allData:{
+           type:Array,
+           default:[]
        }
     },
     data(){
@@ -60,7 +76,23 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+  .inventory-gatt-left-list{
+        width:100%;
+        .ivu-tooltip{
+            width:100%;
+            .ivu-tooltip-rel{
+                width:100%;
+            }
+            .ivu-tooltip-popper{
+                max-width:200px;
+                word-break:break-all;
+                word-wrap: break-word; 
+                .ivu-tooltip-inner{
+                    white-space:normal;
+                }
+            }
+        }
         .detail-li{
            width:100%;
            height:54px;
@@ -91,4 +123,5 @@ export default {
                 }
             }
         }
+  }
 </style>

@@ -19,7 +19,7 @@
                                <Loading/>
                             </div> 
                         </Table>
-                        <SlotHead v-if="theHead" indentify="optional"/>
+                        <SlotHead :class="theHead?'header-here':'header-no'" indentify="optional"/>
                         <div class='spin-position-fix' v-if="spinLoading">
                             <Spin fix size="large"></Spin>
                         </div>
@@ -40,7 +40,7 @@
 
     <Modal
         v-model="openStatistical"
-        title="统计信息"
+        :title="'统计信息  (统计自当前筛选结果共'+totalCount+'条)'"
         class-name="vertical-center-modal"
         width="600"
      >
@@ -106,6 +106,7 @@ var layoutScrollHeight=0;
                 totalCount:0,
                 dailyData:[],
                 dailyOldData:[],
+                optionalIndentify:[],
                 dailyInnerData:[],
                 columns: [
                     {
@@ -238,7 +239,7 @@ var layoutScrollHeight=0;
                 ]    
             }
         },
-        mounted(){        
+        mounted(){      
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('optional-inventory-table-list');
             this.left=dailyTableDom.getBoundingClientRect().left;
@@ -264,12 +265,14 @@ var layoutScrollHeight=0;
             },
             //获取列表数据
             getTableData(values){
+                this.optionalIndentify=[];
                 var params=Object.assign({},values);
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
                 params.startDate=this.dateSwitch(params.startDate);
                 params.endDate=this.dateSwitch(params.endDate);
                 this.$http.get('getOptionalInventory', params).then((res)=>{
                     this.dailyData=res.data.items;
+                    this.optionalIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.loading=false;
                     this.spinLoading=false;
@@ -294,7 +297,11 @@ var layoutScrollHeight=0;
             },
             //格式转换
             dateSwitch(data){
-                return data?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data)):'';
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
             },
             //获取统计数据
             getStatistal(){
@@ -315,7 +322,7 @@ var layoutScrollHeight=0;
                 this.getStatistal();
             },
             //滚动监听
-            onScrollListener(){    
+            onScrollListener(){  
                 var dom=document.getElementById('layout-content-main');
                 var headDom=document.getElementById('slot-head-optional-inventory');
                 if(headDom){
@@ -338,6 +345,9 @@ var layoutScrollHeight=0;
                 var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
                 if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
                     if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    if(!this.optionalIndentify.length){
                         return ;
                     }
                     this.spinLoading=true;
@@ -365,6 +375,7 @@ var layoutScrollHeight=0;
                 this.getTableData(this.tabForms);
             },
             submitExport(){
+                this.tabForms.inventoryDate=this.dateSwitch(this.tabForms.inventoryDate);
                 this.tabForms.startDate=this.dateSwitch(this.tabForms.startDate);
                 this.tabForms.endDate=this.dateSwitch(this.tabForms.endDate);
                 utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export-available');
@@ -444,6 +455,13 @@ var layoutScrollHeight=0;
                     padding:0;
                     padding-right:5px;
                 }
+            }
+            .header-here{
+                opacity:1;
+            }
+            .header-no{
+                transition: opacity 0.2 ease;
+                opacity: 0;
             }
         }
     }

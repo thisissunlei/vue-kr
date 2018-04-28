@@ -2,6 +2,7 @@
     <div >
 
         <!-- 甘特图部分 -->
+
         <GanttChart
             v-if = "!isLoading"
             type='view'
@@ -17,7 +18,7 @@
         >
              <div class='chart-tab-left' slot="leftBar">
                 <div class='chart-left'>
-                    <Tabs size="small" :value="tabValue" @on-click="tabsClick">
+                    <Tabs size="small" :value="tabValue" :animated="false" @on-click="tabsClick">
                         <TabPane label="待开业项目" name="name1">
 
                             <div class='chart-left-table' v-if="mask">
@@ -86,6 +87,8 @@
             </div>
         </GanttChart>
         <!-- 左侧切换部分内容 -->
+      
+
         <Modal
             v-model="openSure"
             title="提示"
@@ -97,29 +100,32 @@
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
+         <Drawer
+            :openDrawer="openEditTask"
+            iconType="view-icon"
+            :close="cancelEditTask"
+            width="735"
+        >
+
+            <ObjectDetailTitle slot="title" :taskStatus="taskStatus" :data="getEdit" />
+            <EditTask
+                :id="editId"
+                @dataChange="dataChange"
+                v-if="openEditTask"
+                :getEdit="Object.assign({},getEdit)"
+            />
+        </Drawer>
 
         <Modal
-                v-model="openEditTask"
-                title="编辑任务"
-                width="660"
-            >
-                <EditTask :id="editId"  @bindData="onEditChange" v-if="openEditTask" ref="fromFieldTask" :getEdit="getEdit"/>
-                <div slot="footer" style="text-align: center;">
-                    <Button type="ghost" style="margin-right:22px;color:#FF6868;border-color:#FF6868;box-shadow:0 1px 4px 0;" @click="cancelTask">删除任务</Button>
-                    <Button type="primary" @click="submitEditTask('formItem')">确认编辑</Button>
-                </div>
-        </Modal>
-
-        <Modal
-                v-model="openDelete"
-                title="删除任务"
-                width="400"
-            >
-                <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
-                <div slot="footer">
-                    <Button type="primary" @click="submitDelete">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
-                </div>
+            v-model="openDelete"
+            title="删除任务"
+            width="400"
+        >
+            <p style="text-align:center;">删除任务后不可恢复，确定要继续删除任务吗？</p>
+            <div slot="footer">
+                <Button type="primary" @click="submitDelete">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelTask">取消</Button>
+            </div>
         </Modal>
 
         <Message
@@ -137,9 +143,13 @@
 import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
+import ObjectDetailTitle from '../project-detail/object-detail-title'
 import EditTask from '../project-detail/edit-task';
 import GanttChart from '../gantt-chart';
 import Message from '~/components/Message';
+import Drawer from '~/components/Drawer';
+import Loading from '~/components/Loading';
+
 import publicFn from '../publicFn';
 import Vue from 'vue';
 
@@ -150,8 +160,11 @@ export default {
     components:{
         GanttChart,
         ListTable,
+        Message,
+        Drawer,
         EditTask,
-        Message
+        ObjectDetailTitle,
+        Loading
     },
     data(){
         return{
@@ -181,7 +194,7 @@ export default {
             scrollWidth:0,
             isLoading:false,
             upperError:false,
-
+            taskStatus:'',
             tabValue:'name1',
 
             treeMiddle:[],
@@ -195,25 +208,10 @@ export default {
         this.leftOver();
         this.rightOver();
         setTimeout(() => {
-
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
               publicFn.windowResize();
         }, 400);
 
-        window.onresize=function(){
-            publicFn.windowResize();
-            // var leftDom=document.getElementById('vue-chart-left-table-list');
-            // var rightDom = document.getElementById("vue-chart-right-draw-content");
-            // var clientHeight = document.documentElement.clientHeight;
-            // var dom = document.getElementById('layout-content-main');
-            // dom.style.height = document.documentElement.clientHeight-130 + "px"
-            // leftDom.style.maxHeight = clientHeight - 362+"px";
-            // rightDom.style.maxHeight = clientHeight - 362 +"px";
-        }
+        window.addEventListener('resize', publicFn.windowResize,false)
     },
 
     methods:{
@@ -224,6 +222,11 @@ export default {
                 leftDom.addEventListener('scroll',this.scroll);
                 rightDom.removeEventListener('scroll',this.rightScroll);
             }
+        },
+         //编辑对象传递校验
+        dataChange(params){
+            var data = Object.assign({},params);
+            this.submitEditTask(data)
         },
         rightOver(event){
             var rightDom=document.getElementById('vue-chart-right-draw-content');
@@ -405,17 +408,23 @@ export default {
             return str;
         },
         //打开编辑任务
-        editTask(id,parentId){
+        editTask(id,callback){
             this.editId=id;
-            this.propertyId=parentId;
             this.$http.get('project-get-task',{id:id}).then((response)=>{
-            this.getEdit=response.data;
-            this.getEdit.planStartTime=this.timeApplyFox(this.getEdit.planStartTime,true);
-            this.getEdit.planEndTime=this.timeApplyFox(this.getEdit.planEndTime,true);
-            this.getEdit.actualStartTime=this.timeApplyFox(this.getEdit.actualStartTime,true);
-            this.getEdit.actualEndTime=this.timeApplyFox(this.getEdit.actualEndTime,true)
-            this.getEdit.focus=this.getEdit.focus==1?'1':'0';
-            this.cancelEditTask();
+                var data = Object.assign({},response.data)
+
+                data.planStartTime=this.timeApplyFox(data.planStartTime,true);
+                data.planEndTime=this.timeApplyFox(data.planEndTime,true);
+                data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
+                data.actualEndTime=this.timeApplyFox(data.actualEndTime,true)
+                data.focus=data.focus==1?'1':'0';
+                this.getEdit=Object.assign({},data);
+                this.taskStatus = data.taskStatus;
+                if(!callback){
+                    this.cancelEditTask();
+                }else{
+
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                 title: error.message,
@@ -428,38 +437,16 @@ export default {
             this.editData=params;
         },
         //编辑任务提交
-        submitEditTask(name){
-            var newPageRefs = this.$refs.fromFieldTask.$refs;
-            var isSubmit = true;
-            newPageRefs[name].validate((valid,data) => {
-                if (!valid) {
-                    isSubmit = false
-                }
-            })
-            if(!isSubmit){
-                return;
-            }
-            if(this.upperError){
-                return ;
-            }
-            if(this.editData.error){
-                this.$Notice.error({
-                    title: '任务名称重复'
-                });
-                return ;
-            }
-            var dataParams=this.editData;
-            dataParams.focus=dataParams.focus=='1'?1:0;
-            dataParams.type='STAGETASK';
+        submitEditTask(params,callback){
+
+            var dataParams = Object.assign({},params);
             dataParams.id=this.editId;
-            dataParams.pid=0;
-            dataParams.propertyId=this.propertyId;
             dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
             dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
             dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
             dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
             this.$http.post('project-edit-task',dataParams).then((response)=>{
-                this.cancelEditTask();
+                // this.cancelEditTask();
                 this.params.page=1;
                 this.getListData(this.params);
                 this.getTreeData();
@@ -467,10 +454,11 @@ export default {
                 if(response.code>1){
                     this.cancelSure();
                 }else{
-                this.MessageType="success";
-                this.openMessage=true;
-                this.warn="编辑成功";
+                    this.MessageType="success";
+                    this.openMessage=true;
+                    this.warn="编辑成功";
                 }
+                this.editTask(this.editId,()=>{});
 
                 this.scrollPosititon();
             }).catch((error)=>{
@@ -525,14 +513,7 @@ export default {
                 this.params.page=1;
                 this.getListData(this.params);
             }
-            setTimeout(() => {
-                // var leftDom=document.getElementById('vue-chart-left-table-list');
-                // var rightDom = document.getElementById("vue-chart-right-draw-content");
-                // var clientHeight = document.documentElement.clientHeight;
-                // leftDom.style.maxHeight = clientHeight - 362+"px";
-                // rightDom.style.maxHeight = clientHeight - 362 +"px";
-                publicFn.windowResize();
-            }, 200);
+
         },
 
         //获取今天日期
@@ -621,6 +602,7 @@ export default {
                     // width:58px !important;
                     // left: 56px;
                     top: auto;
+                    border:0px;
                 }
             }
             .chart-left-table{

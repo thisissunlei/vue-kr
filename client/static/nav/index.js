@@ -73,8 +73,11 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value)[0];
-        j_li.setAttribute("class", "active");
+        var j_li = document.getElementsByName(value);
+        if(j_li.length){
+            j_li[0].setAttribute("class", "active");
+        }
+        
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -209,6 +212,7 @@
 
             if (item.menuItems && item.menuItems.length) {
                 href = item.menuItems[0].menuItems[0].router;
+                item.type = item.menuItems[0].menuItems[0].type || ''
             }
             href = setHref(item.type, href)
             //默认第一个（毅豪说的）
@@ -416,6 +420,8 @@
     // global.listenSidebarOpen = Router.listenSidebarOpen;
     global.LISTENSIDEBAROPEN = globalNav.listenSidebarOpen;
 
+    global.GLOBALHEADERSET = Router.setDefaultHeader;
+    
 
     Router.init();
     //第一级菜单
@@ -493,7 +499,7 @@
 
 
     function getNavs() {
-        var arr = [getHomeNav(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav(),objecrSetting()];
+        var arr = [getHomeNav(), objecrSetting(), getOperationNav(), getUserNav(), getProductNav(), getOrderCenter(), getBillCenter(), getSmartHardware(), getPermissionNav()];
 
         return arr;
     }
@@ -525,6 +531,12 @@
                             router: 'bill/customerAssets',
                             type:'vue',
                             menuCode: 'customer_assets'
+                        },
+                        {
+                            primaryText: '客户管理',
+                            router: 'customer-manage/manage',
+                            type:'vue',
+                            menuCode: 'customer_center'
                         },
                         {
                             primaryText: "客户管理员",
@@ -606,18 +618,6 @@
                             router: 'product/communityAllocation/communityPlanList'
                         },
                         {
-                            primaryText: "每日库存",
-                            router: 'inventory/daily-inventory',
-                            type: 'vue',
-                            menuCode: 'seat_order_list',
-                        },
-                        {
-                            primaryText: "可租库存",
-                            router: 'inventory/optional-inventory',
-                            type: 'vue',
-                            menuCode: 'seat_order_list',
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -626,6 +626,18 @@
                             primaryText: '工位',
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
+                        },
+                        {
+                            primaryText: "每日库存查询",
+                            router: 'inventory/daily-inventory',
+                            type: 'vue',
+                            menuCode: 'daily_inventory',
+                        },
+                        {
+                            primaryText: "可租商品查询",
+                            router: 'inventory/optional-inventory',
+                            type: 'vue',
+                            menuCode: 'inventory',
                         },
                         {
                             primaryText: '注册地址',

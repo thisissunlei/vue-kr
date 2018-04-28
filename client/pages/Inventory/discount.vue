@@ -35,7 +35,10 @@ export default {
                discount:' '
            },
            discountList:[],
-           num:0
+           num:0,
+
+           dailyNull:'',
+           optionalNull:''
         }
     },
     mounted(){
@@ -46,9 +49,11 @@ export default {
         var optionalSelf=localStorage.getItem('optional-inventory-countSelf');
         if(this.identify=='daily'){
             this.params.discount=dailyCount?Number(dailyCount):' ';
+            this.dailyNull=dailySelf;
             this.params.countSelf=dailySelf?dailySelf:'1';
         }else{
             this.params.discount=optionalCount?Number(optionalCount):' ';
+            this.optionalNull=optionalSelf;
             this.params.countSelf=optionalSelf?optionalSelf:'1'; 
         }
     },
@@ -66,7 +71,7 @@ export default {
         //折扣价
         countChange(param){
             this.num=this.num+1;
-            if(this.num!=1){
+            if(this.num!=1||(this.identify=='daily'&&this.dailyNull==null)||(this.identify=='optional'&&this.optionalNull==null)){
                 this.params.countSelf=(typeof param)=='number'?'0':'1';
             }
             if(this.identify=='daily'){

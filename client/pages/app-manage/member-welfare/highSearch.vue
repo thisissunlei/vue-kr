@@ -24,21 +24,17 @@
                         v-model="formItem.couponType"
                         placeholder="请选择"
                         >
-                        <Option v-for="(option, index) in jumpTypeList" :value="option.value" :key="index">{{option.label}}</Option>
+                        <Option v-for="(option, index) in couponTypeList" :value="option.value" :key="index">{{option.label}}</Option>
                     </Select>
             </FormItem>
             <FormItem label="福利范围" class="u-input">
                 <Select
                     v-model="formItem.cityId"
-                    filterable
-                    remote
-                    :remote-method="remoteCommunityMethod"
-                    :loading="communityLoading"
                     placeholder="请选择"
                     :label-in-value="labelInValue"
                     clearable
                     >
-                    <Option v-for="(option, index) in communityList" :value="option.value" :key="index">{{option.label}}</Option>
+                    <Option v-for="(option, index) in cityList" :value="option.value" :key="index">{{option.label}}</Option>
                 </Select>
             </FormItem>
              <FormItem label="领取有效期"  class="u-input u-date">
@@ -89,78 +85,53 @@ export default{
             labelInValue:true,
             communityLoading:false,
             formItem:{
-                customerName:'',
-                communityId:''
+                title:'',
+                createName:'',
+                cityId:'',
+                couponType:'',
             },
-            communityList:[],
-            jumpTypeList:[
-                {
-                    label:'启动页APP（至首页）',
-                    value:'HOMEPAGE'
-                },
-                {
-                    label:'跳转活动',
-                    value:'ACTIVITY'
-                },
-                {
-                    label:'跳转外链',
-                    value:'HTML'
-                },
-            ],
+            couponTypeList:[],
+            cityList:[],
             startDate:'',
             startHour:'00:00',
             endDate:'',
             endHour:'00:00',
             startTime:'',
             endtime:'',
+            cityId:[],
+            couponType:'',
         }
         
     },
     mounted:function(){
-         this.getCommunityList(' ')
+         this.getCityType()
     },
     methods:{
-        //社区
-        remoteCommunityMethod(query){
-            if (query!== '') {
-                this.communityLoading = true;
-                setTimeout(() => {
-                    this.communityLoading = false;
-                    this.getCommunityList(query)
-                }, 200);
-            } else {
-                this.getCommunityList(' ')
-
-            }
-        },
-         //社区
-        getCommunityList(name){
-           let params = {
-                    cmtName:name
-                }
-            let list = [];
-            let _this = this;
-            this.$http.get('get-community-new-list', params).then((res)=>{
-                list = res.data.cmts;
-                list.map((item)=>{
-                    let obj =item;
-                    obj.label = item.cmtName;
-                    obj.value = item.cmtId;
-                    return obj;
-                });
-                _this.communityList = list;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-            return list;
-            
+        getCityType(){
+             this.$http.get('get-city-and-type', '').then((res)=>{
+                   res.data.types.map((item)=>{
+                       item.value=item.code;
+                       item.label=item.name;
+                       return item;
+                   })
+                   res.data.citys.map((item)=>{
+                       item.value=item.id;
+                       item.label=item.name;
+                       return item;
+                   })
+                   this.couponTypeList=res.data.types;
+                   this.cityList=res.data.citys;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
         },
         startChange(date){
             this.startDate=date;
         },
         endChange(date){
+
             this.endDates=date;
         },
         startHourChange(date){
@@ -179,16 +150,21 @@ export default{
     },
     updated:function(){
         if(this.startDate && this.startHour){
+            
             this.beginDate=`${this.startDate} ${this.startHour}:00`
         }
         if(this.endDates && this.endHour){
             this.endDate=`${this.endDates} ${this.endHour}:00`
         }
         let form={
-            beginDate:this.beginDate || '',
-            endDate: this.endDate || '',
-            jumpType:this.formItem.jumpType || '',
-            cmtId:this.formItem.cmtId || ''
+            beginTime:this.beginDate || '',
+            endTime: this.endDate || '',
+            couponType:this.formItem.couponType || '',
+            cityId:this.formItem.cityId || '',
+            createName:this.formItem.createName || '',
+            title:this.formItem.title || '',
+            page:1,
+            pageSize:15,
         }
         this.$emit('formData', form);
         

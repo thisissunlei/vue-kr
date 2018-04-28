@@ -188,12 +188,10 @@ export default {
             default:()=>[],
             type:Array,
         },
-        rentStart:{
-            type:String,
-        },
-        rentEnd:{
-            type:String
-        },
+        searchParams:{
+            type:Object,
+            default:{}
+        }
     },
     data(){
         return{

@@ -107,9 +107,9 @@ function poptipOver(event, data,param) {
 //气泡的具体内容
 function getToolTipContent(thatData,param) {
     var label='';
-    if(param=='0'){
+    if(param=='NOT_EFFECT'){
         label='合同未生效';
-    }else if(param=='1'){
+    }else if(param=='IN_RENT'){
         label='在租';
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
@@ -321,9 +321,9 @@ function getActualBorder(taskStatus) {
 }
 //label的字体的颜色
 function getLabelColor(taskStatus) {
-    if (taskStatus === '0') {
+    if (taskStatus === 'NOT_EFFECT') {
         return '#FFE08F';
-    } else if(taskStatus === '1'){
+    } else if(taskStatus === 'IN_RENT'){
         return '#FDAFAF';
     } 
 }

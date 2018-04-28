@@ -6,8 +6,7 @@
             v-if = "!isLoading"
             :start="params.startTime"
             :end="params.endTime"
-            :rentStart="rentStart"
-            :rentEnd="rentEnd"
+            :searchParams="searchParams"
             :listData="listData"
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
@@ -65,11 +64,9 @@ var nowPage = 1;
 var ganttChartScrollTop = 0;
 export default {
     props:{
-        rentStart:{
-            type:String,
-        },
-        rentEnd:{
-            type:String
+        searchParams:{
+            type:Object,
+            default:{}
         }
     },
     components:{
@@ -103,68 +100,8 @@ export default {
         }
     },
     mounted(){
-          this.listData=[
-                {
-                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
-                    {
-                        "endDate":"1525017600000","startDate":"1524499200000","status":"0"
-                    },
-                    {
-                        "endDate":"1526140800000","startDate":"1525104000000","status":"1"
-                    },
-                    {
-                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
-                    }
-                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
-                },
-                {
-                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
-                    {
-                        "endDate":"1525017600000","startDate":"1524499200000","status":"1"
-                    },
-                    {
-                        "endDate":"1526140800000","startDate":"1525104000000","status":"0"
-                    },
-                    {
-                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
-                    }
-                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
-                },
-                {
-                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
-                    {
-                        "endDate":"1525017600000","startDate":"1524499200000","status":"DISABLE"
-                    }
-                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
-                },
-                {
-                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
-                    {
-                        "endDate":"1525017600000","startDate":"1524499200000","status":"1"
-                    },
-                    {
-                        "endDate":"1526140800000","startDate":"1525104000000","status":"0"
-                    },
-                    {
-                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
-                    }
-                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
-                },
-                {
-                    "area":80483,"capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"location":"测试内容8q1z","name":"测试内容1kud","property":"测试内容j42r","propertyDesc":"测试内容d5d3","quotedPrice":"测试内容0qi2","recentEnd":67706,"recentStart":31706,"timeLine":[
-                    {
-                        "endDate":"1525017600000","startDate":"1524499200000","status":"1"
-                    },
-                    {
-                        "endDate":"1526140800000","startDate":"1525104000000","status":"0"
-                    },
-                    {
-                        "endDate":"1545017600000","startDate":"1526227200000","status":"0"
-                    }
-                    ],"type":"测试内容63t9","unitPrice":"测试内容6p1k"
-                }
-            ];
-        //this.getListData(this.params);
+        var params=Object.assign({},this.searchParams);
+        this.getListData(params);
         GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
@@ -212,6 +149,7 @@ export default {
             this.params.endTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.startTime=this.getLastTime(11,yearRender,monthRender,dayRender);
             console.log('-----start-',this.params);
+            this.getListData(this.params);
         },
         getLastTime(n,year,month,day){
             for(var i=0;i<n;i++){
@@ -240,9 +178,8 @@ export default {
             this.params.startTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.endTime=this.getEndDay(11,this.params.startTime);
             console.log('-----end-',this.params);
+            this.getListData(this.params);
         },
-
-
         //获取进度列表数据
         getListData(params,type){
             if(allPage<params.page){
@@ -250,11 +187,11 @@ export default {
             }
             this.isLoading = true;
             var data = Object.assign({},params);
-            var startTime = data.startTime.split(" ")[0]+' 00:00:00';
+            /*var startTime = data.startTime.split(" ")[0]+' 00:00:00';
             var endTime = data.endTime.split(" ")[0]+' 00:00:00';
             data.startTime = '';
-            data.endTime = '';
-            this.$http.get('project-progress-list',data).then((response)=>{
+            data.endTime = '';*/
+            this.$http.get('getDailyInventory',data).then((response)=>{
                 this.listData=response.data.items;
                 if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);

@@ -11,9 +11,9 @@
            @countChange="countChange"
            identify='daily'
         />
-        <Tabs value="dailyTime" :animated="false">
+        <Tabs value="dailyTime" :animated="false" @on-click="tabsClick">
                 <Tab-pane label="以列表方式展示" name="dailyList">   
-                    <div class="daily-table" id="daily-inventory-table-list">
+                    <div class="daily-table" id="daily-inventory-table-list" v-if="tabsValue=='dailyList'">
                         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
                             <div slot="loading">
                                  <Loading/>
@@ -34,8 +34,8 @@
 
                 <Tab-pane label="以时间轴方式展示" name="dailyTime">
                      <GanttChart 
-                       :rentStart='tabForms.startDate'
-                       :rentEnd='tabForms.endDate'
+                       v-if="tabsValue=='dailyTime'"
+                       :searchParams="tabForms"
                      />
                 </Tab-pane>
         </Tabs> 
@@ -90,7 +90,8 @@ var layoutScrollHeight=0;
             GanttChart
         },
         data () {
-            return {   
+            return {  
+                tabsValue:'dailyTime', 
                 warn:'',
                 MessageType:'',
                 openMessage:false,
@@ -271,8 +272,10 @@ var layoutScrollHeight=0;
         mounted(){
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
-            this.left=dailyTableDom.getBoundingClientRect().left;
-            this.width=dailyTableDom.getBoundingClientRect().width;
+            if(dailyTableDom){
+                this.left=dailyTableDom.getBoundingClientRect().left;
+                this.width=dailyTableDom.getBoundingClientRect().width;
+            }  
             dom.addEventListener("scroll",this.onScrollListener);
             var _this=this;
             LISTENSIDEBAROPEN(function (params) {
@@ -288,9 +291,12 @@ var layoutScrollHeight=0;
            } 
         },
         methods:{
+            tabsClick(key){
+                this.tabsValue=key;
+            },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
-                //this.getTableData(this.tabForms); 
+                this.getTableData(this.tabForms); 
             },
             //获取列表数据
             getTableData(values){

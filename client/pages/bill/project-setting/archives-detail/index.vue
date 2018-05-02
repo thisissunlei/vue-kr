@@ -1,7 +1,31 @@
 <template>
-  <div class="archives-detail">
-            <ClassificationBox  value="1" title="计划工期" :isBorder="true" type="num">
+    <div class="archives-detail">
+    <div v-for="(item ,index) in collapseData.items" :key="item.id">
+            <ClassificationBox  
+                :value="item.index" 
+                :title="item.label" 
+                :isBorder="true" 
+                type="num"
+                :isEnd="item.isEnd"
+            >
+                  <div slot="content"  >
+                        <div v-for="everyData in item.data" :key="everyData.id">
+                             <KrField 
+                                :readOrEdit="true" 
+                                :type="getFieldType(everyData.fieldType)" 
+                                label="含税" 
+                                :value="getValue(everyData)"
+                                placeholder="请输入含税收入" 
+                                @recordClick="recordClick"
+                                @okClick="okClick"
+                            />
+                        </div>
+                  </div>
+            </ClassificationBox>    
+    </div>
+           <!--  <ClassificationBox  value="1" title="计划工期" :isBorder="true" type="num">
                  <div slot="content"  >
+                 
                     
                     <KrField 
                         :readOrEdit="true" 
@@ -60,7 +84,7 @@
                         @recordClick="recordClick"
                         @okClick="okClick"
                     />
-                    <!-- <KrField 
+                    <KrField 
                         :readOrEdit="true" 
                         type="select"   
                         label="含税" 
@@ -70,16 +94,16 @@
                         :filterable="true"
                         @recordClick="recordClick"
                         @okClick="okClick"
-                    /> -->
+                    /> 
 
-                    <!-- <KrField 
+                     <KrField 
                         type="selectTree" 
                         :data="data" 
                         label="含税" 
                         value="formRight.input" 
                         @recordClick="recordClick"
                         placeholder="请输入含税收入"
-                    /> -->
+                    /> 
 
 
                     <KrField 
@@ -111,7 +135,7 @@
                  <div slot="content"  >
                      内容
                  </div>
-            </ClassificationBox>
+            </ClassificationBox>-->
             <Drawer 
                 :openDrawer="openRecord"
                 iconType="view-icon"
@@ -146,39 +170,96 @@ export default {
            openRecord:false,
            imgs:[],
            openIndex:0,
+           endIndex:0,
+           //查看编辑记录数据
            data:[
                {comment:'dasdfsdf',detail:"ppp",uTime:'123134112',updator:'作者以'},
                {comment:'vvvvv',detail:"kkkk",uTime:'65656756756',updator:'作者以'},
                {comment:'dasdfsdf',detail:"ppp",uTime:'123134112',updator:'作者以'}
            ],
-           collapseData:[
+           // 物业基信息
+           collapseData:this.dataFarmat({
+               code:'qq',
+               label:'物业基础信息',
+               items:[
                 {
                     label:"物业基础",
                     t_id:1,
                     value:1,
-                    children:[
-                        {label:'基础信息',value:2,t_id:2},
-                        {label:'产权信息',value:3,t_id:3},
-                        {label:'周边信息',value:4,t_id:4}
+                    type:'GROUP',
+                    data:[
+                        {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
+                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'SELECT'},
+                        {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'[]'},
+                        {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
                     ]
                },
                {
-                   label:"工程信息",
-                   value:5,
-                   t_id:5,
-                   children:[
-                       {label:'基础信息',value:6,t_id:6},
-                       {label:'产权信息',value:7,t_id:7},
-                       {label:'周边信息',value:8,t_id:8}
-                   ]
-               }
-           ]
+                    label:"其他东西",
+                    t_id:1,
+                    value:1,
+                    type:'GROUP',
+                    data:[
+                        {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
+                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'SELECT'},
+                        // {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'FILE'},
+                        {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
+                    ]
+               },
+           ]})
        }
     },
     mounted(){
         
     },
     methods:{
+        getFieldType(type){
+            if(type=="TEXT"){
+                return 'text'
+            }else if(type=="SELECT"){
+                return 'text'
+            }else if(type=="CITY"){
+                return 'cascader'
+            }else if(type=="FILE"){
+                return 'upFiles'
+            }else if(type=="DATE"){
+                return 'date'
+            }else{
+                return 'text'
+            }
+        }, 
+        getEnd(index){
+            console.log(index,this.endIndex,"ppppp")
+        },
+        getValue(everyData){
+            if(everyData.fieldType=="FILE"){
+               return eval(everyData.fieldValue)
+            }else {
+                return everyData.fieldValue;
+            }
+        },
+        dataFarmat(data){
+            var group = [].concat(data.items);
+            var index = 1;
+            var endIndex = 0;
+            for(var i=0;i<group.length;i++) {
+                if(group[i].type=="GROUP"){
+                    group[i].index = index;
+                    group[i].isEnd = false;
+                    endIndex = index;
+                    index++;
+                   
+                }
+            }
+            if(group.length){
+                group[endIndex-1].isEnd = true;
+            }
+            data.items = [].concat(group);
+            this.endIndex = endIndex;
+            return Object.assign({},data);
+        },
         onChange(index){
             this.openIndex = index;
         },
@@ -186,7 +267,6 @@ export default {
 
         },
         recordClick(value){
-            console.log(value,"ooooooo")
             this.cancelRecord();
         },
         cancelRecord(){

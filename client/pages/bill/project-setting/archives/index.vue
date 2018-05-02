@@ -98,7 +98,7 @@ import Loading from '~/components/Loading'
                 columns: [
                     {
                         title: 'ID',
-                        key: 'id',
+                        key: 'code',
                         align:'center',
                         width:100,
                     },

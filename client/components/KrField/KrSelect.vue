@@ -72,8 +72,7 @@ export default {
 		}
     },
     mounted(){
-    //   this.getLabel(this.selectValue); 
-      console.log(this.selectParam,"pppppppp")
+    //   this.getLabel(this.selectValue);
         this.getSelectData(this.selectParam,function(){
             this.getLabel(this.selectValue);
         });
@@ -105,7 +104,7 @@ export default {
             this.$emit('recordClick',value)
         },
         getLabel(value){
-          
+            console.log(value,"ppppppp")
             var label='';
             this.selectData.map((item,index)=>{
                     if(item.value==value){

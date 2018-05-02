@@ -190,7 +190,7 @@ export default {
                     data:[
                         {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
                         {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
-                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'SELECT'},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST'},
                         {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'[]'},
                         {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
                     ]
@@ -219,7 +219,7 @@ export default {
             if(type=="TEXT"){
                 return 'text'
             }else if(type=="SELECT"){
-                return 'text'
+                return 'select'
             }else if(type=="CITY"){
                 return 'cascader'
             }else if(type=="FILE"){
@@ -230,13 +230,12 @@ export default {
                 return 'text'
             }
         }, 
-        getEnd(index){
-            console.log(index,this.endIndex,"ppppp")
-        },
+       
         getValue(everyData){
             if(everyData.fieldType=="FILE"){
                return eval(everyData.fieldValue)
             }else {
+                console.log(everyData.fieldValue,"ppppp")
                 return everyData.fieldValue;
             }
         },

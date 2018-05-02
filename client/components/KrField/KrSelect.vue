@@ -58,8 +58,8 @@ export default {
             default:false,
             type:Boolean
         },
-        selectData:{
-            type:Array
+        selectParam:{
+            type:String
         }
 	},
 	data(){
@@ -67,17 +67,45 @@ export default {
             isEdit:false,
             selectValue:this.value,
             labelValue:'',
-            id:this.value
+            id:this.value,
+            selectData:[]
 		}
     },
     mounted(){
-      this.getLabel(this.selectValue); 
+    //   this.getLabel(this.selectValue); 
+      console.log(this.selectParam,"pppppppp")
+        this.getSelectData(this.selectParam,function(){
+            this.getLabel(this.selectValue);
+        });
     },
 	methods:{
+        getSelectData(value,callback){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
+            }).then((response)=>{
+           
+                this.selectData = [].concat(this.selectFormat(response.data))
+                callback();
+            }).catch((error)=>{
+                // this.MessageType="error";
+                // this.openMessage=true;
+                // this.warn=error.message;
+            })
+        },
+        selectFormat(data){
+            var dataArr =  data.map((item)=>{
+
+                item.label = item.desc;
+                item.t_id = item.code;
+                return item;
+            })
+            return [].concat(dataArr);
+        },
         recordClick(value){
             this.$emit('recordClick',value)
         },
         getLabel(value){
+          
             var label='';
             this.selectData.map((item,index)=>{
                     if(item.value==value){

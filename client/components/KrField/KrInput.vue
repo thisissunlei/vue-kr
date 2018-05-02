@@ -5,6 +5,7 @@
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Input
                 :placeholder="placeholder"
@@ -57,6 +58,7 @@ export default {
 		click(event){
             this.$emit('click',event);
         },
+      
         enter(event){
             this.$emit('enter',event);
         },

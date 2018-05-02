@@ -286,7 +286,7 @@ export default {
         },
         getSelectData(){
 
-            this.$http.post('get-enum-all-data',{
+            this.$http.get('get-enum-all-data',{
                 enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
             }).then((response)=>{
                this.selectFormat(response.data)

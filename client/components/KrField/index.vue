@@ -27,9 +27,9 @@
             :type='type'
             :readOrEdit="readOrEdit"
             :disabled='disabled'
+            :selectParam="selectParam"
             :clearable='clearable'
             :filterable='filterable'
-            :selectData="selectData"
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
@@ -220,10 +220,11 @@ export default {
             type:Boolean,
             default:false
         },
-        selectData:{
-            type:Array
-        },
         treeIds:{
+            default:'',
+            type:String
+        },
+        selectParam:{
             default:'',
             type:String
         }

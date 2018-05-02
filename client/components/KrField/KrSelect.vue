@@ -72,15 +72,15 @@ export default {
 		}
     },
     mounted(){
-    //   this.getLabel(this.selectValue);
-        this.getSelectData(this.selectParam,function(){
+        this.getSelectData(this.selectParam,()=>{
+            console.log("========")
             this.getLabel(this.selectValue);
         });
     },
 	methods:{
         getSelectData(value,callback){
             this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
+                enmuKey:value
             }).then((response)=>{
            
                 this.selectData = [].concat(this.selectFormat(response.data))
@@ -131,8 +131,9 @@ export default {
 <style lang="less" scoped>
 .ui-kr-select{
       position: relative;
+      height:40px;
+
 	.edit-icon{
-		
 		position: absolute;
 		right: 0;
 		top: 0px;

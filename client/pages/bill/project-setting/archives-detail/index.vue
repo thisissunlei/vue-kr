@@ -14,6 +14,7 @@
                                 :readOrEdit="true" 
                                 :type="getFieldType(everyData.fieldType)" 
                                 label="含税" 
+                                :selectParam="everyData.params"
                                 :value="getValue(everyData)"
                                 placeholder="请输入含税收入" 
                                 @recordClick="recordClick"
@@ -190,7 +191,7 @@ export default {
                     data:[
                         {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
                         {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
-                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST'},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
                         {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'[]'},
                         {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
                     ]
@@ -203,7 +204,7 @@ export default {
                     data:[
                         {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
                         {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
-                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST'},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
                         // {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'FILE'},
                         {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
                     ]

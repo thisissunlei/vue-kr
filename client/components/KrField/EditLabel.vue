@@ -1,7 +1,7 @@
 
 <template>
 	<div class="edit-label">
-		<div v-if="readOrEdit">        
+		<div style="height:100%;" v-if="readOrEdit">        
 			<div v-if="!isEdit && labeType=='label'" >
 				<div class="label-text">{{value}}</div>
 				<span class="edit-icon" @click="editClick">
@@ -98,6 +98,10 @@ export default {
 			default:'label',
 			type:String
 		},
+		editClick:{
+			default:()=>{},
+			type:Function,
+		}
 
 	},
 	watch:{
@@ -175,7 +179,13 @@ export default {
 		recordClick(){
 			this.$emit('recordClick',this.value)
 		},
-		editClick(){
+		editClick(event){
+			// this.$emit("editClick",event)
+
+			var isclose = this.editClick();
+			if(isclose){
+
+			}
 			this.isEdit = !this.isEdit;
 			
 		},
@@ -201,6 +211,8 @@ export default {
 .edit-label{
 	position: relative;
 	display: inline-block;
+	height:40px;
+	min-width:150px;
 	// background: red;
 	.to-upload{
 		width: 210px;

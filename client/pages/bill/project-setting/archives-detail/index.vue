@@ -1,6 +1,6 @@
 <template>
     <div class="archives-detail">
-    <div v-for="(item ,index) in collapseData.items" :key="item.id">
+        <div v-for="(item ,index) in collapseData.items" :key="item.id">
             <ClassificationBox  
                 :value="item.index" 
                 :title="item.label" 
@@ -8,148 +8,38 @@
                 type="num"
                 :isEnd="item.isEnd"
             >
-                  <div slot="content"  >
-                        <div v-for="everyData in item.data" :key="everyData.id">
-                             <KrField 
-                                :readOrEdit="true" 
-                                :type="getFieldType(everyData.fieldType)" 
-                                label="含税" 
-                                :selectParam="everyData.params"
-                                :value="getValue(everyData)"
-                                placeholder="请输入含税收入" 
-                                @recordClick="recordClick"
-                                @okClick="okClick"
-                            />
-                        </div>
-                  </div>
-            </ClassificationBox>    
-    </div>
-           <!--  <ClassificationBox  value="1" title="计划工期" :isBorder="true" type="num">
-                 <div slot="content"  >
-                 
-                    
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="datetime"  
-                        label="含税" 
-                        value="2018-01-02 10:10" 
-                        placeholder="请输入含税收入"
-                        @okClick="okClick"
-                        @recordClick="recordClick"
-                        
-
-                    />
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="cascader" 
-                        label="含税" 
-                        value="221"
-                        placeholder="请输入含税收入" 
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-                    />
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="textarea"  
-                        label="含税" 
-                        value="123er" 
-                        placeholder="请输入含税收入" 
-                        :maxLength="200"
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-                    />
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="time"  
-                        label="含税" 
-                        value="10:10" 
-                        placeholder="请输入含税收入"
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-                    />
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="upImage"  
-                        label="含税"  
-                        placeholder="请输入含税收入" 
-                        :value="imgs" 
-                        @okClick="okClick"
-                        @recordClick="recordClick"
-                    /> 
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="date"  
-                        label="含税" 
-                        value="2018-01-02" 
-                        placeholder="请输入含税收入"
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-                    />
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="select"   
-                        label="含税" 
-                        value="1" 
-                        placeholder="请输入含税收入" 
-                        :selectData="selectData" 
-                        :filterable="true"
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-                    /> 
-
-                     <KrField 
-                        type="selectTree" 
-                        :data="data" 
-                        label="含税" 
-                        value="formRight.input" 
-                        @recordClick="recordClick"
-                        placeholder="请输入含税收入"
-                    /> 
-
-
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="upFiles"  
-                        label="含税"  
-                        placeholder="请输入含税收入" 
-                        :value="imgs" 
-                        @okClick="okClick"
-                        @recordClick="recordClick"
-                    /> 
-                    
-
-
-                    <KrField 
-                        :readOrEdit="true" 
-                        type="text" 
-                        label="含税" 
-                        value="什么东西" 
-                        placeholder="请输入含税收入" 
-                        @recordClick="recordClick"
-                        @okClick="okClick"
-
-                    />
-          
-                 </div>
-            </ClassificationBox>
-            <ClassificationBox value="1" title="计划工期" :isBorder="true" type="num">
-                 <div slot="content"  >
-                     内容
-                 </div>
-            </ClassificationBox>-->
-            <Drawer 
-                :openDrawer="openRecord"
-                iconType="view-icon"
-                :close="cancelRecord"
-                width="735"
-            >   
-                <div class="record-title" slot="title">
-                    <div class="big-text">编辑记录</div>
-                    <div class="small-text">招商经理</div>
+                <div slot="content"  >
+                    <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px">
+                        <span class="field-title" >{{everyData.displayName}}</span>
+                        <KrField 
+                            style="display:inline-block;"
+                            :readOrEdit="true" 
+                            :type="getFieldType(everyData.fieldType)" 
+                            label="含税" 
+                            :selectParam="everyData.params"
+                            :value="getValue(everyData)"
+                            placeholder="请输入含税收入" 
+                            @recordClick="recordClick"
+                            @okClick="okClick"
+                        />
+                    </div>
                 </div>
-                <RecordDetail :data="data"/>
-            </Drawer>
-  </div>
+            </ClassificationBox>    
+        </div>
+           
+        <Drawer 
+            :openDrawer="openRecord"
+            iconType="view-icon"
+            :close="cancelRecord"
+            width="735"
+        >   
+            <div class="record-title" slot="title">
+                <div class="big-text">编辑记录</div>
+                <div class="small-text">招商经理</div>
+            </div>
+            <RecordDetail :data="data"/>
+        </Drawer>
+    </div>
 </template>
 
 
@@ -191,7 +81,7 @@ export default {
                     data:[
                         {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
                         {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
-                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
+                        {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
                         {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'[]'},
                         {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
                     ]
@@ -202,11 +92,11 @@ export default {
                     value:1,
                     type:'GROUP',
                     data:[
-                        {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
-                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
+                        {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:''},
+                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:''},
                         {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'INVEST',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
                         // {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'FILE'},
-                        {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
+                        {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:''},
                     ]
                },
            ]})
@@ -280,6 +170,13 @@ export default {
 <style lang="less" >
    .archives-detail{
        background: #ffffff;
+       padding:20px;
+       padding-bottom:50px;
+       .field-title{
+           display:inline-block;
+           min-width:150px;
+           vertical-align: top;
+       }
         .record-title{
             display: inline-block;
             display: inline-block;

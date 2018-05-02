@@ -74,9 +74,12 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .ui-kr-date{
       position: relative;
+    .edit-label{
+        height:40px;
+    }
 	.edit-icon{
 		
 		position: absolute;

@@ -3,13 +3,10 @@
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
 			<div v-if="!isEdit && labeType=='label'" >
-				<div class="label-text">{{value}}</div>
-				<span class="edit-icon" @click="editClick">
-					<!-- <Icon type="ios-compose-outline "></Icon> -->
-				</span>
-				<span class="record-icon" @click="recordClick">
-					<!-- <Icon type="ios-compose-outline "></Icon> -->
-				</span>
+				<div class="label-text">{{value||'无'}}</div>
+				<span class="edit-icon" @click="editClick"></span>
+				<span class="record-icon" @click="recordClick"></span>
+				
 				
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
@@ -98,10 +95,7 @@ export default {
 			default:'label',
 			type:String
 		},
-		editClick:{
-			default:()=>{},
-			type:Function,
-		}
+		
 
 	},
 	watch:{
@@ -181,11 +175,9 @@ export default {
 		},
 		editClick(event){
 			// this.$emit("editClick",event)
-
-			var isclose = this.editClick();
-			if(isclose){
-
-			}
+			// var isclose = this.editClick();
+			// if(isclose){
+			// }
 			this.isEdit = !this.isEdit;
 			
 		},
@@ -211,9 +203,21 @@ export default {
 .edit-label{
 	position: relative;
 	display: inline-block;
-	height:40px;
+	cursor: pointer;
+	// height:40px;
 	min-width:150px;
+	padding-right:100px;
+	box-sizing: content-box;
 	// background: red;
+	.operation-icon{
+		display:none;
+	}
+	&:hover .record-icon{
+		display:inline-block;
+	}
+	&:hover .edit-icon{
+		display:inline-block;
+	}
 	.to-upload{
 		width: 210px;
 		height: 135px;
@@ -230,11 +234,12 @@ export default {
 		background-size:100%; 
 		background-repeat: no-repeat;
 		position: absolute;
-		right: -60px;
+		right: 20px;
 		width: 16px;
 		height: 16px;
 		top: 10px;
 		line-height: 32px;
+		display:none;
 		cursor: pointer;
 	}
 	.edit-icon{
@@ -242,10 +247,11 @@ export default {
 		background-size:100%; 
 		position: absolute;
 		background-repeat: no-repeat;
-		right: -30px;
+		right: 60px;
 		width: 16px;
 		height: 16px;
 		top: 10px;
+		display:none;
 		cursor: pointer;
 	}
 	.kr-ui-ok-icon,.kr-ui-x-icon{
@@ -259,13 +265,13 @@ export default {
 		background-image: url(./images/ok.svg);
 		background-repeat: no-repeat;		
 		background-size:100%; 
-		right:-30px;
+		right:60px;
 	}
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
 		background-repeat: no-repeat;
 		background-size:100%; 
-		right:-60px;
+		right:20px;
 	}
 	.label-text{
 		padding-right: 20px;

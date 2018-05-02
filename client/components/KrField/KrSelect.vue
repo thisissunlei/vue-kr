@@ -128,11 +128,13 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .ui-kr-select{
-      position: relative;
-      height:40px;
-
+    position: relative;
+    height:40px;
+    .edit-label{
+         height:40px;
+    }
 	.edit-icon{
 		position: absolute;
 		right: 0;

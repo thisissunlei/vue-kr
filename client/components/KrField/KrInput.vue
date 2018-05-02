@@ -94,8 +94,11 @@ export default {
 
 <style lang="less" scoped>
 .ui-kr-input{
-      position: relative;
+    position: relative;
     display: inline-block;
+    .edit-label{
+        height:40px;
+    }
 	.edit-icon{
 		
 		position: absolute;

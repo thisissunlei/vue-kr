@@ -88,8 +88,10 @@ export default {
                 max-width:200px;
                 word-break:break-all;
                 word-wrap: break-word; 
+                font-size:14px;
                 .ivu-tooltip-inner{
                     white-space:normal;
+                    padding:6px;
                 }
             }
         }

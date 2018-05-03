@@ -386,7 +386,7 @@ export default {
                     .table-single{
                         width:100%;
                         height:100%;
-                        background:url(./gantt-chart/img/line.png) no-repeat center;
+                        background:url(./gantt-chart/img/line2.jpg) no-repeat center;
                         background-size: 100%;
                         position: absolute;
                         top: 0;

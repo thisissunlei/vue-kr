@@ -107,19 +107,22 @@ function poptipOver(event, data,param) {
 //气泡的具体内容
 function getToolTipContent(thatData,param) {
     var label='';
+    var width = 285;
     if(param=='NOT_EFFECT'){
         label='合同未生效';
     }else if(param=='IN_RENT'){
         label='在租';
+        width = 250;
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
+        width = 260;
     }else if(thatData.status!='DISABLE'&&param=='2'){
         label="未租";
+        width = 250;
     } 
-    var str = '<div class="title">' + label + ':</div>';
+    var str = '<div class="title">' + label + '：</div>';
     var data = Object.assign({}, thatData);
-    //var width = 155;
-    var width = 280;
+    //var width = 155; 
     if (data.endDate && data.startDate) {
         /*var type = 'MM-DD';
 

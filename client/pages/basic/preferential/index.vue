@@ -3,8 +3,14 @@
     <SectionTitle title="社区优惠配置"></SectionTitle>
     <div class="u-search" >
         <Button type="primary" @click="onCreate">新建社区优惠</Button> 
-        <span style="padding:0 10px"></span>
-        <Button type="primary" @click="onSale">新建优惠</Button> 
+        <span style="padding:0 10px"></span> 
+        <div style="display:inline-block;width:400px;">
+            选择社区：
+            <Select :v-model="cmtId" @on-change="changeContent" style="width:300px">
+                <Option v-for="(option, index) in communityList" :value="option.value" :key="option.value">{{option.label}}</Option>
+            </Select>
+        </div>
+        
     </div>
     <div class="u-table">
         <Table border  :columns="columns" :data="tableData"  stripe></Table>
@@ -36,22 +42,6 @@
     
         <div slot="footer">
             <Button type="primary" @click="onSubmit('formContent')">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
-        </div>
-    </Modal>
-
-    <Modal
-        v-model="openSale"
-        title="新建社区优惠"
-        ok-text="确定"
-        cancel-text="取消"
-        width="460"
-        :styles="{top: '20px'}"
-     >  
-        <CreateSale ref="fromFieldNewSale" v-if="openSale" @newPageData="newSale" :editData.sync="editData"  editStatus="create" />
-    
-        <div slot="footer">
-            <Button type="primary" @click="onSubmitSale('formContent')">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="cancelCreate">取消</Button>
         </div>
     </Modal>
@@ -100,6 +90,8 @@ export default {
         },
         data () {
             return {
+                communityList:[],
+                cmtId:'',
                 openSale:false,
                 editData:{},
                 parameterData:{},
@@ -123,33 +115,42 @@ export default {
                 columns: [
                     {
                         title: '社区',
-                        key: 'paramName',
+                        key: 'cmtName',
                         align:'center'
                     },
                     {
                         title: '优惠类型',
-                        key: 'paramCode',
+                        key: 'name',
                         align:'center'
                     },
                     {
                         title: '优惠描述',
-                        key: 'paramVal',
+                        key: 'descName',
                         align:'center',
                     },
                     {
                         title: '有效期开始日期',
-                        key: 'paramDesc',
+                        key: 'validStart',
                         align:'center',
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validStart))
+                        }
                     },
                     {
                         title: '有效期结束日期',
-                        key: 'enableFlag',
+                        key: 'validEnd',
                         align:'center',
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.validEnd))
+                        }
                     },
                     {
                         title: '创建日期',
-                        key: 'enableFlag',
+                        key: 'ctime',
                         align:'center',
+                        render: (h, params) => {
+                            return  dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(params.row.ctime))
+                        }
                     },
                     {
                         title: '操作',
@@ -190,10 +191,27 @@ export default {
         },
         created(){
              this.getTableData(this.params);
+             this.getList()
         },
         methods:{
+            getList(){
+                this.$http.get('join-bill-community','').then((response)=>{    
+                    let list = response.data.items;
+                    list.map((item)=>{
+                        let obj = item;
+                        obj.label = item.name;
+                        obj.value = item.id+'';
+                        return obj;
+                    });
+                    this.communityList = list;
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
+            },
             getTableData(params){
-                this.$http.get('getParamList', params).then((res)=>{
+                this.$http.get('get-sale-list', params).then((res)=>{
                     this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                 }).catch((err)=>{
@@ -236,30 +254,6 @@ export default {
                             });
                             return;
                         }
-                        // 提交数据
-                        this.$http.post('saveParamData', this.parameterData).then((res)=>{
-                            this.getTableData()
-                            this.openCreate = false;
-                        }).catch((err)=>{
-                            this.$Notice.error({
-                                title:err.message
-                            });
-                        })
-
-                    }
-                })
-            },
-            onSubmitSale(name){
-                var newPageRefs = this.$refs.fromFieldNewSale.$refs;
-                var isSubmit = true;
-                newPageRefs[name].validate((valid,data) => {
-                    if (!valid) {
-                        console.log('false',this.saleForm)
-                        isSubmit = false
-                    }else{
-                        
-                        console.log('true',this.saleForm)
-                        return;
                         // 提交数据
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{
                             this.getTableData()
@@ -320,6 +314,12 @@ export default {
             onChangeOpen(){
                 console.log('changeOpen')
             },
+            changeContent(value){
+                this.params.cmtId = value;
+                this.params.page = 1;
+                this.page = 1;
+                this.getTableData(this.params);
+            },
             changePage(page){
                 this.params.page=page;
                 this.page=page;
@@ -336,13 +336,6 @@ export default {
                     this.parameterData = data;
                 }
             },
-            onSale(){
-                this.openSale = true
-            },
-            newSale(data){
-                this.saleForm = data;
-                console.log('newSale=======',data);
-            }
 
 
         }

@@ -21,4 +21,9 @@ export default  {
       url: '/api/krspace-sso-web/sys/enmu?',
       method: 'get'
   },
+  // 优惠列表接口
+  'get-sale-list': {
+      url: '/st/api/krspace-op-web/cmt-sale-tactics/list',
+      method: 'get'
+  },
 }

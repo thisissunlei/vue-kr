@@ -1,10 +1,10 @@
 <template>
 <div>
     <Form :model="formItem" :label-width="100" style="padding:0 20px" :rules="ruleCustom" ref="formContent">
-        <FormItem label="名称" prop="paramName" >
-            <Input v-model="formItem.paramName" placeholder="名称" style="width:252px;"></Input>
+        <FormItem label="选择社区" prop="community" >
+           <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
         </FormItem>
-        <FormItem label="创建日期" class="bill-search" prop="paramName">
+        <FormItem label="创建日期" class="bill-search" prop="time">
             <DatePicker 
                 v-model="formItem.cStartDate"
                 type="date" 
@@ -20,7 +20,7 @@
             />
             <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
         </FormItem>
-        <FormItem label="优惠列选" prop="paramCode">
+        <FormItem label="优惠列选" prop="sale">
 
             <Table border  :columns="columns" :data="saleList" @on-selection-change="selectChange"></Table>
             <Input v-model="formItem.sale" placeholder="名称" style="width:252px;display:none"></Input>
@@ -48,10 +48,12 @@
 </template>
 <script>
 import CreateSale from './createSale.vue';
+import selectCommunities from '~/components/SelectCommunities.vue'
 
     export default {
         components:{
             CreateSale,
+            selectCommunities
         },
         props:{
                 editData:Object,
@@ -64,20 +66,14 @@ import CreateSale from './createSale.vue';
                 openSale:false,
                 formItem:{},
                 ruleCustom:{
-                    paramName: [
-                        { required: true,message: '请填写名称', trigger: 'change' }
+                    community: [
+                        { required: true,message: '请选择社区名称', trigger: 'change' }
                     ],
-                    paramCode: [
-                        { required: true,message: '请填写编码', trigger: 'change' }
+                    time: [
+                        { required: true,message: '请填写时间' }
                     ],
-                    enableFlag: [
-                        { required: true,message: '请选择是否启用', trigger: 'change' }
-                    ],
-                    paramDesc: [
-                        { required: true,message: '请填写描述', trigger: 'change' }
-                    ],
-                    paramVal: [
-                        { required: true,message: '请填写参数值', trigger: 'change' }
+                    sale: [
+                        { required: true,message: '请选择优惠类型' }
                     ],
                 },
                 dateError:false,
@@ -133,6 +129,14 @@ import CreateSale from './createSale.vue';
             cancelCreate(){
                 this.openSale = false;
             },
+            changeCommunity(value){
+                // 客户
+                if(value){
+                    this.formItem.community = value;
+                }else{
+                    this.formItem.community = '';
+                }
+            },
             onSubmitSale(name){
                 var newPageRefs = this.$refs.fromFieldNewSale.$refs;
                 var isSubmit = true;
@@ -143,6 +147,7 @@ import CreateSale from './createSale.vue';
                     }else{
                         
                         console.log('true',this.saleForm)
+                        this.openSale = false
                         return;
                         // 提交数据
                         this.$http.post('saveParamData', this.parameterData).then((res)=>{
@@ -159,11 +164,11 @@ import CreateSale from './createSale.vue';
             },
             newSale(data){
                 this.saleForm = data;
-                console.log('newSale=======',data);
             }
         },
         updated:function(){
             if(this.formItem.cStartDate&&this.formItem.cEndDate){
+                this.formItem.time = '-'
                 if(this.formItem.cStartDate>this.formItem.cEndDate){
                     this.dateError=true;
                 }else{
@@ -172,6 +177,7 @@ import CreateSale from './createSale.vue';
             }else{
                 this.dateError=false; 
             }
+
 
 
             let data = {}

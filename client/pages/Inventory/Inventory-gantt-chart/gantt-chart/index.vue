@@ -128,12 +128,13 @@
                     @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
-                
+                    <span class='add-left-pic' ref='addLeftPic' @click="lastTurnPage"></span>
+                    <span class='add-right-pic' ref='addRightPic' @click="nextTurnPage"></span>
                     <div
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
                     >
-                    <div class="add-left" @click="lastTurnPage">左侧</div>
+                    <div class="add-left" @click="lastTurnPage"></div>
                        
                         <ViewArticle
                             v-if="leftEndpoint.year"
@@ -145,7 +146,7 @@
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
-                        <div class="add-right" @click="nextTurnPage">右侧侧</div>
+                        <div class="add-right" @click="nextTurnPage"></div>
                         <div class='today-flag' :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
                         <div class='start-flag' v-if="startRentLeft!=0" :style="{left:startRentLeft+30+'px',width:2+'px'}"></div>
                         <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+30+'px',width:minCalibration+'px'}"></div>
@@ -661,7 +662,17 @@ export default {
             var top = el.scrollTop;
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
-
+            if(left<1){
+                this.$refs.addLeftPic.style.opacity='1';
+            }else{
+                this.$refs.addLeftPic.style.opacity='0';
+            }
+            
+            if(el.scrollWidth<=left+el.clientWidth){
+                this.$refs.addRightPic.style.opacity='1';
+            }else{
+                this.$refs.addRightPic.style.opacity='0';
+            }
             this.timeShaftFixed(left,el);
         },
         rightOver(event){
@@ -806,25 +817,57 @@ export default {
                 pointer-events:none;
                 z-index:3;
             }
-
+            .add-left-pic{
+                position: absolute;
+                left:8px;
+                top:50%;
+                z-index:11;
+                transform: translateY(-50%);
+                display:inline-block;
+                width:13px;
+                height:20px;
+                background:url(img/left.svg) no-repeat center;
+                background-size:100%;
+                cursor: pointer;
+                opacity: 0;
+            }
+            .add-right-pic{
+                position: absolute;
+                right:22px;
+                top:50%;
+                z-index:11;
+                transform: translateY(-50%);
+                display:inline-block;
+                width:13px;
+                height:20px;
+                background:url(img/right.svg) no-repeat center;
+                background-size:100%;
+                cursor: pointer;
+                opacity: 0;
+            }
         }
          .add-left{
                 position: absolute;
                 width: 30px;
                 height: 100%;
-                background: red;
+                background: #fff;
                 left: 0px;
                 top: 0px;
                 z-index: 10;
+                border-right: solid 1px #F6F6F6;
+                cursor: pointer;
             }
             .add-right{
                 position: absolute;
                 width: 30px;
                 height: 100%;
-                background: red;
+                background: #fff;
                 right: 0px;
                 top: 0px;
                 z-index: 10;
+                border-left: solid 1px #F6F6F6;
+                border-right: solid 1px #F6F6F6;
+                cursor: pointer;
             }
          
         .content{

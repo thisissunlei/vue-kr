@@ -92,13 +92,13 @@ function poptipOver(event, data,param) {
         left: e.clientX,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
-
+    
     var obj = getToolTipContent(data,param);
     tirDom.innerHTML = obj.str;
-    tirDom.style.left = tirLocation.left - 30 + 'px';
+    tirDom.style.left = tirLocation.left - 210 + 'px';
     tirDom.style.top = tirLocation.top + 10 - 345 + 'px';
     tirDom.style.width = obj.width + 'px';
-    angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
+    angleDom.style.left = tirLocation.left+ 5 - 210 + 'px';
     angleDom.style.top = tirLocation.top - 345 + 'px';
     locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width)
     tirDom.style.opacity = 1;
@@ -170,7 +170,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    if (detail.top + detail.height < parseInt(tirDom.style.top) + 290 + 100) {
+    if (detail.top + detail.height < parseInt(tirDom.style.top) + 246 + 100) {
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 + 'px';
         angleDom.className = 'top-triangle';
         angleDom.style.top = parseInt(angleDom.style.top) - 35 + "px";

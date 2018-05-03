@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 甘特图部分 -->
-        <div class='chart-ul-wrap' >
+        <div class='chart-inventory-wrap'>
 
                 <div class="hander" >
                     <!-- 工位类型 -->
@@ -63,8 +63,9 @@
                                     }"
                                 >
                                 </div>
-                                <div  v-if="barType=='month'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
-                                <div  v-if="barType=='month'"  class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='month'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='month'&&endRentLeft!=0"  class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='month'&&inventoryRentLeft!=0"  class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                 <div  v-if="barType=='month'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
                                 <DrawMonth
                                     v-for="( item ) in showData"
@@ -81,8 +82,9 @@
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
                                  <div  v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
-                                 <div  v-if="barType=='week'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
-                                 <div  v-if="barType=='week'" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                 <div  v-if="barType=='week'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                 <div  v-if="barType=='week'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                 <div  v-if="barType=='week'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                  <div  v-if="barType=='week'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
                                 <DrawWeek
@@ -99,8 +101,9 @@
 
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
                                 <div  v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
-                                <div  v-if="barType=='day'" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
-                                <div  v-if="barType=='day'" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='day'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='day'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                                <div  v-if="barType=='day'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                 <div  v-if="barType=='day'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
                                 <DrawDay
@@ -143,10 +146,11 @@
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
                         <div class="add-right" @click="nextTurnPage">右侧侧</div>
-                        <div class='today-flag' :style="{left:tagToLeft+50+'px',width:minCalibration+'px'}"></div>
-                        <div class='start-flag' :style="{left:startRentLeft+50+'px',width:2+'px'}"></div>
-                        <div class='end-flag' :style="{left:endRentLeft+50+'px',width:2+'px'}"></div>
-                        <div class='start-to-end' :style="{left:startRentLeft+50+'px',width:endRentLeft-startRentLeft+'px'}"></div>
+                        <div class='today-flag' :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
+                        <div class='start-flag' v-if="startRentLeft!=0" :style="{left:startRentLeft+30+'px',width:2+'px'}"></div>
+                        <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+30+'px',width:minCalibration+'px'}"></div>
+                        <div class='end-flag' v-if="endRentLeft!=0" :style="{left:endRentLeft+30+'px',width:2+'px'}"></div>
+                        <div class='start-to-end' :style="{left:startRentLeft+30+'px',width:endRentLeft-startRentLeft+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -237,6 +241,7 @@ export default {
             tagToLeft:0,
             startRentLeft:0,
             endRentLeft:0,
+            inventoryRentLeft:0,
             colorTypes:[
                 {
                     title:'未租',
@@ -311,19 +316,29 @@ export default {
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;
         },
-        getStartLeft(data){
-            var today ='2018-4-26';
+        getInventoryLeft(data){
+            var today =this.searchParams.inventoryDate;
+            var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.startRentLeft=utils.dateDiff(today,startTime)*this.minCalibration;
-            return utils.dateDiff(today,startTime)*this.minCalibration;
+            this.inventoryRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
+            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
+        },
+        getStartLeft(data){
+            var today =this.searchParams.startDate;
+            var todayTime=today?today.split(' ')[0]:'';
+            var startMonth = data[0];
+            var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
+            this.startRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
+            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
         },
         getEndLeft(data){
-            var today ='2018-5-03';
+            var today =this.searchParams.endDate;
+            var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.endRentLeft=utils.dateDiff(today,startTime)*this.minCalibration;
-            return utils.dateDiff(today,startTime)*this.minCalibration;
+            this.endRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
+            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
         },
         lastTurnPage(){
            this.$emit('lastTurnPage',this.yearStartDay);
@@ -508,6 +523,7 @@ export default {
             this.getTodayTOLeft(showData);
             this.getStartLeft(showData);
             this.getEndLeft(showData);
+            this.getInventoryLeft(showData);
             this.getYears(startTime,endTime);
 
         },
@@ -656,14 +672,14 @@ export default {
 </script>
 
 <style lang="less">
-   .chart-ul-wrap{
+   .chart-inventory-wrap{
         width:100%;
         box-sizing: border-box;
         display:inline-block;
         position: relative;
         padding-left:25px;
         #gantt-chart-tool-tip{
-            width: 250px;
+            max-width: 280px;
             //min-height: 50px;
             opacity: 0;
             background: rgba(70,76,91,.9);
@@ -680,12 +696,14 @@ export default {
                 font-size: 14px;
                 background: transparent;
                 display:inline-block;
+                vertical-align: middle;
             }
             .content{
                 font-size: 14px;
                 padding: 0px;
                 background: transparent;
                 display:inline-block;
+                vertical-align: middle;
             }
         }
         .top-triangle{
@@ -730,7 +748,7 @@ export default {
                
             }
             .bar{
-                padding: 0px 50px;
+                padding: 0px 30px;
                 box-sizing: content-box;
             }
 
@@ -792,27 +810,30 @@ export default {
         }
          .add-left{
                 position: absolute;
-                width: 50px;
+                width: 30px;
                 height: 100%;
                 background: red;
                 left: 0px;
                 top: 0px;
+                z-index: 10;
             }
             .add-right{
                 position: absolute;
-                width: 50px;
+                width: 30px;
                 height: 100%;
                 background: red;
                 right: 0px;
                 top: 0px;
+                z-index: 10;
             }
          
         .content{
             position: relative;
             background: #F6F6F6;
-            padding-left: 50px;
-            padding-right: 50px;
+            padding-left: 30px;
+            padding-right: 30px;
             box-sizing: content-box;
+            overflow: hidden;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
             }
@@ -820,7 +841,7 @@ export default {
            
         }
         .hander{
-            margin-top:20px;
+            margin-top:0px;
             height: 50px;
             width: 100%;
             text-align: right;

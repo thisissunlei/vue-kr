@@ -1,12 +1,12 @@
 <template>
-    <div >
-
+    <div>
+        <Loading v-if = "isLoading"/>
         <!-- 甘特图部分 -->
         <GanttChart
             v-if = "!isLoading"
             :start="params.startTime"
             :end="params.endTime"
-            :searchParams="searchParams"
+            :searchParams="this.paramsSwitch()"
             :listData="listData"
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
@@ -39,6 +39,10 @@
             </div>
         </GanttChart>
 
+        <div style="float: right;">
+            <Page :total="totalCount" :page-size='100' show-total show-elevator @on-change="onPageChange"/>
+        </div>
+
         <Message
             :type="MessageType"
             :openMessage="openMessage"
@@ -55,6 +59,7 @@ import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
 import ListTable from './list-table';
 import GanttChart from './gantt-chart';
+import Loading from '~/components/Loading';
 import Message from '~/components/Message';
 import publicFn from '../publicFn';
 import Vue from 'vue';
@@ -64,15 +69,20 @@ var nowPage = 1;
 var ganttChartScrollTop = 0;
 export default {
     props:{
-        searchParams:{
+        tabForms:{
             type:Object,
             default:{}
-        }
+        },
+        identify:{
+           type:String,
+           default:''
+       }
     },
     components:{
         GanttChart,
         ListTable,
-        Message
+        Message,
+        Loading
     },
     data(){
         return{
@@ -80,29 +90,26 @@ export default {
             openMessage:false,
             warn:'',
             id:'',
-            editId:'',
-            propertyId:'',
-            getEdit:{},
             params:{
                 endTime:this.getEndDay(8),
                 startTime:this.getStartDay(),
-                pageSize:15,
-                page:nowPage,
-                status:2,
-                taskTemplateIds:'0,2,3,7,9,12,15,20,19,21,23,24,26,27,28,36,40,41,47'
+                page:1,
+                pageSize:100
             },
-            minDay:'',
-            maxDay:'',
+            //minDay:'',
+            //maxDay:'',
             listData:[],
             scrollWidth:0,
             isLoading:false,
-            upperError:false
+            totalCount:0,
+
+            //判断是不是当今所在月
+            isMonth:false
         }
     },
     mounted(){
-        var params=Object.assign({},this.searchParams);
-        this.getListData(params);
-        GLOBALSIDESWITCH("false");
+        this.getListData(this.paramsSwitch());
+        //GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
@@ -113,8 +120,20 @@ export default {
             publicFn.windowResize();
         }
     },
-
+    watch:{
+        tabForms:function(val){
+            this.getListData(this.paramsSwitch());
+        }
+    },
     methods:{
+        //格式转换
+        dateSwitch(data){
+            if(data){
+                return utils.dateCompatible(data);
+            }else{
+                return '';
+            }
+        },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-table-list');
             var rightDom=document.getElementById('vue-chart-right-draw-content');
@@ -131,8 +150,19 @@ export default {
                 leftDom.removeEventListener('scroll',this.scroll);
             }
         },
-
-
+        paramsSwitch(){
+            var params=Object.assign({},this.tabForms,this.params);
+            if(this.identify=='daily'){
+                delete params.startDate;
+                delete params.endDate;
+                params.inventoryDate=this.dateSwitch(params.inventoryDate);
+            }else{
+                delete params.inventoryDate;
+                params.startDate=this.dateSwitch(params.startDate);
+                params.endDate=this.dateSwitch(params.endDate);
+            }
+            return params;
+        },
         lastTurnPage(start){
             var dayTime=start.split('-');
             var dayYear=+dayTime[0],dayMonth=+dayTime[1],dayDay=+dayTime[2];
@@ -148,8 +178,7 @@ export default {
             }
             this.params.endTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.startTime=this.getLastTime(11,yearRender,monthRender,dayRender);
-            console.log('-----start-',this.params);
-            this.getListData(this.params);
+            this.getListData(this.paramsSwitch());
         },
         getLastTime(n,year,month,day){
             for(var i=0;i<n;i++){
@@ -177,33 +206,32 @@ export default {
             }
             this.params.startTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.endTime=this.getEndDay(11,this.params.startTime);
-            console.log('-----end-',this.params);
-            this.getListData(this.params);
+            this.getListData(this.paramsSwitch());
         },
         //获取进度列表数据
         getListData(params,type){
-            if(allPage<params.page){
+            /*if(allPage<params.page){
                 return;
-            }
+            }*/
             this.isLoading = true;
             var data = Object.assign({},params);
             /*var startTime = data.startTime.split(" ")[0]+' 00:00:00';
             var endTime = data.endTime.split(" ")[0]+' 00:00:00';
             data.startTime = '';
             data.endTime = '';*/
-            this.$http.get('getDailyInventory',data).then((response)=>{
+            this.$http.get('getDailyTimeLine',data).then((response)=>{
                 this.listData=response.data.items;
-                if(response.data.hasTime){
+                /*if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);
                     this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
                     this.params.startTime = publicFn.compareTime(this.params.startTime,response.data.firstStartTime);
                     var endObj = this.monthAdd(response.data.lastEndTime);
                     this.params.endTime=publicFn.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
-                }
-                var totalPages=response.data.totalPages;
-                allPage = totalPages==0?1:totalPages;
+                }*/
+                this.totalCount=response.data.totalCount;
+                //allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
-                this.params.page = response.data.page+1;
+               // this.params.page = response.data.page+1;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -318,6 +346,11 @@ export default {
         onChangeOpen(data){
             this.openMessage=data;
         },
+        onPageChange(index){
+            var params=this.paramsSwitch();
+            params.page=index;
+            this.getListData(params);
+        }
     }
 }
 </script>

@@ -11,53 +11,55 @@
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
 		>
+			<div class="view-box">
+				
 			
-			<div class="view" v-for="(item,index) in fileArr" :key="item.id">
+				<div class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-				<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
-				<div 
-					v-if="!getIsPhoto(item.url)"
-					:class="{
-						'file-type-style':true, 
-						'file-color-other':getTyep('other',index),
-						'file-color-word':getTyep('word',index),
-						'file-color-excel':getTyep('excel',index),
-						'file-color-ppt':getTyep('ppt',index),
-					}"
-				>
+					<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
 					<div 
+						v-if="!getIsPhoto(item.url)"
 						:class="{
-							'file-icon':true,
-							'file-icon-other':getTyep('other',index),
-							'file-icon-word':getTyep('other',index),
-							'file-icon-excel':getTyep('other',index),
-							'file-icon-ppt':getTyep('other',index),
-							
+							'file-type-style':true, 
+							'file-color-other':getTyep('other',index),
+							'file-color-word':getTyep('word',index),
+							'file-color-excel':getTyep('excel',index),
+							'file-color-ppt':getTyep('ppt',index),
 						}"
-					></div>
+					>
+						<div 
+							:class="{
+								'file-icon':true,
+								'file-icon-other':getTyep('other',index),
+								'file-icon-word':getTyep('other',index),
+								'file-icon-excel':getTyep('other',index),
+								'file-icon-ppt':getTyep('other',index),
+							}"
+						></div>
+					</div>
+					<div 
+						v-if="!getIsPhoto(item.url)"
+						class="file-name"
+					>
+						{{getFileName(index)}}
+						<div class="down-file" @click="downFile(item.url)"></div>
+					</div>
+					 <span 
+	                    class="delete-icon" 
+	                    @click="delFile(index,$event)"
+	                ></span>
 				</div>
-				<div 
-					v-if="!getIsPhoto(item.url)"
-					class="file-name"
-				>
-					{{getFileName(index)}}
-					<div class="down-file" @click="downFile(item.url)"></div>
-				</div>
-				 <span 
-                    class="delete-icon" 
-                    @click="delFile(index,$event)"
-                ></span>
-			</div>
 
-			<input 
-				:id="inputId" 
-				type="file" 
-				style="display:none;" 
-				@change="fileChange"
-			>
-			<div class="up-icon" @click="addFileClick">
-				<div class="add-icon"></div>
-                <div class="add-text">上传文件</div>
+				<input 
+					:id="inputId" 
+					type="file" 
+					style="display:none;" 
+					@change="fileChange"
+				>
+				<div class="up-icon" @click="addFileClick">
+					<div class="add-icon"></div>
+	                <div class="add-text">上传文件</div>
+				</div>
 			</div>
 		</EditLabel>
 		<PhotoAlbum @downFile="downFile" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
@@ -274,11 +276,9 @@ export default{
 
 <style lang="less" scoped>
 .up-files{
+	
 	display: inline-block;
-	width: 845px;
-	min-height: 198px;
-	background:  #EEEEEE;
-	padding-bottom: 10px;
+	
 	.edit-label{
 		width: 100%;
 	}
@@ -322,6 +322,12 @@ export default{
 	.up-icon:hover{
         border: 1px dashed #2d8cf0;
     }
+    .view-box{
+    	width: 600px;
+		min-height: 198px;
+		background:  #EEEEEE;
+	    padding-bottom: 10px;
+    }
     
 	.view{
 		display: inline-block;
@@ -337,6 +343,7 @@ export default{
         position: relative;
 		margin-right: 20px;
 		border-radius: 4px 4px 4px 4px;
+			
 		.file-type-style{
 			display: inline-block;
             height: 100%;

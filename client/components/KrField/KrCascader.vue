@@ -121,7 +121,11 @@ export default {
 
 <style lang="less" scoped>
 .ui-kr-cascader{
-      position: relative;
+    position: relative;
+    height: 40px;
+    .edit-label{
+       height: 40px;
+    }
 	.edit-icon{
 		
 		position: absolute;

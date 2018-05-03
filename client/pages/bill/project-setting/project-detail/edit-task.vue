@@ -81,9 +81,9 @@
                        
                     </div>
 
-                    <!-- <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
-                        <div>需要填写档案10项，尚未完成3箱，<span style="color:#499DF1;">去填写&nbsp;>></span></div>
-                    </div> -->
+                    <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                        <div>需要填写档案<span>{{getEdit.nullFields}}</span>项，尚未完成<span>{{getEdit.totalFields}}</span>箱，<span style="color:#499DF1;" @click="goArchives">去填写&nbsp;>> </span></div>
+                    </div>
                 </div>
             </ClassificationBox>
             
@@ -183,6 +183,9 @@ export default {
     },
    
     methods:{
+        goArchives(){
+            console.log("----------")
+        },
         editActualEndTime(value){
             
             if(value == "start" && this.planStart && this.planEnd && this.planStart<=this.planEnd){

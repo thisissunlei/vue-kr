@@ -10,54 +10,63 @@
 				
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
-				<div v-if="!value || !value.length" class="to-upload">待上传</div>
+				<div class="file-view-box">
+					
+				
+					<div v-if="!value || !value.length" class="to-upload">待上传</div>
 				
 				<!-- <img :src="item.url" alt="" v-for="(item, index ) in value" :key="item.id" @click="eyeImg(index)"/> -->
-				<div class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-					<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
-					<div 
-						v-if="!getIsPhoto(item.url)"
-						:class="{
-							'file-type-style':true, 
-							'file-color-other':getTyep('other',index),
-							'file-color-word':getTyep('word',index),
-							'file-color-excel':getTyep('excel',index),
-							'file-color-ppt':getTyep('ppt',index),
-						}"
-					>
+					<div class="view" v-for="(item,index) in fileArr" :key="item.id">
+
+						<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
 						<div 
+							v-if="!getIsPhoto(item.url)"
 							:class="{
-								'file-icon':true,
-								'file-icon-other':getTyep('other',index),
-								'file-icon-word':getTyep('other',index),
-								'file-icon-excel':getTyep('other',index),
-								'file-icon-ppt':getTyep('other',index),
-								
+								'file-type-style':true, 
+								'file-color-other':getTyep('other',index),
+								'file-color-word':getTyep('word',index),
+								'file-color-excel':getTyep('excel',index),
+								'file-color-ppt':getTyep('ppt',index),
 							}"
-						></div>
+						>
+							<div 
+								:class="{
+									'file-icon':true,
+									'file-icon-other':getTyep('other',index),
+									'file-icon-word':getTyep('other',index),
+									'file-icon-excel':getTyep('other',index),
+									'file-icon-ppt':getTyep('other',index),
+									
+								}"
+							></div>
+						</div>
+						<div 
+							v-if="!getIsPhoto(item.url)"
+							class="file-name"
+						>
+							{{getFileName(index)}}
+							<div class="down-file" @click="downFile(item.url)"></div>
+						</div>
+					
 					</div>
-					<div 
-						v-if="!getIsPhoto(item.url)"
-						class="file-name"
-					>
-						{{getFileName(index)}}
-						<div class="down-file" @click="downFile(item.url)"></div>
-					</div>
-				
+					<span class="edit-icon" @click="editClick">
+						<!-- <Icon type="ios-compose-outline "></Icon> -->
+					</span>
+					<span class="record-icon" @click="recordClick">
+						<!-- <Icon type="ios-compose-outline "></Icon> -->
+					</span>
 				</div>
-				<span class="edit-icon" @click="editClick">
-					<!-- <Icon type="ios-compose-outline "></Icon> -->
-				</span>
-				<span class="record-icon" @click="recordClick">
-					<!-- <Icon type="ios-compose-outline "></Icon> -->
-				</span>
 			</div>
 
 
 
-			<div v-if="isEdit">
-				<slot></slot>
+			<div style="position:fixed;z-index:1000;" v-if="isEdit">
+				<div class="edit-label-mask" @click="maskClick"></div>
+				
+					<slot></slot>
+				
+				
 				<div class="operation">
 					<span class="kr-ui-x-icon" @click="cancelClick">
 					
@@ -68,13 +77,23 @@
 					</span>
 					
 				</div>
-				
-				
 			</div>
 		</div>
 		<div v-if="!readOrEdit">
 			<slot></slot>
+			<div class="edit-label-mask"></div>
 		</div>
+		<Modal
+            v-model="openMessage"
+            title="提示信息"
+          	width="400"
+        >
+            <p style="text-align:center;">是否保存提交本次修改</p>
+            <div slot="footer">
+                <Button type="primary" @click="submitClick">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="closeMask">取消</Button>
+            </div>
+        </Modal>
 		
 	</div>
 </template>
@@ -102,7 +121,6 @@ export default {
 		value(){
 			if(this.labeType == 'file'&&this.value&& this.value.length){
 				this.fileArr = this.getFileArr();
-				console.log(this.fileArr,"pppppppp")
 			}
 		}
 	},
@@ -110,10 +128,24 @@ export default {
 		return {
 			isEdit:false,
 			fileTypes:[],
-			fileArr:this.getFileArr(this.value)
+			fileArr:this.getFileArr(this.value),
+			openMessage:false,
 		}
 	},
 	methods:{
+		maskClick(){
+			this.switchMask();
+		},
+		submitClick(){
+			this.okClick();
+			this.switchMask();
+		},
+		closeMask(){
+			this.switchMask();
+		},
+		switchMask(){
+			this.openMessage = !this.openMessage;
+		},
 		eyePhotoAlbum(url,event){
 			this.$emit('eyePhotoAlbum',url,event)
 		},
@@ -208,7 +240,22 @@ export default {
 	min-width:150px;
 	padding-right:100px;
 	box-sizing: content-box;
+	.file-view-box{
+		width: 600px;
+		min-height: 198px;
+		background:  #EEEEEE;
+	    padding: 1px;
+	}
 	// background: red;
+	.edit-label-mask{
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
+		// background: red;
+		position: fixed;
+		z-index: 0;
+	}
 	.operation-icon{
 		display:none;
 	}
@@ -265,13 +312,13 @@ export default {
 		background-image: url(./images/ok.svg);
 		background-repeat: no-repeat;		
 		background-size:100%; 
-		right:60px;
+		right:-30px;
 	}
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
 		background-repeat: no-repeat;
 		background-size:100%; 
-		right:20px;
+		right:-60px;
 	}
 	.label-text{
 		padding-right: 20px;

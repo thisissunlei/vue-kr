@@ -16,7 +16,7 @@ function getToDay() {
 }
 //日期转毫秒
 function dayToTime(params) {
-    return (new Date(str + ' 00:00:00')).getTime();
+    return (new Date(params + ' 00:00:00')).getTime();
 }
 //毫秒转日期值
 function timeToDay(params) {
@@ -361,6 +361,6 @@ export default {
     getActualBgColor,
     getActualBorder,
     getLabelColor,
-    timeToStr
-
+    timeToStr,
+    dayToTime
 }

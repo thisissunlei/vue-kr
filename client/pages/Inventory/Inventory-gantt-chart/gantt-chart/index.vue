@@ -193,6 +193,9 @@ export default {
         searchParams:{
             type:Object,
             default:{}
+        },
+        selectDate:{
+            type:String
         }
     },
     data(){
@@ -264,26 +267,23 @@ export default {
         }
     },
     mounted(){
-        this.scrollWidth = utils.getScrollBarSize()
-        this.limitDay(this.barType);
+        this.scrollWidth = utils.getScrollBarSize();
+        this.limitDay();
         setTimeout(() => {
             this.scroolFix(this.showData)          
         }, 100);
     },
-
-
     methods:{
         scroolFix(data){
             var dom = document.getElementById("vue-chart-right-draw-content");
             var offerLeft = 0;
             if(dom){
-                var today = dateUtils.dateToStr("YYYY/MM/DD",new Date());
+                var today = dateUtils.dateToStr("YYYY/MM/DD",new Date(this.start));
 
                 var todayIsWeek = 0;
                 if(this.barType == 'day' || this.barType == 'week'){
-                    var todayIsWeek = (new Date()).getDay();
-                    offerLeft = (todayIsWeek+6) * this.minCalibration
-
+                    var todayIsWeek = (new Date(this.start)).getDay();
+                    offerLeft = (todayIsWeek+6) * this.minCalibration;
 
                 }else{
                     var todayArr = today.split('/');
@@ -299,18 +299,16 @@ export default {
                     }
                     offerLeft = (publicFn.getMonthDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }
-                var scrollLeft = this.getTodayTOLeft(data)-offerLeft;
+                var scrollLeft = (this.searchParams.inventoryDate?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
                 setTimeout(() => {
                      dom.scrollLeft = scrollLeft;
                 }, 100);
-
             }
         },
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-
             this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
             return utils.dateDiff(today,startTime)*this.minCalibration;
         },
@@ -412,57 +410,12 @@ export default {
                 this.minCalibration = 4;
             }
             this.limitDay(event);
-
         },
         //极限时间
-        limitDay(type){
-            var start = this.startTime;
-            var startArr = start.split('-');
-
-            /*向前三个月*/
-            var dayMonth=+startArr[1]-3;
-            var dayYear=+startArr[0];
-            if(dayMonth<=0){
-                dayYear-=1;
-                dayMonth=dayMonth+12;
-            }
-            /*向前三个月*/
-
-            var startObj= {
-                year:+startArr[0],
-                month:+startArr[1],
-                day:+startArr[2]
-            };
-            if(type=='week' || type =='day'){
-                var startToWeek = (new Date(start)).getDay();
-                var offset = 7+startToWeek-1;
-                if(startObj.day-offset<0){
-                    startObj.month -=1;
-                    if(startObj.month<=0){
-                        startObj.month = 12+ startObj.month;
-                        startObj.year -=1;
-                    }
-                    startObj.day = publicFn.getMonthDayNum(startObj.year,startObj.month)+startObj.day-offset;
-                }else{
-
-                     startObj.day = startObj.day-offset;
-                }
-            }else{
-                startObj.month -=1;
-                if(startObj.month<=0){
-                    startObj.month = 12+ startObj.month;
-                    startObj.year -=1;
-                }
-                startObj.day =1;
-            }
-            
-            this.yearStartDay=dayYear+'-'+dayMonth+ '-' +1;
-
-            this.init(dayYear+'-'+dayMonth+ '-' +1,this.endTime);
-
+        limitDay(type){   
+            this.init(this.start,this.endTime);
             this.scroolFix(this.showData);
         },
-
         //获取进度条的总长度
         getDayBarWidth(){
             var barWidth = 0;

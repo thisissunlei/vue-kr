@@ -4,9 +4,10 @@
         <!-- 甘特图部分 -->
         <GanttChart
             v-if = "!isLoading"
-            :start="params.startTime"
-            :end="params.endTime"
-            :searchParams="this.paramsSwitch()"
+            :start="params.lineStartDate"
+            :end="params.lineEndDate"
+            :selectDate="selectDate"
+            :searchParams="params"
             :listData="listData"
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
@@ -92,12 +93,7 @@ export default {
             openMessage:false,
             warn:'',
             id:'',
-            params:{
-                endTime:this.getEndDay(8),
-                startTime:this.getStartDay(),
-                page:1,
-                pageSize:100
-            },
+            params:this.paramsSwitch(),
             //minDay:'',
             //maxDay:'',
             listData:[],
@@ -105,12 +101,12 @@ export default {
             isLoading:false,
             totalCount:0,
 
-            //判断是不是当今所在月
-            isMonth:false
+            //选择的天
+            selectDate:''
         }
     },
     mounted(){
-        this.getListData(this.paramsSwitch());
+        this.commonParams();
         //GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
@@ -124,10 +120,34 @@ export default {
     },
     watch:{
         tabForms:function(val){
-            this.getListData(this.paramsSwitch());
+            this.params=Object.assign({},this.paramsSwitch());     
+            this.commonParams();
         }
     },
     methods:{
+        //极限时间
+        limitTime(){
+            var start = this.params.lineStartDate;
+            this.selectDate=start;
+            var startArr = start.split('-');
+            /*向前三个月*/
+            var dayMonth=+startArr[1]-3;
+            var dayYear=+startArr[0];
+            if(dayMonth<=0){
+                dayYear-=1;
+                dayMonth=dayMonth+12;
+            }
+            /*向前三个月*/
+            return dayYear+'-'+dayMonth+ '-' +1;
+        },
+        //提取公共
+        commonParams(){
+            this.params.lineStartDate=this.limitTime();
+            var params=Object.assign({},this.params);
+            params.lineStartDate=params.lineStartDate+' 00:00:00';
+            params.lineEndDate=params.lineEndDate+' 00:00:00';
+            this.getListData(params);
+        },
         //格式转换
         dateSwitch(data){
             if(data){
@@ -153,16 +173,21 @@ export default {
             }
         },
         paramsSwitch(){
-            var params=Object.assign({},this.tabForms,this.params);
+            var params=Object.assign({},this.tabForms);
+            params.page=1;
+            params.pageSize=100;
             if(this.identify=='daily'){
                 delete params.startDate;
                 delete params.endDate;
                 params.inventoryDate=this.dateSwitch(params.inventoryDate);
+                params.lineStartDate=params.inventoryDate?params.inventoryDate.split(' ')[0]:this.getStartDay();
             }else{
                 delete params.inventoryDate;
                 params.startDate=this.dateSwitch(params.startDate);
                 params.endDate=this.dateSwitch(params.endDate);
+                params.lineStartDate=params.startDate?params.startDate.split(' ')[0]:this.getStartDay();
             }
+            params.lineEndDate=this.getEndDay(8,params.lineStartDate);
             return params;
         },
         lastTurnPage(start){
@@ -180,7 +205,7 @@ export default {
             }
             this.params.endTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.startTime=this.getLastTime(11,yearRender,monthRender,dayRender);
-            this.getListData(this.paramsSwitch());
+            this.commonParams();
         },
         getLastTime(n,year,month,day){
             for(var i=0;i<n;i++){
@@ -208,7 +233,7 @@ export default {
             }
             this.params.startTime=yearRender+'-'+monthRender+'-'+dayRender;
             this.params.endTime=this.getEndDay(11,this.params.startTime);
-            this.getListData(this.paramsSwitch());
+            this.commonParams();
         },
         //获取进度列表数据
         getListData(params,type){
@@ -349,7 +374,7 @@ export default {
             this.openMessage=data;
         },
         onPageChange(index){
-            var params=this.paramsSwitch();
+            var params=Object.assign({},this.params);
             params.page=index;
             this.getListData(params);
         }

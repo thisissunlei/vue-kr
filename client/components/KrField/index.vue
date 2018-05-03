@@ -102,6 +102,7 @@
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
+            :inputWidth="inputWidth"
         />
         <UpFiles 
             v-if="type==='upFiles'"  
@@ -123,7 +124,6 @@ import KrTime from './KrTime';
 import KrTimeDate from './KrTimeDate';
 import KrTextarea from './KrTextarea';
 import UpFiles from './UpFiles';
-
 export default {
     components:{
       KrCascader,
@@ -148,6 +148,9 @@ export default {
         form:{
             type:String,
             default:''
+        },
+        inputWidth:{
+            type:[String,Number]
         },
         prop:{
             default:'',

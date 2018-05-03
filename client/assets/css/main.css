@@ -60,4 +60,49 @@ a, a:hover, a:focus, a:visited {
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
 }
+.ivu-select-multiple .ivu-select-selection{
+    height: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.layout-content{
+    padding-bottom:24px;
+}
+.vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+        
+}
+.vertical-center-modal .ivu-modal{
+    top: 0;
+}
 /*根据ui全局修改*/
+
+/* sort默认样式 */
+.kr-table-sort-icon-init{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_init.svg');
+    background-size: 100% 100%;
+}
+/* sort升序样式 */
+.kr-table-sort-icon-asc{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_asc.svg');
+    background-size: 100% 100%;    
+
+}
+/* sort降序序样式 */
+.kr-table-sort-icon-desc{
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    background-image: url('~/assets/images/sort_desc.svg');
+    background-size: 100% 100%;
+    
+}

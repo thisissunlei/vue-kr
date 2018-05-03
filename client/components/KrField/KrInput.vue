@@ -1,4 +1,3 @@
-
 <template>
 	<div class="edit-label">
         <EditLabel 

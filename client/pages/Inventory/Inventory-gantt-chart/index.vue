@@ -15,7 +15,9 @@
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
                         <div class='view-table-list'>
-                                 
+                            <span class='table-date'>日期</span>
+                            <div class='table-single'></div>  
+                            <span class='table-product'>商品</span>
                         </div>
                         <div
                             @mouseover='leftOver'
@@ -363,9 +365,9 @@ export default {
         border-bottom: none;
             .chart-left-table{
                 .view-table-list{
+                    position: relative;
                     width:100%;
                     height:100px;
-                    line-height:100px;
                     border: 1px solid #f1f1f1;
                     border-right:none;
                     border-top: none;
@@ -375,6 +377,27 @@ export default {
                     color: #333333;
                     font-weight: 500;
                     background:#fff;
+                    .table-date{
+                        display: inline-block;
+                        position: absolute;
+                        right: 24px;
+                        top: 28px;
+                    }
+                    .table-single{
+                        width:100%;
+                        height:100%;
+                        background:url(./gantt-chart/img/line.png) no-repeat center;
+                        background-size: 100%;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                    }
+                    .table-product{
+                        display: inline-block;
+                        position: absolute;
+                        left: 24px;
+                        bottom: 28px;
+                    }
                 }
                 .view-table-detail{
                     width:100%;

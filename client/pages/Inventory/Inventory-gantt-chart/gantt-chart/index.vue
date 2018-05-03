@@ -4,6 +4,17 @@
         <div class='chart-inventory-wrap'>
 
                 <div class="hander" >
+                    <!-- 刻度选择 -->
+                    <div style="display:inline-block;">
+                        <Select
+                            v-model="barType"
+                            @on-change="selectChange"
+                            style="width:220px;margin-right:20px;text-align:left;color:#666;"
+                        >
+                            <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </div>
+
                     <!-- 工位类型 -->
                     <div class='header-left'>
                         <ColorType 
@@ -12,20 +23,6 @@
                             :color="item.color" 
                             :key="index" 
                         />
-                    </div>
-
-                    <!-- 刻度选择 -->
-                    <div style="display:inline-block;">
-                        <span style="margin-top:6px;margin-right:15px;margin-left:10px;font-size:14px;color:#333333;">
-                            时间轴最小刻度
-                        </span>
-                        <Select
-                            v-model="barType"
-                            @on-change="selectChange"
-                            style="width:100px;margin-right:20px;text-align:left;"
-                        >
-                            <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
                     </div>
 
                 </div>
@@ -77,7 +74,7 @@
                                     :type="barType"
 
                                 />
-                                <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
+                                <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
@@ -95,7 +92,7 @@
                                     :minCalibration="minCalibration"
 
                                 />
-                                <div v-if="barType=='week'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}">今天</div>
+                                <div v-if="barType=='week'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
 
                             </div>
 
@@ -114,7 +111,7 @@
                                     :minCalibration="minCalibration"
                                 />
 
-                                <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}">今天</div>
+                                <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
                             </div>
                            
                         </div>
@@ -224,15 +221,15 @@ export default {
             timeList: [
                 {
                     value: 'month',
-                    label: '月'
+                    label: '按月展示时间轴'
                 },
                 {
                     value: 'week',
-                    label: '周'
+                    label: '按周展示时间轴'
                 },
                 {
                     value: 'day',
-                    label: '天'
+                    label: '按天展示时间轴'
                 }
             ],
             //下拉的默认值
@@ -689,6 +686,7 @@ export default {
         display:inline-block;
         position: relative;
         padding-left:25px;
+        margin-top: 3px;
         #gantt-chart-tool-tip{
             max-width: 280px;
             //min-height: 50px;
@@ -885,18 +883,21 @@ export default {
         }
         .hander{
             margin-top:0px;
-            height: 50px;
+            height: 55px;
             width: 100%;
-            text-align: right;
+            text-align: left;
+            .ivu-select-selected-value{
+                font-size: 14px;
+            }
             .header-left{
                 display:inline-block;
-                float:left;
+                //float:left;
             }
             .article{
                 display: inline-block;
-                width: 30px;
+                width: 33px;
                 height: 15px;
-                border-radius: 100px;
+                border-radius: 5px;
                 margin-left: 10px;
             }
         }
@@ -930,16 +931,12 @@ export default {
 
         }
         .today{
-            width: 30px;
-            height: 15px;
-            background: #499DF1;
-            border-radius: 0 0 4px 4px;
-            text-align: center;
-            line-height: 15px;
+            width: 24px;
+            height: 12px;
+            background:url(img/today.png) no-repeat center;
+            background-size: 100%;
             position: absolute;
             top: 0px;
-            color: #ffffff;
-            font-size: 12px;
             transform: translateX(-50%);
         }
         .bar-line{

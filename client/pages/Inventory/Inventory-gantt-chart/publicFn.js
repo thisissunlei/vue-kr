@@ -137,6 +137,9 @@ function getToolTipContent(thatData,param) {
         var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) : '';
         str += '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
 
+    }else{
+        width = 150;
+        str = '<div class="title">' + label + '：全年</div>'; 
     }
     /*if (data.taskStatus !== "UNKNOWN"
         && data.taskStatus !== "UNDERWAY"

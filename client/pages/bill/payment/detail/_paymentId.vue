@@ -25,7 +25,9 @@
 			<LabelText label="付款账号：">
 				{{basicInfo.payAccount?basicInfo.payAccount:'-'}}
 			</LabelText>
-
+			<LabelText label="付款方名称：">
+				{{basicInfo.payerName?basicInfo.payerName:'-'}}
+			</LabelText>
 			<LabelText label="回款金额：">
 				￥{{basicInfo.amount?basicInfo.amount:'-'}}
 			</LabelText>
@@ -41,10 +43,12 @@
 			<LabelText label="我司收款账号：">
 				{{basicInfo.receiveAccount?basicInfo.receiveAccount:'-'}}
 			</LabelText>
+			<LabelText label="备注：">
+				{{basicInfo.remark?basicInfo.remark:'-'}}
+			</LabelText>
 			<LabelText label="创建时间：">
 				{{basicInfo.ctime?basicInfo.ctime:'-'}}
 			</LabelText>
-
 		</DetailStyle>
 
 	</div>

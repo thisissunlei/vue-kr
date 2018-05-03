@@ -1,6 +1,6 @@
 <template>
 
-<div class="g-order">
+<div class="g-order-payment">
     <div class="u-search" >
          <Buttons  label='导入回款明细' checkAction='payment_import' type="primary" @click="importDetail" />
           <Buttons  label='退款'  checkAction='payment_refund' type="primary" @click="onRefund" style="margin-left:20px;" />
@@ -185,7 +185,7 @@ export default {
                         title: '回款日期',
                         key: 'occurDate',
                         align:'center',
-                        width:130,
+                        width:100,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
                             return time;
@@ -195,7 +195,6 @@ export default {
                         title: '回款金额（元）',
                         key: 'amount',
                         align:'center',
-                        width:100,
                     },
 
                     {
@@ -228,16 +227,20 @@ export default {
 
                     },
                     {
+                        title: '付款方名称',
+                        key: 'payerName',
+                        align:'center',
+                    },
+                    {
                         title: '收款账户',
                         key: 'receiveAccount',
                         align:'center',
-                        width:120
                     },
                     {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:110,
+                        width:100,
                         render:(h,params)=>{
                             return h('div', [
                                 h('Button', {
@@ -339,9 +342,9 @@ export default {
 
             getTableData(params){
                 this.$http.get('get-payment-list', params).then((res)=>{
-                    this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
+                    this.tableData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
@@ -432,7 +435,7 @@ export default {
 </script>
 <style lang="less">
 
-.g-order{
+.g-order-payment{
    .u-search{
         height:32px;
         margin:16px 0;
@@ -458,6 +461,11 @@ export default {
     }
     .u-table{
         padding:0 20px;
+        th,td{
+            &:nth-child(8){
+                min-width:120px;
+            }
+        }
     }
     .u-cancel-title{
         width:85%;

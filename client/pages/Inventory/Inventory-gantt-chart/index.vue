@@ -6,7 +6,7 @@
             v-if = "!isLoading"
             :start="params.lineStartDate"
             :end="params.lineEndDate"
-            :selectDate="selectDate"
+            :endPosition="endPosition"
             :searchParams="params"
             :listData="listData"
             @rightOver="rightOver"
@@ -100,13 +100,13 @@ export default {
             scrollWidth:0,
             isLoading:false,
             totalCount:0,
-
-            //选择的天
-            selectDate:''
+            
+            //最后一天定位
+            endPosition:'today'
         }
     },
     mounted(){
-        this.commonParams();
+        this.commonParams('today');
         //GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
@@ -120,15 +120,15 @@ export default {
     },
     watch:{
         tabForms:function(val){
-            this.params=Object.assign({},this.paramsSwitch());     
-            this.commonParams();
+            this.params=Object.assign({},this.paramsSwitch()); 
+            this.endPosition='today';
+            this.commonParams('today');
         }
     },
     methods:{
         //极限时间
         limitTime(){
             var start = this.params.lineStartDate;
-            this.selectDate=start;
             var startArr = start.split('-');
             /*向前三个月*/
             var dayMonth=+startArr[1]-3;
@@ -141,8 +141,10 @@ export default {
             return dayYear+'-'+dayMonth+ '-' +1;
         },
         //提取公共
-        commonParams(){
-            this.params.lineStartDate=this.limitTime();
+        commonParams(param){
+            if(param=='today'){
+                this.params.lineStartDate=this.limitTime();
+            } 
             var params=Object.assign({},this.params);
             params.lineStartDate=params.lineStartDate+' 00:00:00';
             params.lineEndDate=params.lineEndDate+' 00:00:00';
@@ -203,9 +205,32 @@ export default {
                 yearRender=dayYear;
                 dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
             }
-            this.params.endTime=yearRender+'-'+monthRender+'-'+dayRender;
-            this.params.startTime=this.getLastTime(11,yearRender,monthRender,dayRender);
-            this.commonParams();
+
+            this.params.lineEndDate=yearRender+'-'+monthRender+'-'+dayRender;
+            this.params.lineStartDate=this.getLastTime(11,yearRender,monthRender,dayRender);
+            this.fixLeftRight('last',yearRender,monthRender,dayRender);
+        },
+        //固定左边还是右边
+        fixLeftRight(param,year,month,day){
+            var currentDate=this.params.inventoryDate?this.params.inventoryDate:this.params.startDate;
+            var currentEnd=new Date(currentDate).getTime();
+            var lineStart=new Date(this.params.lineStartDate).getTime();
+            var lineEnd=new Date(this.params.lineEndDate).getTime();
+            if(lineStart<currentEnd&&currentEnd<lineEnd){
+                if(param=='last'){
+                    this.params.lineStartDate=this.getLastTime(8,year,month,day);
+                }else if(param=='next'){
+                    this.params.lineEndDate=this.getEndDay(8,this.params.lineStartDate);
+                }
+                this.endPosition='today';
+                this.commonParams('today');
+            }else if(param=='last'){
+                this.endPosition='end';
+                this.commonParams('end');
+            }else if(param=='next'){
+                this.endPosition='start';
+                this.commonParams('start');
+            }
         },
         getLastTime(n,year,month,day){
             for(var i=0;i<n;i++){
@@ -216,7 +241,7 @@ export default {
                 month --;
             }
             day= publicFn.getMonthDayNum(year,month);
-            return year+"-"+month+"-"+day;
+            return year+"-"+month+"-"+1;
         },
         nextTurnPage(end){
             var dayTime=end.split('-');
@@ -231,9 +256,9 @@ export default {
                 yearRender=dayYear;
                 dayRender=publicFn.getMonthDayNum(yearRender,monthRender);
             }
-            this.params.startTime=yearRender+'-'+monthRender+'-'+dayRender;
-            this.params.endTime=this.getEndDay(11,this.params.startTime);
-            this.commonParams();
+            this.params.lineStartDate=yearRender+'-'+monthRender+'-'+1;
+            this.params.lineEndDate=this.getEndDay(11,this.params.lineStartDate);
+            this.fixLeftRight('next');
         },
         //获取进度列表数据
         getListData(params,type){
@@ -323,8 +348,7 @@ export default {
             var today =startParam?startParam:this.getStartDay();
             var start = today.split("-");
             var year = +start[0],
-                month = +start[1],
-                day= publicFn.getMonthDayNum(year,month);
+                month = +start[1];
             for(var i=0;i<n;i++){
                 if(month > 12){
                     month = month-12;
@@ -336,6 +360,9 @@ export default {
                 month = month-12;
                 year += 1;
             }
+
+            var day= publicFn.getMonthDayNum(year,month);
+
             return year+"-"+month+"-"+day;
         },
 
@@ -375,6 +402,8 @@ export default {
         },
         onPageChange(index){
             var params=Object.assign({},this.params);
+            params.lineStartDate=params.lineStartDate+' 00:00:00';
+            params.lineEndDate=params.lineEndDate+' 00:00:00';
             params.page=index;
             this.getListData(params);
         }
@@ -426,7 +455,7 @@ export default {
                 }
                 .view-table-detail{
                     width:100%;
-                    max-height:500px;
+                    max-height:360px;
                     overflow: auto;
                     border-bottom: solid 1px #F6F6F6;
                     background: #F6F6F6;

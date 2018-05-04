@@ -194,7 +194,7 @@ export default {
             type:Object,
             default:{}
         },
-        selectDate:{
+        endPosition:{
             type:String
         }
     },
@@ -260,10 +260,7 @@ export default {
                     title:'不可用',
                     color:"#E4E4E4"
                 }
-            ],
-
-            //一年默认开始
-            yearStartDay:''
+            ]
         }
     },
     mounted(){
@@ -300,9 +297,21 @@ export default {
                     offerLeft = (publicFn.getMonthDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }
                 var scrollLeft = (this.searchParams.inventoryDate?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
-                setTimeout(() => {
-                     dom.scrollLeft = scrollLeft;
-                }, 100);
+                if(this.endPosition=='start'){
+                    setTimeout(() => {
+                      dom.scrollLeft = 0;
+                    }, 100);
+                }else if(this.endPosition=='end'){
+                    console.log('end--');
+                    setTimeout(() => {
+                      dom.scrollLeft = dom.scrollWidth-dom.clientWidth;
+                    }, 100);
+                }else{
+                    setTimeout(() => {
+                      dom.scrollLeft = scrollLeft;
+                    }, 100);
+                }
+
             }
         },
         getTodayTOLeft(data){
@@ -337,7 +346,7 @@ export default {
             return utils.dateDiff(todayTime,startTime)*this.minCalibration;
         },
         lastTurnPage(){
-           this.$emit('lastTurnPage',this.yearStartDay);
+           this.$emit('lastTurnPage',this.start);
         },
         nextTurnPage(){
            this.$emit('nextTurnPage',this.end);
@@ -727,7 +736,7 @@ export default {
         }
         
         #vue-chart-right-draw-content{
-            max-height:500px;
+            max-height:360px;
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;

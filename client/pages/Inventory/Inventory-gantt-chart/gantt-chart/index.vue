@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class='chart-inventory-wrap-out'>
         <!-- 甘特图部分 -->
         <div class='chart-inventory-wrap'>
 
@@ -30,7 +30,11 @@
 
                 class="right-draw"
             >
-                <div class="calibration" id="gantt-chart-calibration">
+                <div 
+                    :class="head?'calibration calibrationFixed':'calibration'" 
+                    id="gantt-chart-calibration"
+                    :style="{left:(head?left:0)+'px',width:width+'px'}"
+                  >
                  <div  style="position:relative;overflow:hidden;"  >
                     <div class="time-shaft-fixed"></div>
                     <div
@@ -196,6 +200,15 @@ export default {
         },
         endPosition:{
             type:String
+        },
+        head:{
+            type:Boolean 
+        },
+        width:{
+            type:[Number,String] 
+        },
+        left:{
+            type:[Number,String] 
         }
     },
     data(){
@@ -648,6 +661,7 @@ export default {
 </script>
 
 <style lang="less">
+.chart-inventory-wrap-out{
    .chart-inventory-wrap{
         width:100%;
         box-sizing: border-box;
@@ -738,11 +752,15 @@ export default {
                     width:0px;
                 }
             }
-
+            .calibrationFixed{
+                position: fixed;
+                top:77px;
+                z-index: 999;
+            }
         }
         
         #vue-chart-right-draw-content{
-            max-height:360px;
+            //max-height:500px;
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
@@ -928,8 +946,9 @@ export default {
             z-index:3;
         }
    }
+}
    .tab-second-title{
         height:45px;
-    }
+   }
 
 </style>

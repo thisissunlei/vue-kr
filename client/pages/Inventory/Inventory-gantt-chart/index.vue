@@ -12,10 +12,13 @@
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
             @nextTurnPage="nextTurnPage"
+            :head="head"
+            :left="left"
+            :width="width"
         >
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
-                        <div class='view-table-list'>
+                        <div :class="head?'view-table-list table-list-fixed':'view-table-list'">
                             <span class='table-date'>日期</span>
                             <div class='table-single'></div>  
                             <span class='table-product'>商品</span>
@@ -42,7 +45,7 @@
             </div>
         </GanttChart>
 
-        <div style="float: right;">
+        <div style="float: right;margin: 15px 0 20px 0;">
             <Page :total="totalCount" :page-size='100' show-total show-elevator @on-change="onPageChange">
                 <div slot>
                     共{{totalCount}}条商品
@@ -106,30 +109,68 @@ export default {
             totalCount:0,
             
             //最后一天定位
-            endPosition:'today'
+            endPosition:'today',
+            //头部固定
+            head:false,
+            width:'',
+            left:'',
+
+            sideBar:true
         }
     },
     mounted(){
+        var dom=document.getElementById('layout-content-main');
+        var domContent=document.getElementById('vue-chart-right-draw-content');
+        if(domContent){
+            this.width=domContent.getBoundingClientRect().width;
+            this.left=domContent.getBoundingClientRect().left;
+        }
+        dom.addEventListener("scroll",this.onScrollListener);
+        var _this=this;
+        LISTENSIDEBAROPEN(function (params) {
+            _this.sideBar=params;
+        })
         this.commonParams('today');
-        //GLOBALSIDESWITCH("false");
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
+        /*GLOBALSIDESWITCH("false");
         setTimeout(() => {
               publicFn.windowResize();
         }, 400);
         window.onresize=function(){
             publicFn.windowResize();
-        }
+        }*/
     },
     watch:{
         tabForms:function(val){
             this.params=Object.assign({},this.paramsSwitch()); 
             this.endPosition='today';
             this.commonParams('today');
-        }
+        },
+        sideBar:function(val){
+            this.onScrollListener();
+        },
+    },
+    destroyed(){
+        var dom=document.getElementById('layout-content-main');
+        dom.removeEventListener("scroll",this.onScrollListener);
     },
     methods:{
+        //滚动监听
+        onScrollListener(){   
+            var dom=document.getElementById('layout-content-main');  
+            var domContent=document.getElementById('vue-chart-right-draw-content');
+            if(domContent){
+                this.width=domContent.getBoundingClientRect().width;
+                this.left=domContent.getBoundingClientRect().left;
+            }    
+            if(dom.scrollTop>321){
+                this.head=true;
+            }else{
+                this.head=false; 
+            }
+        },
         //极限时间
         limitTime(){
             var start = this.params.lineStartDate;
@@ -451,9 +492,15 @@ export default {
                         bottom: 28px;
                     }
                 }
+                .table-list-fixed{
+                    position: fixed;
+                    top:77px;
+                    z-index: 999;
+                    width:183px;
+                }
                 .view-table-detail{
                     width:100%;
-                    max-height:360px;
+                    //max-height:500px;
                     overflow: auto;
                     border-bottom: solid 1px #F6F6F6;
                     background: #F6F6F6;

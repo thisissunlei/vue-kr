@@ -43,7 +43,11 @@
         </GanttChart>
 
         <div style="float: right;">
-            <Page :total="totalCount" :page-size='100' show-total show-elevator @on-change="onPageChange"/>
+            <Page :total="totalCount" :page-size='100' show-total show-elevator @on-change="onPageChange">
+                <div slot>
+                    共{{totalCount}}条商品
+                </div>
+            </Page>
         </div>
 
         <Message

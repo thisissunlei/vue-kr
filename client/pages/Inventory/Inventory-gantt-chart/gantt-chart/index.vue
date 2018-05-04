@@ -52,7 +52,7 @@
                         
                             <div class='month-bar' :style="{background:barType=='month'?'#FAFCFF;':'#fff'}" >
                                 <div
-                                    v-if="barType=='month'"
+                                    v-if="barType=='month'&&tagToLeft!=0"
                                     class="bar-line"
                                     :style="{
                                         left:tagToLeft+'px',
@@ -74,11 +74,11 @@
                                     :type="barType"
 
                                 />
-                                <div v-if="barType=='month'" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
+                                <div v-if="barType=='month'&&tagToLeft!=0" class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
 
                             </div>
                             <div v-if="barType=='week'" class='week-bar' style="background:#FAFCFF">
-                                 <div  v-if="barType=='week'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                 <div  v-if="barType=='week'&&tagToLeft!=0" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                                  <div  v-if="barType=='week'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
                                  <div  v-if="barType=='week'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
                                  <div  v-if="barType=='week'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
@@ -92,12 +92,12 @@
                                     :minCalibration="minCalibration"
 
                                 />
-                                <div v-if="barType=='week'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
+                                <div v-if="barType=='week'&&tagToLeft!=0"  class="today" :style="{left:tagToLeft+minCalibration/2+'px',}"></div>
 
                             </div>
 
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
-                                <div  v-if="barType=='day'" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                <div  v-if="barType=='day'&&tagToLeft!=0" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
                                 <div  v-if="barType=='day'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='day'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='day'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
@@ -111,7 +111,7 @@
                                     :minCalibration="minCalibration"
                                 />
 
-                                <div v-if="barType=='day'"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
+                                <div v-if="barType=='day'&&tagToLeft!=0"  class="today" :style="{left:tagToLeft+minCalibration/2+'px'}"></div>
                             </div>
                            
                         </div>
@@ -144,7 +144,7 @@
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                         />
                         <div class="add-right" @click="nextTurnPage"></div>
-                        <div class='today-flag' :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
+                        <div class='today-flag' v-if="tagToLeft!=0" :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
                         <div class='start-flag' v-if="startRentLeft!=0" :style="{left:startRentLeft+30+'px',width:2+'px'}"></div>
                         <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+30+'px',width:minCalibration+'px'}"></div>
                         <div class='end-flag' v-if="endRentLeft!=0" :style="{left:endRentLeft+30+'px',width:2+'px'}"></div>
@@ -297,21 +297,25 @@ export default {
                     offerLeft = (publicFn.getMonthDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }
                 var scrollLeft = (this.searchParams.inventoryDate?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
+                var timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
                 if(this.endPosition=='start'){
-                    setTimeout(() => {
-                      dom.scrollLeft = 0;
+                    timeShaftFixed.style.opacity=0;
+                    this.$refs.addLeftPic.style.opacity='1';
+                    setTimeout(() => { 
+                      dom.scrollLeft = 0;           
                     }, 100);
                 }else if(this.endPosition=='end'){
-                    console.log('end--');
+                    timeShaftFixed.style.opacity=1;
+                    this.$refs.addRightPic.style.opacity='1';
                     setTimeout(() => {
                       dom.scrollLeft = dom.scrollWidth-dom.clientWidth;
                     }, 100);
                 }else{
+                    timeShaftFixed.style.opacity=1;
                     setTimeout(() => {
                       dom.scrollLeft = scrollLeft;
                     }, 100);
                 }
-
             }
         },
         getTodayTOLeft(data){
@@ -342,7 +346,8 @@ export default {
             var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.endRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
+            var canculateTime=utils.dateDiff(todayTime,startTime)?utils.dateDiff(todayTime,startTime)+1:0;
+            this.endRentLeft=todayTime?canculateTime*this.minCalibration:0;
             return utils.dateDiff(todayTime,startTime)*this.minCalibration;
         },
         lastTurnPage(){
@@ -576,6 +581,7 @@ export default {
             let contentDetail = contentDom.getBoundingClientRect();
             let contentToLeft = contentDetail.left;
             let timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
+            timeShaftFixed.style.opacity=1;
             let timeShaftDetail = timeShaftFixed.getBoundingClientRect();
             let topShaftDomArr = document.querySelectorAll('.month-bar .draw-month');
             if(type == 'month'){

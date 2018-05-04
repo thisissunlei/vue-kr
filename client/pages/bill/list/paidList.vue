@@ -318,9 +318,12 @@ import PdfDownload from './pdfDownload';
                           return bizType[obj.row.bizType];
                         }
                     }
-                if(this.columns.length<13){
-                    this.columns.splice(4, 0, billtype)
+                let arr=[].concat(this.columns);
+
+                if(arr.length<13){
+                   arr.splice(4, 0, billtype)
                 }
+                this.columns=[].concat(arr);
                 
             },
             showSearch (params) {

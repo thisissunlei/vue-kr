@@ -129,8 +129,8 @@
                     @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
-                    <span class='add-left-pic' ref='addLeftPic' @click="lastTurnPage"></span>
-                    <span class='add-right-pic' ref='addRightPic' @click="nextTurnPage"></span>
+                    <span class='add-left-pic'  ref='addLeftPic' @click="lastTurnPage"></span>
+                    <span class='add-right-pic'  ref='addRightPic' @click="nextTurnPage"></span>
                     <div
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
@@ -143,6 +143,8 @@
                             :data="item"
                             :key="item.id"
                             :id="item.id"
+                            :start="start"
+                            :end="end"
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
@@ -331,37 +333,50 @@ export default {
                 }
             }
         },
+        //时间差
+        timeRange(sDate1,sDate2){
+            var aDate, oDate1, oDate2, iDays;
+            aDate = sDate1.split("-")
+            oDate1 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])    //转换为12-18-2002格式  
+            aDate = sDate2.split("-")
+            oDate2 = new Date(aDate[1] + '/' + aDate[2] + '/' + aDate[0])
+            if(oDate1<oDate2){
+                return 0;
+            }
+            iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+            return iDays  
+        },
         getTodayTOLeft(data){
             var today = dateUtils.dateToStr("YYYY-MM-DD",new Date());
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.tagToLeft = utils.dateDiff(today,startTime)*this.minCalibration;
-            return utils.dateDiff(today,startTime)*this.minCalibration;
+            this.tagToLeft = this.timeRange(today,startTime)*this.minCalibration;
+            return this.timeRange(today,startTime)*this.minCalibration;
         },
         getInventoryLeft(data){
             var today =this.searchParams.inventoryDate;
             var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.inventoryRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
-            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
+            this.inventoryRentLeft=todayTime?this.timeRange(todayTime,startTime)*this.minCalibration:0;
+            return this.timeRange(todayTime,startTime)*this.minCalibration;
         },
         getStartLeft(data){
             var today =this.searchParams.startDate;
             var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            this.startRentLeft=todayTime?utils.dateDiff(todayTime,startTime)*this.minCalibration:0;
-            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
+            this.startRentLeft=todayTime?this.timeRange(todayTime,startTime)*this.minCalibration:0;
+            return this.timeRange(todayTime,startTime)*this.minCalibration;
         },
         getEndLeft(data){
             var today =this.searchParams.endDate;
             var todayTime=today?today.split(' ')[0]:'';
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
-            var canculateTime=utils.dateDiff(todayTime,startTime)?utils.dateDiff(todayTime,startTime)+1:0;
+            var canculateTime=this.timeRange(todayTime,startTime)?this.timeRange(todayTime,startTime)+1:0;
             this.endRentLeft=todayTime?canculateTime*this.minCalibration:0;
-            return utils.dateDiff(todayTime,startTime)*this.minCalibration;
+            return this.timeRange(todayTime,startTime)*this.minCalibration;
         },
         lastTurnPage(){
            this.$emit('lastTurnPage',this.start);
@@ -640,6 +655,7 @@ export default {
             var top = el.scrollTop;
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
+
             if(left<1){
                 this.$refs.addLeftPic.style.opacity='1';
             }else{
@@ -760,7 +776,7 @@ export default {
         }
         
         #vue-chart-right-draw-content{
-            //max-height:500px;
+            max-height:500px;
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
@@ -817,7 +833,7 @@ export default {
             }
             .add-right-pic{
                 position: absolute;
-                right:22px;
+                right:10px;
                 top:50%;
                 z-index:11;
                 transform: translateY(-50%);

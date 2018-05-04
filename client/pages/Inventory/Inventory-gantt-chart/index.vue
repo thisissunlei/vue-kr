@@ -134,13 +134,13 @@ export default {
         this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
-        /*GLOBALSIDESWITCH("false");
+        //GLOBALSIDESWITCH("false");
         setTimeout(() => {
               publicFn.windowResize();
         }, 400);
         window.onresize=function(){
             publicFn.windowResize();
-        }*/
+        }
     },
     watch:{
         tabForms:function(val){
@@ -161,10 +161,12 @@ export default {
         onScrollListener(){   
             var dom=document.getElementById('layout-content-main');  
             var domContent=document.getElementById('vue-chart-right-draw-content');
+
             if(domContent){
                 this.width=domContent.getBoundingClientRect().width;
                 this.left=domContent.getBoundingClientRect().left;
-            }    
+            }   
+
             if(dom.scrollTop>321){
                 this.head=true;
             }else{
@@ -193,6 +195,7 @@ export default {
             var params=Object.assign({},this.params);
             params.lineStartDate=params.lineStartDate+' 00:00:00';
             params.lineEndDate=params.lineEndDate+' 00:00:00';
+            this.head=false;
             this.getListData(params);
         },
         //格式转换
@@ -444,6 +447,7 @@ export default {
             params.lineStartDate=params.lineStartDate+' 00:00:00';
             params.lineEndDate=params.lineEndDate+' 00:00:00';
             params.page=index;
+            this.head=false;
             this.getListData(params);
         }
     }
@@ -500,7 +504,7 @@ export default {
                 }
                 .view-table-detail{
                     width:100%;
-                    //max-height:500px;
+                    max-height:500px;
                     overflow: auto;
                     border-bottom: solid 1px #F6F6F6;
                     background: #F6F6F6;

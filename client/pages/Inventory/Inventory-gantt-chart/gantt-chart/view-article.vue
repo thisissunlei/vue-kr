@@ -14,6 +14,8 @@
                 :data="item"
                 :key="item.id"
                 :todayDetail="todayDetail"
+                :start="start"
+                :end="end"
             />
             
             
@@ -44,6 +46,12 @@ export default {
         },
         todayDetail:{
             type:Object,
+        },
+        start:{
+            type:String,
+        },
+        end:{
+            type:String
         }
     },
     data(){

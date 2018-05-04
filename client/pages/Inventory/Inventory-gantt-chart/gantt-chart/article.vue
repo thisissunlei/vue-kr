@@ -1,12 +1,12 @@
 <template>
     <div class="every-view-col"
         :style="{
-            background:data.status=='DISABLE'?'#E4E4E4':'#BCE590'
+            background:this.getBackground()
         }"
-        @mouseover="((event)=>{
+        @mouseenter="((event)=>{
             this.toolOver(event,'2')
         })"
-        @mouseout="((event)=>{
+        @mouseleave="((event)=>{
             this.toolOut(event,'2')
         })"
     >
@@ -21,10 +21,10 @@
                     left:planDetail.office * minCalibration + 'px',
                     color:'#666666'
                 }"
-                @mouseover="((event)=>{
+                @mouseenter="((event)=>{
                     this.toolOver(event,data.status)
                 })"
-                @mouseout="((event)=>{
+                @mouseleave="((event)=>{
                     this.toolOut(event,data.status)
                 })"
             >
@@ -60,6 +60,12 @@ export default {
         },
         todayDetail:{
             type:Object
+        },
+        start:{
+            type:String,
+        },
+        end:{
+            type:String
         }
     },
     data(){
@@ -82,12 +88,24 @@ export default {
                 this.leftEndpoint = this.startDate;
                 this.getBoxWidthAndOffice();
             }
-        },
+        }
     },
     methods:{
+        getBackground(){
+            var status=this.data.status;
+            if(status=='DISABLE'){
+                return '#E4E4E4';
+            }else if(status=='AVAILABLE'&&!this.data.startDate&&!this.data.endDate){
+                return '#BCE590';
+            }
+        },
         toolOver(event,param){
             event.cancelBubble = true;
-            publicFn.poptipOver(event,this.data,param)
+            var time={
+                startTime:this.start,
+                endTime:this.end
+            }
+            publicFn.poptipOver(event,this.data,param,time)
         },
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -102,30 +120,36 @@ export default {
         
        getBoxWidthAndOffice(){
             var  data = Object.assign({},this.data);
-            if(!data.actualStartTime && !data.actualEndTime){
-                data.actualStartTime = data.planStartTime;
-                data.actualEndTime = data.planEndTime; 
-            }      
+
+            if(!data.startDate&&!data.endDate){
+                return ;
+            }  
+            
             var dates = publicFn.getAllMaxAndMin(data);
             var boxDetail={};
-            var planStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate));
-            var planEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate));
-            var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
+
+            var planStart = data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate)):this.start;
+            var planEnd = data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate)):this.end;
+            
+            /*var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
             var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualEndTime));
             var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
-            var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));
+            var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));*/
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
-            var officeEnd = min;
-
+            //var officeEnd = min;
+            
+            
             // this.boxDetail={
             //     width:utils.dateDiff(startDate,endDate)+1,
             //     office:utils.dateDiff(officeStart,startDate)
             // }
+           
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
                 office:utils.dateDiff(officeStart,planStart)
             };
-            this.actualDetail={
+            
+            /*this.actualDetail={
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
@@ -147,7 +171,7 @@ export default {
             this.lineDetail = {
                 width:lineWidth,
                 office:lineOffice
-            }
+            }*/
 
        },
 

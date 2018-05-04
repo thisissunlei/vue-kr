@@ -80,11 +80,12 @@ function lineShow(data) {
     }
 }
 //鼠标滑过气泡的位置
-function poptipOver(event, data,param) {
+function poptipOver(event, data,param,time) {
     var e = event || window.event;
     var dom = event.target;
 
     var detail = dom.getBoundingClientRect();
+    var domMain=document.getElementById('layout-content-main');  
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
 
@@ -92,38 +93,35 @@ function poptipOver(event, data,param) {
         left: e.clientX,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
-    
-    var obj = getToolTipContent(data,param);
+    var obj = getToolTipContent(data,param,time);
     tirDom.innerHTML = obj.str;
-    tirDom.style.left = tirLocation.left - 210 + 'px';
-    tirDom.style.top = tirLocation.top + 10 - 345 + 'px';
+    tirDom.style.left = tirLocation.left - 215 + 'px';
+    tirDom.style.top = tirLocation.top + 10 + domMain.scrollTop-345+ 'px';
     tirDom.style.width = obj.width + 'px';
-    angleDom.style.left = tirLocation.left+ 5 - 210 + 'px';
-    angleDom.style.top = tirLocation.top - 345 + 'px';
+    angleDom.style.left = tirLocation.left+ 5 - 215 + 'px';
+    angleDom.style.top = tirLocation.top + domMain.scrollTop-345+ 'px';
     locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width)
     tirDom.style.opacity = 1;
     angleDom.style.opacity = 1;
 }
 //气泡的具体内容
-function getToolTipContent(thatData,param) {
+function getToolTipContent(thatData,param,time) {
     var label='';
-    var width = 285;
+    var width = 280;
     if(param=='NOT_EFFECT'){
         label='合同未生效';
+        //width = 280;
     }else if(param=='IN_RENT'){
         label='在租';
-        width = 250;
+    }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
+        label="未租";
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
-        width = 260;
-    }else if(thatData.status!='DISABLE'&&param=='2'){
-        label="未租";
-        width = 250;
-    } 
+        //width = 200;
+    }
     var str = '<div class="title">' + label + '：</div>';
     var data = Object.assign({}, thatData);
-    //var width = 155; 
-    if (data.endDate && data.startDate) {
+        //var width = 155; 
         /*var type = 'MM-DD';
 
         var startYear = (new Date(data.startDate)).getFullYear();
@@ -133,14 +131,10 @@ function getToolTipContent(thatData,param) {
             width = 220;
         }*/
 
-        var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) : '';
-        var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) : '';
+        var startDay = data.startDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.startDate)) :time.startTime;
+        var endDay = data.endDate ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.endDate)) :'-';
         str += '<div class="content">' + startDay + ' 至 ' + endDay + '</div>'
 
-    }else{
-        width = 150;
-        str = '<div class="title">' + label + '：全年</div>'; 
-    }
     /*if (data.taskStatus !== "UNKNOWN"
         && data.taskStatus !== "UNDERWAY"
         && data.taskStatus !== "OVERDUE"
@@ -168,21 +162,26 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
 
     let contentDom = document.getElementById('vue-chart-right-draw-content');
     let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+    var domMain=document.getElementById('layout-content-main');  
     let tirDetail = tirDom.getBoundingClientRect();
     let detail = contentDom.getBoundingClientRect();
+    
     let winWidth = document.body.clientWidth;
     let contentToRigth = winWidth - detail.right;
     let tirToRigth = winWidth - tirRightToleft - 20;
+    
     if (contentToRigth > tirToRigth) {
-        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
+        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) -280+15+'px';
+        angleDom.style.left= nowLeft - (contentToRigth - tirToRigth)- 15 +15+ 'px';
     }
-    if (detail.top + detail.height < parseInt(tirDom.style.top) + 246 + 100) {
+
+    /*if (detail.top + detail.height < parseInt(tirDom.style.top) -domMain.scrollTop+345) {
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 + 'px';
         angleDom.className = 'top-triangle';
         angleDom.style.top = parseInt(angleDom.style.top) - 35 + "px";
     } else {
         angleDom.className = 'bottom-triangle'
-    }
+    }*/
 }
 //计划于实际文字覆盖计算
 function fontCover(planContentId, actualContentId) {
@@ -331,6 +330,8 @@ function getLabelColor(taskStatus) {
         return '#FFE08F';
     } else if(taskStatus === 'IN_RENT'){
         return '#FDAFAF';
+    } else if(taskStatus === 'AVAILABLE'){
+        return '#BCE590';
     } 
 }
 function timeToStr(time) {

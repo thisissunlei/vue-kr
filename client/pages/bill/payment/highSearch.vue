@@ -106,6 +106,21 @@
                     style="width: 250px"
                ></Input>
             </FormItem>
+            <FormItem label="社区名称" class="u-input">
+                  <Select
+                        v-model="formItem.communityId"
+                        style="width:250px"
+                        placeholder="请选择社区"
+                    >
+                        <Option
+                            v-for="item in communityList"
+                            :value="item.id"
+                            :key="item.id"
+                        >
+                            {{ item.name }}
+                        </Option>
+                    </Select>
+            </FormItem>
         </Form>
 </div>
 
@@ -125,8 +140,10 @@ export default{
                 endTime:'',
                 payWay:'',
                 customerName:'',
-                receiveAccount:''
+                receiveAccount:'',
+                communityId:'',
             },
+            communityList:[],
             payWay:[    
                 {
                     value:'NONE',
@@ -177,14 +194,26 @@ export default{
 		}
 
     },
-     methods:{
+    mounted(){
+      this.getCommunity();
+    },
+    methods:{
 
         startChange(data){
             this.formItem.startTime=data;
         },
         endChange(date){
             this.formItem.endTime=date;
-        }
+        },
+        getCommunity(){
+              this.$http.get('join-bill-community','').then((res)=>{
+                this.communityList=res.data.items;
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
+         }
         
     },
     updated:function(){

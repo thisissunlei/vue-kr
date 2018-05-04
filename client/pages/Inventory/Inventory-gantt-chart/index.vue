@@ -135,12 +135,12 @@ export default {
         this.leftOver();
         this.rightOver();
         //GLOBALSIDESWITCH("false");
-        setTimeout(() => {
-              publicFn.windowResize();
-        }, 400);
-        window.onresize=function(){
-            publicFn.windowResize();
-        }
+        // setTimeout(() => {
+        //       publicFn.windowResize();
+        // }, 400);
+        // window.onresize=function(){
+        //     publicFn.windowResize();
+        // }
     },
     watch:{
         tabForms:function(val){
@@ -504,7 +504,7 @@ export default {
                 }
                 .view-table-detail{
                     width:100%;
-                    max-height:500px;
+                    //max-height:1000px;
                     overflow: auto;
                     border-bottom: solid 1px #F6F6F6;
                     background: #F6F6F6;

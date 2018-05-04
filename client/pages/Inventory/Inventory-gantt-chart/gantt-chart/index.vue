@@ -44,7 +44,9 @@
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
 
-                        <div class="add-left" @click="lastTurnPage"></div>
+                        <div class="add-left" @click="lastTurnPage">
+                            <span class='add-left-pic'  ref='addLeftPic'></span>
+                        </div>
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year"
@@ -119,7 +121,9 @@
                             </div>
                            
                         </div>
-                        <div class="add-right" @click="nextTurnPage" :style="{right:scrollWidth+'px'}"></div>
+                        <div class="add-right" @click="nextTurnPage" :style="{right:scrollWidth+'px'}">
+                            <span class='add-right-pic'  ref='addRightPic'></span>
+                        </div>
                     </div>
 
                  </div>
@@ -129,8 +133,7 @@
                     @mouseover='rightOver'
                     id="vue-chart-right-draw-content"
                 >
-                    <span class='add-left-pic'  ref='addLeftPic' @click="lastTurnPage"></span>
-                    <span class='add-right-pic'  ref='addRightPic' @click="nextTurnPage"></span>
+
                     <div
                         class="content"
                         :style="{width:dayAllNum*minCalibration+'px'}"
@@ -757,6 +760,34 @@ export default {
             .bar{
                 padding: 0px 30px;
                 box-sizing: content-box;
+                .add-left-pic{
+                    position: absolute;
+                    left:8px;
+                    top:50%;
+                    z-index:11;
+                    transform: translateY(-50%);
+                    display:inline-block;
+                    width:13px;
+                    height:20px;
+                    background:url(img/left.svg) no-repeat center;
+                    background-size:100%;
+                    cursor: pointer;
+                    opacity: 0;
+                }
+                .add-right-pic{
+                    position: absolute;
+                    right:10px;
+                    top:50%;
+                    z-index:11;
+                    transform: translateY(-50%);
+                    display:inline-block;
+                    width:13px;
+                    height:20px;
+                    background:url(img/right.svg) no-repeat center;
+                    background-size:100%;
+                    cursor: pointer;
+                    opacity: 0;
+                }
             }
 
             .calibration  {
@@ -776,7 +807,7 @@ export default {
         }
         
         #vue-chart-right-draw-content{
-            max-height:500px;
+            //max-height:1000px;
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
@@ -816,34 +847,6 @@ export default {
                 top: 0px;
                 pointer-events:none;
                 z-index:3;
-            }
-            .add-left-pic{
-                position: absolute;
-                left:8px;
-                top:50%;
-                z-index:11;
-                transform: translateY(-50%);
-                display:inline-block;
-                width:13px;
-                height:20px;
-                background:url(img/left.svg) no-repeat center;
-                background-size:100%;
-                cursor: pointer;
-                opacity: 0;
-            }
-            .add-right-pic{
-                position: absolute;
-                right:10px;
-                top:50%;
-                z-index:11;
-                transform: translateY(-50%);
-                display:inline-block;
-                width:13px;
-                height:20px;
-                background:url(img/right.svg) no-repeat center;
-                background-size:100%;
-                cursor: pointer;
-                opacity: 0;
             }
         }
          .add-left{

@@ -224,7 +224,13 @@ export default {
         var _this=this;
         LISTENSIDEBAROPEN(function (params) {
             _this.sideBar=params;
-        })  
+        }) 
+        window.onresize=function(){
+            var dailyTableDom=document.getElementById('optional-inventory-table-list');
+            _this.left=dailyTableDom.getBoundingClientRect().left;
+            _this.width=dailyTableDom.getBoundingClientRect().width;
+            _this.onScrollListener();
+        } 
     },
     watch:{
         sideBar:function(val){

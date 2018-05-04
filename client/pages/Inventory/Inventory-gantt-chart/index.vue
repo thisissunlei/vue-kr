@@ -141,6 +141,9 @@ export default {
         // window.onresize=function(){
         //     publicFn.windowResize();
         // }
+        window.onresize=function(){
+            _this.onScrollListener();
+        }
     },
     watch:{
         tabForms:function(val){
@@ -150,7 +153,7 @@ export default {
         },
         sideBar:function(val){
             this.onScrollListener();
-        },
+        }
     },
     destroyed(){
         var dom=document.getElementById('layout-content-main');

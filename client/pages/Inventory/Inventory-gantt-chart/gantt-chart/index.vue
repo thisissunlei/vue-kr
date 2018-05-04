@@ -318,13 +318,17 @@ export default {
                 var timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
                 if(this.endPosition=='start'){
                     timeShaftFixed.style.opacity=0;
-                    this.$refs.addLeftPic.style.opacity='1';
+                    if(this.$refs.addLeftPic){
+                        this.$refs.addLeftPic.style.opacity='1';
+                    }
                     setTimeout(() => { 
                       dom.scrollLeft = 0;           
                     }, 100);
                 }else if(this.endPosition=='end'){
                     timeShaftFixed.style.opacity=1;
-                    this.$refs.addRightPic.style.opacity='1';
+                    if(this.$refs.addRightPic){
+                        this.$refs.addRightPic.style.opacity='1';
+                    }
                     setTimeout(() => {
                       dom.scrollLeft = dom.scrollWidth-dom.clientWidth;
                     }, 100);

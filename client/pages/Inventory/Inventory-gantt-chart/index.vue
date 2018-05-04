@@ -379,9 +379,6 @@ export default {
         },
 
         scroll(event){
-            if(!this.params.startTime || !this.params.endTime){
-                return;
-            }
             let chartDom=document.getElementById('vue-chart-right-draw-content');
             let leftList=document.getElementById('vue-chart-left-table-list');
             const isBottom = leftList.scrollHeight - leftList.clientHeight - leftList.scrollTop;
@@ -390,9 +387,6 @@ export default {
 
         },
         rightScroll(){
-            if(!this.params.startTime || !this.params.endTime){
-                return;
-            }
             let leftList=document.getElementById('vue-chart-left-table-list');
             let chartDom=document.getElementById('vue-chart-right-draw-content');
             const isBottom = chartDom.scrollHeight - chartDom.clientHeight - chartDom.scrollTop;

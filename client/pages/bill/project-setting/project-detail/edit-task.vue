@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
-                        <div>需要填写档案<span>{{getEdit.nullFields}}</span>项，尚未完成<span>{{getEdit.totalFields}}</span>箱，<span style="color:#499DF1;" @click="goArchives">去填写&nbsp;>> </span></div>
+                        <div>需要填写档案<span>{{getEdit.nullFields}}</span>项，尚未完成<span>{{getEdit.totalFields}}</span>箱，<span style="color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
                     </div>
                 </div>
             </ClassificationBox>
@@ -139,6 +139,19 @@
                 </div>
             </ClassificationBox>                
         </Form>
+
+        <Modal
+            v-model="openGoArchives"
+            title="提示信息"
+            width="900"
+        >
+            <p style="text-align:center;">是否保存提交本次修改</p>
+            <ArchivesDetail/>
+            <div slot="footer">
+               <!--  <Button type="primary" @click="submitClick">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="closeMask">取消</Button> -->
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -147,12 +160,14 @@
 import dateUtils from 'vue-dateutils';
 import ClassificationBox from '~/components/ClassificationBox'
 import LabelText from '~/components/LabelText'
+import ArchivesDetail from '../archives-detail'
 
 import Vue from 'vue';
 export default {
     components:{
         ClassificationBox,
-        LabelText
+        LabelText,
+        ArchivesDetail
     },
     props:{
         id:{
@@ -172,7 +187,8 @@ export default {
             actualStart:this.getEdit.actualStartTime,
             actualEnd:this.getEdit.actualEndTime,
             planStart:this.getEdit.planStartTime,
-            planEnd:this.getEdit.planEndTime
+            planEnd:this.getEdit.planEndTime,
+            openGoArchives:false,
         }
     },
     created(){    
@@ -183,8 +199,12 @@ export default {
     },
    
     methods:{
-        goArchives(){
+        goArchivesClick(){
             console.log("----------")
+            this.switchGoArchives();
+        },
+        switchGoArchives(){
+            this.openGoArchives = !this.openGoArchives;
         },
         editActualEndTime(value){
             

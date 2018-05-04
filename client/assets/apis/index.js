@@ -10,6 +10,7 @@ import operationsCenter from './operationsCenter'
 import OperationApi from './operation.js';
 import NewMain from './newMain.js';
 import Basic from './basic.js';
+import projectSetting from './projectSetting'
 
 export default {
   ...OrderApi,
@@ -22,5 +23,6 @@ export default {
   ...operationsCenter,
   ...OperationApi,
   ...NewMain,
-  ...Basic
+  ...Basic,
+  ...projectSetting
 }

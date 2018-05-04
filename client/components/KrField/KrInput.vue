@@ -43,6 +43,9 @@ export default {
             type:Boolean,
             default:false,
 		},
+        name:{
+            type:String
+        }
 	},
 	data(){
 		return {
@@ -83,7 +86,13 @@ export default {
         },
         okClick(){
             this.labelValue = this.inputValue;
-            this.$emit("okClick",this.labelValue)
+            var params = {
+                name:this.name,
+                value:this.inputValue,
+                type:'text',
+
+            }
+            this.$emit("okClick",params)
         },
         cancelClick(event){
             this.inputValue = event

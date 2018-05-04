@@ -61,11 +61,11 @@
 
 
 
-			<div style="position:fixed;z-index:1000;" v-if="isEdit">
+			<div v-if="isEdit">
 				<div class="edit-label-mask" @click="maskClick"></div>
-				
+				<div class="edit-field-box">
 					<slot></slot>
-				
+				</div>
 				
 				<div class="operation">
 					<span class="kr-ui-x-icon" @click="cancelClick">
@@ -81,7 +81,7 @@
 		</div>
 		<div v-if="!readOrEdit">
 			<slot></slot>
-			<div class="edit-label-mask"></div>
+			
 		</div>
 		<Modal
             v-model="openMessage"
@@ -107,7 +107,7 @@ export default {
             default:false,
 		},
 		value:{
-			type:[Number,String,Array],
+			type:[Number,String,Array,Boolean],
 			default:''
 		},
 		labeType:{
@@ -238,13 +238,20 @@ export default {
 	cursor: pointer;
 	// height:40px;
 	min-width:150px;
-	padding-right:100px;
+	padding-right:80px;
 	box-sizing: content-box;
+	// background: red;
 	.file-view-box{
 		width: 600px;
 		min-height: 198px;
 		background:  #EEEEEE;
 	    padding: 1px;
+	}
+	.edit-field-box{
+		display:inline-block;
+		position:relative;
+		z-index:100;
+		min-width: 150px;
 	}
 	// background: red;
 	.edit-label-mask{
@@ -254,7 +261,7 @@ export default {
 		right: 0px;
 		// background: red;
 		position: fixed;
-		z-index: 0;
+		z-index: 99;
 	}
 	.operation-icon{
 		display:none;
@@ -312,13 +319,13 @@ export default {
 		background-image: url(./images/ok.svg);
 		background-repeat: no-repeat;		
 		background-size:100%; 
-		right:-30px;
+		right:60px;
 	}
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
 		background-repeat: no-repeat;
 		background-size:100%; 
-		right:-60px;
+		right:30px;
 	}
 	.label-text{
 		padding-right: 20px;
@@ -329,6 +336,7 @@ export default {
 		top: 0px;
 		right: 0px;
 		line-height: 32px;
+		z-index: 100;
 
 	}
 	img{
@@ -371,7 +379,7 @@ export default {
 			margin: 0px;
 			width: 210px;
 			height: 100px;
-			background: red;
+			// background: red;
 			border-radius: 4px 4px 4px 4px;
 		}
 		.img-mask{

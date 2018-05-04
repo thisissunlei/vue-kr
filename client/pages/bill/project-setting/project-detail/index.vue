@@ -16,13 +16,13 @@
             </div>
             <Tabs size="default"  :animated="false">
                 <TabPane label="物业档案" name="tab1">
-                    <ArchivesManagement/>
+                    <ArchivesManagement code="property"/>
 
                 </TabPane>
                 <TabPane label="产品档案" name="tab2">
 
                     
-                    <ArchivesManagement/>
+                    <ArchivesManagement code="product"/>
                 </TabPane>
                  <TabPane label="项目进度" name="tab3">
                         <GanttChart

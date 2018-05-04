@@ -12,6 +12,7 @@
                     <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px">
                         <span class="field-title" >{{everyData.displayName}}</span>
                         <KrField 
+                            :name="everyData.fieldName"
                             style="display:inline-block;"
                             :readOrEdit="true" 
                             :type="getFieldType(everyData.fieldType)" 
@@ -80,7 +81,7 @@ export default {
                     type:'GROUP',
                     data:[
                         {displayName:'项目名称',fieldName:"name",fieldType:'TEXT',fieldValue:'TEXT'},
-                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:1},
+                        {displayName:'所在区',fieldName:'localtion',fieldType:'CITY',fieldValue:[1,1,1]},
                         {displayName:'所在楼层',fieldName:'num',fieldType:'SELECT',fieldValue:'',params:'com.krspace.erp.api.enums.pm.PmDepartment'},
                         {displayName:'入驻项目资料',fieldName:'file',fieldType:'FILE',fieldValue:'[]'},
                         {displayName:'入驻时间',fieldName:'date',fieldType:'DATE',fieldValue:'DATE'},
@@ -112,7 +113,7 @@ export default {
             }else if(type=="SELECT"){
                 return 'select'
             }else if(type=="CITY"){
-                return 'cascader'
+                return 'city'
             }else if(type=="FILE"){
                 return 'upFiles'
             }else if(type=="DATE"){
@@ -126,7 +127,6 @@ export default {
             if(everyData.fieldType=="FILE"){
                return eval(everyData.fieldValue)
             }else {
-                console.log(everyData.fieldValue,"ppppp----")
                 return everyData.fieldValue;
             }
         },
@@ -153,10 +153,31 @@ export default {
         onChange(index){
             this.openIndex = index;
         },
-        okClick(){
-
+        okClick(params){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:params
+            }).then((response)=>{
+           
+                this.selectData = [].concat(this.selectFormat(response.data))
+                callback();
+            }).catch((error)=>{
+                // this.MessageType="error";
+                // this.openMessage=true;
+                // this.warn=error.message;
+            })
+            console.log("-------",params)
         },
         recordClick(value){
+            var data = {fieldName:'projectName',projectId:51};
+            this.$http.get('project－field-record',data).then((response)=>{
+           
+                console.log(response,"pppppp")
+            }).catch((error)=>{
+                // this.MessageType="error";
+                // this.openMessage=true;
+                // this.warn=error.message;
+            })
+            
             this.cancelRecord();
         },
         cancelRecord(){

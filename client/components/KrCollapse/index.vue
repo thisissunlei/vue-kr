@@ -2,8 +2,23 @@
 
 <div class= "ui-kr-collapse" >
 	<div class="collapse-box" v-for="(item,index) in data" :key="item.id">
-        <div class="title" @click="onChange(index,item)">{{item.label}}<div></div></div>
-        <div class="content" :style="{height:activeBox==index?item.children.length * 45 +'px':0}">
+        <div class="title" 
+            @click="onChange(index,item)"
+            :style="{
+             background:activeBox==index?'#EFF2F4':'#ffffff'
+          }" 
+        >
+          {{item.label}}
+          <div :class="{
+              'collapse-icon':true,
+              'collapse-icon-take-up':!activeBox==index,
+              'collapse-icon-open':activeBox==index
+          }"></div>
+        </div>
+        <div class="content" 
+            :style="{
+              height:activeBox==index?item.children.length * 45 +'px':0,
+            }">
             <div class="collapse-children" v-for="child in item.children" :key="child.id">
                 <div><div class="round"></div>{{child.label}}</div>
             </div>
@@ -24,20 +39,20 @@
               default:0,
           }
         },
-       data(){
+        data(){
            return{
                activeBox:this.openIndex
            }
-       },
-       watch:{
+        },
+        watch:{
            openIndex(){
                this.activeBox = this.openIndex;
            }
-       },
+        },
         
         methods:{
-           onChange(index,data){
-               this.$emit('onChange',index,data)
+            onChange(index,data){
+                this.$emit('onChange',index,data)
             }
 
         },
@@ -52,6 +67,30 @@
     
     .collapse-box{
         position: relative;
+        .collapse-icon{
+          display: inline-block;
+          height: 8px;
+          width: 16px;
+          position: absolute;
+          right: 20px;
+          top: 0px;
+          background-size: 100%;
+          background-repeat: no-repeat;
+          top: 50%;
+          margin-top: -4px;
+        }
+        .collapse-icon-open{
+          background-image:url(./images/open.svg); 
+        }
+        .collapse-icon-open:hover{
+          background-image:url(./images/open-active.svg); 
+        }
+        .collapse-icon-take-up{
+          background-image:url(./images/take-up.svg); 
+        }
+        .collapse-icon-take-up:hover{
+          background-image:url(./images/take-up-active.svg); 
+        }
        
         .title{
             height: 50px;
@@ -62,6 +101,7 @@
             color: #333;
             box-sizing: border-box;
             cursor: pointer;
+            position: relative;
         }
         
         .title:hover{

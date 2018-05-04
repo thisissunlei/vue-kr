@@ -157,7 +157,12 @@ export default{
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		okClick(){
-			
+			 var params = {
+                name:this.name,
+                value:this.inputValue,
+                type:'file',
+
+            }
             this.$emit("okClick",this.fileArr)
 		},
 		eyeImg(index){
@@ -183,8 +188,6 @@ export default{
 					this.eyeIndex = i;
 				}
 			}
-
-			console.log(urlArr,"ooooooooooo")
 			this.imagesArr = [].concat(urlArr);
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
@@ -281,6 +284,7 @@ export default{
 	
 	.edit-label{
 		width: 100%;
+		// padding-right: 0px;
 	}
 	
 	.up-icon{

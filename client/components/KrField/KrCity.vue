@@ -1,5 +1,5 @@
 <template>
-	<div class="ui-kr-cascader">
+	<div class="ui-kr-city">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
@@ -29,13 +29,16 @@ export default {
         EditLabel,
     },
     props:{
+        name:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',
         },
 		value:{
             default:'',
-			type:[Number,String]
+			type:[Number,String,Array]
         },
         readOrEdit:{
             type:Boolean,
@@ -57,10 +60,11 @@ export default {
 	data(){
 		return {
             isEdit:false,
-            cityValue:[],
+            cityValue:this.value,
             labelValue:'',
             id:this.value,
-            t_id:0
+            t_id:0,
+            newValue:this.value,
 		}
     },
     mounted(){
@@ -68,8 +72,7 @@ export default {
             this.labelValue="";
             this.cityValue='';
         }  
-        this.labelValue=this.cityValue ? this.fnTreeId(this.value,this.data) : '';
-        this.cityValue = this.cityValue.reverse();
+        this.labelValue=this.cityValue ? this.getProvince(this.cityValue,this.data) : '';
     },
 	methods:{
         recordClick(value){
@@ -77,40 +80,61 @@ export default {
             this.$emit('recordClick',value)
         },
         change(value){
-            this.labelValue=(value&&value.length) ? this.fnTreeId(value[2],this.data) : '';
+           
             this.$emit('change',value);
-            this.cityValue = value;
+            this.newValue = [].concat(value);
         },
-        fnTreeId(id,data){	
-            var cityLable = '';
-            for(var i=0;i<data.length;i++){		
-                let item = data[i];
-                cityLable = item.label;
-                if(item.t_id == id ){
-                        cityLable = item.label;
-                        this.cityValue.push(item.value)
-                        return cityLable;
-                }else{
-                    if(item.children){
-                        let text = this.fnTreeId(id,item.children);
-                        if(text){
-                            this.cityValue.push(item.value)
-                            
-                            return cityLable+='/'+text;
-                        }
-                        
-                    }	
+       
+        //获取省
+        getProvince(values,data){
+            var children = [];
+            var str = '';
+            for(var i=0;i<data.length;i++){
+                if(data[i].id == values[0]){
+                    children = [].concat(data[i].children);
+                    str += data[i].label;
+                    break;
                 }
             }
-            return false;
+
+            return str +=this.getCity(values,children);
+        },
+        getCity(values,data){
+            var children = [];
+            var str = '';
+            for(var i=0;i<data.length;i++){
+                if(data[i].id == values[1]){
+                    children = [].concat(data[i].children);
+                    str += '/' + data[i].label;
+                    break;
+                }
+            }
+            return str += this.getCounty(values,children);
+        },
+        getCounty(values,data){
+            var str= '';
+            var children = [];
+            for(var i=0;i<data.length;i++){
+                if(data[i].id == values[2]){
+                    return str += '/' + data[i].label;
+                    break;
+                }
+            }
+
         },
         visibleChange(event){
             this.$emit('visibleChange',event)
         },
         okClick(){
-           
-            this.$emit("okClick",this.value);
-            this.id=this.cityValue;
+            this.cityValue = this.newValue;
+            this.labelValue = this.getProvince(this.cityValue,this.data);
+            var cityValue = JSON.stringify(this.cityValue);
+            var params = {
+                name:this.name,
+                value:cityValue,
+                type:'cascader',
+            }
+            this.$emit("okClick",params);
         },
         cancelClick(event){
             this.cityValue=this.id;
@@ -120,7 +144,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ui-kr-cascader{
+.ui-kr-city{
     position: relative;
     height: 40px;
     .edit-label{

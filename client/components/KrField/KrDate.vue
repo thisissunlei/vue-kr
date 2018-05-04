@@ -36,6 +36,9 @@ export default {
 			type:[Number,String],
             default:''
         },
+        name:{
+            type:String
+        },
         readOrEdit:{
             type:Boolean,
             default:false,
@@ -65,7 +68,14 @@ export default {
         },
         okClick(){
             this.labelValue = this.dateValue?dateUtils.dateToStr("YYYY-MM-DD",new Date(this.dateValue)):'';
-            this.$emit("okClick",this.labelValue)
+            
+            var params = {
+                name:this.name,
+                value:this.labelValue+ '00:00:00',
+                type:'date',
+
+            }
+            this.$emit("okClick",params)
         },
         cancelClick(event){
             this.dateValue = event

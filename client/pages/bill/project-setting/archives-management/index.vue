@@ -1,10 +1,10 @@
 <template>
   <div class="archives-management">
         <div class="content">
-            <div class="collapse">
+            <div class="collapse" ref="collapse">
                 <KrCollapse :openIndex="openIndex" :data="collapseData" @onChange="onChange"/>
             </div>
-            <div class="archives-box">
+            <div class="archives-box" ref="archivesBox">
                 <ArchivesDetail />
             </div>
         </div>
@@ -14,11 +14,17 @@
 
 <script>
 import KrCollapse from '~/components/KrCollapse';
-import ArchivesDetail from '../archives-detail'
+import ArchivesDetail from '../archives-detail';
+var wHeight = 0;
 export default {
     components:{
         KrCollapse,
         ArchivesDetail
+    },
+    props:{
+        code:{
+          type:String,
+        }
     },
     data(){
        return {
@@ -48,10 +54,37 @@ export default {
        }
     },
     mounted(){
-        
+        wHeight = document.body.clientHeight;
+        window.addEventListener('resize',this.setContentHeight)
+        this.getArchivesTree({code:this.code});
+
     },
+
     methods:{
-        onChange(index){
+        //获取项目档案左边bai
+        getArchivesTree(data){
+          this.$http.get('project－archives-tree',data).then((response)=>{
+               console.log('=====',response);
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
+        setContentHeight(){
+          var newHeight = document.body.clientHeight;
+          if(newHeight !== wHeight){
+            console.log(this.refs.collapse,"pppp")
+            var collapseDom = this.refs.collapse;
+            var archivesBoxDom = this.refs.archivesBox;
+            collapseDom.style.height = newHeight+'px';
+            archivesBoxDom.style.height = newHeight+'px';
+            wHeight = newHeight;
+          }
+          
+        },
+        onChange(index,data){
+
             this.openIndex = index;
         }
     }

@@ -30,6 +30,9 @@ export default {
         EditLabel,
     },
     props:{
+        name:{
+            type:String
+        },
         placeholder:{
             type:String,
             default:'请输入...',
@@ -73,7 +76,6 @@ export default {
     },
     mounted(){
         this.getSelectData(this.selectParam,()=>{
-            console.log("========")
             this.getLabel(this.selectValue);
         });
     },
@@ -118,7 +120,14 @@ export default {
         },
         okClick(){
             this.getLabel(this.selectValue);
-            this.$emit("okClick",this.selectValue,{value:this.selectValue,label:this.labelValue});
+
+            var params = {
+                name:this.name,
+                value:this.selectValue,
+                type:'select',
+
+            }
+            this.$emit("okClick",params,{value:this.selectValue,label:this.labelValue});
             this.id=this.selectValue;
         },
         cancelClick(event){

@@ -4,6 +4,7 @@
    
         <KrInput
             v-if="type==='text'"
+            :name="name"
             :value="value"
             :placeholder="placeholder"
             :type='type'
@@ -23,6 +24,7 @@
         <KrSelect
             v-if="type==='select'"
             :value="value"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -38,6 +40,7 @@
         <KrDate
             v-if="type==='date'"
             :value="value"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -50,6 +53,7 @@
         <KrTimeDate
             v-if="type==='datetime'"
             :value="value"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -62,6 +66,7 @@
         <KrTime
             v-if="type==='time'"
             :value="value"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :readOrEdit="readOrEdit"
@@ -73,6 +78,7 @@
         <KrTextarea
             v-if="type==='textarea'"
             :value="value"
+            :name="name"
             :placeholder="placeholder"
             :type='type'
             :maxLength="maxLength"
@@ -86,6 +92,22 @@
         <KrCascader
             v-if="type==='cascader'"
             :data="data"
+            :name="name"
+            :value="value"
+            :mask="mask"
+            :clearable='clearable'
+            :placeholder="placeholder"
+            :readOrEdit="readOrEdit"
+            @change="change"
+            @recordClick="recordClick"
+            @visibleChange="visibleChange"
+            @okClick="okClick"
+        />
+        
+         <KrCity
+            v-if="type==='city'"
+            :data="data"
+            :name="name"
             :value="value"
             :mask="mask"
             :clearable='clearable'
@@ -97,10 +119,10 @@
             @okClick="okClick"
         />
 
-
         <SelectTree 
             v-if="type==='selectTree'"
             :data = 'data'
+
             @checkChange="checkChange"
             @okClick="okClick"
             :treeIds="treeIds"
@@ -110,6 +132,7 @@
             v-if="type==='upFiles'"  
             :readOrEdit="readOrEdit" 
             :value = 'value'
+            :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
         />
@@ -117,6 +140,7 @@
             v-if="type==='upImage'"  
             :readOrEdit="readOrEdit" 
             :value = 'value'
+            :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
         />
@@ -126,6 +150,7 @@
 
 <script>
 import KrCascader from './KrCascader';
+import KrCity from './KrCity';
 import SelectTree from './SelectTree';
 import KrInput from './KrInput';
 import KrSelect from './KrSelect';
@@ -146,11 +171,15 @@ export default {
       KrTextarea,
       UpFiles,
       KrTimeDate,
-      UpImage
+      UpImage,
+      KrCity
     },
     props:{
         label:{
             default:'',
+            type:String
+        },
+        name:{
             type:String
         },
         value:{

@@ -122,7 +122,7 @@
                            
                         </div>
                         <div class="add-right" @click="nextTurnPage" :style="{right:scrollWidth+'px'}">
-                            <span class='add-right-pic'  ref='addRightPic'></span>
+                            <span class='add-right-pic' id="add-right-pic-inventory" ref='addRightPic'></span>
                         </div>
                     </div>
 

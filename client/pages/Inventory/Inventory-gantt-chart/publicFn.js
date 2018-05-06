@@ -108,19 +108,22 @@ function poptipOver(event, data,param,time) {
 function getToolTipContent(thatData,param,time) {
     var label='';
     var width = 280;
+    var data = Object.assign({}, thatData);
     if(param=='NOT_EFFECT'){
         label='合同未生效';
         //width = 280;
     }else if(param=='IN_RENT'){
         label='在租';
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
+        /*if(!data.endDate){
+            width=200;
+        }*/
         label="未租";
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
         //width = 200;
     }
     var str = '<div class="title">' + label + '：</div>';
-    var data = Object.assign({}, thatData);
         //var width = 155; 
         /*var type = 'MM-DD';
 
@@ -163,16 +166,20 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
     let contentDom = document.getElementById('vue-chart-right-draw-content');
     let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
     var domMain=document.getElementById('layout-content-main');  
+    var picDom=document.getElementById('add-right-pic-inventory');
     let tirDetail = tirDom.getBoundingClientRect();
     let detail = contentDom.getBoundingClientRect();
     
     let winWidth = document.body.clientWidth;
     let contentToRigth = winWidth - detail.right;
     let tirToRigth = winWidth - tirRightToleft - 20;
+    var right=-10;
+    if(picDom.style.opacity=='1'){
+        right=-30;
+    }
     
     if (contentToRigth > tirToRigth) {
-        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) -280+15+'px';
-        angleDom.style.left= nowLeft - (contentToRigth - tirToRigth)- 15 +15+ 'px';
+        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+right+'px';
     }
 
     /*if (detail.top + detail.height < parseInt(tirDom.style.top) -domMain.scrollTop+345) {

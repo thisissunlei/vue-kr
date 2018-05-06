@@ -11,12 +11,12 @@
                     <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
                     <span >{{item.comment}}</span>
                 </div>
-                <div class='third' v-if="item.detail">
+                <div class='third' v-if="item.descr">
                         <div class="mod-triangle">
                         <div class="t-border"></div>
                         <div class="t-inset"></div>
                     </div>
-                    {{item.detail}}
+                    {{item.descr}}
                     
                 </div>
             </div>
@@ -38,7 +38,7 @@ export default {
        }
     },
     mounted(){
-        console.log(this.data,"pppppp")
+      
     },
     methods:{
         
@@ -60,6 +60,7 @@ export default {
         .record-wrap{
            
             padding-bottom:15px;
+            margin-top: 15px;
             border-bottom:1px solid #EFEFEF;
             .first{
                 font-family: PingFang-SC-Regular;

@@ -1,14 +1,19 @@
 <template>
   <div class="project-setting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
-            <TabPane label="列表视图" name="tab1">
-                <Archives v-if="mask"/>
-
+            <TabPane label="待开业项目" name="tab1">
+                <!--项目管理档案列表
+                 <Archives v-if="mask"/> 
+                -->
+                <ProjectView />
             </TabPane>
-            <TabPane label="日历视图" name="tab2">
+            <TabPane label="已开业项目" name="tab2">
 
-                <ProgressView v-if="!mask"/>
-
+                <!-- 项目总览
+                    <ProgressView v-if="!mask"/> 
+                -->
+                <h1>已开业</h1>
+                
             </TabPane>
         </Tabs>
   </div>
@@ -18,11 +23,11 @@
 <script>
 
 import Archives from './archives'
-import ProgressView from './progress-view';
+import ProjectView from './project-view';
 export default {
     components:{
         Archives,
-        ProgressView
+        ProjectView
     },
     data(){
         return{
@@ -79,10 +84,11 @@ export default {
             box-sizing: border-box;
         }
         .ivu-tabs-nav .ivu-tabs-tab{
-            
+            width: 50%;
             text-align: center;
             line-height: 35px;
             padding: 8px 20px;
+            
         }
         .ivu-tabs-bar{
             margin: 0px;

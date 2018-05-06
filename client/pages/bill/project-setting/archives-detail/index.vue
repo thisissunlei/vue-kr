@@ -61,6 +61,9 @@ export default {
     props:{
         data:{
             type:Object,
+        },
+        projectId:{
+            type:[String,Number]
         }
     },
     data(){
@@ -84,7 +87,6 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
-        console.log(this.data,"pppppppppp")
     },
     methods:{
         getTypeToField(type){
@@ -104,7 +106,7 @@ export default {
         }, 
         getValue(everyData){
             if(everyData.fieldType=="FILE"){
-               console.log(everyData.fieldValue,"ppppppppp")
+             
                return eval(everyData.fieldValue) || [];
             }else {
                 return everyData.fieldValue||'';
@@ -135,14 +137,12 @@ export default {
             this.openIndex = index;
         },
         okClick(params){
-            let data = Object.assign({projectId:this.queryData.id},params)
+            let data = Object.assign({projectId:this.projectId},params)
             data.fieldName = data.name;
             data.fieldType = this.getFieldToType(data.type);
             data.fieldValue = data.value;
-            data.groupCode = "property"
-            console.log(params,"ooooooooo")
+            data.groupCode = "property";
             this.$http.post('project－field-edit',data).then((response)=>{
-                console.log(response)
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{
@@ -150,13 +150,13 @@ export default {
                 // this.openMessage=true;
                 // this.warn=error.message;
             })
-            // console.log("-------",params)
+
         },
         recordClick(value){
-            var data = {fieldName:'projectName',projectId:51};
+            var data = {fieldName:'projectName',projectId:this.projectId};
             this.$http.get('project－field-record',data).then((response)=>{
-           
-                console.log(response,"pppppp")
+                console.log(response,"lllllllll")
+                this.recordData = [].concat(response.data);
             }).catch((error)=>{
                 // this.MessageType="error";
                 // this.openMessage=true;

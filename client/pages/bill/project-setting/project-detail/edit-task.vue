@@ -1,119 +1,68 @@
 <template>
     <div class="edit-task">
         <Form  :model="params"   label-position="top" style="margin-top:25px;">
-            <ClassificationBox value="1" title="计划工期" :isBorder="true" type="num">
-                <div slot="content" class="time-box plan-time" > 
-                    <Form-item label="开始日" class="bill-search" prop="planStartTime">
-                        <DatePicker 
-                        
-                            v-model="params.planStartTime"
-                            type="date" 
-                            placeholder="开始日期" 
-                            style="width: 245px"
-                            :clearable="false"
-                            @on-change="planStartChange"
-                        />
-                        <span class="u-date-txt" ></span>
-                    </Form-item>
-                    
-                    <Form-item label="结束日"  prop="planEndTime" style="display:inline-block;">
-                        <DatePicker 
-                            v-model="params.planEndTime"
-                            type="date" 
-                            placeholder="结束日期" 
-                            style="width: 245px"
-                            :clearable="false"
-                            @on-change="planEndChange"
-                        /> 
-                    </Form-item>
-                    <div  style="color:red;padding-left:32px;padding-bottom:15px;" v-show="dateError">开始日期不能大于结束日期</div> 
-                </div>
-            </ClassificationBox>
-            <ClassificationBox value="2" :promptText="editActualEndTime('title')?'':'（请先填写“计划工期”）'" title="执行情况" :isBorder="true" type="num">
-                <div slot="content" > 
-                    <div class="time-box actual-time" >
-                        
-                        <!-- <Tooltip v-if="!actualStart" placement="top" class="start"> -->
-                            <Form-item label="开始日" class="bill-search ">
-                                <DatePicker 
-                                    v-model="params.actualStartTime"
-                                    type="date" 
-                                    :clearable="false"
-                                    placeholder="开始日期" 
-                                    style="width: 245px"
-                                    @on-change="actualStartChange"
-                                />
-                               
-                                <span class="u-date-txt"></span>
-                                <div 
-                                    v-if="editActualEndTime('start') && !this.actualStart" 
-                                    class="actual-select-today" 
-                                    @click="selectTodayStart"
-                                >
-                                    今天开始的？
-                                </div>
-                                <div v-if="!editActualEndTime('start')" class="mask"></div>
-                            </Form-item>
+            <div class="file-box ">
+                <div class="file-col"><span class="file-title">责任部门</span><span class="file-label">{{getEdit.department}}</span></div>
+                <div>
+                    <div class="tiem-box" style="float:left;">
+                        <div class="time-view">
+                            <div  class="time-title" >计划时间</div>
+                            <div v-if="!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
+                            <div v-if="isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                                <DatePicker
+                                    :open="startOpen"
+                                    :value="actualStart"
+                                    confirm
+                                    type="date"
+                                    @on-change="startChnage"
+                                    @on-clear="startClear"
+                                    @on-ok="startOk">
+                                    <a href="javascript:void(0)" @click="switchStartTime">
+                                    
+                                        <div style="display:inline-block;font-size:20px;color:#333;"> {{ actualStart }} </div>
+                                        
+                                        <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
+                                    </a>
+                                </DatePicker>
+                            </div>
+                        </div>
+                        <div class="time-edit">
                             
-                        <!-- </Tooltip> -->
-                       
-                        <!-- <Tooltip v-if="!actualEnd" placement="top" class="end"> -->
-                            <Form-item  class="end" label="结束日"  prop="actualEndTime" style="display:inline-block;">
-                                <DatePicker 
-                                    v-model="params.actualEndTime"
-                                    type="date" 
-                                    :clearable="false"
-                                    placeholder="结束日期" 
-                                    style="width: 245px"
-                                    @on-change="actualEndChange"
-                                /> 
-                                <div 
-                                    v-if="editActualEndTime('end')&&!this.actualEnd" 
-                                    class="actual-select-today"
-                                    @click="selectTodayEnd"
-                                >今天完成的?</div>
-                                 <div v-if="!editActualEndTime('end')" class="mask"></div>
-                            </Form-item>
-                          
-                        <!-- </Tooltip>    -->
-                        <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError">开始日期不能大于结束日期且不能只有结束日期</div> 
-                        <!-- <div style="color:red;padding-left:32px;padding-bottom:15px;" v-show="cDateError1">计划工期必填</div>  -->
-                       
+                        </div>
                     </div>
-
-                    <div class="time-box" style="margin-top:10px;display:inline-block;line-height:20px;">
-                        <div>需要填写档案<span>{{getEdit.nullFields}}</span>项，尚未完成<span>{{getEdit.totalFields}}</span>箱，<span style="color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
+                    <div class="tiem-box" style="margin-left:19px;">
+                        <div class="time-title">完成时间</div>
+                        <div v-if="!isEndEdit" class="time-bottom-success" @click="switchEndEdit">✔️已完成</div>
+                        <div v-if="isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                            <DatePicker
+                                :open="endOpen"
+                                :value="planEnd"
+                                confirm
+                                type="date"
+                                @on-change="endChange"
+                                @on-clear="endClear"
+                                @on-ok="endOk">
+                                <a href="javascript:void(0)" @click="switchEndTime">
+                                
+                                    <div style="display:inline-block;font-size:20px;color:#333;"> {{ planEnd }} </div>
+                                    
+                                    <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
+                                </a>
+                            </DatePicker>
+                        </div>
                     </div>
                 </div>
-            </ClassificationBox>
+                <div class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                    <div>需要填写档案
+                        <span style="font-size:20px;color:#ccc;">{{getEdit.nullFields}}</span>项，尚未完成
+                        <span style="font-size:20px;color:#000;">{{getEdit.totalFields}}</span>箱，
+                        <span style="font-size:20px;color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
+                </div>
+            </div>
             
-            <ClassificationBox value="3" title="基本信息" :isBorder="true" type="num">
-                <div slot="content"> 
-
-                    <LabelText label="管理层关注" >
-                        {{params.focus=="0"?'否':'是'}}
-                    </LabelText>
-                    <LabelText label="责任部门" >
-                        {{getEdit.department}}
-                    </LabelText>
-                   
-                    <div>
-                        <LabelText label="上游任务" >
-                           {{!params.upstream?'-':params.upstream}}
-                        </LabelText>
-                    </div>
-                     <div>
-                        <LabelText label="下游任务" >
-                            {{!params.downstream?'-':params.downstream}}
-                        </LabelText>
-                    </div>
-                    <LabelText label="描述" >
-                        {{!params.descr?'-':params.descr}}
-                    </LabelText>
-                </div>
-                
-            </ClassificationBox>
-            <ClassificationBox value="4" title="编辑记录" :isBorder="true" :isEnd="true" type="num">
+            
+          
+            
                 <div class="edit-record" slot="content">
                     <div
                         class='record-wrap'
@@ -136,8 +85,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </ClassificationBox>                
+                </div>              
         </Form>
 
         <Modal
@@ -145,11 +93,10 @@
             title="提示信息"
             width="900"
         >
-            <p style="text-align:center;">是否保存提交本次修改</p>
-            <ArchivesDetail/>
+            <ArchivesDetail :projectId="projectId" v-if="fileDetailData.items" :data ="fileDetailData" />
+            
             <div slot="footer">
-               <!--  <Button type="primary" @click="submitClick">确定</Button>
-                <Button type="ghost" style="margin-left:8px" @click="closeMask">取消</Button> -->
+              
             </div>
         </Modal>
     </div>
@@ -170,7 +117,10 @@ export default {
         ArchivesDetail
     },
     props:{
-        id:{
+        taskId:{
+            type:[Number,String]
+        },
+        projectId:{
             type:[Number,String]
         },
         getEdit:{
@@ -189,19 +139,62 @@ export default {
             planStart:this.getEdit.planStartTime,
             planEnd:this.getEdit.planEndTime,
             openGoArchives:false,
+            queryData:{},
+            fileDetailData:{},
+            startOpen:false,
+            isStartEdit:false,
+            endOpen:false,
+            isEndEdit:false,
+            newStart:'',
+            newEnd:''
+
         }
     },
     created(){    
-        // this.queryData=this.$route.query; 
+        this.queryData=Object.assign({},this.$route.query); 
     },
     mounted(){
          
     },
    
     methods:{
+        switchStartTime(){
+            this.startOpen = !this.startOpen;
+        },
+        switchEndTime(){
+            this.endOpen = !this.endOpen;
+        },
+        startChnage(date){
+            this.newStart = date
+        },
+        startOk(){
+            this.actualStart = this.newStart;
+            this.switchStartTime();
+        },
+        startClear(){
+
+        },
+        switchStartEdit(){
+
+            this.isStartEdit = !this.isStartEdit;
+        },
+        endChange(data){
+            this.newEnd = data;
+        },
+        endClear(){
+
+        },
+        endOk(){
+            this.planEnd = this.newEnd;
+            this.switchEndTime();
+        },
+        switchEndEdit(){
+            this.isEndEdit = !this.isEndEdit;
+        },
         goArchivesClick(){
-            console.log("----------")
-            this.switchGoArchives();
+           
+            this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code})
+            
         },
         switchGoArchives(){
             this.openGoArchives = !this.openGoArchives;
@@ -229,60 +222,38 @@ export default {
             this.actualStartChange( this.params.actualStartTime)
         },
         selectTodayEnd(){
-        
+            
             this.params.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
             this.actualEndChange( this.params.actualEndTime)
         },
         planStartChange(params){
         
-            this.planStart=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-                this.dateError=true;
-            }else{
-                this.dateError=false;
-                this.params.planStartTime = params;
-                var data = Object.assign({},this.params);
+            // this.planStart=params;
+            // if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
+            //     this.dateError=true;
+            // }else{
+            //     this.dateError=false;
+            //     this.params.planStartTime = params;
+            //     var data = Object.assign({},this.params);
                
-                this.$emit('dataChange',data)
-            }
+            //     this.$emit('dataChange',data)
+            // }
         },
-        planEndChange(params){
-            this.planEnd=params;
-            if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-                this.dateError=true;
-            }else{
-                this.dateError=false;
-                this.params.planEndTime = params;
-                var data = Object.assign({},this.params);
-                
-                this.$emit('dataChange',data)
-            }
-        },
-        actualStartChange(params){
-          
-            this.actualStart=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
-                this.cDateError=true;
-            }else{
-                this.cDateError=false;
-                this.params.actualStartTime = params;
-                var data = Object.assign({},this.params);
-                this.$emit('dataChange',data)
-            }
-        },
-        actualEndChange(params){
-            
-            this.actualEnd=params;
-            if((this.actualStart&&this.actualEnd&&this.actualStart>this.actualEnd)||this.actualEnd&&!this.actualStart){
-                this.cDateError=true;
-            }else{
+        actualStartChange(){
 
-                this.cDateError=false;
-                this.params.actualEndTime = params;
-                var data = Object.assign({},this.params);
-                this.$emit('dataChange',data)
-            }
-        }
+        },
+        //去填写详情
+        getArchivesDetail(data){
+            this.fileDetailData = {};
+            this.$http.get('project－archives-file-detail',data).then((response)=>{
+                this.fileDetailData = Object.assign({},response.data);
+                this.switchGoArchives();
+            }).catch((error)=>{
+                this.$Notice.error({
+                title: error.message,
+                });
+            })
+        },
     }
 }
 
@@ -290,15 +261,7 @@ export default {
 
 <style lang='less'>
 .edit-task{
-    .mask{
-        position: absolute;
-        cursor: not-allowed;
-        top: 0px;
-        bottom: 0px;
-        width: 100%;
-        z-index: 10;
-
-    }
+    
     .bill-search-class{
         display:inline-block;
         width:50%;
@@ -308,6 +271,19 @@ export default {
     .dep-class{
         .ivu-form-item-content{
             line-height:34px;
+        }
+    }
+    .file-col{
+        margin: 10px 0px 20px;
+        .file-title{
+            font-size: 16px;
+            color: #333333;
+            font-weight: bold;
+        }
+        .file-label{
+            font-size: 16px;
+            color: #333333;
+            margin-left: 15px;
         }
     }
     .ui-labeltext{
@@ -330,14 +306,57 @@ export default {
     }
   
     
-    .ivu-form-item{
-        margin-bottom: 0px;
-    }
-    .time-box{
+   
+    .file-box{
         background:#F6F6F6;
-        padding:10px;
+        padding:15px;
         border-radius:4px; 
         position: relative;
+        .tiem-box{
+            display: inline-block;
+            width: 250px;
+            height: 113px;
+            background: #ffffff;
+            text-align: center;
+              .time-title{
+                padding-top: 20px;
+                font-size: 14px;
+                color: #666666;
+                text-align: center;
+
+            }
+            .time-bottom-unsuccess{
+                background: #FFFFFF;
+                border: 1px solid #4F9EED;
+                border-radius: 4px;
+                font-size: 14px;
+                color: #4F9EED;
+                cursor: pointer;
+                text-align: center;
+                height: 36px;
+                line-height: 36px;
+                width: 150px;
+                display: inline-block;
+                margin: auto;
+                margin-top: 20px;
+                
+            }
+             .time-bottom-success{
+                background:  #4F9EED;
+                border: 1px solid #4F9EED;
+                border-radius: 4px;
+                font-size: 14px;
+                color: #FFFFFF;
+                cursor: pointer;
+                text-align: center;
+                height: 36px;
+                line-height: 36px;
+                width: 150px;
+                display: inline-block;
+                margin-top: 20px;
+                margin: auto;
+            }
+        }
     }
     .actual-select-today{
         position: absolute;

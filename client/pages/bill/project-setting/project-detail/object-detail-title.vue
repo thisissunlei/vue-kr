@@ -41,7 +41,7 @@ export default{
    },
    watch:{
        taskStatus:function (params) {
-           console.log("--------")
+      
            this.status = this.taskStatus;
        }
    },

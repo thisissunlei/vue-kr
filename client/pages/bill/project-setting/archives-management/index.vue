@@ -5,7 +5,7 @@
                 <KrCollapse v-if="collapseData && collapseData.length" :openIndex="openIndex" :data="collapseData" @onChange="onChange"/>
             </div>
             <div class="archives-box" ref="archivesBox">
-                <ArchivesDetail  v-if="fileDetailData.items" :data ="fileDetailData" />
+                <ArchivesDetail :projectId="queryData.id" v-if="fileDetailData.items" :data ="fileDetailData" />
             </div>
         </div>
   </div>
@@ -54,11 +54,12 @@ export default {
                 });
             })
         },
+        //获取档案详情
         getArchivesDetail(data){
             data.projectId = this.queryData.id;
             this.fileDetailData = {};
             this.$http.get('project－archives-file-detail',data).then((response)=>{
-               console.log('---------',response.data);
+             
             //    this.collapseData = [].concat(response.data);
             this.fileDetailData = Object.assign({},response.data);
             }).catch((error)=>{
@@ -70,7 +71,7 @@ export default {
         setContentHeight(){
           var newHeight = document.body.clientHeight;
           if(newHeight !== wHeight){
-            console.log(this.refs.collapse,"pppp")
+            
             var collapseDom = this.refs.collapse;
             var archivesBoxDom = this.refs.archivesBox;
             collapseDom.style.height = newHeight+'px';

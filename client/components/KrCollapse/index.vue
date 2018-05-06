@@ -1,7 +1,7 @@
 <template>
 
 <div class= "ui-kr-collapse" >
-	<div class="collapse-box" v-for="(item,index) in data" :key="item.id">
+	<div class="collapse-box" v-for="(item,index) in data" :key="index">
         <div class="title" 
             @click="onChange(index,item)"
             :style="{
@@ -11,15 +11,16 @@
           {{item.label}}
           <div :class="{
               'collapse-icon':true,
-              'collapse-icon-take-up':!activeBox==index,
+              'collapse-icon-take-up':!(activeBox==index),
               'collapse-icon-open':activeBox==index
           }"></div>
         </div>
         <div class="content" 
+            v-if="item.children && item.children.length"
             :style="{
               height:activeBox==index?item.children.length * 45 +'px':0,
             }">
-            <div class="collapse-children" v-for="child in item.children" :key="child.id">
+            <div class="collapse-children" v-for="child in item.children" :key="child.value">
                 <div><div class="round"></div>{{child.label}}</div>
             </div>
         </div>
@@ -49,12 +50,13 @@
                this.activeBox = this.openIndex;
            }
         },
-        
+        mounted(){
+       
+        },
         methods:{
             onChange(index,data){
                 this.$emit('onChange',index,data)
             }
-
         },
     }
 </script>

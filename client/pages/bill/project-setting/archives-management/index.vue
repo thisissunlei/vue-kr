@@ -2,10 +2,10 @@
   <div class="archives-management">
         <div class="content">
             <div class="collapse" ref="collapse">
-                <KrCollapse :openIndex="openIndex" :data="collapseData" @onChange="onChange"/>
+                <KrCollapse v-if="collapseData && collapseData.length" :openIndex="openIndex" :data="collapseData" @onChange="onChange"/>
             </div>
             <div class="archives-box" ref="archivesBox">
-                <ArchivesDetail />
+                <ArchivesDetail  v-if="fileDetailData.items" :data ="fileDetailData" />
             </div>
         </div>
   </div>
@@ -29,42 +29,38 @@ export default {
     data(){
        return {
            openIndex:0,
-           collapseData:[
-                {
-                    label:"物业基础",
-                    t_id:1,
-                    value:1,
-                    children:[
-                        {label:'基础信息',value:2,t_id:2},
-                        {label:'产权信息',value:3,t_id:3},
-                        {label:'周边信息',value:4,t_id:4}
-                    ]
-               },
-               {
-                   label:"工程信息",
-                   value:5,
-                   t_id:5,
-                   children:[
-                       {label:'基础信息',value:6,t_id:6},
-                       {label:'产权信息',value:7,t_id:7},
-                       {label:'周边信息',value:8,t_id:8}
-                   ]
-               }
-           ]
+           collapseData:[],
+           fileDetailData:{},
+            queryData:{},
        }
+    },
+    created(){
+        this.queryData=this.$route.query;
     },
     mounted(){
         wHeight = document.body.clientHeight;
-        window.addEventListener('resize',this.setContentHeight)
+        window.addEventListener('resize',this.setContentHeight);
         this.getArchivesTree({code:this.code});
-
     },
-
     methods:{
         //获取项目档案左边bai
         getArchivesTree(data){
           this.$http.get('project－archives-tree',data).then((response)=>{
-               console.log('=====',response);
+                this.collapseData = [].concat(response.data);
+                this.getArchivesDetail({code:response.data[this.openIndex].t_id})
+            }).catch((error)=>{
+                this.$Notice.error({
+                   title: error.message,
+                });
+            })
+        },
+        getArchivesDetail(data){
+            data.projectId = this.queryData.id;
+            this.fileDetailData = {};
+            this.$http.get('project－archives-file-detail',data).then((response)=>{
+               console.log('---------',response.data);
+            //    this.collapseData = [].concat(response.data);
+            this.fileDetailData = Object.assign({},response.data);
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,
@@ -86,7 +82,9 @@ export default {
         onChange(index,data){
 
             this.openIndex = index;
-        }
+            this.getArchivesDetail({code: this.collapseData[this.openIndex].t_id})
+        },
+       
     }
 }
 
@@ -114,6 +112,8 @@ export default {
                 width: 265px;
                 height: 500px;
                 background: #ffffff;
+                overflow: auto;
+                padding-bottom: 50px;
 
            }
            .archives-box{

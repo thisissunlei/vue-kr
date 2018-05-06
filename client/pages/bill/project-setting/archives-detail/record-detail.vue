@@ -31,7 +31,6 @@ export default {
     props:{
         data:{
             type:Array,
-
         }
     },
     data(){
@@ -39,7 +38,7 @@ export default {
        }
     },
     mounted(){
-        
+        console.log(this.data,"pppppp")
     },
     methods:{
         

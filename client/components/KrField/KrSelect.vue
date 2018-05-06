@@ -84,7 +84,7 @@ export default {
             this.$http.get('get-enum-all-data',{
                 enmuKey:value
             }).then((response)=>{
-           
+                console.log(response.data,"pppppppppppp======")
                 this.selectData = [].concat(this.selectFormat(response.data))
                 callback();
             }).catch((error)=>{

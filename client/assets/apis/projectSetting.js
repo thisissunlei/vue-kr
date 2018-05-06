@@ -70,9 +70,20 @@ module.exports = {
       url:'/api/krspace-pm-web/pm/form-group/list/type/tree',
       method: 'get'
     },
+    //项目管理-档案管理-字段部分详情
+    'project－archives-file-detail': {
+      url:'/api/krspace-pm-web/pm/form-field/list/type/code',
+      method: 'get'
+    },
     //项目管理-档案管理-获取字段编辑记录
     'project－field-record': {
       url:'/api/krspace-pm-web/pm/operate-log/field',
       method: 'get'
     },
+     //项目管理-档案管理-获取字段编辑记录
+     'project－field-edit': {
+      url:'/api/krspace-pm-web/pm/file/edit',
+      method: 'post'
+    },
+    
 }

@@ -7,7 +7,7 @@
                 <span>仅看</span>
                  <Select
                         v-model="formItem.doneTaskId"
-                        style="width:250px"
+                        style="width:120px"
                         placeholder="请选择"
                         filterable
                         clearable
@@ -20,7 +20,7 @@
                 <span>仅看</span>
                  <Select
                         v-model="formItem.undoneTaskId"
-                        style="width:250px"
+                        style="width:120px"
                         placeholder="请选择"
                         filterable
                         clearable
@@ -29,7 +29,12 @@
                 </Select>
                 <span>未完成项目</span>
             </div>
-           
+        </div>
+        <div class="u-search-form">
+            <SearchForm 
+                :searchFilter="searchFilter"
+                :onSubmit="onSubmit"
+            />
         </div>
          <div class="u-color-block">
             <span class="u-prepare">未完成</span>
@@ -120,7 +125,9 @@ import publicFn from '../publicFn';
 import Loading from '~/components/Loading'
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from '../project-detail/object-detail-title';
+import SearchForm from '~/components/SearchForm';
 import EditTask from '../project-detail/edit-task';
+
     export default {
         components:{
             SectionTitle,
@@ -132,7 +139,8 @@ import EditTask from '../project-detail/edit-task';
             Loading,
             Drawer,
             ObjectDetailTitle,
-            EditTask
+            EditTask,
+            SearchForm
         },
         data () {
             return {
@@ -168,6 +176,16 @@ import EditTask from '../project-detail/edit-task';
                 editTaskData:{},
                 projectList:[],
                 taskSelectData:[],
+                searchFilter:[
+                    {
+                        label:'项目名称',
+                        value:'projectName'
+                    },
+                    {
+                        label:'项目编号',
+                        value:'projectCode'
+                    }
+                ],
                 projectTabColumns:[
                     {
                         title: '项目名称',
@@ -536,10 +554,10 @@ import EditTask from '../project-detail/edit-task';
     .u-search-content{
         position: absolute;
         left:150px;
-        width:850px;
+        width:550px;
         top:0;
          .u-select{
-             width:370px;
+             width:240px;
              margin-right:30px;
              float:left;
              span{
@@ -547,6 +565,11 @@ import EditTask from '../project-detail/edit-task';
                  vertical-align: -2px;
              }
          }
+    }
+    .u-search-form{
+       position: absolute;
+       left:700px;
+       top:0;
     }
     .u-color-block{
         width:172px;

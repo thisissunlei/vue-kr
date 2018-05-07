@@ -70,6 +70,8 @@
                                 <div  v-if="barType=='month'&&endRentLeft!=0"  class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='month'&&inventoryRentLeft!=0"  class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                 <div  v-if="barType=='month'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
+
+                                <div  v-if="barType=='month'" class='hover-flag-line' :style="{left:hoverLeft+'px',width:endMonthDay*minCalibration+'px'}"></div>
                                 <DrawMonth
                                     v-for="( item ) in showData"
                                     :key="item.id"
@@ -90,6 +92,8 @@
                                  <div  v-if="barType=='week'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                  <div  v-if="barType=='week'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
+                                 <div  v-if="barType=='week'" class='hover-flag-line' :style="{left:hoverLeft+'px',width:endMonthDay*minCalibration+'px'}"></div>
+
                                 <DrawWeek
                                     :ref = "'ganttChartTimeShaft'+index"
                                     v-for="(item,index) in weeks"
@@ -108,6 +112,8 @@
                                 <div  v-if="barType=='day'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='day'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
                                 <div  v-if="barType=='day'" class="start-to-end" :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
+
+                                <div v-if="barType=='day'" class='hover-flag-line' :style="{left:hoverLeft+'px',width:minCalibration+'px'}"></div>
 
                                 <DrawDay
                                     v-for="( item ) in showData"
@@ -158,6 +164,8 @@
                         <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+30+'px',width:minCalibration+'px'}"></div>
                         <div class='end-flag' v-if="endRentLeft!=0" :style="{left:endRentLeft+30+'px',width:2+'px'}"></div>
                         <div class='start-to-end' :style="{left:startRentLeft+30+'px',width:endRentLeft-startRentLeft+'px'}"></div>
+
+                        <div class='hover-flag'  :style="{left:hoverLeft+30+'px',width:(barType=='month'||barType=='week'?(endMonthDay*minCalibration):minCalibration)+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -178,7 +186,11 @@ import DrawWeek from './draw-week';
 import ViewArticle from './view-article';
 import publicFn from '../publicFn';
 import KrField from '~/components/KrField';
-import ColorType from './color-type'
+import ColorType from './color-type';
+var drawContent='';
+var noMonth='';
+var noWeek='';
+var noDay='';
 export default {
     components:{
         DrawDay,
@@ -261,6 +273,8 @@ export default {
             startRentLeft:0,
             endRentLeft:0,
             inventoryRentLeft:0,
+            hoverLeft:0,
+            endMonthDay:0,
             colorTypes:[
                 {
                     title:'未租',
@@ -282,6 +296,7 @@ export default {
         }
     },
     mounted(){
+        drawContent=document.getElementById("vue-chart-right-draw-content");
         this.scrollWidth = utils.getScrollBarSize();
         this.limitDay();
         setTimeout(() => {
@@ -290,9 +305,8 @@ export default {
     },
     methods:{
         scroolFix(data){
-            var dom = document.getElementById("vue-chart-right-draw-content");
             var offerLeft = 0;
-            if(dom){
+            if(drawContent){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date(this.start));
 
                 var todayIsWeek = 0;
@@ -317,25 +331,31 @@ export default {
                 var scrollLeft = (this.searchParams.inventoryDate?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
                 var timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
                 if(this.endPosition=='start'){
-                    timeShaftFixed.style.opacity=0;
+                    if(timeShaftFixed){
+                        timeShaftFixed.style.opacity=0;
+                    }
                     if(this.$refs.addLeftPic){
                         this.$refs.addLeftPic.style.opacity='1';
                     }
                     setTimeout(() => { 
-                      dom.scrollLeft = 0;           
+                      drawContent.scrollLeft = 0;           
                     }, 100);
                 }else if(this.endPosition=='end'){
-                    timeShaftFixed.style.opacity=1;
+                    if(timeShaftFixed){
+                        timeShaftFixed.style.opacity=1;
+                    }
                     if(this.$refs.addRightPic){
                         this.$refs.addRightPic.style.opacity='1';
                     }
                     setTimeout(() => {
-                      dom.scrollLeft = dom.scrollWidth-dom.clientWidth;
+                      drawContent.scrollLeft = drawContent.scrollWidth-drawContent.clientWidth;
                     }, 100);
                 }else{
-                    timeShaftFixed.style.opacity=1;
+                    if(timeShaftFixed){
+                        timeShaftFixed.style.opacity=1;
+                    }
                     setTimeout(() => {
-                      dom.scrollLeft = scrollLeft;
+                      drawContent.scrollLeft = scrollLeft;
                     }, 100);
                 }
             }
@@ -677,8 +697,98 @@ export default {
             this.timeShaftFixed(left,el);
         },
         rightOver(event){
+            var e = event || window.event;
+            if(e&&drawContent){
+                var num=0;
+                var left=e.clientX+drawContent.scrollLeft-drawContent.getBoundingClientRect().left;
+                num=Math.ceil(left/this.minCalibration+0.4);
+
+                var endDate=utils.dateRange(this.start,num-2);
+                var endYear=new Date(endDate).getFullYear();
+                var endDayTime=new Date(endDate).getDate();
+                var endMonth=new Date(endDate).getMonth()+1;
+                var endDay=new Date(endDate).getDay()==0?7:new Date(endDate).getDay();
+                if(this.barType == 'month'){
+                    if(endYear+'-'+endMonth === noMonth){
+                        return;
+                    }
+                    this.canculateMonth(this.start,endDate);
+                }else if(this.barType == 'week'){  
+                    if(noWeek==this.getWeekStart(endYear,endMonth,endDayTime,endDay)+this.getWeekEnd(endYear,endMonth,endDayTime,endDay)){
+                        return;
+                    }
+                    console.log('2');
+                    this.canculateWeek(this.start,endDate);
+                }else{
+                    if(endYear+'-'+endMonth+'-'+endDayTime === noDay){
+                        return;
+                    }
+                    this.canculateDay(this.start,endDate);
+                }
+            }
             this.$emit('rightOver',event);
         },
+        canculateMonth(start,endDate){
+            var endYear=new Date(endDate).getFullYear();
+            var endDay=new Date(endDate).getDate();
+            var endMonth=new Date(endDate).getMonth()+1;
+            this.endMonthDay=publicFn.getMonthDayNum(endYear,endMonth);
+            var num=utils.dateDiff(endDate,start);
+            var endNum=num-endDay;
+            noMonth=endYear+'-'+endMonth;
+            this.hoverLeft=(endNum+1)*this.minCalibration;
+        },
+        canculateWeek(start,endDate){
+            var endYear=new Date(endDate).getFullYear();
+            var endDayTime=new Date(endDate).getDate();
+            var endMonth=new Date(endDate).getMonth()+1;
+            var endDay=new Date(endDate).getDay()==0?7:new Date(endDate).getDay();
+            var num=utils.dateDiff(endDate,start);
+            this.endMonthDay=7;
+            var endNum=num-endDay;     
+            noWeek=this.getWeekStart(endYear,endMonth,endDayTime,endDay)+this.getWeekEnd(endYear,endMonth,endDayTime,endDay)
+            this.hoverLeft=(endNum+1)*this.minCalibration;
+        },
+        canculateDay(start,endDate){
+            var endYear=new Date(endDate).getFullYear();
+            var endDayTime=new Date(endDate).getDate();
+            var endMonth=new Date(endDate).getMonth()+1;
+            noDay=endYear+'-'+endMonth+'-'+endDayTime;
+            this.hoverLeft=utils.dateDiff(endDate,start)*this.minCalibration; 
+        },
+         
+        getWeekStart(endYear,endMonth,endDate,endDay){
+            var date = endDate,
+                month = endMonth,
+                year = endYear;
+            var range = date-endDay;
+
+            if(range<0){
+                month = month-1;
+                if(month<=0){
+                    year = year-1;
+                    month = 12+month;
+                    date = publicFn.getMonthDayNum(year,month)+date;
+                }
+            }
+            return year+'-'+month+'-'+(Number(date)+1);
+        },
+        getWeekEnd(endYear,endMonth,endDate,endDay){
+            var date = endDate,
+                month = endMonth,
+                year = endYear;
+            var range = date+(6-endDay);
+            var newMonthNum = publicFn.getMonthDayNum(year,month)+date;
+            if(range>newMonthNum){
+                month = month+1;
+                if(month>12){
+                    year = year+1;
+                    month = month-12;
+                    date = date-newMonthNum;
+                }
+            }
+            return year+'-'+month+'-'+(Number(date)-1);
+        }
     }
 }
 </script>
@@ -852,6 +962,15 @@ export default {
                 pointer-events:none;
                 z-index:3;
             }
+            .hover-flag{
+                background: rgba(186,198,205,0.30);
+                height: 100%;
+                position: absolute;
+                top: 0px;
+                width: 50px;
+                pointer-events:none;
+                z-index:3;
+            }
         }
          .add-left{
                 position: absolute;
@@ -959,6 +1078,14 @@ export default {
         .rent-line{
             box-shadow: 2px 0 4px 0 #499DF1;
             opacity: 1;
+        }
+        .hover-flag-line{
+            background: rgba(186,198,205,0.30);
+            height: 50px;
+            position: absolute;
+            top: 0px;
+            width: 50px;
+            z-index:3;
         }
         .start-to-end{
             background: rgba(73,157,241,0.10);

@@ -7,19 +7,20 @@
                     <div class="tiem-box" style="float:left;">
                         <div class="time-view">
                             <div  class="time-title" >计划时间</div>
-                            <div v-if="!actualEnd &&!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
-                            <div v-if="actualEnd||isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                            <div v-if="!planEnd &&!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
+                            <div v-if="planEnd||isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
                                 <DatePicker
                                     :open="startOpen"
-                                    :value="actualStart"
+                                    :value="planEnd"
                                     confirm
                                     type="date"
                                     @on-change="startChnage"
                                     @on-clear="startClear"
+                                    :clearable="false"
                                     @on-ok="startOk">
                                     <a href="javascript:void(0)" @click="switchStartTime">
                                     
-                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ actualEnd||' '}} </div>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ planEnd||' '}} </div>
                                         
                                         <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                     </a>
@@ -36,15 +37,16 @@
                         <div v-if="isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
                             <DatePicker
                                 :open="endOpen"
-                                :value="planEnd"
+                                :value="actualEnd"
                                 confirm
                                 type="date"
+                                :clearable="false"
                                 @on-change="endChange"
                                 @on-clear="endClear"
                                 @on-ok="endOk">
                                 <a href="javascript:void(0)" @click="switchEndTime">
                                 
-                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ planEnd }} </div>
+                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ actualEnd }} </div>
                                     
                                     <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                 </a>
@@ -168,8 +170,11 @@ export default {
             this.newStart = date
         },
         startOk(){
-            this.actualEnd = this.newStart;
+            this.planEnd = this.newStart;
+            this.params.planEndTime = this.planEnd;
+            var data = Object.assign({},this.params);
             this.switchStartTime();
+            this.$emit("dataChange",data);
         },
         startClear(){
 
@@ -185,8 +190,12 @@ export default {
 
         },
         endOk(){
-            this.planEnd = this.newEnd;
+            this.actualEnd = this.newEnd;
+            this.params.actualEndTime = this.actualEnd;
+            var data = Object.assign({},this.params);
             this.switchEndTime();
+
+            this.$emit("dataChange",data);
         },
         switchEndEdit(){
             this.endOpen = true;
@@ -255,6 +264,7 @@ export default {
                 });
             })
         },
+        
     }
 }
 
@@ -367,6 +377,11 @@ export default {
                 margin-top: 20px;
                 margin: auto;
             }
+        }
+    }
+    .time-view{
+        .ivu-btn.ivu-btn-text{
+            display: none;
         }
     }
     .actual-select-today{

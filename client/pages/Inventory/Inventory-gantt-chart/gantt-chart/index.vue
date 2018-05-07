@@ -1053,6 +1053,7 @@ export default {
 
         }
         .year-bar{
+            background: #fff;
             .year{
 
                 height: 50px;

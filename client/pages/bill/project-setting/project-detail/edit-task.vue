@@ -33,8 +33,8 @@
                     </div>
                     <div class="tiem-box" style="margin-left:19px;">
                         <div class="time-title">完成时间</div>
-                        <div v-if="!isEndEdit" class="time-bottom-success" @click="switchEndEdit">✔️已完成</div>
-                        <div v-if="isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit">✔️已完成</div>
+                        <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
                             <DatePicker
                                 :open="endOpen"
                                 :value="actualEnd"

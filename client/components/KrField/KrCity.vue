@@ -60,11 +60,11 @@ export default {
 	data(){
 		return {
             isEdit:false,
-            cityValue:this.value,
+            cityValue:this.strToArr(this.value),
             labelValue:'',
             id:this.value,
             t_id:0,
-            newValue:this.value,
+            newValue:this.strToArr(this.value),
 		}
     },
     mounted(){
@@ -72,9 +72,16 @@ export default {
             this.labelValue="";
             this.cityValue='';
         }  
-        this.labelValue=this.cityValue ? this.getProvince(this.cityValue,this.data) : '';
+        this.labelValue= this.getProvince(this.cityValue,this.data);
     },
 	methods:{
+        strToArr(value){
+            if(!value){
+                return [];
+            }else{
+                return value.split(',');
+            }
+        },
         recordClick(value){
             
             this.$emit('recordClick',value)
@@ -128,7 +135,7 @@ export default {
         okClick(){
             this.cityValue = this.newValue;
             this.labelValue = this.getProvince(this.cityValue,this.data);
-            var cityValue = JSON.stringify(this.cityValue);
+            var cityValue = this.cityValue.join();
             var params = {
                 name:this.name,
                 value:cityValue,

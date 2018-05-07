@@ -20,8 +20,8 @@
             :style="{
               height:activeBox==index?item.children.length * 45 +'px':0,
             }">
-            <div class="collapse-children" v-for="child in item.children" :key="child.value">
-                <div><div class="round"></div>{{child.label}}</div>
+            <div class="collapse-children" v-for="(child, index) in item.children" :key="child.value">
+                <div :class="{'active-content':activeIndex == index}" ><div class="round"></div>{{child.label}}</div>
             </div>
         </div>
     </div>
@@ -31,14 +31,17 @@
 <script>
     export default {
 
-       props:{
-          data:{
-              type:Array
-          },
-          openIndex:{
-              type:[Number,String],
-              default:0,
-          }
+        props:{
+            data:{
+                type:Array
+            },
+            openIndex:{
+                type:[Number,String],
+                default:0,
+            },
+            activeIndex:{
+                type:[Number,String]
+            }
         },
         data(){
            return{
@@ -66,7 +69,12 @@
     box-shadow: 0 0 4px 0 rgba(0,0,0,0.10);
     border-radius: 4px;
     padding-top:5px;
-    
+    .active-content{
+        color: #4F9EED;
+        .round{
+            border: 1px solid #4F9EED !important;
+        }
+    }
     .collapse-box{
         position: relative;
         .collapse-icon{
@@ -93,6 +101,7 @@
         .collapse-icon-take-up:hover{
           background-image:url(./images/take-up-active.svg); 
         }
+        
        
         .title{
             height: 50px;

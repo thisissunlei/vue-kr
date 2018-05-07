@@ -105,7 +105,6 @@ export default {
             this.$emit('recordClick',value)
         },
         getLabel(value){
-            console.log(value,"ppppppp")
             var label='';
             this.selectData.map((item,index)=>{
                     if(item.value==value){

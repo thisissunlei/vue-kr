@@ -1,6 +1,6 @@
 <template>
-    <div class="archives-detail">
-        <div  v-for="(item ,index) in collapseData.items" :key="index">
+    <div class="archives-detail" >
+        <div class="archivesDetailDom"  v-for="(item ,index) in collapseData.items" :key="index">
             <ClassificationBox  
                 :value="item.index" 
                 :title="item.label" 
@@ -10,7 +10,7 @@
                 v-if="item.data && item.data.length"
             >
                 <div slot="content"  >
-                    <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px">
+                    <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px;margin:20px 0px;">
                         <span class="field-title" >{{everyData.displayName}}</span>
                         <KrField 
                             :name="everyData.fieldName"
@@ -64,6 +64,10 @@ export default {
         },
         projectId:{
             type:[String,Number]
+        },
+        archivesBoxId:{
+            type:String,
+
         }
     },
     data(){
@@ -74,21 +78,35 @@ export default {
            openIndex:0,
            endIndex:0,
            //查看编辑记录数据
-           recordData:[
-               {comment:'dasdfsdf',detail:"ppp",uTime:'123134112',updator:'作者以'},
-               {comment:'vvvvv',detail:"kkkk",uTime:'65656756756',updator:'作者以'},
-               {comment:'dasdfsdf',detail:"ppp",uTime:'123134112',updator:'作者以'}
-           ],
+           recordData:[],
            // 物业基信息
-           collapseData:this.dataFarmat(this.data)
+           collapseData:this.dataFarmat(this.data),
+           archivesDetailId:'archivesDetail'+this._uid,
+
        }
     },
     created(){
         this.queryData=this.$route.query;
     },
     mounted(){
+         var archivesBoxDom = document.getElementById(this.archivesBoxId);
+         archivesBoxDom.addEventListener('scroll',this.getTreeActive)
+
     },
     methods:{
+        getTreeActive(){
+            var groupDoms = document.querySelectorAll('.archivesDetailDom');
+            for(let i=0;i<groupDoms.length;i++){
+                let everyDom = groupDoms[i];
+                let everyDetail = everyDom.getBoundingClientRect();
+                if(everyDetail.top<300 && 300<everyDetail.height+everyDetail.top){
+                 
+                  
+                    this.$emit('krScroll',i);
+                }
+
+            }
+        },
         getTypeToField(type){
             if(type=="TEXT"){
                 return 'text'
@@ -113,6 +131,9 @@ export default {
             }
         },
         dataFarmat(data){
+            if(!data.items){
+                return {};
+            }
             var group = [].concat(data.items);
 
             var index = 1;
@@ -137,6 +158,7 @@ export default {
             this.openIndex = index;
         },
         okClick(params){
+            console.log(params,";;;;;;;;")
             let data = Object.assign({projectId:this.projectId},params)
             data.fieldName = data.name;
             data.fieldType = this.getFieldToType(data.type);
@@ -155,7 +177,7 @@ export default {
         recordClick(value){
             var data = {fieldName:'projectName',projectId:this.projectId};
             this.$http.get('project－field-record',data).then((response)=>{
-                console.log(response,"lllllllll")
+                // console.log(response,"lllllllll")
                 this.recordData = [].concat(response.data);
             }).catch((error)=>{
                 // this.MessageType="error";
@@ -175,7 +197,7 @@ export default {
                 return 'SELECT'
             }else if(type=="city"){
                 return 'CITY'
-            }else if(type=="upFiles"){
+            }else if(type=="file"){
                 return 'FILE'
             }else if(type=="city"){
                 return 'DATE'

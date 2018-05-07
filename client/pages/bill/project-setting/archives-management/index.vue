@@ -1,11 +1,17 @@
 <template>
   <div class="archives-management">
         <div class="content">
-            <div class="collapse" ref="collapse">
-                <KrCollapse v-if="collapseData && collapseData.length" :openIndex="openIndex" :data="collapseData" @onChange="onChange"/>
+            <div :id="collapseId" class="collapse" ref="collapse">
+                <KrCollapse 
+                    v-if="collapseData && collapseData.length" 
+                    :openIndex="openIndex" 
+                    :data="collapseData" 
+                    @onChange="onChange"
+                    :activeIndex="activeIndex"
+                />
             </div>
-            <div class="archives-box" ref="archivesBox">
-                <ArchivesDetail :projectId="queryData.id" v-if="fileDetailData.items" :data ="fileDetailData" />
+            <div :id="archivesBoxId" class="archives-box" ref="archivesBox">
+                <ArchivesDetail @krScroll="boxScroll" :archivesBoxId="archivesBoxId" :projectId="queryData.id" v-if="fileDetailData.items"  :data ="fileDetailData" />
             </div>
         </div>
   </div>
@@ -28,10 +34,13 @@ export default {
     },
     data(){
        return {
-           openIndex:0,
-           collapseData:[],
-           fileDetailData:{},
+            openIndex:0,
+            collapseData:[],
+            fileDetailData:{},
             queryData:{},
+            collapseId:'collapse'+this._uid,
+            archivesBoxId:'archivesBox'+this._uid,
+             activeIndex:0,
        }
     },
     created(){
@@ -39,10 +48,14 @@ export default {
     },
     mounted(){
         wHeight = document.body.clientHeight;
-        window.addEventListener('resize',this.setContentHeight);
+        this.setContentHeight();
+        window.addEventListener('resize',this.setContentHeight.bind(this));
         this.getArchivesTree({code:this.code});
     },
     methods:{
+        boxScroll(index){
+            this.activeIndex = index;
+        },
         //获取项目档案左边bai
         getArchivesTree(data){
           this.$http.get('project－archives-tree',data).then((response)=>{
@@ -69,11 +82,12 @@ export default {
             })
         },
         setContentHeight(){
-          var newHeight = document.body.clientHeight;
+          var newHeight = document.body.clientHeight-243;
+         
           if(newHeight !== wHeight){
             
-            var collapseDom = this.refs.collapse;
-            var archivesBoxDom = this.refs.archivesBox;
+            var collapseDom = document.getElementById(this.collapseId);
+            var archivesBoxDom = document.getElementById(this.archivesBoxId);
             collapseDom.style.height = newHeight+'px';
             archivesBoxDom.style.height = newHeight+'px';
             wHeight = newHeight;
@@ -122,7 +136,7 @@ export default {
             //    min-height: 500px;
                right: 0px;
                overflow: auto;
-               height: 500px;
+            //    height: 500px;
            }
        }
    }

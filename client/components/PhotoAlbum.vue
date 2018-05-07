@@ -7,7 +7,7 @@
            
             <div  class="view-img-box" style="padding:0px 40px;">
                
-                <img :src="data[urlIndex].url" alt="">
+                <img :src="data[urlIndex].fieldUrl" alt="">
                 <div 
                     class="back"
                     style="left:-60px;"

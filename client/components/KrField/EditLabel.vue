@@ -17,36 +17,36 @@
 				
 				<!-- <img :src="item.url" alt="" v-for="(item, index ) in value" :key="item.id" @click="eyeImg(index)"/> -->
 
-					<div class="view" v-for="(item,index) in fileArr" :key="item.id">
+					<div v-if="value && value.length" class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-						<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
+						<img v-if="getIsPhoto(item.fieldUrl)" @click="eyePhotoAlbum(item.url,$event)" :src="item.fieldUrl" alt=""/>
 						<div 
-							v-if="!getIsPhoto(item.url)"
+							v-if="!getIsPhoto(item.fieldUrl)"
 							:class="{
 								'file-type-style':true, 
-								'file-color-other':getTyep('other',index),
-								'file-color-word':getTyep('word',index),
-								'file-color-excel':getTyep('excel',index),
-								'file-color-ppt':getTyep('ppt',index),
+								'file-color-other':getExt(item.fieldUrl)=='other',
+								'file-color-word':getExt(item.fieldUrl)=='word',
+								'file-color-excel':getExt(item.fieldUrl)=='excel',
+								'file-color-ppt':getExt(item.fieldUrl)=='ppt',
 							}"
 						>
 							<div 
 								:class="{
 									'file-icon':true,
-									'file-icon-other':getTyep('other',index),
-									'file-icon-word':getTyep('other',index),
-									'file-icon-excel':getTyep('other',index),
-									'file-icon-ppt':getTyep('other',index),
+									'file-icon-other':getExt(item.fieldUrl)=='other',
+									'file-icon-word':getExt(item.fieldUrl)=='word',
+									'file-icon-excel':getExt(item.fieldUrl)=='excel',
+									'file-icon-ppt':getExt(item.fieldUrl)=='ppt',
 									
 								}"
 							></div>
 						</div>
 						<div 
-							v-if="!getIsPhoto(item.url)"
+							v-if="!getIsPhoto(item.fieldUrl)"
 							class="file-name"
 						>
 							{{getFileName(index)}}
-							<div class="down-file" @click="downFile(item.url)"></div>
+							<div class="down-file" @click="downFile(item.fieldUrl)"></div>
 						</div>
 					
 					</div>
@@ -150,9 +150,10 @@ export default {
 			this.$emit('eyePhotoAlbum',url,event)
 		},
 		getFileArr(){
+			
 			if(this.labeType == 'file'&&this.value&&this.value.length){
 				for (var i = 0; i < this.value.length; i++) {
-					let url = this.value[i].url;
+					let url = this.value[i].fieldUrl;
 					this.fileTypes.push(this.getExt(url));
 				}
 				return [].concat(this.value)
@@ -167,7 +168,7 @@ export default {
 			return false;
 		},
 		getFileName(index){
-			var fileArr = this.fileArr[index].url.split('?')[0].split('/')
+			var fileArr = this.fileArr[index].fieldUrl.split('?')[0].split('/')
 			var filename  =fileArr[fileArr.length-1];
 			return decodeURI(filename);
 		},
@@ -175,6 +176,7 @@ export default {
 			utils.downFile(url)
 		},
 		getIsPhoto(url){
+			
 			var img="png,jpg,jpeg";
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");

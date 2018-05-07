@@ -154,7 +154,7 @@
                                     不限
                                 </Radio>
                                 <Radio label="0">
-                                    部分城市
+                                    部分城市(可多选)
                                 </Radio>
                             </RadioGroup> 
                       </FormItem>

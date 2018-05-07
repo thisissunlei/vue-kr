@@ -11,6 +11,7 @@
                         placeholder="请选择"
                         filterable
                         clearable
+                        @on-change="doneTaskChange"
                     >
                          <Option  v-for="item in taskSelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
                 </Select>
@@ -24,6 +25,7 @@
                         placeholder="请选择"
                         filterable
                         clearable
+                        @on-change="dundoneTaskChange"
                     >
                          <Option  v-for="item in taskSelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
                 </Select>
@@ -153,7 +155,6 @@ import EditTask from '../project-detail/edit-task';
                 tabParams:{
                     page:1,
                     pageSize:15,
-                    query:'CTIMEDESC'
                 },
                 taskId:1869,//任务id
                 projectId:51,//项目id
@@ -534,18 +535,30 @@ import EditTask from '../project-detail/edit-task';
             //         let tableDom = document.querySelectorAll('#object-seting-archives table')[0];
             //         utils.tableSort(tableDom,this.shortChange);
             //     })
-            this.getBaseicInfo();
+
+            let tab=sessionStorage.getItem('chartSetting') || 'PREPARE';
+            this.tabParams.projectStatus=tab;
+            this.getTableData(this.tabParams);
             this.getSelect();
         },
         methods:{
+            dundoneTaskChange(form){
+                this.tabParams.undoneTaskId=form;
+                this.getTableData(this.tabParams);
+            },
+            doneTaskChange(form){
+                this.tabParams.doneTaskId=form;
+                this.getTableData(this.tabParams);
+            },
             onSubmit(form){ 
-                // if(this.Params.title){
-                //     this.Params.title="";
-                // }
-                // if(this.Params.createName){
-                //     this.Params.createName="";
-                // }
-                // let params=Object.assign(form,this.Params);
+                if(this.tabParams.projectName){
+                    this.tabParams.projectName="";
+                }
+                if(this.tabParams.projectCode){
+                    this.tabParams.projectCode="";
+                }
+                 let params=Object.assign(form,this.tabParams);
+                this.getTableData(params);
                 // utils.addParams(params);
             },
             getSelect(){
@@ -559,15 +572,8 @@ import EditTask from '../project-detail/edit-task';
                     })
 
             },
-            getBaseicInfo(){
-                    let tab=sessionStorage.getItem('chartSetting') || 'PREPARE';
-                    let form={
-                        projectStatus:tab,
-                    }
-                    if(this.undoneTaskId){
-                        form.undoneTaskId=this.undoneTaskId;
-                    }
-                    this.$http.get('get-project-home', form).then((res)=>{
+            getTableData(tabParams){
+                    this.$http.get('get-project-home', tabParams).then((res)=>{
                             this.projectList=res.data.items;
                         }).catch((err)=>{
                             this.$Notice.error({

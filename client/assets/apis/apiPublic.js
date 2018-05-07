@@ -10,7 +10,7 @@ module.exports = {
         method: 'get'
     },
     'get-enum-all-data':{
-        url:'api/krspace-sso-web/sys/enmu',
+        url:'/api/krspace-sso-web/sys/enmu',
         method:'get'
     }
 }

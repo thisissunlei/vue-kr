@@ -90,5 +90,10 @@ module.exports = {
       url:'/api/krspace-pm-web/pm/project/home',
       method: 'get'
     },
+     //项目管理-项目档案-项目任务
+     'get-task-template-list': {
+      url:'/api/krspace-pm-web/pm/task-template/list',
+      method: 'get'
+    },
     
 }

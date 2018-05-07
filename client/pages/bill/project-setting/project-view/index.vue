@@ -2,7 +2,35 @@
 <div class="project-view">
     <div class="u-search" >
         <Button type="primary"  @click="newArchives">新建项目</Button>
-        <div class="u-search-content"></div>
+        <div class="u-search-content">
+            <div class="u-select">
+                <span>仅看</span>
+                 <Select
+                        v-model="formItem.doneTaskId"
+                        style="width:250px"
+                        placeholder="请选择"
+                        filterable
+                        clearable
+                    >
+                         <Option  v-for="item in taskSelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+                </Select>
+                <span>已完成项目</span>
+            </div>
+           <div class="u-select">
+                <span>仅看</span>
+                 <Select
+                        v-model="formItem.undoneTaskId"
+                        style="width:250px"
+                        placeholder="请选择"
+                        filterable
+                        clearable
+                    >
+                         <Option  v-for="item in taskSelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+                </Select>
+                <span>未完成项目</span>
+            </div>
+           
+        </div>
          <div class="u-color-block">
             <span class="u-prepare">未完成</span>
             <span class="u-opened">已完成</span>
@@ -130,13 +158,16 @@ import EditTask from '../project-detail/edit-task';
                 openNewArchives:false,
     
                 openEditTask:false,
-            
+                formItem:{
+                    doneTaskId:'',
+                    undoneTaskId:'',
+                },
                 warn:'',
                 MessageType:'',
                 allowSubmit:true,
                 editTaskData:{},
-                undoneTaskId:'',
                 projectList:[],
+                taskSelectData:[],
                 projectTabColumns:[
                     {
                         title: '项目名称',
@@ -305,8 +336,22 @@ import EditTask from '../project-detail/edit-task';
             //         utils.tableSort(tableDom,this.shortChange);
             //     })
             this.getBaseicInfo();
+            this.getSelect();
         },
         methods:{
+            getSelect(){
+                
+                 this.$http.get('get-task-template-list', "").then((res)=>{
+                            
+                            console.log('res-----',res)
+                            this.taskSelectData = [].concat(res.data.items);
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                    })
+
+            },
             getBaseicInfo(){
                     let tab=sessionStorage.getItem('chartSetting') || 'PREPARE';
                     let form={
@@ -475,9 +520,10 @@ import EditTask from '../project-detail/edit-task';
 .project-view{
     padding:0 20px;
     .u-search{
-            height:32px;
-            margin:16px 0;
-            .u-high-search{
+        position: relative;
+        height:32px;
+        margin:16px 0;
+        .u-high-search{
                 width:22px;
                 height:22px;
                 background:url('~/assets/images/upperSearch.png') no-repeat center;
@@ -485,10 +531,22 @@ import EditTask from '../project-detail/edit-task';
                 float:right;
                 cursor:pointer;
 
-            }
+        }
     }
     .u-search-content{
-         float:left;
+        position: absolute;
+        left:150px;
+        width:850px;
+        top:0;
+         .u-select{
+             width:370px;
+             margin-right:30px;
+             float:left;
+             span{
+                 padding:0 10px;
+                 vertical-align: -2px;
+             }
+         }
     }
     .u-color-block{
         width:172px;

@@ -357,6 +357,16 @@ import EditTask from '../project-detail/edit-task';
             this.getSelect();
         },
         methods:{
+            onSubmit(form){ 
+                // if(this.Params.title){
+                //     this.Params.title="";
+                // }
+                // if(this.Params.createName){
+                //     this.Params.createName="";
+                // }
+                // let params=Object.assign(form,this.Params);
+                // utils.addParams(params);
+            },
             getSelect(){
                 
                  this.$http.get('get-task-template-list', "").then((res)=>{

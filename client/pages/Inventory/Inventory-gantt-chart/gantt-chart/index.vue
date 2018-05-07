@@ -717,7 +717,6 @@ export default {
                     if(noWeek==this.getWeekStart(endYear,endMonth,endDayTime,endDay)+this.getWeekEnd(endYear,endMonth,endDayTime,endDay)){
                         return;
                     }
-                    console.log('2');
                     this.canculateWeek(this.start,endDate);
                 }else{
                     if(endYear+'-'+endMonth+'-'+endDayTime === noDay){
@@ -771,7 +770,7 @@ export default {
                     date = publicFn.getMonthDayNum(year,month)+date;
                 }
             }
-            return year+'-'+month+'-'+(Number(date)+1);
+            return year+'-'+month+'-'+(Number(range)+1);
         },
         getWeekEnd(endYear,endMonth,endDate,endDay){
             var date = endDate,
@@ -787,7 +786,7 @@ export default {
                     date = date-newMonthNum;
                 }
             }
-            return year+'-'+month+'-'+(Number(date)-1);
+            return year+'-'+month+'-'+(Number(range)+1);
         }
     }
 }

@@ -42,18 +42,17 @@
         </div>
     </div>
     <div class="u-table-list">
-            <!-- <div class="u-table-left">
+            <div class="u-table-left">
+                 <div class="u-table-arrow" @click="stretchTable"></div>
                  <div class="u-table-box">
                         <div class="u-table-content">
-                            <div class="u-right-btn" @click="stretchTable"></div>
-                                <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
-                            </div>
-                        <div class="u-table-footer"></div>
+                            <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+                        </div>
                  </div>
-            </div> -->
+            </div>
             <div class="u-table-right">
-                <div class="u-table-right" style="overflow-x:auto;">
-                    <div class="u-table-box">
+                <div class="u-table-box" style="overflow-x:auto;">
+                    <div class="u-table-box-right">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
@@ -191,28 +190,39 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目名称',
                         key: 'name',
                         align:'center',
+                        width:160,
                        
                     },
                     {
                         title: '城市',
-                        key: 'cityName',
+                        key: 'city',
                         align:'center',
+                        width:80,
                        
                     },
                     {
                         title: '项目编号',
                         key: 'code',
                         align:'center',
-                        
+                        width:100,
                     },
                     {
                         title: '项目立项',
                         key: 'k1',
                         align:'center',
-                       
                         render(h, obj){
-                            console.log('111', obj.row)
-                           
+                             switch (obj.row.k1.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                         }
                     },
                     {
@@ -220,7 +230,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k2',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k2.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                         
@@ -230,7 +251,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k3',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k3.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },
@@ -239,7 +271,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k4',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k4.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },
@@ -248,8 +291,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k5',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
-                           
+                            switch (obj.row.k5.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                         }
                     }, 
                     {
@@ -257,7 +310,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k6',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k6.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     }, 
@@ -266,7 +330,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k7',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                             switch (obj.row.k7.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },
@@ -275,7 +350,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k8',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k8.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },
@@ -284,7 +370,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k9',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k9.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     }, 
@@ -293,7 +390,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k10',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                             switch (obj.row.k10.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     }, 
@@ -302,7 +410,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k11',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k11.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },
@@ -311,7 +430,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k12',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                             switch (obj.row.k12.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     }, 
@@ -320,7 +450,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k13',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k13.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     }, 
@@ -329,7 +470,18 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k14',
                         align:'center',
                         render(h, obj){
-                            console.log('111', obj.row)
+                            switch (obj.row.k14.taskStatus){
+                                case 'DONE':
+                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                break;
+                                case 'UNDONE':
+                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                break;
+                                case 'UNPLANNED':
+                                     return <div class="u-status-undone"></div>
+                                     
+                                break;
+                             }    
                            
                         }
                     },   
@@ -389,12 +541,7 @@ import EditTask from '../project-detail/edit-task';
                         form.undoneTaskId=this.undoneTaskId;
                     }
                     this.$http.get('get-project-home', form).then((res)=>{
-                            res.data.enums.map((item)=>{
-                                this.billType[item.code]=item.name; 
-                                item.label=item.name;
-                                item.value=item.code; 
-                            })
-                            this.typeList=res.data.enums;
+                            this.projectList=res.data.items;
                         }).catch((err)=>{
                             this.$Notice.error({
                                 title:err.message
@@ -547,6 +694,10 @@ import EditTask from '../project-detail/edit-task';
 }
 .project-view{
     padding:0 20px;
+    .ivu-table-cell{
+        padding:0;
+        margin:0;
+    }
     .u-search{
         position: relative;
         height:32px;
@@ -605,16 +756,42 @@ import EditTask from '../project-detail/edit-task';
 
     }
    
-   
+   .u-status-done{
+       width:105px;
+       text-align: center;
+       height:32px;
+       line-height:32px;
+       background: #AFD882;
+       border-radius: 7px 7px 8px 8px;
+       margin:0 auto;
+   }
+   .u-status-undone{
+       width:105px;
+       text-align: center;
+       height:32px;
+       line-height:32px;
+       background: #EEEEEE;
+       border-radius: 7px 7px 8px 8px;
+       margin:0 auto;
+   }
+
     .u-table-list{
        
         position: relative;
         .u-table-left{
+            position: absolute;
+            left:0;
+            top:0;
+            width:340px;
            
+            z-index:100;
             .u-table-content{
-                 position: relative;
+                width:2000px;
             }
-            .u-right-btn{
+           .u-table-box{
+              overflow: hidden;
+           }
+            .u-table-arrow{
                 width:15px;
                 height:30px;
                 background: rgba(0,0,0,0.2);
@@ -629,9 +806,12 @@ import EditTask from '../project-detail/edit-task';
         
         .u-table-right{
            overflow: hidden;
-           .u-table-box{
-               width:1900px;
-                overflow-x:auto;
+          .u-table-box{
+              overflow-x:auto;
+          }
+           .u-table-box-right{
+                width:2000px;
+                //transform: translateX(-300px);
            }
         }
     }

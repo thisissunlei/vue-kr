@@ -35,17 +35,17 @@ export default {
     
            joinColumns:[   
                     {   
-                        title: '社区',
+                        title: '社区名称',
                         key: 'communityName',
                         align:'center',
                     },    
                     {   
-                        title: '工位/房间编号',
+                        title: '工位编号',
                         key: 'code',
                         align:'center',
                     },
                     {
-                        title: '类型',
+                        title: '工位类型',
                         key: 'seatTypeName',
                         align:'center',
                     },
@@ -56,7 +56,7 @@ export default {
                         align:'center',
                     },
                     {
-                        title: '占用开始时间',
+                        title: '入驻开始日期',
                         key: 'startDate',
                         align:'center',
                         render(tag, params){
@@ -64,7 +64,7 @@ export default {
                         }
                     },
                     {
-                        title: '占用结束时间',
+                        title: '入驻结束日期',
                         key: 'endDate',
                         align:'center',
                         render(tag, params){
@@ -72,7 +72,7 @@ export default {
                         }
                     },
                     {
-                        title: '状态',
+                        title: '入住状态',
                         key: 'status',
                         width:200,
                         align:'center',

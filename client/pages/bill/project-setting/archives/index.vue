@@ -97,8 +97,8 @@ import Loading from '~/components/Loading'
                 allowSubmit:true,
                 columns: [
                     {
-                        title: 'ID',
-                        key: 'id',
+                        title: '项目编号',
+                        key: 'code',
                         align:'center',
                         width:100,
                     },

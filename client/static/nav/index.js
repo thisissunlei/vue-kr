@@ -807,7 +807,19 @@
                             primaryText: '版本更新通知',
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
-                        },   
+                        },
+                        {
+                            primaryText: '会员福利',
+                            menuCode: 'op_member_coupon_external',
+                            type: 'vue',
+                            router: 'app-manage/member-welfare'
+                        }, 
+                        // {
+                        //     primaryText: '免费额度优惠券',
+                        //     menuCode: 'op_member_coupon_internal',
+                        //     type: 'vue',
+                        //     router: 'app-manage/coupon'
+                        // },   
                     ]
                 },
                 {

@@ -99,6 +99,9 @@
 			<LabelText label="收款账号：">
 				{{basicInfo.bankAccount}}
 			</LabelText>
+			<LabelText label="创建时间：">
+				{{basicInfo.createTime}}
+			</LabelText>
 		</DetailStyle>
 		<DetailStyle info="费用明细">
 			<div v-bind:class="[ISshow?showClass:hideClass]" >

@@ -2,7 +2,7 @@
     <div class='daily-search-form'>
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
-                <div>    
+                <div style="white-space: nowrap;">    
                     <div class='header-icon' :style="identify=='daily'?'margin-right:113px;':'margin-right:20px;'">  
                         <Form-item label="库存日期" class='iconForm' v-if="identify=='daily'">
                             <DatePicker 
@@ -56,7 +56,7 @@
                     </Form-item>
                 </div>
 
-                <div>
+                <div style="white-space: nowrap;">
                     <Form-item class='daily-form community-form'>
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;">社<span style="display:inline-block;width:27px;"></span>区</span>
                         <Select 
@@ -137,7 +137,7 @@
                      <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
 
-                <div>
+                <div style="white-space: nowrap;">
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">价<span style="display:inline-block;width:27px;"></span>格</span>
                         <Form-item class='priceForm'> 

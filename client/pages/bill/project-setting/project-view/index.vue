@@ -1,6 +1,5 @@
 <template>
 <div class="project-view">
-    
     <div class="u-search" >
         <Button type="primary"  @click="newArchives">新建项目</Button>
          <div class="u-color-block">
@@ -8,24 +7,26 @@
             <span class="u-opened">已完成</span>
         </div>
     </div>
-    <div class="u-table-left">
-        <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
-    </div>
-    <div class="u-table-right">
-        <Table  border :columns="projectListColumns" :data="projectList"></Table>
-        <div style="margin: 10px;overflow: hidden">
-            <!-- <Button type="primary" @click="onExport">导出</Button> -->
-            <div style="float: right;">
-                <Page 
-                    :current="page"
-                    :total="totalCount"
-                    :page-size="pageSize" 
-                    show-total 
-                    show-elevator
-                    @on-change="changePage"
-                ></Page>
+    <div class="u-table-list u-clearfix">
+            <div class="u-table-left">
+                <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
             </div>
-        </div>
+            <div class="u-table-right">
+                <Table  border :columns="projectListColumns" :data="projectList"></Table>
+                <div style="margin: 10px;overflow: hidden">
+                    <!-- <Button type="primary" @click="onExport">导出</Button> -->
+                    <div style="float: right;">
+                        <Page 
+                            :current="page"
+                            :total="totalCount"
+                            :page-size="pageSize" 
+                            show-total 
+                            show-elevator
+                            @on-change="changePage"
+                        ></Page>
+                    </div>
+                </div>
+            </div>
     </div>
     <Modal
         v-model="openNewArchives"
@@ -321,6 +322,14 @@ import EditTask from '../project-detail/edit-task';
 </script>
 
 <style lang="less">
+.u-clearfix { zoom:1; }
+.u-clearfix:after {
+  clear: both;
+  content: '.';
+  height: 0;
+  display: block;
+  visibility: hidden;
+}
 .project-view{
     padding:0 20px;
     //iview组件样式修改
@@ -371,15 +380,14 @@ import EditTask from '../project-detail/edit-task';
         line-height: 47px;
     }
     .ivu-modal-footer{
-    padding-top:10px; 
-}
+        padding-top:10px; 
+    }
     .current-range{
         .ivu-table-cell{
             padding:0;
             height:100%;
         .ivu-tooltip{
             .row-current-more{
-               
                 padding: 15px 0 10px 0;
             }
             .noBorder{
@@ -423,6 +431,26 @@ import EditTask from '../project-detail/edit-task';
     .ivu-table th{
          background-color: #FAFCFF;
     }
+
+    .u-table-left{
+        float:left;
+        max-width:18.4%;
+    }
+    .u-table-right{
+        float:right;
+        max-width:81.6%;
+    }
+   table {
+       thead,th{
+        height:48px !important;
+        line-height:48px !important;
+      }
+   }
+   
+
+
+
+
 }
 .ivu-modal-footer{
     padding-top:10px; 

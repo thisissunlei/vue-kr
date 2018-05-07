@@ -246,16 +246,11 @@ export default {
             this.width=dailyTableDom.getBoundingClientRect().width;
         }  
         dom.addEventListener("scroll",this.onScrollListener);
+        window.addEventListener('resize',this.onResize);  
         var _this=this;
         LISTENSIDEBAROPEN(function (params) {
             _this.sideBar=params;
         })
-        window.onresize=function(){
-            var dailyTableDom=document.getElementById('daily-inventory-table-list');
-            _this.left=dailyTableDom.getBoundingClientRect().left;
-            _this.width=dailyTableDom.getBoundingClientRect().width;
-            _this.onScrollListener();
-        }
     },
     watch:{
         sideBar:function(val){
@@ -272,8 +267,15 @@ export default {
     destroyed(){
         var dom=document.getElementById('layout-content-main');
         dom.removeEventListener("scroll",this.onScrollListener);
+        window.removeEventListener('resize',this.onResize); 
     },
     methods:{
+        onResize(){
+            var dailyTableDom=document.getElementById('daily-inventory-table-list');
+            this.left=dailyTableDom.getBoundingClientRect().left;
+            this.width=dailyTableDom.getBoundingClientRect().width;
+            this.onScrollListener();
+        },
         //提取公共
         getCommonParam(){
             this.tabForms.page=1;

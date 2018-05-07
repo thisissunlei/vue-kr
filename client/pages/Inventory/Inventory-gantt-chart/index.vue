@@ -126,6 +126,7 @@ export default {
             this.left=domContent.getBoundingClientRect().left;
         }
         dom.addEventListener("scroll",this.onScrollListener);
+        window.addEventListener('resize',this.onResize);  
         var _this=this;
         LISTENSIDEBAROPEN(function (params) {
             _this.sideBar=params;
@@ -141,9 +142,6 @@ export default {
         // window.onresize=function(){
         //     publicFn.windowResize();
         // }
-        window.onresize=function(){
-            _this.onScrollListener();
-        }
     },
     watch:{
         tabForms:function(val){
@@ -158,8 +156,13 @@ export default {
     destroyed(){
         var dom=document.getElementById('layout-content-main');
         dom.removeEventListener("scroll",this.onScrollListener);
+        window.removeEventListener('resize',this.onResize);  
     },
     methods:{
+        //窗口
+        onResize(){
+            this.onScrollListener();
+        },
         //滚动监听
         onScrollListener(){   
             var dom=document.getElementById('layout-content-main');  

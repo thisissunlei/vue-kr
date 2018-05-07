@@ -1,5 +1,6 @@
 <template>
     <div class='chart-inventory-wrap-out'>
+       
         <!-- 甘特图部分 -->
         <div class='chart-inventory-wrap'>
 
@@ -134,9 +135,11 @@
 
                  </div>
                 </div>
+                
                 <div
                     @scroll="rightScroll"
                     @mouseover='rightOver'
+                    @mousemove="rightMove"
                     id="vue-chart-right-draw-content"
                 >
 
@@ -172,6 +175,10 @@
             <div id="gantt-chart-tool-tip"></div>
             <div id="gantt-chart-tool-tip-triangle" class="bottom-triangle"></div>
             <slot name="leftBar"></slot>
+        </div>
+        <div class='inventory-no-data' v-if="!listData.length">
+            <div class="icon"></div>
+            <span class="tip">暂时还没有数据呦~</span>
         </div>
     </div>
 
@@ -715,7 +722,10 @@ export default {
             }
             this.timeShaftFixed(left,el);
         },
-        rightOver(event){
+        rightOver(event){ 
+            this.$emit('rightOver',event);
+        },
+        rightMove(event){
             var e = event || window.event;
             if(e&&drawContent){
                 var num=0;
@@ -744,7 +754,6 @@ export default {
                     this.canculateDay(this.start,endDate);
                 }
             }
-            this.$emit('rightOver',event);
         },
         canculateMonth(start,endDate){
             var endYear=new Date(endDate).getFullYear();
@@ -813,6 +822,23 @@ export default {
 
 <style lang="less">
 .chart-inventory-wrap-out{
+    .inventory-no-data{
+        height: 250px;
+        text-align: center;
+        .icon{
+                width: 139px;
+                height: 196px;
+                background: url(img/nothings.png) no-repeat center center;
+                background-size: 100% 100%;
+                margin:0 auto;
+                margin-top: 20px;
+        }
+       .tip {
+            font-size: 18px;
+            color: #666666;
+            margin-left: 30px;
+        }
+    }
    .chart-inventory-wrap{
         width:100%;
         box-sizing: border-box;

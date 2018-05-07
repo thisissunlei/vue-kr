@@ -17,7 +17,10 @@
             </DetailStyle>
              <DetailStyle info="展示信息">
                   <LabelText label="福利类型：" style="width:1100px;">
-                    {{basicInfo.couponType}}
+                    {{basicInfo.couponTypetxt}}
+                  </LabelText>
+                   <LabelText  label="福利标题：" style="width:1100px;">
+                    {{basicInfo.title}}
                   </LabelText>
                   <LabelText label="福利描述：" style="width:1100px;">
                     {{basicInfo.descr}}
@@ -56,6 +59,10 @@
                    <LabelText label="领取有效期：" style="width:1100px;">
                     {{basicInfo.indate}}
                   </LabelText>
+                   <LabelText   v-if="basicInfo.couponType!='OFFLINESTORE'" label="领取链接：" style="width:1100px;">
+                    {{basicInfo.getUrl}}
+                  </LabelText>
+                 
              </DetailStyle>
         </div>
   </div>
@@ -100,7 +107,7 @@ export default {
         this.$http.get('get-coupon-detail', from).then((res)=>{
                   let data = res.data;
                   data.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date(data.ctime));
-                  data.couponType=type[data.couponType];
+                  data.couponTypetxt=type[data.couponType];
                   this.basicInfo = data;
 
         }).catch((error)=>{
@@ -127,6 +134,7 @@ export default {
             float:left;
             color: #333;
             margin-left:14px;
+            font-weight: 700;
         }
         .u-img-url{
             max-width: 132px;

@@ -317,6 +317,7 @@ export default {
         },
         //获取进度列表数据
         getListData(params,type){
+            var url=this.identify=='daily'?'getDailyTimeLine':'getOptionalTimeLine';
             /*if(allPage<params.page){
                 return;
             }*/
@@ -326,7 +327,7 @@ export default {
             var endTime = data.endTime.split(" ")[0]+' 00:00:00';
             data.startTime = '';
             data.endTime = '';*/
-            this.$http.get('getDailyTimeLine',data).then((response)=>{
+            this.$http.get(url,data).then((response)=>{
                 this.listData=response.data.items;
                 /*if(response.data.hasTime){
                     this.minDay = this.getTimeToDay(response.data.firstStartTime);

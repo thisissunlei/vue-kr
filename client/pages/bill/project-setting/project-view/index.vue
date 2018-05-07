@@ -2,18 +2,23 @@
 <div class="project-view">
     <div class="u-search" >
         <Button type="primary"  @click="newArchives">新建项目</Button>
+        <div class="u-search-content"></div>
          <div class="u-color-block">
             <span class="u-prepare">未完成</span>
             <span class="u-opened">已完成</span>
         </div>
     </div>
-    <div class="u-table-list ">
+    <div class="u-table-list">
             <div class="u-table-left">
-                <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
-                <div class="u-table-footer"></div>
-                <div class="u-right-btn"></div>
+                 <div :class="[tableFlag?'u-animation-stretch-left':'','u-table-box']">
+                    <div class="u-table-content">
+                            <div class="u-right-btn" @click="stretchTable"></div>
+                            <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+                        </div>
+                        <div class="u-table-footer"></div>
+                    </div>
             </div>
-            <div class="u-table-right">
+            <div :class="[tableFlag?'u-table-w':'','u-table-right']">
                 <Table  border :columns="projectListColumns" :data="projectList"></Table>
                 <div style="margin: 10px;overflow: hidden">
                     <!-- <Button type="primary" @click="onExport">导出</Button> -->
@@ -106,6 +111,7 @@ import EditTask from '../project-detail/edit-task';
                 itemDetail:{},
                 pageSize:15,
                 page:1,
+                tableFlag:false,
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -133,11 +139,19 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目名称',
                         key: 'name',
                         align:'center',
+                        width:215,
                     },
                     {
                         title: '城市',
                         key: 'cityName',
                         align:'center',
+                        width:122,
+                    },
+                    {
+                        title: '项目编号',
+                        key: 'code',
+                        align:'center',
+                        width:120,
                     },
                 ],
                 projectListColumns:[
@@ -145,6 +159,7 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目立项',
                         key: 'k1',
                         align:'center',
+                       
                         render(h, obj){
                             console.log('111', obj.row)
                            
@@ -247,6 +262,9 @@ import EditTask from '../project-detail/edit-task';
                                 title:err.message
                             });
                     })
+            },
+            stretchTable(){
+                this.tableFlag=!this.tableFlag;
             },
             //跳转查看页面
             goView(params){
@@ -411,6 +429,9 @@ import EditTask from '../project-detail/edit-task';
 
             }
     }
+    .u-search-content{
+         float:left;
+    }
     .u-color-block{
         width:172px;
         height:71px;
@@ -492,31 +513,79 @@ import EditTask from '../project-detail/edit-task';
          background-color: #FAFCFF;
     }
     .u-table-list{
-        background: #F6F6F6;
-        float:left;
+        min-height:100px;
+        position: relative;
         .u-table-left{
-            float:left;
-            width:18.7%;
+            width:337px;
             background:#fff;
+            position: absolute;
+            left:0;
+            .u-table-box{
+                width:337px;
+                overflow-x: hidden;
+            }
             .u-table-footer{
                height:53px; 
             }
+            .ivu-table-wrapper{
+                 border-right:none !important;
+                 border-left:none ;
+            }
+            .ivu-table-border {
+                td,th{
+                    border-right: none;
+                     border-left:1px solid #e9eaec;
+                }
+            }
+            table{
+                border-right:5px solid #F6F6F6;
+            }
+            .u-table-content{
+                 position: relative;
+            }
+            .u-right-btn{
+                width:15px;
+                height:30px;
+                background: rgba(0,0,0,0.2);
+                border-radius: 0 4px 4px 0;
+                position: absolute;
+                z-index:100;
+                right:-10px;
+                top:50%;
+                transform: translateY(-50%);
+            }
+        }
+        .u-table-w{
+            width:100% !important;
+            .ivu-table-wrapper{
+                 border-left:1px solid #e9eaec !important;
+            }
         }
         .u-table-right{
-            float:right;
+            position: absolute;
             width:81.3%;
+            right:0;
             background:#fff;
+             .ivu-table-wrapper{
+                 border-left:none;
+            }
+            .ivu-table-border {
+                td,th{
+                    border-left: none;
+                }
+            }
         }
     }
 
-    
-   
-   
-
-
-
-
 }
+.u-animation-stretch-left{
+    transform:translateX(-18.8%);
+}
+.u-animation-stretch-right{
+    transform:translateX(18.8%);
+}
+
+
 .ivu-modal-footer{
     padding-top:10px; 
 }

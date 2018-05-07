@@ -36,7 +36,7 @@
                       <FormItem label="福利描述"  style="width:516px" prop="descr">
                           <Input 
                               v-model="formItem.descr" 
-                              placeholder="20个字符以内,建议填写门店详细地址"
+                              :placeholder="[formItem.couponType=='OFFLINESTORE'?'20个字符以内,建议填写门店详细地址':'20个字符以内,建议补充描述该福利内容']"
                               :maxlength="descrLength"
                           />
                       </FormItem>

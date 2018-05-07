@@ -7,9 +7,11 @@
             <span class="u-opened">已完成</span>
         </div>
     </div>
-    <div class="u-table-list u-clearfix">
+    <div class="u-table-list ">
             <div class="u-table-left">
                 <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+                <div class="u-table-footer"></div>
+                <div class="u-right-btn"></div>
             </div>
             <div class="u-table-right">
                 <Table  border :columns="projectListColumns" :data="projectList"></Table>
@@ -140,11 +142,68 @@ import EditTask from '../project-detail/edit-task';
                 ],
                 projectListColumns:[
                     {
-                        title: '账单编号',
-                        key: 'billNo',
+                        title: '项目立项',
+                        key: 'k1',
                         align:'center',
-                        width:160,
-                        fixed:'left'
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },
+                    {
+                        title: '项目决策',
+                        key: 'k2',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                        
+                    },
+                    {
+                        title: '意向书签订',
+                        key: 'k3',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },
+                    {
+                        title: '支付意向金',
+                        key: 'k4',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },
+                    {
+                        title: '租赁合同签订',
+                        key: 'k5',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    }, 
+                    {
+                        title: '支付履约保证金',
+                        key: 'k6',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    }, 
+                    {
+                        title: '产品平面决策',
+                        key: 'k7',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
                     }, 
                 ]
             }
@@ -403,6 +462,7 @@ import EditTask from '../project-detail/edit-task';
       }
     }
     .ivu-table-header{
+        
         .ivu-table-cell{
             height:auto;
         }
@@ -422,30 +482,35 @@ import EditTask from '../project-detail/edit-task';
     tr.ivu-table-row-hover td{
         background-color: #F7F9FB;
     }
-    .ivu-table-header{
-        thead{
-            height:50px;
-            line-height:50px;
+    .ivu-table{
+         thead,th{
+            height:48px !important;
+            line-height:48px !important;
         }
     }
     .ivu-table th{
          background-color: #FAFCFF;
     }
-
-    .u-table-left{
+    .u-table-list{
+        background: #F6F6F6;
         float:left;
-        max-width:18.4%;
+        .u-table-left{
+            float:left;
+            width:18.7%;
+            background:#fff;
+            .u-table-footer{
+               height:53px; 
+            }
+        }
+        .u-table-right{
+            float:right;
+            width:81.3%;
+            background:#fff;
+        }
     }
-    .u-table-right{
-        float:right;
-        max-width:81.6%;
-    }
-   table {
-       thead,th{
-        height:48px !important;
-        line-height:48px !important;
-      }
-   }
+
+    
+   
    
 
 

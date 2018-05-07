@@ -15,7 +15,7 @@
     </div>
     <div class="u-table">
         <Table  border :columns="columns" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <div  style="margin: 10px;overflow: hidden;">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 

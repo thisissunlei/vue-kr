@@ -43,7 +43,7 @@
     </div>
     <div class="u-table-list">
             <div class="u-table-left">
-                 <div class="u-table-arrow" @click="stretchTable"></div>
+                 <div :class="[btnFlag?'u-right-arrow':'u-left-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div class="u-table-box">
                         <div class="u-table-content">
                             <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
@@ -794,13 +794,19 @@ import EditTask from '../project-detail/edit-task';
             .u-table-arrow{
                 width:15px;
                 height:30px;
-                background: rgba(0,0,0,0.2);
-                border-radius: 0 4px 4px 0;
                 position: absolute;
                 z-index:100;
                 right:-10px;
                 top:50%;
                 transform: translateY(-50%);
+            }
+            .u-left-arrow{
+                background: url('~/assets/images/arrow_left.png') no-repeat center center;
+                background-size:100% 100%;
+            }
+            .u-right-arrow{
+                background: url('~/assets/images/arrow_right.png') no-repeat center center;
+                background-size:100% 100%;
             }
         }
         

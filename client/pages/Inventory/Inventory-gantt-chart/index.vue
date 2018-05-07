@@ -15,6 +15,7 @@
             :head="head"
             :left="left"
             :width="width"
+            :identify="identify"
         >
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>

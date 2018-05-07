@@ -419,6 +419,12 @@ export default {
                             str=str?str+','+item:item;
                     })
                     this.formItem.statusName=str;
+                    if(!this.formItem.startDate&&!this.formItem.endDate){
+                        this.$Notice.error({
+                            title:'至少选择一个时间'
+                        });
+                        return ;
+                    }
                     this.$emit('searchClick',this.formItem);
                 }
             })

@@ -44,8 +44,8 @@
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
 
-                        <div class="add-left" @click="lastTurnPage">
-                            <span class='add-left-pic'  ref='addLeftPic'></span>
+                        <div class="add-left" ref='addLeftPic' @click="lastTurnPage">
+                            <span class='add-left-pic'></span>
                         </div>
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
@@ -127,8 +127,8 @@
                             </div>
                            
                         </div>
-                        <div class="add-right" @click="nextTurnPage" :style="{right:scrollWidth+'px'}">
-                            <span class='add-right-pic' id="add-right-pic-inventory" ref='addRightPic'></span>
+                        <div class="add-right" @click="nextTurnPage" ref='addRightPic' :style="{right:scrollWidth+'px'}">
+                            <span class='add-right-pic' id="add-right-pic-inventory"></span>
                         </div>
                     </div>
 
@@ -226,6 +226,10 @@ export default {
         },
         left:{
             type:[Number,String] 
+        },
+        identify:{
+           type:String,
+           default:''
         }
     },
     data(){
@@ -328,8 +332,18 @@ export default {
                     }
                     offerLeft = (publicFn.getMonthDayNum(todayObj.year,todayObj.month)+todayObj.dayNum-1)*this.minCalibration;
                 }
-                var scrollLeft = (this.searchParams.inventoryDate?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
+                var scrollLeft = (this.identify=='daily'?this.getInventoryLeft(data):this.getStartLeft(data))-offerLeft;
                 var timeShaftFixed = document.querySelectorAll('.time-shaft-fixed')[0];
+                if(!this.listData.length){
+                    if(timeShaftFixed){
+                        timeShaftFixed.style.opacity=0;
+                    }
+                    if(this.$refs.addLeftPic){
+                        this.$refs.addLeftPic.style.opacity='1';
+                        this.$refs.addLeftPic.style.pointerEvents='none';
+                    }
+                    return;
+                }
                 if(this.endPosition=='start'){
                     if(timeShaftFixed){
                         timeShaftFixed.style.opacity=0;
@@ -382,7 +396,8 @@ export default {
         },
         getInventoryLeft(data){
             var today =this.searchParams.inventoryDate;
-            var todayTime=today?today.split(' ')[0]:'';
+            var otherDay = dateUtils.dateToStr("YYYY-MM-DD",new Date());
+            var todayTime=today?today.split(' ')[0]:otherDay;
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
             this.inventoryRentLeft=todayTime?this.timeRange(todayTime,startTime)*this.minCalibration:0;
@@ -390,7 +405,8 @@ export default {
         },
         getStartLeft(data){
             var today =this.searchParams.startDate;
-            var todayTime=today?today.split(' ')[0]:'';
+            var otherDay=this.searchParams.endDate;
+            var todayTime=today?today.split(' ')[0]:otherDay.split(' ')[0];
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
             this.startRentLeft=todayTime?this.timeRange(todayTime,startTime)*this.minCalibration:0;
@@ -398,7 +414,8 @@ export default {
         },
         getEndLeft(data){
             var today =this.searchParams.endDate;
-            var todayTime=today?today.split(' ')[0]:'';
+            var otherDay=this.searchParams.startDate;
+            var todayTime=today?today.split(' ')[0]:otherDay.split(' ')[0];
             var startMonth = data[0];
             var startTime = startMonth.year + '-'+startMonth.month+'-'+startMonth.start;
             var canculateTime=this.timeRange(todayTime,startTime)?this.timeRange(todayTime,startTime)+1:0;
@@ -541,11 +558,13 @@ export default {
             //获取周的具体数据
             this.getWeekStartAndEnd(showData);
             this.getTodayTOLeft(showData);
-            this.getStartLeft(showData);
-            this.getEndLeft(showData);
-            this.getInventoryLeft(showData);
+            if(this.identify=='daily'){
+                this.getInventoryLeft(showData);
+            }else{
+                this.getStartLeft(showData);
+                this.getEndLeft(showData);
+            }  
             this.getYears(startTime,endTime);
-
         },
 
         //获取某日为周几
@@ -885,7 +904,6 @@ export default {
                     background:url(img/left.svg) no-repeat center;
                     background-size:100%;
                     cursor: pointer;
-                    opacity: 0;
                 }
                 .add-right-pic{
                     position: absolute;
@@ -899,7 +917,6 @@ export default {
                     background:url(img/right.svg) no-repeat center;
                     background-size:100%;
                     cursor: pointer;
-                    opacity: 0;
                 }
             }
 
@@ -971,7 +988,7 @@ export default {
                 z-index:3;
             }
         }
-         .add-left{
+           .add-left{
                 position: absolute;
                 width: 30px;
                 height: 100%;

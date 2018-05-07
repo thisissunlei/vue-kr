@@ -43,7 +43,7 @@
                        <FormItem label="福利面值"  style="width:294px" prop="faceValue">
                           <Input 
                               v-model="formItem.faceValue" 
-                              placeholder="10个字符以内,如“9折”"
+                              :placeholder="[formItem.couponType=='OFFLINESTORE'?'10个字符以内,如“9折”':'10个字符以内,如“1000元礼券”']"
                               :maxlength="faceValueLength"
                           />
                       </FormItem>

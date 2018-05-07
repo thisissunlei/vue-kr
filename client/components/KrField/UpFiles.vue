@@ -117,7 +117,7 @@ export default{
 		getFileName(index){
 			var fileArr = this.fileArr[index].url.split('?')[0].split('/')
 			var filename  =fileArr[fileArr.length-1];
-			return filename;
+			return decodeURI(filename);
 		},
 		downFile(url){
 			utils.downFile(url)

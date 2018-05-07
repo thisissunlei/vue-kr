@@ -1,9 +1,32 @@
 <template>
 <div class="project-view">
+    
     <div class="u-search" >
         <Button type="primary"  @click="newArchives">新建项目</Button>
+         <div class="u-color-block">
+            <span class="u-prepare">未完成</span>
+            <span class="u-opened">已完成</span>
+        </div>
     </div>
-
+    <div class="u-table-left">
+        <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+    </div>
+    <div class="u-table-right">
+        <Table  border :columns="projectListColumns" :data="projectList"></Table>
+        <div style="margin: 10px;overflow: hidden">
+            <!-- <Button type="primary" @click="onExport">导出</Button> -->
+            <div style="float: right;">
+                <Page 
+                    :current="page"
+                    :total="totalCount"
+                    :page-size="pageSize" 
+                    show-total 
+                    show-elevator
+                    @on-change="changePage"
+                ></Page>
+            </div>
+        </div>
+    </div>
     <Modal
         v-model="openNewArchives"
         title="新建项目"
@@ -99,8 +122,30 @@ import EditTask from '../project-detail/edit-task';
                 warn:'',
                 MessageType:'',
                 allowSubmit:true,
-                editTaskData:{}
-               
+                editTaskData:{},
+                undoneTaskId:'',
+                projectList:[],
+                projectTabColumns:[
+                    {
+                        title: '项目名称',
+                        key: 'name',
+                        align:'center',
+                    },
+                    {
+                        title: '城市',
+                        key: 'cityName',
+                        align:'center',
+                    },
+                ],
+                projectListColumns:[
+                    {
+                        title: '账单编号',
+                        key: 'billNo',
+                        align:'center',
+                        width:160,
+                        fixed:'left'
+                    }, 
+                ]
             }
         },
         created(){
@@ -119,9 +164,30 @@ import EditTask from '../project-detail/edit-task';
             //         let tableDom = document.querySelectorAll('#object-seting-archives table')[0];
             //         utils.tableSort(tableDom,this.shortChange);
             //     })
+            this.getBaseicInfo();
         },
         methods:{
-           
+            getBaseicInfo(){
+                    let tab=sessionStorage.getItem('chartSetting') || 'PREPARE';
+                    let form={
+                        projectStatus:tab,
+                    }
+                    if(this.undoneTaskId){
+                        form.undoneTaskId=this.undoneTaskId;
+                    }
+                    this.$http.get('get-project-home', form).then((res)=>{
+                            res.data.enums.map((item)=>{
+                                this.billType[item.code]=item.name; 
+                                item.label=item.name;
+                                item.value=item.code; 
+                            })
+                            this.typeList=res.data.enums;
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                    })
+            },
             //跳转查看页面
             goView(params){
                 window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
@@ -258,16 +324,15 @@ import EditTask from '../project-detail/edit-task';
 .project-view{
     padding:0 20px;
     //iview组件样式修改
-    .ivu-icon-arrow-up-b::before{
-        //  content: '';
-    }
-    .ivu-icon-arrow-down-b::before{
-        //  content: '';
-    }
+    // .ivu-icon-arrow-up-b::before{
+    //     //  content: '';
+    // }
+    // .ivu-icon-arrow-down-b::before{
+    //     //  content: '';
+    // }
     .u-search{
             height:32px;
             margin:16px 0;
-
             .u-high-search{
                 width:22px;
                 height:22px;
@@ -278,6 +343,30 @@ import EditTask from '../project-detail/edit-task';
 
             }
     }
+    .u-color-block{
+        width:172px;
+        height:71px;
+        float:right;
+        span{
+            width:80px;
+            height:30px;
+            line-height: 30px;
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+            color: #666666;
+            border-radius: 7px;
+        }
+
+        .u-prepare{
+           background: #EEEEEE; 
+           margin-right:12px;
+        }
+        .u-opened{
+            background: #AFD882;
+        }
+
+    }
     .table-null{
         line-height: 47px;
     }
@@ -285,13 +374,12 @@ import EditTask from '../project-detail/edit-task';
     padding-top:10px; 
 }
     .current-range{
-        //border-bottom: none;
         .ivu-table-cell{
             padding:0;
             height:100%;
         .ivu-tooltip{
             .row-current-more{
-                //border-bottom:1px solid #e9eaec;
+               
                 padding: 15px 0 10px 0;
             }
             .noBorder{

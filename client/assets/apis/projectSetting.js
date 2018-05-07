@@ -85,5 +85,10 @@ module.exports = {
       url:'/api/krspace-pm-web/pm/project/edit',
       method: 'post'
     },
+    //项目管理-项目档案-查看首页列表
+    'get-project-home': {
+      url:'/api/krspace-pm-web/pm/project/home',
+      method: 'get'
+    },
     
 }

@@ -9,19 +9,22 @@
         </div>
     </div>
     <div class="u-table-list">
-            <div class="u-table-left">
-                 <div :class="[tableFlag?'u-animation-stretch-left':'','u-table-box']">
-                    <div class="u-table-content">
+            <!-- <div class="u-table-left">
+                 <div class="u-table-box">
+                        <div class="u-table-content">
                             <div class="u-right-btn" @click="stretchTable"></div>
-                            <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
-                        </div>
+                                <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+                            </div>
                         <div class="u-table-footer"></div>
+                 </div>
+            </div> -->
+            <div class="u-table-right">
+                <div class="u-table-right" style="overflow-x:auto;">
+                    <div class="u-table-box">
+                        <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
-            </div>
-            <div :class="[tableFlag?'u-table-w':'','u-table-right']">
-                <Table  border :columns="projectListColumns" :data="projectList"></Table>
+                </div>
                 <div style="margin: 10px;overflow: hidden">
-                    <!-- <Button type="primary" @click="onExport">导出</Button> -->
                     <div style="float: right;">
                         <Page 
                             :current="page"
@@ -139,22 +142,20 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目名称',
                         key: 'name',
                         align:'center',
-                        width:215,
+                       
                     },
                     {
                         title: '城市',
                         key: 'cityName',
                         align:'center',
-                        width:122,
+                       
                     },
                     {
                         title: '项目编号',
                         key: 'code',
                         align:'center',
-                        width:120,
+                        
                     },
-                ],
-                projectListColumns:[
                     {
                         title: '项目立项',
                         key: 'k1',
@@ -219,8 +220,72 @@ import EditTask from '../project-detail/edit-task';
                             console.log('111', obj.row)
                            
                         }
+                    },
+                     {
+                        title: '工程收房',
+                        key: 'k8',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },
+                    {
+                        title: '图纸完成',
+                        key: 'k9',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
                     }, 
-                ]
+                    {
+                        title: '报审完成',
+                        key: 'k10',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    }, 
+                     {
+                        title: '项目开工',
+                        key: 'k11',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },
+                    {
+                        title: '项目竣工',
+                        key: 'k12',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    }, 
+                    {
+                        title: '项目交付',
+                        key: 'k13',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    }, 
+                     {
+                        title: '项目正式开业',
+                        key: 'k14',
+                        align:'center',
+                        render(h, obj){
+                            console.log('111', obj.row)
+                           
+                        }
+                    },   
+                ],
+                
             }
         },
         created(){
@@ -409,13 +474,6 @@ import EditTask from '../project-detail/edit-task';
 }
 .project-view{
     padding:0 20px;
-    //iview组件样式修改
-    // .ivu-icon-arrow-up-b::before{
-    //     //  content: '';
-    // }
-    // .ivu-icon-arrow-down-b::before{
-    //     //  content: '';
-    // }
     .u-search{
             height:32px;
             margin:16px 0;
@@ -434,7 +492,6 @@ import EditTask from '../project-detail/edit-task';
     }
     .u-color-block{
         width:172px;
-        height:71px;
         float:right;
         span{
             width:80px;
@@ -456,90 +513,13 @@ import EditTask from '../project-detail/edit-task';
         }
 
     }
-    .table-null{
-        line-height: 47px;
-    }
-    .ivu-modal-footer{
-        padding-top:10px; 
-    }
-    .current-range{
-        .ivu-table-cell{
-            padding:0;
-            height:100%;
-        .ivu-tooltip{
-            .row-current-more{
-                padding: 15px 0 10px 0;
-            }
-            .noBorder{
-                border-bottom:none;
-            }
-        }
-      }
-      .ivu-table-cell > div{
-            border-bottom:solid 1px #e9eaec;
-            &:last-child{
-                border-bottom:none;
-            }
-      }
-    }
-    .ivu-table-header{
-        
-        .ivu-table-cell{
-            height:auto;
-        }
-        thead{
-            tr{
-                th{
-                    &:nth-child(5){
-                        border-bottom:solid 1px #e9eaec;
-                    }
-                    &:nth-child(6){
-                        border-bottom:solid 1px #e9eaec;
-                    }
-                }
-            }
-        }
-    }
-    tr.ivu-table-row-hover td{
-        background-color: #F7F9FB;
-    }
-    .ivu-table{
-         thead,th{
-            height:48px !important;
-            line-height:48px !important;
-        }
-    }
-    .ivu-table th{
-         background-color: #FAFCFF;
-    }
+   
+   
     .u-table-list{
-        min-height:100px;
+       
         position: relative;
         .u-table-left{
-            width:337px;
-            background:#fff;
-            position: absolute;
-            left:0;
-            .u-table-box{
-                width:337px;
-                overflow-x: hidden;
-            }
-            .u-table-footer{
-               height:53px; 
-            }
-            .ivu-table-wrapper{
-                 border-right:none !important;
-                 border-left:none ;
-            }
-            .ivu-table-border {
-                td,th{
-                    border-right: none;
-                     border-left:1px solid #e9eaec;
-                }
-            }
-            table{
-                border-right:5px solid #F6F6F6;
-            }
+           
             .u-table-content{
                  position: relative;
             }
@@ -555,52 +535,20 @@ import EditTask from '../project-detail/edit-task';
                 transform: translateY(-50%);
             }
         }
-        .u-table-w{
-            width:100% !important;
-            .ivu-table-wrapper{
-                 border-left:1px solid #e9eaec !important;
-            }
-        }
+        
         .u-table-right{
-            position: absolute;
-            width:81.3%;
-            right:0;
-            background:#fff;
-             .ivu-table-wrapper{
-                 border-left:none;
-            }
-            .ivu-table-border {
-                td,th{
-                    border-left: none;
-                }
-            }
+           overflow: hidden;
+           .u-table-box{
+               width:1900px;
+                overflow-x:auto;
+           }
         }
     }
 
 }
-.u-animation-stretch-left{
-    transform:translateX(-18.8%);
-}
-.u-animation-stretch-right{
-    transform:translateX(18.8%);
-}
 
 
-.ivu-modal-footer{
-    padding-top:10px; 
-}
 
-.ivu-tooltip{
-    width:100%;
-    .ivu-tooltip-rel{
-       width:100%;
-    }
-}
-.current-more-task{
-    width:100%;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-}
+
 
 </style>

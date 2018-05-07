@@ -64,7 +64,7 @@
                                 :on-success="coverSuccess"
                                 :on-error="coverError"
                                 type="drag"
-                                action="http://optest01.krspace.cn/api/krspace-finance-web/mobile/file/img/upload"
+                                action="/api/krspace-finance-web/mobile/file/img/upload"
                                 style="display: inline-block;width:148px;">
                                 <div style="width: 148px;height:148px;line-height: 158px;">
                                     <Icon type="camera" size="40"></Icon>
@@ -94,7 +94,7 @@
                                         :on-success="logoSuccess"
                                         :on-error="logoError"
                                         type="drag"
-                                        action="http://optest01.krspace.cn/api/krspace-finance-web/mobile/file/img/upload"
+                                        action="/api/krspace-finance-web/mobile/file/img/upload"
                                         style="display: inline-block;width:148px;">
                                         <div style="width: 148px;height:148px;line-height: 158px;">
                                             <Icon type="camera" size="40"></Icon>

@@ -43,7 +43,7 @@
     </div>
     <div class="u-table-list">
             <div class="u-table-left">
-                 <div :class="[btnFlag?'u-right-arrow':'u-left-arrow','u-table-arrow']" @click="stretchTable"></div>
+                 <div :class="[tableFlag?'u-right-arrow':'u-left-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div class="u-table-box">
                         <div class="u-table-content">
                             <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
@@ -191,6 +191,15 @@ import EditTask from '../project-detail/edit-task';
                         key: 'name',
                         align:'center',
                         width:160,
+                        render:(h, obj)=>{
+                            return h('div', {
+                                       on: {
+                                            click: () => {
+                                                this.goView(obj.row)
+                                            }
+                                        }
+                                  },obj.row.name);
+                        }
                        
                     },
                     {
@@ -198,6 +207,16 @@ import EditTask from '../project-detail/edit-task';
                         key: 'city',
                         align:'center',
                         width:80,
+                        render:(h, obj)=>{
+                             return h('div', {
+                                       on: {
+                                            click: () => {
+                                                this.goView(obj.row)
+                                            }
+                                        }
+                            },obj.row.city);
+                           
+                        }
                        
                     },
                     {
@@ -205,6 +224,16 @@ import EditTask from '../project-detail/edit-task';
                         key: 'code',
                         align:'center',
                         width:100,
+                        render:(h, obj)=>{
+                             return h('div', {
+                                       on: {
+                                            click: () => {
+                                                this.goView(obj.row)
+                                            }
+                                        }
+                            },obj.row.code);
+                          
+                        }
                     },
                     {
                         title: '项目立项',
@@ -522,8 +551,6 @@ import EditTask from '../project-detail/edit-task';
             getSelect(){
                 
                  this.$http.get('get-task-template-list', "").then((res)=>{
-                            
-                            console.log('res-----',res)
                             this.taskSelectData = [].concat(res.data.items);
                         }).catch((err)=>{
                             this.$Notice.error({
@@ -553,7 +580,7 @@ import EditTask from '../project-detail/edit-task';
             },
             //跳转查看页面
             goView(params){
-                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=${params.status}`;
+                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`; //${params.status}
             },
             //新建页数据更新
             onAddArchives(params){

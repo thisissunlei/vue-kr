@@ -1,13 +1,13 @@
 <template>
   <div class="project-setting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
-            <TabPane label="待开业项目" name="tab1">
+            <TabPane label="待开业项目" name="PREPARE">
                 <!--项目管理档案列表
                  <Archives v-if="mask"/> 
                 -->
                 <ProjectView />
             </TabPane>
-            <TabPane label="已开业项目" name="tab2">
+            <TabPane label="已开业项目" name="OPENED">
 
                 <!-- 项目总览
                     <ProgressView v-if="!mask"/> 
@@ -32,15 +32,14 @@ export default {
     data(){
         return{
             mask:true,
-
-            tabs:'tab1'
+            tabs:'PREPARE'
         }
     },
     mounted(){
         GLOBALSIDESWITCH("false");
         var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
-        this.tabs=sessionStorage.getItem('chartSetting')||'tab1';
-        if(this.tabs=='tab2'){
+        this.tabs=sessionStorage.getItem('chartSetting')||'PREPARE';
+        if(this.tabs=='OPENED'){
             this.mask=false;
             tabDom.style.overflow = 'visible';
         }else{
@@ -51,7 +50,7 @@ export default {
         tabsClick(key){
             var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
-            if(key=='tab2'){
+            if(key=='OPENED'){
                 tabDom.style.overflow = 'visible';
                 this.mask=false;
 
@@ -61,7 +60,7 @@ export default {
             }
             this.tabs=key;
             sessionStorage.setItem('chartSetting',key);
-        }
+        },
     }
 }
 

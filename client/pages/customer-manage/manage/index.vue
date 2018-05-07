@@ -3,9 +3,9 @@
    <SectionTitle title="客户中心"></SectionTitle>
         
             <div class='list-banner'>
-                    <div class='list-btn' v-if="isBtn">
-                        <Button type="primary"  @click="createNew" class='join-btn'>新建</Button>
-                        <Button type="primary"  @click="createSwitch" v-if="isSwitch">转移</Button>
+                    <div class='list-btn'>
+                        <Buttons label='新建'  type='primary' @click='createNew' checkAction='customer_add' class='join-btn'/>
+                        <Buttons label='转移'  type='primary' @click='createSwitch' checkAction='customer_transfer' v-if="isSwitch"/>
                     </div>
 
                     <div class='list-search'>
@@ -122,7 +122,6 @@
                 newPageData:{},
                 canSubmit:true,
             /*转移客户*/
-            isBtn:false,
             isSwitch:false,
             switchIds:'',
             switchForm:{},
@@ -210,9 +209,6 @@
           this.getListData(params);
           this.params=params; 
         },
-        mounted(){
-            this.btnPermissions();
-        },
         methods:{
             lowerSubmit(){
                 this.params.page = 1;
@@ -294,18 +290,6 @@
                 this.newPageData = Object.assign({},data);
                 var params = Object.assign({},data)  
             },
-
-            //新增和转移按钮权限
-            btnPermissions(){
-                this.$http.get('customer-permission-btn').then((response)=>{   
-                    this.isBtn=response.code==1?true:false;
-                }).catch((error)=>{
-                    this.$Notice.error({
-                        title:error.message
-                    });
-                })    
-            },
-
 
             //获取form数据
             getSwitchData(formItem){

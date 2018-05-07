@@ -7,8 +7,8 @@
                     <div class="tiem-box" style="float:left;">
                         <div class="time-view">
                             <div  class="time-title" >计划时间</div>
-                            <div v-if="!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
-                            <div v-if="isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                            <div v-if="!actualEnd &&!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
+                            <div v-if="actualEnd||isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
                                 <DatePicker
                                     :open="startOpen"
                                     :value="actualStart"
@@ -19,7 +19,7 @@
                                     @on-ok="startOk">
                                     <a href="javascript:void(0)" @click="switchStartTime">
                                     
-                                        <div style="display:inline-block;font-size:20px;color:#333;"> {{ actualStart }} </div>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ actualEnd||' '}} </div>
                                         
                                         <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                     </a>
@@ -44,7 +44,7 @@
                                 @on-ok="endOk">
                                 <a href="javascript:void(0)" @click="switchEndTime">
                                 
-                                    <div style="display:inline-block;font-size:20px;color:#333;"> {{ planEnd }} </div>
+                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ planEnd }} </div>
                                     
                                     <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                 </a>
@@ -55,37 +55,37 @@
                 <div class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                     <div>需要填写档案
                         <span style="font-size:20px;color:#ccc;">{{getEdit.nullFields}}</span>项，尚未完成
-                        <span style="font-size:20px;color:#000;">{{getEdit.totalFields}}</span>箱，
+                        <span style="font-size:20px;color:#000;">{{getEdit.totalFields}}</span>项，
                         <span style="font-size:20px;color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
                 </div>
             </div>
             
             
-          
-            
-                <div class="edit-record" slot="content">
-                    <div
-                        class='record-wrap'
-                        v-for="item in getEdit.operLogs" 
-                        :key="item.id"
-                    >
-                        <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
-                        <div style="display:inline-block;">
-                            <div class='second'>
-                                <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
-                                <span >{{item.comment}}</span>
+
+            <div class="segmentation-line"></div>
+            <div class="edit-record" >
+                <div
+                    class='record-wrap'
+                    v-for="item in getEdit.operLogs" 
+                    :key="item.id"
+                >
+                    <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
+                    <div style="display:inline-block;">
+                        <div class='second'>
+                            <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
+                            <span >{{item.comment}}</span>
+                        </div>
+                        <div class='third' v-if="item.descr">
+                                <div class="mod-triangle">
+                                <div class="t-border"></div>
+                                <div class="t-inset"></div>
                             </div>
-                            <div class='third' v-if="item.descr">
-                                 <div class="mod-triangle">
-                                    <div class="t-border"></div>
-                                    <div class="t-inset"></div>
-                                </div>
-                                {{item.descr}}
-                               
-                            </div>
+                            {{item.descr}}
+                            
                         </div>
                     </div>
-                </div>              
+                </div>
+            </div>              
         </Form>
 
         <Modal
@@ -168,14 +168,14 @@ export default {
             this.newStart = date
         },
         startOk(){
-            this.actualStart = this.newStart;
+            this.actualEnd = this.newStart;
             this.switchStartTime();
         },
         startClear(){
 
         },
         switchStartEdit(){
-
+            this.startOpen = true;
             this.isStartEdit = !this.isStartEdit;
         },
         endChange(data){
@@ -189,6 +189,7 @@ export default {
             this.switchEndTime();
         },
         switchEndEdit(){
+            this.endOpen = true;
             this.isEndEdit = !this.isEndEdit;
         },
         goArchivesClick(){
@@ -272,6 +273,16 @@ export default {
         .ivu-form-item-content{
             line-height:34px;
         }
+    }
+    .segmentation-line{
+        width: 100%;
+        height: 5px;
+        background: #F6F6F6;
+        position: relative;
+        left: -45px;
+        padding: 0px 45px;
+        margin-top: 30px;
+        box-sizing:content-box;
     }
     .file-col{
         margin: 10px 0px 20px;

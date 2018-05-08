@@ -23,14 +23,14 @@
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
-            	<div v-if="selectedTab=='menber'" class="tab-text">
-            		<a  href="javascript:void(0);" @click="method">点击查看会员列表</a>  
+            	<div v-if="selectedTab=='menber'" class="tab-texts">
+            		<a href="javascript:void(0);" @click="openMember">点击查看会员列表</a>  
             	</div>
-            	<div v-if="selectedTab=='bill'" class="tab-text">
-            		<a href="">点击查看账单列表</a>
+            	<div v-if="selectedTab=='bill'" class="tab-texts">
+            		<a href="javascript:void(0);" @click="openBill">点击查看账单列表</a> 
             	</div>
-            	<div v-if="selectedTab=='order'" class="tab-text">
-            		<a href="">点击查看入驻订单列表</a>
+            	<div v-if="selectedTab=='order'" class="tab-texts">
+            		<a href="javascript:void(0);" @click="openOrder">点击查看入驻订单列表</a>
             	</div>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
             	<Waiting v-if="selectedTab=='more' "/>
@@ -128,12 +128,16 @@
                     });
                 })
 			},
-			method(){
-				console.log('======')
-				window.location.href = "/bill/list?page=1&pageSize=15&customerName="+this.customerBasic.company
-
-				// href=
-			}
+			openOrder(){
+				window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+			},
+			openBill(){
+				// window.open("/bill/list?page=1&pageSize=15&customerName="+this.customerBasic.company,'_blank');
+				window.open("/bill/list",'_blank');
+			},
+			openMember(){
+				window.open("/new/#/user/memberManage/list",'_blank');
+			},
 		},
 		mounted(){
 			this.getBasicInfo()
@@ -191,8 +195,7 @@
 		.tab-content{
 			// border:1px solid red;
 		}
-		.tab-text{
-			border:1px solid red;
+		.tab-texts{
 			margin:30px;
 		}
     }

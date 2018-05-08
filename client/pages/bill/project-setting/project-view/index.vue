@@ -821,6 +821,7 @@ import EditTask from '../project-detail/edit-task';
             }
            .u-table-box{
               overflow: hidden;
+              border-right: 5px solid #F6F6F6;
            }
             .u-table-arrow{
                 width:15px;
@@ -855,6 +856,13 @@ import EditTask from '../project-detail/edit-task';
           }
            .u-table-box-right{
                 width:2000px;
+                table{
+                        th,td{
+                            &:nth-child(3){
+                                border-right:none !important;
+                            }
+                        }
+                }
            }
            .u-hide{
                transform: translateX(-100px);

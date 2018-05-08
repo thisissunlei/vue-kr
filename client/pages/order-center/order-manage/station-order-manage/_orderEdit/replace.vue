@@ -1313,6 +1313,8 @@
                     tacticsId:freeMap[0].tacticsId
 
                 }
+                console.log('freeMap',this.freeMap)
+                console.log('discount',this.discount)
             },
             selectFree(obj){
                 this.freeType = obj.month;

@@ -6,7 +6,7 @@
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
                         <Breadcrumb separator=">">
-                            <BreadcrumbItem to="/bill/project-setting">开业进度总览</BreadcrumbItem>
+                            <BreadcrumbItem to="/bill/project-setting">首页</BreadcrumbItem>
                             <BreadcrumbItem><span @click="currentClick" style="cursor:pointer;">{{queryData.name}}</span></BreadcrumbItem>
                         </Breadcrumb>
                     </div>

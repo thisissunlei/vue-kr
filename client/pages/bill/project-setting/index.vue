@@ -89,6 +89,9 @@ export default {
             padding: 8px 20px;
             
         }
+        .ivu-tabs-no-animation{
+            overflow: visible !important;
+        }
         .ivu-tabs-bar{
             margin: 0px;
         }

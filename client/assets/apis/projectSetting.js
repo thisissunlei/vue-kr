@@ -47,7 +47,7 @@ module.exports = {
     },
     //项目档案管理列表-新增项目
     'project-archives-add': {
-      url: '/api/krspace-pm-web/pm/file/save',
+      url: '/api/krspace-erp-web/pm/file/save',
       method: 'post'
     },
     //确定签署合同（项目进入待开业期）

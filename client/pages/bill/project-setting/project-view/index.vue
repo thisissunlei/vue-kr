@@ -286,6 +286,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k1)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -340,6 +351,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k2)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -396,6 +418,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k3)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -452,6 +485,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k4)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -507,6 +551,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k5)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -562,6 +617,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k6)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -617,6 +683,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k7)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -672,6 +749,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k8)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -727,6 +815,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k9)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -782,6 +881,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                             on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k10)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -837,6 +947,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k11)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -892,6 +1013,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k12)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -947,6 +1079,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k13)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;
@@ -1003,6 +1146,17 @@ import EditTask from '../project-detail/edit-task';
                                     return h('div', {
                                             attrs: {
                                                 class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    this.openEditTaskDraw(obj.row.k14)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },'');
                                 break;

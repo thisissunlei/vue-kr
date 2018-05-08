@@ -83,7 +83,6 @@ function lineShow(data) {
 function poptipOver(event,data,domName) {
     var e = event || window.event;
     var dom = event.target;
-    console.log('dom-----',dom)
     var detail = dom.getBoundingClientRect();
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -95,10 +94,10 @@ function poptipOver(event,data,domName) {
     var obj = getToolTipContent(data);
     tirDom.innerHTML = obj.str;
     tirDom.style.left = tirLocation.left - 30 + 'px';
-    tirDom.style.top = tirLocation.top + 10 - 130 + 'px';
+    tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
     tirDom.style.width = obj.width + 'px';
     angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-    angleDom.style.top = tirLocation.top - 130 + 'px';
+    angleDom.style.top = tirLocation.top - (130-60) + 'px';
     locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
     tirDom.style.opacity = 1;
     angleDom.style.opacity = 1;
@@ -132,10 +131,11 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
+    console.log('angleDom.style.top',angleDom.style.top)
     if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 +'px';
         angleDom.className = 'top-triangle';
-        angleDom.style.top = parseInt(angleDom.style.top) - 35+ "px";
+        angleDom.style.top = parseInt(angleDom.style.top)-35+ "px";
     }else {
         angleDom.className = 'bottom-triangle'
     }

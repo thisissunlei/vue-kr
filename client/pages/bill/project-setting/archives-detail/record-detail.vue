@@ -89,6 +89,7 @@ export default {
                 border-radius: 4px;
                 line-height: 18px;
                 position: relative;
+                margin-top: 10px;
                .mod-triangle {
                     display:block;
                     position: absolute;

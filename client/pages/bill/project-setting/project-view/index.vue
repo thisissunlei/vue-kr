@@ -1287,9 +1287,9 @@ import EditTask from '../project-detail/edit-task';
                 dataParams.id=this.taskId;
                 dataParams.projectId=this.projectId;
               
-                dataParams.planEndTime= dataParams.planEndTime+' 00:00:00';
+                dataParams.planEndTime= dataParams.planEndTime?dataParams.planEndTime+' 00:00:00':'';
               
-                dataParams.actualEndTime= dataParams.actualEndTime+' 00:00:00';
+                dataParams.actualEndTime= dataParams.actualEndTime?dataParams.actualEndTime+' 00:00:00':'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     // this.getListData(this.ids);
                 

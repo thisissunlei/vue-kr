@@ -1,6 +1,6 @@
 <template>
   <div v-if="data && data.length" class="photo-album">
-      <div class="mask"  @click="close"></div>
+      <!-- <div class="mask"  @click="close"></div> -->
       
      
       <div>
@@ -29,6 +29,7 @@
                 </div>
                 <span class="close-btn " @click="close"></span>
                 <Button class="down-img" @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
+                <Button class="down-img" style="left: 70%;"  @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
             </div>
             
       </div>
@@ -107,8 +108,8 @@ export default {
     z-index: 999;
     .down-img{
         position: absolute;
-        left: 50%;
-        bottom: 30px;
+        left: 30%;
+        bottom: -50px;
         width: 130px;
         transform: translateX(-50%);
     }
@@ -133,7 +134,7 @@ export default {
     }
     .view-img-box{
         position: absolute;
-        height: 70%;
+        height: 460px;
         top: 50%;
         left: 50%;
         transform: translateY(-50%) translateX(-50%);

@@ -815,8 +815,8 @@ import EditTask from '../project-detail/edit-task';
             position: absolute;
             left:0;
             top:0;
-            width:340px;
-           
+            width:240px;
+            //width:340px;
             z-index:100;
             .u-table-content{
                 width:2000px;

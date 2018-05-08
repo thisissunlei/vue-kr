@@ -8,18 +8,18 @@
 <template>
 
     <div>
-
+        <Waiting 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onChangeOpen"
+        ></Waiting>
     
     </div>
 </template>
 <script>
-    import SinglePhone from '~/components/SinglePhone'
-    import EditInput from '~/components/EditInput'
     import dateUtils from 'vue-dateutils';
-    import Buttons from '~/components/Buttons';
-import KrField from '~/components/KrField';
-
-import selectCustomers from '~/components/SelectCustomers.vue'
+    import Waiting from '~/components/Waiting';
 
     export default {
         head () {
@@ -31,12 +31,19 @@ import selectCustomers from '~/components/SelectCustomers.vue'
         data () {
            
             return {
-                
+                MessageType:'error',
+                openMessage:true,
+                warn:'合同列表',
+
             }
         },
         components:{
+            Waiting
         },
         methods:{
+            onChangeOpen(){
+                this.openMessage = false;
+            }
         },
     }
 </script>

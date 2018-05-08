@@ -23,8 +23,17 @@
 		<div class="tab-content">
             	<Assets v-if="selectedTab=='account'"/>
             	<Basic v-if="selectedTab=='basic'"/>
+            	<div v-if="selectedTab=='menber'" class="tab-text">
+            		<a  href="javascript:void(0);" @click="method">点击查看会员列表</a>  
+            	</div>
+            	<div v-if="selectedTab=='bill'" class="tab-text">
+            		<a href="">点击查看账单列表</a>
+            	</div>
+            	<div v-if="selectedTab=='order'" class="tab-text">
+            		<a href="">点击查看入驻订单列表</a>
+            	</div>
 				<JoinInfo v-if="selectedTab=='join'" :customerId="customerId"/>
-            	<Waiting v-if="selectedTab!='account' && selectedTab!='basic'&& selectedTab!='join' "/>
+            	<Waiting v-if="selectedTab=='more' "/>
         </div>
 		
     </div>
@@ -118,6 +127,12 @@
                         title:err.message
                     });
                 })
+			},
+			method(){
+				console.log('======')
+				window.location.href = "/bill/list?page=1&pageSize=15&customerName="+this.customerBasic.company
+
+				// href=
 			}
 		},
 		mounted(){
@@ -175,6 +190,10 @@
 		}
 		.tab-content{
 			// border:1px solid red;
+		}
+		.tab-text{
+			border:1px solid red;
+			margin:30px;
 		}
     }
 </style>

@@ -169,6 +169,7 @@ export default {
         onScrollListener(){   
             var dom=document.getElementById('layout-content-main');  
             var domContent=document.getElementById('vue-chart-right-draw-content');
+            var tableDom=document.getElementById('vue-chart-left-table-list');
 
             if(domContent){
                 this.width=domContent.getBoundingClientRect().width;
@@ -177,8 +178,12 @@ export default {
            
             if(dom.scrollTop>321){
                 this.head=true;
+                domContent.style.paddingTop="101px";
+                tableDom.style.paddingTop="101px";
             }else{
-                this.head=false;   
+                this.head=false;  
+                domContent.style.paddingTop="0px";
+                tableDom.style.paddingTop="0px"; 
             }
         },
         //极限时间

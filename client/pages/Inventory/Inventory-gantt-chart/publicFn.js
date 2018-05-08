@@ -175,15 +175,21 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,sideBar) {
     let winWidth = document.body.clientWidth;
     let contentToRigth = winWidth - detail.right;
     let tirToRigth = winWidth - tirRightToleft - 20;
-    var right=-10;
+    var right=0;
     if(picDom.style.opacity=='1'){
-        right=-30;
+        right=-10;
+    }
+
+    if(sideBar){
+        if (contentToRigth > tirToRigth) {
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+right+'px';
+        }
+    }else{
+        if (contentToRigth > tirToRigth+150) {
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+150+right+'px';
+        }
     }
     
-    if (contentToRigth > tirToRigth) {
-        var other=sideBar?0:165;
-        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+other+right+'px';
-    }
 
     /*if (detail.top + detail.height < parseInt(tirDom.style.top) -domMain.scrollTop+345) {
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 + 'px';

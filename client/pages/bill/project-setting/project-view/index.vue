@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="u-table-list">
-            <div class="u-table-left">
+            <div :class="[tableFlag?'u-left-show':'u-left-hide','u-table-left']">
                  <div :class="[tableFlag?'u-right-arrow':'u-left-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div class="u-table-box">
                         <div class="u-table-content">
@@ -54,7 +54,7 @@
             </div>
             <div class="u-table-right">
                 <div class="u-table-box" style="overflow-x:auto;">
-                    <div class="u-table-box-right">
+                    <div :class="[tableFlag?'u-show':'u-hide','u-table-box-right']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
@@ -815,8 +815,6 @@ import EditTask from '../project-detail/edit-task';
             position: absolute;
             left:0;
             top:0;
-            width:240px;
-            //width:340px;
             z-index:100;
             .u-table-content{
                 width:2000px;
@@ -841,6 +839,13 @@ import EditTask from '../project-detail/edit-task';
                 background: url('~/assets/images/arrow_right.png') no-repeat center center;
                 background-size:100% 100%;
             }
+           
+        }
+        .u-left-hide{
+            width:240px;
+        }
+        .u-left-show{
+            width:340px;
         }
         
         .u-table-right{
@@ -850,7 +855,12 @@ import EditTask from '../project-detail/edit-task';
           }
            .u-table-box-right{
                 width:2000px;
-                //transform: translateX(-300px);
+           }
+           .u-hide{
+               transform: translateX(-100px);
+           }
+           .u-show{
+               transform: translateX(0);
            }
         }
     }

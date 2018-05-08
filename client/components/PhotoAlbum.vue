@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .photo-album{
     position: fixed;
     top: 0px;
@@ -140,6 +140,9 @@ export default {
         // background: brown;
         border-radius: 50%;
         cursor: pointer;
+    }
+    .kr-img .img-box{
+        box-shadow:0 1px 1px rgba(0,0,0,0);
     }
     .view-img-box{
         position: absolute;

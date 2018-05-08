@@ -7,6 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :isOk="isOk"        
         >
             <Select
                 :placeholder="placeholder"
@@ -30,6 +31,10 @@ export default {
         EditLabel,
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         name:{
             type:String
         },

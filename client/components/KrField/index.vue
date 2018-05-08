@@ -11,7 +11,7 @@
             :readOrEdit="readOrEdit"
             @on-click="click"
             @on-enter="enter"
-            @on-change="change"
+            @change="change"
             @on-focus="focus"
             @on-blur="blur"
             @on-keyup="keyup"
@@ -19,6 +19,7 @@
             @on-keypress="keypress"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrSelect
@@ -35,6 +36,7 @@
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrDate
@@ -48,6 +50,7 @@
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTimeDate
@@ -61,6 +64,7 @@
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTime
@@ -73,6 +77,7 @@
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
         <KrTextarea
@@ -86,6 +91,7 @@
             @change="selectChange"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
 
 
@@ -102,6 +108,7 @@
             @recordClick="recordClick"
             @visibleChange="visibleChange"
             @okClick="okClick"
+            :isOk="isOk"
         />
         
          <KrCity
@@ -117,6 +124,7 @@
             @recordClick="recordClick"
             @visibleChange="visibleChange"
             @okClick="okClick"
+            :isOk="isOk"
         />
 
         <SelectTree 
@@ -135,6 +143,7 @@
             :name="name"
             @okClick="okClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         />
         <UpImage 
             v-if="type==='upImage'"  
@@ -175,6 +184,10 @@ export default {
       KrCity
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         label:{
             default:'',
             type:String
@@ -264,6 +277,9 @@ export default {
            
         }
     },
+    mounted(){
+        console.log(this.isOk,"kkkkkk")
+    },
     methods:{
         recordClick(value){
             this.$emit('recordClick',value,this.name)
@@ -275,6 +291,7 @@ export default {
             this.$emit('enter',event);
         },
         change(event){
+         
             this.$emit('change',event);
         },
        

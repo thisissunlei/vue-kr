@@ -117,6 +117,10 @@ export default {
             type:Boolean,
             default:false,
 		},
+		isOk:{
+			type:Boolean,
+		
+		},
 		value:{
 			type:[Number,String,Array,Boolean],
 			default:''
@@ -142,6 +146,9 @@ export default {
 			fileArr:this.getFileArr(this.value),
 			openMessage:false,
 		}
+	},
+	mounted(){
+		console.log(this.isOk,"pppp")
 	},
 	methods:{
 		maskClick(){
@@ -231,6 +238,10 @@ export default {
 			this.isEdit = !this.isEdit;
 		},
 		okClick(){
+			console.log(this.isOk,"ooooo")
+			if(!this.isOk){
+				return;
+			}
 			this.$emit('okClick')
 			this.isEdit = !this.isEdit;
 		},
@@ -238,9 +249,7 @@ export default {
 			this.$emit('eyeImg',index);
 		}
 	},
-	mounted(){
-		
-	}
+	
 }
 </script>
 
@@ -278,6 +287,7 @@ export default {
 		// background: red;
 		position: fixed;
 		z-index: 99;
+		// pointer-events: none;
 	}
 	.operation-icon{
 		display:none;
@@ -328,7 +338,7 @@ export default {
 		position: absolute;
 		width: 16px;
 		height: 16px;
-		top: 3px;
+		top: 8px;
 		cursor: pointer;
 	}
 	.kr-ui-ok-icon{

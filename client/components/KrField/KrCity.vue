@@ -6,6 +6,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         >
             <Cascader
                 :data="data"
@@ -29,6 +30,10 @@ export default {
         EditLabel,
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         name:{
             type:String
         },
@@ -140,7 +145,7 @@ export default {
             var params = {
                 name:this.name,
                 value:cityValue,
-                type:'cascader',
+                type:'city',
             }
             this.$emit("okClick",params);
         },

@@ -20,11 +20,17 @@
                             label="含税" 
                             :selectParam="everyData.param"
                             :value="getValue(everyData)"
-                            placeholder="请输入含税收入" 
+                            placeholder="请输入..." 
                             @recordClick="recordClick"
                             @okClick="okClick"
+                            :isOk="getIsOk(errorName,everyData.fieldName)"
+                            @change="(event)=>{
+                                change(event,everyData)
+                            }"
                         />
+                        <div v-if="everyData.fieldName == errorName" style="color:red;padding-left:100px;"> 不得超过100</div>
                     </div>
+                    
                 </div>
             </ClassificationBox>    
         </div>
@@ -37,9 +43,9 @@
         >   
             <div class="record-title" slot="title">
                 <div class="big-text">编辑记录</div>
-                <div class="small-text">招商经理</div>
+                <div class="small-text">{{recordData.title}}</div>
             </div>
-            <RecordDetail :data="recordData"/>
+            <RecordDetail :data="recordData.items"/>
         </Drawer>
     </div>
 </template>
@@ -68,7 +74,7 @@ export default {
         archivesBoxId:{
             type:String,
 
-        }
+        },
     },
     data(){
        return {
@@ -82,6 +88,7 @@ export default {
            // 物业基信息
            collapseData:this.dataFarmat(this.data),
            archivesDetailId:'archivesDetail'+this._uid,
+           errorName:'-1'
 
        }
     },
@@ -97,6 +104,24 @@ export default {
 
     },
     methods:{
+        getIsOk(str1,str2){
+            console.log(str1!=str2,"lllll")
+            return str1 != str2;
+        },
+        change(event,param){
+            if(param.fieldType == 'TEXT'){
+                var value = event.target.value;
+
+                if(value.length>100){
+                    this.errorName = param.fieldName;
+                }else{
+                    this.errorName ='-1';
+                }
+            }else{
+                return;
+            }
+            console.log(event,"pppppp",param)
+        },
         getTreeActive(){
             var groupDoms = document.querySelectorAll('.archivesDetailDom');
             for(let i=0;i<groupDoms.length;i++){
@@ -154,10 +179,8 @@ export default {
             this.endIndex = endIndex;
             return Object.assign({},data);
         },
-        onChange(index){
-            this.openIndex = index;
-        },
-        okClick(params){
+ 
+        okClick(params,callback){
           
             let data = Object.assign({projectId:this.projectId},params)
             data.fieldName = data.name;
@@ -165,6 +188,7 @@ export default {
             data.fieldValue = data.value;
             data.groupCode = "property";
             this.$http.post('project－field-edit',data).then((response)=>{
+                callback();
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{
@@ -179,7 +203,7 @@ export default {
             var data = {fieldName:name,projectId:this.projectId};
             this.$http.get('project－field-record',data).then((response)=>{
                 // console.log(response,"lllllllll")
-                this.recordData = [].concat(response.data);
+                this.recordData = Object.assign({},response.data)
             }).catch((error)=>{
                 // this.MessageType="error";
                 // this.openMessage=true;

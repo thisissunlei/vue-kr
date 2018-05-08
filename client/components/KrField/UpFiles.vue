@@ -10,6 +10,7 @@
 			@eyeImg="eyeImg"
 			@recordClick="recordClick"
 			@eyePhotoAlbum="eyePhotoAlbum"
+			:isOk="isOk"  
 		>
 			<div class="view-box">
 				
@@ -91,7 +92,10 @@ export default{
             default:false,
 			type:Boolean,
 		},
-		
+		isOk:{
+            type:Boolean,
+            default:true,
+        },
 		value:{
 			default:()=>[],
 			type:Array
@@ -335,7 +339,7 @@ export default{
 	
 	.edit-label{
 		width: 100%;
-		// padding-right: 0px;
+		padding-right: 50px;
 	}
 	
 	.up-icon{

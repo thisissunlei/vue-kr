@@ -1197,6 +1197,7 @@ import EditTask from '../project-detail/edit-task';
             },
             openEditTaskDraw(params){
                 this.taskId=params.value;
+                this.projectId = params.projectId;
                 this.getEditTaskData(this.taskId)
             } ,
             dundoneTaskChange(form){

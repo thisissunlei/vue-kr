@@ -7,6 +7,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            :isOk="isOk"
         >
             <DatePicker 
                 v-model="dateValue"
@@ -28,6 +29,10 @@ export default {
         EditLabel,
     },
     props:{
+        isOk:{
+            type:Boolean,
+            default:true,
+        },
         placeholder:{
             type:String,
             default:'请输入...',

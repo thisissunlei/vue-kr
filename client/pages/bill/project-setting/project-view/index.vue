@@ -96,7 +96,7 @@
         :openDrawer="openEditTask"
         iconType="view-icon"
         :close="cancelEditTask"
-        width="650"
+        width="660"
     >   
         <ObjectDetailTitle slot="title"  :taskStatus="taskStatus" :data="editTaskData" />
         <EditTask 

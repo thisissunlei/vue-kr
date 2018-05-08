@@ -220,7 +220,8 @@ export default{
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
         cancelClick(event){
-            // this.inputValue = event
+			// this.inputValue = event
+			this.newFileArr = [].concat(this.fileArr);
 		},
 		//查看图片
 		eyePhotoAlbum(url,event){

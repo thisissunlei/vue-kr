@@ -76,6 +76,7 @@ export default {
     },
 	methods:{
         strToArr(value){
+            console.log(value,"---------")
             if(!value){
                 return [];
             }else{

@@ -6,8 +6,14 @@
       <div>
            
             <div  class="view-img-box" style="padding:0px 40px;">
-               
-                <img :src="data[urlIndex].fieldUrl" alt="">
+               	<KrImg
+                    :src="data[urlIndex].fieldUrl" 
+                    width="690"
+                    height="460"
+                    type="center"
+                    backgroundColor="transparent"
+                />
+                <!-- <img :src="data[urlIndex].fieldUrl" alt=""> -->
                 <div 
                     class="back"
                     style="left:-60px;"
@@ -31,59 +37,63 @@
 </template>
 
 <script>
-    export default {
-        props:{
-            data:{
-                default:()=>[],
-                type:Array
-            },
-            show:{
-                default:false,
-                type:Boolean
-            },
-            eyeIndex:{
-                default:0,
-                type:Number
-
-            }
-            
+import KrImg from './KrImg'
+export default {
+    components:{
+        KrImg
+    },
+    props:{
+        data:{
+            default:()=>[],
+            type:Array
         },
-        data(){
-            return {
-                urlIndex:this.eyeIndex
-            }
+        show:{
+            default:false,
+            type:Boolean
         },
-        methods:{
-            backClick(){
-                if(this.urlIndex == 0){
-                    this.urlIndex = this.data.length -1;
-                }else {
-                    this.urlIndex--;
-                }
-
-            },
-            forwardClick(){
-                if(this.urlIndex == this.data.length -1){
-                    this.urlIndex = 0;
-                }else {
-                    this.urlIndex++
-                }
-
-            },
-            close(){
-                this.$emit('close')
-            },
-            downFile(url){
-                
-                this.$emit('downFile',url)
-            }
-        },
-        mounted(){
-            // console.log(this.urlIndex,this.eyeIndex)
-            this.urlIndex = this.eyeIndex;
+        eyeIndex:{
+            default:0,
+            type:Number
 
         }
+        
+    },
+    data(){
+        return {
+            urlIndex:this.eyeIndex
+        }
+    },
+    methods:{
+        backClick(){
+            if(this.urlIndex == 0){
+                this.urlIndex = this.data.length -1;
+            }else {
+                this.urlIndex--;
+            }
+
+        },
+        forwardClick(){
+            if(this.urlIndex == this.data.length -1){
+                this.urlIndex = 0;
+            }else {
+                this.urlIndex++
+            }
+
+        },
+        close(){
+            this.$emit('close')
+        },
+        downFile(url){
+            
+            this.$emit('downFile',url)
+        }
+    },
+    mounted(){
+        // console.log(this.urlIndex,this.eyeIndex)
+        this.urlIndex = this.eyeIndex;
+
     }
+}
 </script>
 
 <style lang="less" scoped>

@@ -730,6 +730,11 @@ export default {
             if(e&&drawContent){
                 var num=0;
                 var left=e.clientX+drawContent.scrollLeft-drawContent.getBoundingClientRect().left;
+                if(this.barType=='week'){
+                    left=left-10;
+                }else if(this.barType=='month'){
+                    left=left-20;
+                }      
                 num=Math.ceil(left/this.minCalibration+0.4);
 
                 var endDate=utils.dateRange(this.start,num-2);

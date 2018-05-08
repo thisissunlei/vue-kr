@@ -1,5 +1,5 @@
 <template>
-  <div class="project-setting">
+  <div class="project-setting" id="projectSetting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="待开业项目" name="PREPARE">
                 <!--项目管理档案列表

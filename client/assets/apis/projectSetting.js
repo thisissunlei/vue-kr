@@ -32,7 +32,7 @@ module.exports = {
     },
     //项目管理－项目进度列表
     'project-progress-list': {
-      url: '/api/krspace-pm-web/pm/file/list/type/schedule',
+      url: '/api/krspace-pm-web/pm/project/list/type/schedule',
       method: 'get'
     },
      //项目管理－根据项目状态类型查询甘特图显示任务项
@@ -42,17 +42,17 @@ module.exports = {
     },
     //项目档案管理列表
     'project-archives-list': {
-      url: '/api/krspace-pm-web/pm/file/list/type/dashboard',
+      url: '/api/krspace-pm-web/pm/project/list/type/dashboard',
       method: 'get'
     },
     //项目档案管理列表-新增项目
     'project-archives-add': {
-      url: '/api/krspace-erp-web/pm/file/save',
+      url: '/api/krspace-pm-web/pm/project/save',
       method: 'post'
     },
     //确定签署合同（项目进入待开业期）
     'sure-sign-project': {
-      url: '/api/krspace-pm-web/pm/file/signed',
+      url: '/api/krspace-pm-web/pm/project/signed',
       method: 'post'
     },
     //项目详情星星

@@ -307,7 +307,7 @@ export default {
 		right: 20px;
 		width: 16px;
 		height: 16px;
-		top: 10px;
+		top: 3px;
 		line-height: 32px;
 		display:none;
 		cursor: pointer;
@@ -320,7 +320,7 @@ export default {
 		right: 60px;
 		width: 16px;
 		height: 16px;
-		top: 10px;
+		top: 3px;
 		display:none;
 		cursor: pointer;
 	}
@@ -328,20 +328,20 @@ export default {
 		position: absolute;
 		width: 16px;
 		height: 16px;
-		top: 10px;
+		top: 3px;
 		cursor: pointer;
 	}
 	.kr-ui-ok-icon{
 		background-image: url(./images/ok.svg);
 		background-repeat: no-repeat;		
 		background-size:100%; 
-		right:60px;
+		right:50px;
 	}
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
 		background-repeat: no-repeat;
 		background-size:100%; 
-		right:30px;
+		right:20px;
 	}
 	.label-text{
 		padding-right: 20px;

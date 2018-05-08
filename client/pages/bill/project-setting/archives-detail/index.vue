@@ -10,8 +10,8 @@
                 v-if="item.data && item.data.length"
             >
                 <div slot="content"  >
-                    <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px;margin:20px 0px;">
-                        <span class="field-title" >{{everyData.displayName}}</span>
+                    <div v-for="everyData in item.data" :key="everyData.id" style="min-height:40px;margin:20px 0px;line-height:1.5;">
+                        <span class="field-title" >{{everyData.displayName+':'}}</span>
                         <KrField 
                             :name="everyData.fieldName"
                             style="display:inline-block;"
@@ -89,8 +89,11 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
-         var archivesBoxDom = document.getElementById(this.archivesBoxId);
-         archivesBoxDom.addEventListener('scroll',this.getTreeActive)
+        var archivesBoxDom = document.getElementById(this.archivesBoxId);
+        if(archivesBoxDom){
+            archivesBoxDom.addEventListener('scroll',this.getTreeActive)
+        }
+         
 
     },
     methods:{
@@ -100,11 +103,8 @@ export default {
                 let everyDom = groupDoms[i];
                 let everyDetail = everyDom.getBoundingClientRect();
                 if(everyDetail.top<300 && 300<everyDetail.height+everyDetail.top){
-                 
-                  
                     this.$emit('krScroll',i);
                 }
-
             }
         },
         getTypeToField(type){
@@ -158,7 +158,7 @@ export default {
             this.openIndex = index;
         },
         okClick(params){
-            console.log(params,";;;;;;;;")
+          
             let data = Object.assign({projectId:this.projectId},params)
             data.fieldName = data.name;
             data.fieldType = this.getFieldToType(data.type);
@@ -174,8 +174,9 @@ export default {
             })
 
         },
-        recordClick(value){
-            var data = {fieldName:'projectName',projectId:this.projectId};
+        recordClick(value,name){
+            console.log("value",value)
+            var data = {fieldName:name,projectId:this.projectId};
             this.$http.get('project－field-record',data).then((response)=>{
                 // console.log(response,"lllllllll")
                 this.recordData = [].concat(response.data);
@@ -217,8 +218,9 @@ export default {
        padding-bottom:50px;
        .field-title{
            display:inline-block;
-           min-width:150px;
+           width:100px;
            vertical-align: top;
+           padding-right: 5px;
        }
         .record-title{
             display: inline-block;

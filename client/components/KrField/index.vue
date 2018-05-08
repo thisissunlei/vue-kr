@@ -266,7 +266,7 @@ export default {
     },
     methods:{
         recordClick(value){
-            this.$emit('recordClick',value)
+            this.$emit('recordClick',value,this.name)
         },
         click(event){
             this.$emit('click',event);

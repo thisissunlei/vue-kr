@@ -37,6 +37,18 @@ export default {
         }
 		
     },
+    watch:{
+        src(){
+         
+            let imgDom = document.getElementById(this.imgId);
+            let that = this;
+             console.log("---------",imgDom)
+            imgDom.onload = function(){
+                that.setimgSize(that.type,imgDom);
+            }
+        }
+
+    },
     mounted(){
         let imgDom = document.getElementById(this.imgId);
         let that = this;

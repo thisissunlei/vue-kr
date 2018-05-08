@@ -104,19 +104,28 @@ function poptipOver(event,data,domName) {
 }
 //气泡的具体内容
 function getToolTipContent(thatData) {
-    var str = '<div class="title">' + thatData.label + '</div>';
-    var data = Object.assign({}, thatData);
-    var width = 155;
-    if(data.planEndTimeStr){
-        str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
+    if(thatData.planEndTimeStr || thatData.actualEndTimeStr){
+        var str = '<div class="title">' + thatData.label + '</div>';
+        var data = Object.assign({}, thatData);
+        var width = 155;
+        if(data.planEndTimeStr){
+            str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
+        }
+        if(data.actualEndTimeStr){
+            str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
+        }
+        
+        return {
+            str: str,
+            width: width
+        };
+    }else{
+        return {
+            str: '',
+            width:0
+        };
     }
-    if(data.actualEndTimeStr){
-        str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
-    }
-    return {
-        str: str,
-        width: width
-    };
+    
 }
 //气泡的位置微调
 function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {

@@ -626,7 +626,7 @@ import EditTask from '../project-detail/edit-task';
             submitEditTask(params){
                 var dataParams = Object.assign({},params);
                 dataParams.id=this.taskId;
-                dataParams.propertyId=this.queryData.id;
+                dataParams.projectId=this.projectId;
                 dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
                 dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
                 dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);

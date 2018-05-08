@@ -12,7 +12,6 @@
                     </div>
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
-                <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
             </div>
             <Tabs size="default"  :animated="false">
                 <TabPane label="物业档案" name="tab1">
@@ -24,7 +23,7 @@
                     
                     <ArchivesManagement code="product"/>
                 </TabPane>
-                 <TabPane label="项目进度" name="tab3">
+                 <!-- <TabPane label="项目进度" name="tab3">
                         <GanttChart
                             v-if="!isLoading "
                             :data="listData"
@@ -49,7 +48,7 @@
                             </div>
                         </GanttChart>
 
-                </TabPane>
+                </TabPane> -->
             </Tabs>
          
 
@@ -201,7 +200,6 @@ export default {
             taskStatus:'',
 
             treeData:[],
-            signMask:false,
             openSure:false,
             scrollWidth:0,
 
@@ -227,33 +225,31 @@ export default {
     },
     mounted(){
         // return;
-         this.scrollWidth= utils.getScrollBarSize();
+        //  this.scrollWidth= utils.getScrollBarSize();
          GLOBALSIDESWITCH("false");
-         this.signMask=this.queryData.status==1?true:false;
-
-         this.leftOver();
-         this.rightOver();
-         this.getSelectData();
-         setTimeout(() => {
-            var leftDom=document.getElementById('vue-chart-left-detail-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            if(leftDom){
-                leftDom.style.maxHeight = clientHeight - 362+"px";
-            }
-            if(rightDom){
-                rightDom.style.maxHeight = clientHeight - 362 +"px";
-            }
-         }, 200);
-         window.addEventListener('resize',()=>{
-            var leftDom=document.getElementById('vue-chart-left-detail-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            var dom = document.getElementById('layout-content-main');
-            dom.style.height = document.documentElement.clientHeight-130 + "px"
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
-         },false)
+        //  this.leftOver();
+        //  this.rightOver();
+        //  this.getSelectData();
+        //  setTimeout(() => {
+        //     var leftDom=document.getElementById('vue-chart-left-detail-list');
+        //     var rightDom = document.getElementById("vue-chart-right-draw-content");
+        //     var clientHeight = document.documentElement.clientHeight;
+        //     if(leftDom){
+        //         leftDom.style.maxHeight = clientHeight - 362+"px";
+        //     }
+        //     if(rightDom){
+        //         rightDom.style.maxHeight = clientHeight - 362 +"px";
+        //     }
+        //  }, 200);
+        //  window.addEventListener('resize',()=>{
+        //     var leftDom=document.getElementById('vue-chart-left-detail-list');
+        //     var rightDom = document.getElementById("vue-chart-right-draw-content");
+        //     var clientHeight = document.documentElement.clientHeight;
+        //     var dom = document.getElementById('layout-content-main');
+        //     dom.style.height = document.documentElement.clientHeight-130 + "px"
+        //     leftDom.style.maxHeight = clientHeight - 362+"px";
+        //     rightDom.style.maxHeight = clientHeight - 362 +"px";
+        //  },false)
     
     },
     methods:{

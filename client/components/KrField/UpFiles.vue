@@ -14,35 +14,35 @@
 			<div class="view-box">
 				
 			
-				<div class="view" v-for="(item,index) in fileArr" :key="item.id">
+				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">
 
-					<img v-if="getIsPhoto(item.url)" @click="eyePhotoAlbum(item.url,$event)" :src="item.url" alt=""/>
+					<img v-if="getIsPhoto(item.fieldUrl)" @click="eyePhotoAlbum(item.fieldUrl,$event)" :src="item.fieldUrl" alt=""/>
 					<div 
-						v-if="!getIsPhoto(item.url)"
+						v-if="!getIsPhoto(item.fieldUrl)"
 						:class="{
 							'file-type-style':true, 
-							'file-color-other':getTyep('other',index),
-							'file-color-word':getTyep('word',index),
-							'file-color-excel':getTyep('excel',index),
-							'file-color-ppt':getTyep('ppt',index),
+							'file-color-other':getExt(item.fieldUrl)=='other',
+							'file-color-word':getExt(item.fieldUrl)=='word',
+							'file-color-excel':getExt(item.fieldUrl)=='excel',
+							'file-color-ppt':getExt(item.fieldUrl)=='ppt',
 						}"
 					>
 						<div 
 							:class="{
 								'file-icon':true,
-								'file-icon-other':getTyep('other',index),
-								'file-icon-word':getTyep('other',index),
-								'file-icon-excel':getTyep('other',index),
-								'file-icon-ppt':getTyep('other',index),
+								'file-icon-other':getExt(item.fieldUrl)=='other',
+								'file-icon-word':getExt(item.fieldUrl)=='word',
+								'file-icon-excel':getExt(item.fieldUrl)=='excel',
+								'file-icon-ppt':getExt(item.fieldUrl)=='ppt',
 							}"
 						></div>
 					</div>
 					<div 
-						v-if="!getIsPhoto(item.url)"
+						v-if="!getIsPhoto(item.fieldUrl)"
 						class="file-name"
 					>
 						{{getFileName(index)}}
-						<div class="down-file" @click="downFile(item.url)"></div>
+						<div class="down-file" @click="downFile(item.fieldUrl)"></div>
 					</div>
 					 <span 
 	                    class="delete-icon" 
@@ -90,6 +90,9 @@ export default{
 		readOrEdit:{
 			default:false,
 			type:Boolean
+		},
+		name:{
+			type:[String,Number]
 		}
 		
     },
@@ -102,20 +105,48 @@ export default{
 			openPhotoAlbum:false,
 			eyeIndex:0,
 			fileTypes:[],
+			newFileArr: [],
         }
 	},
 	mounted(){
 		this.fileArr = [].concat(this.value)
+		this.newFileArr = [].concat(this.value);
+		this.fileTypes = [].concat(this.setFileArrType(this.newFileArr));
 	},
 	methods:{
-		getTyep(type,index){
-			if(this.fileTypes[index]==type){
-				return true;
+		setFileArrType(data){
+			var types = [];
+			for(let i=0;i<data.length;i++){
+				types[this.getExt(data[i].fieldUrl)];
 			}
-			return false;
+			return [].concat(types);
+		},
+		getTyep(type,url){
+			console.log(this.getExt(url),"ppppp")
+			if(type=="other" && this.getExt(url)=="other"){
+				return true;
+			}else{
+				return false;
+			}
+			if(type=="word" && this.getExt(url)=="word"){
+				return true;
+			}else{
+				return false;
+			}
+			if(type=="excel" && this.getExt(url)=="excel"){
+				return true;
+			}else{
+				return false;
+			}
+			if(type=="ppt" && this.getExt(url)=="ppt"){
+				return true;
+			}else{
+				return false;
+			}
 		},
 		getFileName(index){
-			var fileArr = this.fileArr[index].url.split('?')[0].split('/')
+			
+			var fileArr = this.newFileArr[index].fieldUrl.split('?')[0].split('/')
 			var filename  =fileArr[fileArr.length-1];
 			return decodeURI(filename);
 		},
@@ -157,13 +188,23 @@ export default{
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		okClick(){
-			 var params = {
+			var urls = [].concat(this.newFileArr);
+			this.fileArr = [].concat(urls);
+			var params = {
                 name:this.name,
-                value:this.inputValue,
+                value:JSON.stringify(urls),
                 type:'file',
 
-            }
-            this.$emit("okClick",this.fileArr)
+			}
+			console.log('parmas,UPFILE',params)
+            this.$emit("okClick",params)
+		},
+		getValues(urls){
+			var arr = [];
+			for(let i=0;i<urls.length;i++){
+				arr.push(urls[i].fieldUrl);
+			}
+			return [].concat(arr);
 		},
 		eyeImg(index){
 			this.eyeIndex = index;
@@ -171,20 +212,21 @@ export default{
 		},
         cancelClick(event){
             // this.inputValue = event
-        },
+		},
+		//查看图片
 		eyePhotoAlbum(url,event){
 			let urlArr = [];
-			for (var i = 0; i < this.fileArr.length; i++) {
-				let everyUrl = this.fileArr[i].url;
+			for (var i = 0; i < this.newFileArr.length; i++) {
+				let everyUrl = this.newFileArr[i].fieldUrl;
 				if(this.getIsPhoto(everyUrl)){
-					urlArr.push(this.fileArr[i]);
+					urlArr.push(this.newFileArr[i]);
 
 				}
 				
 			}
 			for (var i = 0; i < urlArr.length; i++) {
 				
-				if(urlArr[i].url == url){
+				if(urlArr[i].fieldUrl == url){
 					this.eyeIndex = i;
 				}
 			}
@@ -192,12 +234,12 @@ export default{
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		delFile(index,event){
-			let urls = [].concat(this.fileArr);
+			let urls = [].concat(this.newFileArr);
 			let types = [].concat(this.fileTypes);
 			urls.splice(index,1);
 			types.splice(index,1);
 			this.fileTypes = [].concat(types);
-            this.fileArr = [].concat(urls)
+            this.newFileArr = [].concat(urls)
 		},
 		addFileClick(){
 			var inputDom = document.getElementById(this.inputId);
@@ -219,8 +261,9 @@ export default{
 					if (xhrfile.status === 200) {
 						if (fileResponse && fileResponse.code > 0) {
 							var data = fileResponse.data;
-						
-							that.fileArr.push({url:data.url});
+
+							that.newFileArr.push({fieldUrl:data.url,fieldId:data.id});
+							console.log(that.getExt(data.url),"lllllll")
 							that.fileTypes.push(that.getExt(data.url));
 						} else {
 						

@@ -1182,12 +1182,6 @@ import EditTask from '../project-detail/edit-task';
             
         },
         mounted(){
-            //    this.$nextTick(()=>{
-            //         let tableDom = document.querySelectorAll('#object-seting-archives table')[0];
-            //         utils.tableSort(tableDom,this.shortChange);
-            //     })
-           
-            //  publicFn.poptipOver(event,this.data)
             this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
             this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
@@ -1291,6 +1285,7 @@ import EditTask from '../project-detail/edit-task';
               
                 dataParams.actualEndTime= dataParams.actualEndTime?dataParams.actualEndTime+' 00:00:00':'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
+                    this.getTableData(this.tabParams);
                     // this.getListData(this.ids);
                 
                     // if(response.code>1){

@@ -72,6 +72,8 @@
                 </div>
             </div>
     </div>
+    <div id="gantt-chart-tool-tip"></div>
+    <div id="gantt-chart-tool-tip-triangle" class="bottom-triangle"></div>
     <Modal
         v-model="openNewArchives"
         title="新建项目"
@@ -251,9 +253,16 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k1)
-                                                }
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
+                                                },
+                                                // mouseout:()=>{
+                                                //     this.toolOut(event)
+                                                // }
+                                               
                                             }
-                                        },obj.row.k1.actualEndTime);
+                                        },obj.row.k1.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -263,9 +272,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k1)
-                                                }
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
+                                                },
                                             }
-                                        },obj.row.k1.planEndTime);
+                                        },obj.row.k1.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -292,9 +304,13 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k2)
-                                                }
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
+                                                },
+
                                             }
-                                        },obj.row.k2.actualEndTime);
+                                        },obj.row.k2.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -304,9 +320,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k2)
-                                                }
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
+                                                },
                                             }
-                                        },obj.row.k2.planEndTime);
+                                        },obj.row.k2.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -338,7 +357,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k3)
                                                 }
                                             }
-                                        },obj.row.k3.actualEndTime);
+                                        },obj.row.k3.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -350,7 +369,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k3)
                                                 }
                                             }
-                                        },obj.row.k3.planEndTime);
+                                        },obj.row.k3.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -382,7 +401,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k4)
                                                 }
                                             }
-                                        },obj.row.k4.actualEndTime);
+                                        },obj.row.k4.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -394,7 +413,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k4)
                                                 }
                                             }
-                                        },obj.row.k4.planEndTime);
+                                        },obj.row.k4.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -425,7 +444,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k5)
                                                 }
                                             }
-                                        },obj.row.k5.actualEndTime);
+                                        },obj.row.k5.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -437,7 +456,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k5)
                                                 }
                                             }
-                                        },obj.row.k5.planEndTime);
+                                        },obj.row.k5.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -468,7 +487,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k6)
                                                 }
                                             }
-                                        },obj.row.k6.actualEndTime);
+                                        },obj.row.k6.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -480,7 +499,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k6)
                                                 }
                                             }
-                                        },obj.row.k6.planEndTime);
+                                        },obj.row.k6.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -511,7 +530,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k7)
                                                 }
                                             }
-                                        },obj.row.k7.actualEndTime);
+                                        },obj.row.k7.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -523,7 +542,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k7)
                                                 }
                                             }
-                                        },obj.row.k7.planEndTime);
+                                        },obj.row.k7.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -554,7 +573,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k8)
                                                 }
                                             }
-                                        },obj.row.k8.actualEndTime);
+                                        },obj.row.k8.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -566,7 +585,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k8)
                                                 }
                                             }
-                                        },obj.row.k8.planEndTime);
+                                        },obj.row.k8.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -597,7 +616,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k9)
                                                 }
                                             }
-                                        },obj.row.k9.actualEndTime);
+                                        },obj.row.k9.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -609,7 +628,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k9)
                                                 }
                                             }
-                                        },obj.row.k9.planEndTime);
+                                        },obj.row.k9.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -640,7 +659,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k10)
                                                 }
                                             }
-                                        },obj.row.k10.actualEndTime);
+                                        },obj.row.k10.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -652,7 +671,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k10)
                                                 }
                                             }
-                                        },obj.row.k10.planEndTime);
+                                        },obj.row.k10.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -683,7 +702,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k11)
                                                 }
                                             }
-                                        },obj.row.k11.actualEndTime);
+                                        },obj.row.k11.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -695,7 +714,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k11)
                                                 }
                                             }
-                                        },obj.row.k11.planEndTime);
+                                        },obj.row.k11.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -726,7 +745,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k12)
                                                 }
                                             }
-                                        },obj.row.k12.actualEndTime);
+                                        },obj.row.k12.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -738,7 +757,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k12)
                                                 }
                                             }
-                                        },obj.row.k12.planEndTime);
+                                        },obj.row.k12.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -769,7 +788,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k13)
                                                 }
                                             }
-                                        },obj.row.k13.actualEndTime);
+                                        },obj.row.k13.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -781,7 +800,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k13)
                                                 }
                                             }
-                                        },obj.row.k13.planEndTime);
+                                        },obj.row.k13.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -810,9 +829,10 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k14)
-                                                }
+                                                },
+                                                
                                             }
-                                        },obj.row.k14.actualEndTime);
+                                        },obj.row.k14.actualEndTimeStr);
                                 break;
                                 case 'UNDONE':
                                     return h('div', {
@@ -824,7 +844,7 @@ import EditTask from '../project-detail/edit-task';
                                                     this.openEditTaskDraw(obj.row.k14)
                                                 }
                                             }
-                                        },obj.row.k14.planEndTime);
+                                        },obj.row.k14.planEndTimeStr);
                                   
                                 break;
                                 case 'UNPLANNED':
@@ -860,7 +880,7 @@ import EditTask from '../project-detail/edit-task';
             //         utils.tableSort(tableDom,this.shortChange);
             //     })
            
-
+            //  publicFn.poptipOver(event,this.data)
             let tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
             this.tabParams.projectStatus=tab;
             this.getTableData(this.tabParams);
@@ -868,6 +888,12 @@ import EditTask from '../project-detail/edit-task';
         },
         
         methods:{
+            toolOut(event){
+                var tirDom = document.getElementById('gantt-chart-tool-tip');
+                var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+                tirDom.style.opacity = 0;
+                angleDom.style.opacity = 0;
+            },
             openEditTaskDraw(params){
                 this.taskId=params.value;
                 this.getEditTaskData(this.taskId)
@@ -935,9 +961,9 @@ import EditTask from '../project-detail/edit-task';
                 this.$http.get('project-get-task',{id:id}).then((response)=>{
                     var data = Object.assign({},response.data)
                     data.planStartTime=this.timeApplyFox(data.planStartTime,true);
-                    data.planEndTime=this.timeApplyFox(data.planEndTime,true);
+                    data.planEndTimeStr=this.timeApplyFox(data.planEndTimeStr,true);
                     data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
-                    data.actualEndTime=this.timeApplyFox(data.actualEndTime,true)
+                    data.actualEndTimeStr=this.timeApplyFox(data.actualEndTimeStr,true)
                     data.focus=data.focus==1?'1':'0';
                     this.editTaskData=Object.assign({},data);
                     this.taskStatus = data.taskStatus;
@@ -958,9 +984,9 @@ import EditTask from '../project-detail/edit-task';
                 dataParams.id=this.taskId;
                 dataParams.projectId=this.projectId;
                 dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
-                dataParams.planEndTime=this.timeApplyFox(dataParams.planEndTime);
+                dataParams.planEndTimeStr=this.timeApplyFox(dataParams.planEndTimeStr);
                 dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
-                dataParams.actualEndTime=this.timeApplyFox(dataParams.actualEndTime);
+                dataParams.actualEndTimeStr=this.timeApplyFox(dataParams.actualEndTimeStr);
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     // this.getListData(this.ids);
                 
@@ -1055,6 +1081,11 @@ import EditTask from '../project-detail/edit-task';
 }
 .project-view{
     padding:0 20px;
+
+
+    .ivu-tooltip-popper{
+        position: fixed;
+    }
     .ivu-table-cell{
         padding:0;
         margin:0;
@@ -1148,7 +1179,7 @@ import EditTask from '../project-detail/edit-task';
                 width:2000px;
             }
            .u-table-box{
-              overflow: hidden;
+              overflow-x: hidden;
               border-right: 5px solid #F6F6F6;
            }
             .u-table-arrow{
@@ -1180,7 +1211,7 @@ import EditTask from '../project-detail/edit-task';
         }
         
         .u-table-right{
-           overflow: hidden;
+           overflow-x: hidden;
           .u-table-box{
               overflow-x:auto;
               
@@ -1201,6 +1232,48 @@ import EditTask from '../project-detail/edit-task';
                transform: translateX(0);
            }
         }
+    }
+    #gantt-chart-tool-tip{
+        width: 250px;
+        min-height: 50px;
+        opacity: 0;
+        background: rgba(70,76,91,.9);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border-radius: 4px;
+        padding:6px 12px 9px;
+        color: #ffffff;
+        z-index: 999;
+        transition: all .1s;
+        pointer-events:none;
+        .title{
+            font-size: 12px;
+            background: transparent;
+        }
+        .content{
+            font-size: 12px;
+            background: transparent;
+        }
+    }
+    #gantt-chart-tool-tip-triangle{
+
+        opacity: 0;
+        position: absolute;
+        display:block;
+        // margin:10px;
+        width:0;
+        height:0;
+        border-style:solid;
+        border-width:5px;
+        top: -10px;
+        left: 10px;
+        transition: all .1s;
+        z-index: 999;
+
+    }
+    .bottom-triangle{
+        border-color: transparent transparent rgba(70,76,91,.9)  transparent;
     }
 
 }

@@ -116,7 +116,7 @@ function getToolTipContent(thatData,param,time) {
         width=235;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
         if(!data.endDate){
-            width=170;
+            width=163;
         }else{
             width=235;
         }

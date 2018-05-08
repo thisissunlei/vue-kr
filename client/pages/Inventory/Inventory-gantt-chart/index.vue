@@ -197,8 +197,11 @@ export default {
                 dayYear-=1;
                 dayMonth=dayMonth+12;
             }
+            if(dayMonth<10){
+                dayMonth='0'+dayMonth
+            }
             /*向前三个月*/
-            return dayYear+'-'+dayMonth+ '-' +1;
+            return dayYear+'-'+dayMonth+ '-' +'01';
         },
         //提取公共
         commonParams(param){

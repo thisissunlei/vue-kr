@@ -240,17 +240,40 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目立项',
                         key: 'k1',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
+                            var _this=this;
                              switch (obj.row.k1.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k1)
+                                                }
+                                            }
+                                        },obj.row.k1.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k1)
+                                                }
+                                            }
+                                        },obj.row.k1.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
                              }    
                         }
@@ -259,18 +282,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目决策',
                         key: 'k2',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k2.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k2)
+                                                }
+                                            }
+                                        },obj.row.k2.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k2)
+                                                }
+                                            }
+                                        },obj.row.k2.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -280,38 +326,85 @@ import EditTask from '../project-detail/edit-task';
                         title: '意向书签订',
                         key: 'k3',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k3.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k3)
+                                                }
+                                            }
+                                        },obj.row.k3.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k3)
+                                                }
+                                            }
+                                        },obj.row.k3.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
+                       
                     },
                     {
                         title: '支付意向金',
                         key: 'k4',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k4.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k4)
+                                                }
+                                            }
+                                        },obj.row.k4.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k4)
+                                                }
+                                            }
+                                        },obj.row.k4.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -320,37 +413,84 @@ import EditTask from '../project-detail/edit-task';
                         title: '租赁合同签订',
                         key: 'k5',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k5.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k5)
+                                                }
+                                            }
+                                        },obj.row.k5.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k5)
+                                                }
+                                            }
+                                        },obj.row.k5.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
+                           
                         }
                     }, 
                     {
                         title: '支付履约保证金',
                         key: 'k6',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k6.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k6)
+                                                }
+                                            }
+                                        },obj.row.k6.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k6)
+                                                }
+                                            }
+                                        },obj.row.k6.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -359,18 +499,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '产品平面决策',
                         key: 'k7',
                         align:'center',
-                        render(h, obj){
-                             switch (obj.row.k7.taskStatus){
+                        render:(h, obj)=>{
+                            switch (obj.row.k7.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k7)
+                                                }
+                                            }
+                                        },obj.row.k7.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k7)
+                                                }
+                                            }
+                                        },obj.row.k7.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -379,18 +542,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '工程收房',
                         key: 'k8',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k8.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k8)
+                                                }
+                                            }
+                                        },obj.row.k8.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k8)
+                                                }
+                                            }
+                                        },obj.row.k8.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -399,18 +585,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '图纸完成',
                         key: 'k9',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k9.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k9)
+                                                }
+                                            }
+                                        },obj.row.k9.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k9)
+                                                }
+                                            }
+                                        },obj.row.k9.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -419,18 +628,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '报审完成',
                         key: 'k10',
                         align:'center',
-                        render(h, obj){
-                             switch (obj.row.k10.taskStatus){
+                        render:(h, obj)=>{
+                            switch (obj.row.k10.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k10)
+                                                }
+                                            }
+                                        },obj.row.k10.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k10)
+                                                }
+                                            }
+                                        },obj.row.k10.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -439,18 +671,41 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目开工',
                         key: 'k11',
                         align:'center',
-                        render(h, obj){
+                        render:(h, obj)=>{
                             switch (obj.row.k11.taskStatus){
                                 case 'DONE':
-                                    return <div class="u-status-done">{obj.row.k1.actualEndTime}</div>
+                                     return h('div', {
+                                            attrs: {
+                                                class: "u-status-done",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k11)
+                                                }
+                                            }
+                                        },obj.row.k11.actualEndTime);
                                 break;
                                 case 'UNDONE':
-                                    return <div class="u-status-undone">{obj.row.k1.planEndTime}</div>
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            },
+                                            on: {
+                                                click: () => {
+                                                    _this.openEditTaskDraw(obj.row.k11)
+                                                }
+                                            }
+                                        },obj.row.k11.planEndTime);
+                                  
                                 break;
                                 case 'UNPLANNED':
-                                     return <div class="u-status-undone"></div>
-                                     
+                                    return h('div', {
+                                            attrs: {
+                                                class: "u-status-undone",
+                                            }
+                                        },'');
                                 break;
+                                
                              }    
                            
                         }
@@ -542,6 +797,10 @@ import EditTask from '../project-detail/edit-task';
             this.getSelect();
         },
         methods:{
+            openEditTaskDraw(params){
+                this.taskId=params.value;
+                this.getEditTaskData(this.taskId)
+            } ,
             dundoneTaskChange(form){
                 this.tabParams.undoneTaskId=form;
                 this.getTableData(this.tabParams);
@@ -703,15 +962,13 @@ import EditTask from '../project-detail/edit-task';
             },
             //新建按钮被点击
             newArchives(){
-                this.getEditTaskData(this.taskId)
-                // this.cancelEditTask;
-                return;
                 utils.clearForm(this.addData);
                 this.openNewArchives = !this.openNewArchives;
                 if(this.openNewArchives){
                     this.allowSubmit = true;
                 }
-            }           
+            },
+                     
         }
     }
 </script>

@@ -12,7 +12,7 @@
                 <!-- 项目总览
                     <ProgressView v-if="!mask"/> 
                 -->
-                <h1>已开业</h1>
+               <ProjectView />
                 
             </TabPane>
         </Tabs>

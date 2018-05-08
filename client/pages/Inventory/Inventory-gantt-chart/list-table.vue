@@ -4,7 +4,7 @@
             <div slot="content" class='list-content'>
                 <p>工位单价：{{data.unitPrice}}</p>
                 <p>商品总价：{{data.quotedPrice}}</p>
-                <p>补充描述：{{data.propertyDesc}}</p>
+                <p v-if="data.propertyDesc">补充描述：{{data.propertyDesc}}</p>
             </div>
             <div class='detail-li' :data-box-id="data.id"
             @mouseover="overShow(data.id)"

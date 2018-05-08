@@ -92,19 +92,20 @@ function poptipOver(event,data,domName) {
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
     var obj = getToolTipContent(data);
-    tirDom.innerHTML = obj.str;
-    tirDom.style.left = tirLocation.left - 30 + 'px';
-    tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
-    tirDom.style.width = obj.width + 'px';
-    angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-    angleDom.style.top = tirLocation.top - (130-60) + 'px';
-    locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
-    tirDom.style.opacity = 1;
-    angleDom.style.opacity = 1;
+    if(data.planEndTimeStr || data.actualEndTimeStr){
+        tirDom.innerHTML = obj.str;
+        tirDom.style.left = tirLocation.left - 30 + 'px';
+        tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
+        tirDom.style.width = obj.width + 'px';
+        angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
+        angleDom.style.top = tirLocation.top - (130-60) + 'px';
+        locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
+        tirDom.style.opacity = 1;
+        angleDom.style.opacity = 1;
+    }
 }
 //气泡的具体内容
 function getToolTipContent(thatData) {
-    if(thatData.planEndTimeStr || thatData.actualEndTimeStr){
         var str = '<div class="title">' + thatData.label + '</div>';
         var data = Object.assign({}, thatData);
         var width = 155;
@@ -119,13 +120,7 @@ function getToolTipContent(thatData) {
             str: str,
             width: width
         };
-    }else{
-        return {
-            str: '',
-            width:0
-        };
-    }
-    
+
 }
 //气泡的位置微调
 function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {

@@ -1,7 +1,7 @@
 <template>
 <div class="project-view">
     <div class="u-search" >
-        <Button type="primary"  @click="newArchives">新建项目</Button>
+        <Button type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
         <div class="u-search-content">
             <div class="u-select">
                 <span>仅看</span>
@@ -172,6 +172,7 @@ import EditTask from '../project-detail/edit-task';
                     doneTaskId:'',
                     undoneTaskId:'',
                 },
+                tab:'',
                 warn:'',
                 MessageType:'',
                 allowSubmit:true,
@@ -1187,8 +1188,8 @@ import EditTask from '../project-detail/edit-task';
             //     })
            
             //  publicFn.poptipOver(event,this.data)
-            let tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
-            this.tabParams.projectStatus=tab;
+            this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
+            this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
             this.getSelect();
         },
@@ -1410,11 +1411,12 @@ import EditTask from '../project-detail/edit-task';
 
         }
     }
+    
     .u-search-content{
         position: absolute;
-        left:150px;
         width:550px;
         top:0;
+        left:230px;
          .u-select{
              width:240px;
              margin-right:30px;
@@ -1427,19 +1429,19 @@ import EditTask from '../project-detail/edit-task';
     }
     .u-search-form{
        position: absolute;
-       left:700px;
+       left:750px;
        top:0;
     }
     .u-color-block{
-        width:172px;
+        width:132px;
         float:right;
         span{
-            width:80px;
+            width:60px;
             height:30px;
             line-height: 30px;
             display: inline-block;
             text-align: center;
-            font-size: 14px;
+            font-size: 12px;
             color: #666666;
             border-radius: 7px;
         }

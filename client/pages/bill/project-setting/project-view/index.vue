@@ -257,10 +257,9 @@ import EditTask from '../project-detail/edit-task';
                                                 mouseover:(event)=>{
                                                      publicFn.poptipOver(event,obj.row.k1,'projectSetting');
                                                 },
-                                                // mouseout:()=>{
-                                                //     this.toolOut(event)
-                                                // }
-                                               
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },obj.row.k1.actualEndTimeStr);
                                 break;
@@ -276,6 +275,9 @@ import EditTask from '../project-detail/edit-task';
                                                 mouseover:(event)=>{
                                                      publicFn.poptipOver(event,obj.row.k1,'projectSetting');
                                                 },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },obj.row.k1.planEndTimeStr);
                                   
@@ -308,6 +310,9 @@ import EditTask from '../project-detail/edit-task';
                                                  mouseover:(event)=>{
                                                      publicFn.poptipOver(event,obj.row.k2,'projectSetting');
                                                 },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
 
                                             }
                                         },obj.row.k2.actualEndTimeStr);
@@ -321,9 +326,12 @@ import EditTask from '../project-detail/edit-task';
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k2)
                                                 },
-                                                 mouseover:(event)=>{
+                                                mouseover:(event)=>{
                                                      publicFn.poptipOver(event,obj.row.k2,'projectSetting');
                                                 },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                             }
                                         },obj.row.k2.planEndTimeStr);
                                   
@@ -355,6 +363,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k3)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k3.actualEndTimeStr);
@@ -367,6 +381,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k3)
+                                                }, 
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k3.planEndTimeStr);
@@ -399,6 +419,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k4)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k4.actualEndTimeStr);
@@ -411,6 +437,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k4)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k4.planEndTimeStr);
@@ -442,6 +474,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k5)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k5.actualEndTimeStr);
@@ -454,6 +492,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k5)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k5.planEndTimeStr);
@@ -485,6 +529,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k6)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k6.actualEndTimeStr);
@@ -497,6 +547,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k6)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k6.planEndTimeStr);
@@ -528,6 +584,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k7)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k7.actualEndTimeStr);
@@ -540,6 +602,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k7)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k7.planEndTimeStr);
@@ -571,6 +639,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k8)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k8.actualEndTimeStr);
@@ -583,6 +657,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k8)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k8.planEndTimeStr);
@@ -614,6 +694,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k9)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k9.actualEndTimeStr);
@@ -626,6 +712,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k9)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k9.planEndTimeStr);
@@ -657,6 +749,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k10)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k10.actualEndTimeStr);
@@ -669,6 +767,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k10)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k10.planEndTimeStr);
@@ -700,6 +804,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k11)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k11.actualEndTimeStr);
@@ -712,6 +822,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k11)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k11.planEndTimeStr);
@@ -743,6 +859,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k12)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k12.actualEndTimeStr);
@@ -755,6 +877,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k12)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k12.planEndTimeStr);
@@ -786,6 +914,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k13)
+                                                },
+                                                mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k13.actualEndTimeStr);
@@ -798,6 +932,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k13)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k13.planEndTimeStr);
@@ -830,6 +970,12 @@ import EditTask from '../project-detail/edit-task';
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k14)
                                                 },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
+                                                }
                                                 
                                             }
                                         },obj.row.k14.actualEndTimeStr);
@@ -842,6 +988,12 @@ import EditTask from '../project-detail/edit-task';
                                             on: {
                                                 click: () => {
                                                     this.openEditTaskDraw(obj.row.k14)
+                                                },
+                                                 mouseover:(event)=>{
+                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
+                                                },
+                                                mouseout:()=>{
+                                                    this.toolOut(event)
                                                 }
                                             }
                                         },obj.row.k14.planEndTimeStr);
@@ -929,7 +1081,6 @@ import EditTask from '../project-detail/edit-task';
 
             },
             getTableData(tabParams){
-                console.log('111--->>>>',tabParams)
                     this.$http.get('get-project-home', tabParams).then((res)=>{
                             this.projectList=res.data.items;
                         }).catch((err)=>{

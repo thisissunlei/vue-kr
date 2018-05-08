@@ -1267,10 +1267,6 @@ import EditTask from '../project-detail/edit-task';
             getEditTaskData(id,callback){
                 this.$http.get('project-get-task',{id:id}).then((response)=>{
                     var data = Object.assign({},response.data)
-                    data.planStartTime=this.timeApplyFox(data.planStartTime,true);
-                    data.planEndTimeStr=this.timeApplyFox(data.planEndTimeStr,true);
-                    data.actualStartTime=this.timeApplyFox(data.actualStartTime,true);
-                    data.actualEndTimeStr=this.timeApplyFox(data.actualEndTimeStr,true)
                     data.focus=data.focus==1?'1':'0';
                     this.editTaskData=Object.assign({},data);
                     this.taskStatus = data.taskStatus;
@@ -1290,10 +1286,10 @@ import EditTask from '../project-detail/edit-task';
                 var dataParams = Object.assign({},params);
                 dataParams.id=this.taskId;
                 dataParams.projectId=this.projectId;
-                dataParams.planStartTime=this.timeApplyFox(dataParams.planStartTime);
-                dataParams.planEndTimeStr=this.timeApplyFox(dataParams.planEndTimeStr);
-                dataParams.actualStartTime=this.timeApplyFox(dataParams.actualStartTime);
-                dataParams.actualEndTimeStr=this.timeApplyFox(dataParams.actualEndTimeStr);
+              
+                dataParams.planEndTime= dataParams.planEndTime+' 00:00:00';
+              
+                dataParams.actualEndTime= dataParams.actualEndTime+' 00:00:00';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     // this.getListData(this.ids);
                 

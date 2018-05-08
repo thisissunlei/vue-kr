@@ -1385,13 +1385,19 @@ import EditTask from '../project-detail/edit-task';
 .project-view{
     padding:0 20px;
 
-
     .ivu-tooltip-popper{
         position: fixed;
     }
     .ivu-table-cell{
         padding:0;
         margin:0;
+    }
+    .ivu-table-header{
+        th{
+            background:  #E4ECF4;
+            border-right:1px solid #F6F6F6;
+        }
+        
     }
     .u-search{
         position: relative;
@@ -1453,7 +1459,7 @@ import EditTask from '../project-detail/edit-task';
     }
    
    .u-status-done{
-       width:105px;
+       width:80px;
        text-align: center;
        height:32px;
        line-height:32px;
@@ -1462,7 +1468,7 @@ import EditTask from '../project-detail/edit-task';
        margin:0 auto;
    }
    .u-status-undone{
-       width:105px;
+       width:80px;
        text-align: center;
        height:32px;
        line-height:32px;
@@ -1480,11 +1486,25 @@ import EditTask from '../project-detail/edit-task';
             top:0;
             z-index:100;
             .u-table-content{
-                width:2000px;
+                width:1600px;
             }
            .u-table-box{
               overflow-x: hidden;
               border-right: 5px solid #F6F6F6;
+           }
+           table{
+               td{
+                    &:nth-child(1){
+                        font-size:13px;
+                    }
+                    &:nth-child(2){
+                        font-size:13px;
+                    }
+                     &:nth-child(3){
+                        font-size:13px;
+                    }
+               }
+              
            }
             .u-table-arrow{
                 width:15px;
@@ -1521,7 +1541,7 @@ import EditTask from '../project-detail/edit-task';
               
           }
            .u-table-box-right{
-                width:2000px;
+                width:1600px;
                 transform: translateX(-100px);
                 table{
                         th,td{
@@ -1578,6 +1598,9 @@ import EditTask from '../project-detail/edit-task';
     }
     .bottom-triangle{
         border-color: transparent transparent rgba(70,76,91,.9)  transparent;
+    }
+    .top-triangle{
+        border-color:rgba(70,76,91,.9) transparent transparent  transparent   ;
     }
 
 }

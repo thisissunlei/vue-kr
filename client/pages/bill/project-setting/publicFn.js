@@ -92,31 +92,35 @@ function poptipOver(event,data,domName) {
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
     var obj = getToolTipContent(data);
-    tirDom.innerHTML = obj.str;
-    tirDom.style.left = tirLocation.left - 30 + 'px';
-    tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
-    tirDom.style.width = obj.width + 'px';
-    angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-    angleDom.style.top = tirLocation.top - (130-60) + 'px';
-    locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
-    tirDom.style.opacity = 1;
-    angleDom.style.opacity = 1;
+    if(data.planEndTimeStr || data.actualEndTimeStr){
+        tirDom.innerHTML = obj.str;
+        tirDom.style.left = tirLocation.left - 30 + 'px';
+        tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
+        tirDom.style.width = obj.width + 'px';
+        angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
+        angleDom.style.top = tirLocation.top - (130-60) + 'px';
+        locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
+        tirDom.style.opacity = 1;
+        angleDom.style.opacity = 1;
+    }
 }
 //气泡的具体内容
 function getToolTipContent(thatData) {
-    var str = '<div class="title">' + thatData.label + '</div>';
-    var data = Object.assign({}, thatData);
-    var width = 155;
-    if(data.planEndTimeStr){
-        str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
-    }
-    if(data.actualEndTimeStr){
-        str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
-    }
-    return {
-        str: str,
-        width: width
-    };
+        var str = '<div class="title">' + thatData.label + '</div>';
+        var data = Object.assign({}, thatData);
+        var width = 155;
+        if(data.planEndTimeStr){
+            str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
+        }
+        if(data.actualEndTimeStr){
+            str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
+        }
+        
+        return {
+            str: str,
+            width: width
+        };
+
 }
 //气泡的位置微调
 function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
@@ -131,7 +135,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    console.log('angleDom.style.top',angleDom.style.top)
+    
     if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 +'px';
         angleDom.className = 'top-triangle';

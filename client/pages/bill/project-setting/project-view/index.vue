@@ -1172,18 +1172,22 @@ import EditTask from '../project-detail/edit-task';
         }
         .u-left-hide{
             width:240px;
+            transition:width .2s;
         }
         .u-left-show{
             width:340px;
+            transition:width .2s;
         }
         
         .u-table-right{
            overflow: hidden;
           .u-table-box{
               overflow-x:auto;
+              
           }
            .u-table-box-right{
                 width:2000px;
+                transition:all .2s;
                 table{
                         th,td{
                             &:nth-child(3){
@@ -1193,9 +1197,11 @@ import EditTask from '../project-detail/edit-task';
                 }
            }
            .u-hide{
+              
                transform: translateX(-100px);
            }
            .u-show{
+              
                transform: translateX(0);
            }
         }

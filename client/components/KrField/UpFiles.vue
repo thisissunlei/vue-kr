@@ -16,7 +16,14 @@
 			
 				<div  class="view" v-for="(item,index) in newFileArr" :key="item.id">
 
-					<img v-if="getIsPhoto(item.fieldUrl)" @click="eyePhotoAlbum(item.fieldUrl,$event)" :src="item.fieldUrl" alt=""/>
+					<KrImg 
+						v-if="getIsPhoto(item.fieldUrl)" 
+						@click="eyePhotoAlbum(item.fieldUrl,$event)" 
+						:src="item.fieldUrl" 
+						width="210"
+						height="135"
+						type="cover"
+					/>
 					<div 
 						v-if="!getIsPhoto(item.fieldUrl)"
 						:class="{
@@ -72,15 +79,17 @@
 import PhotoAlbum from '../PhotoAlbum';
 import EditLabel from './EditLabel';
 import utils from '~/plugins/utils';
+import KrImg from '../KrImg'
 export default{
 	components:{
 		PhotoAlbum,
-		EditLabel
+		EditLabel,
+		KrImg
 	},
     props:{
         publicUse:{
             default:false,
-            type:Boolean
+			type:Boolean,
 		},
 		
 		value:{
@@ -158,7 +167,7 @@ export default{
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(img.indexOf(ext)>0){
+			if(img.indexOf(ext)>=0){
 				return true;
 			}
 			return false;
@@ -170,13 +179,13 @@ export default{
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(word.indexOf(ext)>0){
+			if(word.indexOf(ext)>=0){
 				return 'word';
 			}
-			if(excel.indexOf(ext)>0){
+			if(excel.indexOf(ext)>=0){
 				return 'excel';
 			}
-			if(ppt.indexOf(ext)>0){
+			if(ppt.indexOf(ext)>=0){
 				return 'ppt';
 			}
 			return 'other';
@@ -261,9 +270,7 @@ export default{
 					if (xhrfile.status === 200) {
 						if (fileResponse && fileResponse.code > 0) {
 							var data = fileResponse.data;
-
 							that.newFileArr.push({fieldUrl:data.url,fieldId:data.id});
-							console.log(that.getExt(data.url),"lllllll")
 							that.fileTypes.push(that.getExt(data.url));
 						} else {
 						

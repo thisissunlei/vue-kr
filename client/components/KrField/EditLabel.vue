@@ -19,7 +19,14 @@
 
 					<div v-if="value && value.length" class="view" v-for="(item,index) in fileArr" :key="item.id">
 
-						<img v-if="getIsPhoto(item.fieldUrl)" @click="eyePhotoAlbum(item.url,$event)" :src="item.fieldUrl" alt=""/>
+						<KrImg 
+							v-if="getIsPhoto(item.fieldUrl)" 
+							@click="eyePhotoAlbum(item.fieldUrl,$event)" 
+							:src="item.fieldUrl" 
+							width="210"
+							height="135"
+							type="cover"
+						/>
 						<div 
 							v-if="!getIsPhoto(item.fieldUrl)"
 							:class="{
@@ -100,7 +107,11 @@
 
 <script>
 import utils from '~/plugins/utils';
+import KrImg from '../KrImg'
 export default {
+	components:{
+		KrImg
+	},
     props:{
         readOrEdit:{
             type:Boolean,
@@ -181,7 +192,7 @@ export default {
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(img.indexOf(ext)>0){
+			if(img.indexOf(ext)>=0){
 				return true;
 			}
 			return false;
@@ -193,13 +204,13 @@ export default {
 			url = url.split('?')[0];
 			var index= url.lastIndexOf(".");
 			var ext = url.substr(index+1);
-			if(word.indexOf(ext)>0){
+			if(word.indexOf(ext)>=0){
 				return 'word';
 			}
-			if(excel.indexOf(ext)>0){
+			if(excel.indexOf(ext)>=0){
 				return 'excel';
 			}
-			if(ppt.indexOf(ext)>0){
+			if(ppt.indexOf(ext)>=0){
 				return 'ppt';
 			}
 			return 'other';
@@ -247,7 +258,10 @@ export default {
 		width: 600px;
 		min-height: 198px;
 		background:  #EEEEEE;
-	    padding: 1px;
+		padding: 1px;
+		.img-box{
+			border-radius: 4px;
+		}
 	}
 	.edit-field-box{
 		display:inline-block;
@@ -341,23 +355,23 @@ export default {
 		z-index: 100;
 
 	}
-	img{
-		display: inline-block;
-		width: auto;
-		height: 135px;
-		text-align: center;
-		line-height: 135px;
-		border: 1px solid transparent;
-		border-radius: 4px;
-		overflow: hidden;
-		background: #fff;
-		position: relative;
-		box-shadow: 0 1px 1px rgba(0,0,0,.2);
-		margin-right: 4px;
-		vertical-align: middle;
-		position: relative;
-		margin: 30px 30px 10px;		
-	}
+	// img{
+	// 	display: inline-block;
+	// 	width: auto;
+	// 	height: 135px;
+	// 	text-align: center;
+	// 	line-height: 135px;
+	// 	border: 1px solid transparent;
+	// 	border-radius: 4px;
+	// 	overflow: hidden;
+	// 	background: #fff;
+	// 	position: relative;
+	// 	box-shadow: 0 1px 1px rgba(0,0,0,.2);
+	// 	margin-right: 4px;
+	// 	vertical-align: middle;
+	// 	position: relative;
+	// 	margin: 30px 30px 10px;		
+	// }
 	.view{
 		display: inline-block;
 		width: auto;

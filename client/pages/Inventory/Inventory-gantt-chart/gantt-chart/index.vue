@@ -108,7 +108,7 @@
                             </div>
 
                             <div v-if="barType=='day'" class='day-bar' style="background:#FAFCFF">
-                                <div  v-if="barType=='day'&&tagToLeft!=0" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                                <div  v-if="barType=='day'&&tagToLeft!=0" class="bar-line" :style="{left:tagToLeft+'px',width:minCalibration+'px',zIndex:10}"></div>
                                 <div  v-if="barType=='day'&&startRentLeft!=0" class="bar-line rent-line" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='day'&&endRentLeft!=0" class="bar-line rent-line" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
                                 <div  v-if="barType=='day'&&inventoryRentLeft!=0" class="bar-line" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
@@ -160,6 +160,7 @@
                             :leftEndpoint="leftEndpoint"
                             :minCalibration="minCalibration"
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
+                            :sideBar="sideBar"
                         />
                         <div class="add-right" @click="nextTurnPage"></div>
                         <div class='today-flag' v-if="tagToLeft!=0" :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
@@ -237,6 +238,9 @@ export default {
         identify:{
            type:String,
            default:''
+        },
+        sideBar:{
+           type:Boolean  
         }
     },
     data(){
@@ -849,7 +853,7 @@ export default {
         box-sizing: border-box;
         display:inline-block;
         position: relative;
-        padding-left:25px;
+        padding:0 25px;
         margin-top: 3px;
         #gantt-chart-tool-tip{
             max-width: 280px;
@@ -904,9 +908,9 @@ export default {
         }
         .right-draw{
             position: absolute;
-            overflow:auto;
+            overflow:hidden;
             left: 210px;
-            right: 0px;
+            right: 25px;
             .time-shaft-fixed{
                 position: absolute;
                 background: #ffffff;

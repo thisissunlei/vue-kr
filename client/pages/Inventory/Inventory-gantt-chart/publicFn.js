@@ -80,7 +80,7 @@ function lineShow(data) {
     }
 }
 //鼠标滑过气泡的位置
-function poptipOver(event, data,param,time) {
+function poptipOver(event, data,param,time,sideBar) {
     var e = event || window.event;
     var dom = event.target;
 
@@ -88,9 +88,9 @@ function poptipOver(event, data,param,time) {
     var domMain=document.getElementById('layout-content-main');  
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-
+    
     var tirLocation = {
-        left: e.clientX,
+        left: sideBar?e.clientX:e.clientX+160,
         top: (e.clientY < detail.top ? e.clientY : detail.top) + detail.height
     }
     var obj = getToolTipContent(data,param,time);
@@ -100,7 +100,7 @@ function poptipOver(event, data,param,time) {
     tirDom.style.width = obj.width + 'px';
     angleDom.style.left = tirLocation.left+ 5 - 215 + 'px';
     angleDom.style.top = tirLocation.top + domMain.scrollTop-345+ 'px';
-    locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width)
+    locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,sideBar)
     tirDom.style.opacity = 1;
     angleDom.style.opacity = 1;
 }
@@ -111,17 +111,19 @@ function getToolTipContent(thatData,param,time) {
     var data = Object.assign({}, thatData);
     if(param=='NOT_EFFECT'){
         label='合同未生效';
-        //width = 280;
     }else if(param=='IN_RENT'){
         label='在租';
+        width=235;
     }else if(param=='AVAILABLE'||(thatData.status=='AVAILABLE'&&param=='2')){
-        /*if(!data.endDate){
-            width=200;
-        }*/
+        if(!data.endDate){
+            width=170;
+        }else{
+            width=235;
+        }
         label="未租";
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
-        //width = 200;
+        width = 170;
     }
     var str = '<div class="title">' + label + '：</div>';
         //var width = 155; 
@@ -161,7 +163,7 @@ function getToolTipContent(thatData,param,time) {
     };
 }
 //气泡的位置微调
-function locationCorrect(tirDom, nowLeft, tirRightToleft) {
+function locationCorrect(tirDom, nowLeft, tirRightToleft,sideBar) {
 
     let contentDom = document.getElementById('vue-chart-right-draw-content');
     let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -179,7 +181,8 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft) {
     }
     
     if (contentToRigth > tirToRigth) {
-        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+right+'px';
+        var other=sideBar?0:165;
+        tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+other+right+'px';
     }
 
     /*if (detail.top + detail.height < parseInt(tirDom.style.top) -domMain.scrollTop+345) {

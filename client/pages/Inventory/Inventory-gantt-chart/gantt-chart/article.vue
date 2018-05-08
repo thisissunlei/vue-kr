@@ -66,6 +66,9 @@ export default {
         },
         end:{
             type:String
+        },
+        sideBar:{
+            type:Boolean
         }
     },
     data(){
@@ -105,7 +108,7 @@ export default {
                 startTime:this.start,
                 endTime:this.end
             }
-            publicFn.poptipOver(event,this.data,param,time)
+            publicFn.poptipOver(event,this.data,param,time,this.sideBar)
         },
         toolOut(event){
             var tirDom = document.getElementById('gantt-chart-tool-tip');

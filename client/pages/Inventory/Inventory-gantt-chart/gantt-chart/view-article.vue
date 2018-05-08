@@ -16,6 +16,7 @@
                 :todayDetail="todayDetail"
                 :start="start"
                 :end="end"
+                :sideBar="sideBar"
             />
             
             
@@ -52,6 +53,9 @@ export default {
         },
         end:{
             type:String
+        },
+        sideBar:{
+            type:Boolean
         }
     },
     data(){

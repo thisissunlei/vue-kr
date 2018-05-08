@@ -16,6 +16,7 @@
             :left="left"
             :width="width"
             :identify="identify"
+            :sideBar="sideBar"
         >
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
@@ -173,11 +174,11 @@ export default {
                 this.width=domContent.getBoundingClientRect().width;
                 this.left=domContent.getBoundingClientRect().left;
             }   
-
+           
             if(dom.scrollTop>321){
                 this.head=true;
             }else{
-                this.head=false; 
+                this.head=false;   
             }
         },
         //极限时间

@@ -38,6 +38,9 @@ export default {
     mounted(){
         GLOBALSIDESWITCH("false");
         var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+        if(sessionStorage.getItem('chartSetting')==""){
+            sessionStorage.setItem('chartSetting','PREPARE');
+        }
         this.tabs=sessionStorage.getItem('chartSetting')||'PREPARE';
         if(this.tabs=='OPENED'){
             this.mask=false;

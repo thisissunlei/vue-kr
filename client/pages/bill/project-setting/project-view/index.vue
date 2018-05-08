@@ -241,7 +241,7 @@ import EditTask from '../project-detail/edit-task';
                         key: 'k1',
                         align:'center',
                         render:(h, obj)=>{
-                            var _this=this;
+                           
                              switch (obj.row.k1.taskStatus){
                                 case 'DONE':
                                      return h('div', {
@@ -250,7 +250,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k1)
+                                                    this.openEditTaskDraw(obj.row.k1)
                                                 }
                                             }
                                         },obj.row.k1.actualEndTime);
@@ -262,7 +262,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k1)
+                                                    this.openEditTaskDraw(obj.row.k1)
                                                 }
                                             }
                                         },obj.row.k1.planEndTime);
@@ -291,7 +291,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k2)
+                                                    this.openEditTaskDraw(obj.row.k2)
                                                 }
                                             }
                                         },obj.row.k2.actualEndTime);
@@ -303,7 +303,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k2)
+                                                    this.openEditTaskDraw(obj.row.k2)
                                                 }
                                             }
                                         },obj.row.k2.planEndTime);
@@ -335,7 +335,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k3)
+                                                    this.openEditTaskDraw(obj.row.k3)
                                                 }
                                             }
                                         },obj.row.k3.actualEndTime);
@@ -347,7 +347,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k3)
+                                                    this.openEditTaskDraw(obj.row.k3)
                                                 }
                                             }
                                         },obj.row.k3.planEndTime);
@@ -379,7 +379,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k4)
+                                                    this.openEditTaskDraw(obj.row.k4)
                                                 }
                                             }
                                         },obj.row.k4.actualEndTime);
@@ -391,7 +391,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k4)
+                                                    this.openEditTaskDraw(obj.row.k4)
                                                 }
                                             }
                                         },obj.row.k4.planEndTime);
@@ -422,7 +422,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k5)
+                                                    this.openEditTaskDraw(obj.row.k5)
                                                 }
                                             }
                                         },obj.row.k5.actualEndTime);
@@ -434,7 +434,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k5)
+                                                    this.openEditTaskDraw(obj.row.k5)
                                                 }
                                             }
                                         },obj.row.k5.planEndTime);
@@ -465,7 +465,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k6)
+                                                    this.openEditTaskDraw(obj.row.k6)
                                                 }
                                             }
                                         },obj.row.k6.actualEndTime);
@@ -477,7 +477,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k6)
+                                                    this.openEditTaskDraw(obj.row.k6)
                                                 }
                                             }
                                         },obj.row.k6.planEndTime);
@@ -508,7 +508,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k7)
+                                                    this.openEditTaskDraw(obj.row.k7)
                                                 }
                                             }
                                         },obj.row.k7.actualEndTime);
@@ -520,7 +520,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k7)
+                                                    this.openEditTaskDraw(obj.row.k7)
                                                 }
                                             }
                                         },obj.row.k7.planEndTime);
@@ -551,7 +551,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k8)
+                                                    this.openEditTaskDraw(obj.row.k8)
                                                 }
                                             }
                                         },obj.row.k8.actualEndTime);
@@ -563,7 +563,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k8)
+                                                    this.openEditTaskDraw(obj.row.k8)
                                                 }
                                             }
                                         },obj.row.k8.planEndTime);
@@ -594,7 +594,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k9)
+                                                    this.openEditTaskDraw(obj.row.k9)
                                                 }
                                             }
                                         },obj.row.k9.actualEndTime);
@@ -606,7 +606,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k9)
+                                                    this.openEditTaskDraw(obj.row.k9)
                                                 }
                                             }
                                         },obj.row.k9.planEndTime);
@@ -637,7 +637,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k10)
+                                                    this.openEditTaskDraw(obj.row.k10)
                                                 }
                                             }
                                         },obj.row.k10.actualEndTime);
@@ -649,7 +649,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k10)
+                                                    this.openEditTaskDraw(obj.row.k10)
                                                 }
                                             }
                                         },obj.row.k10.planEndTime);
@@ -680,7 +680,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k11)
+                                                    this.openEditTaskDraw(obj.row.k11)
                                                 }
                                             }
                                         },obj.row.k11.actualEndTime);
@@ -692,7 +692,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k11)
+                                                    this.openEditTaskDraw(obj.row.k11)
                                                 }
                                             }
                                         },obj.row.k11.planEndTime);
@@ -723,7 +723,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k12)
+                                                    this.openEditTaskDraw(obj.row.k12)
                                                 }
                                             }
                                         },obj.row.k12.actualEndTime);
@@ -735,7 +735,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k12)
+                                                    this.openEditTaskDraw(obj.row.k12)
                                                 }
                                             }
                                         },obj.row.k12.planEndTime);
@@ -757,7 +757,7 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目交付',
                         key: 'k13',
                         align:'center',
-                        rrender:(h, obj)=>{
+                        render:(h, obj)=>{
                             switch (obj.row.k13.taskStatus){
                                 case 'DONE':
                                      return h('div', {
@@ -766,7 +766,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k13)
+                                                    this.openEditTaskDraw(obj.row.k13)
                                                 }
                                             }
                                         },obj.row.k13.actualEndTime);
@@ -778,7 +778,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k13)
+                                                    this.openEditTaskDraw(obj.row.k13)
                                                 }
                                             }
                                         },obj.row.k13.planEndTime);
@@ -809,7 +809,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k14)
+                                                    this.openEditTaskDraw(obj.row.k14)
                                                 }
                                             }
                                         },obj.row.k14.actualEndTime);
@@ -821,7 +821,7 @@ import EditTask from '../project-detail/edit-task';
                                             },
                                             on: {
                                                 click: () => {
-                                                    _this.openEditTaskDraw(obj.row.k14)
+                                                    this.openEditTaskDraw(obj.row.k14)
                                                 }
                                             }
                                         },obj.row.k14.planEndTime);
@@ -859,8 +859,9 @@ import EditTask from '../project-detail/edit-task';
             //         let tableDom = document.querySelectorAll('#object-seting-archives table')[0];
             //         utils.tableSort(tableDom,this.shortChange);
             //     })
+           
 
-            let tab=sessionStorage.getItem('chartSetting') || 'PREPARE';
+            let tab=sessionStorage.getItem('chartSetting');
             this.tabParams.projectStatus=tab;
             this.getTableData(this.tabParams);
             this.getSelect();

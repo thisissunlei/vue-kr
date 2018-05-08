@@ -1,6 +1,6 @@
 <template>
   <div v-if="data && data.length" class="photo-album">
-      <!-- <div class="mask"  @click="close"></div> -->
+      <div class="mask"  @click="close"></div>
       
      
       <div>
@@ -27,9 +27,9 @@
                     @click="forwardClick"
                 >
                 </div>
-                <span class="close-btn " @click="close"></span>
+                <!-- <span class="close-btn " @click="close"></span> -->
                 <Button class="down-img" @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
-                <Button class="down-img" style="left: 70%;"  @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
+                <div class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
             </div>
             
       </div>
@@ -108,10 +108,19 @@ export default {
     z-index: 999;
     .down-img{
         position: absolute;
-        left: 30%;
+        left: 35%;
         bottom: -50px;
         width: 130px;
         transform: translateX(-50%);
+    }
+    .close-img{
+       
+        width: 130px;
+        height: 36px;
+        background: #fff;
+        line-height: 36px;
+        border-radius: 4px;
+        box-shadow: 0 1px 6px rgba(0,0,0,.2), 0 1px 4px rgba(0,0,0,.2);
     }
     .close-btn{
         position: absolute;
@@ -136,6 +145,7 @@ export default {
         position: absolute;
         height: 460px;
         top: 50%;
+        margin-top: -50px;
         left: 50%;
         transform: translateY(-50%) translateX(-50%);
         text-align: center;

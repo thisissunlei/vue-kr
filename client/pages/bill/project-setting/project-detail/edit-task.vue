@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                <div v-if="getEdit.code" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                     <div>需要填写档案
                         <span style="font-size:20px;color:#ccc;">{{getEdit.nullFields}}</span>项，尚未完成
                         <span style="font-size:20px;color:#000;">{{getEdit.totalFields}}</span>项，

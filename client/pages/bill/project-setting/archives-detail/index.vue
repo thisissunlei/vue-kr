@@ -139,13 +139,13 @@ export default {
             var index = 1;
             var endIndex = 0;
             for(var i=0;i<group.length;i++) {
-                if(group[i].type=="GROUP"){
+                // if(group[i].type=="GROUP"){
                     group[i].index = index;
                     group[i].isEnd = false;
                     endIndex = index;
                     index++;
                    
-                }
+                // }
             }
             if(group.length){
                 group[endIndex-1].isEnd = true;

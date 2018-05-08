@@ -45,7 +45,7 @@
     </div>
     <div class="u-table-list">
             <div :class="[tableFlag?'u-left-show':'u-left-hide','u-table-left']">
-                 <div :class="[tableFlag?'u-right-arrow':'u-left-arrow','u-table-arrow']" @click="stretchTable"></div>
+                 <div :class="[tableFlag?'u-left-arrow':'u-right-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div class="u-table-box">
                         <div class="u-table-content">
                             <Table  border :columns="projectTabColumns" :data="projectList" ></Table>

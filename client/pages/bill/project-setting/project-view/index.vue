@@ -1453,7 +1453,7 @@ import EditTask from '../project-detail/edit-task';
     }
    
    .u-status-done{
-       width:105px;
+       width:80px;
        text-align: center;
        height:32px;
        line-height:32px;
@@ -1462,7 +1462,7 @@ import EditTask from '../project-detail/edit-task';
        margin:0 auto;
    }
    .u-status-undone{
-       width:105px;
+       width:80px;
        text-align: center;
        height:32px;
        line-height:32px;
@@ -1480,7 +1480,7 @@ import EditTask from '../project-detail/edit-task';
             top:0;
             z-index:100;
             .u-table-content{
-                width:2000px;
+                width:1600px;
             }
            .u-table-box{
               overflow-x: hidden;
@@ -1521,7 +1521,7 @@ import EditTask from '../project-detail/edit-task';
               
           }
            .u-table-box-right{
-                width:2000px;
+                width:1600px;
                 transform: translateX(-100px);
                 table{
                         th,td{

@@ -5,15 +5,14 @@
                 <!--项目管理档案列表
                  <Archives v-if="mask"/> 
                 -->
-                <ProjectView />
+                <ProjectView  v-if="tabs=='PREPARE'"/>
             </TabPane>
             <TabPane label="已开业项目" name="OPENED">
 
                 <!-- 项目总览
                     <ProgressView v-if="!mask"/> 
                 -->
-               <ProjectView />
-                
+               <ProjectView  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
   </div>
@@ -38,10 +37,8 @@ export default {
     mounted(){
         GLOBALSIDESWITCH("false");
         var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
-        if(sessionStorage.getItem('chartSetting')==""){
-            sessionStorage.setItem('chartSetting','PREPARE');
-        }
-        this.tabs=sessionStorage.getItem('chartSetting')||'PREPARE';
+       
+        this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
         if(this.tabs=='OPENED'){
             this.mask=false;
             tabDom.style.overflow = 'visible';

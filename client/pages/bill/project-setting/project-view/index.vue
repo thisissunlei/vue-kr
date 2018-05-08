@@ -861,11 +861,12 @@ import EditTask from '../project-detail/edit-task';
             //     })
            
 
-            let tab=sessionStorage.getItem('chartSetting');
+            let tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
             this.tabParams.projectStatus=tab;
             this.getTableData(this.tabParams);
             this.getSelect();
         },
+        
         methods:{
             openEditTaskDraw(params){
                 this.taskId=params.value;

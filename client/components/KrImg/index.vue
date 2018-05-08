@@ -42,8 +42,9 @@ export default {
          
             let imgDom = document.getElementById(this.imgId);
             let that = this;
-             console.log("---------",imgDom)
+            
             imgDom.onload = function(){
+                
                 that.setimgSize(that.type,imgDom);
             }
         }
@@ -63,6 +64,11 @@ export default {
             imgW:'auto',
             imgH:'auto',
             imgId:'img'+this._uid,
+            imgLeft:'auto',
+            imgTop:'auto',
+            imgMarginLeft:'auto',
+            imgMarginTop:'auto',
+
 
 		}
 	},
@@ -77,6 +83,7 @@ export default {
                 let h = imgDetail.height;
                 
                if(type=="auto"){
+                    console.log("=======auto",type)
                    this.imgW = this.width + 'px'||'auto';
                    this.imgH = this.height + 'px'||'auto';
                    return ;
@@ -85,19 +92,21 @@ export default {
                 if(type == 'center'){
                     let newW = ( w/h)*this.height;//height 100%时
                     let newH = (h/w)*this.width;
-                    console.log(newW,"ooooooo")
+                  
                     if(newW<=this.width){
-                            this.imgW = newW +'px';
-                            this.imgH = this.height +'px;'
-                            dom.style.left='50%';
-                            dom.style.top=0;
-                            dom.style.marginLeft=-newW/2+'px';
+                        this.imgW = newW +'px';
+                        this.imgH = this.height +'px;'
+                        dom.style.left='50%';
+                        dom.style.top=0;
+                        dom.style.marginLeft=-newW/2+'px';
+                        dom.style.marginTop=-0+'px'
                     }else{
-                            this.imgW = this.width +'px';
-                            this.imgH = newH +'px;'
-                            dom.style.top='50%';
-                            dom.style.left=0;
-                            dom.style.marginTop=-newH/2+'px';
+                        this.imgW = this.width +'px';
+                        this.imgH = newH +'px;'
+                        dom.style.top='50%';
+                        dom.style.left=0;
+                        dom.style.marginTop=-newH/2+'px';
+                        dom.style.marginLeft=0+'px';
                     }
                    
                }
@@ -105,18 +114,21 @@ export default {
                     let newW = ( w/h)*this.height;//height 100%时
                     let newH = (h/w)*this.width;
                     if(newW<=this.width){
+                         console.log("---------width")
                         this.imgW = this.width +'px';
                         this.imgH = newH +'px;'
                         dom.style.top='50%';
-                        dom.style.left=0;
+                        dom.style.left=0+'px';
                         dom.style.marginTop=-newH/2+'px';
+                        dom.style.marginLeft=0+'px';
                     }else{
                         this.imgW = newW +'px';
                         this.imgH = this.height +'px;'
                         dom.style.left='50%';
-                        dom.style.top=0;
+                        dom.style.top=0+'px';
                         dom.style.marginLeft=-newW/2+'px';
-                           
+                        dom.style.marginTop=0+'px';
+                        console.log("---------heigjt")
                     }
                 }
                

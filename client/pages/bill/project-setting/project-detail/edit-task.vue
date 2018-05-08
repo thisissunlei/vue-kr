@@ -20,7 +20,7 @@
                                     @on-ok="startOk">
                                     <a href="javascript:void(0)" @click="switchStartTime">
                                     
-                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ planEnd||' '}} </div>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(planEnd)}} </div>
                                         
                                         <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                     </a>
@@ -46,7 +46,7 @@
                                 @on-ok="endOk">
                                 <a href="javascript:void(0)" @click="switchEndTime">
                                 
-                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ actualEnd }} </div>
+                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
                                     
                                     <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
                                 </a>
@@ -173,8 +173,16 @@ export default {
             this.planEnd = this.newStart;
             this.params.planEndTime = this.planEnd;
             var data = Object.assign({},this.params);
+            data.planEndTime = this.numToDate(data.planEndTime);
+            data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchStartTime();
             this.$emit("dataChange",data);
+        },
+        numToDate(num){
+            if(!isNaN(num)){
+                return dateUtils.dateToStr("YYYY-MM-DD", new Date(num));
+            }
+            return num;
         },
         startClear(){
 
@@ -193,6 +201,8 @@ export default {
             this.actualEnd = this.newEnd;
             this.params.actualEndTime = this.actualEnd;
             var data = Object.assign({},this.params);
+            data.planEndTime = this.numToDate(data.planEndTime);
+            data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchEndTime();
 
             this.$emit("dataChange",data);

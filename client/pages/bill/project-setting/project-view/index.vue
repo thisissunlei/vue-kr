@@ -1486,6 +1486,20 @@ import EditTask from '../project-detail/edit-task';
               overflow-x: hidden;
               border-right: 5px solid #F6F6F6;
            }
+           table{
+               td{
+                    &:nth-child(1){
+                        font-size:13px;
+                    }
+                    &:nth-child(2){
+                        font-size:13px;
+                    }
+                     &:nth-child(3){
+                        font-size:13px;
+                    }
+               }
+              
+           }
             .u-table-arrow{
                 width:15px;
                 height:30px;
@@ -1578,6 +1592,9 @@ import EditTask from '../project-detail/edit-task';
     }
     .bottom-triangle{
         border-color: transparent transparent rgba(70,76,91,.9)  transparent;
+    }
+    .top-triangle{
+        border-color:rgba(70,76,91,.9) transparent transparent  transparent   ;
     }
 
 }

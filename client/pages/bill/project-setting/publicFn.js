@@ -135,7 +135,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    console.log('angleDom.style.top',angleDom.style.top)
+    
     if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
         tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 +'px';
         angleDom.className = 'top-triangle';

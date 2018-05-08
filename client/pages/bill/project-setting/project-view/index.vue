@@ -1385,13 +1385,19 @@ import EditTask from '../project-detail/edit-task';
 .project-view{
     padding:0 20px;
 
-
     .ivu-tooltip-popper{
         position: fixed;
     }
     .ivu-table-cell{
         padding:0;
         margin:0;
+    }
+    .ivu-table-header{
+        th{
+            background:  #E4ECF4;
+            border-right:1px solid #F6F6F6;
+        }
+        
     }
     .u-search{
         position: relative;

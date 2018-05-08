@@ -54,7 +54,7 @@
             </div>
             <div class="u-table-right">
                 <div class="u-table-box" style="overflow-x:auto;">
-                    <div :class="[tableFlag?'u-show':'u-hide','u-table-box-right']">
+                    <div :class="[tableFlag?'u-show':'','u-table-box-right']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
@@ -1187,7 +1187,7 @@ import EditTask from '../project-detail/edit-task';
           }
            .u-table-box-right{
                 width:2000px;
-                transition:all .2s;
+                transform: translateX(-100px);
                 table{
                         th,td{
                             &:nth-child(3){
@@ -1196,12 +1196,8 @@ import EditTask from '../project-detail/edit-task';
                         }
                 }
            }
-           .u-hide{
-              
-               transform: translateX(-100px);
-           }
            .u-show{
-              
+               transition:all .2s;
                transform: translateX(0);
            }
         }

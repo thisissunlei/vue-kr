@@ -929,6 +929,7 @@ import EditTask from '../project-detail/edit-task';
 
             },
             getTableData(tabParams){
+                console.log('111--->>>>',tabParams)
                     this.$http.get('get-project-home', tabParams).then((res)=>{
                             this.projectList=res.data.items;
                         }).catch((err)=>{
@@ -1034,7 +1035,7 @@ import EditTask from '../project-detail/edit-task';
                 this.addData.county=this.addData.citys[2];
                 this.allowSubmit = false;
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
-                    // this.getTableData(this.tabParams);
+                    this.getTableData(this.tabParams);
                     this.newArchives();
                     this.openMessage=true;
                     this.warn='新建成功';

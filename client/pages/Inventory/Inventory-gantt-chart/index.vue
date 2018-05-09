@@ -47,7 +47,7 @@
             </div>
         </GanttChart>
 
-        <div style="float: right;margin: 15px 0 20px 0;">
+        <div style="float: right;margin: 15px 0 20px 0;marginRight:25px;">
             <Page :total="totalCount" :page-size='100' show-total show-elevator @on-change="onPageChange">
                 <div slot>
                     共{{totalCount}}条商品

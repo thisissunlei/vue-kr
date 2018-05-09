@@ -2,97 +2,97 @@
 module.exports = {
      //项目管理－新建任务
      'project-add-task': {
-      url: '/api/krspace-pm-web/pm/task/add',
+      url: '/api/pm/task/actions/add',
       method: 'post'
     },
     //任务名称唯一性校验
     'project-name-check': {
-      url: '/api/krspace-pm-web/pm/task/unique',
+      url: '/api/pm/task/unique',
       method: 'get'
     },
     //项目管理－编辑任务
     'project-edit-task': {
-      url: '/api/krspace-pm-web/pm/task/edit',
+      url: '/api/pm/task/actions/edit',
       method: 'post'
     },
     //项目管理－删除任务
     'project-delete-task': {
-      url: '/api/krspace-pm-web/pm/task/delete',
+      url: '/api/pm/task/actions/delete',
       method: 'delete'
     },
     //项目管理－查询任务
     'project-get-task': {
-      url: '/api/krspace-pm-web/pm/task/detail',
+      url: '/api/pm/task/detail',
       method: 'get'
     },
     //项目管理－查询任务列表
     'project-list-task': {
-      url: '/api/krspace-pm-web/pm/task/list',
+      url: '/api/pm/task/list',
       method: 'get'
     },
     //项目管理－项目进度列表
     'project-progress-list': {
-      url: '/api/krspace-pm-web/pm/project/list/type/schedule',
+      url: '/api/pm/project/list/type/schedule',
       method: 'get'
     },
      //项目管理－根据项目状态类型查询甘特图显示任务项
      'project-status-search': {
-      url: '/api/krspace-pm-web/pm/task-template/list',
+      url: '/api/pm/task-template/list',
       method: 'get'
     },
     //项目档案管理列表
     'project-archives-list': {
-      url: '/api/krspace-pm-web/pm/project/list/type/dashboard',
+      url: '/api/pm/project/list/type/dashboard',
       method: 'get'
     },
     //项目档案管理列表-新增项目
     'project-archives-add': {
-      url: '/api/krspace-pm-web/pm/project/save',
+      url: '/api/pm/project/actions/save',
       method: 'post'
     },
     //确定签署合同（项目进入待开业期）
     'sure-sign-project': {
-      url: '/api/krspace-pm-web/pm/project/signed',
+      url: '/api/pm/project/actions/signed',
       method: 'post'
     },
     //项目详情星星
     'project-detail-star': {
-      url: '/api/krspace-pm-web/pm/task/focus',
+      url: '/api/pm/task/actions/focus',
       method: 'post'
     },
     //根据项目id查询甘特图显示任务项
     'project-id-search': {
-      url: '/api/krspace-pm-web/pm/task/tree',
+      url: '/api/pm/task/tree',
       method: 'get'
     },
     //项目管理-档案管理-档案树部
     'project－archives-tree': {
-      url:'/api/krspace-pm-web/pm/form-group/list/type/tree',
+      url:'/api/pm/form-group/list/type/tree',
       method: 'get'
     },
     //项目管理-档案管理-字段部分详情
     'project－archives-file-detail': {
-      url:'/api/krspace-pm-web/pm/form-field/list/type/code',
+      url:'/api/pm/form-field/list/type/code',
       method: 'get'
     },
     //项目管理-档案管理-获取字段编辑记录
     'project－field-record': {
-      url:'/api/krspace-pm-web/pm/operate-log/field',
+      url:'/api/pm/operate-log/list/type/field',
       method: 'get'
     },
      //项目管理-档案管理-获取字段编辑记录
      'project－field-edit': {
-      url:'/api/krspace-pm-web/pm/project/edit',
+      url:'/api/pm/project/actions/edit',
       method: 'post'
     },
     //项目管理-项目档案-查看首页列表
     'get-project-home': {
-      url:'/api/krspace-pm-web/pm/project/home',
+      url:'/api/pm/project/home',
       method: 'get'
     },
      //项目管理-项目档案-项目任务
      'get-task-template-list': {
-      url:'/api/krspace-pm-web/pm/task-template/list',
+      url:'/api/pm/task-template/list',
       method: 'get'
     },
     

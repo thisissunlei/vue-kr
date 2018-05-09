@@ -1356,7 +1356,7 @@ import EditTask from '../project-detail/edit-task';
             changePage(page){
                 this.tabParams.page=page;
                 this.page=page;
-                // this.getTableData(this.tabParams);
+                this.getTableData(this.tabParams);
             },
             //新建按钮被点击
             newArchives(){
@@ -1418,7 +1418,7 @@ import EditTask from '../project-detail/edit-task';
         top:0;
         left:230px;
          .u-select{
-             width:240px;
+             width:245px;
              margin-right:30px;
              float:left;
              span{

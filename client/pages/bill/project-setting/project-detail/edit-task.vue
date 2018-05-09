@@ -96,7 +96,7 @@
             width="900"
         >
             <div slot="header" style="font-size:16px;color:#333;">
-                <div>已填写<span style="color:#151515;">{{getEdit.totalFields-getEdit.nullFields}}</span><span  style="color:#2A2A2A;">/{{getEdit.totalFields}}</span></div>
+                <div>已填写<span style="color:#151515;">{{fileDetailData.validFields}}</span><span  style="color:#2A2A2A;">/{{fileDetailData.totalFields}}</span></div>
                 <div style="margin-top:8px;">{{getEdit.name}}</div>
             </div>
             <ArchivesDetail @okClick="okClick" :projectId="projectId" v-if="fileDetailData.items" :data ="fileDetailData" />

@@ -83,7 +83,7 @@ export default {
                 let h = imgDetail.height;
                 
                if(type=="auto"){
-                    console.log("=======auto",type)
+                  
                    this.imgW = this.width + 'px'||'auto';
                    this.imgH = this.height + 'px'||'auto';
                    return ;
@@ -114,7 +114,7 @@ export default {
                     let newW = ( w/h)*this.height;//height 100%时
                     let newH = (h/w)*this.width;
                     if(newW<=this.width){
-                         console.log("---------width")
+                        
                         this.imgW = this.width +'px';
                         this.imgH = newH +'px;'
                         dom.style.top='50%';
@@ -128,7 +128,7 @@ export default {
                         dom.style.top=0+'px';
                         dom.style.marginLeft=-newW/2+'px';
                         dom.style.marginTop=0+'px';
-                        console.log("---------heigjt")
+                        
                     }
                 }
                

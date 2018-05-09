@@ -226,11 +226,12 @@ export default {
 			this.$emit('recordClick',this.value)
 		},
 		editClick(event){
-			// this.$emit("editClick",event)
+			this.$emit("editClick",event)
 			// var isclose = this.editClick();
 			// if(isclose){
 			// }
 			this.isEdit = !this.isEdit;
+
 			
 		},
 		cancelClick(){
@@ -359,6 +360,7 @@ export default {
 	.label-text{
 		padding-right: 20px;
 		font-size: 14px;
+		width: 250px;
 		max-width: 580px;
 		color: #333333;
 		font-weight:bold;

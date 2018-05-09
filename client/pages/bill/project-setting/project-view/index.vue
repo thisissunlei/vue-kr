@@ -1483,7 +1483,10 @@ import EditTask from '../project-detail/edit-task';
             top:0;
             z-index:100;
             .u-table-content{
-                width:1600px;
+                width:106%; 
+                min-width:1600px;
+               
+               
             }
            .u-table-box{
               overflow-x: hidden;
@@ -1538,7 +1541,8 @@ import EditTask from '../project-detail/edit-task';
               
           }
            .u-table-box-right{
-                width:1600px;
+                width:106%; 
+                min-width:1600px;
                 transform: translateX(-100px);
                 table{
                         th,td{
@@ -1601,8 +1605,6 @@ import EditTask from '../project-detail/edit-task';
     }
 
 }
-
-
 
 
 

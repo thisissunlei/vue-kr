@@ -192,16 +192,7 @@ export default  {
       url: '/api/krspace-pay/account/community/list?',
       method: 'get'
     },
-    //根据父级ID查询子级任务列表
-    'parent-search-kid': {
-      url: '/api/krspace-pm-web/pm/task/sub-list',
-      method: 'get'
-    },
-    //查看编辑记录
-    'watch-edit-record': {
-      url: '/api/krspace-pm-web/pm/operate-log/list',
-      method: 'get'
-    },
+  
     
     //账单中心--回款列表--未绑定列表
     'get-payment-unbind-list': {

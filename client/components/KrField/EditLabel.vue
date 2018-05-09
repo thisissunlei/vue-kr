@@ -356,6 +356,7 @@ export default {
 	.label-text{
 		padding-right: 20px;
 		font-size: 14px;
+		max-width: 580px;
 	}
 	.operation{
 		position: absolute;

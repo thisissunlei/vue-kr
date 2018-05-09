@@ -909,7 +909,7 @@ export default {
         .right-draw{
             position: absolute;
             overflow:hidden;
-            left: 210px;
+            left: 185px;
             right: 0px;
             .time-shaft-fixed{
                 position: absolute;

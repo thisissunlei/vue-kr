@@ -17,6 +17,7 @@
                 :clearable='clearable'
                 :filterable='filterable'
                 @on-change="change"
+                style="width:250px;"
             >
             <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
         </Select>

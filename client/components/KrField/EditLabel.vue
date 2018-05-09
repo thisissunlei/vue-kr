@@ -361,6 +361,7 @@ export default {
 		max-width: 580px;
 		color: #333333;
 		font-weight:bold;
+		word-break: break-all;
 	}
 	.operation{
 		position: absolute;

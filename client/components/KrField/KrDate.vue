@@ -15,6 +15,7 @@
                 :placeholder="placeholder"
                 :format="format"
                 @on-change="change"
+                style="width:250px;"
             />
         </EditLabel>
 	</div>

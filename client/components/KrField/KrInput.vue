@@ -20,6 +20,7 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
+                style="width:250px;"
             />
         </EditLabel>
 	</div>

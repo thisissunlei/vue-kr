@@ -13,15 +13,15 @@
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
             </div>
-            <Tabs size="default"  :animated="false">
-                <TabPane label="物业档案" name="tab1">
-                    <ArchivesManagement code="property"/>
+            <Tabs size="default" @on-click="tabClick" :animated="false">
+                <TabPane label="物业档案" name="property">
+                    <ArchivesManagement v-if="activeTab=='property'" code="property"/>
 
                 </TabPane>
-                <TabPane label="产品档案" name="tab2">
+                <TabPane label="产品档案"  name="product">
 
                     
-                    <ArchivesManagement code="product"/>
+                    <ArchivesManagement v-if="activeTab=='product'" code="product"/>
                 </TabPane>
                  <!-- <TabPane label="项目进度" name="tab3">
                         <GanttChart
@@ -192,6 +192,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
+            activeTab:'property',
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -230,6 +231,10 @@ export default {
     
     },
     methods:{
+        tabClick(name){
+            this.activeTab = name;
+            console.log(name,"ppppp")
+        },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom=document.getElementById('vue-chart-right-draw-content');

@@ -224,32 +224,9 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
-        // return;
-        //  this.scrollWidth= utils.getScrollBarSize();
+       
          GLOBALSIDESWITCH("false");
-        //  this.leftOver();
-        //  this.rightOver();
-        //  this.getSelectData();
-        //  setTimeout(() => {
-        //     var leftDom=document.getElementById('vue-chart-left-detail-list');
-        //     var rightDom = document.getElementById("vue-chart-right-draw-content");
-        //     var clientHeight = document.documentElement.clientHeight;
-        //     if(leftDom){
-        //         leftDom.style.maxHeight = clientHeight - 362+"px";
-        //     }
-        //     if(rightDom){
-        //         rightDom.style.maxHeight = clientHeight - 362 +"px";
-        //     }
-        //  }, 200);
-        //  window.addEventListener('resize',()=>{
-        //     var leftDom=document.getElementById('vue-chart-left-detail-list');
-        //     var rightDom = document.getElementById("vue-chart-right-draw-content");
-        //     var clientHeight = document.documentElement.clientHeight;
-        //     var dom = document.getElementById('layout-content-main');
-        //     dom.style.height = document.documentElement.clientHeight-130 + "px"
-        //     leftDom.style.maxHeight = clientHeight - 362+"px";
-        //     rightDom.style.maxHeight = clientHeight - 362 +"px";
-        //  },false)
+       
     
     },
     methods:{
@@ -326,7 +303,7 @@ export default {
            this.cancelStar();
         },
         currentClick(){
-           this.initTree();
+        //    this.initTree();
         },
         cancelStar(){
             this.openStar=!this.openStar;

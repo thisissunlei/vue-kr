@@ -13,8 +13,7 @@
                     class="actual"
                     :style="{
                         background:getActualBgColor(),
-                        color:getActualColor(),
-                        border:getActualBorder()
+                        color:'#495060'
                     }"
                 >{{data.taskStatusDesc}}</span>
             </span>
@@ -48,16 +47,12 @@ export default{
    methods:{
        getActualBgColor(){
             let taskStatus = this.data.taskStatus;
-            return publicFn.getActualBgColor(taskStatus);
+            if(taskStatus == "DONE"){
+                return '#afd882'
+            }else{
+                return "#eee"
+            }
        },
-       getActualColor(){
-          let taskStatus = this.data.taskStatus;
-            return publicFn.getLabelColor(taskStatus);
-       },
-       getActualBorder(){
-            let taskStatus = this.data.taskStatus;
-            return publicFn.getActualBorder(taskStatus)
-       }
    }
 }
 	

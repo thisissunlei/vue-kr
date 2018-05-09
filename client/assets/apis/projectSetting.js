@@ -95,5 +95,15 @@ module.exports = {
       url:'/api/pm/task-template/list',
       method: 'get'
     },
+    //根据父级ID查询子级任务列表
+    'parent-search-kid': {
+      url: '/api/krspace-pm-web/pm/task/sub-list',
+      method: 'get'
+    },
+    //查看编辑记录
+    'watch-edit-record': {
+      url: '/api/pm/operate-log/list/type/project',
+      method: 'get'
+    },
     
 }

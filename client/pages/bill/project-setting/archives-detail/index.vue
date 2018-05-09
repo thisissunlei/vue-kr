@@ -195,8 +195,9 @@ export default {
             data.fieldValue = data.value;
             data.groupCode = "property";
             this.$http.post('project－field-edit',data).then((response)=>{
-                callback();
+               
                 this.$emit('okClick');
+                 callback();
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{

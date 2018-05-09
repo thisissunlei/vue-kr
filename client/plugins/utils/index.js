@@ -121,6 +121,7 @@ import tableSort from './tableSort';
         a.href = href;
         a.target = '_blank';
         //a.download = filename;
+        a.download = filename;
         a.click();
      
     }

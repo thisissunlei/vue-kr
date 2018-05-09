@@ -54,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div v-if="getEdit.code" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
+                <div v-if="getEdit.code||getEdit.nullFields" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                     <div>需要填写档案
                         <span style="font-size:20px;color:#ccc;">{{getEdit.totalFields}}</span>项，尚未完成
                         <span style="font-size:20px;color:#000;">{{getEdit.nullFields}}</span>项，
@@ -96,7 +96,7 @@
             width="900"
         >
             <div slot="header" style="font-size:16px;color:#333;">
-                <div>已填写<span style="color:#151515;">{{fileDetailData.validFields}}</span><span  style="color:#2A2A2A;">/{{fileDetailData.totalFields}}</span></div>
+                <div>已填写<span style="color:#151515;">{{validFields}}</span><span  style="color:#2A2A2A;">/{{totalFields}}</span></div>
                 <div style="margin-top:8px;">{{getEdit.name}}</div>
             </div>
             <ArchivesDetail @okClick="okClick" :projectId="projectId" v-if="fileDetailData.items" :data ="fileDetailData" />
@@ -152,7 +152,9 @@ export default {
             endOpen:false,
             isEndEdit:false,
             newStart:'',
-            newEnd:''
+            newEnd:'',
+            totalFields:0,
+            validFields:0
 
         }
     },
@@ -205,7 +207,8 @@ export default {
 
         },
         okClick(){
-            
+          
+              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{})
         },
         endOk(){
             this.actualEnd = this.newEnd;
@@ -234,11 +237,18 @@ export default {
             return Object.assign({},this.getEdit)
         },
         //去填写详情
-        getArchivesDetail(data){
-            this.fileDetailData = {};
+        getArchivesDetail(data,callback){
+           
             this.$http.get('project－archives-file-detail',data).then((response)=>{
-                this.fileDetailData = Object.assign({},response.data);
-                this.switchGoArchives();
+               
+                if(!callback){
+                     this.fileDetailData = Object.assign({},response.data);
+                    this.switchGoArchives();
+                    
+                }
+                this.totalFields=response.data.totalFields;
+                this.validFields = response.data.validFields;
+                
             }).catch((error)=>{
                 this.$Notice.error({
                 title: error.message,

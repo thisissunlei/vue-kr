@@ -360,7 +360,7 @@ export default {
 	.label-text{
 		padding-right: 20px;
 		font-size: 14px;
-		width: 250px;
+		min-width:250px;
 		max-width: 580px;
 		color: #333333;
 		font-weight:bold;

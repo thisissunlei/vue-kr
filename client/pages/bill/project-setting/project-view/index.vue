@@ -1356,7 +1356,7 @@ import EditTask from '../project-detail/edit-task';
             changePage(page){
                 this.tabParams.page=page;
                 this.page=page;
-                // this.getTableData(this.tabParams);
+                this.getTableData(this.tabParams);
             },
             //新建按钮被点击
             newArchives(){

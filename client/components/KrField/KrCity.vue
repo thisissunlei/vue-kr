@@ -9,6 +9,7 @@
             :isOk="isOk"
         >
             <Cascader
+                ref="cityCascader"
                 :data="data"
                 v-model="cityValue"
                 :placeholder="placeholder"
@@ -73,6 +74,8 @@ export default {
 		}
     },
     mounted(){
+        // var cityDom = this.refs.cityCascader.visible = true;
+        console.log()
         // if(this.mask){
         //     this.labelValue="";
         //     this.cityValue='';
@@ -85,7 +88,7 @@ export default {
             if(!value){
                 return [];
             }
-            console.log("00000000",value.split(','))
+           
             return value.split(',');
         },
         recordClick(value){
@@ -100,6 +103,10 @@ export default {
        
         //获取省
         getProvince(values,data){
+            
+            if(!values || !values.length){
+                return '';
+            }
             var children = [];
             var str = '';
             for(var i=0;i<data.length;i++){
@@ -139,9 +146,9 @@ export default {
             this.$emit('visibleChange',event)
         },
         okClick(){
-            this.cityValue = this.newValue;
+            this.cityValue = this.newValue||'';
             this.labelValue = this.getProvince(this.cityValue,this.data);
-            var cityValue = this.cityValue.join();
+            var cityValue = this.cityValue.join()||'';
             var params = {
                 name:this.name,
                 value:cityValue,

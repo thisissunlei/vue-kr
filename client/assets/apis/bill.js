@@ -192,7 +192,6 @@ export default  {
       url: '/api/krspace-pay/account/community/list?',
       method: 'get'
     },
-  
     
     //账单中心--回款列表--未绑定列表
     'get-payment-unbind-list': {

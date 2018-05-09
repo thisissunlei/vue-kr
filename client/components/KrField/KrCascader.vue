@@ -14,7 +14,7 @@
                 :clearable='clearable'
                 @on-change="change"
                 @on-visible-change="visibleChange"
-                style="width:252px;"
+                style="width:250px;"
             />
         </EditLabel>
 	</div>

@@ -249,9 +249,9 @@ export default {
         padding-bottom:50px;
         .field-title{
             display:inline-block;
-            width:100px;
+            width:120px;
             vertical-align: top;
-            padding-right: 5px;
+            padding-right: 20px;
             font-size: 14px;
             color: #333333;
         }

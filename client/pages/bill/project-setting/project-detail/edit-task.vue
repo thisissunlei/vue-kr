@@ -33,7 +33,7 @@
                     </div>
                     <div class="tiem-box" style="margin-left:19px;">
                         <div class="time-title">完成时间</div>
-                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit">✔️已完成</div>
+                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
                         <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
                             <DatePicker
                                 :open="endOpen"
@@ -271,6 +271,17 @@ export default {
         padding: 0px 45px;
         margin-top: 30px;
         box-sizing:content-box;
+    }
+    .ok-icon{
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        background-image: url(./images/ok.svg);
+        background-size:100%;
+        position: relative;
+        top: 5px;
+        left: -5px;
+        background-repeat: no-repeat;
     }
     .file-col{
         margin: 10px 0px 20px;

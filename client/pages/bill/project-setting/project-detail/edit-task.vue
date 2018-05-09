@@ -37,7 +37,7 @@
                         <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
                             <DatePicker
                                 :open="endOpen"
-                                :value="actualEnd"
+                                :value="newEnd"
                                 confirm
                                 type="date"
                                 :clearable="false"
@@ -172,6 +172,10 @@ export default {
         },
         switchEndTime(){
             this.endOpen = !this.endOpen;
+            if(this.endOpen){
+                this.newEnd = this.actualEnd;
+                console.log(this.newEnd,"ppppp")
+            }
         },
         startChnage(date){
             this.newStart = date
@@ -219,13 +223,20 @@ export default {
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchEndTime();
-            console.log(data.actualEndTime,"kkkkkk")
             this.$emit("dataChange",data);
         },
         switchEndEdit(){
             // this.endOpen = true;
+           
             this.actualEnd = this.newEnd = (new Date()).getTime();
-            this.isEndEdit = !this.isEndEdit;
+           
+           
+            this.params.actualEndTime = this.actualEnd;
+            this.isEndEdit = true;
+            var data = Object.assign({},this.params);
+            data.planEndTime = this.numToDate(data.planEndTime);
+            data.actualEndTime = this.numToDate(data.actualEndTime)
+            this.$emit("dataChange",data);
         },
         goArchivesClick(){
            

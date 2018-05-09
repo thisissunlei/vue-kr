@@ -151,12 +151,12 @@ import EditTask from '../project-detail/edit-task';
                 openMessage:false,
                 taskStatus:'',
                 itemDetail:{},
-                pageSize:15,
+                pageSize:10,
                 page:1,
                 tableFlag:false,
                 tabParams:{
                     page:1,
-                    pageSize:15,
+                    pageSize:10,
                 },
                 taskId:1869,//任务id
                 projectId:51,//项目id
@@ -1233,6 +1233,7 @@ import EditTask from '../project-detail/edit-task';
             getTableData(tabParams){
                     this.$http.get('get-project-home', tabParams).then((res)=>{
                             this.projectList=res.data.items;
+                            this.totalCount=res.data.totalCount;
                         }).catch((err)=>{
                             this.$Notice.error({
                                 title:err.message

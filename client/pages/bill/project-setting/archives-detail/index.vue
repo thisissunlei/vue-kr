@@ -112,7 +112,7 @@ export default {
     },
     methods:{
         getIsOk(str1,str2){
-            console.log(str1!=str2,"lllll")
+           
             return str1 != str2;
         },
         change(event,param){
@@ -127,7 +127,7 @@ export default {
             }else{
                 return;
             }
-            console.log(event,"pppppp",param)
+         
         },
         getTreeActive(){
             var groupDoms = document.querySelectorAll('.archivesDetailDom');
@@ -196,6 +196,7 @@ export default {
             data.groupCode = "property";
             this.$http.post('project－field-edit',data).then((response)=>{
                 callback();
+                this.$emit('okClick');
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{

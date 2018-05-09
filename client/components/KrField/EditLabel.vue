@@ -3,7 +3,8 @@
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
 			<div v-if="!isEdit && labeType=='label'" >
-				<div class="label-text">{{value||'无'}}</div>
+				<div v-if="value" class="label-text">{{value}}</div>
+				<div v-if="!value" class="error-label-text">未填写</div>
 				<span class="edit-icon" @click="editClick"></span>
 				<span class="record-icon" @click="recordClick"></span>
 				
@@ -360,6 +361,14 @@ export default {
 		font-size: 14px;
 		max-width: 580px;
 		color: #333333;
+		font-weight:bold;
+		word-break: break-all;
+	}
+	.error-label-text{
+		padding-right: 20px;
+		font-size: 14px;
+		max-width: 580px;
+		color: #ff6868;
 		font-weight:bold;
 		word-break: break-all;
 	}

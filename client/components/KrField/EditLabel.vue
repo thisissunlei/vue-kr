@@ -68,7 +68,7 @@
 
 
 
-			<div v-if="isEdit">
+			<div  :style="{display:isEdit?'block':'none'}">
 				<div class="edit-label-mask" @click="maskClick"></div>
 				<div class="edit-field-box">
 					<slot></slot>
@@ -148,7 +148,6 @@ export default {
 		}
 	},
 	mounted(){
-		console.log(this.isOk,"pppp")
 	},
 	methods:{
 		maskClick(){
@@ -268,6 +267,9 @@ export default {
 		min-height: 198px;
 		background:  #EEEEEE;
 		padding: 1px;
+		border-radius: 4px;
+		border: 1px dashed  rgba(79, 158, 237,0.5);
+		
 		.img-box{
 			border-radius: 4px;
 		}
@@ -357,6 +359,8 @@ export default {
 		padding-right: 20px;
 		font-size: 14px;
 		max-width: 580px;
+		color: #333333;
+		font-weight:bold;
 	}
 	.operation{
 		position: absolute;

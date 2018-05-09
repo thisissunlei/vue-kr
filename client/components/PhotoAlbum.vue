@@ -28,7 +28,7 @@
                 >
                 </div>
                 <!-- <span class="close-btn " @click="close"></span> -->
-                <Button class="down-img" @click="downFile(data[urlIndex].url)" type="primary">下载原图</Button>
+                <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl)" type="primary">下载原图</Button>
                 <div class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
             </div>
             
@@ -85,7 +85,7 @@ export default {
             this.$emit('close')
         },
         downFile(url){
-            
+         
             this.$emit('downFile',url)
         }
     },

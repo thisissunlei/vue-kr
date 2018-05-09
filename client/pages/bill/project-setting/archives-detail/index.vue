@@ -1,5 +1,9 @@
 <template>
     <div class="archives-detail" >
+        <div
+            v-if="code"
+            style="font-size:14px;color:#333;margin-bottom:30px;"
+        >{{(code=="property"?"物业档案-":"产品档案-") +collapseData.label}}</div>
         <div class="archivesDetailDom"  v-for="(item ,index) in collapseData.items" :key="index">
             <ClassificationBox  
                 :value="item.index" 
@@ -75,6 +79,9 @@ export default {
             type:String,
 
         },
+        code:{
+            type:String
+        }
     },
     data(){
        return {
@@ -200,7 +207,7 @@ export default {
         },
         recordClick(value,name){
             console.log("value",value)
-            var data = {fieldName:name,projectId:this.projectId};
+            var data = {fieldName:name,projectId:this.projectId,groupCode:this.collapseData.code};
             this.$http.get('project－field-record',data).then((response)=>{
                 // console.log(response,"lllllllll")
                 this.recordData = Object.assign({},response.data)
@@ -245,6 +252,8 @@ export default {
             width:100px;
             vertical-align: top;
             padding-right: 5px;
+            font-size: 14px;
+            color: #333333;
         }
         .ui-kr-select .ivu-select-dropdown{
            position: fixed !important;

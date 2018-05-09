@@ -278,7 +278,7 @@ export default {
         }
     },
     mounted(){
-        console.log(this.isOk,"kkkkkk")
+       
     },
     methods:{
         recordClick(value){

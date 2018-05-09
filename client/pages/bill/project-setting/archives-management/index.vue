@@ -11,7 +11,7 @@
                 />
             </div>
             <div :id="archivesBoxId" class="archives-box" ref="archivesBox">
-                <ArchivesDetail @krScroll="boxScroll" :archivesBoxId="archivesBoxId" :projectId="queryData.id" v-if="fileDetailData.items"  :data ="fileDetailData" />
+                <ArchivesDetail :code="code" @krScroll="boxScroll" :archivesBoxId="archivesBoxId" :projectId="queryData.id" v-if="fileDetailData.items"  :data ="fileDetailData" />
             </div>
         </div>
   </div>

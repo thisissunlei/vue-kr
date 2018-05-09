@@ -65,28 +65,28 @@ export default {
 	data(){
 		return {
             isEdit:false,
-            cityValue:this.strToArr(this.value),
+            cityValue:[].concat(this.strToArr(this.value)),
             labelValue:'',
             id:this.value,
             t_id:0,
-            newValue:this.strToArr(this.value),
+            newValue:[].concat(this.strToArr(this.value)),
 		}
     },
     mounted(){
-        if(this.mask){
-            this.labelValue="";
-            this.cityValue='';
-        }  
+        // if(this.mask){
+        //     this.labelValue="";
+        //     this.cityValue='';
+        // }  
         this.labelValue= this.getProvince(this.cityValue,this.data);
     },
 	methods:{
         strToArr(value){
-            console.log(value,"---------")
+           
             if(!value){
                 return [];
-            }else{
-                return value.split(',');
             }
+            console.log("00000000",value.split(','))
+            return value.split(',');
         },
         recordClick(value){
             
@@ -150,7 +150,7 @@ export default {
             this.$emit("okClick",params);
         },
         cancelClick(event){
-            this.cityValue=this.id;
+            this.cityValue=[].concat(this.strToArr(this.value));
         }
 	}
 }

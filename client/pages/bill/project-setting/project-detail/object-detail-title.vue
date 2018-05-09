@@ -46,7 +46,7 @@ export default{
    },
    methods:{
        getActualBgColor(){
-            let taskStatus = this.data.taskStatus;
+            let taskStatus = this.taskStatus;
             if(taskStatus == "DONE"){
                 return '#afd882'
             }else{

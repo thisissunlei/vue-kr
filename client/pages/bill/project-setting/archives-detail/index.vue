@@ -237,15 +237,18 @@ export default {
 
 <style lang="less" >
    .archives-detail{
-       background: #ffffff;
-       padding:20px;
-       padding-bottom:50px;
-       .field-title{
-           display:inline-block;
-           width:100px;
-           vertical-align: top;
-           padding-right: 5px;
-       }
+        background: #ffffff;
+        padding:20px;
+        padding-bottom:50px;
+        .field-title{
+            display:inline-block;
+            width:100px;
+            vertical-align: top;
+            padding-right: 5px;
+        }
+        .ui-kr-select .ivu-select-dropdown{
+           position: fixed !important;
+        }
         .record-title{
             display: inline-block;
             display: inline-block;

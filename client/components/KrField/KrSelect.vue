@@ -17,11 +17,8 @@
                 :clearable='clearable'
                 :filterable='filterable'
                 @on-change="change"
-<<<<<<< HEAD
-                style="width:252px;"
-=======
+
                 style="width:250px;"
->>>>>>> feature/项目管理档案
             >
             <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
         </Select>

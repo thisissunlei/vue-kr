@@ -219,12 +219,16 @@ export default {
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchEndTime();
-            console.log(data.actualEndTime,"kkkkkk")
             this.$emit("dataChange",data);
         },
         switchEndEdit(){
             // this.endOpen = true;
             this.actualEnd = this.newEnd = (new Date()).getTime();
+            this.params.actualEndTime = this.actualEnd;
+            var data = Object.assign({},this.params);
+            data.planEndTime = this.numToDate(data.planEndTime);
+            data.actualEndTime = this.numToDate(data.actualEndTime)
+            this.$emit("dataChange",data);
             this.isEndEdit = !this.isEndEdit;
         },
         goArchivesClick(){

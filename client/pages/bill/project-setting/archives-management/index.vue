@@ -70,6 +70,7 @@ export default {
         },
         //获取档案详情
         getArchivesDetail(data){
+            this.activeIndex = 0;
             data.projectId = this.queryData.id;
             this.fileDetailData = {};
             this.$http.get('project－archives-file-detail',data).then((response)=>{

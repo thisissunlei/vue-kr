@@ -32,6 +32,7 @@ export default {
           type:String,
         }
     },
+   
     data(){
        return {
             openIndex:0,
@@ -82,12 +83,14 @@ export default {
             })
         },
         setContentHeight(){
-          var newHeight = document.body.clientHeight-243;
+           
+          var newHeight = document.body.clientHeight-255;
          
           if(newHeight !== wHeight){
             
             var collapseDom = document.getElementById(this.collapseId);
             var archivesBoxDom = document.getElementById(this.archivesBoxId);
+             console.log(newHeight,"pppp---========")
             collapseDom.style.height = newHeight+'px';
             archivesBoxDom.style.height = newHeight+'px';
             wHeight = newHeight;

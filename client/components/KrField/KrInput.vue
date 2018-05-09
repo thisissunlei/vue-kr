@@ -20,7 +20,11 @@
                 @on-keyup="keyup"
                 @on-keydown="keydown"
                 @on-keypress="keypress"
+<<<<<<< HEAD
                 style="width:252px;"
+=======
+                style="width:250px;"
+>>>>>>> feature/项目管理档案
             />
         </EditLabel>
 	</div>

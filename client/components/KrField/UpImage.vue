@@ -114,7 +114,6 @@ export default{
 			
 			var that = this;
             var file = event.target.files[0];
-            console.log(file.type.match('image.*'),"llllll")
             if (!file.type.match('image.*')) {
                 return false;
             }

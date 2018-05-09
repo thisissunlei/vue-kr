@@ -254,6 +254,7 @@ export default {
             padding-right: 20px;
             font-size: 14px;
             color: #333333;
+
         }
         .ui-kr-select .ivu-select-dropdown{
            position: fixed !important;

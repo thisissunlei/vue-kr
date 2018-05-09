@@ -853,7 +853,7 @@ export default {
         box-sizing: border-box;
         display:inline-block;
         position: relative;
-        padding:0 25px;
+        //padding:0 25px;
         margin-top: 3px;
         #gantt-chart-tool-tip{
             max-width: 280px;
@@ -910,7 +910,7 @@ export default {
             position: absolute;
             overflow:hidden;
             left: 210px;
-            right: 25px;
+            right: 0px;
             .time-shaft-fixed{
                 position: absolute;
                 background: #ffffff;

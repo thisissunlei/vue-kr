@@ -224,7 +224,6 @@ export default {
         height: 30px;
         top: -1px;
         width: 100%;
-        cursor: pointer;
         .line{
             border-bottom:1px dashed #E9F0F6;
             position: relative;
@@ -257,7 +256,6 @@ export default {
             padding-left:6px;
             color: #666666;
             position: absolute;
-            cursor: pointer;
             top: 0px;
             overflow: hidden;
             text-overflow:ellipsis;

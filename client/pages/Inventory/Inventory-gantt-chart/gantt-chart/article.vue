@@ -258,7 +258,7 @@ export default {
             color: #666666;
             position: absolute;
             cursor: pointer;
-            top: 1px;
+            top: 0px;
             overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;

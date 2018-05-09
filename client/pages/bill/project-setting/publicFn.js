@@ -137,9 +137,9 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     }
     
     if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
-        tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 45 +'px';
+        tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 65 +'px'; 
         angleDom.className = 'top-triangle';
-        angleDom.style.top = parseInt(angleDom.style.top)-35+ "px";
+        angleDom.style.top = parseInt(angleDom.style.top)-55+ "px";
     }else {
         angleDom.className = 'bottom-triangle'
     }

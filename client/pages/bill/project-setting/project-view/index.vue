@@ -1418,7 +1418,7 @@ import EditTask from '../project-detail/edit-task';
         top:0;
         left:230px;
          .u-select{
-             width:240px;
+             width:245px;
              margin-right:30px;
              float:left;
              span{

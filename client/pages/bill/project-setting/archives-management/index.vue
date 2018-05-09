@@ -90,7 +90,7 @@ export default {
             
             var collapseDom = document.getElementById(this.collapseId);
             var archivesBoxDom = document.getElementById(this.archivesBoxId);
-             console.log(newHeight,"pppp---========")
+           
             collapseDom.style.height = newHeight+'px';
             archivesBoxDom.style.height = newHeight+'px';
             wHeight = newHeight;

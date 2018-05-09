@@ -6,6 +6,7 @@
             @okClick="okClick"
             @cancelClick="cancelClick"
             @recordClick="recordClick"
+            @editClick="editClick"
             :isOk="isOk"
         >
             <Cascader
@@ -74,8 +75,8 @@ export default {
 		}
     },
     mounted(){
-        // var cityDom = this.refs.cityCascader.visible = true;
-        console.log()
+        
+        // console.log()
         // if(this.mask){
         //     this.labelValue="";
         //     this.cityValue='';
@@ -83,6 +84,14 @@ export default {
         this.labelValue= this.getProvince(this.cityValue,this.data);
     },
 	methods:{
+        editClick(){
+            // this.$refs.cityCascader.filterable = true
+
+            // this.$refs.cityCascader.visible=true;
+            // console.log(this.$refs.cityCascader.visible)
+
+            
+        },
         strToArr(value){
            
             if(!value){
@@ -96,7 +105,7 @@ export default {
             this.$emit('recordClick',value)
         },
         change(value){
-           
+            // console.log("-----",this.$refs.cityCascader.visible)
             this.$emit('change',value);
             this.newValue = [].concat(value);
         },
@@ -146,6 +155,7 @@ export default {
             this.$emit('visibleChange',event)
         },
         okClick(){
+           
             this.cityValue = this.newValue||'';
             this.labelValue = this.getProvince(this.cityValue,this.data);
             var cityValue = this.cityValue.join()||'';

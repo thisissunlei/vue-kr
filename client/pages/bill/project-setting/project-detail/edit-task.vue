@@ -11,7 +11,7 @@
                             <div v-if="planEnd||isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
                                 <DatePicker
                                     :open="startOpen"
-                                    :value="planEnd"
+                                    :value="newStart"
                                     confirm
                                     type="date"
                                     @on-change="startChnage"
@@ -151,8 +151,8 @@ export default {
             isStartEdit:false,
             endOpen:false,
             isEndEdit:false,
-            newStart:'',
-            newEnd:'',
+            newStart:this.planEnd||'',
+            newEnd:this.actualEnd||'',
             totalFields:0,
             validFields:0
 
@@ -168,6 +168,7 @@ export default {
     methods:{
         switchStartTime(){
             this.startOpen = !this.startOpen;
+            
         },
         switchEndTime(){
             this.endOpen = !this.endOpen;
@@ -198,6 +199,7 @@ export default {
         },
         switchStartEdit(){
             this.startOpen = true;
+            this.newStart = (new Date()).getTime();
             this.isStartEdit = !this.isStartEdit;
         },
         endChange(data){
@@ -221,7 +223,8 @@ export default {
             this.$emit("dataChange",data);
         },
         switchEndEdit(){
-            this.endOpen = true;
+            // this.endOpen = true;
+            this.actualEnd = this.newEnd = (new Date()).getTime();
             this.isEndEdit = !this.isEndEdit;
         },
         goArchivesClick(){

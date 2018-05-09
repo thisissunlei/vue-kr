@@ -96,7 +96,7 @@
     /> 
     <Drawer 
         :openDrawer="openEditTask"
-        iconType="view-icon"
+      
         :close="cancelEditTask"
         width="660"
     >   
@@ -1287,6 +1287,7 @@ import EditTask from '../project-detail/edit-task';
                 dataParams.actualEndTime= dataParams.actualEndTime?dataParams.actualEndTime+' 00:00:00':'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     this.getTableData(this.tabParams);
+                    this.getEditTaskData(this.taskId,()=>{})
                     // this.getListData(this.ids);
                 
                     // if(response.code>1){

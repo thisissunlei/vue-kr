@@ -194,12 +194,12 @@ export default  {
     },
     //根据父级ID查询子级任务列表
     'parent-search-kid': {
-      url: '/api/krspace-erp-web/pm/task/sub-list',
+      url: '/api/krspace-pm-web/pm/task/sub-list',
       method: 'get'
     },
     //查看编辑记录
     'watch-edit-record': {
-      url: '/api/krspace-erp-web/pm/operate-log/list',
+      url: '/api/krspace-pm-web/pm/operate-log/list',
       method: 'get'
     },
     

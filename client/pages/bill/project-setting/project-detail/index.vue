@@ -677,9 +677,34 @@ export default {
        width:100%;
        background: #fff;
        display:inline-block;
-       .ivu-tabs-bar{
-            margin-bottom:0px;
+       .ivu-tabs{
+            overflow: visible;
         }
+        .nav-text.ivu-tabs-nav{
+            width: 100%;
+        }
+        .ivu-tabs-ink-bar{
+            top:0px;
+            height: 4px;
+           
+            border-top: 0px;
+            border-bottom: 0px;
+            box-sizing: border-box;
+        }
+        .ivu-tabs-nav .ivu-tabs-tab{
+            width: 50%;
+            text-align: center;
+            line-height: 35px;
+            padding: 8px 20px;
+            
+        }
+        .ivu-tabs-no-animation{
+            overflow: visible !important;
+        }
+        .ivu-tabs-bar{
+            margin: 0px;
+        }
+       
        .detail-title{
            background: #F5F6FA;
            height:50px;

@@ -56,8 +56,8 @@
                 </div>
                 <div v-if="getEdit.code" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                     <div>需要填写档案
-                        <span style="font-size:20px;color:#ccc;">{{getEdit.nullFields}}</span>项，尚未完成
-                        <span style="font-size:20px;color:#000;">{{getEdit.totalFields}}</span>项，
+                        <span style="font-size:20px;color:#ccc;">{{getEdit.totalFields}}</span>项，尚未完成
+                        <span style="font-size:20px;color:#000;">{{getEdit.nullFields}}</span>项，
                         <span style="font-size:20px;color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
                 </div>
             </div>
@@ -92,9 +92,13 @@
 
         <Modal
             v-model="openGoArchives"
-            title="提示信息"
+           
             width="900"
         >
+            <div slot="header" style="font-size:16px;color:#333;">
+                <div>已填写<span style="color:#151515;">{{getEdit.totalFields-getEdit.nullFields}}</span><span  style="color:#2A2A2A;">/{{getEdit.totalFields}}</span></div>
+                <div style="margin-top:8px;">{{getEdit.name}}</div>
+            </div>
             <ArchivesDetail :projectId="projectId" v-if="fileDetailData.items" :data ="fileDetailData" />
             
             <div slot="footer">
@@ -179,6 +183,9 @@ export default {
             this.$emit("dataChange",data);
         },
         numToDate(num){
+            if(!num){
+                return '';
+            }
             if(!isNaN(num)){
                 return dateUtils.dateToStr("YYYY-MM-DD", new Date(num));
             }
@@ -204,7 +211,7 @@ export default {
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchEndTime();
-
+            console.log(data.actualEndTime,"kkkkkk")
             this.$emit("dataChange",data);
         },
         switchEndEdit(){
@@ -219,48 +226,9 @@ export default {
         switchGoArchives(){
             this.openGoArchives = !this.openGoArchives;
         },
-        editActualEndTime(value){
-            
-            if(value == "start" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
-                return true;
-            }
-            if(value=="end"&& this.planStart && this.planEnd && this.planStart<=this.planEnd && this.actualStart){
-                return true;
-            }
-            if(value == "title" && this.planStart && this.planEnd && this.planStart<=this.planEnd){
-                return true;
-            }
-            return false;
-        },
         getFormItem(){
           
             return Object.assign({},this.getEdit)
-        },
-        selectTodayStart(){
-           
-            this.params.actualStartTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());
-            this.actualStartChange( this.params.actualStartTime)
-        },
-        selectTodayEnd(){
-            
-            this.params.actualEndTime = dateUtils.dateToStr("YYYY-MM-DD",new Date());  
-            this.actualEndChange( this.params.actualEndTime)
-        },
-        planStartChange(params){
-        
-            // this.planStart=params;
-            // if(this.planStart&&this.planEnd&&this.planStart>this.planEnd){
-            //     this.dateError=true;
-            // }else{
-            //     this.dateError=false;
-            //     this.params.planStartTime = params;
-            //     var data = Object.assign({},this.params);
-               
-            //     this.$emit('dataChange',data)
-            // }
-        },
-        actualStartChange(){
-
         },
         //去填写详情
         getArchivesDetail(data){

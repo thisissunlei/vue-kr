@@ -119,7 +119,7 @@ import tableSort from './tableSort';
     function downFile(href, filename) {
         var a = document.createElement('a');
         a.href = href;
-        a.target = '_blank';
+        // a.target = '_blank';
         //a.download = filename;
         a.download = filename;
         a.click();
@@ -129,11 +129,13 @@ import tableSort from './tableSort';
     function downImg(href, filename) {
         console.log("oooooo")
         var a = document.createElement('a');
+        var aspanDom = document.createElement('span');
         a.href = href;
         // a.target = '_blank';
         //a.download = filename;
         a.download = filename;
-        // document.body.appendChild(a);
+        a.appendChild(aspanDom);
+
         a.click();
         
      

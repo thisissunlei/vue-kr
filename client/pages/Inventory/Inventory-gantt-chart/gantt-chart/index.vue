@@ -34,14 +34,14 @@
                 <div 
                     :class="head?'calibration calibrationFixed':'calibration'" 
                     id="gantt-chart-calibration"
-                    :style="{left:(head?left:0)+'px',width:width+'px'}"
+                    :style="head?{left:(head?left:0)+'px',width:width+'px'}:{left:(head?left:0)+'px'}"
                   >
 
-                 <div class="add-left"  @click="lastTurnPage">
+                 <div class="add-left"  @click="lastTurnPage" style="borderTop:solid 1px #F6F6F6;">
                     <span :class="leftPic?'add-left-pic add-left-pic-new':'add-left-pic'"></span>
                  </div>
 
-                 <div class="add-right" @click="nextTurnPage">
+                 <div class="add-right" @click="nextTurnPage" style="borderTop:solid 1px #F6F6F6;">
                     <span :class="rightPic?'add-right-pic add-right-pic-new':'add-right-pic'"></span>
                 </div>
 

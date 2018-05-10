@@ -77,7 +77,7 @@
         if(j_li.length){
             j_li[0].setAttribute("class", "active");
         }
-        
+
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -98,15 +98,15 @@
     }
     //导航渲染
     var GlobalNav = function () {
-       
-        
+
+
         this.state = {
             navs: [],
             user: {
                 nickname: ''
             },
             salidNav: [],
-            
+
         };
         this.menuBtnBacks = [];
         this.isInit = false;
@@ -421,7 +421,7 @@
     global.LISTENSIDEBAROPEN = globalNav.listenSidebarOpen;
 
     global.GLOBALHEADERSET = Router.setDefaultHeader;
-    
+
 
     Router.init();
     //第一级菜单
@@ -519,7 +519,7 @@
             primaryText: "客户会员",
             router:'customer',
             type:'vue',
-           
+
             menuItems: [
                 {
                     primaryText: '客户',
@@ -554,8 +554,8 @@
                             router: 'user/customerManage/customerList',
                             menuCode: 'oper_csr_base',
                         },
-                    ]   
-                }, 
+                    ]
+                },
                 {
                     primaryText: '会员',
                     iconName: 'icon-donething',
@@ -587,8 +587,8 @@
                             router: 'user/personalManage/peopleState',
 
                         },
-                    ]   
-                }, 
+                    ]
+                },
             ]
         }
     }
@@ -598,14 +598,14 @@
             primaryText: "产品商品",
             router: 'product',
             originUrl: '#/product/statistical/index',
-            menuItems: [ 
+            menuItems: [
                 {
                     primaryText: '产品商品',
                     iconName: 'icon-donething',
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-                        
+
                         {
 
                             primaryText: '社区',
@@ -649,7 +649,7 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-                        
+
                         {
                             primaryText: '门禁权限组管理',
                             menuCode: 'auth_user_group_list',
@@ -687,8 +687,8 @@
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]   
-                }, 
+                    ]
+                },
             ]
         }
 
@@ -735,7 +735,7 @@
                     },
                 ]
             },
-            
+
 
 
 
@@ -797,7 +797,7 @@
                             menuCode: 'oper_opinion_base',
                             router: 'operation/communityAllocation/opinion'
                         },
-                        
+
                         {
                             primaryText: '登录日志',
                             router: 'permission/loginLog',
@@ -813,13 +813,13 @@
                             menuCode: 'op_member_coupon_external',
                             type: 'vue',
                             router: 'app-manage/member-welfare'
-                        }, 
+                        },
                         // {
                         //     primaryText: '免费额度优惠券',
                         //     menuCode: 'op_member_coupon_internal',
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
-                        // },   
+                        // },
                     ]
                 },
                 {
@@ -828,7 +828,7 @@
                     iconColor: '#79859a',
                     router: 'activity',
                     menuItems: [
-                        
+
                         {
                             primaryText: '社区信息',
                             menuCode: 'krspace_cmt',
@@ -845,6 +845,11 @@
                             type:'vue',
                             router: 'facility-tags/',
                         },
+                        {
+                            primaryText: '关键词配置',
+                            menuCode: 'sem_list',
+                            router: 'WebBackstage/keyword',
+                        }
                     ]
                 },
                 {
@@ -892,7 +897,7 @@
                     iconColor: '#79859a',
                     // router: 'activity',
                     menuItems: [
-                        
+
                         {
                             primaryText: '角色权限',
                             router: 'permission/user',
@@ -918,7 +923,7 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
-                        
+
                     ]
                 },
                 {
@@ -932,7 +937,7 @@
                             router: 'permission/accountManage/operationsLogs',
                             menuCode: 'sso_actionLog_base',
                         },
-                        
+
                         {
                             primaryText: '登录日志',
                             router: 'permission/loginLog',
@@ -1062,7 +1067,7 @@
                     iconColor: '#79859a',
                     router :'',
                     menuItems: [
-    
+
                         {
                             primaryText: '设备管理',
                             menuCode: 'gateway_list',
@@ -1079,7 +1084,7 @@
                 iconColor: '#79859a',
                 router :'',
                 menuItems: [
-    
+
                     {
                         primaryText: '设备查询',
                         menuCode: 'public',
@@ -1126,8 +1131,8 @@
                         type: 'vue',
                         menuCode: 'orderCurrency_list',
                     },
-                ]   
-            }, 
+                ]
+            },
             {
                 primaryText: '合同',
                 iconName: 'icon-donething',
@@ -1162,8 +1167,8 @@
                         type: 'vue',
                         router: 'order-center/contract-manage/contract-yard',
                     }
-                ]   
-            }, 
+                ]
+            },
         ]
     }
     }
@@ -1180,7 +1185,7 @@
                 iconColor: '#79859a',
                 type:'vue',
                 menuItems: [
-                    
+
                     {
                         primaryText: "账单",
                         router: 'bill/list',
@@ -1225,7 +1230,7 @@
                 },
         ]
         }
-        
+
     }
     function objecrSetting() {
         return {
@@ -1247,7 +1252,7 @@
                         }
                     ]
                 }
-               
+
             ]
         }
     }

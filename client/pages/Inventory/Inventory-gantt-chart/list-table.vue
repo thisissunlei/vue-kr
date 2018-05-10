@@ -85,7 +85,7 @@ export default {
                 width:100%;
             }
             .ivu-tooltip-popper{
-                max-width:200px;
+                max-width:170px;
                 word-break:break-all;
                 word-wrap: break-word; 
                 font-size:14px;

@@ -123,7 +123,7 @@ function getToolTipContent(thatData,param,time) {
         label="未租";
     }else if(thatData.status=='DISABLE'&&param=='2'){
         label="不可用";
-        width = 170;
+        width = 180;
     }
     var str = '<div class="title">' + label + '：</div>';
         //var width = 155; 
@@ -181,7 +181,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,sideBar) {
         }
     }else{
         if (contentToRigth > tirToRigth+150) {
-            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+150-30+'px';
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+170-30+'px';
         }
     }
     

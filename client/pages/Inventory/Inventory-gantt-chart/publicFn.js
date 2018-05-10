@@ -181,7 +181,7 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,sideBar) {
         }
     }else{
         if (contentToRigth > tirToRigth+150) {
-            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+150-30+'px';
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+170-30+'px';
         }
     }
     

@@ -128,7 +128,7 @@ import tableSort from './tableSort';
      
     }
     function downImg(href, filename) {
-       
+        var a = document.createElement('a');
         a.href = href;
         a.target = '_blank';
         //a.download = filename;

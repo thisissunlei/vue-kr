@@ -114,7 +114,10 @@
 		},
 		methods:{
 			selectTab(name){
-				console.log('selectTab',name)
+				console.log('selectTab',name);
+				if(name=='order'){
+					window.open("/order-center/order-manage/station-order-manage?page=1&pageSize=15&mask=join&customerName="+this.customerBasic.company,'_blank');
+				}
 				this.selectedTab = name
 			},
 			getBasicInfo(){

@@ -41,31 +41,21 @@
         <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
     </div>
 </Modal>
-<!-- <Drawer 
-    title="设置企业管理员"
-    :openDrawer="openDrawer"
-    @changeOpen="onChangeOpen"
-    :close="onClose"
->
-    <Setting :detail="itemDetail" @changeOpen="onIsRefresh"></Setting>
-</Drawer> -->
+
 </div> 	
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import HighSearch from './highSearch';
-//import Drawer from '~/components/Drawer';
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 export default {
     components:{
         SectionTitle,
         HighSearch,
-       // Drawer,
     },
     data(){
         return{
-            openDrawer:false,
             openSearch:false,
             totalCount:0,
             pageSize:15,
@@ -78,7 +68,6 @@ export default {
             },
             itemDetail:{},
             searchData:{},
-            isRefresh:false,
             tableHeader:[
                 {
                     title: '企业名称',
@@ -184,22 +173,10 @@ export default {
         },
         openSetting(params){
              window.open(`/member/setting-manager/detail/${params.csrId}`,'_blank');
-            //setting
-                // this.itemDetail=params;
-                // this.isRefresh=false;
-                // this.openDrawer=!this.openDrawer;
         },
-        onChangeOpen(data){
-                this.openDrawer=data;
-        },
-        onClose(){
-            if(this.isRefresh){
-                this.getTableData(this.Params)
-            }
-        },
-        onIsRefresh(data){
-            this.isRefresh=data;
-        }
+       
+       
+       
     }
 }
 </script>

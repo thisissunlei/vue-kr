@@ -12,5 +12,10 @@ module.exports = {
     'get-enum-all-data':{
         url:'/api/krspace-sso-web/sys/enmu',
         method:'get'
-    }
+    },
+    'down-file':{
+        url:'/api/op/sys/downFile',
+        method:'get'
+    },
+   
 }

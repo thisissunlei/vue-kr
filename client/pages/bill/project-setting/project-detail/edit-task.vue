@@ -94,7 +94,7 @@
         <Modal
             v-model="openGoArchives"
            
-            width="900"
+            width="910"
         >
             <div slot="header" style="font-size:16px;color:#333;">
                 <div>已填写<span style="color:#151515;">{{validFields}}</span><span  style="color:#2A2A2A;">/{{totalFields}}</span></div>

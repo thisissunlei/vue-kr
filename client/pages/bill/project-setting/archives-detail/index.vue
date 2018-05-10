@@ -32,7 +32,7 @@
                                 change(event,everyData)
                             }"
                         />
-                        <div v-if="everyData.fieldName == errorName" style="color:red;padding-left:100px;"> 不得超过100</div>
+                        <div v-if="everyData.fieldName == errorName" style="color:red;padding-left:130px;"> 不得超过100</div>
                     </div>
                     
                 </div>
@@ -197,7 +197,10 @@ export default {
             this.$http.post('project－field-edit',data).then((response)=>{
                
                 this.$emit('okClick');
-                 callback();
+                if(callback){
+                    callback();
+                }
+                 
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{

@@ -90,6 +90,9 @@ export default {
                 margin-top: 25px;
             }
         }
+        .ivu-cascader .ivu-input{
+            padding-right: 25px;
+        }
     }
     
 </style>

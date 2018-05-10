@@ -4,6 +4,7 @@ import dataType from './dataType';
 import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
+import downImg from './downImg';
    /** 数字金额大写转换(可以处理整数,小数,负数) */
     function smalltoBIG(n) {
         var fraction = ['角', '分'];
@@ -126,20 +127,13 @@ import tableSort from './tableSort';
         location
      
     }
-    function downImg(href, filename) {
-        console.log("oooooo")
-        var a = document.createElement('a');
-        var aspanDom = document.createElement('span');
-        a.href = href;
-        // a.target = '_blank';
-        //a.download = filename;
-        a.download = filename;
-        a.appendChild(aspanDom);
-
-        a.click();
-        
-     
-    }
+    // function downImg(href, filename) {
+       
+    //     var a = document.createElement('a');
+    //     a.setAttribute('href', "data:text/plain," +href);
+    //     a.setAttribute('download', filename||'');
+    //     a.click();
+    // }
 
     function getDaysInOneMonth(year, month){  
         month = parseInt(month, 10);  
@@ -212,7 +206,7 @@ import tableSort from './tableSort';
         return cached;
     }
 
-   export default{
+export default{
     smalltoBIG,
     clearForm,
     commonExport,
@@ -232,6 +226,6 @@ import tableSort from './tableSort';
     tableSort,
     dateRange,
     downImg
-   }
+}
 
 

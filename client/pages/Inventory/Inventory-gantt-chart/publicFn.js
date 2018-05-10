@@ -168,25 +168,20 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,sideBar) {
     let contentDom = document.getElementById('vue-chart-right-draw-content');
     let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
     var domMain=document.getElementById('layout-content-main');  
-    var picDom=document.getElementById('add-right-pic-inventory');
     let tirDetail = tirDom.getBoundingClientRect();
     let detail = contentDom.getBoundingClientRect();
     
     let winWidth = document.body.clientWidth;
     let contentToRigth = winWidth - detail.right;
     let tirToRigth = winWidth - tirRightToleft - 20;
-    var right=0;
-    if(picDom.style.opacity=='1'){
-        right=-10;
-    }
 
     if(sideBar){
         if (contentToRigth > tirToRigth) {
-            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+right+'px';
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180-30+'px';
         }
     }else{
         if (contentToRigth > tirToRigth+150) {
-            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+150+right+'px';
+            tirDom.style.left = nowLeft - (contentToRigth - tirToRigth)-180+150-30+'px';
         }
     }
     

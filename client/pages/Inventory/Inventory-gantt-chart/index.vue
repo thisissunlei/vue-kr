@@ -123,8 +123,9 @@ export default {
     mounted(){
         var dom=document.getElementById('layout-content-main');
         var domContent=document.getElementById('vue-chart-right-draw-content');
+        this.scrollWidth = utils.getScrollBarSize();
         if(domContent){
-            this.width=domContent.getBoundingClientRect().width;
+            this.width=domContent.getBoundingClientRect().width-this.scrollWidth;
             this.left=domContent.getBoundingClientRect().left;
         }
         dom.addEventListener("scroll",this.onScrollListener);
@@ -134,7 +135,6 @@ export default {
             _this.sideBar=params;
         })
         this.commonParams('today');
-        this.scrollWidth = utils.getScrollBarSize();
         this.leftOver();
         this.rightOver();
         //GLOBALSIDESWITCH("false");
@@ -175,15 +175,19 @@ export default {
                 this.width=domContent.getBoundingClientRect().width;
                 this.left=domContent.getBoundingClientRect().left;
             }   
-           
+            
             if(dom.scrollTop>321){
                 this.head=true;
-                domContent.style.paddingTop="101px";
-                tableDom.style.paddingTop="101px";
+                if(domContent&&tableDom){
+                    domContent.style.paddingTop="101px";
+                    tableDom.style.paddingTop="101px";
+                }
             }else{
                 this.head=false;  
-                domContent.style.paddingTop="0px";
-                tableDom.style.paddingTop="0px"; 
+                if(domContent&&tableDom){
+                    domContent.style.paddingTop="0px";
+                    tableDom.style.paddingTop="0px";
+                }
             }
         },
         //极限时间
@@ -256,7 +260,7 @@ export default {
             params.lineEndDate=this.getEndDay(8,params.lineStartDate);
             return params;
         },
-        lastTurnPage(start){
+        lastTurnPage(start){       
             var dayTime=start.split('-');
             var dayYear=+dayTime[0],dayMonth=+dayTime[1],dayDay=+dayTime[2];
             var yearRender,monthRender,dayRender;
@@ -284,10 +288,11 @@ export default {
                 if(param=='last'){
                     this.params.lineStartDate=this.getLastTime(8,year,month,day);
                 }else if(param=='next'){
-                    this.params.lineEndDate=this.getEndDay(8,this.params.lineStartDate);
+                    this.params.lineStartDate=currentDate;
+                    this.params.lineEndDate=this.getEndDay(8,currentDate);
                 }
                 this.endPosition='today';
-                this.commonParams('today');
+                this.commonParams('today'); 
             }else if(param=='last'){
                 this.endPosition='end';
                 this.commonParams('end');
@@ -322,6 +327,7 @@ export default {
             }
             this.params.lineStartDate=yearRender+'-'+monthRender+'-'+1;
             this.params.lineEndDate=this.getEndDay(11,this.params.lineStartDate);
+            console.log('123',this.params.lineStartDate,this.params.lineEndDate);
             this.fixLeftRight('next');
         },
         //获取进度列表数据

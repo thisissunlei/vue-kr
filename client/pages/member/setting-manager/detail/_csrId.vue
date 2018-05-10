@@ -1,38 +1,54 @@
 <template>
 <div class="g-setting-detail">
+	<SectionTitle title="设置企业管理员" ></SectionTitle>
 	<div class="m-detail-content">
-		<div class="u-detail-info">
+		<div class="u-company-info">
+			<Card id="u-step-one">
+				<p slot="title" class="card-title">
+					企业信息
+				</p>
+				<LabelText :inline="inline" label="企业名称：">
+                    {{detail.csrName}}
+                </LabelText>
+                 <Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
+			</Card>
+		</div>
+		<!-- <div class="u-detail-info">
 			<LabelText label="企业名称：" style="width:100%;">
 				{{detail.csrName}}
 			</LabelText>	
 			<LabelText label="已入驻社区：" style="width:100%;">
 				{{detail.cmtName}}
 			</LabelText>
-		</div>
-		<div class="u-detail-table">
-			<div class="u-table-label">员工列表：</div>
-			<div class="u-search-box">
-				<div style='float:right;'>
-					<Input 
-						v-model="mbrName" 
-						placeholder="请输入员工姓名"
-						style="width: 240px"
-					/>
-					<div class='m-search' @click="lowerSubmit">搜索</div>
-				</div> 
-       		</div>
-			<Table border :columns="list" :data="listInfo"></Table>
-			 <div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
-                <div style="float: right;">
-                    <Page   
-                        :total="totalCount" 
-                        :page-size="pageSize"
-                        show-total 
-                        show-elevator
-                        @on-change="changePage"
-                    ></Page>
-                </div>
-            </div>
+		</div> -->
+		<div class="u-company-info">
+			<Card id="u-step-two">
+				<p slot="title" class="card-title">
+					员工信息
+				</p>
+				<div class="u-search-box">
+					<div style='float:right;'>
+						<Input 
+							v-model="mbrName" 
+							placeholder="请输入员工姓名"
+							style="width: 240px"
+						/>
+						<div class='m-search' @click="lowerSubmit">搜索</div>
+					</div> 
+				</div>
+				<Table border :columns="list" :data="listInfo"></Table>
+				<div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
+					<div style="float: right;">
+						<Page   
+							:total="totalCount" 
+							:page-size="pageSize"
+							show-total 
+							show-elevator
+							@on-change="changePage"
+						></Page>
+					</div>
+            	</div>
+			</Card>
 		</div>
 	</div>
 	 <Modal
@@ -58,6 +74,7 @@
 </template>
 <script>
 
+import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
@@ -65,6 +82,7 @@ import Message from '~/components/Message';
 
 export default {
 	components:{
+		SectionTitle,
 		DetailStyle,
 		LabelText,
 		Message
@@ -108,8 +126,96 @@ export default {
 				 title: '邮箱',
                  key: 'mbrEmail',
 				 align:'center',
-                },
-			]
+				},
+				{
+				 title: '入驻社区',
+                 key: 'mbrEmail',
+				 align:'center',
+				},
+				{
+				 title: '管理员',
+                 key: 'mbrEmail',
+				 align:'center',
+				},
+				{
+				 title: '管理的社区',
+                 key: 'mbrEmail',
+				 align:'center',
+				},
+				{
+				 title: '操作',
+                 key: 'mbrEmail',
+				 align:'center',
+				 render(h, obj){
+					 if(obj.row.isManager=='1'){
+						  return h('div', [
+                                 h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#FF6868'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            _this.cancelManager(obj.row)
+                                        }
+                                    }
+                                }, '取消管理员')
+                            ]);  
+						  
+					 }else if(obj.row.isManager=='0'){
+						  return h('div', [
+                                 h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            _this.setManager(obj.row)
+                                        }
+                                    }
+                                }, '设置管理员')
+                            ]);  
+						  
+					 }
+                        
+                }
+				},
+			],
+			companyColumns:[
+				{
+				 title: '社区名称',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '入驻开始日期',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '入驻结束日期',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '当前入驻状态',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '该社区管理员数量',
+                 key: 'mbrName',
+				 align:'center',
+                }
+			],
+			companyList:[],
 		}
 	},
 	mounted:function(){
@@ -193,7 +299,7 @@ export default {
 			}
 			this.$http.get('get-manager-count', Params).then((res)=>{
 				this.managerCount=res.data.managerCount;
-				this.renderList();
+				//this.renderList();
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -269,19 +375,25 @@ export default {
 	.m-detail-content{
 		margin-bottom:20px;
 	}
-	.u-detail-info{
-		margin-top:20px;
-	}
-	.u-detail-table{
-		margin-left:15px;
-		.u-table-label{
-			margin-bottom:10px;
+	.u-company-info{
+		margin:30px;
+		.ivu-card-head{
+			background-color:#f7f7f7;
 		}
+
 	}
+	.ui-labeltext{
+        padding-left: 0px;
+    }
+	
+	
 	.u-search-box{
 		height:32px;
 		margin:16px 0;
-		
+		.m-search{
+			display: inline-block;
+			padding:0 10px;
+		}
     }
 
 }

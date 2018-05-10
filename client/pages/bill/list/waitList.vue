@@ -381,20 +381,19 @@ import PdfDownload from './pdfDownload';
                 
             }
         },
-        created(){
-             this.getTableData(this.$route.query);
-             if(!this.$route.query.customerName){
-                 this.$route.query.customerName=""
-             }
-             this.tabParams=this.$route.query;
-             
+        mounted(){
+            if(JSON.parse(sessionStorage.getItem('waitParams'))){
+                 this.tabParams=JSON.parse(sessionStorage.getItem('waitParams'));
+            }
+             this.getTableData(this.tabParams);
         },
          watch: {
             $props: {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='wait'){
-                      this.getTableData(this.params);
+                       //this.tabParams=JSON.parse(sessionStorage.getItem('waitParams'))
+                      this.getTableData(this.tabParams);
                     }
                    
                 }
@@ -572,7 +571,8 @@ import PdfDownload from './pdfDownload';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                utils.addParams(this.tabParams);
+                this.getTableData(this.tabParams)
+                sessionStorage.setItem('waitParams',JSON.stringify(this.tabParams));
 
             },
             onChangeOpen(data){
@@ -586,7 +586,8 @@ import PdfDownload from './pdfDownload';
                     pageSize:15,
                     customerName:customerName
                 }
-                utils.addParams(this.tabParams);
+                this.getTableData(this.tabParams)
+                sessionStorage.setItem('waitParams',JSON.stringify(this.tabParams));
             },
             changePage(page){
                 this.tabParams.page=page;

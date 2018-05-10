@@ -1,6 +1,6 @@
 <template>
 
-<div class="g-order">
+<div class="g-order-payment">
     <div class="u-search" >
          <Buttons  label='导入回款明细' checkAction='payment_import' type="primary" @click="importDetail" />
           <Buttons  label='退款'  checkAction='payment_refund' type="primary" @click="onRefund" style="margin-left:20px;" />
@@ -79,7 +79,7 @@
             </Upload>
         </div>
          <div slot="footer">
-            <Button type="primary" @click="importSubmit">确定</Button>
+            <Button type="primary" :disabled="submitDisabled"   @click="importSubmit">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="importDetail">取消</Button>
         </div>
     </Modal>
@@ -164,6 +164,7 @@ export default {
                 IsCookie:true,
                 maxlength:500,
                 paymentId:'',
+                submitDisabled:false,
                 columns: [
                     {
                         title: '交易流水号',
@@ -184,7 +185,7 @@ export default {
                         title: '回款日期',
                         key: 'occurDate',
                         align:'center',
-                        width:130,
+                        width:100,
                         render(h, obj){
                             let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(obj.row.occurDate));
                             return time;
@@ -194,7 +195,6 @@ export default {
                         title: '回款金额（元）',
                         key: 'amount',
                         align:'center',
-                        width:100,
                     },
 
                     {
@@ -214,6 +214,7 @@ export default {
                               'ALIWEBPAY':'支付宝网银',
                               'BANKONLINE':'网银',
                               'BANLANCE':'余额支付',
+                              'FUNDS_TRANSFER ':'资金转移',
                               
                             }
                             return payWay[obj.row.payWay]
@@ -226,16 +227,20 @@ export default {
 
                     },
                     {
+                        title: '付款方名称',
+                        key: 'payerName',
+                        align:'center',
+                    },
+                    {
                         title: '收款账户',
                         key: 'receiveAccount',
                         align:'center',
-                        width:120
                     },
                     {
                         title: '操作',
                         key: 'operation',
                         align:'center',
-                        width:110,
+                        width:100,
                         render:(h,params)=>{
                             return h('div', [
                                 h('Button', {
@@ -337,9 +342,9 @@ export default {
 
             getTableData(params){
                 this.$http.get('get-payment-list', params).then((res)=>{
-                    this.tableData=res.data.items;
                     this.totalCount=res.data.totalCount;
                     this.openSearch=false;
+                    this.tableData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
@@ -391,9 +396,11 @@ export default {
             },
             importSubmit(){
                 var data=new FormData();
+                this.submitDisabled=true;
                 data.append('file',this.file);
                 this.$http.put('import-bank-flow', data).then((res)=>{
                     this.openMessage=true;
+                    this.submitDisabled=false;
                     if(res.code==-1){
                         this.MessageType="error";
                         this.warn=res.message;
@@ -408,6 +415,7 @@ export default {
                     this.openImport=false;
                     this.getTableData(this.params);
                 }).catch((err)=>{
+                    this.submitDisabled=false;
                     this.$Notice.error({
 						title:err.message
 					});
@@ -427,7 +435,7 @@ export default {
 </script>
 <style lang="less">
 
-.g-order{
+.g-order-payment{
    .u-search{
         height:32px;
         margin:16px 0;
@@ -453,6 +461,11 @@ export default {
     }
     .u-table{
         padding:0 20px;
+        th,td{
+            &:nth-child(8){
+                min-width:120px;
+            }
+        }
     }
     .u-cancel-title{
         width:85%;

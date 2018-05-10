@@ -1255,9 +1255,10 @@ import EditTask from '../project-detail/edit-task';
             cancelEditTask(){
                 this.openEditTask = !this.openEditTask;
             },
-            dataChange(params){ 
+            dataChange(params,callback){ 
+                console.log("-=====")
                 var data = Object.assign({},params);
-                this.submitEditTask(data);
+                this.submitEditTask(data,callback);
             },
             //获取侧滑页面数据
             getEditTaskData(id,callback){
@@ -1278,7 +1279,7 @@ import EditTask from '../project-detail/edit-task';
                 })
             },
             //侧滑编辑任务提交
-            submitEditTask(params){
+            submitEditTask(params,callback){
                 var dataParams = Object.assign({},params);
                 dataParams.id=this.taskId;
                 dataParams.projectId=this.projectId;
@@ -1289,6 +1290,10 @@ import EditTask from '../project-detail/edit-task';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     this.getTableData(this.tabParams);
                     this.getEditTaskData(this.taskId,()=>{})
+                    console.log(callback,"---=======",response.code >1)
+                    if(callback && response.code >1){
+                        callback();
+                    }
                     // this.getListData(this.ids);
                 
                     // if(response.code>1){
@@ -1604,6 +1609,13 @@ import EditTask from '../project-detail/edit-task';
     }
     .top-triangle{
         border-color:rgba(70,76,91,.9) transparent transparent  transparent   ;
+    }
+    .sure-sign{
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+        line-height: 26px;
+        font-size: 14px;
     }
 
 }

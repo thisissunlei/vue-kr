@@ -164,7 +164,7 @@ export default{
 			return decodeURI(filename);
 		},
 		downFile(url){
-			utils.downFile(url)
+			utils.downImg(url)
 		},
 		getIsPhoto(url){
 			var img="png,jpg,jpeg";

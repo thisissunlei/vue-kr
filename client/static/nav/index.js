@@ -1198,6 +1198,11 @@
                         menuCode: 'fina_account_list'
                     },
                     {
+                        primaryText: "审核列表(老数据)",
+                        router: 'finance/manage/audit/auditlist',
+                        menuCode: 'fina_verify_page'
+                    },
+                    {
                         primaryText: "回款",
                         router: 'bill/payment',
                         type: 'vue',

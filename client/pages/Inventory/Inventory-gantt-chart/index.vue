@@ -125,7 +125,7 @@ export default {
         var domContent=document.getElementById('vue-chart-right-draw-content');
         this.scrollWidth = utils.getScrollBarSize();
         if(domContent){
-            this.width=domContent.getBoundingClientRect().width-this.scrollWidth;
+            this.width=domContent.getBoundingClientRect().width;
             this.left=domContent.getBoundingClientRect().left;
         }
         dom.addEventListener("scroll",this.onScrollListener);

@@ -661,34 +661,34 @@
                         }
                     ]
                 },
-                {
-                    primaryText: '社区经营',
-                    iconName: 'icon-com',
-                    iconColor: '#79859a',
-                    router: 'community',
-                    menuItems: [
-                        {
-                            primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
-                        },
-                        {
-                            primaryText: '销控',
-                            menuCode: 'cmt_sell_control',
-                            router: 'product/communityManage/controlTable',
-                        },
-                        {
-                            primaryText: "招商数据",
-                            router: 'product/statistical/index',
-                            menuCode: 'stat_group',
-                        },
-                        {
-                            primaryText: '会议室设备配置',
-                            menuCode: 'oper_cmt_deviceList_base',
-                            router: 'product/communityAllocation/equipmentList'
-                        },
-                    ]
-                },
+                // {
+                //     primaryText: '社区经营',
+                //     iconName: 'icon-com',
+                //     iconColor: '#79859a',
+                //     router: 'community',
+                //     menuItems: [
+                //         {
+                //             primaryText: '库存平面图',
+                //             menuCode: 'cmt_run',
+                //             router: 'product/communityManage/detail',
+                //         },
+                //         {
+                //             primaryText: '销控',
+                //             menuCode: 'cmt_sell_control',
+                //             router: 'product/communityManage/controlTable',
+                //         },
+                //         {
+                //             primaryText: "招商数据",
+                //             router: 'product/statistical/index',
+                //             menuCode: 'stat_group',
+                //         },
+                //         {
+                //             primaryText: '会议室设备配置',
+                //             menuCode: 'oper_cmt_deviceList_base',
+                //             router: 'product/communityAllocation/equipmentList'
+                //         },
+                //     ]
+                // },
             ]
         }
 

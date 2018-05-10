@@ -55,9 +55,9 @@
                     </div>
                 </div>
                 <div v-if="getEdit.code||getEdit.nullFields" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
-                    <div>需要填写档案
-                        <span style="font-size:20px;color:#ccc;">{{getEdit.totalFields}}</span>项，尚未完成
-                        <span style="font-size:20px;color:#000;">{{getEdit.nullFields}}</span>项，
+                    <div>
+                        需要填写档案&nbsp;<span style="font-size:20px;color:#ccc;">{{getEdit.totalFields}}</span>&nbsp;项，
+                        尚未完成&nbsp;<span style="font-size:20px;color:#000;">{{getEdit.nullFields}}</span>&nbsp;项，
                         <span style="font-size:20px;color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
                 </div>
             </div>
@@ -65,6 +65,7 @@
             
 
             <div class="segmentation-line"></div>
+            <div v-if="getEdit && getEdit.operLogs && getEdit.operLogs.length" class="edit-record-title">编辑记录</div>
             <div class="edit-record" >
                 <div
                     class='record-wrap'
@@ -311,7 +312,13 @@ export default {
 
 <style lang='less'>
 .edit-task{
-    
+    .edit-record-title{
+        margin-top: 30px;
+        padding-left: 20px;
+        font-size: 16px;
+        color: #333333;
+        font-weight: bold;
+    }
     .bill-search-class{
         display:inline-block;
         width:50%;
@@ -528,8 +535,9 @@ export default {
         box-sizing: border-box;
         .record-wrap{
             width: 540px;
-            padding-bottom:15px;
-            border-bottom:1px solid #EFEFEF;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #efefef;
+            margin-top: 20px;
             .first{
                 font-family: PingFang-SC-Regular;
                 font-size: 14px;
@@ -548,7 +556,7 @@ export default {
                 padding:5px 10px;
                 width: 330px;
                 background: #F6F6F6;
-              
+                margin-top: 10px; 
                 font-family: PingFang-SC-Regular;
                 font-size: 12px;
                 color: #666;

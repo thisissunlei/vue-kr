@@ -267,7 +267,7 @@ export default {
 	.file-view-box{
 		width: 600px;
 		min-height: 198px;
-		background:  #EEEEEE;
+		background: #f3f3f3;;
 		padding: 1px;
 		border-radius: 4px;
 		border: 1px dashed  rgba(79, 158, 237,0.5);
@@ -354,7 +354,7 @@ export default {
 	.kr-ui-x-icon{
 		background-image: url(./images/x.svg);
 		background-repeat: no-repeat;
-		background-size:100%; 
+		background-size:85%;
 		right:20px;
 	}
 	.label-text{

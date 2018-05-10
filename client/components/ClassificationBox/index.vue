@@ -7,7 +7,7 @@
         </div>
         <div class="content" :style="{borderWidth:isBorder?'1px':'0px',height:'auto'}">
             <slot name="content"></slot>
-            <div class="tag" :style="tagStyle()"></div>
+            <div class="tag" v-if="isEnd" :style="tagStyle()"></div>
         </div>
      
   </div>

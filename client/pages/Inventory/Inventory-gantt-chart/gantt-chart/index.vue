@@ -36,6 +36,16 @@
                     id="gantt-chart-calibration"
                     :style="{left:(head?left:0)+'px',width:width+'px'}"
                   >
+
+                 <div class="add-left"  @click="lastTurnPage">
+                    <span :class="leftPic?'add-left-pic add-left-pic-new':'add-left-pic'"></span>
+                 </div>
+
+                 <div class="add-right" @click="nextTurnPage">
+                    <span :class="rightPic?'add-right-pic add-right-pic-new':'add-right-pic'"></span>
+                </div>
+
+
                  <div  style="position:relative;overflow:hidden;"  >
                     <div class="time-shaft-fixed"></div>
                     <div
@@ -45,9 +55,7 @@
                         :style="{width: dayAllNum * minCalibration+scrollWidth+'px'}"
                     >
 
-                        <div class="add-left" ref='addLeftPic' @click="lastTurnPage">
-                            <span class='add-left-pic'></span>
-                        </div>
+                        
                         <div :style="{width:dayAllNum*minCalibration+'px'}">
                             <div class="year-bar" v-if="years && years.length && barType=='month'">
                                 <div class="year"
@@ -128,9 +136,7 @@
                             </div>
                            
                         </div>
-                        <div class="add-right" @click="nextTurnPage" ref='addRightPic' :style="{right:scrollWidth+'px'}">
-                            <span class='add-right-pic' id="add-right-pic-inventory"></span>
-                        </div>
+                        
                     </div>
 
                  </div>
@@ -142,12 +148,14 @@
                     @mousemove="rightMove"
                     id="vue-chart-right-draw-content"
                 >
+                    <div class="add-left" @click="lastTurnPage"></div>
+                    <div class="add-right" @click="nextTurnPage"></div>
 
                     <div
                         class="content"
-                        :style="{width:dayAllNum*minCalibration+'px'}"
+                        :style="{width:dayAllNum*minCalibration+30+'px'}"
                     >
-                    <div class="add-left" @click="lastTurnPage"></div>
+                    
                        
                         <ViewArticle
                             v-if="leftEndpoint.year"
@@ -162,14 +170,14 @@
                             :todayDetail="{width:minCalibration,left:tagToLeft}"
                             :sideBar="sideBar"
                         />
-                        <div class="add-right" @click="nextTurnPage"></div>
-                        <div class='today-flag' v-if="tagToLeft!=0" :style="{left:tagToLeft+30+'px',width:minCalibration+'px'}"></div>
-                        <div class='start-flag' v-if="startRentLeft!=0" :style="{left:startRentLeft+30+'px',width:2+'px'}"></div>
-                        <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+30+'px',width:minCalibration+'px'}"></div>
-                        <div class='end-flag' v-if="endRentLeft!=0" :style="{left:endRentLeft+30+'px',width:2+'px'}"></div>
-                        <div class='start-to-end' :style="{left:startRentLeft+30+'px',width:endRentLeft-startRentLeft+'px'}"></div>
+                        
+                        <div class='today-flag' v-if="tagToLeft!=0" :style="{left:tagToLeft+'px',width:minCalibration+'px'}"></div>
+                        <div class='start-flag' v-if="startRentLeft!=0" :style="{left:startRentLeft+'px',width:2+'px'}"></div>
+                        <div class='today-flag' v-if="inventoryRentLeft!=0" :style="{left:inventoryRentLeft+'px',width:minCalibration+'px'}"></div>
+                        <div class='end-flag' v-if="endRentLeft!=0" :style="{left:endRentLeft+'px',width:2+'px'}"></div>
+                        <div class='start-to-end' :style="{left:startRentLeft+'px',width:endRentLeft-startRentLeft+'px'}"></div>
 
-                        <div class='hover-flag'  :style="{left:hoverLeft+30+'px',width:(barType=='month'||barType=='week'?(endMonthDay*minCalibration):minCalibration)+'px'}"></div>
+                        <div class='hover-flag'  :style="{left:hoverLeft+'px',width:(barType=='month'||barType=='week'?(endMonthDay*minCalibration):minCalibration)+'px'}"></div>
                     </div>
                 </div>
             </div>
@@ -307,10 +315,12 @@ export default {
                     title:'不可用',
                     color:"#E4E4E4"
                 }
-            ]
+            ],
+            leftPic:false,
+            rightPic:false,
         }
     },
-    mounted(){
+    mounted(){   
         drawContent=document.getElementById("vue-chart-right-draw-content");
         this.scrollWidth = utils.getScrollBarSize();
         this.limitDay();
@@ -320,6 +330,7 @@ export default {
     },
     methods:{
         scroolFix(data){
+            var _this=this;
             var offerLeft = 0;
             if(drawContent){
                 var today = dateUtils.dateToStr("YYYY/MM/DD",new Date(this.start));
@@ -349,38 +360,31 @@ export default {
                     if(timeShaftFixed){
                         timeShaftFixed.style.opacity=0;
                     }
-                    if(this.$refs.addLeftPic){
-                        this.$refs.addLeftPic.style.opacity='1';
-                        this.$refs.addLeftPic.style.pointerEvents='none';
-                    }
                     return;
                 }
                 if(this.endPosition=='start'){
                     if(timeShaftFixed){
                         timeShaftFixed.style.opacity=0;
                     }
-                    if(this.$refs.addLeftPic){
-                        this.$refs.addLeftPic.style.opacity='1';
-                    }
                     setTimeout(() => { 
-                      drawContent.scrollLeft = 0;           
+                      drawContent.scrollLeft = 0;
+                      _this.leftPic=true;
+                      _this.rightPic=false;   
                     }, 100);
                 }else if(this.endPosition=='end'){
                     if(timeShaftFixed){
                         timeShaftFixed.style.opacity=1;
                     }
-                    if(this.$refs.addRightPic){
-                        this.$refs.addRightPic.style.opacity='1';
-                    }
                     setTimeout(() => {
                       drawContent.scrollLeft = drawContent.scrollWidth-drawContent.clientWidth;
+                      _this.leftPic=false;
+                      _this.rightPic=true;   
                     }, 100);
                 }else{
-                    if(timeShaftFixed){
-                        timeShaftFixed.style.opacity=1;
-                    }
                     setTimeout(() => {
                       drawContent.scrollLeft = scrollLeft;
+                      _this.leftPic=false;
+                      _this.rightPic=false;
                     }, 100);
                 }
             }
@@ -434,10 +438,37 @@ export default {
             return this.timeRange(todayTime,startTime)*this.minCalibration;
         },
         lastTurnPage(){
-           this.$emit('lastTurnPage',this.start);
+            var domContent=document.getElementById('vue-chart-right-draw-content');
+            if(domContent.scrollLeft>0){
+                 this.leftPic=false;  
+                 domContent.scrollLeft=domContent.scrollLeft-50;
+                 if(domContent.scrollLeft<=0){      
+                    domContent.scrollLeft=0; 
+                 }
+            }else{
+                 this.leftPic=true;
+                 var _this=this;
+                 setTimeout(() => {
+                    _this.$emit('lastTurnPage',_this.start); 
+                 },500);   
+            }
         },
         nextTurnPage(){
-           this.$emit('nextTurnPage',this.end);
+            var domContent=document.getElementById('vue-chart-right-draw-content');
+            var scrollLeft=domContent.scrollLeft;
+            if(scrollLeft<domContent.scrollWidth-domContent.clientWidth){
+                 this.rightPic=false;  
+                 domContent.scrollLeft=scrollLeft+50;
+                 if(domContent.scrollLeft>=domContent.scrollWidth-domContent.clientWidth){         
+                     domContent.scrollLeft=domContent.scrollWidth-domContent.clientWidth; 
+                 }
+            }else{
+                 this.rightPic=true;
+                 var _this=this;
+                 setTimeout(() => {
+                   _this.$emit('nextTurnPage',_this.end);
+                },500);  
+            }
         },
         //获取年数组
         getYears(startTime,endTime){
@@ -681,15 +712,16 @@ export default {
                 if(contentToLeft>=thatStartToLeft && contentToLeft<=thatEndToLeft){
                     timeShaftFixed.innerHTML = thatDom.innerHTML;
                     if(thatEndToLeft- contentDetail.left<90){
-                        timeShaftFixed.style.left =-(90 - (thatEndToLeft- contentDetail.left))-1 +'px';
+                        timeShaftFixed.style.left =-(90 - (thatEndToLeft- contentDetail.left))-1 -30+'px';
                     }else {
                         timeShaftFixed.style.left = 0;
                     }
                     break;
                 }
             }
+
             if(contentLeft<50){
-                timeShaftFixed.style.left = 50 -contentLeft + 'px';
+                timeShaftFixed.style.left = 0 -contentLeft + 'px';
             }
         },
         //每周的具体内容校正
@@ -713,17 +745,19 @@ export default {
             var left = el.scrollLeft;
             this.$refs.rightBar.style.left = -left+'px';
 
-            if(left<1){
-                this.$refs.addLeftPic.style.opacity='1';
+            var chartDom=document.getElementById('vue-chart-right-draw-content');
+            var isRight = chartDom.scrollWidth - chartDom.clientWidth - chartDom.scrollLeft;
+            if(isRight<=0){
+                this.rightPic=true;
             }else{
-                this.$refs.addLeftPic.style.opacity='0';
+                this.rightPic=false; 
             }
-            
-            if(el.scrollWidth<=left+el.clientWidth){
-                this.$refs.addRightPic.style.opacity='1';
+            if(chartDom.scrollLeft<=0){
+                this.leftPic=true;
             }else{
-                this.$refs.addRightPic.style.opacity='0';
+                this.leftPic=false;
             }
+
             this.timeShaftFixed(left,el);
         },
         rightOver(event){ 
@@ -853,7 +887,7 @@ export default {
         box-sizing: border-box;
         display:inline-block;
         position: relative;
-        padding:0 25px;
+        //padding:0 25px;
         margin-top: 3px;
         #gantt-chart-tool-tip{
             max-width: 280px;
@@ -909,8 +943,8 @@ export default {
         .right-draw{
             position: absolute;
             overflow:hidden;
-            left: 210px;
-            right: 25px;
+            left: 185px;
+            right: 0px;
             .time-shaft-fixed{
                 position: absolute;
                 background: #ffffff;
@@ -925,8 +959,42 @@ export default {
                
             }
             .bar{
-                padding: 0px 30px;
+                //padding: 0px 30px;
                 box-sizing: content-box;
+            }
+
+            .calibration  {
+                width:100%;
+                position:relative;
+                overflow:hidden;
+                height: 101px;
+                padding:0 30px;
+                ::-webkit-scrollbar {
+                    width:0px;
+                }
+                .add-left{
+                    position: absolute;
+                    width: 30px;
+                    height: 100%;
+                    background: #fff;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 10;
+                    border-right: solid 1px #F6F6F6;
+                    cursor: pointer;
+                }
+                .add-right{
+                    position: absolute;
+                    width: 30px;
+                    height: 100%;
+                    background: #fff;
+                    right: 0px;
+                    top: 0px;
+                    z-index: 10;
+                    border-left: solid 1px #F6F6F6;
+                    border-right: solid 1px #F6F6F6;
+                    cursor: pointer;
+                }
                 .add-left-pic{
                     position: absolute;
                     left:8px;
@@ -939,6 +1007,9 @@ export default {
                     background:url(img/left.svg) no-repeat center;
                     background-size:100%;
                     cursor: pointer;
+                }
+                .add-left-pic-new{
+                    background:url(img/leftN.svg) no-repeat center;
                 }
                 .add-right-pic{
                     position: absolute;
@@ -953,15 +1024,8 @@ export default {
                     background-size:100%;
                     cursor: pointer;
                 }
-            }
-
-            .calibration  {
-                width:100%;
-                position:relative;
-                overflow:hidden;
-                height: 101px;
-                ::-webkit-scrollbar {
-                    width:0px;
+                .add-right-pic-new{
+                    background:url(img/rightN.svg) no-repeat center;
                 }
             }
             .calibrationFixed{
@@ -976,6 +1040,7 @@ export default {
             width: 100%;
             overflow:auto;
             border-bottom: 1px solid #F6F6F6;
+            padding:0 30px;
             .today-flag{
                 background: rgba(73,157,241,0.20);
                 height: 100%;
@@ -1022,14 +1087,14 @@ export default {
                 pointer-events:none;
                 z-index:3;
             }
-        }
-           .add-left{
+
+            .add-left{
                 position: absolute;
                 width: 30px;
                 height: 100%;
                 background: #fff;
                 left: 0px;
-                top: 0px;
+                top: 101px;
                 z-index: 10;
                 border-right: solid 1px #F6F6F6;
                 cursor: pointer;
@@ -1040,24 +1105,24 @@ export default {
                 height: 100%;
                 background: #fff;
                 right: 0px;
-                top: 0px;
+                top: 101px;
                 z-index: 10;
                 border-left: solid 1px #F6F6F6;
                 border-right: solid 1px #F6F6F6;
                 cursor: pointer;
             }
+        }
          
         .content{
             position: relative;
             background: #F6F6F6;
-            padding-left: 30px;
-            padding-right: 30px;
+            //padding-left: 30px;
+            //padding-right: 30px;
             box-sizing: content-box;
             overflow: hidden;
             .view-article:first-child .view-channel:first-child .every-view-col:first-child .article{
                 top: 0px;
             }
-           
            
         }
         .hander{

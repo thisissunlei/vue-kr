@@ -8,6 +8,7 @@
                     :data="collapseData" 
                     @onChange="onChange"
                     :activeIndex="activeIndex"
+                    @childrenClick="childrenClick"
                 />
             </div>
             <div :id="archivesBoxId" class="archives-box" ref="archivesBox">
@@ -54,6 +55,19 @@ export default {
         this.getArchivesTree({code:this.code});
     },
     methods:{
+        childrenClick(index){
+        
+            var groupDoms = document.querySelectorAll('.archivesDetailDom');
+            var archivesBoxDom = document.getElementById(this.archivesBoxId);
+            var activeGroup = groupDoms[index];
+            var activeDetail = activeGroup.getBoundingClientRect();
+            var archivesBoxDeatil = archivesBoxDom.getBoundingClientRect();
+            var moveHeight = archivesBoxDeatil.top - activeDetail.top;
+            console.log(moveHeight,"ppppp",archivesBoxDeatil.top,activeDetail.top)
+            archivesBoxDom.scrollTop =archivesBoxDom.scrollTop - moveHeight;
+
+
+        },
         boxScroll(index){
             this.activeIndex = index;
         },

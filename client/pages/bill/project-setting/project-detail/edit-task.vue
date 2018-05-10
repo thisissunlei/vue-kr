@@ -105,6 +105,17 @@
               
             </div>
         </Modal>
+        <Modal
+            v-model="openSure"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
+            <div slot="footer">
+                <Button type="primary" @click="submitSure()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -154,7 +165,8 @@ export default {
             newStart:this.planEnd||'',
             newEnd:this.actualEnd||'',
             totalFields:0,
-            validFields:0
+            validFields:0,
+            openSure:false,
 
         }
     },
@@ -166,6 +178,24 @@ export default {
     },
    
     methods:{
+         submitSure(){
+            let params={
+                id:this.taskId,
+                projectId:this.projectId
+            }
+            this.$http.post('sure-sign-project',params).then((response)=>{
+                this.cancelSure();
+                // this.getListData(this.ids);
+                this.endOk(true);
+            }).catch((error)=>{
+                // this.MessageType="error";
+                // this.openMessage=true;
+                // this.warn=error.message;
+            })
+        },
+         cancelSure(){
+            this.openSure=!this.openSure;
+        },
         switchStartTime(){
             this.startOpen = !this.startOpen;
             
@@ -216,14 +246,18 @@ export default {
           
               this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{})
         },
-        endOk(){
+        endOk(flag){
             this.actualEnd = this.newEnd;
             this.params.actualEndTime = this.actualEnd;
             var data = Object.assign({},this.params);
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
-            this.switchEndTime();
-            this.$emit("dataChange",data);
+            if(!flag){
+                this.switchEndTime();
+            }
+            this.$emit("dataChange",data,()=>{
+                 this.cancelSure()
+            });
         },
         switchEndEdit(){
             // this.endOpen = true;
@@ -236,7 +270,9 @@ export default {
             var data = Object.assign({},this.params);
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
-            this.$emit("dataChange",data);
+            this.$emit("dataChange",data,()=>{
+                this.cancelSure()
+            });
         },
         goArchivesClick(){
            

@@ -20,7 +20,10 @@
             :style="{
               height:activeBox==index?item.children.length * 45 +'px':0,
             }">
-            <div class="collapse-children" v-for="(child, index) in item.children" :key="child.value">
+            <div 
+                @click="childrenClick(index)"
+                class="collapse-children" 
+                v-for="(child, index) in item.children" :key="child.value">
                 <div :class="{'active-content':activeIndex == index}" ><div class="round"></div>{{child.label}}</div>
             </div>
         </div>
@@ -57,6 +60,10 @@
        
         },
         methods:{
+            childrenClick(index){
+                console.log("=======",index)
+                this.$emit('childrenClick',index)
+            },
             onChange(index,data){
                 this.$emit('onChange',index,data)
             }
@@ -135,6 +142,7 @@
                 line-height: 45px;
                 font-size: 14px;
                 color: #666;
+                cursor: pointer;
                 position: relative;
                 .round{
                     width: 7px;

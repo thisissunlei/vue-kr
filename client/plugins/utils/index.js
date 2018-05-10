@@ -123,6 +123,19 @@ import tableSort from './tableSort';
         //a.download = filename;
         a.download = filename;
         a.click();
+        location
+     
+    }
+    function downImg(href, filename) {
+        console.log("oooooo")
+        var a = document.createElement('a');
+        a.href = href;
+        // a.target = '_blank';
+        //a.download = filename;
+        a.download = filename;
+        // document.body.appendChild(a);
+        a.click();
+        
      
     }
 
@@ -215,7 +228,8 @@ import tableSort from './tableSort';
     getScrollBarSize,
     dateCompatible,
     tableSort,
-    dateRange
+    dateRange,
+    downImg
    }
 
 

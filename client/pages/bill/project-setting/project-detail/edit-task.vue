@@ -189,6 +189,9 @@ export default {
                 // this.getListData(this.ids);
                 this.endOk(true);
             }).catch((error)=>{
+                this.$Notice.error({
+                    title: error.message,
+                });
                 // this.MessageType="error";
                 // this.openMessage=true;
                 // this.warn=error.message;

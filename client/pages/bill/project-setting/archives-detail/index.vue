@@ -201,9 +201,9 @@ export default {
                 // this.selectData = [].concat(this.selectFormat(response.data))
                 // callback();
             }).catch((error)=>{
-                // this.MessageType="error";
-                // this.openMessage=true;
-                // this.warn=error.message;
+                this.$Notice.error({
+                    title: error.message,
+                });
             })
 
         },
@@ -214,6 +214,9 @@ export default {
                 // console.log(response,"lllllllll")
                 this.recordData = Object.assign({},response.data)
             }).catch((error)=>{
+                this.$Notice.error({
+                    title: error.message,
+                });
                 // this.MessageType="error";
                 // this.openMessage=true;
                 // this.warn=error.message;

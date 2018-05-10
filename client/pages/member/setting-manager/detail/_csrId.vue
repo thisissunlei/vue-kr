@@ -17,13 +17,12 @@
 						v-model="mbrName" 
 						placeholder="请输入员工姓名"
 						style="width: 240px"
-					></Input>
+					/>
 					<div class='m-search' @click="lowerSubmit">搜索</div>
 				</div> 
        		</div>
 			<Table border :columns="list" :data="listInfo"></Table>
 			 <div v-if="totalCount>15" style="margin: 10px;height:40px;overflow: hidden">
-                <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
                     <Page   
                         :total="totalCount" 
@@ -70,9 +69,9 @@ export default {
 		LabelText,
 		Message
 	},
-	props:['detail'],
 	data(){
 		return{
+			detail:{},
 			openTip:false,
 			basicInfo:{},
 			incomeType:null,
@@ -114,6 +113,7 @@ export default {
 		}
 	},
 	mounted:function(){
+		GLOBALSIDESWITCH("false");
 		this.getInfo();
 		
 	},
@@ -175,7 +175,8 @@ export default {
 			
 		},
 		getInfo(){
-			this.Params.csrId=this.detail.csrId;
+			let {params}=this.$route;
+			this.Params.csrId=params.csrId;
 			this.$http.get('customer-manager-detail', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;

@@ -605,7 +605,6 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-
                         {
 
                             primaryText: '社区',
@@ -649,24 +648,6 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-
-                        {
-                            primaryText: '门禁权限组管理',
-                            menuCode: 'auth_user_group_list',
-                            router: 'doorpermission/doorgroupmanage',
-                        }, {
-                            primaryText: "企业门禁授权",
-                            router: 'member/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        }
-                    ]
-                },
-                {
-                    primaryText: '社区经营',
-                    iconName: 'icon-com',
-                    iconColor: '#79859a',
-                    router: 'community',
-                    menuItems: [
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -687,11 +668,10 @@
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]
-                },
-            ]
+                    ]	
+                }, 
+             ]
         }
-
     }
     // 社区运营
     function getOperationNav(params) {

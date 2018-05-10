@@ -605,7 +605,6 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-
                         {
 
                             primaryText: '社区',
@@ -629,13 +628,13 @@
                         },
                         {
                             primaryText: "每日库存查询",
-                            router: 'inventory/daily-inventory',
+                            originUrl: 'inventory/daily-inventory',
                             type: 'vue',
                             menuCode: 'daily_inventory',
                         },
                         {
                             primaryText: "可租商品查询",
-                            router: 'inventory/optional-inventory',
+                            originUrl: 'inventory/optional-inventory',
                             type: 'vue',
                             menuCode: 'inventory',
                         },
@@ -649,49 +648,30 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-
                         {
-                            primaryText: '门禁权限组管理',
-                            menuCode: 'auth_user_group_list',
-                            router: 'doorpermission/doorgroupmanage',
-                        }, {
-                            primaryText: "企业门禁授权",
-                            router: 'member/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        }
-                    ]
-                },
-                // {
-                //     primaryText: '社区经营',
-                //     iconName: 'icon-com',
-                //     iconColor: '#79859a',
-                //     router: 'community',
-                //     menuItems: [
-                //         {
-                //             primaryText: '库存平面图',
-                //             menuCode: 'cmt_run',
-                //             router: 'product/communityManage/detail',
-                //         },
-                //         {
-                //             primaryText: '销控',
-                //             menuCode: 'cmt_sell_control',
-                //             router: 'product/communityManage/controlTable',
-                //         },
-                //         {
-                //             primaryText: "招商数据",
-                //             router: 'product/statistical/index',
-                //             menuCode: 'stat_group',
-                //         },
-                //         {
-                //             primaryText: '会议室设备配置',
-                //             menuCode: 'oper_cmt_deviceList_base',
-                //             router: 'product/communityAllocation/equipmentList'
-                //         },
-                //     ]
-                // },
-            ]
+                            primaryText: '库存平面图',
+                            menuCode: 'cmt_run',
+                            router: 'product/communityManage/detail',
+                        },
+                        {
+                            primaryText: '销控',
+                            menuCode: 'cmt_sell_control',
+                            router: 'product/communityManage/controlTable',
+                        },
+                        {
+                            primaryText: "招商数据",
+                            router: 'product/statistical/index',
+                            menuCode: 'stat_group',
+                        },
+                        {
+                            primaryText: '会议室设备配置',
+                            menuCode: 'oper_cmt_deviceList_base',
+                            router: 'product/communityAllocation/equipmentList'
+                        },
+                    ]	
+                }, 
+             ]
         }
-
     }
     // 社区运营
     function getOperationNav(params) {

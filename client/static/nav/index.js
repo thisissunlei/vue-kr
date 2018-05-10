@@ -628,13 +628,13 @@
                         },
                         {
                             primaryText: "每日库存查询",
-                            originUrl: 'inventory/daily-inventory',
+                            router: 'inventory/daily-inventory',
                             type: 'vue',
                             menuCode: 'daily_inventory',
                         },
                         {
                             primaryText: "可租商品查询",
-                            originUrl: 'inventory/optional-inventory',
+                            router: 'inventory/optional-inventory',
                             type: 'vue',
                             menuCode: 'inventory',
                         },

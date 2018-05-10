@@ -161,12 +161,13 @@ export default {
         border-radius:6px;
     }
     .mask{
-        background: rgba(0,0,0,.3);
+        background: rgba(0,0,0,.5);
         position: absolute;
         top: 0px;
         left: 0px;
         right: 0px;
         bottom: 0px;
+        filter: blur(5px);
     }
     .back,.forward{
         font-size:40px;

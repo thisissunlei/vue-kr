@@ -1424,8 +1424,9 @@ import EditTask from '../project-detail/edit-task';
         left:230px;
          .u-select{
              width:245px;
-             margin-right:30px;
+             margin-right:15px;
              float:left;
+             font-size: 13px;
              span{
                  padding:0 10px;
                  vertical-align: -2px;
@@ -1446,7 +1447,7 @@ import EditTask from '../project-detail/edit-task';
             line-height: 30px;
             display: inline-block;
             text-align: center;
-            font-size: 12px;
+            font-size: 13px;
             color: #666666;
             border-radius: 7px;
         }

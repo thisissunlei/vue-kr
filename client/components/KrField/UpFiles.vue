@@ -164,8 +164,8 @@ export default{
 			return decodeURI(filename);
 		},
 		downImg(url,id){
-				window.location.href = '/api/op/sys/downFile?fileId='+id;
-			// utils.downFile(url);
+				// window.location.href = '/api/op/sys/downFile?fileId='+id;
+			utils.downImg(url);
 			// // down-file
 			return ;
 			//  this.$http.get('down-file',{

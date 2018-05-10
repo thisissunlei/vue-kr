@@ -28,6 +28,7 @@
                 >
                 </div>
                 <!-- <span class="close-btn " @click="close"></span> -->
+                <!-- <iframe height="0" width="0" :src="data[urlIndex].fieldUrl" name="saveImage" id="saveImage"></iframe> -->
                 <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">下载原图</Button>
                 <div class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
             </div>
@@ -85,7 +86,8 @@ export default {
             this.$emit('close')
         },
         downFile(url,id){
-         
+            
+        //    saveImage.document.execCommand('saveAs');
             this.$emit('downFile',url,id)
         }
     },

@@ -69,7 +69,7 @@
 
 
 
-			<div  :style="{display:isEdit?'block':'none'}">
+			<div v-if="isEdit" :style="{display:isEdit?'block':'none'}">
 				<div class="edit-label-mask" @click="maskClick"></div>
 				<div class="edit-field-box">
 					<slot></slot>

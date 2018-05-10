@@ -70,7 +70,7 @@
 				</div>
 			</div>
 		</EditLabel>
-		<PhotoAlbum @downFile="downFile" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
+		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	
 	</div>
 	
@@ -163,27 +163,33 @@ export default{
 			var filename  =fileArr[fileArr.length-1];
 			return decodeURI(filename);
 		},
-		downFile(url,id){
-			utils.downFile(url,'11.jpg','image/png')
-			// down-file
+		downImg(url,id){
+				window.location.href = '/api/op/sys/downFile?fileId='+id;
+			// utils.downFile(url);
+			// // down-file
 			return ;
-			 this.$http.get('down-file',{
-                fileId:id
-            }).then((response)=>{
-				console.log("======",response)
-				var aLink = document.createElement('a');
-				var blob = new Blob([response]);
-				var evt = document.createEvent("HTMLEvents");
-				evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错, 感谢 Barret Lee 的反馈
-				aLink.download = "fileName";
-				aLink.href = URL.createObjectURL(blob);
-				aLink.dispatchEvent(evt);
-                // utils.downImg(response)
-            }).catch((error)=>{
-                // this.MessageType="error";
-                // this.openMessage=true;
-                // this.warn=error.message;
-            })
+			//  this.$http.get('down-file',{
+            //     fileId:id
+            // }).then((response)=>{
+			// 	console.log("======",response)
+			// 	var aLink = document.createElement('a');
+			// 	var blob = new Blob([response]);
+			// 	var evt = document.createEvent("HTMLEvents");
+			// 	evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错, 感谢 Barret Lee 的反馈
+			// 	aLink.download = "fileName";
+			// 	aLink.href = URL.createObjectURL(blob);
+			// 	aLink.dispatchEvent(evt);
+            //     // utils.downImg(response)
+            // }).catch((error)=>{
+            //     // this.MessageType="error";
+            //     // this.openMessage=true;
+            //     // this.warn=error.message;
+            // })
+		},
+		downFile(url,id){
+			
+			utils.downFile(url);
+			
 		},
 		getIsPhoto(url){
 			var img="png,jpg,jpeg";

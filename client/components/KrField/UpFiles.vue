@@ -344,7 +344,7 @@ export default{
 	
 	.up-icon{
 		display: inline-block;
-		width: 180px;
+		width: 210px;
 		height: 135px;
 		margin-left: 20px;
 		text-align: center;
@@ -384,7 +384,7 @@ export default{
     .view-box{
     	width: 600px;
 		min-height: 198px;
-		background:  #EEEEEE;
+		background: #f3f3f3;
 	    padding-bottom: 10px;
     }
     

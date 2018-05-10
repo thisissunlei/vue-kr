@@ -193,7 +193,7 @@ export default {
             data.fieldName = data.name;
             data.fieldType = this.getFieldToType(data.type);
             data.fieldValue = data.value;
-            data.groupCode = "property";
+            data.groupCode = this.collapseData.code;
             this.$http.post('project－field-edit',data).then((response)=>{
                
                 this.$emit('okClick');

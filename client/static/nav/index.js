@@ -903,6 +903,12 @@
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
                         },
+                        {
+                            primaryText: '运维工具',
+                            menuCode: 'op_member_coupon_external',
+                            type: 'vue',
+                            router: 'ops'
+                        },
 
                     ]
                 },

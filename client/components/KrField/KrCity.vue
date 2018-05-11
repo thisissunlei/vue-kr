@@ -80,10 +80,12 @@ export default {
         // if(this.mask){
         //     this.labelValue="";
         //     this.cityValue='';
-        // }  
+        // } 
         this.labelValue= this.getProvince(this.cityValue,this.data);
     },
 	methods:{
+       
+
         editClick(){
             // this.$refs.cityCascader.filterable = true
 
@@ -98,7 +100,14 @@ export default {
                 return [];
             }
            
-            return value.split(',');
+            return this.arrToNum(value.split(','));
+        },
+        arrToNum(arr){
+            var ids = [];
+            for(let i=0;i<arr.length;i++){
+                ids.push(+arr[i]);
+            }
+            return [].concat(ids);
         },
         recordClick(value){
             

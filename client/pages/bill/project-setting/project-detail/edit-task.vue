@@ -72,7 +72,7 @@
                     v-for="item in getEdit.operLogs" 
                     :key="item.id"
                 >
-                    <div class='first'>{{item.uTime|dateFormat('YYYY-MM-dd HH:mm')}}</div>
+                    <div class='first'>{{item.uTime|dateFormat('MM-dd')}}</div>
                     <div style="display:inline-block;">
                         <div class='second'>
                             <span style="font-weight:bold; ">{{item.updatorName}}&nbsp;</span>
@@ -290,7 +290,6 @@ export default {
             
         },
         switchGoArchives(){
-            console.log("999999999")
             this.openGoArchives = !this.openGoArchives;
             if(!this.openGoArchives){
                 this.startOk();

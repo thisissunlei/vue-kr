@@ -248,6 +248,7 @@ export default {
         okClick(){
           
               this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
+                    console.log("=========")
                     this.params.actualEndTime = this.actualEnd;
                     this.isEndEdit = true;
                     var data = Object.assign({},this.params);
@@ -307,7 +308,11 @@ export default {
                 if(!callback){
                      this.fileDetailData = Object.assign({},response.data);
                     this.switchGoArchives();
+                   
                     
+                }
+                if( callback){
+                     callback();
                 }
                 this.totalFields=response.data.totalFields;
                 this.validFields = response.data.validFields;

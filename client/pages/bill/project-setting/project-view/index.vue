@@ -1202,10 +1202,12 @@ import EditTask from '../project-detail/edit-task';
             } ,
             dundoneTaskChange(form){
                 this.tabParams.undoneTaskId=form;
+                this.tabParams.page = 1;
                 this.getTableData(this.tabParams);
             },
             doneTaskChange(form){
                 this.tabParams.doneTaskId=form;
+                this.tabParams.page = 1;
                 this.getTableData(this.tabParams);
             },
             onSubmit(form){ 

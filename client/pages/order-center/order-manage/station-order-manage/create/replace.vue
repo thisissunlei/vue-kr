@@ -150,7 +150,7 @@
                         <Col style='display:inline-block;width:30%'>
                             <div class="title">签约价明细</div>
                         </Col>
-                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount.list.length && selecedStationList.length">
+                        <Col class="sale-tactics" style='display:inline-block;width:70%' v-if="discount && discount.list &&discount.list.length && selecedStationList.length">
 
                             <div style="display:inline-block">
                                 <span v-for="types in discount.list" :key="types.sale" class="button-list" v-on:click="selectDiscount(types)" v-bind:class="{active:discountCon==types.sale }">{{ types.sale }}折</span>
@@ -1137,10 +1137,14 @@
                 }
                 //换租结束时间
                 this.getSaleList(value)
-                this.changeThree = new Date()
-                if(this.selecedStationList && this.selecedStationList.length){
-                    this.clearFormThree()
-
+                this.changeThree = new Date();
+                var toString = Object.prototype.toString;
+                
+                var typeStr = toString.call([]); 
+                console.log(this.selecedStationList,">>>>>>>>>",typeStr)
+                if(this.selecedStationList && typeStr == '[object Array]' &&  this.selecedStationList.length){
+                    console.log(this.selecedStationList,"============")
+                    this.clearFormThree();
                 }
             },
             clearFormThree(){

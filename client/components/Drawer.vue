@@ -74,6 +74,7 @@
             },
             onClose(){
                 this.isOpen=!this.isOpen;
+                this.$emit('onClose');
                 this.close && this.close();
             }
         },

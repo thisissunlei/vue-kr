@@ -7,14 +7,14 @@
              <Input 
                 v-model="formItem.iconName" 
                 placeholder="请输入图标名称"
-                :maxlength="maxLength"
+                
             />
         </FormItem>
         <FormItem label="跳转地址：" style="width:352px" prop="destUrl">
              <Input 
                 v-model="formItem.destUrl" 
                 placeholder="请输入跳转地址"
-                :maxlength="maxLength"
+                
             />
         </FormItem>
         <FormItem label="是否启用：" style="width:352px" prop="enable">
@@ -61,7 +61,7 @@
              <Input 
                 v-model="formItem.orderNum" 
                 placeholder="请输入排序号"
-                :maxlength="maxLength"
+              
             />
         </FormItem>
        

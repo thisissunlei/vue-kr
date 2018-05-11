@@ -4,29 +4,32 @@
       <div class="m-detail-content">
             <DetailStyle info="数据层">
                <div class="u-btn-list">
-                    <a href="http://op.krspace.cn/api/op/druid/index.html" class="u-ops-btn">正式 druid-op 监控</a>
-                    <a href="http://optest04.krspace.cn/api/op/druid/index.html" class="u-ops-btn">测试04 druid-op 监控</a>
+                    <a href="http://op.krspace.cn/api/op/druid/index.html" target="_blank" class="u-ops-btn">正式 druid-op 监控</a>
+                    <a href="http://optest04.krspace.cn/api/op/druid/index.html" target="_blank" class="u-ops-btn">测试04 druid-op 监控</a>
                </div>
             </DetailStyle>
             <DetailStyle info="服务层">
                 <div class="u-btn-list">
-                        <a href="http://192.168.205.3:8077/#" class="u-ops-btn">正式dubbo监控</a>
-                        <a href="http://192.168.205.2:8077/" class="u-ops-btn">测试01dubbo监控</a>
-                        <a href="http://192.168.205.3:8077/" class="u-ops-btn">测试02dubbo监控</a>
-                        <a href="http://192.168.206.3:8077/" class="u-ops-btn">测试03dubbo监控</a>
-                        <a href="http://192.168.206.4:8077/" class="u-ops-btn">测试04dubbo监控</a>
+                        <a href="http://192.168.205.3:8077/#" target="_blank" class="u-ops-btn">正式dubbo监控</a>
+                        <a href="http://192.168.205.2:8077/" target="_blank" class="u-ops-btn">测试01dubbo监控</a>
+                        <a href="http://192.168.205.3:8077/" target="_blank" class="u-ops-btn">测试02dubbo监控</a>
+                        <a href="http://192.168.206.3:8077/" target="_blank" class="u-ops-btn">测试03dubbo监控</a>
+                        <a href="http://192.168.206.4:8077/" target="_blank" class="u-ops-btn">测试04dubbo监控</a>
                 </div>
             </DetailStyle>
             <DetailStyle info="定时任务">
                  <div class="u-btn-list">
-                        <a href="http://192.168.203.5:63391/#" class="u-ops-btn">正式dd定时</a>
-                        <a href="http://192.168.205.2:8899/" class="u-ops-btn">测试01dd定时</a>
-                        <a href="http://192.168.205.3:8899/" class="u-ops-btn">测试02dd定时</a>
-                        <a href="http://192.168.206.3:8899/" class="u-ops-btn">测试03dd定时</a>
-                        <a href="http://192.168.206.4:8899/" class="u-ops-btn">测试04dd定时</a>
+                        <a href="http://192.168.203.5:63391/#" target="_blank" class="u-ops-btn">正式dd定时</a>
+                        <a href="http://192.168.205.2:8899/" target="_blank" class="u-ops-btn">测试01dd定时</a>
+                        <a href="http://192.168.205.3:8899/" target="_blank" class="u-ops-btn">测试02dd定时</a>
+                        <a href="http://192.168.206.3:8899/" target="_blank" class="u-ops-btn">测试03dd定时</a>
+                        <a href="http://192.168.206.4:8899/" target="_blank" class="u-ops-btn">测试04dd定时</a>
                  </div>
             </DetailStyle>
             <DetailStyle info="消息中间件">
+                 <div class="u-btn-list">
+                      <a href="http://192.168.203.8:15672/#/" target="_blank" class="u-ops-btn">正式mq</a>
+                 </div>
                 
             </DetailStyle>
 	  </div>

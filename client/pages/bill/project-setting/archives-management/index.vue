@@ -63,7 +63,6 @@ export default {
             var activeDetail = activeGroup.getBoundingClientRect();
             var archivesBoxDeatil = archivesBoxDom.getBoundingClientRect();
             var moveHeight = archivesBoxDeatil.top - activeDetail.top;
-            console.log(moveHeight,"ppppp",archivesBoxDeatil.top,activeDetail.top)
             archivesBoxDom.scrollTop =archivesBoxDom.scrollTop - moveHeight;
 
 

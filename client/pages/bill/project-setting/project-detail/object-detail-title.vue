@@ -3,7 +3,7 @@
 
     <div class="object-detail-title">
         <div class="task-name">
-            <span>{{data.name}}</span>
+            <span style="font-weight: bold;">{{data.name}}</span>
             <span 
                 v-if="data.taskStatus"
                 class="task-status" 

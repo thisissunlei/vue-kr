@@ -56,7 +56,7 @@
                 </div>
                 <div v-if="getEdit.code||getEdit.nullFields" class="file-box" style="margin-top:10px;display:inline-block;line-height:20px;">
                     <div>
-                        需要填写档案&nbsp;<span style="font-size:20px;color:#ccc;">{{getEdit.totalFields}}</span>&nbsp;项，
+                        需要填写档案&nbsp;<span style="font-size:20px;color:#666;">{{getEdit.totalFields}}</span>&nbsp;项，
                         尚未完成&nbsp;<span style="font-size:20px;color:#000;">{{getEdit.nullFields}}</span>&nbsp;项，
                         <span style="font-size:20px;color:#499DF1;cursor: pointer;" @click="goArchivesClick">去填写&nbsp;>> </span></div>
                 </div>
@@ -93,7 +93,7 @@
 
         <Modal
             v-model="openGoArchives"
-           
+        
             width="910"
         >
             <div slot="header" style="font-size:16px;color:#333;">
@@ -197,7 +197,7 @@ export default {
                 // this.warn=error.message;
             })
         },
-         cancelSure(){
+        cancelSure(){
             this.openSure=!this.openSure;
         },
         switchStartTime(){
@@ -208,7 +208,6 @@ export default {
             this.endOpen = !this.endOpen;
             if(this.endOpen){
                 this.newEnd = this.actualEnd;
-                console.log(this.newEnd,"ppppp")
             }
         },
         startChnage(date){
@@ -248,7 +247,16 @@ export default {
         },
         okClick(){
           
-              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{})
+              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
+                    this.params.actualEndTime = this.actualEnd;
+                    this.isEndEdit = true;
+                    var data = Object.assign({},this.params);
+                    data.planEndTime = this.numToDate(data.planEndTime);
+                    data.actualEndTime = this.numToDate(data.actualEndTime)
+                    this.$emit("dataChange",data,()=>{
+                        this.cancelSure()
+                    });
+              })
         },
         endOk(flag){
             this.actualEnd = this.newEnd;
@@ -277,12 +285,15 @@ export default {
             });
         },
         goArchivesClick(){
-           
             this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code})
             
         },
         switchGoArchives(){
+            console.log("999999999")
             this.openGoArchives = !this.openGoArchives;
+            if(!this.openGoArchives){
+                this.startOk();
+            }
         },
         getFormItem(){
           
@@ -290,7 +301,7 @@ export default {
         },
         //去填写详情
         getArchivesDetail(data,callback){
-           
+           console.log(data,"ooooooo")
             this.$http.get('project－archives-file-detail',data).then((response)=>{
                
                 if(!callback){

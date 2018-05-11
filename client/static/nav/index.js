@@ -605,10 +605,6 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-<<<<<<< HEAD
-
-=======
->>>>>>> 1cd696258725e93558b47a8205ca88ee87209e33
                         {
 
                             primaryText: '社区',
@@ -652,27 +648,6 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-<<<<<<< HEAD
-
-                        {
-                            primaryText: '门禁权限组管理',
-                            menuCode: 'auth_user_group_list',
-                            router: 'doorpermission/doorgroupmanage',
-                        }, {
-                            primaryText: "企业门禁授权",
-                            router: 'member/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        }
-                    ]
-                },
-                {
-                    primaryText: '社区经营',
-                    iconName: 'icon-com',
-                    iconColor: '#79859a',
-                    router: 'community',
-                    menuItems: [
-=======
->>>>>>> 1cd696258725e93558b47a8205ca88ee87209e33
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -693,15 +668,9 @@
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-<<<<<<< HEAD
-                    ]
-                },
-            ]
-=======
                     ]	
                 }, 
              ]
->>>>>>> 1cd696258725e93558b47a8205ca88ee87209e33
         }
     }
     // 社区运营
@@ -1207,6 +1176,11 @@
                         primaryText: "账单(老数据)",
                         router: 'finance/manage/orderbill/orderList',
                         menuCode: 'fina_account_list'
+                    },
+                    {
+                        primaryText: "审核列表(老数据)",
+                        router: 'finance/manage/audit/auditlist',
+                        menuCode: 'fina_verify_page'
                     },
                     {
                         primaryText: "回款",

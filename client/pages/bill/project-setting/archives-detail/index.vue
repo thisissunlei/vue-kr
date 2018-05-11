@@ -134,7 +134,7 @@ export default {
             for(let i=0;i<groupDoms.length;i++){
                 let everyDom = groupDoms[i];
                 let everyDetail = everyDom.getBoundingClientRect();
-                if(everyDetail.top<300 && 300<everyDetail.height+everyDetail.top){
+                if(everyDetail.top<500 && 500<everyDetail.height+everyDetail.top){
                     this.$emit('krScroll',i);
                 }
             }

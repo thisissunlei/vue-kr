@@ -905,7 +905,7 @@
                         },
                         {
                             primaryText: '运维工具',
-                            menuCode: 'op_member_coupon_external',
+                            menuCode: 'ops_tool_management',
                             type: 'vue',
                             router: 'ops'
                         },

@@ -5,9 +5,9 @@
             
             <div class="title"><span>{{title}}</span><span v-if="promptText" style="font-size:14px;color:red;">{{promptText}}</span></div>
         </div>
-        <div class="content" :style="{borderWidth:isBorder?'1px':'0px'}">
+        <div class="content" :style="{borderWidth:isBorder?'1px':'0px',height:'auto'}">
             <slot name="content"></slot>
-            <div class="tag" :style="tagStyle()"></div>
+            <div class="tag" v-if="isEnd" :style="tagStyle()"></div>
         </div>
      
   </div>
@@ -128,6 +128,8 @@
         margin-left: 20px;
         position: relative;
         margin-top: -2px;
+        box-sizing: border-box;
+        background: #ffffff;
         .tag{
             display: inline-block;
             position: absolute;

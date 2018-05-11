@@ -1,11 +1,12 @@
 
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-textarea">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Input
                 v-model="areaValue"
@@ -63,6 +64,9 @@ export default {
 		}
 	},
 	methods:{
+        recordClick(value){
+            this.$emit('recordClick',value)
+        },
 		click(event){
             this.$emit('click',event);
         },
@@ -100,7 +104,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-textarea{
+      position: relative;
 	.edit-icon{
 		
 		position: absolute;

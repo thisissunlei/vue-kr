@@ -305,7 +305,7 @@ export default {
                 },
                 {
                     title:'在租',
-                    color:"#FDAFAF"
+                    color:"#FCC17C"
                 },
                 {
                     title:'合同未生效',

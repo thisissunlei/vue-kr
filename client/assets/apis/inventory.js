@@ -44,6 +44,11 @@ export default  {
     'getOptionalTimeLine': {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
+    },
+    //每日库存-平面图
+    'getInventoryMap': {
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
+        method: 'get'
     }
   }
   

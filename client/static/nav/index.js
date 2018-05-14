@@ -800,6 +800,12 @@
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
                         // },
+                        {
+                            primaryText: '电视图库管理',
+                            menuCode: 'tv_ad_storage',
+                            type: 'vue',
+                            router: 'smart-hardware/map-depot'
+                        },
                     ]
                 },
                 {

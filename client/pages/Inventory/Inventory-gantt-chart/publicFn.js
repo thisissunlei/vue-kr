@@ -340,7 +340,7 @@ function getLabelColor(taskStatus) {
     if (taskStatus === 'NOT_EFFECT') {
         return '#FFE08F';
     } else if(taskStatus === 'IN_RENT'){
-        return '#FDAFAF';
+        return '#FCC17C';
     } else if(taskStatus === 'AVAILABLE'){
         return '#BCE590';
     } 

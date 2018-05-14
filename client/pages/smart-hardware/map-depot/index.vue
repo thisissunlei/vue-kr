@@ -2,7 +2,20 @@
   <div class="g-map-depot">
        <SectionTitle title="电视图库管理" />
         <div class="u-search" >
-                 
+            <Button type="primary" @click="jumpCreate">新建图库</Button> 
+            <div class="u-select">
+              <span class="u-select-label">图库：</span>
+               <Select 
+                    v-model="communityId" 
+                    style="width:200px"
+                    placeholder="请选择" 
+                    filterable
+                    clearable
+                    @on-change="communityChange"
+                >
+                    <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                </Select>
+            </div>
         </div>
          <div class="u-table">
               <Table  border :columns="picColumns" :data="tableList" @on-select="onSelectList"  @on-select-all="onSelectList"/>
@@ -37,7 +50,9 @@ export default {
          page:1,
          pageSize:15,
        },
+       communityId:'',
        tableList:[],
+       communityList:[],
        picColumns:[
               {
                   type: 'selection',
@@ -97,13 +112,23 @@ export default {
 
    },
    mounted(){
-
+     this.tableList=[
+       {
+         billNo:111
+       }
+     ]
    },
    methods:{
+     communityChange(){
+
+     },
+     jumpCreate(){
+         
+     },
      jumpEdit(){
 
      },
-      onSelectList(data){
+     onSelectList(data){
             // let billIds=[];
             // data.map((item)=>{
             //     billIds.push(item.billId)
@@ -137,6 +162,13 @@ export default {
             margin:16px 0;
             padding:0 20px;
             
+    }
+    .u-select{
+      float:right;
+      width:250px;
+      .u-select-label{
+        padding-right:10px;
+      }
     }
     .u-table{
         padding:0 20px;

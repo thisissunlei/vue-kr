@@ -2,7 +2,7 @@ import axios from 'axios'
 import APIS from '../assets/apis/index';
 import Qs from 'qs'; 
 // 超时时间
-axios.defaults.timeout = 6000
+axios.defaults.timeout = 10000
 // http请求拦截器
 
 const env = process.env.NODE_ENV;

@@ -134,7 +134,8 @@ export default {
    mounted(){
      this.tableList=[
        {
-         billNo:111
+         billNo:111,
+         storageId:1,
        }
      ]
    },
@@ -151,8 +152,8 @@ export default {
      jumpCreate(){
         this.showCreate() 
      },
-     jumpEdit(){
-
+     jumpEdit(params){
+        window.open(`/smart-hardware/map-depot/edit/${params.storageId}`,'_blank');
      },
      onSelectList(data){
             // let billIds=[];

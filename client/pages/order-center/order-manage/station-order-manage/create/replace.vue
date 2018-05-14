@@ -186,7 +186,8 @@
                             <Input v-model="freeDays" :placeholder="'最大允许赠送'+freeMap.maxDays+'天'" @on-blur="checkFreeMap"  style="width: 120px;" ></Input>
                             <span style="padding:0 15px"> 天</span>
                             <Button type="primary" @click="setfreeMap">设置</Button>
-
+                            <span style="padding:0 5px"> </span>
+                            <Button type="ghost" @click="cancleFreeMap">取消免租</Button>
                             </div>
 
 
@@ -1260,10 +1261,17 @@
                 this.freeDays = obj.days;
 
             },
+            cancleFreeMap(){
+                this.freeStartDate = ''
+                this.freeDays = ''
+                this.setFreeDays(this.formItem.leaseEnddate)
+            },
             //设置免租天数
             setfreeMap(){
                 let free = this.freeDays;
-                let checkResult = this.checkFreeMap() //1.数字2.小于最大天数
+                if(free){
+                    this.checkFreeMap() //1.数字2.小于最大天数
+                }
                 let params = {
                     communityId:this.formItem.communityId,
                     days:this.freeDays,
@@ -1271,12 +1279,17 @@
                     start:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date(this.formItem.leaseBegindate)),
                     tacticsId:this.freeMap.tacticsId,
                 }
-               
-               if(free == 0){
+                if(free === 0){
                     this.freeStartDate = ''
                     this.setFreeDays(this.formItem.leaseEnddate)
                     return;
-               }
+                }
+                if(!free){
+                    this.$Notice.error({
+                        title:'请填写免租天数'
+                    })
+                    return 
+                }
                 //3.获取免租开始日期
                 
                 this.$http.post('get-free-start-date', params).then( r => {
@@ -1319,7 +1332,7 @@
                 return true
             },
             setFreeDays(start){
-                if(!this.freeDays){
+                if(!this.freeDays && this.freeDays !=0){
                     this.$Notice.error({
                         title:'请先选择免租天数'
                     })

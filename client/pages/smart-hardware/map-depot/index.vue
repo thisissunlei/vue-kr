@@ -32,14 +32,30 @@
                   </div>
               </div>
         </div>
+        <Modal
+            v-model="openSearch"
+            title="高级查询"
+            ok-text="确定"
+            cancel-text="取消"
+            width="660"
+        >
+            <CreatedMapDepot />
+            
+            <div slot="footer">
+                <Button type="primary" @click="searchSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+            </div>
+        </Modal>
   </div>
 </template>
 <script>
 
 import SectionTitle from '~/components/SectionTitle';
+import  CreatedMapDepot from "./createdMapDepot"
 export default {
    components:{
       SectionTitle,
+      CreatedMapDepot
    },
    data(){
      return{

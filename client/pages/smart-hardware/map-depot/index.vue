@@ -33,17 +33,20 @@
               </div>
         </div>
         <Modal
-            v-model="openSearch"
-            title="高级查询"
+            v-model="openCreate"
+            title="新建"
             ok-text="确定"
             cancel-text="取消"
-            width="660"
+            width="400"
         >
-            <CreatedMapDepot />
+            <CreatedMapDepot 
+                :itemDetail="communityList" 
+                @formData="getCreateData"  
+            />
             
             <div slot="footer">
-                <Button type="primary" @click="searchSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                <Button type="primary" @click="createSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showCreate">取消</Button>
             </div>
         </Modal>
   </div>
@@ -66,15 +69,16 @@ export default {
          page:1,
          pageSize:15,
        },
+       openCreate:false,
        communityId:'',
        tableList:[],
        communityList:[],
+       createData:'',
        picColumns:[
               {
                   type: 'selection',
                   width: 35,
                   align: 'center',
-                  
               },
               {
                   title: '图库名',
@@ -135,11 +139,17 @@ export default {
      ]
    },
    methods:{
+     showCreate(){
+       this.openCreate=!this.openCreate;
+     },
+     createSubmit(){
+
+     },
      communityChange(){
 
      },
      jumpCreate(){
-         
+        this.showCreate() 
      },
      jumpEdit(){
 
@@ -153,16 +163,24 @@ export default {
      },
      getTableData(params){
             
-        // this.$http.get('get-bill-paid-list', params).then((res)=>{
-        //     this.tableList=res.data.items;
-        //     this.totalCount=res.data.totalCount;
+        this.$http.get('get-tv-ad-storage-list', params).then((res)=>{
+            this.tableList=res.data.items;
+            this.totalCount=res.data.totalCount;
            
-        // }).catch((err)=>{
-        //     this.$Notice.error({
-        //         title:err.message
-        //     });
-        // })
+        }).catch((err)=>{
+            this.$Notice.error({
+                title:err.message
+            });
+        })
           
+      },
+      changePage(page){
+            this.tabParams.page=page;
+            this.page=page;
+            this.getTableData(this.tabParams);
+      },
+      getCreateData(form){
+          this.createData=form;
       },
 
 

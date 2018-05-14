@@ -54,7 +54,9 @@
 <script>
 
 import SectionTitle from '~/components/SectionTitle';
-import  CreatedMapDepot from "./createdMapDepot"
+import  CreatedMapDepot from "./createdMapDepot";
+import dateUtils from 'vue-dateutils';
+
 export default {
    components:{
       SectionTitle,
@@ -82,27 +84,31 @@ export default {
               },
               {
                   title: '图库名',
-                  key: 'billNo',
+                  key: 'name',
                   align:'center',
               },
               {
                   title: '图片数量（张）',
-                  key: 'billNo',
+                  key: 'imgCount',
                   align:'center',
               },
               {
                   title: '最后编辑时间',
-                  key: 'billNo',
+                  key: 'lastEditTime',
                   align:'center',
+                  render(h, obj){
+                    let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.lastEditTime));
+                    return time;
+                  }
               },
               {
                   title: '最后编辑人',
-                  key: 'billNo',
+                  key: 'lasEditUser',
                   align:'center',
               },
               {
                   title: '操作',
-                  key: 'effective',
+                  key: 'operation',
                   align:'center',
                   render:(h,params)=>{
                       return h('div', [

@@ -26,6 +26,8 @@
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import dateUtils from 'vue-dateutils';
+
 export default {
    components:{
       SectionTitle,
@@ -42,7 +44,7 @@ export default {
                 pageSize:15,
            },
            imgColumns:[
-                {
+               {
                   type: 'selection',
                   width: 60,
                   align: 'center',
@@ -51,6 +53,15 @@ export default {
                     title: '文件名',
                     key: 'bizType',
                     align:'center',
+                    render:(h,params)=>{
+                        return h('div', {
+                           on: {
+                                click: () => {
+                                    this.picShow(params.row)
+                                }
+                            } 
+                        },params.row.fileName);
+                    }
                 },
                 {
                     title: '大小',
@@ -71,9 +82,18 @@ export default {
       GLOBALSIDESWITCH("false");
       let {params}=this.$route;
       this.tabParams.storageId=params.storageId;
-      this.getTableData(this.tabParams);
+      this.tableList=[
+          {
+            bizType:'111',
+            aa:222  
+          }
+      ]
+      //this.getTableData(this.tabParams);
    },
    methods:{
+       picShow(){
+
+       },
        uploadPic(){
 
        },

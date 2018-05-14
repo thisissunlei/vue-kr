@@ -68,8 +68,10 @@ export default {
        }
    },
    mounted(){
-     GLOBALSIDESWITCH("false");
-     this.getTableData();
+      GLOBALSIDESWITCH("false");
+      let {params}=this.$route;
+      this.tabParams.storageId=params.storageId;
+      this.getTableData(this.tabParams);
    },
    methods:{
        uploadPic(){
@@ -91,10 +93,9 @@ export default {
        },
        getTableData(params){
                 this.renderList()
-                this.$http.get('get-bill-paid-list', params).then((res)=>{
-                    this.billList=res.data.items;
+                this.$http.get('get-tv-ad-storage-file-list', params).then((res)=>{
+                    this.tableList=res.data.items;
                     this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message

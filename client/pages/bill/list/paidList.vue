@@ -15,7 +15,7 @@
     </div>
     <div class="u-table">
         <Table  border :columns="columns" :data="billList" @on-select="onSelectList"  @on-select-all="onSelectList"></Table>
-        <div style="margin: 10px;overflow: hidden">
+        <div  style="margin: 10px;overflow: hidden;">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
@@ -256,20 +256,19 @@ import PdfDownload from './pdfDownload';
                 
             }
         },
-        created(){
-             this.getTableData(this.$route.query);
-             if(!this.$route.query.customerName){
-                 this.$route.query.customerName=""
-             }
-             this.tabParams=this.$route.query;
-             
+        mounted(){
+            if(sessionStorage.getItem('paidParams')){
+                this.tabParams=JSON.parse(sessionStorage.getItem('paidParams'))
+            }
+             this.getTableData(this.tabParams);
         },
          watch: {
             $props: {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='paid'){
-                      this.getTableData(this.params);
+                      //this.tabParams=JSON.parse(sessionStorage.getItem('paidParams'))
+                      this.getTableData(this.tabParams);
                     }
                   
                 }
@@ -319,9 +318,12 @@ import PdfDownload from './pdfDownload';
                           return bizType[obj.row.bizType];
                         }
                     }
-                if(this.columns.length<13){
-                    this.columns.splice(4, 0, billtype)
+                let arr=[].concat(this.columns);
+
+                if(arr.length<13){
+                   arr.splice(4, 0, billtype)
                 }
+                this.columns=[].concat(arr);
                 
             },
             showSearch (params) {
@@ -365,7 +367,8 @@ import PdfDownload from './pdfDownload';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                utils.addParams(this.tabParams);
+                this.getTableData(this.tabParams)
+                sessionStorage.setItem('paidParams',JSON.stringify(this.tabParams));
 
             },
             onChangeOpen(data){
@@ -379,7 +382,9 @@ import PdfDownload from './pdfDownload';
                     pageSize:15,
                     customerName:customerName
                 }
-                utils.addParams(this.tabParams);
+                 this.getTableData(this.tabParams);
+                 sessionStorage.setItem('paidParams',JSON.stringify(this.tabParams));
+               
             },
             changePage(page){
                 this.tabParams.page=page;

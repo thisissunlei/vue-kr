@@ -136,6 +136,7 @@ export default {
 		color: #d4dce2;
 		float: right;
 		margin-left: 10px;
+		cursor: pointer;
 		&:hover{
 			color:#499df1;
 		}

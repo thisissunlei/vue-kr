@@ -4,8 +4,8 @@
 			<Select v-model="newfloor" style="width:100px;margin-right:15px;" @on-change="floorsChange" placeholder="floor">
 		        <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
 		    </Select>
-		    <Input v-model="inputStart" placeholder="开始工位" style="width: 80px;margin-right:5px"></Input>至
-		    <Input v-model="inputEnd" placeholder="结束工位" style="width: 80px;margin-right:5px"></Input>
+		    <Input v-model="inputStart" placeholder="开始工位" style="width: 80px;margin-right:5px" />至
+		    <Input v-model="inputEnd" placeholder="结束工位" style="width: 80px;margin-right:5px" />
 			<Button type="primary" @click="submitStation" style="margin-right:15px">选择</Button>
 
 			<span class="til">当前比例：</span>

@@ -65,14 +65,10 @@
                         v-model="formItem.communityId"
                         style="width:250px"
                         placeholder="请选择社区"
+                        filterable
+                        clearable
                     >
-                        <Option
-                            v-for="item in communityList"
-                            :value="item.id"
-                            :key="item.id"
-                        >
-                            {{ item.name }}
-                        </Option>
+                        <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                     </Select>
             </FormItem>
             

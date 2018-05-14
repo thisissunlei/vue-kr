@@ -1240,7 +1240,9 @@
                 }
                 this.$http.post('get-free-sale', params).then( r => {
                     this.freeMap = {};
-                    this.discount = {};
+                    this.discount = {
+                        list:[]
+                    };
                     if(r.data.length){
                         this.dealSale(r.data)
                     }

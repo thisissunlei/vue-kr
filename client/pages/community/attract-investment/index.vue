@@ -29,6 +29,8 @@ import SearchForm from '../publicPage';
 import Message from '~/components/Message';
 import Buttons from '~/components/Buttons';
 import utils from '~/plugins/utils';
+import publicFn from '../publicFn';
+
 export default {
     components:{
        SearchForm,
@@ -48,219 +50,96 @@ export default {
             attractColumns:[
                 {
                     title: '商品名称',
-                    key: 'orderNum',
+                    key: 'name',
                     width:150,
                     align:'center',
                     fixed: 'left'
                 },
                 {
                     title: '商品类型',
-                    key: 'customerName',
+                    key: 'type',
                     align:'center',
                     width:150,
                     fixed: 'left'
                 },
                 {
                     title: '工位数量',
-                    key: 'communityName',
+                    key: 'capacity',
                     align:'center',
                     width:100,
                     fixed: 'left'
                 },
                 {
                     title: '商品定价',
-                    key: 'orderNum',
+                    key: 'quotedPrice',
                     align:'center'
                 },
                 {
                     title: '招商状态',
-                    key: 'customerName',
+                    key: 'investmentStatusName',
                     align:'center'
                 },
                 {
                     title: '签约价',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                    }, item.currentTask?item.currentTask:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'price')
                     }
                 },
                 {
                     title: '折扣',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'discount')
                     }
                 },
                 {
                     title: '合同开始',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'recentStart',true)
                     }
                 },
                 {
                     title: '合同结束',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'recentEnd',true)
                     }
                 },
                 {
                     title: '租期',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'rentTime')
                     }
                 },
                 {
                     title: '渠道来源',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                         publicFn.mergeCell(h,obj.row.orderList,'sourceName')
                     }
                 },
                 {
                     title: '销售员',
-                    key: 'communityName',
+                    key: 'orderList',
+                    className:'current-range',
                     align:'center',
                     render(h,obj){
-                        var row='';
-                        if(obj.row.tasks){
-                            row=obj.row.tasks.map((item,index)=>{
-                                return h('div', [
-                                    h('Tooltip', {
-                                        props: {
-                                            placement: 'top',
-                                            content: item.currentTask
-                                        }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
-                                            class: publicFn.getDivClass(index,obj),
-                                        },
-                                    }, item.currentTask?`${item.currentTask}`:'-')
-                                ])
-                              ])
-                            })
-                            return row
-                        }
+                        publicFn.mergeCell(h,obj.row.orderList,'sellerName')
                     }
                 }
             ],
@@ -312,6 +191,35 @@ export default {
          .list-footer{
             margin: 10px 20px;
             overflow: hidden;
+        }
+        .current-range{
+            .ivu-table-cell{ 
+                padding:0;
+                height:100%;
+            .ivu-tooltip{
+                .row-current-more{
+                    padding: 15px 0 10px 0;
+                 }
+                .noBorder{
+                    border-bottom:none;
+                  }
+               }
+            }
+            .ivu-table-cell > div{
+                    border-bottom:solid 1px #e9eaec;
+                    &:last-child{
+                        border-bottom:none;
+                    }
+                }
+            .current-more-task{
+                width:100%;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+            }
+            .table-null{
+                line-height: 47px;
+            }
         }
      }
 </style>

@@ -406,7 +406,6 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            console.log('---',param);
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
                 if(this.floorList.length>1){

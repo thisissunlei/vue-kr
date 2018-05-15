@@ -42,6 +42,7 @@
             <CreatedMapDepot 
                 :itemDetail="communityList" 
                 @submitData="getCreateData"  
+                v-if="openCreate"
             />
             
             <div slot="footer">

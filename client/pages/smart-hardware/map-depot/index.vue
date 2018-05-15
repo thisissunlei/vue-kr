@@ -148,6 +148,12 @@ export default {
          let form={
             communityId: this.createData
          }
+         if(this.createData==''){
+             this.$Notice.error({
+                title:'请选择社区'
+            });
+            return;
+         }
          this.$http.post('create-tv-ad-storage', form).then((res)=>{
             this.$Notice.success({
                 title:'新建图库成功'

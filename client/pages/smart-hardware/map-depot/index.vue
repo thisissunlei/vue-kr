@@ -175,7 +175,7 @@ export default {
         this.showCreate() 
      },
      jumpEdit(params){
-        window.open(`/smart-hardware/map-depot/edit/${params.storageId}`,'_blank');
+        window.open(`/smart-hardware/map-depot/edit/${params.id}`,'_blank');
      },
      getTableData(params){
         this.$http.get('get-tv-ad-storage-list', params).then((res)=>{

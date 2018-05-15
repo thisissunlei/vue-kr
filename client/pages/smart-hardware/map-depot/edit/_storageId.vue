@@ -22,7 +22,7 @@
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
         </div>
         <div class="u-table">
-                <Table  border :columns="imgColumns" :data="tableList" @on-select="onSelectList"  @on-select-all="onSelectList"/>
+                <Table  border :columns="imgColumns" :data="tableList"   @on-selection-change="onSelectList" @on-select-all="onSelectList"/>
                 <div style="margin: 10px;overflow: hidden">
                     <div style="float: right;">
                         <Page 
@@ -115,13 +115,13 @@ export default {
            ],
            tableList:[],
            picList:[],
-       }
+           Ids:[],
+         }
    },
    mounted(){
       GLOBALSIDESWITCH("false");
       let {params}=this.$route;
       this.tabParams.storageId=params.storageId;
-      
       this.getTableData(this.tabParams);
    },
    methods:{
@@ -138,15 +138,27 @@ export default {
        },
        downloadPic(){
 
+           this.downloadImg()
+
        },
        deletePic(){
-
+            // this.$http.delete('delete-pic', params).then((res)=>{
+            //    this.$Notice.error({
+            //         title:'图片删除成功'
+            //     });
+            // }).catch((err)=>{
+            //     this.$Notice.error({
+            //         title:err.message
+            //     });
+            // })
        },
        renderList(){
             let arr=[].concat(this.imgColumns);
             let len=this.picList.length;
             if(len>0){
                 arr[1].title=`已选中${len}个文件`;
+            }else{
+                arr[1].title='文件名';
             }
             this.picColumns=[].concat(arr);
        },
@@ -168,11 +180,18 @@ export default {
             this.getTableData(this.tabParams);
         },
         onSelectList(data){
-            // let billIds=[];
-            // data.map((item)=>{
-            //     billIds.push(item.billId)
-            // })
-            // this.billIds=billIds;
+            let Ids=[];
+            data.map((item)=>{
+                Ids.push(item.id)
+            })
+            this.Ids=[].concat(Ids);
+            if(this.Ids.length>0){
+                this.btnDisabled=false;
+            }else{
+               this.btnDisabled=true; 
+            }
+            this.picList=data;
+            this.renderList();
         },
          handleSuccess(res,file){
             if(res.code==1){
@@ -185,7 +204,16 @@ export default {
             this.$Notice.error({
                     title:error.message
             });
+        },
+        downloadImg(){
+            var a = document.createElement('a');
+            a.setAttribute("href", src);
+            a.setAttribute("download", "");
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+            a.dispatchEvent(evObj);
         }
+       
    }
 }
 </script>

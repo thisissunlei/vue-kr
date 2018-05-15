@@ -7,17 +7,29 @@
             />
         </div>
         <Table :columns="attractColumns" :data="attractData" border/>
+
+        <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onMessageChange"
+        />
     </div>
 </template>
 
 <script>
 import SearchForm from '../publicPage';
+import Message from '~/components/Message';
 export default {
     components:{
-       SearchForm
+       SearchForm,
+       Message
     },
     data() {
         return{
+            warn:'',
+            MessageType:'',
+            openMessage:false,
             attractColumns:[
                 {
                     title: '商品名称',
@@ -241,14 +253,24 @@ export default {
         }
     },
     methods:{
-      getListData(){
-          
+      getListData(params){
+           this.$http.get('join-bill-list', params).then((response)=>{
+                this.totalCount=response.data.totalCount;
+                this.attractData=response.data.items;
+            }).catch((error)=>{
+                this.openMessage=true;
+                this.MessageType="error";
+                this.warn=error.message;
+            })
       },
-      searchClick(){
-
+      searchClick(params){
+         this.getListData(params); 
       },
-      clearClick(){
-          
+      clearClick(params){
+         this.getListData(params); 
+      },
+      onMessageChange(data){
+        this.openMessage=data;
       }
     }
 }

@@ -97,8 +97,11 @@ export default {
                   key: 'lastEditTime',
                   align:'center',
                   render(h, obj){
-                    let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.lastEditTime));
-                    return time;
+                    if(obj.row.lastEditTime){
+                        let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.lastEditTime));
+                        return time;
+                    }
+                    
                   }
               },
               {
@@ -138,12 +141,7 @@ export default {
 
    },
    mounted(){
-     this.tableList=[
-       {
-         billNo:111,
-         storageId:1,
-       }
-     ]
+        this.getTableData(this.tabParams)
    },
    methods:{
      showCreate(){

@@ -1,5 +1,6 @@
 import dateUtils from 'vue-dateutils';
 
+//判断单元格最后一个不加border
 function getDivClass(index,obj){
     let divClass = 'row-current-more current-more-task ';
     if (index === obj.length - 1) {
@@ -41,6 +42,22 @@ function mergeCell(h,rowArray,param,isTime){
     }
 }
 
+//检查输入字符串字节长度
+function fucCheckLength(strTemp){
+    var i,sum;
+    sum=0;
+    var length = strTemp.length ;
+    for(i=0;i<length;i++) {
+        if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
+            sum=sum+1;
+        }else {
+            sum=sum+2;
+        }
+    }
+    return sum;
+}
+
 export default {
-    mergeCell
+    mergeCell,
+    fucCheckLength
 }

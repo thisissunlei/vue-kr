@@ -3,6 +3,7 @@
         <div class="community-header">
             <Form ref="formItemInvestment" :model="formItem" :rules="ruleInvestment" label-position="left">
 
+                <!-- 第一行-->
                 <div style="white-space: nowrap;"> 
                         <Form-item label="商品名称" class='daily-form' prop="name">
                             <i-input 
@@ -72,7 +73,7 @@
                         </Form-item>
                 </div>
 
-
+                <!-- 第二行-->
                 <div style="white-space: nowrap;">
                     <div class="daily-form">
                         <span class="attract-font" style="padding-top:7px;">商品定价</span>
@@ -126,7 +127,7 @@
                 </div>
 
 
-
+                <!-- 第三行-->
                 <div style="white-space: nowrap;">
                     <div class='daily-form'>
                         <span class="attract-font" style="padding-top:7px;margin-right:24px;">签约价</span>
@@ -177,6 +178,7 @@
                 </div>
 
 
+                 <!-- 第四行-->
                 <div style="white-space: nowrap;">
                     <span class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
                     <Form-item class='daily-form' style="width:200px">
@@ -216,6 +218,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import publicFn from '../publicFn';
 import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
@@ -267,8 +270,6 @@ export default {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
                     callback('名称最多20个字节');
-                }else if(value&&!(this.formItem.communityId.toString().trim())){
-                    callback('请先选择社区');
                 }else{
                     callback();
                 }
@@ -443,24 +444,17 @@ export default {
         },
         //检查输入字符串字节长度
         fucCheckLength(strTemp) {
-            var i,sum;
-            sum=0;
-            var length = strTemp.length ;
-            for(i=0;i<length;i++) {
-                if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
-                    sum=sum+1;
-                }else {
-                    sum=sum+2;
-                }
-            }
-            return sum;
+           return publicFn.fucCheckLength(strTemp);
         },
+        //城市change事件
         cityChange(param){
             this.getCommunityList(param)
         },
+        //社区change事件
         communityChange(param){
             this.getFloorList(param);
         },
+        //销售员change事件
         changeSaler(value){
             this.formItem.sellerId=value;
         }

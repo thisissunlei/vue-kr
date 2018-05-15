@@ -41,7 +41,7 @@
         >
             <CreatedMapDepot 
                 :itemDetail="communityList" 
-                @formData="getCreateData"  
+                @submitData="getCreateData"  
             />
             
             <div slot="footer">
@@ -144,7 +144,21 @@ export default {
        this.openCreate=!this.openCreate;
      },
      createSubmit(){
-
+         let form={
+            communityId: this.createData
+         }
+         this.$http.post('create-tv-ad-storage', form).then((res)=>{
+            this.$Notice.success({
+                title:'新建图库成功'
+            });
+            this.showCreate();
+            this.getTableData(this.tabParams);
+           
+        }).catch((err)=>{
+            this.$Notice.error({
+                title:err.message
+            });
+        })
      },
      communityChange(){
          this.tabParams.communityId=this.communityId;
@@ -175,6 +189,7 @@ export default {
       },
       getCreateData(form){
           this.createData=form;
+
       },
       getCommunityList(){
             this.$http.get('get-select-items', '').then((res)=>{

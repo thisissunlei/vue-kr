@@ -27,7 +27,7 @@ export default {
    },
    methods:{
      communityChange(){
-        this.$emit('formData',this.communityId);
+        this.$emit('submitData',this.communityId);
      }
    }
 

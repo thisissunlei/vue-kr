@@ -41,6 +41,7 @@
                     :data="itemDetail"
                     @close="openViewUpload"
                     :ifDelete="ifDelete"
+                    @downFile="downloadImg"
             />
       
   </div>
@@ -50,6 +51,8 @@ import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import TvCard from './tvCard';
 import PhotoAlbum from '~/components/PhotoAlbum';
+import utils from '~/plugins/utils';
+
 export default {
    components:{
       SectionTitle,
@@ -137,8 +140,9 @@ export default {
             this.imgViewShow=!this.imgViewShow;
        },
        downloadPic(){
-
-           this.downloadImg()
+           let picList=this.picList;
+           console.log('picList',picList)
+          // this.downloadImg()
 
        },
        deletePic(){
@@ -205,13 +209,14 @@ export default {
                     title:error.message
             });
         },
-        downloadImg(){
+        downloadImg(src){
             var a = document.createElement('a');
-            a.setAttribute("href", src);
-            a.setAttribute("download", "");
-            var evObj = document.createEvent('MouseEvents');
-            evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
-            a.dispatchEvent(evObj);
+                a.href = src;
+                a.download = "";
+              var evObj = document.createEvent('MouseEvents');
+              evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+              a.dispatchEvent(evObj);
+            
         }
        
    }

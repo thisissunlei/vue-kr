@@ -5,7 +5,9 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
     var myDiagram =
        $(go.Diagram, content,         
         {   
-            initialContentAlignment: go.Spot.Center, 
+            initialContentAlignment: go.Spot.Center,
+            //initialAutoScale: go.Diagram.Uniform, 
+            isReadOnly: true,
             "undoManager.isEnabled": true
         });
 

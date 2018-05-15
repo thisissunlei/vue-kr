@@ -49,10 +49,6 @@ export default {
             default:()=>[],
             type:Array
         },
-        show:{
-            default:false,
-            type:Boolean
-        },
         eyeIndex:{
             default:0,
             type:Number

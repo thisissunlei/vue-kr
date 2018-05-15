@@ -2,16 +2,16 @@
 <template>
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
-			<div v-if="!isEdit && labeType=='label'" >
-				<div v-if="value" class="label-text">{{value}}</div>
-				<div v-if="!value" class="error-label-text">未填写</div>
+			<div v-if="!isEdit && labeType=='label'"  >
+				<div v-if="value" class="label-text" @click="editClick">{{value}}</div>
+				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
 				<span class="edit-icon" @click="editClick"></span>
 				<span class="record-icon" @click="recordClick"></span>
 				
 				
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
-				<div class="file-view-box">
+				<div class="file-view-box" @click="editClick">
 					
 				
 					<div v-if="!value || !value.length" class="to-upload">待上传</div>

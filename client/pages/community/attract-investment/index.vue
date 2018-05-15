@@ -4,9 +4,16 @@
             <SearchForm 
               @searchClick="searchClick"
               @clearClick="clearClick"
+              @initData="initData"
             />
         </div>
         <Table :columns="attractColumns" :data="attractData" border/>
+        <div  class='list-footer'>
+                <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
+                <div style="float: right;">
+                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                </div>
+        </div>
 
         <Message 
             :type="MessageType" 
@@ -20,16 +27,24 @@
 <script>
 import SearchForm from '../publicPage';
 import Message from '~/components/Message';
+import Buttons from '~/components/Buttons';
+import utils from '~/plugins/utils';
 export default {
     components:{
        SearchForm,
-       Message
+       Message,
+       Buttons
     },
     data() {
         return{
             warn:'',
             MessageType:'',
             openMessage:false,
+            tabForms:{
+                page:1,
+                pageSize:15
+            },
+            totalCount:0,
             attractColumns:[
                 {
                     title: '商品名称',
@@ -253,6 +268,9 @@ export default {
         }
     },
     methods:{
+      initData(formItem){
+         this.tabForms=Object.assign({},formItem,this.tabForms);
+      },
       getListData(params){
            this.$http.get('join-bill-list', params).then((response)=>{
                 this.totalCount=response.data.totalCount;
@@ -263,11 +281,20 @@ export default {
                 this.warn=error.message;
             })
       },
-      searchClick(params){
-         this.getListData(params); 
+      searchClick(values){
+         this.tabForms=Object.assign({},this.tabForms,values);
+         this.getListData(this.tabForms); 
       },
-      clearClick(params){
-         this.getListData(params); 
+      clearClick(values){
+         this.tabForms=Object.assign({},this.tabForms,values);
+         this.getListData(this.tabForms); 
+      },
+      submitExport(){
+          utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export');
+      },
+      onPageChange(page){
+         this.tabForms.page=page;
+         this.getListData(this.tabForms); 
       },
       onMessageChange(data){
         this.openMessage=data;
@@ -282,5 +309,9 @@ export default {
              border-bottom:solid 1px #dddee1;
              margin-bottom:20px;
          }
+         .list-footer{
+            margin: 10px 20px;
+            overflow: hidden;
+        }
      }
 </style>

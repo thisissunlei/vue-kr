@@ -42,7 +42,6 @@
                             </Select>
                             <Select 
                                     v-model="formItem.communityId" 
-                                    v-if="communityList && communityList.length !=0"
                                     placeholder="请输入社区" 
                                     style="width: 90px;"
                                     @on-change="communityChange"
@@ -79,7 +78,7 @@
                         <span class="attract-font" style="padding-top:7px;">商品定价</span>
                         <Form-item  class="priceForm" prop="stationsMin">
                             <i-input 
-                                v-model="formItem.stationsMin" 
+                                v-model="formItem.priceMin" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -87,7 +86,7 @@
                         <span class="attract-line" style="margin:0 3px 0 4px">至</span>
                         <Form-item  class="priceForm" prop="stationsMax" >
                             <i-input 
-                                v-model="formItem.stationsMax" 
+                                v-model="formItem.priceMax" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -133,7 +132,7 @@
                         <span class="attract-font" style="padding-top:7px;margin-right:24px;">签约价</span>
                         <Form-item  class="priceForm" prop="stationsMin">
                             <i-input 
-                                v-model="formItem.stationsMin" 
+                                v-model="formItem.orderPriceMin" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -141,7 +140,7 @@
                         <span class="attract-line">至</span>
                         <Form-item  class="priceForm" prop="stationsMax">
                             <i-input 
-                                v-model="formItem.stationsMax" 
+                                v-model="formItem.orderPriceMax" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -152,7 +151,7 @@
                         <span class="attract-font" style="padding-top:7px;margin-right:11px;">折<span style="display:inline-block;width:25px;"></span>扣</span>
                         <Form-item  class="priceForm" prop="stationsMin">
                             <i-input 
-                                v-model="formItem.stationsMin" 
+                                v-model="formItem.discountMin" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -160,7 +159,7 @@
                         <span class="attract-line">至</span>
                         <Form-item  class="priceForm" prop="stationsMax">
                             <i-input 
-                                v-model="formItem.stationsMax" 
+                                v-model="formItem.discountMax" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -169,7 +168,7 @@
 
                     <Form-item label="渠道来源" class='daily-form'> 
                         <Cascader 
-                          v-model="formItem.status"
+                          v-model="formItem.source"
                           style="width: 200px"
                           :data="sourceData"    
                         />
@@ -180,12 +179,10 @@
 
                 <div style="white-space: nowrap;">
                     <span class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
-                    <Form-item class='daily-form' prop="name">
-                        <i-input 
-                            v-model="formItem.name" 
-                            placeholder="请输入商品名称"
-                            style="width: 200px"
-                            @keyup.enter.native="onKeyEnter($event)"
+                    <Form-item class='daily-form' style="width:200px">
+                       <SelectSaler 
+                         name="formItem.sellerId" 
+                         :onchange="changeSaler"
                         />
                     </Form-item>
 
@@ -193,8 +190,7 @@
                         <span class="attract-font" style="padding-top:7px;margin-right:11px;">租<span style="display:inline-block;width:27px;"></span>期</span>
                         <Form-item  class='daily-form' prop="stationsMin">
                             <Select 
-                                v-model="formItem.goodsType" 
-                                placeholder="请输入商品类型" 
+                                v-model="formItem.rentTimeType" 
                                 style="width: 90px"
                                 clearable
                             >
@@ -203,7 +199,7 @@
                         </Form-item>
                         <Form-item  prop="stationsMax" class="priceForm" style="margin-right:5px">
                             <i-input 
-                                v-model="formItem.stationsMax" 
+                                v-model="formItem.rentTime" 
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -220,12 +216,16 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
+import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
        identify:{
            type:String,
            default:''
        }
+    },
+    components:{
+       SelectSaler
     },
     data() {
             const validateStation = (rule, value, callback) => {
@@ -262,13 +262,7 @@ export default {
                     callback();
                 }
             };
-            const validateDate = (rule, value, callback) => {
-                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };
+           
             const validateName = (rule, value, callback) => {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
@@ -281,22 +275,27 @@ export default {
             };
             return {  
                 formItem:{
-                    name:'',
+                    investmentStatus:'',
                     status:[],
-                    communityId:' ',
-                    statusName:'',
+
+                    name:'',
+                    communityId:'',
                     cityId:'',
                     floor:' ',
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    priceType:'UNIT_PRICE',
                     priceMin:'',
                     priceMax:'',
-                    areaMin:'',
-                    areaMax:'',
-                    locationName:' ',
-                    suiteName:' '
+                    discountMin:'',
+                    discountMax:'',
+                    sellerId:'',
+                    orderPriceMin:'',
+                    orderPriceMax:'',
+
+                    source:[],
+                    sourceId:'',
+                    subSourceId:''
                 },
                 sourceData:[{
                     value: 'beijing',
@@ -344,32 +343,17 @@ export default {
                     {value:'IN_RENT',label:'在租'},
                     {value:'DISABLE',label:'不可用'}
                 ],
-                priceList:[
-                    {value:'UNIT_PRICE',label:'工位单价'},
-                    {value:'AMOUNT',label:'商品总价'}
-                ],
-                locationList:[
-                    {value:' ',label:'全部方位'},
-                    {value:'OUTSIDE_SPACE',label:'外侧间'},
-                    {value:'INSIDE_SPACE',label:'内侧间'},
-                    {value:'UNKNOWN',label:'未知'}
-                ],
-                suiteList:[
-                    {value:' ',label:'全部'},
-                    {value:'SUITE',label:'有套间'},
-                    {value:'UNSUITE',label:'无套间'}
-                ],
 
                 formItemOld:{},
                 ruleInvestment: {
+                    name:[
+                        { validator: validateName, trigger: 'change' }
+                    ],
                     stationsMin: [
                         { validator: validateStation, trigger: 'change' }
                     ],
                     stationsMax: [
                         { validator: validateStation, trigger: 'change' }
-                    ],
-                    name:[
-                        { validator: validateName, trigger: 'change' }
                     ],
                     priceMin: [
                         { validator: validatePrice, trigger: 'change' }
@@ -377,17 +361,17 @@ export default {
                     priceMax: [
                         { validator: validatePrice, trigger: 'change' }
                     ],
-                    areaMin: [
+                    orderPriceMin: [
                         { validator: validateArea, trigger: 'change' }
                     ],
-                    areaMax: [
+                    orderPriceMax: [
                         { validator: validateArea, trigger: 'change' }
                     ],
-                    startDate: [
-                        { validator: validateDate, trigger: 'change' }
+                    discountMin: [
+                        { validator: validateArea, trigger: 'change' }
                     ],
-                    endDate: [
-                        { validator: validateDate, trigger: 'change' }
+                    discountMax: [
+                        { validator: validateArea, trigger: 'change' }
                     ]
                 }
             }
@@ -400,10 +384,7 @@ export default {
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
-                if(this.communityList.length>1){
-                    this.communityList.unshift({id:' ',name:"全部社区"})
-                }
-                this.formItem.communityId=this.communityList[0].id;
+                this.formItem.communityId=this.communityList?this.communityList[0].id:'';
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -414,12 +395,7 @@ export default {
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data;
-                if(this.cityList.length>1){
-                    this.cityList.unshift({cityId:' ',cityName:"全部城市"})
-                    this.formItem.cityId=this.cityList[1].cityId;
-                }else{
-                    this.formItem.cityId=this.cityList[0].cityId;
-                }  
+                this.formItem.cityId=this.cityList.length?this.cityList[0].cityId:'';
                 this.$emit('initData',this.formItem);
                 this.formItemOld=Object.assign({},this.formItem);
             }).catch((error)=>{
@@ -430,6 +406,7 @@ export default {
         },
         //楼层接口
         getFloorList(param){
+            console.log('---',param);
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
                 if(this.floorList.length>1){
@@ -450,7 +427,7 @@ export default {
                     this.formItem.status.map((item,index)=>{
                             str=str?str+','+item:item;
                     })
-                    this.formItem.statusName=str;
+                    this.formItem.investmentStatus=str;
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -484,6 +461,9 @@ export default {
         },
         communityChange(param){
             this.getFloorList(param);
+        },
+        changeSaler(value){
+            this.formItem.sellerId=value;
         }
     }
 }
@@ -502,6 +482,7 @@ export default {
                 margin-right:20px;
                 .ivu-form-item-content{
                     display:inline-block;
+                    width: 100%;
                 }
             }
             .community-form{

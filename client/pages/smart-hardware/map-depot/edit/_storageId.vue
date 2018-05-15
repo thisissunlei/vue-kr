@@ -3,18 +3,9 @@
       <SectionTitle :title="tilte" />
         <div class="u-btn-list" >
             <div class="u-upload-btn">
-                <Upload 
-                    name="imgUrl"
-                    multiple
-                    :show-upload-list="false"
-                    :format="['jpg','jpeg','png']"
-                    :on-success="handleSuccess"
-                    :on-error="handleError"
-                    with-credentials
-                    action="http://optest01.krspace.cn/api/krspace-finance-web/app/icon/upload" 
-                >
-                        <Button type="primary" style="margin-right:15px;">上传图片</Button> 
-                </Upload>
+                <UploadImg >
+                     <Button type="primary" style="margin-right:15px;" >上传图片</Button> 
+                </UploadImg>
             </div>
              
             <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button> 
@@ -42,6 +33,7 @@
                     @close="openViewUpload"
                     :ifDelete="ifDelete"
                     @downFile="downloadImg"
+                    @deleteFile="deletePic"
             />
       
   </div>
@@ -52,12 +44,13 @@ import dateUtils from 'vue-dateutils';
 import TvCard from './tvCard';
 import PhotoAlbum from '~/components/PhotoAlbum';
 import utils from '~/plugins/utils';
-
+import UploadImg from '~/components/UploadImg';
 export default {
    components:{
       SectionTitle,
       TvCard,
-      PhotoAlbum
+      PhotoAlbum,
+      UploadImg
    },
    data(){
        return{
@@ -141,20 +134,22 @@ export default {
        },
        downloadPic(){
            let picList=this.picList;
-           console.log('picList',picList)
-          // this.downloadImg()
-
        },
-       deletePic(){
-            // this.$http.delete('delete-pic', params).then((res)=>{
-            //    this.$Notice.error({
-            //         title:'图片删除成功'
-            //     });
-            // }).catch((err)=>{
-            //     this.$Notice.error({
-            //         title:err.message
-            //     });
-            // })
+       deletePic(id){
+            let form={
+                ids:id
+            }
+            this.$http.delete('delete-pic', form).then((res)=>{
+               this.$Notice.error({
+                    title:'图片删除成功'
+                });
+                this.openViewUpload();
+                this.getTableData(this.tabParams);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
        },
        renderList(){
             let arr=[].concat(this.imgColumns);
@@ -209,14 +204,14 @@ export default {
                     title:error.message
             });
         },
-        downloadImg(src){
+        downloadImg(src,name){
             var a = document.createElement('a');
                 a.href = src;
-                a.download = "";
-              var evObj = document.createEvent('MouseEvents');
-              evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
-              a.dispatchEvent(evObj);
-            
+                a.download = name || "";
+                var evObj = document.createEvent('MouseEvents');
+                console.log('6666')
+                evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+                a.dispatchEvent(evObj);
         }
        
    }

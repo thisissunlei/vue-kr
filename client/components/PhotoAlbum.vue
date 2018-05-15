@@ -33,7 +33,7 @@
                 <!-- <iframe height="0" width="0" :src="data[urlIndex].fieldUrl" name="saveImage" id="saveImage"></iframe> -->
                 <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">下载原图</Button>
                 <div v-if="!ifDelete" class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
-                <div v-if="ifDelete" class="down-img close-img" style="left: 65%;"   @click="deleteImg" type="ghost">删除</div>
+                <div v-if="ifDelete" class="down-img close-img" style="left: 65%;"   @click="deleteImg(data[urlIndex].id)" type="ghost">删除</div>
             </div>
             
       </div>
@@ -89,8 +89,8 @@ export default {
         //    saveImage.document.execCommand('saveAs');
             this.$emit('downFile',url,id)
         },
-        deleteImg(){
-            this.$emit('deleteFile',)
+        deleteImg(id){
+            this.$emit('deleteFile',id)
         }
     },
     mounted(){

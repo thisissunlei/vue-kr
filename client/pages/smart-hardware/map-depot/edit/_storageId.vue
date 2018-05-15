@@ -2,7 +2,21 @@
   <div class="g-edit-map-depot">
       <SectionTitle :title="tilte" />
         <div class="u-btn-list" >
-            <Button type="primary" style="margin-right:15px;" @click="uploadPic">上传图片</Button> 
+            <div class="u-upload-btn">
+                <Upload 
+                    name="imgUrl"
+                    multiple
+                    :show-upload-list="false"
+                    :format="['jpg','jpeg','png']"
+                    :on-success="handleSuccess"
+                    :on-error="handleError"
+                    with-credentials
+                    action="http://optest01.krspace.cn/api/krspace-finance-web/app/icon/upload" 
+                >
+                        <Button type="primary" style="margin-right:15px;">上传图片</Button> 
+                </Upload>
+            </div>
+             
             <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button> 
             <Button type="primary" :disabled="btnDisabled" @click="deletePic">删除</Button> 
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
@@ -27,10 +41,11 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
-
+import TvCard from './tvCard';
 export default {
    components:{
       SectionTitle,
+      TvCard
    },
    data(){
        return{
@@ -51,27 +66,35 @@ export default {
                },
                {
                     title: '文件名',
-                    key: 'bizType',
+                    key: 'fileName',
                     align:'center',
-                    render:(h,params)=>{
-                        return h('div', {
-                           on: {
+                    render:(h,obj)=>{
+                        return h(TvCard ,{
+                            props: {
+                                imgUrl:obj.row.fileUrl,
+                                fileName:obj.row.fileName
+                            },
+                            on: {
                                 click: () => {
-                                    this.picShow(params.row)
+                                    this.picShow()
                                 }
-                            } 
-                        },params.row.fileName);
+                            }
+                         });
                     }
                 },
                 {
                     title: '大小',
-                    key: 'bizType',
+                    key: 'size',
                     align:'center',
                 },
                 {
                     title: '上传日期',
-                    key: 'bizType',
+                    key: 'ctime',
                     align:'center',
+                    render(h, obj){
+                        let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
+                        return time;
+                    }
                 }
            ],
            tableList:[],
@@ -84,18 +107,16 @@ export default {
       this.tabParams.storageId=params.storageId;
       this.tableList=[
           {
-            bizType:'111',
-            aa:222  
+            fileName:'图片',
+            aa:222 ,
+            fileUrl:'http://img.zcool.cn/community/0142135541fe180000019ae9b8cf86.jpg@1280w_1l_2o_100sh.png'
           }
       ]
       //this.getTableData(this.tabParams);
    },
    methods:{
        picShow(){
-
-       },
-       uploadPic(){
-
+           console.log('88888')
        },
        downloadPic(){
 
@@ -135,6 +156,18 @@ export default {
             // })
             // this.billIds=billIds;
         },
+         handleSuccess(res,file){
+            if(res.code==1){
+                this.isError=false;
+                this.formItem.iconUrl=res.data.imgUrl;
+                this.imgUrl=res.data.imgUrl
+            }
+        },
+        handleError(error,file){
+            this.$Notice.error({
+                    title:error.message
+            });
+        }
    }
 }
 </script>
@@ -148,6 +181,11 @@ export default {
             float:right;
             width:265px;
             line-height:32px;
+        }
+        .u-upload-btn{
+            float:left;
+            width:100px;
+
         }
     }
     .u-table{

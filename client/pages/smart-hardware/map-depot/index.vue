@@ -13,7 +13,7 @@
                     clearable
                     @on-change="communityChange"
                 >
-                    <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
                 </Select>
             </div>
         </div>
@@ -141,7 +141,8 @@ export default {
 
    },
    mounted(){
-        this.getTableData(this.tabParams)
+        this.getTableData(this.tabParams);
+        this.getCommunityList();
    },
    methods:{
      showCreate(){
@@ -167,7 +168,6 @@ export default {
             // this.billIds=billIds;
      },
      getTableData(params){
-            
         this.$http.get('get-tv-ad-storage-list', params).then((res)=>{
             this.tableList=res.data.items;
             this.totalCount=res.data.totalCount;
@@ -187,6 +187,22 @@ export default {
       getCreateData(form){
           this.createData=form;
       },
+      getCommunityList(){
+            this.$http.get('get-select-items', '').then((res)=>{
+                res.data.map((item,index)=>{
+                    item.label=item.cmtName;
+                    item.value=item.cmtId;
+                    return  item;
+                })
+               this.communityList=res.data
+              
+            
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            }) 
+      }
 
 
 

@@ -10,7 +10,7 @@
                     clearable
                     @on-change="communityChange"
                 >
-                <Option v-for="item in itemDetail" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                <Option v-for="item in itemDetail" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
             </Select>
     </div>
   </div>

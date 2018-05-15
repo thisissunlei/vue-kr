@@ -98,6 +98,10 @@ export default {
                     title: '大小',
                     key: 'size',
                     align:'center',
+                    render:(h,obj)=>{
+                        
+                        return `${obj.row.size}M`
+                    }
                 },
                 {
                     title: '上传日期',
@@ -117,14 +121,8 @@ export default {
       GLOBALSIDESWITCH("false");
       let {params}=this.$route;
       this.tabParams.storageId=params.storageId;
-      this.tableList=[
-          {
-            fileName:'图片',
-            aa:222 ,
-            fileUrl:'http://img.zcool.cn/community/0142135541fe180000019ae9b8cf86.jpg@1280w_1l_2o_100sh.png'
-          }
-      ]
-      //this.getTableData(this.tabParams);
+      
+      this.getTableData(this.tabParams);
    },
    methods:{
        picShow(params){

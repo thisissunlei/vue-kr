@@ -1,7 +1,7 @@
 <template>
   <div v-if="data && data.length" class="photo-album">
       <div class="mask"  @click="close"></div>
-      
+      <div class="u-close" @click="close"></div>
      
       <div>
            
@@ -18,6 +18,7 @@
                     class="back"
                     style="left:-60px;"
                     @click="backClick"
+                    v-if="data.length>1"
                 >
                 </div>
 
@@ -25,12 +26,14 @@
                     class="forward"
                     style="right:-60px;"
                     @click="forwardClick"
+                    v-if="data.length>1"
                 >
                 </div>
                 <!-- <span class="close-btn " @click="close"></span> -->
                 <!-- <iframe height="0" width="0" :src="data[urlIndex].fieldUrl" name="saveImage" id="saveImage"></iframe> -->
                 <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">下载原图</Button>
-                <div class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
+                <div v-if="!ifDelete" class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
+                <div v-if="ifDelete" class="down-img close-img" style="left: 65%;"   @click="deleteImg" type="ghost">删除</div>
             </div>
             
       </div>
@@ -49,15 +52,11 @@ export default {
             default:()=>[],
             type:Array
         },
-        show:{
-            default:false,
-            type:Boolean
-        },
         eyeIndex:{
             default:0,
             type:Number
-
-        }
+        },
+        ifDelete:Boolean
         
     },
     data(){
@@ -89,6 +88,9 @@ export default {
             
         //    saveImage.document.execCommand('saveAs');
             this.$emit('downFile',url,id)
+        },
+        deleteImg(){
+            this.$emit('deleteFile',)
         }
     },
     mounted(){
@@ -161,7 +163,7 @@ export default {
         border-radius:6px;
     }
     .mask{
-        background: rgba(0,0,0,.5);
+        background: rgba(0,0,0,.7);
         position: absolute;
         top: 0px;
         left: 0px;
@@ -189,6 +191,16 @@ export default {
     }
     .forward{
         background-image: url(./images/arrow_right.svg);
+    }
+    .u-close{
+        width:20px;
+        height:20px;
+        position: absolute;
+        right:20px;
+        top:20px;
+        background: url('~/assets/images/close.svg') no-repeat center center;
+        background-size:100% 100%;
+
     }
     // .back:hover,.forward:hover{
     //     background: #ccc;

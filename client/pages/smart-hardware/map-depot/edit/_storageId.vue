@@ -36,16 +36,25 @@
                     </div>
                 </div>
             </div>
+           <PhotoAlbum  
+                    v-if="imgViewShow" 
+                    :data="itemDetail"
+                    @close="openViewUpload"
+                    :ifDelete="ifDelete"
+            />
+      
   </div>
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import TvCard from './tvCard';
+import PhotoAlbum from '~/components/PhotoAlbum';
 export default {
    components:{
       SectionTitle,
-      TvCard
+      TvCard,
+      PhotoAlbum
    },
    data(){
        return{
@@ -58,6 +67,9 @@ export default {
                 page:1,
                 pageSize:15,
            },
+           ifDelete:true,
+           imgViewShow:false,
+           itemDetail:[],
            imgColumns:[
                {
                   type: 'selection',
@@ -76,7 +88,7 @@ export default {
                             },
                             on: {
                                 click: () => {
-                                    this.picShow()
+                                    this.picShow(obj.row)
                                 }
                             }
                          });
@@ -115,8 +127,16 @@ export default {
       //this.getTableData(this.tabParams);
    },
    methods:{
-       picShow(){
-           console.log('88888')
+       picShow(params){
+           params.fieldUrl=params.fileUrl;
+           let arr=[];
+           arr.push(params);
+           this.itemDetail=[].concat(arr) ;
+           this.openViewUpload();
+          
+       },
+       openViewUpload(){
+            this.imgViewShow=!this.imgViewShow;
        },
        downloadPic(){
 

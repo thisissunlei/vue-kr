@@ -152,7 +152,8 @@ export default {
 
      },
      communityChange(){
-
+         this.tabParams.communityId=this.communityId;
+         this.getTableData(this.tabParams);
      },
      jumpCreate(){
         this.showCreate() 

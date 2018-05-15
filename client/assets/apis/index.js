@@ -11,6 +11,7 @@ import OperationApi from './operation.js';
 import NewMain from './newMain.js';
 import Basic from './basic.js';
 import Inventory from './inventory.js';
+import Calculator from './calculator.js';
 
 export default {
   ...OrderApi,
@@ -24,5 +25,6 @@ export default {
   ...OperationApi,
   ...NewMain,
   ...Basic,
-  ...Inventory
+  ...Inventory,
+  ...Calculator
 }

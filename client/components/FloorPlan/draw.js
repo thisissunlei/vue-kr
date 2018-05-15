@@ -4,8 +4,8 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
 
     var myDiagram =
        $(go.Diagram, content,         
-        {
-            initialContentAlignment: go.Spot.Center,   
+        {   
+            initialContentAlignment: go.Spot.Center, 
             "undoManager.isEnabled": true
         });
 
@@ -14,19 +14,29 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
         function(e) {
         clickFn(e);
     });
+    
+    //公共字体样式
+    function textStyle() {
+        return { stroke: "white", font: "bold 12px PingFangSC-Medium" };
+    }
     //绘制
     myDiagram.nodeTemplate =
         $(go.Node, "Auto",
-        $(go.Shape, "RoundedRectangle",
+        $(go.Shape, "Rectangle",
         //元素填充背景色
         new go.Binding("fill","color")),
         //元素尺寸
         new go.Binding("desiredSize", "size", go.Size.parse),
         //元素位置
         new go.Binding("position", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
-        $(go.TextBlock,
-        { margin: 12, stroke: "white", font: "bold 12px sans-serif" },
+        //元件名称
+        $(go.TextBlock,textStyle(),
+        { row: 0, column: 0,margin:10},
         new go.Binding("text", "name")),
+        //元件属性
+        $(go.TextBlock,textStyle(),
+        { row: 1, column: 1,margin:10},
+        new go.Binding("text", "property")),
         { //鼠标hover事件
             mouseEnter: function (e, node) { 
                 enterFn(e,node)

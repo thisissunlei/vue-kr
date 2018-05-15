@@ -13,28 +13,7 @@
 <script>
 import init from './draw';
 import dataFormat from './dataFormat';
-var canvasData = /*[ 
-        { name: "未租", pos: "0 0", size:"50 50", color:"yellow"},
-        { name: "在租", pos: "276 19", size:"100 100", color:"#499df1"},
-        { name: "合同未生效", pos: "44 214", size:"100 50",color:"#ccc"},
-        { name: "不可用", pos: "239 171", size:"50 100",color:"#000"}
-    ];*/
-    [
-        {
-            "cellHeight":"30","cellWidth":"30","communityId":1,"communityName":"创业大街社区","currentId":62,"figures":[
-            {
-                "belongId":1416,"belongType":"SPACE","canFigureId":1,"capacity":9,"cellCoordX":"100","cellCoordY":"100","cellHeight":"200","cellName":"301","cellWidth":"50","floor":3,"floorGraphId":2,"id":9844,"inventStatus":"IN_RENT","price":17100,"quotedPrice":"28080","recentEnd":1651248000000,"recentStart":1540224000000,"seatPrice":28080,"spaceType":"INDEPENDENT_OFFICE","statusName":"在租","totalPrice":28080,"unitPrice":"3120","unitPriceNum":3120
-            },
-            {
-                "belongId":1416,"belongType":"SPACE","canFigureId":1,"capacity":9,"cellCoordX":"300","cellCoordY":"400","cellHeight":"100","cellName":"302","cellWidth":"100","floor":3,"floorGraphId":2,"id":9845,"inventStatus":"NOT_EFFECT","price":17100,"quotedPrice":"28080","recentEnd":1651248000000,"recentStart":1540224000000,"seatPrice":28080,"spaceType":"INDEPENDENT_OFFICE","statusName":"合同未生效","totalPrice":28080,"unitPrice":"3120","unitPriceNum":3120
-            },
-            {
-                "belongId":1416,"belongType":"STATION","canFigureId":1,"capacity":9,"cellCoordX":"10","cellCoordY":"10","cellHeight":"30","cellName":"302","cellWidth":"30","floor":3,"floorGraphId":2,"id":9845,"inventStatus":"AVAILABLE","price":17100,"quotedPrice":"28080","recentEnd":1651248000000,"recentStart":1540224000000,"seatPrice":28080,"spaceType":"INDEPENDENT_OFFICE","statusName":"合同未生效","totalPrice":28080,"unitPrice":"3120","unitPriceNum":3120
-            }
-            ],"floor":3,"graphFileId":46612,"graphFileName":"大街OP图-01.jpg","graphFilePath":"/krspace_oa_web/doc/docFile/viewFile?sourceservicetoken=AF6nQfcS0uARjSHa6gf4EDwKqoPfHQctOaDrWZTN7GCj7NHlBm0yqBn7WisuUTey&operater=2&fileId=46612","id":2,"idToIndex":{}
-            ,"operater":101,"stationSizeSame":"SAME","updateDate":1511339066000
-        }
-    ]
+var canvasData =[]
 var flowChart= '';
  export default {
     props:{
@@ -45,7 +24,6 @@ var flowChart= '';
     },
     data(){
         return{
-            overview:'overPlanview' + this._uid,
             drawingBoard:'drawingPlanBoard' + this._uid
         }
     },
@@ -53,24 +31,25 @@ var flowChart= '';
         mouseEnter(event,node){
              var every=node.data;
              var everyData =every?every:{};
-             this.$emit('enter',event,everyData,this.data);
+             this.$emit('enter',event,everyData,canvasData,this.drawingBoard);
         },
         mouseLeave(event,node){
              var every=node.data;
              var everyData =every?every:{};
-             this.$emit('leave',event,everyData,this.data);
+             this.$emit('leave',event,everyData,canvasData);
         },
         mouseClick(event){
-            var every=e.subject.part.data;
+            var every=event.subject.part.data;
             var everyData =every?every:{};
-            this.$emit('click',event,everyData,this.data); 
+            this.$emit('click',event,everyData,canvasData); 
         }  
     },
     mounted(){
+        canvasData=this.data;
         flowChart =  init(
             go,
             this.drawingBoard,
-            dataFormat.init(this.data),
+            dataFormat.init(canvasData),
             this.mouseClick,
             this.mouseEnter,
             this.mouseLeave,

@@ -1,6 +1,7 @@
 <template>
   <div class="inventory-floor-map">
       <FloorPlan
+        v-if="canvasData.length"
         @click="this.singleClick"
         @enter="this.mouseEnter"
         @leave="this.mouseLeave"
@@ -20,34 +21,34 @@ export default {
   },
   data(){
     return{
-       sideBar:true,
        canvasData:[]
     }
   },
   mounted(){
     this.getMapData({communityId:1,currentDate:'',floor:''});
-    var _this=this;
-    LISTENSIDEBAROPEN(function (params) {
-        _this.sideBar=params;
-    })
   },
   methods:{
     //获取数据
     getMapData(values){
         this.$http.get('getInventoryMap',values).then((res)=>{
-           this.canvasData=res.data.items;
+           this.canvasData=[].concat(res.data.items);
         }).catch((error)=>{
-           
+           this.$Notice.error({
+              title:error.message
+            });
         })        
     },
     singleClick(event,every,all){
        
     },
-    mouseEnter(event,every,all){
-        publicFn.poptipOver(event,every,all,this.sideBar)
+    mouseEnter(event,every,all,canvas){
+        publicFn.poptipOver(event,every,all,canvas)
     },
     mouseLeave(event,every,all){
-
+        var tirDom = document.getElementById('gantt-chart-tool-tip');
+        var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+        tirDom.style.opacity = 0;
+        angleDom.style.opacity = 0;
     }
   }
 }
@@ -60,7 +61,7 @@ export default {
           max-width: 280px;
           opacity: 0;
           background: rgba(70,76,91,.9);
-          position: absolute;
+          position: fixed;
           top: 0px;
           left: 0px;
           border-radius: 4px;
@@ -91,7 +92,7 @@ export default {
       }
       #gantt-chart-tool-tip-triangle{
           opacity: 0;
-          position: absolute;
+          position: fixed;
           display:block;
           width:0;
           height:0;

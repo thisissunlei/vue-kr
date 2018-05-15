@@ -18,7 +18,7 @@
             </div>
         </div>
          <div class="u-table">
-              <Table  border :columns="picColumns" :data="tableList" @on-select="onSelectList"  @on-select-all="onSelectList"/>
+              <Table  border :columns="picColumns" :data="tableList" />
               <div style="margin: 10px;overflow: hidden">
                   <div style="float: right;">
                       <Page 
@@ -77,11 +77,6 @@ export default {
        communityList:[],
        createData:'',
        picColumns:[
-              {
-                  type: 'selection',
-                  width: 35,
-                  align: 'center',
-              },
               {
                   title: '图库名',
                   key: 'name',
@@ -160,13 +155,6 @@ export default {
      },
      jumpEdit(params){
         window.open(`/smart-hardware/map-depot/edit/${params.storageId}`,'_blank');
-     },
-     onSelectList(data){
-            // let billIds=[];
-            // data.map((item)=>{
-            //     billIds.push(item.billId)
-            // })
-            // this.billIds=billIds;
      },
      getTableData(params){
         this.$http.get('get-tv-ad-storage-list', params).then((res)=>{

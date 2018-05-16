@@ -6,7 +6,7 @@
                 <Button type="primary" style="margin-right:15px;" @click="uploadShow">上传图片</Button> 
             </div>
             <!-- <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button>  -->
-            <Button type="primary" :disabled="btnDisabled" @click="openDelete">批量删除</Button> 
+            <Button type="primary" :disabled="btnDisabled" @click="openMoreDelete">批量删除</Button> 
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
         </div>
         <div class="u-table">
@@ -71,7 +71,7 @@
             确认要删除该文件吗？
         </div>
         <div slot="footer">
-            <Button type="primary" @click="deletePic">确定</Button>
+            <Button type="primary" @click="onDeletePic">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
         </div>
     </Modal>
@@ -205,9 +205,12 @@ export default {
       this.getTableData(this.tabParams);
    },
    methods:{
+       openMoreDelete(){
+           this.openDelete();
+       },
        openDelete(id){
            if(id){
-               this.ids=id
+               this.Ids.push(id)
            }
            this.openCancel=!this.openCancel;
        },
@@ -226,21 +229,26 @@ export default {
             this.imgViewShow=!this.imgViewShow;
        },
        onDeletePic(){
-           let ids=this.Ids.join(',');
+           let id=[].concat(this.Ids);
+           let ids=id.join(',');
            this.deletePic(ids)
            this.picList=[];
            this.openViewUpload();
        },
        deletePic(id){
+           console.log('id',id)
             let form={
                 ids:id
             }
+           
             this.$http.delete('delete-pic', form).then((res)=>{
                this.$Notice.error({
                     title:'图片删除成功'
                 });
                 this.btnDisabled=true;
-                this.openViewUpload();
+                this.openDelete()
+                this.imgViewShow=false;
+                
                 this.getTableData(this.tabParams);
             }).catch((err)=>{
                 this.$Notice.error({

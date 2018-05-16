@@ -111,7 +111,6 @@ export default {
         let id=res.data.id;
         this.imgIds.push(id);
         let ids=this.imgIds.join(',');
-        console.log('ids---1111>>>',ids)
         this.$emit('formData',ids);
         
     },

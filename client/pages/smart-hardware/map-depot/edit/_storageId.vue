@@ -173,11 +173,25 @@ export default {
        },
        downloadPic(){
            let picList=this.picList;
+         //  var arr=[];
+        //    picList.map((item)=>{
+               
+                   
+        //         let a = document.createElement('a');
+        //         a.href = item.fileUrl;
+        //         a.download = item.fileName || "";
+               
+        //         arr.push(a);
+               
+        //    })
+           
+        
        },
        onDeletePic(){
            let ids=this.Ids.join(',');
            this.deletePic(ids)
            this.picList=[];
+           this.openViewUpload();
        },
        deletePic(id){
             let form={
@@ -241,8 +255,6 @@ export default {
             this.imgIds=ids;
         },
         uploadImgSubmit(){
-            //let fileIds=ids.join(',')
-            console.log('ids---->>>',this.imgIds)
             let {params}=this.$route;
             let form={
                 storageId:params.storageId,
@@ -266,10 +278,11 @@ export default {
             var a = document.createElement('a');
                 a.href = src;
                 a.download = name || "";
-                var evObj = document.createEvent('MouseEvents');
-                console.log('6666')
-                evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
-                a.dispatchEvent(evObj);
+                a.click();
+                // var evObj = document.createEvent('MouseEvents');
+                // console.log('6666')
+                // evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
+                // a.dispatchEvent(evObj);
         }
        
    }
@@ -295,24 +308,24 @@ export default {
     .u-table{
         padding:0 20px;
     } 
-   .u-upload-title{
+}
+ .u-upload-title{
         width:500px;
         div{
             width:97%;
         }
         .u-upload-content{
             width:94px;
-            height:110px;
-            margin:25px auto 0;
-            i{
-                text-indent: 19px !important;
-            }
+            height:80px;
+            margin:15px auto 0;
+           i{
+               text-indent: -5px;
+           }
         }
         .g-upload-img{
-            width: 100px;
-            margin: 20px auto;
+            text-align: center;
+            
         }
-    }  
-}
+}  
 </style>
 

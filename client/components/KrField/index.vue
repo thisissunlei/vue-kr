@@ -110,6 +110,8 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
+            :width="width"
+            :inline="inline"
         />
         
          <KrCity
@@ -273,7 +275,12 @@ export default {
             type:String
         },
         width:{
-            type:[Number,String]
+            default:250,
+            type:[String,Number]
+        },
+        inline:{
+            default:false,
+            type:Boolean
         }
     },
     data(){

@@ -86,6 +86,7 @@ function poptipOver(event,data,domName) {
     var detail = dom.getBoundingClientRect();
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+    var mainDom = document.getElementById("layout-content-main");
 
     var tirLocation = {
         left: e.clientX,
@@ -95,10 +96,10 @@ function poptipOver(event,data,domName) {
     if(data.planEndTimeStr || data.actualEndTimeStr){
         tirDom.innerHTML = obj.str;
         tirDom.style.left = tirLocation.left - 30 + 'px';
-        tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
+        tirDom.style.top = tirLocation.top + 10 - (130-60)+mainDom.scrollTop + 'px';
         tirDom.style.width = obj.width + 'px';
         angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-        angleDom.style.top = tirLocation.top - (130-60) + 'px';
+        angleDom.style.top = tirLocation.top - (130-60)+mainDom.scrollTop + 'px';
         locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
         tirDom.style.opacity = 1;
         angleDom.style.opacity = 1;

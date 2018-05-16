@@ -1382,6 +1382,7 @@ import EditTask from '../project-detail/edit-task';
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
                     this.getTableData(this.tabParams);
                     this.newArchives();
+                    this.getCityData(this.tab);
                     this.openMessage=true;
                     this.warn='新建成功';
                     this.MessageType="success";

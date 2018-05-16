@@ -232,7 +232,7 @@ export default {
                     key: 'guidePrice',
                     align: 'center',
                     render: (h, params) => {
-                        return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                        return utils.thousand(params.row.guidePrice)+'(元/月)'
                     }
                 },
                 {
@@ -240,7 +240,7 @@ export default {
                     key: 'originalPrice',
                     align: 'center',
                     render: (h, params) => {
-                        return utils.thousand(params.row.originalPrice)+'(元/月/房间)'
+                        return utils.thousand(params.row.originalPrice)+'(元/月)'
                     }
                 },
                 {
@@ -260,7 +260,7 @@ export default {
                     key: 'signPrice',
                     align: 'center',
                     render: (h, params) => {
-                        return utils.thousand(params.row.signPrice)+'(元/月/房间)'
+                        return utils.thousand(params.row.signPrice)+'(元/月)'
                     }
                 },
             ],

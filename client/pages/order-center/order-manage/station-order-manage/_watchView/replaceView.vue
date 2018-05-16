@@ -471,15 +471,15 @@
                         }
                     },
                     {
-                        title: '指导价(元/月/房间)',
+                        title: '指导价(元/月)',
                         key: 'guidePrice',
                         align: 'center',
                         render: (h, params) => {
-                            return utils.thousand(params.row.guidePrice)+'(元/月/房间)'
+                            return utils.thousand(params.row.guidePrice)+'(元/月)'
                         }
                     },
                     {
-                        title: '下单价(元/月/房间)',
+                        title: '下单价(元/月)',
                         key: 'guidePrice',
                         align: 'center',
                         render: (h, params) => {
@@ -529,7 +529,7 @@
                         key: 'discountedPrice',
                         align: 'center',
                         render: (h, params) => {
-                            return utils.thousand(params.row.discountedPrice)+'(元/月/房间)'
+                            return utils.thousand(params.row.discountedPrice)+'(元/月)'
                         }
                     },
                     {

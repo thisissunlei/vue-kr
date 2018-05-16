@@ -268,13 +268,13 @@ export default {
             data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchStartTime();
             this.$emit("dataChange",data,(code)=>{
-                if(code=='DELSIGN'){
-                    this.promptText = '签署合同';     
-               }
+                console.log(code)
+               
                 if(code=='DELOPEN'){
                     this.promptText = '清空已完成时间后，该项目将会移入“待开业项目”列表';
+                    this.switchPrompt();
                 }
-                this.switchPrompt();
+                
             });
         },
         numToDate(num){

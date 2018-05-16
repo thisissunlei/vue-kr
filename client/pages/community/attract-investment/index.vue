@@ -7,7 +7,9 @@
               @initData="initData"
             />
         </div>
-        <Table :columns="attractColumns" :data="attractData" border/>
+        <div style="margin:0 20px;">
+            <Table :columns="attractColumns" :data="attractData" border/>
+        </div>
         <div  class='list-footer'>
                 <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
                 <div style="float: right;">
@@ -53,39 +55,39 @@ export default {
                     key: 'name',
                     width:150,
                     align:'center',
-                    fixed: 'left'
                 },
                 {
                     title: '商品类型',
                     key: 'type',
                     align:'center',
-                    width:150,
-                    fixed: 'left'
+                    width:110,
                 },
                 {
                     title: '工位数量',
                     key: 'capacity',
                     align:'center',
-                    width:100,
-                    fixed: 'left'
+                    width:90,
                 },
                 {
                     title: '商品定价',
                     key: 'quotedPrice',
-                    align:'center'
+                    align:'center',
+                    width:90,
                 },
                 {
                     title: '招商状态',
                     key: 'investmentStatusName',
-                    align:'center'
+                    align:'center',
+                    width:90,
                 },
                 {
                     title: '签约价',
                     key: 'orderList',
                     className:'current-range',
+                    width:90,
                     align:'center',
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'price')
+                        return publicFn.mergeCell(h,obj.row.orderList,'price')
                     }
                 },
                 {
@@ -93,8 +95,9 @@ export default {
                     key: 'orderList',
                     className:'current-range',
                     align:'center',
+                    width:70,
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'discount')
+                        return publicFn.mergeCell(h,obj.row.orderList,'discount')
                     }
                 },
                 {
@@ -103,7 +106,7 @@ export default {
                     className:'current-range',
                     align:'center',
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'recentStart',true)
+                        return publicFn.mergeCell(h,obj.row.orderList,'recentStart',true)
                     }
                 },
                 {
@@ -112,7 +115,7 @@ export default {
                     className:'current-range',
                     align:'center',
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'recentEnd',true)
+                        return publicFn.mergeCell(h,obj.row.orderList,'recentEnd',true)
                     }
                 },
                 {
@@ -120,8 +123,9 @@ export default {
                     key: 'orderList',
                     className:'current-range',
                     align:'center',
+                    width:90,
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'rentTime')
+                        return publicFn.mergeCell(h,obj.row.orderList,'rentTime')
                     }
                 },
                 {
@@ -130,7 +134,7 @@ export default {
                     className:'current-range',
                     align:'center',
                     render(h,obj){
-                         publicFn.mergeCell(h,obj.row.orderList,'sourceName')
+                         return publicFn.mergeCell(h,obj.row.orderList,'sourceName')
                     }
                 },
                 {
@@ -139,7 +143,7 @@ export default {
                     className:'current-range',
                     align:'center',
                     render(h,obj){
-                        publicFn.mergeCell(h,obj.row.orderList,'sellerName')
+                        return publicFn.mergeCell(h,obj.row.orderList,'sellerName')
                     }
                 }
             ],
@@ -149,9 +153,25 @@ export default {
     methods:{
       initData(formItem){
          this.tabForms=Object.assign({},formItem,this.tabForms);
+         this.attractData=[
+            {
+                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","orderList":[
+                {
+                    "discount":"测试内容l3o5","price":16380,"recentEnd":"测试内容5647","recentStart":"测试内容6h3q","rentTime":"测试内容v54r","sellerName":"测试内容o4vx","sourceName":"测试内容585t"
+                },
+                {
+                    "discount":"测试内容l3o5","price":16380,"recentEnd":"测试内容5647","recentStart":"测试内容6h3q","rentTime":"测试内容v54r","sellerName":"测试内容o4vx","sourceName":"测试内容585t"
+                }
+                ],"quotedPrice":"测试内容0qi2","type":"测试内容63t9"
+            },
+            {
+                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
+            }
+        ]
+        //this.getListData(this.tabForms);
       },
       getListData(params){
-           this.$http.get('join-bill-list', params).then((response)=>{
+           this.$http.get('community-investment-list', params).then((response)=>{
                 this.totalCount=response.data.totalCount;
                 this.attractData=response.data.items;
             }).catch((error)=>{
@@ -182,7 +202,7 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
      .attract-investment{
          .attract-search{
              border-bottom:solid 1px #dddee1;
@@ -195,7 +215,6 @@ export default {
         .current-range{
             .ivu-table-cell{ 
                 padding:0;
-                height:100%;
             .ivu-tooltip{
                 .row-current-more{
                     padding: 15px 0 10px 0;

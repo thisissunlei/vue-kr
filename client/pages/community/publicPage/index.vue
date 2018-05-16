@@ -77,7 +77,7 @@
                 <div style="white-space: nowrap;">
                     <div class="daily-form">
                         <span class="attract-font" style="padding-top:7px;">商品定价</span>
-                        <Form-item  class="priceForm" prop="stationsMin">
+                        <Form-item  class="priceForm" prop="priceMin">
                             <i-input 
                                 v-model="formItem.priceMin" 
                                 style="width: 90px"
@@ -85,7 +85,7 @@
                             />
                         </Form-item>
                         <span class="attract-line" style="margin:0 3px 0 4px">至</span>
-                        <Form-item  class="priceForm" prop="stationsMax" >
+                        <Form-item  class="priceForm" prop="priceMax" >
                             <i-input 
                                 v-model="formItem.priceMax" 
                                 style="width: 90px"
@@ -131,7 +131,7 @@
                 <div style="white-space: nowrap;">
                     <div class='daily-form'>
                         <span class="attract-font" style="padding-top:7px;margin-right:24px;">签约价</span>
-                        <Form-item  class="priceForm" prop="stationsMin">
+                        <Form-item  class="priceForm" prop="orderPriceMin">
                             <i-input 
                                 v-model="formItem.orderPriceMin" 
                                 style="width: 90px"
@@ -139,7 +139,7 @@
                             />
                         </Form-item>
                         <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="stationsMax">
+                        <Form-item  class="priceForm" prop="orderPriceMax">
                             <i-input 
                                 v-model="formItem.orderPriceMax" 
                                 style="width: 90px"
@@ -150,7 +150,7 @@
 
                     <div class='daily-form'>
                         <span class="attract-font" style="padding-top:7px;margin-right:11px;">折<span style="display:inline-block;width:25px;"></span>扣</span>
-                        <Form-item  class="priceForm" prop="stationsMin">
+                        <Form-item  class="priceForm" prop="discountMin">
                             <i-input 
                                 v-model="formItem.discountMin" 
                                 style="width: 90px"
@@ -158,7 +158,7 @@
                             />
                         </Form-item>
                         <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="stationsMax">
+                        <Form-item  class="priceForm" prop="discountMax">
                             <i-input 
                                 v-model="formItem.discountMax" 
                                 style="width: 90px"
@@ -181,7 +181,7 @@
                  <!-- 第四行-->
                 <div style="white-space: nowrap;">
                     <span class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
-                    <Form-item class='daily-form' style="width:200px">
+                    <Form-item class='daily-form seller-form' style="width:200px">
                        <SelectSaler 
                          name="formItem.sellerId" 
                          :onchange="changeSaler"
@@ -190,16 +190,16 @@
 
                     <div class='daily-form'>
                         <span class="attract-font" style="padding-top:7px;margin-right:11px;">租<span style="display:inline-block;width:27px;"></span>期</span>
-                        <Form-item  class='daily-form' prop="stationsMin">
+                        <Form-item  class='daily-form'>
                             <Select 
                                 v-model="formItem.rentTimeType" 
                                 style="width: 90px"
                                 clearable
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item  prop="stationsMax" class="priceForm" style="margin-right:5px">
+                        <Form-item  prop="rentTime" class="priceForm" style="margin-right:5px">
                             <i-input 
                                 v-model="formItem.rentTime" 
                                 style="width: 90px"
@@ -243,6 +243,7 @@ export default {
                     callback();
                 }
             };
+
             const validatePrice = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
@@ -255,17 +256,31 @@ export default {
                     callback();
                 }
             };
-            const validateArea = (rule, value, callback) => {
-                var reg=/^(([1-9]{1}[0-9]{0,2})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,2}\.\d{1,2}))$/;
+
+            const validateOrder = (rule, value, callback) => {
+                var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入小于1000的数字,最多2位小数');
-                }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
+                    callback('请输入正整数');
+                }else if(value&&value>9999999){
+                    callback('单价最高9999999');
+                }else if (this.formItem.orderPriceMin&&this.formItem.orderPriceMax&&Number(this.formItem.orderPriceMin)>Number(this.formItem.orderPriceMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
             };
-           
+
+            const validateDiscount = (rule, value, callback) => {
+                var reg=/^(([1-9]{1})|([0-9]{1}\.\d{1}))$/;
+                if(value&&!reg.test(value)){
+                    callback('请输入0-10之间的数字,最多1位小数');
+                }else if (this.formItem.discountMin&&this.formItem.discountMax&&Number(this.formItem.discountMin)>Number(this.formItem.discountMax)) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            };
+            
             const validateName = (rule, value, callback) => {
                 var str=this.fucCheckLength(value);
                 if(value&&str>20){
@@ -274,6 +289,16 @@ export default {
                     callback();
                 }
             };
+            
+            const validateTime = (rule, value, callback) => {
+                var reg = /^\+?[1-9]\d*$/;
+                if(value&&!reg.test(value)){
+                    callback('请输入正整数');
+                }else{
+                    callback();
+                }
+            };
+
             return {  
                 formItem:{
                     investmentStatus:'',
@@ -298,37 +323,7 @@ export default {
                     sourceId:'',
                     subSourceId:''
                 },
-                sourceData:[{
-                    value: 'beijing',
-                    label: '北京',
-                    children: [
-                        {
-                            value: 'gugong',
-                            label: '故宫'
-                        },
-                        {
-                            value: 'tiantan',
-                            label: '天坛'
-                        },
-                        {
-                            value: 'wangfujing',
-                            label: '王府井'
-                        }
-                    ]
-                }, {
-                    value: 'jiangsu',
-                    label: '江苏',
-                    children: [
-                        {
-                            value: 'nanjing',
-                            label: '南京'
-                        },
-                        {
-                            value: 'suzhou',
-                            label: '苏州'
-                        }
-                    ]
-                }],
+                sourceData:[],
                 communityList:[],
                 cityList:[],
                 floorList:[],
@@ -339,12 +334,17 @@ export default {
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
-                    {value:'AVAILABLE',label:'未租'},
-                    {value:'NOT_EFFECT',label:'合同未生效'},
-                    {value:'IN_RENT',label:'在租'},
-                    {value:'DISABLE',label:'不可用'}
+                    {value:'AVAILABLE',label:'未招商'},
+                    {value:'INVITING',label:'招商中'},
+                    {value:'RENTING',label:'已招商'},
+                    {value:'DISABLED',label:'不可招商'}
                 ],
-
+                timeList:[
+                   {value:'LT',label:'小于'},
+                   {value:'EQ',label:'等于'},
+                   {value:'GT',label:'大于'}
+                ],
+                
                 formItemOld:{},
                 ruleInvestment: {
                     name:[
@@ -363,29 +363,43 @@ export default {
                         { validator: validatePrice, trigger: 'change' }
                     ],
                     orderPriceMin: [
-                        { validator: validateArea, trigger: 'change' }
+                        { validator: validateOrder, trigger: 'change' }
                     ],
                     orderPriceMax: [
-                        { validator: validateArea, trigger: 'change' }
+                        { validator: validateOrder, trigger: 'change' }
                     ],
                     discountMin: [
-                        { validator: validateArea, trigger: 'change' }
+                        { validator: validateDiscount, trigger: 'change' }
                     ],
                     discountMax: [
-                        { validator: validateArea, trigger: 'change' }
+                        { validator: validateDiscount, trigger: 'change' }
+                    ],
+                    rentTime:[
+                        { validator: validateTime, trigger: 'change' }
                     ]
                 }
             }
     },
     mounted(){
         this.getCityList();
+        this.getSourceData();
     },
     methods:{
+        //渠道来源
+        getSourceData(){
+            this.$http.get('get-customer-source').then((res)=>{
+                this.sourceData=publicFn.sourceStyleSwitch(res.data);
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data;
-                this.formItem.communityId=this.communityList?this.communityList[0].id:'';
+                this.formItem.communityId=res.data.length?res.data[0].id:'';
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -396,9 +410,7 @@ export default {
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data;
-                this.formItem.cityId=this.cityList.length?this.cityList[0].cityId:'';
-                this.$emit('initData',this.formItem);
-                this.formItemOld=Object.assign({},this.formItem);
+                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -413,6 +425,8 @@ export default {
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
                 }
                 this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                this.$emit('initData',this.formItem);
+                this.formItemOld=Object.assign({},this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -423,11 +437,18 @@ export default {
         searchClick(){
             this.$refs['formItemInvestment'].validate((valid) => {
                 if (valid) {
+                    //招商状态格式转换
                     var str='';
                     this.formItem.status.map((item,index)=>{
                             str=str?str+','+item:item;
-                    })
-                    this.formItem.investmentStatus=str;
+                    }) 
+                    this.formItem.investmentStatus=str; 
+                    //渠道来源格式转换
+                    var length=this.formItem.source.length;
+                    if(length){
+                        this.formItem.sourceId=this.formItem.source[0];
+                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
+                    }
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -475,7 +496,11 @@ export default {
                 margin-right:20px;
                 .ivu-form-item-content{
                     display:inline-block;
-                    width: 100%;
+                }
+            }
+            .seller-form{
+                .ivu-form-item-content{
+                   width:100%;
                 }
             }
             .community-form{

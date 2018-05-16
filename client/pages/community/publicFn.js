@@ -22,7 +22,7 @@ function mergeCell(h,rowArray,param,isTime){
     if(rowArray){
         row=rowArray.map((item,index)=>{
             var pageData=item[param]?item[param]:'-';
-            var popData=(item[param]&&isTime)?dateUtils.dateToStr("YYYY-MM-DD",new Date(item[param])):isHas;
+            var popData=(item[param]&&isTime)?dateUtils.dateToStr("YYYY-MM-DD",new Date(item[param])):pageData;
             return h('div', [
                 h('Tooltip', {
                     props: {
@@ -57,7 +57,22 @@ function fucCheckLength(strTemp){
     return sum;
 }
 
+//渠道来源格式转换
+function sourceStyleSwitch(data){
+     var renderData=[].concat(data);
+     renderData.map((item,index)=>{
+         item.value=item.id;
+         item.label=item.name;
+         if(item.subSources){
+            item.children=item.subSources;
+            sourceStyleSwitch(item.children); 
+         }
+     })
+    return renderData 
+}
+
 export default {
     mergeCell,
-    fucCheckLength
+    fucCheckLength,
+    sourceStyleSwitch
 }

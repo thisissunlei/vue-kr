@@ -52,122 +52,69 @@
                         </Select> 
                     </Form-item>
 
-                    <Form-item label="客户名称" class='daily-form' prop="name">
-                        <i-input 
-                            v-model="formItem.customerName" 
-                            placeholder="请输入客户名称"
-                            style="width: 200px"
-                            @keyup.enter.native="onKeyEnter($event)"
-                        />
-                    </Form-item>
-
-
-                    <Form-item label="商品类型" class='daily-form'> 
+                    <Form-item label="账单类型" class='daily-form'> 
                         <Select 
                             v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
+                            placeholder="请输入账单类型" 
                             style="width: 200px"
                             clearable
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
                     </Form-item>
+
+                    <div style="display:inline-block;margin-right:19px;vertical-align: top;">
+                            <Form-item label="服务开始日" class='priceForm' prop="startDate">
+                                <DatePicker 
+                                    v-model="formItem.startDate" 
+                                    placeholder="开始日期"
+                                    style="width: 80px"
+                                />
+                            </Form-item>
+                            <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                            <Form-item  class='priceForm' prop="endDate">
+                                <DatePicker 
+                                    v-model="formItem.endDate" 
+                                    placeholder="结束日期"
+                                    style="width: 80px"
+                                />
+                            </Form-item>
+                        </div>
+
+
+                     <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
 
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">距进场日</span>
-                        <Form-item class='priceForm'> 
-                            <Select 
-                                v-model="formItem.enterType" 
-                                style="width: 90px;margin-right:20px;"
-                                clearable
-                            >
-                                <Option value="large" >长于</Option>
-                                <Option value="short">少于</Option>
-                        </Select> 
-                        </Form-item>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:14px;">欠款金额</span>
                         <Form-item  prop="enterNum" style="display:inline-block;">
                             <i-input 
                                 v-model="formItem.enterNum" 
                                 style="width: 90px;"
-                                placeholder="请输入天数"
+                                placeholder="金额"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-left:11px;">天</span>
-                    </div>
-
-                    <div style="display:inline-block;margin-right:20px;margin-left:93px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系人：</span>
-                        <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
+                        <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                        <Form-item  prop="enterNum" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.person" 
-                                style="width: 200px"
-                                placeholder="请输入联系人"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
-
-                     <div style="display:inline-block;margin-right:19px;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">商品名称</span>
-                        <Form-item class='priceForm'  prop="name">
-                            <i-input 
-                                v-model="formItem.name" 
-                                style="width: 200px"
-                                placeholder="请输入商品名称"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
-                    
-                    <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
-                </div>
-
-                <div style="white-space: nowrap;">
-                    <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">租<span style="display:inline-block;width:25px;"></span>期</span>
-                        <Form-item class='priceForm'> 
-                            <Select 
-                                v-model="formItem.rangeType" 
-                                style="width: 90px;margin-right:20px;"
-                                clearable
-                            >
-                                <Option value="large" >长于</Option>
-                                <Option value="short">少于</Option>
-                        </Select> 
-                        </Form-item>
-                        <Form-item  prop="rangeNum" style="display:inline-block;">
-                            <i-input 
-                                v-model="formItem.rangeNum" 
+                                v-model="formItem.enterNum" 
                                 style="width: 90px;"
-                                placeholder="请输入租期天数"
+                                placeholder="金额"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-left:11px;">天</span>
+                        
                     </div>
 
-                    <div style="display:inline-block;margin-right:19px;margin-left:93px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系方式</span>
-                        <Form-item class='priceForm'  prop="areaMin">
-                            <i-input 
-                                v-model="formItem.phone" 
-                                style="width: 200px"
-                                placeholder="请输入联系方式"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
-
-                    <div style="display:inline-block;margin-right:20px;">
+                    <div style="display:inline-block;margin-right:20px;margin-left:111px;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
                                 v-model="formItem.stationsMin" 
                                 style="width: 90px"
-                                placeholder="请输入工位数量"
+                                placeholder="工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -175,16 +122,29 @@
                         <Form-item  prop="stationsMax" style="width:auto;display:inline-block;">
                             <i-input 
                                 v-model="formItem.stationsMax" 
-                                placeholder="请输入工位数量"
+                                placeholder="工位数量"
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
                     </div>
 
-                     
+
+                    <div style="display:inline-block;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">客户名称</span>
+
+                        <Form-item class='daily-form' prop="name">
+                            <i-input 
+                                v-model="formItem.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 180px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+                    </div>
                     
                     <Button type="primary" @click="searchClick">搜索</Button>
+                   
                 </div>
 
             </Form>

@@ -6,7 +6,7 @@
                 <Button type="primary" style="margin-right:15px;" @click="uploadShow">上传图片</Button> 
             </div>
             <!-- <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button>  -->
-            <Button type="primary" :disabled="btnDisabled" @click="onDeletePic">批量删除</Button> 
+            <Button type="primary" :disabled="btnDisabled" @click="openDelete">批量删除</Button> 
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
         </div>
         <div class="u-table">
@@ -60,7 +60,21 @@
                 <Button type="ghost" style="margin-left: 8px" @click="uploadShow">取消</Button>
         </div>
     </Modal>
-      
+    <Modal
+        v-model="openCancel"
+        title="删除"
+        ok-text="确定"
+        cancel-text="取消"
+        width="490"
+    >
+        <div class="u-cancel-title">
+            确认要删除该文件吗？
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="deletePic">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -94,6 +108,7 @@ export default {
            imgViewShow:false,
            itemDetail:[],
            openUpload:false,
+           openCancel:false,
            imgColumns:[
                {
                   type: 'selection',
@@ -168,7 +183,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.deletePic(params.row.id);
+                                            this.openDelete(params.row.id);
                                         }
                                     }
                                 }, '删除'),
@@ -190,7 +205,13 @@ export default {
       this.getTableData(this.tabParams);
    },
    methods:{
-        uploadShow(){
+       openDelete(id){
+           if(id){
+               this.ids=id
+           }
+           this.openCancel=!this.openCancel;
+       },
+       uploadShow(){
             this.openUpload=!this.openUpload;
        },
        picShow(params){
@@ -342,6 +363,10 @@ export default {
             text-align: center;
             
         }
-}  
+} 
+.u-cancel-title{
+    margin-top: 30px;
+    text-align: center;
+} 
 </style>
 

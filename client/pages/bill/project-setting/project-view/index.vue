@@ -1,18 +1,23 @@
 <template>
 <div class="project-view">
     <div class="u-search" >
-        <Button type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
+        <Button style="vertical-align:top;" type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
+        <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED'"></div>
         <div class="u-search-content">
-            <div class="u-select">
+            <div class="u-select" style="width:170px;">
                 <span>城市</span>
-                <KrField 
-                    type="cascader" 
-                    placeholder="请输入所在地区" 
-                    @change="cascaderChange"
-                    width="120"
-                />
+                 <Select
+                        v-model="formItem.cityId"
+                        style="width:120px"
+                        placeholder="请选择"
+                        filterable
+                        clearable
+                        @on-change="cityChange"
+                    >
+                         <Option  v-for="item in citySelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
+                </Select>
             </div>
-            <div class="u-select">
+            <div class="u-select" >
                 <span>仅看</span>
                  <Select
                         v-model="formItem.doneTaskId"
@@ -26,7 +31,7 @@
                 </Select>
                 <span>已完成项目</span>
             </div>
-           <div class="u-select">
+           <div class="u-select" >
                 <span>仅看</span>
                  <Select
                         v-model="formItem.undoneTaskId"
@@ -41,7 +46,7 @@
                 <span>未完成项目</span>
             </div>
         </div>
-        <div class="u-search-form">
+        <div class="u-search-form" style="display:inline-block;position:absolute;top:0px;">
             <SearchForm 
                 :searchFilter="searchFilter"
                 :onSubmit="onSubmit"
@@ -167,6 +172,7 @@ import EditTask from '../project-detail/edit-task';
                     page:1,
                     pageSize:10,
                 },
+                citySelectData:[],
                 taskId:1869,//任务id
                 projectId:51,//项目id
                 addData:{},
@@ -1194,11 +1200,30 @@ import EditTask from '../project-detail/edit-task';
             this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
             this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
+            this.getCityData(this.tab);
             this.getSelect();
         },
         
         methods:{
-            cascaderChange(){},
+            getCityData(projectStatus){
+                this.$http.get('get-task-city-data',{
+                    projectStatus:projectStatus
+                }).then((res)=>{
+                    this.citySelectData = [].concat(res.data);
+                    console.log(res,"llllllll")
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+
+            },
+            cityChange(value){
+                console.log(value,"ppppppp")
+                this.tabParams.cityId = value;
+                var params = Object.assign({},this.tabParams);
+                this.getTableData(params);
+            },
             toolOut(event){
                 var tirDom = document.getElementById('gantt-chart-tool-tip');
                 var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -1268,7 +1293,6 @@ import EditTask from '../project-detail/edit-task';
                 this.openEditTask = !this.openEditTask;
             },
             dataChange(params,callback){ 
-                console.log("-=====")
                 var data = Object.assign({},params);
                 this.submitEditTask(data,callback);
             },
@@ -1399,7 +1423,9 @@ import EditTask from '../project-detail/edit-task';
 }
 .project-view{
     padding:0 20px;
-
+    .edit-label{
+       padding-right:0px !important;
+   }
     .ivu-tooltip-popper{
         position: fixed;
     }
@@ -1431,8 +1457,9 @@ import EditTask from '../project-detail/edit-task';
     
     .u-search-content{
         display: inline-block;
+        margin-left: 20px;
         .u-select{
-            width:200px;
+            width:250px;
             margin-right:15px;
             float:left;
             font-size: 13px;
@@ -1443,8 +1470,6 @@ import EditTask from '../project-detail/edit-task';
         }
     }
     .u-search-form{
-       position: absolute;
-       left:750px;
        top:0;
     }
     .u-color-block{

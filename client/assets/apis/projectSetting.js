@@ -105,5 +105,11 @@ module.exports = {
       url: '/api/pm/operate-log/list/type/project',
       method: 'get'
     },
+     //查看编辑记录
+    'get-task-city-data': {
+      url: '/api/pm/project/activeCities',
+      method: 'get'
+    },
+    
     
 }

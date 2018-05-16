@@ -1,7 +1,7 @@
 <template>
   <div class="g-upload-img">
        <Upload 
-            name="imgUrl"
+            :name="uploadName"
             multiple
             :show-upload-list="false"
             :format="['jpg','jpeg','png']"
@@ -10,6 +10,8 @@
             with-credentials
             :action="actionUrl" 
             :max-size="maxSize"
+            :before-upload="beforeUpload"
+            :data="data"
         >
               <slot></slot>
         </Upload>
@@ -18,10 +20,6 @@
 <script>
 export default {
   props:{
-     maxSize:{
-         type:Number,
-         defalut:null
-     },
      format:{
          type:Array,
          defalut:[]
@@ -29,20 +27,95 @@ export default {
      multiple:{
          type:Boolean,
          defalut:false
-     }
+     },
+     category:String,
+     isPublic:Boolean,
+     uploadName:String,
+     onSubmit:Function,
   },
   data(){
       return{
           actionUrl:'',
+          signatureInfo : {},
+          expire : 0,
+          data:{},
+          pathPrefix:'',
+          maxSize:null,
+          imgIds:[]
       }
   },
+  mounted(){
+      this.getActionUrl();
+  },
   methods:{
-     handleSuccess(){
+    getActionUrl(){
+         let form={
+             category:this.category,
+             isPublic:this.isPublic
+         }
+          this.$http.get('get-upload-policy', form).then((res)=>{
+                this.actionUrl=res.data.serverUrl;
+                this.maxSize=res.data.maxSizeKb;
+                let params=Object.assign({},res.data);
+                delete params.serverUrl;
+                delete params.sign;
+                delete params.ossAccessKeyId;
+                delete params.maxSizeKb;
 
-     },
-     handleError(){
+                this.data=params;
+                this.data.signature=res.data.sign;
+                this.data.OSSAccessKeyId=res.data.ossAccessKeyId;
+                this.pathPrefix=params.pathPrefix;
+          }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+          })
+    },
+    //生成随机字符
+    random_string(len){
+		len = len || 32;
+	　　var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';   
+	　　var maxPos = chars.length;
+	　　var pwd = '';
+	　　for (var i = 0; i < len; i++) {
+	    　　pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+	    }
+	    return pwd;
+	},
+     //获取文件后缀名
+    get_suffix(filename){
+       
+            var pos = filename.lastIndexOf('.'),
+            suffix = ''
+            if (pos != -1) {
+                suffix = filename.substring(pos)
+            }
+            return suffix;
+    },
+    set_file_name(filename){
+		this.get_suffix(filename);
+		var fileRandomName = this.random_string(10)+this.get_suffix(filename)
+		return fileRandomName;
+    },
+    beforeUpload(file){
+        let fileNameRandom=this.set_file_name(file.name);
+        this.data.Filename=file.name;
+        this.data.key=this.pathPrefix+fileNameRandom;
+        let originalName='X:original_name';
+        let content='Content-Disposition';
+        this.data[originalName]=file.name;
+        this.data[content]=`attachment;filename=${file.name}`
+       
+    },
+    handleSuccess(res,file){
+        let id=res.data.id;
+        this.imgIds.push(id);
+        this.onSubmit && this.onSubmit(this.imgIds)
+    },
+    handleError(){
 
-     }
+    }
   }
 }
 </script>

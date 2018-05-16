@@ -3,13 +3,17 @@
       <SectionTitle :title="tilte" />
         <div class="u-btn-list" >
             <div class="u-upload-btn">
-                <UploadImg >
+                <UploadImg 
+                    category="ad/tv"
+                    :isPublic="isPublic"
+                    uploadName="file"
+                    :onSubmit="uploadImgSubmit"
+                >
                      <Button type="primary" style="margin-right:15px;" >上传图片</Button> 
                 </UploadImg>
             </div>
-             
             <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button> 
-            <Button type="primary" :disabled="btnDisabled" @click="deletePic">删除</Button> 
+            <Button type="primary" :disabled="btnDisabled" @click="onDeletePic">删除</Button> 
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
         </div>
         <div class="u-table">
@@ -63,6 +67,7 @@ export default {
                 page:1,
                 pageSize:15,
            },
+           isPublic:true,
            ifDelete:true,
            imgViewShow:false,
            itemDetail:[],
@@ -135,6 +140,11 @@ export default {
        downloadPic(){
            let picList=this.picList;
        },
+       onDeletePic(){
+           let ids=this.Ids.join(',');
+           console.log('----->>>>ids--->>',ids)
+           this.deletePic(ids)
+       },
        deletePic(id){
             let form={
                 ids:id
@@ -192,17 +202,26 @@ export default {
             this.picList=data;
             this.renderList();
         },
-         handleSuccess(res,file){
-            if(res.code==1){
-                this.isError=false;
-                this.formItem.iconUrl=res.data.imgUrl;
-                this.imgUrl=res.data.imgUrl
+        uploadImgSubmit(ids){
+            let fileIds=ids.join(',')
+            let {params}=this.$route;
+            let form={
+                storageId:params.storageId,
+                fileIds:fileIds
             }
-        },
-        handleError(error,file){
-            this.$Notice.error({
-                    title:error.message
-            });
+            console.log('fileIds---',fileIds)
+            // this.$http.post('save-pic', form).then((res)=>{
+            //     this.$Notice.success({
+            //         title:'图片上传成功'
+            //     });
+
+            //    this.getTableData(this.tabParams);
+            // }).catch((err)=>{
+            //     this.$Notice.error({
+            //         title:err.message
+            //     });
+            // })
+
         },
         downloadImg(src,name){
             var a = document.createElement('a');

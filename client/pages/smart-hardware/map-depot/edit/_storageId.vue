@@ -173,17 +173,22 @@ export default {
        },
        downloadPic(){
            let picList=this.picList;
-         //  var arr=[];
-        //    picList.map((item)=>{
+          var arr=[];
+           picList.map((item,index)=>{
+                let a = document.createElement('a');
+                a.href = item.fileUrl;
+                a.download = item.fileName || "";
+                 console.log('item.fileName',item.fileName)
+                
+                arr.push(a)
                
-                   
-        //         let a = document.createElement('a');
-        //         a.href = item.fileUrl;
-        //         a.download = item.fileName || "";
-               
-        //         arr.push(a);
-               
-        //    })
+           })
+           arr.map((item)=>{
+               item.click();
+           })
+            arr[0].click();
+             arr[1].click();
+          console.log('arr---->>>',arr)
            
         
        },

@@ -5,6 +5,7 @@
                     <div class='list-btn'>
                         <Button type="primary" @click="jumpJoin" class='join-btn'>入驻</Button>
                         <Button type="primary" @click="jumpRenew" class='join-btn'>续租</Button>
+                        <Button type="primary" @click="jumpReduce" class='join-btn'>减租</Button>
                         <Button type="primary" @click="jumpReplace">换租</Button>
                     </div>
 
@@ -450,6 +451,11 @@
                 window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
             },
 
+            jumpReduce(){
+                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
+            },
+
+
             jumpView(params){
                 let edit = params.row.orderStatus ==='NOT_EFFECTIVE'?true:false
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/replaceView?edit=${edit}`,'_blank');
@@ -506,7 +512,7 @@
                 display:inline-block;
                 width:40%;
                 .join-btn{
-                    margin-right:30px;
+                    margin-right:20px;
                 }
             }
             .list-search{

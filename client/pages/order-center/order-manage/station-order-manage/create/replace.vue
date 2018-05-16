@@ -262,7 +262,7 @@
                             </FormItem>
                         </Col>
                         <Col class="col">
-                            <FormItem label="旧服务保证金转新" style="width:252px" prop="transferDepositAmount">
+                            <FormItem label="旧服务保证金转新(剩余扣除)" style="width:252px" prop="transferDepositAmount">
                                  <Input 
                                     v-model="formItem.transferDepositAmount" 
                                     placeholder="旧服务保证金转新"
@@ -729,12 +729,12 @@
                         align:'center'
                     },
                     {
-                        title: '已交服务费中涉及到更换的金额',
+                        title: '退还服务费',
                         key: 'changeServiceFee',
                         align:'center'
                     },
                     {
-                        title: '已交保证金涉及到更换的金额',
+                        title: '工位已交保证金',
                         key: 'changeDeposit',
                         align:'center'
                     },

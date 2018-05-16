@@ -83,7 +83,7 @@
                 <LabelText  :inline="inline"label="退还服务费：">
                     ￥{{formItem.changeServiceFee | thousand}}
                 </LabelText>
-                <LabelText  :inline="inline"label="旧服务保证金转新：">
+                <LabelText  :inline="inline"label="旧服务保证金转新（剩余扣除）">
                     ￥{{formItem.transferDepositAmount | thousand}}
                 </LabelText>
                 <LabelText :inline="inline" label="扣除服务保证金：">
@@ -355,7 +355,7 @@ export default {
                     }
                 },
                 {
-                    title: '已交服务费中涉及到更换的金额',
+                    title: '退还服务费',
                     key: 'changeServiceFee',
                     align: 'center',
                     render: (h, params) => {
@@ -363,7 +363,7 @@ export default {
                     }
                 },
                 {
-                    title: '已交保证金涉及到更换的金额',
+                    title: '工位已交保证金',
                     key: 'changeDeposit',
                     align: 'center',
                     render: (h, params) => {

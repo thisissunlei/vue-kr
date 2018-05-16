@@ -97,6 +97,7 @@
 
         <KrCascader
             v-if="type==='cascader'"
+            :width="width"
             :data="data"
             :name="name"
             :value="value"
@@ -270,6 +271,9 @@ export default {
         selectParam:{
             default:'',
             type:String
+        },
+        width:{
+            type:[Number,String]
         }
     },
     data(){

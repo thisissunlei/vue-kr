@@ -4,6 +4,15 @@
         <Button type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
         <div class="u-search-content">
             <div class="u-select">
+                <span>城市</span>
+                <KrField 
+                    type="cascader" 
+                    placeholder="请输入所在地区" 
+                    @change="cascaderChange"
+                    width="120"
+                />
+            </div>
+            <div class="u-select">
                 <span>仅看</span>
                  <Select
                         v-model="formItem.doneTaskId"
@@ -1189,6 +1198,7 @@ import EditTask from '../project-detail/edit-task';
         },
         
         methods:{
+            cascaderChange(){},
             toolOut(event){
                 var tirDom = document.getElementById('gantt-chart-tool-tip');
                 var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -1420,20 +1430,17 @@ import EditTask from '../project-detail/edit-task';
     }
     
     .u-search-content{
-        position: absolute;
-        width:550px;
-        top:0;
-        left:230px;
-         .u-select{
-             width:245px;
-             margin-right:15px;
-             float:left;
-             font-size: 13px;
-             span{
-                 padding:0 10px;
-                 vertical-align: -2px;
-             }
-         }
+        display: inline-block;
+        .u-select{
+            width:200px;
+            margin-right:15px;
+            float:left;
+            font-size: 13px;
+            span{
+                padding:0 10px;
+                vertical-align: -2px;
+            }
+        }
     }
     .u-search-form{
        position: absolute;

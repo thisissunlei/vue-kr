@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-task">
+    <div class="edit-task" :id="edittaskId">
         <Form  :model="params"   label-position="top" style="margin-top:25px;">
             <div class="file-box ">
                 <div class="file-col"><span class="file-title">责任部门</span><span class="file-label">{{getEdit.department}}</span></div>
@@ -8,7 +8,7 @@
                         <div class="time-view">
                             <div  class="time-title" >计划时间</div>
                             <div v-if="!planEnd &&!isStartEdit" class="time-bottom-unsuccess" @click="switchStartEdit">设置</div>
-                            <div v-if="planEnd||isStartEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                            <div  :style="{height:'36px',lineHeight:'36px',marginTop:'20px',display:planEnd||isStartEdit?'block':'none'}">
                                 <DatePicker
                                     :open="startOpen"
                                     :value="newStart"
@@ -32,25 +32,27 @@
                         </div>
                     </div>
                     <div class="tiem-box" style="margin-left:19px;">
-                        <div class="time-title">完成时间</div>
-                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
-                        <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
-                            <DatePicker
-                                :open="endOpen"
-                                :value="newEnd"
-                                confirm
-                                type="date"
-                                :clearable="false"
-                                @on-change="endChange"
-                                @on-clear="endClear"
-                                @on-ok="endOk">
-                                <a href="javascript:void(0)" @click="switchEndTime">
-                                
-                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                        <div class="time-view">
+                            <div class="time-title">完成时间</div>
+                            <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
+                            <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                                <DatePicker
+                                    :open="endOpen"
+                                    :value="newEnd"
+                                    confirm
+                                    type="date"
+                                    :clearable="false"
+                                    @on-change="endChange"
+                                    @on-clear="endClear"
+                                    @on-ok="endOk">
+                                    <a href="javascript:void(0)" @click="switchEndTime">
                                     
-                                    <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
-                                </a>
-                            </DatePicker>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                                        
+                                        <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
+                                    </a>
+                                </DatePicker>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,6 +170,7 @@ export default {
             totalFields:0,
             validFields:0,
             openSure:false,
+            edittaskId:'editTask'+this._uid,
 
         }
     },
@@ -175,7 +178,9 @@ export default {
         this.queryData=Object.assign({},this.$route.query); 
     },
     mounted(){
-         
+        
+        // console.log(startClearBtn,"ooooooooo")
+        //  console.log("-------",window.resourcesCode)
     },
    
     methods:{
@@ -197,20 +202,42 @@ export default {
                 // this.warn=error.message;
             })
         },
+        isShowClearBtn(){
+            this.$nextTick(function(){
+                var permissions="999";
+                var resourcesCode = [].concat(window.resourcesCode);
+                var isShow = resourcesCode.indexOf(permissions)>-1;
+                var startClearBtn = document.querySelectorAll("#"+this.edittaskId+" .time-view .ivu-btn-text")
+                for(var i=0;i<startClearBtn.length;i++){
+                    if(isShow){
+                         startClearBtn[i].style.display = 'inline-block'
+                    }else{
+                         startClearBtn[i].style.display = 'none'
+                    }
+                   
+                }
+                
+            });
+        },
         cancelSure(){
             this.openSure=!this.openSure;
         },
         switchStartTime(){
             this.startOpen = !this.startOpen;
+            this.isShowClearBtn();
             
         },
         switchEndTime(){
             this.endOpen = !this.endOpen;
             if(this.endOpen){
                 this.newEnd = this.actualEnd;
+               this.isShowClearBtn();
+                
+            
             }
         },
         startChnage(date){
+           
             this.newStart = date
         },
         startOk(){
@@ -236,6 +263,9 @@ export default {
         },
         switchStartEdit(){
             this.startOpen = true;
+            if(this.startOpen){
+                this.isShowClearBtn();
+            }
             this.newStart = (new Date()).getTime();
             this.isStartEdit = !this.isStartEdit;
         },
@@ -278,6 +308,9 @@ export default {
             this.actualEnd = this.newEnd = (new Date()).getTime();
             this.params.actualEndTime = this.actualEnd;
             this.isEndEdit = true;
+             if(this.startOpen){
+                this.isShowClearBtn();
+            }
             var data = Object.assign({},this.params);
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
@@ -455,6 +488,7 @@ export default {
         }
     }
     .time-view{
+       
         .ivu-btn.ivu-btn-text{
             display: none;
         }

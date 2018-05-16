@@ -1326,9 +1326,9 @@ import EditTask from '../project-detail/edit-task';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
                     this.getTableData(this.tabParams);
                     this.getEditTaskData(this.taskId,()=>{})
-                    console.log(callback,"---=======",response.code >1)
-                    if(callback && response.code >1){
-                        callback();
+                   
+                    if(callback){
+                        callback(response.code);
                     }
                     // this.getListData(this.ids);
                 

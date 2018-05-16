@@ -34,7 +34,7 @@
                     <div class="tiem-box" style="margin-left:19px;">
                         <div class="time-view">
                             <div class="time-title">完成时间</div>
-                            <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
+                            <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="check-icon"></span>已完成</div>
                             <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
                                 <DatePicker
                                     :open="endOpen"
@@ -115,7 +115,16 @@
             >
             <div class='sure-sign'>“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
             <div slot="footer">
-                <Button type="primary" @click="submitSure()">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
+        <Modal
+            v-model="openPrompt"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>{{promptText}}</div>
+            <div slot="footer">
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
@@ -171,6 +180,8 @@ export default {
             validFields:0,
             openSure:false,
             edittaskId:'editTask'+this._uid,
+            openPrompt:false,
+            promptText:'清空已完成时间后，该项目将会移入“待开业项目”列表'
 
         }
     },
@@ -184,6 +195,15 @@ export default {
     },
    
     methods:{
+        switchPrompt(){
+            this.openPrompt = !this.openPrompt;
+        },
+        okPrompt(){
+            if(this.promptType == 'start'){
+
+            }
+        },
+        //确认已签署合同
          submitSure(){
             let params={
                 id:this.taskId,
@@ -206,7 +226,7 @@ export default {
             this.$nextTick(function(){
                 var permissions="999";
                 var resourcesCode = [].concat(window.resourcesCode);
-                var isShow = resourcesCode.indexOf(permissions)>-1;
+                var isShow =true; // resourcesCode.indexOf(permissions)>-1;
                 var startClearBtn = document.querySelectorAll("#"+this.edittaskId+" .time-view .ivu-btn-text")
                 for(var i=0;i<startClearBtn.length;i++){
                     if(isShow){
@@ -247,7 +267,15 @@ export default {
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
             this.switchStartTime();
-            this.$emit("dataChange",data);
+            this.$emit("dataChange",data,(code)=>{
+                if(code=='DELSIGN'){
+                    this.promptText = '签署合同';     
+               }
+                if(code=='DELOPEN'){
+                    this.promptText = '清空已完成时间后，该项目将会移入“待开业项目”列表';
+                }
+                this.switchPrompt();
+            });
         },
         numToDate(num){
             if(!num){
@@ -259,7 +287,11 @@ export default {
             return num;
         },
         startClear(){
-
+          
+            this.startOpen = false;
+            this.planEnd = this.newStart = '';
+            this.isStartEdit = false;
+            this.startOk();
         },
         switchStartEdit(){
             this.startOpen = true;
@@ -273,21 +305,30 @@ export default {
             this.newEnd = data;
         },
         endClear(){
-
+            this.endOpen = false;
+            this.actualEnd = this.newEnd = '';
+            this.isEndEdit = false;
+            this.endOk()
         },
+        //字段编辑提交
         okClick(){
-          
-              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
-                    console.log("=========")
-                    this.params.actualEndTime = this.actualEnd;
-                    this.isEndEdit = true;
-                    var data = Object.assign({},this.params);
-                    data.planEndTime = this.numToDate(data.planEndTime);
-                    data.actualEndTime = this.numToDate(data.actualEndTime)
-                    this.$emit("dataChange",data,()=>{
-                        this.cancelSure()
-                    });
-              })
+            this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
+                this.params.actualEndTime = this.actualEnd;
+                this.isEndEdit = true;
+                var data = Object.assign({},this.params);
+                data.planEndTime = this.numToDate(data.planEndTime);
+                data.actualEndTime = this.numToDate(data.actualEndTime)
+                this.$emit("dataChange",data,(code)=>{
+                    if(code=='DELSIGN'){
+                        this.promptText = '签署合同';     
+                    }
+                    if(code=='DELOPEN'){
+                        this.promptText = '清空已完成时间后，该项目将会移入“待开业项目”列表';
+                    }
+                    this.switchPrompt();
+                    
+                });
+            })
         },
         endOk(flag){
             this.actualEnd = this.newEnd;
@@ -334,7 +375,6 @@ export default {
         },
         //去填写详情
         getArchivesDetail(data,callback){
-           console.log(data,"ooooooo")
             this.$http.get('project－archives-file-detail',data).then((response)=>{
                
                 if(!callback){
@@ -391,9 +431,9 @@ export default {
         margin-top: 30px;
         box-sizing:content-box;
     }
-    .ok-icon{
+    .check-icon{
         display: inline-block;
-        height: 16px;
+        height: 15px;
         width: 16px;
         background-image: url(./images/ok.svg);
         background-size:100%;

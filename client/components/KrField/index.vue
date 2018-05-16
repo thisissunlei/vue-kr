@@ -110,7 +110,6 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
-            :width="width"
             :inline="inline"
         />
         

@@ -13,13 +13,7 @@
                 :placeholder="placeholder"
                 :clearable='clearable'
                 @on-change="change"
-                @on-visible-change="visibleChange"
-<<<<<<< HEAD
-                :style="{width:width?width+'px':'250px'}"
-=======
-               
-                
->>>>>>> feature/项目管理城市搜索
+                @on-visible-change="visibleChange"   
             />
         </EditLabel>
 	</div>
@@ -59,16 +53,12 @@ export default {
             type:Boolean
         },
         width:{
-<<<<<<< HEAD
-            type:[Number,String]
-=======
             default:250,
             type:[String,Number]
         },
         inline:{
             default:false,
             type:Boolean
->>>>>>> feature/项目管理城市搜索
         }
 	},
 	data(){

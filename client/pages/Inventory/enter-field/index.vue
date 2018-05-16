@@ -17,7 +17,7 @@
 
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
-import SearchForm from '../searchForm';
+import SearchForm from './searchForm';
 
     export default {
         name: 'EnterField',

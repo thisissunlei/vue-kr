@@ -171,6 +171,12 @@ import EditTask from '../project-detail/edit-task';
                 tabParams:{
                     page:1,
                     pageSize:10,
+                    projectName:'',
+                    projectCode:'',
+                    cityId:'',
+                    doneTaskId:'',
+                    undoneTaskId:'',
+
                 },
                 citySelectData:[],
                 taskId:1869,//任务id
@@ -185,7 +191,7 @@ import EditTask from '../project-detail/edit-task';
                 openEditTask:false,
                 formItem:{
                     doneTaskId:'',
-                    undoneTaskId:'',
+                    undoneTaskId:''
                 },
                 tab:'',
                 warn:'',
@@ -1246,13 +1252,11 @@ import EditTask from '../project-detail/edit-task';
                 this.getTableData(this.tabParams);
             },
             onSubmit(form){ 
-                if(this.tabParams.projectName){
-                    this.tabParams.projectName="";
-                }
-                if(this.tabParams.projectCode){
-                    this.tabParams.projectCode="";
-                }
-                 let params=Object.assign(form,this.tabParams);
+                console.log(form,"pppppppp")
+                
+                this.tabParams.projectName=form.projectName||'';
+                this.tabParams.projectCode=form.projectCode||'';
+                let params = Object.assign({},this.tabParams);
                 this.getTableData(params);
                 // utils.addParams(params);
             },
@@ -1378,6 +1382,7 @@ import EditTask from '../project-detail/edit-task';
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
                     this.getTableData(this.tabParams);
                     this.newArchives();
+                    this.getCityData(this.tab);
                     this.openMessage=true;
                     this.warn='新建成功';
                     this.MessageType="success";

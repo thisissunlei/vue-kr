@@ -80,6 +80,10 @@ export default {
         .ivu-form-item-error-tip{
             width:250px;
         }
+        .edit-label{
+            display: block !important;
+            padding-right: 55px !important;
+        }
         .bill-archives-class{
             padding-left:32px;
             height: 48px;

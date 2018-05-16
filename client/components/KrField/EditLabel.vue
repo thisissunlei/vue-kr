@@ -230,7 +230,7 @@ export default {
 			// var isclose = this.editClick();
 			// if(isclose){
 			// }
-			this.isEdit = !this.isEdit;
+			this.isEdit = true;
 
 			
 		},

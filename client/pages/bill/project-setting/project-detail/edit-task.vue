@@ -118,6 +118,16 @@
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
             </div>
         </Modal>
+         <Modal
+            v-model="openPrompt"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>清空已完成时间后，该项目将会移入“待开业项目”列表</div>
+            <div slot="footer">
+                <Button type="ghost" style="margin-left:8px" @click="switchPrompt">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -169,6 +179,7 @@ export default {
             totalFields:0,
             validFields:0,
             openSure:false,
+            openPrompt:false,
             endOptions:{
                 disabledDate (date) {
                     return date && date.valueOf() > Date.now();
@@ -185,6 +196,9 @@ export default {
     },
    
     methods:{
+        switchPrompt(){
+            this.openPrompt = !this.openPrompt;
+        },
          submitSure(){
             let params={
                 id:this.taskId,
@@ -249,21 +263,27 @@ export default {
             this.newEnd = data;
         },
         endClear(){
-
+            this.isEndEdit = false;
+            this.actualEnd = this.newEnd = '';
+            this.endOpen = false;
+            this.endOk()
         },
         okClick(){
           
-              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
-                    console.log("=========")
-                    this.params.actualEndTime = this.actualEnd;
-                    this.isEndEdit = true;
-                    var data = Object.assign({},this.params);
-                    data.planEndTime = this.numToDate(data.planEndTime);
-                    data.actualEndTime = this.numToDate(data.actualEndTime)
-                    this.$emit("dataChange",data,()=>{
+            this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
+                
+                this.params.actualEndTime = this.actualEnd;
+                this.isEndEdit = true;
+                var data = Object.assign({},this.params);
+                data.planEndTime = this.numToDate(data.planEndTime);
+                data.actualEndTime = this.numToDate(data.actualEndTime)
+                this.$emit("dataChange",data,(code)=>{
+                    if(code===15){
                         this.cancelSure()
-                    });
-              })
+                    }
+                    
+                });
+            })
         },
         endOk(flag){
             this.actualEnd = this.newEnd;
@@ -274,8 +294,8 @@ export default {
             if(!flag){
                 this.switchEndTime();
             }
-            this.$emit("dataChange",data,()=>{
-                 this.cancelSure()
+            this.$emit("dataChange",data,(code)=>{
+                
             });
         },
         switchEndEdit(){

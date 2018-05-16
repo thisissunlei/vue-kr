@@ -1067,6 +1067,12 @@ import utils from '~/plugins/utils';
                         });
                     return;
                 }
+                if(!this.formItem.customerId){
+                    this.$Notice.error({
+                            title:'请先选择客户'
+                        });
+                    return;
+                }
                 if(!this.formItem.startDate){
                     this.$Notice.error({
                             title:'请先选择开始时间'

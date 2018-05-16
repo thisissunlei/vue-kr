@@ -3,7 +3,6 @@
        <Upload 
             :name="uploadName"
             multiple
-            :show-upload-list="false"
             :format="['jpg','jpeg','png']"
             :on-success="handleSuccess"
             :on-error="handleError"
@@ -111,7 +110,10 @@ export default {
     handleSuccess(res,file){
         let id=res.data.id;
         this.imgIds.push(id);
-        this.onSubmit && this.onSubmit(this.imgIds)
+        let ids=this.imgIds.join(',');
+        console.log('ids---1111>>>',ids)
+        this.$emit('formData',ids);
+        
     },
     handleError(){
 

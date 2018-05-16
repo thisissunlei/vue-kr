@@ -3,14 +3,15 @@
       <SectionTitle :title="tilte" />
         <div class="u-btn-list" >
             <div class="u-upload-btn">
-                <UploadImg 
+                <Button type="primary" style="margin-right:15px;" @click="uploadShow">上传图片</Button> 
+                <!-- <UploadImg 
                     category="ad/tv"
                     :isPublic="isPublic"
                     uploadName="file"
                     :onSubmit="uploadImgSubmit"
                 >
-                     <Button type="primary" style="margin-right:15px;" >上传图片</Button> 
-                </UploadImg>
+                    
+                </UploadImg> -->
             </div>
             <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button> 
             <Button type="primary" :disabled="btnDisabled" @click="onDeletePic">删除</Button> 
@@ -39,6 +40,34 @@
                     @downFile="downloadImg"
                     @deleteFile="deletePic"
             />
+
+    <Modal
+        v-model="openUpload"
+        title="上传图片"
+        ok-text="确定"
+        cancel-text="取消"
+        width="500"
+     >
+      <div class="u-upload-title">
+            <UploadImg 
+                category="ad/tv"
+                :isPublic="isPublic"
+                uploadName="file"
+                v-if="openUpload"
+                @formData="getImgIds"
+            >
+                <div class="u-upload-content">
+                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                        <p>请选择上传文件</p>
+                        <!-- <div class="u-upload-file-name" v-if="file !== null"> {{ file.name }}</div> -->
+                </div>        
+            </UploadImg>
+        </div>
+        <div slot="footer">
+                <Button type="primary"    @click="uploadImgSubmit()">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="uploadShow">取消</Button>
+        </div>
+    </Modal>
       
   </div>
 </template>
@@ -67,10 +96,12 @@ export default {
                 page:1,
                 pageSize:15,
            },
+           imgIds:'',
            isPublic:true,
            ifDelete:true,
            imgViewShow:false,
            itemDetail:[],
+           openUpload:false,
            imgColumns:[
                {
                   type: 'selection',
@@ -126,6 +157,9 @@ export default {
       this.getTableData(this.tabParams);
    },
    methods:{
+        uploadShow(){
+            this.openUpload=!this.openUpload;
+       },
        picShow(params){
            params.fieldUrl=params.fileUrl;
            let arr=[];
@@ -142,8 +176,8 @@ export default {
        },
        onDeletePic(){
            let ids=this.Ids.join(',');
-           console.log('----->>>>ids--->>',ids)
            this.deletePic(ids)
+           this.picList=[];
        },
        deletePic(id){
             let form={
@@ -153,6 +187,7 @@ export default {
                this.$Notice.error({
                     title:'图片删除成功'
                 });
+                this.btnDisabled=true;
                 this.openViewUpload();
                 this.getTableData(this.tabParams);
             }).catch((err)=>{
@@ -202,25 +237,29 @@ export default {
             this.picList=data;
             this.renderList();
         },
-        uploadImgSubmit(ids){
-            let fileIds=ids.join(',')
+        getImgIds(ids){
+            this.imgIds=ids;
+        },
+        uploadImgSubmit(){
+            //let fileIds=ids.join(',')
+            console.log('ids---->>>',this.imgIds)
             let {params}=this.$route;
             let form={
                 storageId:params.storageId,
-                fileIds:fileIds
+                fileIds:this.imgIds
             }
-            console.log('fileIds---',fileIds)
-            // this.$http.post('save-pic', form).then((res)=>{
-            //     this.$Notice.success({
-            //         title:'图片上传成功'
-            //     });
+            this.$http.post('save-pic', form).then((res)=>{
+                this.$Notice.success({
+                    title:'图片上传成功'
+                });
+                this.uploadShow();
 
-            //    this.getTableData(this.tabParams);
-            // }).catch((err)=>{
-            //     this.$Notice.error({
-            //         title:err.message
-            //     });
-            // })
+               this.getTableData(this.tabParams);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
 
         },
         downloadImg(src,name){
@@ -255,7 +294,25 @@ export default {
     }
     .u-table{
         padding:0 20px;
-    }    
+    } 
+   .u-upload-title{
+        width:500px;
+        div{
+            width:97%;
+        }
+        .u-upload-content{
+            width:94px;
+            height:110px;
+            margin:25px auto 0;
+            i{
+                text-indent: 19px !important;
+            }
+        }
+        .g-upload-img{
+            width: 100px;
+            margin: 20px auto;
+        }
+    }  
 }
 </style>
 

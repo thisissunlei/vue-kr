@@ -54,7 +54,7 @@
 
                     <Form-item label="客户名称" class='daily-form' prop="name">
                         <i-input 
-                            v-model="formItem.name" 
+                            v-model="formItem.customerName" 
                             placeholder="请输入客户名称"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -79,7 +79,7 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">距进场日</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.priceType" 
+                                v-model="formItem.enterType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
@@ -87,10 +87,11 @@
                                 <Option value="short">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="priceMin" style="display:inline-block;">
+                        <Form-item  prop="enterNum" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.priceMin" 
+                                v-model="formItem.enterNum" 
                                 style="width: 90px;"
+                                placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -101,8 +102,9 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系人：</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
-                                v-model="formItem.stationsMin" 
+                                v-model="formItem.person" 
                                 style="width: 200px"
+                                placeholder="请输入联系人"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -110,10 +112,11 @@
 
                      <div style="display:inline-block;margin-right:19px;">
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">商品名称</span>
-                        <Form-item class='priceForm'  prop="areaMin">
+                        <Form-item class='priceForm'  prop="name">
                             <i-input 
-                                v-model="formItem.areaMin" 
+                                v-model="formItem.name" 
                                 style="width: 200px"
+                                placeholder="请输入商品名称"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -124,28 +127,35 @@
 
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">租<span style="display:inline-block;width:27px;"></span>期</span>
+                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">租<span style="display:inline-block;width:25px;"></span>期</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.priceType" 
+                                v-model="formItem.rangeType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option v-for="item in priceList" :value="item.value" :key="item.value">{{ item.label}}</Option>
+                                <Option value="large" >长于</Option>
+                                <Option value="short">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="priceMin" style="display:inline-block;">
+                        <Form-item  prop="rangeNum" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.priceMin" 
+                                v-model="formItem.rangeNum" 
                                 style="width: 90px;"
+                                placeholder="请输入租期天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
-                        <span style="display:inline-block;margin:0 4px 0 5px;vertical-align: middle;">至</span>
-                        <Form-item  prop="priceMax" style="display:inline-block;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-left:11px;">天</span>
+                    </div>
+
+                    <div style="display:inline-block;margin-right:19px;margin-left:93px;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系方式</span>
+                        <Form-item class='priceForm'  prop="areaMin">
                             <i-input 
-                                v-model="formItem.priceMax" 
-                                style="width: 90px"
+                                v-model="formItem.phone" 
+                                style="width: 200px"
+                                placeholder="请输入联系方式"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -157,6 +167,7 @@
                             <i-input 
                                 v-model="formItem.stationsMin" 
                                 style="width: 90px"
+                                placeholder="请输入工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -164,30 +175,14 @@
                         <Form-item  prop="stationsMax" style="width:auto;display:inline-block;">
                             <i-input 
                                 v-model="formItem.stationsMax" 
+                                placeholder="请输入工位数量"
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
                     </div>
 
-                     <div style="display:inline-block;margin-right:19px;">
-                        <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">面<span style="display:inline-block;width:25px;"></span>积</span>
-                        <Form-item class='priceForm'  prop="areaMin">
-                            <i-input 
-                                v-model="formItem.areaMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                        <span style="display:inline-block;margin: 7px 3px 0 4px;">至</span>
-                        <Form-item  class='priceForm' prop="areaMax">
-                            <i-input 
-                                v-model="formItem.areaMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
+                     
                     
                     <Button type="primary" @click="searchClick">搜索</Button>
                 </div>
@@ -232,12 +227,12 @@ export default {
                     callback();
                 }
             };
-            const validateArea = (rule, value, callback) => {
-                var reg=/^(([1-9]{1}[0-9]{0,2})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,2}\.\d{1,2}))$/;
+            const validateNum = (rule, value, callback) => {
+                var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入小于1000的数字,最多2位小数');
-                }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
-                    callback('后者需要大于前者');
+                    callback('请输入正整数');
+                }else if(value&&value>100){
+                    callback('最大可查范围为100天');
                 }else{
                     callback();
                 }
@@ -260,27 +255,16 @@ export default {
                 }
             };
             return {  
-                tipContent:this.identify=='daily'?'查询某一天，商品的库存状态。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询':'查询某个时间段，可租的商品。如需查询所有商品的库存情况，请前往每日库存查询页面', 
                 formItem:{
-                    inventoryDate:publicFn.getToDay(),
                     name:'',
-                    status:[],
                     communityId:' ',
-                    statusName:'',
                     cityId:'',
                     floor:' ',
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    priceType:'UNIT_PRICE',
-                    priceMin:'',
-                    priceMax:'',
-                    areaMin:'',
-                    areaMax:'',
-                    locationName:' ',
-                    suiteName:' ',
-                    startDate:publicFn.getToDay(),
-                    endDate:this.getEndDate()
+                    enterType:'large',
+                    rangeType:'large',
                 },
                 communityList:[],
                 cityList:[],
@@ -301,17 +285,6 @@ export default {
                     {value:'UNIT_PRICE',label:'工位单价'},
                     {value:'AMOUNT',label:'商品总价'}
                 ],
-                locationList:[
-                    {value:' ',label:'全部方位'},
-                    {value:'OUTSIDE_SPACE',label:'外侧间'},
-                    {value:'INSIDE_SPACE',label:'内侧间'},
-                    {value:'UNKNOWN',label:'未知'}
-                ],
-                suiteList:[
-                    {value:' ',label:'全部'},
-                    {value:'SUITE',label:'有套间'},
-                    {value:'UNSUITE',label:'无套间'}
-                ],
 
                 formItemOld:{},
                 ruleDaily: {
@@ -324,24 +297,12 @@ export default {
                     name:[
                         { validator: validateName, trigger: 'change' }
                     ],
-                    priceMin: [
-                        { validator: validatePrice, trigger: 'change' }
+                    enterNum: [
+                        { validator: validateNum, trigger: 'change' }
                     ],
-                    priceMax: [
-                        { validator: validatePrice, trigger: 'change' }
+                    rangeNum: [
+                        { validator: validateNum, trigger: 'change' }
                     ],
-                    areaMin: [
-                        { validator: validateArea, trigger: 'change' }
-                    ],
-                    areaMax: [
-                        { validator: validateArea, trigger: 'change' }
-                    ],
-                    startDate: [
-                        { validator: validateDate, trigger: 'change' }
-                    ],
-                    endDate: [
-                        { validator: validateDate, trigger: 'change' }
-                    ]
                 }
             }
     },
@@ -399,25 +360,14 @@ export default {
         searchClick(){
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
-                    var str='';
-                    this.formItem.status.map((item,index)=>{
-                            str=str?str+','+item:item;
-                    })
-                    this.formItem.statusName=str;
-                    if(!this.formItem.startDate&&!this.formItem.endDate){
-                        this.$Notice.error({
-                            title:'至少选择一个时间'
-                        });
-                        return ;
-                    }
-                    this.$emit('searchClick',this.formItem);
+                    console.log('搜索',this.formItem)
+                    // this.$emit('searchClick',this.formItem);
                 }
             })
         },
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
-            this.formItem.status=[];
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -444,22 +394,6 @@ export default {
         communityChange(param){
             this.getFloorList(param);
         },
-        getEndDate(){
-            var today=publicFn.getToDay();
-            var date=today.split('-');
-            var year=Number(date[0]),month=Number(date[1]),day=Number(date[2]);
-            var dayNum=Number(publicFn.getMonthDayNum(year,month));
-            var endDay=day+7,endYear=year,endMonth=month;
-            if(endDay>dayNum){
-                endMonth+=1;
-                endDay=endDay-dayNum;
-            }
-            if(endMonth>12){
-                endYear+=1;
-                endMonth=endMonth-12;
-            }
-            return endYear+'-'+endMonth+'-'+endDay
-        }
     }
 }
 </script>

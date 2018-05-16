@@ -13,8 +13,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以缩放
             allowZoom: false
         });
-
-
+    
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {
@@ -44,15 +43,15 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
                 $(go.TextBlock,textStyle(),
                 { row: 1, column: 0},
                 new go.Binding("text", "property")),
-                { //鼠标hover事件
-                    mouseEnter: function (e, node) { 
-                        enterFn(e,node)
-                    },
-                    mouseLeave: function (e, node) { 
-                        leaveFn(e,node)
-                    }
+            ),
+            { //鼠标hover事件
+                mouseEnter: function (e, node) { 
+                    enterFn(e,node)
+                },
+                mouseLeave: function (e, node) { 
+                    leaveFn(e,node)
                 }
-            )
+            }
         );
     
     var myModel = $(go.Model);

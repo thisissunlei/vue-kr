@@ -4,17 +4,9 @@
         <div class="u-btn-list" >
             <div class="u-upload-btn">
                 <Button type="primary" style="margin-right:15px;" @click="uploadShow">上传图片</Button> 
-                <!-- <UploadImg 
-                    category="ad/tv"
-                    :isPublic="isPublic"
-                    uploadName="file"
-                    :onSubmit="uploadImgSubmit"
-                >
-                    
-                </UploadImg> -->
             </div>
-            <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button> 
-            <Button type="primary" :disabled="btnDisabled" @click="onDeletePic">删除</Button> 
+            <!-- <Button type="primary" :disabled="btnDisabled" style="margin-right:15px;" @click="downloadPic">下载</Button>  -->
+            <Button type="primary" :disabled="btnDisabled" @click="onDeletePic">批量删除</Button> 
             <div class="u-tip">图片小于3M，仅支持上传 jpg、jpeg、png格式</div>
         </div>
         <div class="u-table">
@@ -143,7 +135,48 @@ export default {
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
                         return time;
                     }
-                }
+                },
+                {
+                        title: '操作',
+                        key: 'operation',
+                        align:'center',
+                        width:100,
+                        render:(h,params)=>{
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.downloadImg(params.row.fileUrl,params.row.fileName);
+                                        }
+                                    }
+                                }, '下载'),
+                                
+                                 h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.deletePic(params.row.id);
+                                        }
+                                    }
+                                }, '删除'),
+                                
+                            ]);
+                        }
+                    }
+
            ],
            tableList:[],
            picList:[],
@@ -170,27 +203,6 @@ export default {
        },
        openViewUpload(){
             this.imgViewShow=!this.imgViewShow;
-       },
-       downloadPic(){
-           let picList=this.picList;
-          var arr=[];
-           picList.map((item,index)=>{
-                let a = document.createElement('a');
-                a.href = item.fileUrl;
-                a.download = item.fileName || "";
-                 console.log('item.fileName',item.fileName)
-                
-                arr.push(a)
-               
-           })
-           arr.map((item)=>{
-               item.click();
-           })
-            arr[0].click();
-             arr[1].click();
-          console.log('arr---->>>',arr)
-           
-        
        },
        onDeletePic(){
            let ids=this.Ids.join(',');
@@ -284,10 +296,6 @@ export default {
                 a.href = src;
                 a.download = name || "";
                 a.click();
-                // var evObj = document.createEvent('MouseEvents');
-                // console.log('6666')
-                // evObj.initMouseEvent( 'click', true, true, window, 0, 0, 0, 0, 0, false, false, true, false, 0, null);
-                // a.dispatchEvent(evObj);
         }
        
    }
@@ -313,6 +321,9 @@ export default {
     .u-table{
         padding:0 20px;
     } 
+     .ivu-table-cell{
+        padding:0;
+    }
 }
  .u-upload-title{
         width:500px;

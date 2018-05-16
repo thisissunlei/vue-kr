@@ -1,6 +1,6 @@
 import colorStatus from './colorStatus';
 function init(data){
-    var dataRender=[{name:'1',pos:"0 0",size:'100 100',color:"#ccc",item:{cellWidth:100,cellHeight:100,cellCoordX:0,cellCoordY:0}}];
+    var dataRender=[{pos:"0 0",size:'0 0',color:"transparent",item:{cellWidth:0,cellHeight:0,cellCoordX:0,cellCoordY:0}}];
     if(data.length){    
         data[0].figures.map((item,index)=>{
             var list={};

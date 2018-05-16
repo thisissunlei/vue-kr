@@ -130,7 +130,10 @@
                 <!-- 第三行-->
                 <div style="white-space: nowrap;">
                     <div class='daily-form'>
-                        <span class="attract-font" style="padding-top:7px;margin-right:24px;">签约价</span>
+                        <span class="attract-font" style="padding-top:7px;margin-right: 3px;">签约价</span>
+                        <Tooltip content="表中的签约价均只显示整数，实际签约金额以合同为准" placement="top">
+                            <span class="tip-pic"></span>
+                        </Tooltip>
                         <Form-item  class="priceForm" prop="orderPriceMin">
                             <i-input 
                                 v-model="formItem.orderPriceMin" 
@@ -526,6 +529,24 @@ export default {
                 display:inline-block;
                 margin:0 4px 0 5px;
                 padding-top: 6px;
+            }
+            .tip-pic{
+                display:inline-block;
+                width: 16px;
+                height: 16px;
+                background: url(img/q1.svg) no-repeat center;
+                background-size: 100%;
+                vertical-align: middle;
+                margin-right:5px;
+                margin-top: -2px;
+            }
+            .ivu-tooltip-popper{
+                word-break: break-all;
+                word-wrap: break-word;
+                max-width:150px;
+            }
+            .ivu-tooltip-inner{
+                white-space: normal;
             }
         }
      }

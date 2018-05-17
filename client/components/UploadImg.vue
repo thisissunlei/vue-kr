@@ -13,6 +13,7 @@
             :data="data"
             :on-exceeded-size="sizeMore"
             :on-format-error="formatError"
+            :on-remove="fileRemove"
         >
               <slot></slot>
         </Upload>
@@ -110,6 +111,7 @@ export default {
        
     },
     handleSuccess(res,file){
+        console.log('res--->>>',res.data)
         let id=res.data.id;
         this.imgIds.push(id);
         let ids=this.imgIds.join(',');
@@ -130,6 +132,13 @@ export default {
          this.$Notice.error({
                 title:'图片格式不正确'
         });
+    },
+    fileRemove(file){
+        let id=file.response.data.id;
+        let index=this.imgIds.indexOf()
+        this.imgIds.splice(index,1)
+        let ids=this.imgIds.join(',');
+        this.$emit('formData',ids);
     }
   }
 }

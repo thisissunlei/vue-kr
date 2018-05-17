@@ -396,6 +396,11 @@ export default {
     mounted(){
         this.getCityList();
         this.getSourceData();
+        var _this=this;
+        setTimeout(() => {
+            _this.$emit('initData',this.formItem);
+            _this.formItemOld=Object.assign({},this.formItem);
+        },500);
     },
     methods:{
         //销售员搜索
@@ -460,8 +465,7 @@ export default {
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
                 }
                 this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
-                this.$emit('initData',this.formItem);
-                this.formItemOld=Object.assign({},this.formItem);
+                
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

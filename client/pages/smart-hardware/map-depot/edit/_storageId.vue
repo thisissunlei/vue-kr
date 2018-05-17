@@ -62,8 +62,25 @@
                 <Button type="ghost" style="margin-left: 8px" @click="uploadShow">取消</Button>
         </div>
     </Modal>
+    <!-- 批量删除 -->
     <Modal
         v-model="openCancel"
+        title="删除"
+        ok-text="确定"
+        cancel-text="取消"
+        width="490"
+    >
+        <div class="u-cancel-title">
+            确认要删除这些文件吗？
+        </div>
+        <div slot="footer">
+            <Button type="primary" @click="onDeletePic">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+        </div>
+    </Modal>
+      <!-- 删除 -->
+     <Modal
+        v-model="deleteImg"
         title="删除"
         ok-text="确定"
         cancel-text="取消"
@@ -74,7 +91,7 @@
         </div>
         <div slot="footer">
             <Button type="primary" @click="onDeletePic">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openDeleteImg">取消</Button>
         </div>
     </Modal>
   </div>
@@ -111,6 +128,7 @@ export default {
            itemDetail:[],
            openUpload:false,
            openCancel:false,
+           deleteImg:false,
            maxSize:3072,
            imgColumns:[
                {
@@ -186,7 +204,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openDelete(params.row.id,'delete');
+                                            this.openDeleteImg(params.row.id,'delete');
                                         }
                                     }
                                 }, '删除'),
@@ -199,6 +217,7 @@ export default {
            tableList:[],
            picList:[],
            Ids:[],
+           id:''
          }
    },
    mounted(){
@@ -230,6 +249,10 @@ export default {
            }
            
            this.openCancel=!this.openCancel;
+       },
+
+       openDeleteImg(){
+           this.deleteImg=!this.deleteImg;
        },
        uploadShow(){
             this.openUpload=!this.openUpload;

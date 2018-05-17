@@ -168,6 +168,7 @@ export default {
         })
      },
      communityChange(){
+         this.tabParams.page=1;
          this.tabParams.communityId=this.communityId;
          this.getTableData(this.tabParams);
      },

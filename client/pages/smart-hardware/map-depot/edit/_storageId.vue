@@ -48,6 +48,7 @@
                 v-if="openUpload"
                 @formData="getImgIds"
                 :format="['jpg','jpeg','png']"
+                :maxSize="3072"
             >
                 <div class="u-upload-content">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>

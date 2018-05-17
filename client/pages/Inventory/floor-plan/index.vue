@@ -7,7 +7,10 @@
         @leave="this.mouseLeave"
         :data="canvasData"
       />
-      <div id="gantt-chart-tool-tip"></div>
+      <div id="gantt-chart-tool-tip">
+          <div class="title" @click="this.closePop"/>
+          <div id="gantt-chart-tool-tip-content"></div>
+      </div>
       <div id="gantt-chart-tool-tip-triangle" class="top-triangle"></div>
   </div>
 </template>
@@ -21,7 +24,8 @@ export default {
   },
   data(){
     return{
-       canvasData:[]
+       canvasData:[],
+       isClick:false
     }
   },
   mounted(){
@@ -39,22 +43,31 @@ export default {
         })        
     },
     singleClick(event,every,all){
-       
+       this.isClick=true;
     },
     mouseEnter(event,every,all,canvas,scroll){
         publicFn.poptipOver(event,every,all,canvas,scroll)
     },
-    mouseLeave(event,every,all){
+    closeCommon(){
         var tirDom = document.getElementById('gantt-chart-tool-tip');
         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
         tirDom.style.opacity = 0;
         angleDom.style.opacity = 0;
+    },
+    mouseLeave(event,every,all){
+        if(!this.isClick){
+            this.closeCommon();
+        }
+    },
+    closePop(){
+        this.isClick=false;
+        this.closeCommon();        
     }
   }
 }
 </script>
 
-<style lang="less" scoped> 
+<style lang="less"> 
   .inventory-floor-map{
      position: relative;
     #gantt-chart-tool-tip{
@@ -69,12 +82,14 @@ export default {
           color: #ffffff;
           z-index: 999;
           transition: all .1s;
-          pointer-events:none;
           .title{
+              float: right;
+              width:20px;
+              height:20px;
               font-size: 14px;
-              background: transparent;
-              display:inline-block;
-              vertical-align: middle;
+              background:url(img/close.svg) no-repeat center;
+              background-size:100%;
+              cursor: pointer;
           }
           .content{
               font-size: 14px;

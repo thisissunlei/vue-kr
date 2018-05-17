@@ -11,7 +11,6 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             isReadOnly: true,
             //是否可以缩放
             allowZoom: false,
-            allowDrop: false,
             allowMove: false
         });     
     //点击事件
@@ -19,7 +18,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
         function(e) {
         clickFn(e);
     });
-
+    
     //公共字体样式
     function textStyle() {
         return {stroke: "white", font: "bold 12px PingFangSC-Medium" };

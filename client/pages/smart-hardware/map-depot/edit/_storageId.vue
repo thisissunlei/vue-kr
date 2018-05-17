@@ -94,7 +94,7 @@ export default {
    },
    data(){
        return{
-           tilte:'全国通用图库',
+           tilte:'',
            btnDisabled:true,
            totalCount:0,
            page:1,
@@ -204,8 +204,21 @@ export default {
       let {params}=this.$route;
       this.tabParams.storageId=params.storageId;
       this.getTableData(this.tabParams);
+      this.getInfo(params.storageId)
    },
    methods:{
+       getInfo(storageId){
+          let form={
+              storageId:storageId
+          }
+           this.$http.get('get-tv-ad-storage-info', form).then((res)=>{
+               this.tilte=res.data.name;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+       },
        openMoreDelete(){
            this.openDelete();
        },

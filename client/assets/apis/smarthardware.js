@@ -36,6 +36,11 @@ export default  {
         url: '/api/sso/common/upload-policy',
         method: 'get'
     },
+    //图库管理--获取图库信息
+    'get-tv-ad-storage-info': {
+        url: '/api/iot-platform/tv-ad-storage/actions/find',
+        method: 'get'
+    },
    
   }
   

@@ -1,5 +1,6 @@
 <template>
     <div class='daily-search-form'>
+        <SectionTitle title="即将进场"></SectionTitle>
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
 
@@ -52,9 +53,9 @@
                         </Select> 
                     </Form-item>
                     
-                     <Form-item label="商品名称" class='daily-form' prop="name">
+                     <Form-item label="商品名称" class='daily-form' prop="goodsName">
                         <i-input 
-                            v-model="formItem.name" 
+                            v-model="formItem.goodsName" 
                             placeholder="请输入商品名称"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -79,17 +80,18 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">租期剩余</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.enterType" 
+                                v-model="formItem.leaseRemainingType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="large" >长于</Option>
-                                <Option value="short">少于</Option>
+                                <Option value="EQ" >等于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="enterNum" style="display:inline-block;">
+                        <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.enterNum" 
+                                v-model="formItem.leaseRemainingDays" 
                                 style="width: 90px;"
                                 placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -112,9 +114,9 @@
 
                      <div style="display:inline-block;margin-right:19px;">
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">随后可续</span>
-                        <Form-item class='priceForm'  prop="name">
+                        <Form-item class='priceForm'>
                             <Select 
-                            v-model="formItem.goodsType" 
+                            v-model="formItem.reletType" 
                             placeholder="请选择随后可续" 
                             style="width: 200px"
                             clearable
@@ -132,17 +134,18 @@
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">租<span style="display:inline-block;width:25px;"></span>期</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.rangeType" 
+                                v-model="formItem.rentType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="large" >长于</Option>
-                                <Option value="short">少于</Option>
+                                <Option value="EQ" >等于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="rangeNum" style="display:inline-block;">
+                        <Form-item  prop="rentDays" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.rangeNum" 
+                                v-model="formItem.rentDays" 
                                 style="width: 90px;"
                                 placeholder="请输入租期天数"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -187,12 +190,17 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
+import SectionTitle from '~/components/SectionTitle.vue'
+
 export default {
     props:{
        identify:{
            type:String,
            default:''
        }
+    },
+    components:{
+        SectionTitle
     },
     data() {
             const validateStation = (rule, value, callback) => {
@@ -255,14 +263,16 @@ export default {
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    enterType:'large',
-                    rangeType:'large',
+                    leaseRemainingType:'GT',
+                    rentType:'GT',
+                    reletType:' ',
+                    goodsName:''
                 },
                 renewList:[
                     {value:' ',label:'全部'},
-                    {value:'1',label:'可续租（时长不限）'},
-                    {value:'2',label:'不可续租'},
-                    {value:'3',label:'只可续部分时间'}
+                    {value:'AVAILABLE',label:'可续租（时长不限）'},
+                    {value:'PERIOD',label:'不可续租'},
+                    {value:'DISABLED',label:'只可续部分时间'}
                 ],
                 communityList:[],
                 cityList:[],
@@ -292,13 +302,13 @@ export default {
                     stationsMax: [
                         { validator: validateStation, trigger: 'change' }
                     ],
-                    name:[
+                    goodsName:[
                         { validator: validateName, trigger: 'change' }
                     ],
-                    enterNum: [
+                    leaseRemainingDays: [
                         { validator: validateNum, trigger: 'change' }
                     ],
-                    rangeNum: [
+                    rentDays: [
                         { validator: validateNum, trigger: 'change' }
                     ],
                 }
@@ -306,6 +316,11 @@ export default {
     },
     mounted(){
         this.getCityList();
+    },
+    head() {
+        return {
+            title: '即将到期列表'
+        }
     },
     methods:{
         //社区接口
@@ -359,7 +374,7 @@ export default {
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
                     console.log('搜索',this.formItem)
-                    // this.$emit('searchClick',this.formItem);
+                    this.$emit('searchClick',this.formItem);
                 }
             })
         },
@@ -392,6 +407,7 @@ export default {
         communityChange(param){
             this.getFloorList(param);
         },
+        
     }
 }
 </script>

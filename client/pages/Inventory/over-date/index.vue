@@ -7,7 +7,14 @@
       identify='daily'
     />
     <div class='daily-tab'>
+        <Table border :columns="columns" :data="tableList" />
     </div>
+    <Message 
+            :type="MessageType" 
+            :openMessage="openMessage"
+            :warn="warn"
+            @changeOpen="onMessageChange"
+        />
 
   </div>
 </template>
@@ -18,11 +25,13 @@
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SearchForm from './searchForm';
+import Message from '~/components/Message';
 
     export default {
         name: 'EnterField',
         components:{
             SearchForm,
+            Message
         },
         data () {
             return {  
@@ -31,14 +40,79 @@ import SearchForm from './searchForm';
                     page:1,
                     pageSize:100,
                 },
-                endParams:{}
+                endParams:{},
+                tableList:[],
+                columns:[
+                    {
+                        title: '商品',
+                        key: 'seatType',
+                        align:'center',
+                    },
+                    {
+                        title: '商品类型',
+                        key: 'seatType',
+                        align:'center',
+                    },
+                    {
+                        title: '工位数量',
+                        key: 'seatType',
+                        align:'center',
+                    },
+                    {
+                        title: '进场日',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '离场日',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '租期',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '当前签约价',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '当前客户',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '客户当前在租工位数',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '随后可续时段',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '商品定价',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                ],
+                openMessage:false,
+                MessageType:'',
+                warn:''
             }
+        },
+        mounted(){
+            this.getData(this.endParams);
         },
         methods:{
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.dataParams(this.tabForms);
+
             },
             //清空
             clearClick(formItem){
@@ -48,10 +122,26 @@ import SearchForm from './searchForm';
             //数据变化
             dataParams(data){
                 this.endParams=Object.assign({},data);
+                console.log('数据变化=======',this.endParams)
+                this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
+            },
+            getData(params){
+                this.$http.get('getDueList', params).then((res)=>{
+                    this.tableList = []
+                }).catch((error)=>{
+                    this.tableList = []
+                    this.openMessage=true;
+                    this.MessageType="error";
+                    this.warn=error.message;
+                }) 
+            },
+            //信息提示框
+            onMessageChange(data){
+                this.openMessage=data;
             },
         }
     }

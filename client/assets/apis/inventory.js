@@ -44,6 +44,11 @@ export default  {
     'getOptionalTimeLine': {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
-    }
+    },
+    // 即将到期
+    'getDueList': {
+        url: '/api/krspace-op-web/operation/due/list',
+        method: 'post'
+    },
   }
   

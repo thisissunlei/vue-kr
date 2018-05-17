@@ -40,6 +40,7 @@ import SectionTitle from '~/components/SectionTitle.vue'
                     page:1,
                     pageSize:100,
                 },
+                tableList:[],
                 endParams:{},
                 columns:[
                     {
@@ -107,6 +108,15 @@ import SectionTitle from '~/components/SectionTitle.vue'
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
+            getData(){
+                let params = this.endParams;
+                this.$http.get('getDueList', params).then((res)=>{
+
+                }).catch((error)=>{
+
+                }) 
+            }
+
         }
     }
 </script>

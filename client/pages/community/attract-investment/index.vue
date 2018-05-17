@@ -220,7 +220,7 @@ export default {
                 headDom.style.left=this.left+'px';
                 headDom.style.width=this.width+'px';
             }
-            if(dom.scrollTop>330){
+            if(dom.scrollTop>420){
                 this.theHead=true;
             }else{
                 this.theHead=false;

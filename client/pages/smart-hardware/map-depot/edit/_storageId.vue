@@ -47,6 +47,7 @@
                 uploadName="file"
                 v-if="openUpload"
                 @formData="getImgIds"
+                :format="['jpg','jpeg','png']"
             >
                 <div class="u-upload-content">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -302,16 +303,23 @@ export default {
         },
         uploadImgSubmit(){
             let {params}=this.$route;
+            if(!this.imgIds){
+                this.$Notice.error({
+                    title:'请先选择要上传的图片'
+                });
+                return;
+            }
             let form={
                 storageId:params.storageId,
                 fileIds:this.imgIds
             }
+
             this.$http.post('save-pic', form).then((res)=>{
                 this.$Notice.success({
                     title:'图片上传成功'
                 });
                 this.uploadShow();
-
+                this.imgIds=[];
                this.getTableData(this.tabParams);
             }).catch((err)=>{
                 this.$Notice.error({

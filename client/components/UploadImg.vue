@@ -3,7 +3,7 @@
        <Upload 
             :name="uploadName"
             multiple
-            :format="['jpg','jpeg','png']"
+            :format="format"
             :on-success="handleSuccess"
             :on-error="handleError"
             with-credentials
@@ -98,6 +98,13 @@ export default {
 		return fileRandomName;
     },
     beforeUpload(file){
+        let type=file.type.split('/')[1];
+        if(this.format.indexOf(type)==-1){
+            this.$Notice.error({
+                title:'图片格式不正确'
+            });
+            return;
+        }
         let fileNameRandom=this.set_file_name(file.name);
         this.data.Filename=file.name;
         this.data.key=this.pathPrefix+fileNameRandom;
@@ -114,8 +121,8 @@ export default {
         this.$emit('formData',ids);
         
     },
-    handleError(){
-
+    handleError(err){
+        console.log('error----->>>>>',err)
     }
   }
 }

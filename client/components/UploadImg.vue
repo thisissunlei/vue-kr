@@ -8,7 +8,7 @@
             :on-error="handleError"
             with-credentials
             :action="actionUrl" 
-            :max-size="maxSize"
+            :max-size="imgMaxSize"
             :before-upload="beforeUpload"
             :data="data"
         >
@@ -31,10 +31,7 @@ export default {
      isPublic:Boolean,
      uploadName:String,
      onSubmit:Function,
-     maxSize:{
-         type:Number,
-         defalut:3072
-     }
+     imgMaxSize:Number
   },
   data(){
       return{

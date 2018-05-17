@@ -48,7 +48,7 @@
                 v-if="openUpload"
                 @formData="getImgIds"
                 :format="['jpg','jpeg','png']"
-                :maxSize="3072"
+                :imgMaxSize="maxSize"
             >
                 <div class="u-upload-content">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -111,6 +111,7 @@ export default {
            itemDetail:[],
            openUpload:false,
            openCancel:false,
+           maxSize:3072,
            imgColumns:[
                {
                   type: 'selection',

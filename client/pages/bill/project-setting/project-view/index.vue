@@ -69,8 +69,8 @@
                  </div>
             </div>
             <div class="u-table-right">
-                <div class="project-view-table-content" style="overflow-x:auto;">
-                    <div :class="[tableFlag?'u-show':'','u-table-box-right']">
+                <div  style="overflow-x:auto;">
+                    <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
@@ -1706,7 +1706,8 @@ var scrollWidth = 0;
            .u-table-box-right{
                 width:100%; 
                 // min-width:1600px;
-                transform: translateX(-100px);
+                margin-left: -100px;
+                 transition:all .2s;
                 table{
                         th,td{
                             &:nth-child(3){
@@ -1716,8 +1717,8 @@ var scrollWidth = 0;
                 }
            }
            .u-show{
-               transition:all .2s;
-               transform: translateX(0);
+                transition:all .2s;
+                margin-left: 0px;
            }
         }
     }

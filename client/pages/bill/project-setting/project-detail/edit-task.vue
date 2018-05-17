@@ -112,7 +112,7 @@
             title="提示"
             width="440"
             >
-            <div class='sure-sign'>“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
+            <div class="sure-sign" style="text-align: center;font-size: 14px;">“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
             <div slot="footer">
                 <Button type="primary" @click="submitSure()">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
@@ -123,9 +123,9 @@
             title="提示"
             width="440"
             >
-            <div class='sure-sign'>清空已完成时间后，该项目将会移入“待开业项目”列表</div>
+            <div class="sure-sign" style="text-align: center;font-size: 14px;">清空已完成时间后，该项目将会移入“待开业项目”列表</div>
             <div slot="footer">
-                <Button type="ghost" style="margin-left:8px" @click="switchPrompt">取消</Button>
+                <Button type="ghost" style="margin-left:8px" @click="switchPrompt">关闭</Button>
             </div>
         </Modal>
     </div>
@@ -428,7 +428,11 @@ export default {
             font-weight: bold;
         }
     }
-  
+    .sure-sign{
+        text-align: center;
+        font-size: 14px;
+
+    }
     
    
     .file-box{

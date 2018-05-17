@@ -7,6 +7,7 @@
       identify='daily'
     />
     <div class='daily-tab'>
+        <span class="line"></span>
         <Table border :columns="columns" :data="tableList" />
     </div>
     <Message 
@@ -45,58 +46,58 @@ import Message from '~/components/Message';
                 columns:[
                     {
                         title: '商品',
-                        key: 'seatType',
+                        key: 'name',
                         align:'center',
                     },
                     {
                         title: '商品类型',
-                        key: 'seatType',
+                        key: 'type',
                         align:'center',
                     },
                     {
                         title: '工位数量',
-                        key: 'seatType',
+                        key: 'capacity',
                         align:'center',
                     },
                     {
                         title: '进场日',
                         align:'center',
-                        key: 'seatType',
+                        key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        key: 'seatType',
+                        key: 'endDate',
                     },
                     {
                         title: '租期',
                         align:'center',
-                        key: 'seatType',
+                        key: 'rentDays',
                     },
                     {
                         title: '当前签约价',
                         align:'center',
-                        key: 'seatType',
+                        key: 'price',
                     },
                     {
                         title: '当前客户',
                         align:'center',
-                        key: 'seatType',
+                        key: 'price',
                     },
                     {
                         title: '客户当前在租工位数',
                         align:'center',
-                        key: 'seatType',
+                        key: 'customerStatoons',
                     },
                     {
                         title: '随后可续时段',
                         align:'center',
-                        key: 'seatType',
+                        key: 'reletTypeName',
                     },
                     {
                         title: '商品定价',
                         align:'center',
-                        key: 'seatType',
+                        key: 'quotedPrice',
                     },
                 ],
                 openMessage:false,
@@ -106,6 +107,7 @@ import Message from '~/components/Message';
         },
         mounted(){
             this.getData(this.endParams);
+            // GLOBALSIDESWITCH('false');
         },
         methods:{
             //搜索
@@ -122,7 +124,6 @@ import Message from '~/components/Message';
             //数据变化
             dataParams(data){
                 this.endParams=Object.assign({},data);
-                console.log('数据变化=======',this.endParams)
                 this.getData(this.endParams);
             },
             initData(formItem){
@@ -162,6 +163,12 @@ import Message from '~/components/Message';
         padding: 0 20px;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
+        }
+        .line{
+            display:inline-block;
+            width:100%;
+            border-top:1px solid #dddee1;
+            margin-bottom:20px;
         }
         .daily-table{
             padding-bottom:77px; 
@@ -226,5 +233,6 @@ import Message from '~/components/Message';
         }
     }
 }
+
 
 </style>

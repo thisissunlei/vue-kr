@@ -162,9 +162,11 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
+            console.log(item,"kkkkkkkkkk")
             let iconName = item.iconName ? item.iconName : '';
-            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
+                html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
+            
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -468,7 +470,6 @@
             }
 
         })
-
         return arr;
     }
     //第三级菜单

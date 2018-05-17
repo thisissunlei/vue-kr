@@ -1,8 +1,8 @@
 <template>
-<div class="project-view">
+<div :id="projectViewId" class="project-view">
     <div class="u-search" >
         <Button class="new-btn"  type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
-        <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED'"></div>
+        <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED' && tdType == 'max' "></div>
          <div class="u-color-block">
             <span class="u-prepare">未完成</span>
             <span class="u-opened">已完成</span>
@@ -59,22 +59,23 @@
         
     </div>
     <div class="u-table-list">
-            <div :class="[tableFlag?'u-left-show':'u-left-hide','u-table-left']">
+            <div class="u-table-left">
                  <div :class="[tableFlag?'u-left-arrow':'u-right-arrow','u-table-arrow']" @click="stretchTable"></div>
-                 <div class="u-table-box">
-                        <div class="u-table-content">
+                 <div :class="[tableFlag?'u-left-box-show':'u-left-box-hide','u-table-box']">
+                        <div class="u-table-content project-view-table-content">
+                            <!--  -->
                             <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
                         </div>
                  </div>
             </div>
             <div class="u-table-right">
-                <div class="u-table-box" style="overflow-x:auto;">
+                <div class="project-view-table-content" style="overflow-x:auto;">
                     <div :class="[tableFlag?'u-show':'','u-table-box-right']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
                 <div style="margin: 10px;overflow: hidden">
-                    <div style="float: right;">
+                    <div  style="float: right;">
                         <Page 
                             :current="page"
                             :total="totalCount"
@@ -145,7 +146,7 @@ import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from '../project-detail/object-detail-title';
 import SearchForm from '~/components/SearchForm';
 import EditTask from '../project-detail/edit-task';
-
+var scrollWidth = 0; 
     export default {
         components:{
             SectionTitle,
@@ -163,6 +164,8 @@ import EditTask from '../project-detail/edit-task';
         data () {
             return {
                 totalCount:0,
+                tdType:'max',
+                projectViewId:'projectView'+this._uid,
                 openMessage:false,
                 taskStatus:'',
                 itemDetail:{},
@@ -1212,16 +1215,74 @@ import EditTask from '../project-detail/edit-task';
             this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
             this.getCityData(this.tab);
+            scrollWidth = utils.getScrollBarSize();
             this.getSelect();
+            
+            this.response(true);
+            window.addEventListener('resize',this.response)
         },
+
         
         methods:{
+            response(flag){
+                var data =[].concat(this.projectTabColumns);
+                var arr = [];
+                
+                var wWidth = document.body.clientWidth;
+                // var boxDom = document.getElementById('projectView'+this._uid);
+                // console.log(boxDom.style.width)
+                // if(boxDom){
+                     
+                // }
+               console.log("-00000000",wWidth-30)
+                var contentdom = document.querySelectorAll('.project-view-table-content');
+               
+                contentdom[0].style.width = wWidth-70+100-scrollWidth +'px';
+                contentdom[1].style.width = wWidth-70+100-scrollWidth +'px';
+                
+                // console.log(boxWidth.style.width ,"kkkkkkk")
+                if(wWidth>1400  &&( flag||this.tdType=='min')){
+                    arr = data.map((item,index)=>{
+                        delete item.width;
+                        if(item.key=='name'){
+                            item.width = 160;
+                        }
+                        if(item.key=='city'){
+                            item.width = 80;
+                        }
+                        if(item.key=='code'){
+                            item.width = 100;
+                        }
+                      
+                        return item;
+                    })
+                    this.tdType = 'max'
+                }
+                if(wWidth<=1300 && (flag||this.tdType=='max')){
+                    arr = data.map((item,index)=>{
+                        item.width = 72;
+                        if(item.key=='code'){
+                            item.width = 100;
+                        }
+                         if(item.key=='city'){
+                            item.width = 77;
+                        }
+                        if(item.key=='k14'||item.key=='k13'||item.key=='k12'){
+                            delete item.width;
+                        }
+                        return item;
+                    })
+                    this.tdType = 'min';
+                }
+                
+                this.projectTabColumns = [].concat(arr);
+            },
             getCityData(projectStatus){
                 this.$http.get('get-task-city-data',{
                     projectStatus:projectStatus
                 }).then((res)=>{
                     this.citySelectData = [].concat(res.data);
-                    console.log(res,"llllllll")
+                    
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -1545,20 +1606,21 @@ import EditTask from '../project-detail/edit-task';
         .task-city{
             width: 80px;
         }
+        .u-table-content{
+            width: 1600px;
+        }
         .u-table-left{
             position: absolute;
             left:0;
             top:0;
             z-index:100;
-            .u-table-content{
-                width:100%; 
-                min-width:1600px;
-               
-               
-            }
+            
            .u-table-box{
-              overflow-x: hidden;
+              overflow: hidden;
               border-right: 5px solid #F6F6F6;
+              .ivu-table-body{
+                  overflow: hidden;
+              }
            }
            table{
                td{
@@ -1593,11 +1655,11 @@ import EditTask from '../project-detail/edit-task';
             }
            
         }
-        .u-left-hide{
+        .u-left-box-hide{
             width:240px;
             transition:width .2s;
         }
-        .u-left-show{
+        .u-left-box-show{
             width:340px;
             transition:width .2s;
         }
@@ -1609,8 +1671,8 @@ import EditTask from '../project-detail/edit-task';
               
           }
            .u-table-box-right{
-                width:106%; 
-                min-width:1600px;
+                width:100%; 
+                // min-width:1600px;
                 transform: translateX(-100px);
                 table{
                         th,td{
@@ -1680,7 +1742,7 @@ import EditTask from '../project-detail/edit-task';
     }
 
 }
-@media all and (max-width: 1400px) {
+@media all and (max-width: 1300px) {
     .project-view {
         .u-search{
             height: 75px;
@@ -1703,12 +1765,28 @@ import EditTask from '../project-detail/edit-task';
                 }
             }
         }
-        .u-status-done,.u-status-undone{
-            width: 60px;
-
+       
+       .u-table-list .u-left-box-hide{
+            width:147px;
+            transition:width .2s;
         }
-        .ivu-table-header .ivu-table-cell{
-            width: 70px;
+        .u-table-list .u-left-box-show{
+            width:247px;
+            transition:width .2s;
+        }
+        .u-table-list .task-name{
+            width: 60px;
+            margin: auto;
+        }
+        .u-table-list .task-city{
+            width: 60px;
+             margin: auto;
+        }
+        .u-status-done{
+            width: 60px;
+        }
+        .u-status-undone{
+            width: 60px;
         }
     }
 }

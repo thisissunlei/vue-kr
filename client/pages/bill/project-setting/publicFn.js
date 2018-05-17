@@ -110,11 +110,11 @@ function getToolTipContent(thatData) {
         var str = '<div class="title">' + thatData.label + '</div>';
         var data = Object.assign({}, thatData);
         var width = 155;
-        if(data.planEndTimeStr){
-            str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
+        if(data.planEndTime){
+            str+='<div class="content" > 计划日期：' + dateUtils.dateToStr("YYYY/MM/DD", new Date(data.planEndTime))+ '</div>';
         }
-        if(data.actualEndTimeStr){
-            str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
+        if(data.actualEndTime){
+            str+='<div class="content" > 完成日期：' + dateUtils.dateToStr("YYYY/MM/DD", new Date(data.actualEndTime))+ '</div>';
         }
         
         return {

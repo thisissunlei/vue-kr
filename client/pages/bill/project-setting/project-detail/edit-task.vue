@@ -295,7 +295,9 @@ export default {
                 this.switchEndTime();
             }
             this.$emit("dataChange",data,(code)=>{
-                
+                if(code=="47"){
+                    this.switchPrompt();
+                }
             });
         },
         switchEndEdit(){

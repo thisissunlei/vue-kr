@@ -242,7 +242,7 @@ export default {
             }
            
             this.$http.delete('delete-pic', form).then((res)=>{
-               this.$Notice.error({
+               this.$Notice.success({
                     title:'图片删除成功'
                 });
                 this.btnDisabled=true;

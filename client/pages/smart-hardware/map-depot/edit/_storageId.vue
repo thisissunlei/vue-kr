@@ -90,7 +90,7 @@
             确认要删除该文件吗？
         </div>
         <div slot="footer">
-            <Button type="primary" @click="onDeletePic">确定</Button>
+            <Button type="primary" @click="onDeleteImgPic">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="openDeleteImg">取消</Button>
         </div>
     </Modal>
@@ -204,7 +204,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openDeleteImg(params.row.id,'delete');
+                                            this.openDeleteImg(params.row.id);
                                         }
                                     }
                                 }, '删除'),
@@ -247,11 +247,10 @@ export default {
            if(id){
                this.Ids.push(id)
            }
-           
            this.openCancel=!this.openCancel;
        },
-
-       openDeleteImg(){
+       openDeleteImg(id){
+           this.id=id;
            this.deleteImg=!this.deleteImg;
        },
        uploadShow(){
@@ -275,6 +274,10 @@ export default {
            this.picList=[];
            this.openViewUpload();
        },
+       onDeleteImgPic(){
+           let id=this.id;
+           this.deletePic(id)
+       },
        deletePic(id){
             let form={
                 ids:id
@@ -285,7 +288,8 @@ export default {
                     title:'图片删除成功'
                 });
                 this.btnDisabled=true;
-                this.openDelete()
+                this.deleteImg=false;
+                this.openCancel=false;
                 this.imgViewShow=false;
                 
                 this.getTableData(this.tabParams);

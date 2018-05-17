@@ -34,7 +34,7 @@ function mergeCell(h,rowArray,param,isTime){
                 h('div', {
                     attrs: {
                         class:getDivClass(index,rowArray),
-                    },
+                    }
                 },popData)
             ])
           ])

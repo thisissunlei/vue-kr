@@ -9,7 +9,18 @@
         </div>
         <SlotHead :class="theHead?'header-here':'header-no'"/>
         <div style="margin:0 20px;" class="attract-investment-table">
-            <Table :loading="loading" :columns="attractColumns" :data="attractData" border>
+            <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
+                <div style="display:inline-block;margin-right:100px;">
+                    <div>已招商:60天内的库存状态有在租的</div>
+                    <div>未招商:60天内的库存状态全都是未租的</div>
+                    <div>60天:从社区开业日期算起，如已开业则从今天算起</div>
+                </div>
+                <div style="display:inline-block;vertical-align:top;">
+                    <div>招商中:60天内的库存中没有在租的,但有合同未生效的</div>
+                    <div>不可招商:60天内的库存中有不可用的,同时没有是在租或合同未生效的</div>
+                </div>
+            </div>
+            <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
                  <div slot="loading">
                     <Loading/>
                  </div>
@@ -82,21 +93,25 @@ export default {
                 {
                     title: '商品定价',
                     key: 'quotedPrice',
-                    align:'center',
-                    width:90,
+                    align:'right',
+                    width:90
                 },
                 {
                     title: '招商状态',
                     key: 'investmentStatusName',
                     align:'center',
                     width:90,
+                    render(tag, params){
+                        var ren=params.row.investmentStatusName?params.row.investmentStatusName:'-'
+                        return <span style={params.row.investmentStatus=='AVAILABLE'?'color:red':''}>{ren}</span>
+                    }
                 },
                 {
                     title: '签约价',
                     key: 'orderList',
                     className:'current-range',
                     width:90,
-                    align:'center',
+                    align:'right',
                     render(h,obj){
                         return publicFn.mergeCell(h,obj.row.orderList,'price')
                     }
@@ -295,6 +310,11 @@ export default {
         .header-no{
             transition: opacity 0.2 ease;
             opacity: 0;
+        }
+        .attract-investment-table{
+            .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
+                background-color: #f6f6f6;
+            }
         }
      }
 </style>

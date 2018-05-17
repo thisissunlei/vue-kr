@@ -13,17 +13,10 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以缩放
             allowZoom: false
         });
-    var min=data[0].item.cellWidth;
-    data.map((item,index)=>{
-        if(item.cellWidth<min){
-            min=item.cellWidth;
-        }
-    })
-    var dom =document.getElementById(content);
-    console.log('dom',dom.getBoundingClientRect().width,min);
+   
     //scale
-    myDiagram.commandHandler.increaseZoom();
-    myDiagram.commandHandler.decreaseZoom();        
+    myDiagram.commandHandler.increaseZoom(0.76);
+    // myDiagram.commandHandler.decreaseZoom();        
      
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
@@ -33,7 +26,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
 
     //公共字体样式
     function textStyle() {
-        return { minSize: new go.Size(120, NaN),stroke: "white", font: "bold 12px PingFangSC-Medium" };
+        return {stroke: "white", font: "bold 12px PingFangSC-Medium" };
     }
 
     myDiagram.add(

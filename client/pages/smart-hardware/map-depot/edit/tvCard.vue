@@ -26,7 +26,8 @@ export default {
 </script>
 <style lang="less">
 .g-tv-card{
-  height:30px;
+  height:80px;
+  padding:10px;
   .u-img{
     width:80px;
     height:60px;

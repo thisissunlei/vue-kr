@@ -833,9 +833,11 @@
             planMap
         },
          mounted(){
+            this.getFreeDeposit()
             GLOBALSIDESWITCH("false");
             GLOBALHEADERSET('订单合同');
             this.getDetailData()
+
         },
         watch:{
             getFloor(){
@@ -1967,7 +1969,21 @@
             cancelPrice(){
                 this.price = '';
                 this.openPrice = false;
-            }
+            },
+            getFreeDeposit(){
+                this.$http.get('get-seat-deposit-free', '').then( r => {
+                    this.showFree = r.data;
+                    if(r.data){
+                        this.depositList.push({value:'0',label:'无押金'},)
+                        this.depositList.push({value:'1',label:'1个月'},)
+                    }
+                }).catch( e => {
+                        this.$Notice.error({
+                            title:e.message
+                        })
+
+                })
+            },
         }
     }
 

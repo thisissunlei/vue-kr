@@ -16,7 +16,7 @@
             </Table>
         </div>
         <div  class='list-footer'>
-                <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/>
+                <Button type="primary" @click='submitExport'>导出</Button>
                 <div style="float: right;">
                     <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
@@ -35,7 +35,6 @@
 import Loading from '~/components/Loading';
 import SearchForm from '../publicPage';
 import Message from '~/components/Message';
-import Buttons from '~/components/Buttons';
 import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
 import SlotHead from '../fixHead/attract-head';
@@ -45,7 +44,6 @@ export default {
        Loading,
        SearchForm,
        Message,
-       Buttons,
        SlotHead
     },
     data() {

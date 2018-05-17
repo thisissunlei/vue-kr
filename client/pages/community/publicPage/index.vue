@@ -241,6 +241,7 @@ export default {
        SelectSaler
     },
     data() {
+            //工位数量
             const validateStation = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
@@ -253,7 +254,7 @@ export default {
                     callback();
                 }
             };
-
+            //签约价
             const validatePrice = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
@@ -266,7 +267,7 @@ export default {
                     callback();
                 }
             };
-
+            //商品定价
             const validateOrder = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
@@ -279,7 +280,7 @@ export default {
                     callback();
                 }
             };
-
+            //折扣
             const validateDiscount = (rule, value, callback) => {
                 var reg=/^(([1-9]{1})|([0-9]{1}\.\d{1}))$/;
                 if(value&&!reg.test(value)){
@@ -289,17 +290,17 @@ export default {
                 }else{
                     callback();
                 }
-            };
-            
+            };    
+            //商品名称
             const validateName = (rule, value, callback) => {
-                var str=this.fucCheckLength(value);
+                var str=publicFn.fucCheckLength(value);
                 if(value&&str>20){
                     callback('名称最多20个字节');
                 }else{
                     callback();
                 }
             };
-            
+            //租期天数
             const validateTime = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
@@ -496,10 +497,6 @@ export default {
         //回车
         onKeyEnter(){
             this.searchClick();
-        },
-        //检查输入字符串字节长度
-        fucCheckLength(strTemp) {
-           return publicFn.fucCheckLength(strTemp);
         },
         //城市change事件
         cityChange(param){

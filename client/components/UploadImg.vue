@@ -98,6 +98,13 @@ export default {
 		return fileRandomName;
     },
     beforeUpload(file){
+        let size=file.size/1024;
+        if(size>3){
+            this.$Notice.error({
+                title:'图片尺寸应小于3M'
+            });
+            return;
+        }
         let type=file.type.split('/')[1];
         if(this.format.indexOf(type)==-1){
             this.$Notice.error({

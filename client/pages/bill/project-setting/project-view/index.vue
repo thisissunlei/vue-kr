@@ -1,15 +1,18 @@
 <template>
 <div class="project-view">
     <div class="u-search" >
-        <Button style="vertical-align:top;" type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
+        <Button class="new-btn"  type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
         <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED'"></div>
+         <div class="u-color-block">
+            <span class="u-prepare">未完成</span>
+            <span class="u-opened">已完成</span>
+        </div>
         <div class="u-search-content">
-            <div class="u-select" style="width:170px;">
-                <span>城市</span>
+            <div class="u-select" style="width:140px;">
                  <Select
                         v-model="formItem.cityId"
-                        style="width:120px"
-                        placeholder="请选择"
+                        style="width:140px"
+                        placeholder="请选择城市"
                         filterable
                         clearable
                         @on-change="cityChange"
@@ -17,11 +20,11 @@
                          <Option  v-for="item in citySelectData" :value="item.value" :key="item.value"> {{ item.label }}</Option>
                 </Select>
             </div>
-            <div class="u-select" >
+            <div class="u-select task-select-box" >
                 <span>仅看</span>
                  <Select
                         v-model="formItem.doneTaskId"
-                        style="width:120px"
+                        class="task-select"
                         placeholder="请选择"
                         filterable
                         clearable
@@ -31,11 +34,11 @@
                 </Select>
                 <span>已完成项目</span>
             </div>
-           <div class="u-select" >
+           <div class="u-select task-select-box" >
                 <span>仅看</span>
                  <Select
+                        class="task-select"
                         v-model="formItem.undoneTaskId"
-                        style="width:120px"
                         placeholder="请选择"
                         filterable
                         clearable
@@ -45,17 +48,15 @@
                 </Select>
                 <span>未完成项目</span>
             </div>
+            <div class="u-search-form" style="display:inline-block;position:absolute;top:0px;">
+                <SearchForm 
+                    :searchFilter="searchFilter"
+                    :onSubmit="onSubmit"
+                />
+            </div>
         </div>
-        <div class="u-search-form" style="display:inline-block;position:absolute;top:0px;">
-            <SearchForm 
-                :searchFilter="searchFilter"
-                :onSubmit="onSubmit"
-            />
-        </div>
-         <div class="u-color-block">
-            <span class="u-prepare">未完成</span>
-            <span class="u-opened">已完成</span>
-        </div>
+        
+        
     </div>
     <div class="u-table-list">
             <div :class="[tableFlag?'u-left-show':'u-left-hide','u-table-left']">
@@ -215,15 +216,17 @@ import EditTask from '../project-detail/edit-task';
                         title: '项目名称',
                         key: 'name',
                         align:'center',
-                        width:160,
                         render:(h, obj)=>{
                             return h('div', {
-                                       on: {
-                                            click: () => {
-                                                this.goView(obj.row)
-                                            }
-                                        }
-                                  },obj.row.name);
+                                attrs: {
+                                    class: "task-name",
+                                },
+                                on: {
+                                    click: () => {
+                                        this.goView(obj.row)
+                                    }
+                                }
+                            },obj.row.name);
                         }
                        
                     },
@@ -231,14 +234,16 @@ import EditTask from '../project-detail/edit-task';
                         title: '城市',
                         key: 'city',
                         align:'center',
-                        width:80,
                         render:(h, obj)=>{
                              return h('div', {
-                                       on: {
-                                            click: () => {
-                                                this.goView(obj.row)
-                                            }
-                                        }
+                                attrs:{
+                                    class:"task-city"
+                                },
+                                on: {
+                                    click: () => {
+                                        this.goView(obj.row)
+                                    }
+                                }
                             },obj.row.city);
                            
                         }
@@ -250,12 +255,12 @@ import EditTask from '../project-detail/edit-task';
                         align:'center',
                         width:100,
                         render:(h, obj)=>{
-                             return h('div', {
-                                       on: {
-                                            click: () => {
-                                                this.goView(obj.row)
-                                            }
-                                        }
+                            return h('div', {
+                                on: {
+                                    click: () => {
+                                        this.goView(obj.row)
+                                    }
+                                }
                             },obj.row.code);
                           
                         }
@@ -1233,8 +1238,8 @@ import EditTask from '../project-detail/edit-task';
             toolOut(event){
                 var tirDom = document.getElementById('gantt-chart-tool-tip');
                 var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-                tirDom.style.opacity = 0;
-                angleDom.style.opacity = 0;
+                tirDom.style.display = 'none';
+                angleDom.style.display = 'none';
             },
             openEditTaskDraw(params){
                 this.taskId=params.value;
@@ -1449,20 +1454,25 @@ import EditTask from '../project-detail/edit-task';
         position: relative;
         height:32px;
         margin:16px 0;
+        .new-btn{
+            width: 80px;
+           vertical-align:top;
+        }
         .u-high-search{
-                width:22px;
-                height:22px;
-                background:url('~/assets/images/upperSearch.png') no-repeat center;
-                background-size: contain;
-                float:right;
-                cursor:pointer;
-
+            width:22px;
+            height:22px;
+            background:url('~/assets/images/upperSearch.png') no-repeat center;
+            background-size: contain;
+            float:right;
+            cursor:pointer;
         }
     }
     
     .u-search-content{
+        position: relative;
         display: inline-block;
         margin-left: 20px;
+       
         .u-select{
             width:250px;
             margin-right:15px;
@@ -1472,6 +1482,12 @@ import EditTask from '../project-detail/edit-task';
                 padding:0 10px;
                 vertical-align: -2px;
             }
+            .task-select{
+                width: 170px;
+            }
+        }
+        .task-select-box{
+            width: 300px;
         }
     }
     .u-search-form{
@@ -1523,13 +1539,19 @@ import EditTask from '../project-detail/edit-task';
     .u-table-list{
        
         position: relative;
+        .task-name{
+            width: 160px;
+        }
+        .task-city{
+            width: 80px;
+        }
         .u-table-left{
             position: absolute;
             left:0;
             top:0;
             z-index:100;
             .u-table-content{
-                width:106%; 
+                width:100%; 
                 min-width:1600px;
                
                
@@ -1607,7 +1629,7 @@ import EditTask from '../project-detail/edit-task';
     #gantt-chart-tool-tip{
         width: 250px;
         min-height: 50px;
-        opacity: 0;
+        display: none;
         background: rgba(70,76,91,.9);
         position: absolute;
         top: 0px;
@@ -1629,9 +1651,9 @@ import EditTask from '../project-detail/edit-task';
     }
     #gantt-chart-tool-tip-triangle{
 
-        opacity: 0;
+       
         position: absolute;
-        display:block;
+        display:none;
         // margin:10px;
         width:0;
         height:0;
@@ -1658,7 +1680,38 @@ import EditTask from '../project-detail/edit-task';
     }
 
 }
+@media all and (max-width: 1400px) {
+    .project-view {
+        .u-search{
+            height: 75px;
+            .new-btn{
+                width: 108px;
+            }
+       
+            .u-search-content{
 
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0px;
+                .u-select{
+                    .task-select{
+                        width: 170px;
+                    }
+                }
+                .task-select-box{
+                    width: 300px;
+                }
+            }
+        }
+        .u-status-done,.u-status-undone{
+            width: 60px;
+
+        }
+        .ivu-table-header .ivu-table-cell{
+            width: 70px;
+        }
+    }
+}
 
 
 </style>

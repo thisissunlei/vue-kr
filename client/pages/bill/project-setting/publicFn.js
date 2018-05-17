@@ -101,8 +101,8 @@ function poptipOver(event,data,domName) {
         angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
         angleDom.style.top = tirLocation.top - (130-60)+mainDom.scrollTop + 'px';
         locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
-        tirDom.style.opacity = 1;
-        angleDom.style.opacity = 1;
+        tirDom.style.display = 'block';
+        angleDom.style.display = 'block';
     }
 }
 //气泡的具体内容

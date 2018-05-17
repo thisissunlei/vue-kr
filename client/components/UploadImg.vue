@@ -11,6 +11,8 @@
             :max-size="imgMaxSize"
             :before-upload="beforeUpload"
             :data="data"
+            :on-exceeded-size="sizeMore"
+            :on-format-error="formatError"
         >
               <slot></slot>
         </Upload>
@@ -98,22 +100,6 @@ export default {
 		return fileRandomName;
     },
     beforeUpload(file){
-        let size=file.size/1024;
-        console.log('size---',size)
-        console.log('file---',file)
-        // if(size>3){
-        //     this.$Notice.error({
-        //         title:'图片尺寸应小于3M'
-        //     });
-        //     return;
-        // }
-        let type=file.type.split('/')[1];
-        if(this.format.indexOf(type)==-1){
-            this.$Notice.error({
-                title:'图片格式不正确'
-            });
-            return;
-        }
         let fileNameRandom=this.set_file_name(file.name);
         this.data.Filename=file.name;
         this.data.key=this.pathPrefix+fileNameRandom;
@@ -131,7 +117,19 @@ export default {
         
     },
     handleError(err){
-        console.log('error----->>>>>',err)
+       
+    },
+    //超出文件指定大小
+    sizeMore(file){
+        let size=this.imgMaxSize/1024;
+         this.$Notice.error({
+            title:`图片尺寸应小于${size}M`
+        });
+    },
+    formatError(){
+         this.$Notice.error({
+                title:'图片格式不正确'
+        });
     }
   }
 }

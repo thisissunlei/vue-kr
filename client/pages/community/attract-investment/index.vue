@@ -120,7 +120,7 @@ export default {
                     align:'center',
                     width:100,
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'recentStart',true)
+                        return publicFn.mergeCell(h,obj.row.orderList,'startDate',true)
                     }
                 },
                 {
@@ -130,7 +130,7 @@ export default {
                     align:'center',
                     width:100,
                     render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'recentEnd',true)
+                        return publicFn.mergeCell(h,obj.row.orderList,'endDate',true)
                     }
                 },
                 {
@@ -215,73 +215,7 @@ export default {
       },
       initData(formItem){
          this.tabForms=Object.assign({},formItem,this.tabForms);
-         this.attractData=[
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","orderList":[
-                {
-                    "discount":"测试内容l3o5","price":16380,"recentEnd":"测试内容5647","recentStart":"测试内容6h3q","rentTime":"测试内容v54r","sellerName":"测试内容o4vx","sourceName":"测试内容585t"
-                },
-                {
-                    "discount":"测试内容l3o5","price":16380,"recentEnd":"测试内容5647","recentStart":"测试内容6h3q","rentTime":"测试内容v54r","sellerName":"测试内容o4vx","sourceName":"测试内容585t"
-                }
-                ],"quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            },
-            {
-                "capacity":70101,"cityName":"测试内容nfhw","communityName":"测试内容7c4n","floor":76604,"investmentStatusName":"测试内容n21u","name":"测试内容1kud","quotedPrice":"测试内容0qi2","type":"测试内容63t9"
-            }
-        ]
-        //this.getListData(this.tabForms);
+         this.getListData(this.tabForms);
       },
       getListData(params){
            this.loading=true;

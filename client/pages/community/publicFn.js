@@ -21,7 +21,8 @@ function mergeCell(h,rowArray,param,isTime){
     }
     if(rowArray){
         row=rowArray.map((item,index)=>{
-            var pageData=item[param]?item[param]:'-';
+            var otherName=param=='discount'?'折':(param=='rentTime'?'天':'');
+            var pageData=item[param]?item[param]+otherName:'-';
             var popData=(item[param]&&isTime)?dateUtils.dateToStr("YYYY-MM-DD",new Date(item[param])):pageData;
             return h('div', [
                 h('Tooltip', {
@@ -34,7 +35,7 @@ function mergeCell(h,rowArray,param,isTime){
                     attrs: {
                         class:getDivClass(index,rowArray),
                     },
-                },pageData)
+                },popData)
             ])
           ])
         })

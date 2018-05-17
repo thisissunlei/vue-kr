@@ -184,11 +184,18 @@
                  <!-- 第四行-->
                 <div style="white-space: nowrap;">
                     <span class="attract-font" style="padding-top:7px;margin-right:24px;">销售员</span>
-                    <Form-item class='daily-form seller-form' style="width:200px">
-                       <SelectSaler 
-                         name="formItem.sellerId" 
-                         :onchange="changeSaler"
-                        />
+                    <Form-item class='daily-form'>
+                        <Select 
+                                v-model="formItem.sellerId" 
+                                style="width: 200px"
+                                :remote-method="remoteSaler"
+                                clearable
+                                filterable
+                                remote
+                                :loading="loading"
+                            >
+                            <Option v-for="item in sellerList" :value="''+item.id" :key="item.id">{{ item.lastname }}</Option>
+                        </Select>
                     </Form-item>
 
                     <div class='daily-form'>
@@ -302,7 +309,8 @@ export default {
                 }
             };
 
-            return {  
+            return { 
+                loading:false, 
                 formItem:{
                     investmentStatus:'',
                     status:[],
@@ -330,6 +338,7 @@ export default {
                 communityList:[],
                 cityList:[],
                 floorList:[],
+                sellerList:[],
                 productList:[
                     {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
@@ -388,6 +397,28 @@ export default {
         this.getSourceData();
     },
     methods:{
+        //销售员搜索
+        remoteSaler(query){
+            if (query !== '') {
+                this.loading = true;
+                setTimeout(() => {
+                    this.getSalerData(query)
+                }, 200);
+            }
+        },
+        //销售员
+        getSalerData(name){
+            let list = [];
+            this.$http.get('get-saler',{phoneOrEmail:name}).then((res)=>{
+                list = res.data.slice(0,10);
+                this.loading= false;
+                this.sellerList=list;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //渠道来源
         getSourceData(){
             this.$http.get('get-customer-source').then((res)=>{
@@ -477,10 +508,6 @@ export default {
         //社区change事件
         communityChange(param){
             this.getFloorList(param);
-        },
-        //销售员change事件
-        changeSaler(value){
-            this.formItem.sellerId=value;
         }
     }
 }
@@ -499,11 +526,6 @@ export default {
                 margin-right:20px;
                 .ivu-form-item-content{
                     display:inline-block;
-                }
-            }
-            .seller-form{
-                .ivu-form-item-content{
-                   width:100%;
                 }
             }
             .community-form{

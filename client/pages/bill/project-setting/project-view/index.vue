@@ -2,7 +2,7 @@
 <div :id="projectViewId" class="project-view">
     <div class="u-search" >
         <Button class="new-btn"  type="primary"   v-if="tab!='OPENED'" @click="newArchives">新建项目</Button>
-        <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED' && tdType == 'max' "></div>
+        <div style="display:inline-block;width:80px;" v-if="tab == 'OPENED' && (tdType == '1220-1400'||tdType=='<1220' )"></div>
          <div class="u-color-block">
             <span class="u-prepare">未完成</span>
             <span class="u-opened">已完成</span>
@@ -164,7 +164,7 @@ var scrollWidth = 0;
         data () {
             return {
                 totalCount:0,
-                tdType:'max',
+                tdType:'>1500',
                 projectViewId:'projectView'+this._uid,
                 openMessage:false,
                 taskStatus:'',
@@ -1234,14 +1234,13 @@ var scrollWidth = 0;
                 // if(boxDom){
                      
                 // }
-               console.log("-00000000",wWidth-30)
                 var contentdom = document.querySelectorAll('.project-view-table-content');
                
                 contentdom[0].style.width = wWidth-70+100-scrollWidth +'px';
                 contentdom[1].style.width = wWidth-70+100-scrollWidth +'px';
                 
                 // console.log(boxWidth.style.width ,"kkkkkkk")
-                if(wWidth>1400  &&( flag||this.tdType=='min')){
+                if(wWidth>1500  &&( flag||this.tdType!=='>1500')){
                     arr = data.map((item,index)=>{
                         delete item.width;
                         if(item.key=='name'){
@@ -1258,7 +1257,43 @@ var scrollWidth = 0;
                     })
                     this.tdType = 'max'
                 }
-                if(wWidth<=1300 && (flag||this.tdType=='max')){
+                if(wWidth>1400 && wWidth<1500&&( flag||this.tdType!=='1400-1500')){
+                    arr = data.map((item,index)=>{
+                        item.width=80;
+                        if(item.key=='name'){
+                            item.width = 160;
+                        }
+                        if(item.key=='city'){
+                            item.width = 80;
+                        }
+                        if(item.key=='code'){
+                            item.width = 100;
+                        }
+                        if(item.key=='k14'||item.key=='k13'||item.key=='k12'){
+                            delete item.width;
+                        }
+                      
+                        return item;
+                    })
+                    this.tdType = 'max'
+                }
+                if(wWidth<=1400 && wWidth>1220 && (flag||this.tdType!=='1220-1400')){
+                    arr = data.map((item,index)=>{
+                        item.width=74;
+                        if(item.key=='code'){
+                            item.width = 100;
+                        }
+                         if(item.key=='city'){
+                            item.width = 77;
+                        }
+                        if(item.key=='k14'){
+                            delete item.width;
+                        }
+                        return item;
+                    })
+                    this.tdType = 'min';
+                }
+                 if(wWidth<=1220 && (flag||this.tdType!=='<1220')){
                     arr = data.map((item,index)=>{
                         item.width = 72;
                         if(item.key=='code'){
@@ -1267,13 +1302,11 @@ var scrollWidth = 0;
                          if(item.key=='city'){
                             item.width = 77;
                         }
-                        if(item.key=='k14'||item.key=='k13'||item.key=='k12'){
-                            delete item.width;
-                        }
                         return item;
                     })
                     this.tdType = 'min';
                 }
+
                 
                 this.projectTabColumns = [].concat(arr);
             },
@@ -1700,7 +1733,7 @@ var scrollWidth = 0;
         padding:6px 12px 9px;
         color: #ffffff;
         z-index: 999;
-        transition: all .1s;
+       
         pointer-events:none;
         .title{
             font-size: 12px;
@@ -1723,7 +1756,7 @@ var scrollWidth = 0;
         border-width:5px;
         top: -10px;
         left: 10px;
-        transition: all .1s;
+       
         z-index: 999;
 
     }
@@ -1741,6 +1774,16 @@ var scrollWidth = 0;
         font-size: 14px;
     }
 
+}
+@media all and (min-width: 1220px)  and (max-width: 1500px){
+    .project-view {
+        .u-status-done{
+            width: 70px;
+        }
+        .u-status-undone{
+            width: 70px;
+        }
+     }
 }
 @media all and (max-width: 1300px) {
     .project-view {

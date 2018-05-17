@@ -73,11 +73,12 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value);
-        if(j_li.length){
-            j_li[0].setAttribute("class", "active");
+        var j_li = document.getElementsByName(value)[0];
+        if(j_li){
+            j_li.setAttribute("class", "active");
+        }else{
+            return
         }
-
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -421,7 +422,6 @@
     global.LISTENSIDEBAROPEN = globalNav.listenSidebarOpen;
 
     global.GLOBALHEADERSET = Router.setDefaultHeader;
-
 
     Router.init();
     //第一级菜单

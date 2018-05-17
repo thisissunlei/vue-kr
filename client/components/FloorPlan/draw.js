@@ -13,11 +13,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以缩放
             allowZoom: false
         });
-   
-    //scale
-    myDiagram.commandHandler.increaseZoom(0.76);
-    // myDiagram.commandHandler.decreaseZoom();        
-     
+
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {

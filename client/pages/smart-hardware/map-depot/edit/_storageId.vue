@@ -303,7 +303,7 @@ export default {
         },
         uploadImgSubmit(){
             let {params}=this.$route;
-            if(!this.imgIds){
+            if(this.imgIds.length==0){
                 this.$Notice.error({
                     title:'请先选择要上传的图片'
                 });

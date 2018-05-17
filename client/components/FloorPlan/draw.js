@@ -13,17 +13,36 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以缩放
             allowZoom: false
         });
-    
+    var min=data[0].item.cellWidth;
+    data.map((item,index)=>{
+        if(item.cellWidth<min){
+            min=item.cellWidth;
+        }
+    })
+    var dom =document.getElementById(content);
+    console.log('dom',dom.getBoundingClientRect().width,min);
+    //scale
+    myDiagram.commandHandler.increaseZoom();
+    myDiagram.commandHandler.decreaseZoom();        
+     
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {
         clickFn(e);
     });
-    
+
     //公共字体样式
     function textStyle() {
-        return { maxSize: new go.Size(140, NaN),stroke: "white", font: "bold 14px PingFangSC-Medium" };
+        return { minSize: new go.Size(120, NaN),stroke: "white", font: "bold 12px PingFangSC-Medium" };
     }
+
+    myDiagram.add(
+        $(go.Part,  // this Part is not bound to any model data
+          { layerName: "Background", position: new go.Point(0, 0),
+            selectable: false, pickable: false },
+          $(go.Picture, "https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg")
+        ));
+    
     //绘制
     myDiagram.nodeTemplate =
         $(go.Node, "Auto",
@@ -37,7 +56,7 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //元件名称
             $(go.Panel, "Table",
                 $(go.TextBlock,textStyle(),
-                { row: 0, column: 0,margin:5},
+                { row: 0, column: 0,margin:5,textAlign:'center'},
                 new go.Binding("text", "name")),
                 //元件属性
                 $(go.TextBlock,textStyle(),

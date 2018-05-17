@@ -185,7 +185,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.openDelete(params.row.id);
+                                            this.openDelete(params.row.id,'delete');
                                         }
                                     }
                                 }, '删除'),
@@ -227,6 +227,7 @@ export default {
            if(id){
                this.Ids.push(id)
            }
+           
            this.openCancel=!this.openCancel;
        },
        uploadShow(){
@@ -251,7 +252,6 @@ export default {
            this.openViewUpload();
        },
        deletePic(id){
-           console.log('id',id)
             let form={
                 ids:id
             }
@@ -297,6 +297,8 @@ export default {
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
+            this.picList=[];
+            this.renderList()
         },
         onSelectList(data){
             let Ids=[];

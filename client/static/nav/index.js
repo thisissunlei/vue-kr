@@ -664,6 +664,12 @@
                             menuCode: 'stat_group',
                         },
                         {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'

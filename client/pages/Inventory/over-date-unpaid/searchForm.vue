@@ -56,7 +56,7 @@
                         <Select 
                             v-model="formItem.goodsType" 
                             placeholder="请输入账单类型" 
-                            style="width: 200px"
+                            style="width: 150px"
                             clearable
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -68,7 +68,7 @@
                                 <DatePicker 
                                     v-model="formItem.startDate" 
                                     placeholder="开始日期"
-                                    style="width: 80px"
+                                    style="width: 105px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
@@ -76,7 +76,7 @@
                                 <DatePicker 
                                     v-model="formItem.endDate" 
                                     placeholder="结束日期"
-                                    style="width: 80px"
+                                    style="width: 105px"
                                 />
                             </Form-item>
                         </div>
@@ -108,12 +108,25 @@
                         
                     </div>
 
-                    <div style="display:inline-block;margin-right:20px;margin-left:111px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
+                    <div style="display:inline-block;margin-left:111px;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">客户名称</span>
+
+                        <Form-item class='daily-form' prop="name">
+                            <i-input 
+                                v-model="formItem.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 150px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+                    </div>
+
+                    <div style="display:inline-block;margin-right:20px;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
                                 v-model="formItem.stationsMin" 
-                                style="width: 90px"
+                                style="width: 105px"
                                 placeholder="工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -123,25 +136,14 @@
                             <i-input 
                                 v-model="formItem.stationsMax" 
                                 placeholder="工位数量"
-                                style="width: 90px"
+                                style="width: 105px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
                     </div>
 
 
-                    <div style="display:inline-block;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">客户名称</span>
-
-                        <Form-item class='daily-form' prop="name">
-                            <i-input 
-                                v-model="formItem.customerName" 
-                                placeholder="请输入客户名称"
-                                style="width: 180px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div>
+                    
                     
                     <Button type="primary" @click="searchClick">搜索</Button>
                    

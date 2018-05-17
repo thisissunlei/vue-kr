@@ -100,7 +100,7 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-left:11px;">天</span>
                     </div>
 
-                    <div style="display:inline-block;margin-right:20px;margin-left:93px;">
+                    <div style="display:inline-block;margin-right:20px;margin-left:90px;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">当前客户</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
@@ -155,7 +155,7 @@
                     </div>
 
 
-                    <div style="display:inline-block;margin-right:20px;margin-left:93px;">
+                    <div style="display:inline-block;margin-right:20px;margin-left:90px;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 

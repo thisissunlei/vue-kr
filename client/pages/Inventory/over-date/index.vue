@@ -10,11 +10,11 @@
         <Table border :columns="columns" :data="tableList" />
     </div>
     <Message 
-            :type="MessageType" 
-            :openMessage="openMessage"
-            :warn="warn"
-            @changeOpen="onMessageChange"
-        />
+        :type="MessageType" 
+        :openMessage="openMessage"
+        :warn="warn"
+        @changeOpen="onMessageChange"
+    />
 
   </div>
 </template>

@@ -31,6 +31,10 @@ export default {
      isPublic:Boolean,
      uploadName:String,
      onSubmit:Function,
+     maxSize:{
+         type:Number,
+         defalut:3072
+     }
   },
   data(){
       return{
@@ -54,7 +58,6 @@ export default {
          }
           this.$http.get('get-upload-policy', form).then((res)=>{
                 this.actionUrl=res.data.serverUrl;
-                this.maxSize=res.data.maxSizeKb;
                 let params=Object.assign({},res.data);
                 delete params.serverUrl;
                 delete params.sign;

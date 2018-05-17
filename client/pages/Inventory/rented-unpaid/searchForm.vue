@@ -52,23 +52,12 @@
                         </Select> 
                     </Form-item>
 
-                    <Form-item label="账单类型" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入账单类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item>
-
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
                             <Form-item label="服务开始日" class='priceForm' prop="startDate">
                                 <DatePicker 
                                     v-model="formItem.startDate" 
                                     placeholder="开始日期"
-                                    style="width: 80px"
+                                    style="width: 105px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
@@ -76,10 +65,22 @@
                                 <DatePicker 
                                     v-model="formItem.endDate" 
                                     placeholder="结束日期"
-                                    style="width: 80px"
+                                    style="width: 105px"
                                 />
                             </Form-item>
-                        </div>
+                    </div>
+
+
+                    <Form-item label="账单类型" class='daily-form'> 
+                        <Select 
+                            v-model="formItem.goodsType" 
+                            placeholder="请输入账单类型" 
+                            style="width: 150px"
+                            clearable
+                        >
+                            <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select> 
+                    </Form-item>
 
 
                      <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
@@ -109,11 +110,11 @@
                     </div>
 
                     <div style="display:inline-block;margin-right:20px;margin-left:111px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
                                 v-model="formItem.stationsMin" 
-                                style="width: 90px"
+                                style="width: 105px"
                                 placeholder="工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -123,7 +124,7 @@
                             <i-input 
                                 v-model="formItem.stationsMax" 
                                 placeholder="工位数量"
-                                style="width: 90px"
+                                style="width: 105px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -131,13 +132,13 @@
 
 
                     <div style="display:inline-block;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">客户名称</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">客户名称</span>
 
                         <Form-item class='daily-form' prop="name">
                             <i-input 
                                 v-model="formItem.customerName" 
                                 placeholder="请输入客户名称"
-                                style="width: 180px"
+                                style="width: 150px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -229,22 +230,6 @@ export default {
                 communityList:[],
                 cityList:[],
                 floorList:[],
-                productList:[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-                ],
-                inventoryList:[
-                    {value:'AVAILABLE',label:'未租'},
-                    {value:'NOT_EFFECT',label:'合同未生效'},
-                    {value:'IN_RENT',label:'在租'},
-                    {value:'DISABLE',label:'不可用'}
-                ],
-                priceList:[
-                    {value:'UNIT_PRICE',label:'工位单价'},
-                    {value:'AMOUNT',label:'商品总价'}
-                ],
 
                 formItemOld:{},
                 ruleDaily: {
@@ -263,11 +248,13 @@ export default {
                     rangeNum: [
                         { validator: validateNum, trigger: 'change' }
                     ],
-                }
+                },
+                typeList:[]
             }
     },
     mounted(){
         this.getCityList();
+        this.getBillType()
     },
     methods:{
         //社区接口
@@ -353,6 +340,20 @@ export default {
         },
         communityChange(param){
             this.getFloorList(param);
+        },
+        getBillType(){
+            this.$http.get('get-bill-type', '').then((res)=>{
+                res.data.enums.map((item)=>{
+                     // this.billType[item.code]=item.name; 
+                     item.label=item.name;
+                    item.value=item.code+''; 
+                })
+                this.typeList=res.data.enums;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
         },
     }
 }

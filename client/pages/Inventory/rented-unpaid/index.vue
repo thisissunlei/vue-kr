@@ -1,5 +1,6 @@
 <template>
   <div class="enter-filed"> 
+    <SectionTitle title="已起租未付"></SectionTitle>
     <SearchForm 
       @searchClick="searchClick"
       @clearClick="clearClick"
@@ -7,6 +8,7 @@
       identify='daily'
     />
     <div class='daily-tab'>
+        <Table border :columns="columns"  />
     </div>
 
   </div>
@@ -18,11 +20,18 @@
 import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SearchForm from './searchForm';
+import SectionTitle from '~/components/SectionTitle.vue'
 
     export default {
         name: 'EnterField',
         components:{
             SearchForm,
+            SectionTitle
+        },
+        head() {
+            return {
+                title: '已起租未付'
+            }
         },
         data () {
             return {  
@@ -31,7 +40,52 @@ import SearchForm from './searchForm';
                     page:1,
                     pageSize:100,
                 },
-                endParams:{}
+                endParams:{},
+                columns:[
+                    {
+                        title: '账单类型—ID',
+                        key: 'seatType',
+                        align:'center',
+                        render:(h, params) => {
+                            
+                        }
+                    },
+                    {
+                        title: '客户名称',
+                        key: 'seatType',
+                        align:'center',
+                    },
+                    {
+                        title: '服务内容',
+                        key: 'seatType',
+                        align:'center',
+                    },
+                    {
+                        title: '服务费明细',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '服务开始日',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '账单金额',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '欠款金额',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                    {
+                        title: '逾期时长（服务开始日起）',
+                        align:'center',
+                        key: 'seatType',
+                    },
+                ]
             }
         },
         methods:{

@@ -1,6 +1,6 @@
 import dateUtils from 'vue-dateutils';
 //鼠标滑过气泡的位置
-function poptipOver(ev,every,all,canvas) {
+function poptipOver(ev,every,all,canvas,scroll) {
     var e = ev.event || window.ev.event;
     var dom = e.target;
     var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -15,8 +15,8 @@ function poptipOver(ev,every,all,canvas) {
     var obj = getToolTipContent(every); 
     tirDom.innerHTML = obj.str;
     var toolLocation={
-        left:Number(every.item.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.item.cellWidth))/2,
-        top:Number(every.item.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-12
+        left:Number(every.item.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.item.cellWidth))/2-scroll.left,
+        top:Number(every.item.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-12-scroll.top
     }
    
     tirDom.style.maxWidth = obj.width + 'px';

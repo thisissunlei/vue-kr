@@ -7,13 +7,13 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
        $(go.Diagram, content,         
         {   
             initialDocumentSpot: go.Spot.TopLeft,
-            //initialAutoScale: go.Diagram.Uniform, 
             //是否可以拖动
             isReadOnly: true,
             //是否可以缩放
-            allowZoom: false
-        });
-
+            allowZoom: false,
+            allowDrop: false,
+            allowMove: false
+        });     
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {

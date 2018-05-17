@@ -41,8 +41,8 @@ export default {
     singleClick(event,every,all){
        
     },
-    mouseEnter(event,every,all,canvas){
-        publicFn.poptipOver(event,every,all,canvas)
+    mouseEnter(event,every,all,canvas,scroll){
+        publicFn.poptipOver(event,every,all,canvas,scroll)
     },
     mouseLeave(event,every,all){
         var tirDom = document.getElementById('gantt-chart-tool-tip');

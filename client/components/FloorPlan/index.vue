@@ -15,6 +15,7 @@ import init from './draw';
 import dataFormat from './dataFormat';
 var canvasData =[]
 var flowChart= '';
+var scrollDom='';
  export default {
     props:{
         data:{
@@ -24,15 +25,14 @@ var flowChart= '';
     },
     data(){
         return{
-            drawingBoard:'drawingPlanBoard' + this._uid
+            drawingBoard:'drawingPlanBoard' + this._uid,
+            scroll:{
+                top:0,
+                left:0
+            }
         }
     },
     mounted(){
-        var dom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
-        console.log('dom',dom);
-        if(dom){
-          dom.addEventListener('scroll',this.canvasScroll);            
-        } 
         canvasData=this.data;
         flowChart =  init(
             go,
@@ -42,12 +42,16 @@ var flowChart= '';
             this.mouseEnter,
             this.mouseLeave,
         )
+        scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
+        if(scrollDom){
+          scrollDom.addEventListener('scroll',this.canvasScroll);            
+        } 
     },
     methods:{
         mouseEnter(event,node){
              var every=node.data;
              var everyData =every?every:{};
-             this.$emit('enter',event,everyData,canvasData,this.drawingBoard);
+             this.$emit('enter',event,everyData,canvasData,this.drawingBoard,this.scroll);
         },
         mouseLeave(event,node){
              var every=node.data;
@@ -59,9 +63,11 @@ var flowChart= '';
             var everyData =every?every:{};
             this.$emit('click',event,everyData,canvasData); 
         },
-        canvasScroll(){
-            var dom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0]; 
-            console.log('dom',dom.scrollTop);  
+        canvasScroll(){ 
+            this.scroll={
+                top:scrollDom.scrollTop,
+                left:scrollDom.scrollLeft
+            }
         }  
     }
  }

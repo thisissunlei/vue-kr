@@ -238,7 +238,7 @@ export default {
          this.getListData(this.tabForms); 
       },
       submitExport(){
-          utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/list/export');
+          utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/cmt-investment/list/export');
       },
       onPageChange(page){
          this.tabForms.page=page;

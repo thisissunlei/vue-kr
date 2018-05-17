@@ -27,6 +27,22 @@ var flowChart= '';
             drawingBoard:'drawingPlanBoard' + this._uid
         }
     },
+    mounted(){
+        var dom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
+        console.log('dom',dom);
+        if(dom){
+          dom.addEventListener('scroll',this.canvasScroll);            
+        } 
+        canvasData=this.data;
+        flowChart =  init(
+            go,
+            this.drawingBoard,
+            dataFormat.init(canvasData),
+            this.mouseClick,
+            this.mouseEnter,
+            this.mouseLeave,
+        )
+    },
     methods:{
         mouseEnter(event,node){
              var every=node.data;
@@ -42,18 +58,11 @@ var flowChart= '';
             var every=event.subject.part.data;
             var everyData =every?every:{};
             this.$emit('click',event,everyData,canvasData); 
+        },
+        canvasScroll(){
+            var dom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0]; 
+            console.log('dom',dom.scrollTop);  
         }  
-    },
-    mounted(){
-        canvasData=this.data;
-        flowChart =  init(
-            go,
-            this.drawingBoard,
-            dataFormat.init(canvasData),
-            this.mouseClick,
-            this.mouseEnter,
-            this.mouseLeave,
-        )
     }
  }
 </script>

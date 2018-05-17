@@ -12,7 +12,7 @@ function init(data){
             list.property=item.belongType=='SPACE'?item.capacity+'工位 套间':'';
             list.pos=item.cellCoordX+' '+item.cellCoordY;
             list.size=item.cellWidth+' '+item.cellHeight;
-            list.color=colorStatus(item.inventStatus);
+            list.color='#ccc'//colorStatus(item.inventStatus);
             list.item=item;
             dataRender.push(list);
         })

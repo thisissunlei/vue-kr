@@ -178,7 +178,7 @@ import ChangeBalance from './changeBalance.vue';
                                         },
                                         on: {
                                             click: () => {
-                                                this.transferOutsideBusiness(params.row)
+                                                this.transferOutsideBusiness('balance',params.row)
                                             }
                                         }
                                 }))
@@ -188,7 +188,35 @@ import ChangeBalance from './changeBalance.vue';
                         }
                     },
                     {
-                        title: '服务保证金（元）',
+                        title: '可用押金',
+                        key: 'depositFree',
+                        align:'center',
+                        render:(tag,params)=>{
+                           let index = params.row._index;
+                            var btnRender=[
+                               tag('span', '￥'+utils.thousand((params.row.depositFree/100).toFixed(2)))];
+                            if(index != 0){
+                                btnRender.push(
+                                    tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转余额',
+                                            checkAction:'customer_assets_button',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferBalance('depositFree',params.row)
+                                            }
+                                        }
+                                }))
+                            }
+                           
+                           return tag('div',btnRender);    
+                        }
+                    },
+                    {
+                        title: '在押押金',
                         key: 'deposit',
                         align:'center',
                         render:(tag,params)=>{
@@ -216,6 +244,18 @@ import ChangeBalance from './changeBalance.vue';
                                         on: {
                                             click: () => {
                                                 this.transferBalance('lockDeposit',params.row)
+                                            }
+                                        }
+                                }),tag(Buttons, {
+                                        props: {
+                                            type: 'text',
+                                            label:'转营业外',
+                                            checkAction:'customer_assets_button',
+                                            styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.transferOutsideBusiness('lockDeposit',params.row)
                                             }
                                         }
                                 }))
@@ -378,10 +418,11 @@ import ChangeBalance from './changeBalance.vue';
                 this.editData = item;
                 this.openCommunity = true;
             },
-            transferOutsideBusiness(item){
+            transferOutsideBusiness(type,item){
                 // 转营业外
                 console.log('转营业外',item)
                 this.editData = item;
+                this.balanceType = type;
                 this.openBusiness = true;
             },
             transferBalance(type,item){
@@ -413,6 +454,9 @@ import ChangeBalance from './changeBalance.vue';
                                 break;
                             case 'lockDeposit':
                                 url = 'lock-deposit';
+                                break;
+                            case 'depositFree':
+                                url = 'free-to-balance';
                                 break; 
                             default :
                                 url = '';
@@ -443,15 +487,30 @@ import ChangeBalance from './changeBalance.vue';
             submitBusiness(name){
                 var balanceForm = this.$refs.changeBusiness.$refs;
                 var isSubmit = true;
+                let url = '';
+                switch (this.balanceType){
+                    case 'lockDeposit':
+                        url = 'lock-to-income';
+                        break;
+                    case 'balance':
+                        url = 'nonoperating';
+                        break;
+                    default :
+                        url = '';
+                        break;
+                }
+                // 提交数据
+                if(url === ''){
+                    return;
+                }
                 balanceForm[name].validate((valid,data) => {
                     if (!valid) {
 
                         isSubmit = false
                     }else{
                         let params = Object.assign({},this.submitData,{customerId:this.customerId})
-                        console.log('submit',params)
                         // 提交数据
-                        this.$http.post('nonoperating', params).then((res)=>{
+                        this.$http.post(url, params).then((res)=>{
                            // 关闭窗口
                            this.openBusiness = false;
                            // 更新数据（1）公示数据（2）余额汇总3）余额明细

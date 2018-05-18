@@ -187,6 +187,16 @@ export default  {
       url: '/api/krspace-pay/balance/other-deposit',
       method: 'post'
     },
+    //可用押金转余额
+    'free-to-balance': {
+      url: '/api/krspace-pay/deposit/free-to-balance',
+      method: 'get'
+    },
+    // 冻结服务保证金转营业外
+    'lock-to-income': {
+      url: '/api/krspace-pay/deposit/lock-to-income',
+      method: 'post'
+    },
     //余额转社区--社区列表
     'balance-community-list': {
       url: '/api/krspace-pay/account/community/list?',

@@ -55,7 +55,7 @@
                 title="转营业外"
                 width="500"
             >
-                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" @sync-data="syncData" type="balance"/>
+                <ChangeBalance ref="changeBusiness" :editData="editData" v-if="openBusiness == true" @sync-data="syncData" :type="balance"/>
             <div slot="footer">
                 <Button type="primary"  @click="submitBusiness('balance')">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="closeModal">取消</Button>
@@ -93,6 +93,7 @@ import ChangeBalance from './changeBalance.vue';
 		data (){
             let {params}=this.$route;
 			return{
+                balance:'',
                 options:[],
                 updateTime:new Date(),
                 customerId:params.customer,
@@ -423,6 +424,7 @@ import ChangeBalance from './changeBalance.vue';
                 console.log('转营业外',item)
                 this.editData = item;
                 this.balanceType = type;
+                this.balance = type;
                 this.openBusiness = true;
             },
             transferBalance(type,item){

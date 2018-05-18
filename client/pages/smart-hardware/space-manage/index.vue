@@ -292,14 +292,17 @@ export default {
         },
         communityChange(id){
             this.getFloor(id);
+            this.tabParams.page=1;
             this.tabParams.communityId=id;
             this.getTableData(this.tabParams);
         },
         floorChange(form){
+            this.tabParams.page=1;
             this.tabParams.floor=form;
             this.getTableData(this.tabParams);
         },
         typeChange(form){
+            this.tabParams.page=1;
             this.tabParams.type=form;
             this.getTableData(this.tabParams);
         },

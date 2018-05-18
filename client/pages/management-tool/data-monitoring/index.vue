@@ -2,17 +2,33 @@
     <div class="contract-center-list">
         <SectionTitle title="数据监控" />
         <div style='text-align:right;margin-bottom:10px'>
-          
+            <div style='display:inline-block;margin:10px 20px;'>
+                <span style='padding-right:10px'>订单号</span>
+                <i-input 
+                    v-model="params.customName" 
+                    placeholder="请输入订单号"
+                    style="width: 252px"
+                    
+                />
+            </div>
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>客户名称</span>
                 <i-input 
                     v-model="params.customName" 
                     placeholder="请输入客户名称"
                     style="width: 252px"
-                    @keyup.enter.native="onKeyEnter($event)"
                 />
             </div>
-            <div class='m-search' @click="submitLowerSearch">搜索</div>
+            <div style='display:inline-block;margin:10px 20px;'>
+                <Select 
+                    v-model="formItem.priceType" 
+                    style="width: 90px;margin-right:20px;"
+                    clearable
+                >
+                        <Option v-for="item in priceList" :value="item.value" :key="item.value">{{ item.label}}</Option>
+                </Select> 
+            </div>
+            <Button type="primary" @click="submitLowerSearch">搜索</Button>
         </div>
         <Table 
             border 
@@ -71,7 +87,12 @@
                 describeData:{},//其他约定的数据
                 totalCount:1,
                 downType:"down",
-
+                priceList:[
+                    {value:'1',label:'费用、收入、回款校验'},
+                    {value:'2',label:'明细、分期、日费用支付状态校验'},
+                    {value:'3',label:'押金、工位押金表、客户押金表校验'},
+                    {value:'4',label:'工位收入表与收入中心收入表校验'},
+                ],
                 columns: [
                     
                     {

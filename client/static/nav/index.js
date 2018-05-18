@@ -1103,7 +1103,7 @@
                             primaryText: '空间管理',
                             menuCode: 'basic_space',
                             type: 'vue',
-                            router: 'ops'
+                            router: 'smart-hardware/space-manage'
                         },
                     ]
             },

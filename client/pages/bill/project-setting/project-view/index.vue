@@ -1283,8 +1283,11 @@ var scrollWidth = 0;
                         if(item.key=='code'){
                             item.width = 100;
                         }
+                         if(item.key=='name'){
+                            item.width = 90;
+                        }
                          if(item.key=='city'){
-                            item.width = 77;
+                            item.width = 57;
                         }
                         if(item.key=='k14'){
                             delete item.width;
@@ -1776,13 +1779,57 @@ var scrollWidth = 0;
     }
 
 }
-@media all and (min-width: 1220px)  and (max-width: 1500px){
+@media all and (max-width: 1220px){
+    .project-view {
+        .u-status-done{
+            width: 60px;
+        }
+        .u-status-undone{
+            width: 60px;
+        }
+        .u-table-list .task-name{
+            width: 60px;
+            margin: auto;
+        }
+        .u-table-list .task-city{
+            width: 60px;
+             margin: auto;
+        }
+     }
+}
+@media all and (min-width: 1220px)  and (max-width: 1400px){
+    .project-view {
+        .u-status-done{
+            width: 60px;
+        }
+        .u-status-undone{
+            width: 60px;
+        }
+        .u-table-list .task-name{
+            width: 90px;
+            margin: auto;
+        }
+        .u-table-list .task-city{
+            width: 46px;
+             margin: auto;
+        }
+     }
+}
+@media all and (min-width: 1400px)  and (max-width: 1500px){
     .project-view {
         .u-status-done{
             width: 70px;
         }
         .u-status-undone{
             width: 70px;
+        }
+        .u-table-list .task-name{
+            width: 150px;
+            margin: auto;
+        }
+        .u-table-list .task-city{
+            width: 60px;
+             margin: auto;
         }
      }
 }
@@ -1818,20 +1865,7 @@ var scrollWidth = 0;
             width:247px;
             transition:width .2s;
         }
-        .u-table-list .task-name{
-            width: 60px;
-            margin: auto;
-        }
-        .u-table-list .task-city{
-            width: 60px;
-             margin: auto;
-        }
-        .u-status-done{
-            width: 60px;
-        }
-        .u-status-undone{
-            width: 60px;
-        }
+       
     }
 }
 

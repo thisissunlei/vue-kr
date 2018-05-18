@@ -9,6 +9,8 @@
                     filterable
                     clearable
                     @on-change="communityChange"
+                    remote
+                    :label="communityName"
                 >
                     <Option v-for="item in communityList" :value="`${item.id}`" :key="item.id">{{ item.name }}</Option>
                 </Select>
@@ -19,6 +21,8 @@
                     style="width:200px"
                     placeholder="请选择"
                     clearable
+                    remote
+                    :label="floor"
                 >
                     <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
                 </Select>
@@ -52,10 +56,7 @@ export default {
     props:{
         close:Function,
         submit:Function,
-        detail:{
-           type: Object,
-           defalut:{}
-        },
+        detail:Object
     },
     data(){
        return{
@@ -67,6 +68,8 @@ export default {
          }, 
          communityList:[],
          floorList:[],
+         communityName:'',
+         floor:'',
          typeList:[
              {
                  label:'会议室',
@@ -113,12 +116,17 @@ export default {
     methods:{
        getInfo(){
            let form={
-               id:detail.id
+               id:this.detail.id
            }
            this.$http.get('get-space-edit-info', form).then((res)=>{
-              
-              
-            
+               let data=Object.assign({}, res.data)
+              data.communityId=toString(res.data.communityId);
+              data.floor=toString(res.data.floor)
+              this.formItem=data;
+              this.communityChange(data.communityId);
+             // this.communityName=res.data.communityName;
+             // this.floor=res.data.floor;
+
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -144,12 +152,18 @@ export default {
                 });
             }) 
       },
-      //获取楼层
       communityChange(id){
+         if(id){
+                this.getFloor(id);
+            }else{
+                this.floorLis=[];
+                this.formItem.floor=""
+          }
+      },
+      getFloor(id){
           let form={
               communityId:id
           }
-          
           this.$http.get('get-space-floor', form).then((res)=>{
               let floorList=[]
                 res.data.floors.map((item,index)=>{

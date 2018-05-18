@@ -272,7 +272,7 @@ export default {
            let ids=id.join(',');
            this.deletePic(ids)
            this.picList=[];
-           this.openViewUpload();
+           this.imgViewShow=false;
        },
        onDeleteImgPic(){
            let id=this.id;

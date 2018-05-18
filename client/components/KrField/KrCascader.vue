@@ -14,7 +14,8 @@
                 :clearable='clearable'
                 @on-change="change"
                 @on-visible-change="visibleChange"
-                style="width:250px;"
+               
+                
             />
         </EditLabel>
 	</div>
@@ -53,6 +54,14 @@ export default {
             default:false,
             type:Boolean
         },
+        width:{
+            default:250,
+            type:[String,Number]
+        },
+        inline:{
+            default:false,
+            type:Boolean
+        }
 	},
 	data(){
 		return {

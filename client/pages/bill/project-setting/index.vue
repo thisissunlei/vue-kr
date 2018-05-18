@@ -77,7 +77,6 @@ export default {
         .ivu-tabs-ink-bar{
             top:0px;
             height: 4px;
-            border: 20px solid #fff;
             border-top: 0px;
             border-bottom: 0px;
             box-sizing: border-box;

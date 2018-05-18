@@ -8,6 +8,9 @@
             <Tab-pane label="减租订单" name="reduce">
                 <ReduceList :mask="key"/>
             </Tab-pane>
+            <Tab-pane label="换租订单" name="replace">
+                <ReplaceList :mask="key"/>
+            </Tab-pane>
         </Tabs>    
     </div>
 </template>
@@ -15,6 +18,7 @@
 <script>
 import JoinList from './joinList';
 import ReduceList from './reduceList';
+import ReplaceList from './replaceList';
 
 export default {
    name:'List',
@@ -31,7 +35,8 @@ export default {
    },
    components:{
        JoinList,
-       ReduceList
+       ReduceList,
+       ReplaceList
    },
    mounted(){
       this.activeKey=sessionStorage.getItem('orderMask')||'join';
@@ -39,6 +44,7 @@ export default {
    methods:{
         tabsClick(key){
            this.key=key;
+           console.log('key',key)
            sessionStorage.setItem('orderMask',key);
         }
     }

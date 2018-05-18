@@ -1,7 +1,7 @@
 <template>
     <div class="contract-center-list">
         <SectionTitle title="数据监控" />
-        <div style='text-align:right;margin-bottom:10px'>
+        <div style='margin-bottom:10px'>
             <div style='display:inline-block;margin:10px 20px;'>
                 <span style='padding-right:10px'>订单号</span>
                 <i-input 
@@ -20,12 +20,13 @@
                 />
             </div>
             <div style='display:inline-block;margin:10px 20px;'>
+                <span style='padding-right:10px'>校验类型</span>
                 <Select 
-                    v-model="formItem.priceType" 
-                    style="width: 90px;margin-right:20px;"
+                    v-model="priceType" 
+                    style="width: 252px;"
                     clearable
                 >
-                        <Option v-for="item in priceList" :value="item.value" :key="item.value">{{ item.label}}</Option>
+                    <Option v-for="item in priceList" :value="item.value" :key="item.value">{{ item.label}}</Option>
                 </Select> 
             </div>
             <Button type="primary" @click="submitLowerSearch">搜索</Button>

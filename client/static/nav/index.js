@@ -1087,7 +1087,21 @@
                     }
                 ]
         },
-            ],
+        {
+                primaryText: "空间管理",
+                iconName: 'icon-card',
+                iconColor: '#79859a',
+                router :'',
+                menuItems: [
+                        {
+                            primaryText: '空间管理',
+                            menuCode: 'basic_space',
+                            type: 'vue',
+                            router: 'ops'
+                        },
+                    ]
+            },
+        ],
         }
     }
     // 订单合同

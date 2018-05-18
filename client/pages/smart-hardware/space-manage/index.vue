@@ -2,7 +2,7 @@
     <div class="g-space-manage">
          <SectionTitle title="空间管理" />
          <div class="u-search" >
-            <Button type="primary" @click="openCreate">新建空间</Button> 
+            <Button type="primary" @click="showCreate">新建空间</Button> 
             <!-- <div class="u-select">
               <span class="u-select-label">图库：</span>
                <Select 
@@ -32,16 +32,34 @@
                   </div>
               </div>
         </div>
+        <Modal
+            v-model="openCreate"
+            title="新建"
+            ok-text="确定"
+            cancel-text="取消"
+            width="600"
+        >
+            <CreateSpace 
+                v-if="openCreate"
+            />
+             <!-- :itemDetail="communityList"  -->
+                <!-- @submitData="getCreateData"  -->
+            <div slot="footer">
+                <Button type="primary" @click="createSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showCreate">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
+import CreateSpace from './createSpace';
 
 export default {
     components:{
       SectionTitle,
-      
+      CreateSpace
    },
     data(){
         return{
@@ -52,6 +70,7 @@ export default {
                 page:1,
                 pageSize:15,
             },
+            openCreate:false,
             spaceColumns:[
                 {
                   title: '社区',
@@ -107,8 +126,9 @@ export default {
                   title: '操作',
                   key: 'operation',
                   align:'center',
-                  render:(h,params)=>{
-                      return h('div', [
+                  render:(h,obj)=>{
+                      if(obj.row.type=="OFFICE" || obj.row.type=="STATION"){
+                          return h('div', [
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -119,7 +139,26 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpEdit(params.row)
+                                            this.jumpEdit(obj.row)
+                                        }
+                                    }
+                                }, '管理子空间')
+                                
+
+                            ]); 
+                      }else{
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpEdit(obj.row)
                                         }
                                     }
                                 }, '编辑'),
@@ -133,10 +172,10 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpEdit(params.row)
+                                            this.jumpEdit(obj.row)
                                         }
                                     }
-                                }, '管理子空间'),
+                                }, '删除'),
                                 h('Button', {
                                     props: {
                                         type: 'text',
@@ -147,12 +186,14 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpEdit(params.row)
+                                            this.jumpEdit(obj.row)
                                         }
                                     }
-                                }, '删除')
+                                }, '管理子空间')
+                                
 
                             ]); 
+                    }
                   }
               }
             ],
@@ -163,14 +204,20 @@ export default {
         this.tableList=[
             {
                 communityName:'创业大街社区',
-                floor:20
-            }
+                floor:20,
+                type:"OFFICE"
+            },
+            {
+                communityName:'创业大街社区',
+                floor:30,
+                type:"BOARDROOM"
+            },
         ]
         //this.getTableData(this.tabParams)
     },
     methods:{
-        openCreate(){
-
+        showCreate(){
+            this.openCreate=!this.openCreate;
         },
         getTableData(params){
             this.$http.get('get-space-actions-list', params).then((res)=>{
@@ -189,6 +236,10 @@ export default {
             this.page=page;
             this.getTableData(this.tabParams);
         },
+        createSubmit(){
+
+        },
+        
 
     }
 }

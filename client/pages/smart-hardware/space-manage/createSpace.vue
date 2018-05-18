@@ -17,8 +17,7 @@
                  <Select 
                     v-model="formItem.floor" 
                     style="width:200px"
-                    placeholder="请选择" 
-                    filterable
+                    placeholder="请选择"
                     clearable
                 >
                     <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
@@ -35,8 +34,7 @@
                  <Select 
                     v-model="formItem.type" 
                     style="width:200px"
-                    placeholder="请选择" 
-                    filterable
+                    placeholder="请选择"
                     clearable
                 >
                     <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>

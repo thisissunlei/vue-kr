@@ -3,19 +3,42 @@
          <SectionTitle title="空间管理" />
          <div class="u-search" >
             <Button type="primary" @click="showCreate">新建空间</Button> 
-            <!-- <div class="u-select">
-              <span class="u-select-label">图库：</span>
-               <Select 
-                    v-model="communityId" 
-                    style="width:200px"
-                    placeholder="请选择" 
-                    filterable
-                    clearable
-                    @on-change="communityChange"
-                >
-                    <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
-                </Select>
-            </div> -->
+            <div class="u-select-content">
+                <div class="u-select">
+                    <Select 
+                            v-model="formItem.communityId" 
+                            style="width:200px"
+                            placeholder="请选择社区" 
+                            filterable
+                            clearable
+                            @on-change="communityChange"
+                        >
+                            <Option v-for="item in communityList" :value="`${item.id}`" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                </div>
+                 <div class="u-select">
+                     <Select 
+                            v-model="formItem.floor" 
+                            style="width:200px"
+                            placeholder="请选择楼层" 
+                            clearable
+                            @on-change="floorChange"
+                        >
+                            <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                </div>
+                <div class="u-select">
+                    <Select 
+                        v-model="formItem.type" 
+                        style="width:200px"
+                        placeholder="请选择空间类型"
+                        clearable
+                        @on-change="typeChange"
+                    >
+                        <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                </div>
+            </div>
         </div>
         <div class="u-table">
               <Table  border :columns="spaceColumns" :data="tableList" />
@@ -90,6 +113,35 @@ export default {
             openCreate:false,
             openEdit:false,
             detail:{},
+            formItem:{
+                communityId:'',
+                floor:'',
+                type:''
+            },
+            communityList:[],
+            floorList:[],
+            typeList:[
+                {
+                    label:'会议室',
+                    value:'BOARDROOM'
+                },
+                {
+                    label:'路演厅',
+                    value:'ROADSHOW_HALL'
+                },
+                {
+                    label:'开放区',
+                    value:'OPEN_ZONE'
+                },
+                {
+                    label:'走廊',
+                    value:'AISLE'
+                },
+                {
+                    label:'通用空间',
+                    value:'COMMON'
+                }
+            ],
             spaceColumns:[
                 {
                   title: '社区',
@@ -220,9 +272,59 @@ export default {
         }
     },
     mounted(){
-        this.getTableData(this.tabParams)
+        this.getTableData(this.tabParams);
+        this.getCommunityList();
     },
     methods:{
+        getCommunityList(){
+            this.$http.get('get-space-community-list', '').then((res)=>{
+                res.data.items.map((item,index)=>{
+                    item.label=item.name;
+                    item.value=item.id;
+                    return  item;
+                })
+                this.communityList=res.data.items;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            }) 
+        },
+        communityChange(id){
+            this.getFloor(id);
+            this.tabParams.communityId=id;
+            this.getTableData(this.tabParams);
+        },
+        floorChange(form){
+            this.tabParams.floor=form;
+            this.getTableData(this.tabParams);
+        },
+        typeChange(form){
+            this.tabParams.type=form;
+            this.getTableData(this.tabParams);
+        },
+        getFloor(id){
+            let form={
+                communityId:id
+            }
+            this.$http.get('get-space-floor', form).then((res)=>{
+                let floorList=[]
+                    res.data.floors.map((item,index)=>{
+                        let obj={}
+                        obj.label=item;
+                        obj.value=item;
+                        floorList.push(obj)
+                    })
+
+                this.floorList=floorList
+                
+                
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                }) 
+        },
         showEdit(params){
             if(params){
                 this.detail=params;
@@ -296,6 +398,15 @@ export default {
         .ivu-table-cell{
             padding:0;
         }
+    .u-select-content{
+        float:right;
+        width:650px;
+        .u-select{
+           float:left;
+           width:200px;
+           margin-left:10px;
+        }
+    }
 }
 .u-create{
     .ivu-modal-footer{

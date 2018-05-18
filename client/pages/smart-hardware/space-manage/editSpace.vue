@@ -116,12 +116,7 @@ export default {
                id:detail.id
            }
            this.$http.get('get-space-edit-info', form).then((res)=>{
-                res.data.items.map((item,index)=>{
-                    item.label=item.name;
-                    item.value=item.id;
-                    return  item;
-                })
-               this.communityList=res.data.items
+              
               
             
             }).catch((err)=>{

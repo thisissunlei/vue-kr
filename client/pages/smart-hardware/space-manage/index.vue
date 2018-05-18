@@ -73,6 +73,18 @@ export default {
                   title: '空间类型',
                   key: 'type',
                   align:'center',
+                  render(h,obj){
+                      let type={
+                         'OFFICE':'独立办公室',
+                         'BOARDROOM':'会议室',
+                         'ROADSHOW_HALL':'路演厅',
+                         'OPEN_ZONE':'开放区',
+                         'STATION':'工位',
+                         'AISLE':'走廊',
+                         'COMMON':'通用空间'
+                      }
+                      return type[obj.row.type];
+                  }
                 },
                 {
                   title: '创建人',
@@ -154,16 +166,29 @@ export default {
                 floor:20
             }
         ]
+        //this.getTableData(this.tabParams)
     },
     methods:{
         openCreate(){
 
         },
+        getTableData(params){
+            this.$http.get('get-space-actions-list', params).then((res)=>{
+                this.tableList=res.data.items;
+                this.totalCount=res.data.totalCount;
+            
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+            
+        },
         changePage(page){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
-       },
+        },
 
     }
 }

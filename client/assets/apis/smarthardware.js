@@ -81,6 +81,10 @@ export default  {
         url: '/api/sso/basic/community/actions/list',
         method: 'get'
     },
-   
+    //空间管理--空间管理--获取楼层
+    'get-space-floor': {
+        url: '/api/krspace-finance-web/cmt/community/select/use/floor',
+        method: 'get'
+    },
   }
   

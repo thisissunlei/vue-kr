@@ -10,7 +10,7 @@
                     clearable
                     @on-change="communityChange"
                 >
-                    <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
+                    <Option v-for="item in communityList" :value="`${item.id}`" :key="item.id">{{ item.name }}</Option>
                 </Select>
             </FormItem>
             <FormItem label="楼层"  style="width:300px" prop="floor">
@@ -20,9 +20,8 @@
                     placeholder="请选择" 
                     filterable
                     clearable
-                    @on-change="communityChange"
                 >
-                    <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
+                    <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </FormItem>
              <FormItem label="空间名称" style="width:300px" prop="name">
@@ -39,9 +38,8 @@
                     placeholder="请选择" 
                     filterable
                     clearable
-                    @on-change="communityChange"
                 >
-                    <Option v-for="item in communityList" :value="item.cmtId" :key="item.cmtId">{{ item.cmtName }}</Option>
+                    <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </FormItem>
         </Form>
@@ -58,6 +56,29 @@ export default {
              type:'',
          }, 
          communityList:[],
+         floorList:[],
+         typeList:[
+             {
+                 label:'会议室',
+                 value:'BOARDROOM'
+             },
+             {
+                 label:'路演厅',
+                 value:'ROADSHOW_HALL'
+             },
+             {
+                 label:'开放区',
+                 value:'OPEN_ZONE'
+             },
+             {
+                 label:'走廊',
+                 value:'AISLE'
+             },
+             {
+                 label:'通用空间',
+                 value:'COMMON'
+             }
+         ],
          ruleCustom:{
             communityId:[
                 { required: true, message: '请选择社区', trigger:'change' }
@@ -76,17 +97,17 @@ export default {
        } 
     },
     mounted(){
-
+        this.getCommunityList();
     },
     methods:{
        getCommunityList(){
             this.$http.get('get-space-community-list', '').then((res)=>{
-                res.data.map((item,index)=>{
-                    item.label=item.cmtName;
-                    item.value=item.cmtId;
+                res.data.items.map((item,index)=>{
+                    item.label=item.name;
+                    item.value=item.id;
                     return  item;
                 })
-               this.communityList=res.data
+               this.communityList=res.data.items
               
             
             }).catch((err)=>{
@@ -95,8 +116,29 @@ export default {
                 });
             }) 
       },
-      communityChange(){
+      //获取楼层
+      communityChange(id){
+          let form={
+              communityId:id
+          }
+          
+          this.$http.get('get-space-floor', form).then((res)=>{
+              let floorList=[]
+                res.data.floors.map((item,index)=>{
+                    let obj={}
+                    obj.label=item;
+                    obj.value=item;
+                    floorList.push(obj)
+                })
 
+               this.floorList=floorList
+              
+            
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            }) 
       }
 
     }

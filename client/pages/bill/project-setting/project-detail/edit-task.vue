@@ -335,7 +335,8 @@ export default {
                 this.switchEndTime();
             }
             this.$emit("dataChange",data,(code)=>{
-                if(code=="47"){
+                
+                if(code==47){
                     this.switchPrompt();
                 }
             });
@@ -349,8 +350,11 @@ export default {
             var data = Object.assign({},this.params);
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
-            this.$emit("dataChange",data,()=>{
-                this.cancelSure()
+            this.$emit("dataChange",data,(code)=>{
+                if(code==15){
+                    this.cancelSure()
+                }
+                
             });
         },
         goArchivesClick(){

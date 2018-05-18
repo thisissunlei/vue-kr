@@ -330,6 +330,9 @@ export default {
                     sellerId:'',
                     orderPriceMin:'',
                     orderPriceMax:'',
+                    rentTime:'',
+                    rentTimeType:'GT',
+
 
                     source:[],
                     sourceId:'',

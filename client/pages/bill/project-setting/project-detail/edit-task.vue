@@ -341,7 +341,7 @@ export default {
                 }
                 if(code===15){
                         this.cancelSure()
-                    }
+                }
             });
         },
         switchEndEdit(){

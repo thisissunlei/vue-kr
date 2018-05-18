@@ -44,6 +44,12 @@ export default  {
     'getOptionalTimeLine': {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
+    },
+
+    //社区招商
+    'community-investment-list': {
+        url: '/api/krspace-finance-web/inventory/cmt-investment/list',
+        method: 'get'
     }
   }
   

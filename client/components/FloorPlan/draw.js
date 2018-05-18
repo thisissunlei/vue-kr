@@ -7,14 +7,12 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
        $(go.Diagram, content,         
         {   
             initialDocumentSpot: go.Spot.TopLeft,
+            "toolManager.draggingTool":go.ToolManager.GestureNone,
             //是否可以拖动
             isReadOnly: true,
             //是否可以缩放
             allowZoom: false,
-            allowMove: false,
-            scrollsPageOnFocus:false,
-            allowDragOut:false,
-            allowDrop:false
+            allowMove: false
         });
 
     var button = document.getElementById(pic);

@@ -41,6 +41,41 @@ export default  {
         url: '/api/iot-platform/tv-ad-storage/actions/find',
         method: 'get'
     },
+    //空间管理--空间管理--删除空间
+    'delete-basic-space': {
+        url: '/api/sso/basic/space/actions/delete',
+        method: 'delete'
+    },
+    //空间管理--空间管理--新增空间
+    'create-actions-space': {
+        url: '/api/sso/basic/space/actions/create',
+        method: 'post'
+    },
+    //空间管理--空间管理--空间列表
+    'get-space-actions-list': {
+        url: '/api/sso/basic/space/actions/list',
+        method: 'get'
+    },
+    //空间管理--空间管理--详情
+    'get-space-edit-info': {
+        url: '/api/sso/basic/space/edit-info',
+        method: 'get'
+    },
+    //空间管理--空间管理--编辑空间
+    'edit-actions-space': {
+        url: '/api/sso/basic/space/actions/edit',
+        method: 'post'
+    },
+     //空间管理--空间管理--添加子空间
+     'add-children': {
+        url: '/api/sso/space/actions/add-children',
+        method: 'post'
+    },
+     //空间管理--空间管理--移除子空间
+     'remove-children': {
+        url: '/api/sso/basic/space/actions/remove-children',
+        method: 'post'
+    },
    
   }
   

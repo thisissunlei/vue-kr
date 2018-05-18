@@ -76,6 +76,11 @@ export default  {
         url: '/api/sso/basic/space/actions/remove-children',
         method: 'post'
     },
+    //空间管理--空间管理--社区下拉
+    'get-space-community-list': {
+        url: '/api/sso/basic/community/actions/list',
+        method: 'get'
+    },
    
   }
   

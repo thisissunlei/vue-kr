@@ -34,10 +34,10 @@
         </div>
         <Modal
             v-model="openCreate"
-            title="新建"
+            title="新建空间"
             ok-text="确定"
             cancel-text="取消"
-            width="600"
+            width="500"
         >
             <CreateSpace 
                 v-if="openCreate"
@@ -201,19 +201,19 @@ export default {
         }
     },
     mounted(){
-        this.tableList=[
-            {
-                communityName:'创业大街社区',
-                floor:20,
-                type:"OFFICE"
-            },
-            {
-                communityName:'创业大街社区',
-                floor:30,
-                type:"BOARDROOM"
-            },
-        ]
-        //this.getTableData(this.tabParams)
+        // this.tableList=[
+        //     {
+        //         communityName:'创业大街社区',
+        //         floor:20,
+        //         type:"OFFICE"
+        //     },
+        //     {
+        //         communityName:'创业大街社区',
+        //         floor:30,
+        //         type:"BOARDROOM"
+        //     },
+        // ]
+        this.getTableData(this.tabParams)
     },
     methods:{
         showCreate(){

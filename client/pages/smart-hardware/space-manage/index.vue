@@ -295,6 +295,8 @@ export default {
                 this.getFloor(id);
             }else{
                 this.floorLis=[];
+                this.formItem.floor=""
+                this.tabParams.floor=""
             }
             
             this.tabParams.page=1;

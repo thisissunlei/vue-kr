@@ -130,6 +130,7 @@ export default {
                 this.getFloor(id);
             }else{
                 this.floorLis=[];
+                this.formItem.floor=""
           }
       },
       getFloor(id){

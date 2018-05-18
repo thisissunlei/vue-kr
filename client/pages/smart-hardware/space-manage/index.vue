@@ -291,7 +291,12 @@ export default {
             }) 
         },
         communityChange(id){
-            this.getFloor(id);
+            if(id){
+                this.getFloor(id);
+            }else{
+                this.floorLis=[];
+            }
+            
             this.tabParams.page=1;
             this.tabParams.communityId=id;
             this.getTableData(this.tabParams);

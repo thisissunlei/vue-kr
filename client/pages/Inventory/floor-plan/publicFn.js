@@ -1,8 +1,6 @@
 import dateUtils from 'vue-dateutils';
 //鼠标滑过气泡的位置
 function poptipOver(ev,every,all,canvas,scroll) {
-    var e = ev.event || window.ev.event;
-    var dom = e.target;
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var contentDom=document.getElementById('gantt-chart-tool-tip-content');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
@@ -60,6 +58,13 @@ function getToolTipContent(thatData) {
     };
 }
 
+//获取今天的日期
+function getToDay() {
+    var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+    return today; 
+}
+
 export default {
-    poptipOver
+    poptipOver,
+    getToDay
 }

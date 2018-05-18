@@ -1,14 +1,22 @@
 <template>
     <div class="floor-chart-box-map">
-        <div  class="flow-chart-top-toolbar">      
-        </div>
 
+        <div  class="flow-chart-top-toolbar">
+             <div class="toolbar-inner" v-for="item in colorLabels" :key="item.id">
+                 <span class="map-font-tip">{{item.label}}</span>
+                 <span class="map-color-tip" :style="'background:'+item.color"></span>
+             </div>
+
+             <span class="warning-tip"></span>
+             <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公桌和固定办公桌的库存</span> 
+
+             <div class="export" :id="drawingPicture">导出高清图</div>    
+        </div>
+        
         <div class="flow-chart-content">
-            <div :id="drawingBoard" class="drawing-board" :style="{height:'700px',background:'#f5f5f5'}"></div>  
+            <div :id="drawingBoard" class="drawing-board" :style="{height:'600px',background:'#f5f5f5'}"></div>  
         </div>
-
-        <div  :id="drawingPicture">导出</div>
-         
+        
     </div>
 </template>
 
@@ -27,6 +35,12 @@ var scrollDom='';
     },
     data(){
         return{
+            colorLabels:[
+                {label:'未租',color:'#BCE590'},
+                {label:'在租',color:'#FFC684'},
+                {label:'合同未生效',color:'#FFE08F'},
+                {label:'不可用',color:'#E4E4E4'}
+            ],
             drawingBoard:'drawingPlanBoard' + this._uid,
             drawingPicture:'drawingPlanPicture'+this._uid,
             scroll:{
@@ -87,18 +101,62 @@ var scrollDom='';
     background: #DAE4E4;
     transition: all 0.3 ease;
     .flow-chart-top-toolbar{
+        padding:0 20px;
+        line-height: 50px;
         position: absolute;
         height: 50px;
         width: 100%;
         top: 0px;
         left: 0px;
-        background: #F6F6F6;
+        background: #fff;
         box-shadow: 0 1px 1px rgba(0,0,0,.1);
+        .toolbar-inner{
+             display:inline-block;
+             margin-right:30px;
+            .map-font-tip{
+                display:inline-block;
+                vertical-align: middle;
+                font-family: PingFangSC-Medium;
+                font-size: 14px;
+                color: #999999;
+            }
+            .map-color-tip{
+                display:inline-block;
+                width:33px;
+                height:15px;
+                margin-left:10px;
+                border-radius: 4px;  
+                vertical-align: middle;
+            }
+        }
+        .warning-tip{
+            display:inline-block;
+            width:19px;
+            height:23px;
+            background:url(img/warning.png) no-repeat center;
+            background-size: 100%;
+            margin-right:6px;
+            vertical-align: middle;
+        }
+        .export{
+            float:right;
+            width:109px;
+            height:30px;
+            line-height: 30px;
+            background: #499DF1;
+            box-shadow: 0 1px 4px 0 rgba(14,94,174,0.50);
+            border-radius: 4px;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
+            margin-top: 8px;
+            cursor: pointer;
+        }
     }
     .flow-chart-content{
         .drawing-board{
           box-sizing: border-box;
-          margin: 10px;
+          //margin: 10px;
           border: 1px solid #E5E5E5;
           max-width: 100%;
         }

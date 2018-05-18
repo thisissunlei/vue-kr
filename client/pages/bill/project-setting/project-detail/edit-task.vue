@@ -313,7 +313,6 @@ export default {
             this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
                 
                 this.params.actualEndTime = this.actualEnd;
-                this.isEndEdit = true;
                 var data = Object.assign({},this.params);
                 data.planEndTime = this.numToDate(data.planEndTime);
                 data.actualEndTime = this.numToDate(data.actualEndTime)

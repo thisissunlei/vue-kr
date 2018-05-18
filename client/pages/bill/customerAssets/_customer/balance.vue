@@ -188,7 +188,7 @@ import ChangeBalance from './changeBalance.vue';
                         }
                     },
                     {
-                        title: '可用押金',
+                        title: '可用服务保证金（元）',
                         key: 'depositFree',
                         align:'center',
                         render:(tag,params)=>{
@@ -216,7 +216,7 @@ import ChangeBalance from './changeBalance.vue';
                         }
                     },
                     {
-                        title: '在押押金',
+                        title: '服务保证金（元）',
                         key: 'deposit',
                         align:'center',
                         render:(tag,params)=>{

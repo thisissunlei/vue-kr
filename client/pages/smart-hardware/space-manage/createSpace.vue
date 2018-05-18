@@ -125,8 +125,14 @@ export default {
                 });
             }) 
       },
-      //获取楼层
       communityChange(id){
+          if(id){
+                this.getFloor(id);
+            }else{
+                this.floorLis=[];
+          }
+      },
+      getFloor(id){
           let form={
               communityId:id
           }

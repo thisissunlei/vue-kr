@@ -272,11 +272,11 @@ export default {
            let ids=id.join(',');
            this.deletePic(ids)
            this.picList=[];
-           this.openViewUpload();
+           this.imgViewShow=false;
        },
        onDeleteImgPic(){
            let id=this.id;
-           this.deletePic(id)
+           this.deletePic(id);
        },
        deletePic(id){
             let form={
@@ -291,7 +291,7 @@ export default {
                 this.deleteImg=false;
                 this.openCancel=false;
                 this.imgViewShow=false;
-                
+                this.picList=[];
                 this.getTableData(this.tabParams);
             }).catch((err)=>{
                 this.$Notice.error({

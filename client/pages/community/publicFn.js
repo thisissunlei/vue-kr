@@ -66,6 +66,7 @@ function sourceStyleSwitch(data){
          item.label=item.name;
          if(item.subSources){
             item.children=item.subSources;
+            item.children.unshift({name:'全部',id:''})
             sourceStyleSwitch(item.children); 
          }
      })

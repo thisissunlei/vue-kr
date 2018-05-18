@@ -32,26 +32,28 @@
                         </div>
                     </div>
                     <div class="tiem-box" style="margin-left:19px;">
-                        <div class="time-title">完成时间</div>
-                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
-                        <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
-                            <DatePicker
-                                :open="endOpen"
-                                :value="newEnd"
-                                confirm
-                                type="date"
-                                :options="endOptions"
-                                :clearable="false"
-                                @on-change="endChange"
-                                @on-clear="endClear"
-                                @on-ok="endOk">
-                                <a href="javascript:void(0)" @click="switchEndTime">
-                                
-                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                        <div class="time-view">
+                            <div class="time-title">完成时间</div>
+                            <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
+                            <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                                <DatePicker
+                                    :open="endOpen"
+                                    :value="newEnd"
+                                    confirm
+                                    type="date"
+                                    :options="endOptions"
+                                    :clearable="false"
+                                    @on-change="endChange"
+                                    @on-clear="endClear"
+                                    @on-ok="endOk">
+                                    <a href="javascript:void(0)" @click="switchEndTime">
                                     
-                                    <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
-                                </a>
-                            </DatePicker>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                                        
+                                        <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
+                                    </a>
+                                </DatePicker>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,8 +176,8 @@ export default {
             isStartEdit:false,
             endOpen:false,
             isEndEdit:false,
-            newStart:this.planEnd||'',
-            newEnd:this.actualEnd||'',
+            newStart:this.getEdit.planEndTime||'',
+            newEnd:this.getEdit.actualEndTime||'',
             totalFields:0,
             validFields:0,
             openSure:false,
@@ -191,6 +193,19 @@ export default {
     created(){    
         this.queryData=Object.assign({},this.$route.query); 
     },
+    watch:{
+        startOpen(){
+            if(this.startOpen){
+                this.permissions();
+            }
+            
+        },
+        endOpen(){
+            if(this.endOpen){
+                this.permissions();
+            }
+        }
+    },
     mounted(){
          
     },
@@ -199,7 +214,32 @@ export default {
         switchPrompt(){
             this.openPrompt = !this.openPrompt;
         },
-         submitSure(){
+        permissions(){
+            var code= 'pm_manage_date_del';
+            this.$nextTick(()=>{
+                var doms = document.querySelectorAll('.edit-task .time-view .ivu-picker-confirm .ivu-btn-text');
+                if(!doms){
+                    return;
+                }
+                console.log(doms,"pppp")
+                for(let i=0;i<doms.length;i++){
+                     if(window.resourcesCode.indexOf(code)>-1){
+                        doms[i].style.display="inline-block";
+                    }else{
+                        doms[i].style.display="none";
+                    }
+                }
+                // doms.map((item)=>{
+                //     if(window.resourcesCode.indexOf(code)>-1){
+                //         item.style.display="inline-block";
+                //     }else{
+                //         item.style.display="none";
+                //     }
+                // })
+            })
+             window.resourcesCode;
+        },
+        submitSure(){
             let params={
                 id:this.taskId,
                 projectId:this.projectId
@@ -221,8 +261,8 @@ export default {
             this.openSure=!this.openSure;
         },
         switchStartTime(){
+            console.log(this.newStart,"ppppp")
             this.startOpen = !this.startOpen;
-            
         },
         switchEndTime(){
             this.endOpen = !this.endOpen;

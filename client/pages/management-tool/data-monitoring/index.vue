@@ -104,31 +104,28 @@
                         key: 'communityName',
                         align:'center',
                         fixed: 'left',
-                        width: 150,
+                       
                     },
                     {
                         title: '校验结果说明',
                         key: 'content',
-                        align:'center',
-                        width: 200,
+                        align:'center'
                     },
                     {
                         title: '客户id',
                         key: 'customerId',
-                        align:'center',
-                        width: 150,
+                        align:'center'
+                       
                     },
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        align:'center',
-                        width: 150,
+                        align:'center'
                     },
                     {
                         title: '校验类型',
                         key: 'validateType',
-                        align:'center',
-                        width: 150,
+                        align:'center'
                     },
                     {
                         title: '创建时间',

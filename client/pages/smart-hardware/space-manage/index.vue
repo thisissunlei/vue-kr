@@ -38,16 +38,14 @@
             ok-text="确定"
             cancel-text="取消"
             width="500"
+            class="u-create"
         >
             <CreateSpace 
                 v-if="openCreate"
+                :submit="createSubmit"
+                :close="showCreate"
             />
-             <!-- :itemDetail="communityList"  -->
-                <!-- @submitData="getCreateData"  -->
-            <div slot="footer">
-                <Button type="primary" @click="createSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="showCreate">取消</Button>
-            </div>
+            <div  slot="footer"></div>
         </Modal>
     </div>
 </template>
@@ -70,6 +68,7 @@ export default {
                 page:1,
                 pageSize:15,
             },
+            formData:"",
             openCreate:false,
             spaceColumns:[
                 {
@@ -236,8 +235,20 @@ export default {
             this.page=page;
             this.getTableData(this.tabParams);
         },
-        createSubmit(){
-
+        getFormData(form){
+            this.formData=form;
+        },
+        createSubmit(form){
+            this.$http.post('create-actions-space', form).then((res)=>{
+                this.$Notice.success({
+                    title:'新建成功'
+                });
+                this.openCreate=false;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
         },
         
 
@@ -258,6 +269,11 @@ export default {
         .ivu-table-cell{
             padding:0;
         }
+}
+.u-create{
+    .ivu-modal-footer{
+       padding:0; 
+    }
 }
 
 </style>  

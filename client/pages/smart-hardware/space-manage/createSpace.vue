@@ -42,11 +42,19 @@
                     <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
             </FormItem>
+            <FormItem style="padding-left:24px;margin-top:40px" class="u-btn-list" >
+                <Button type="primary" style="margin-right:20px" @click="handleSubmit('formItem')" >确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="showCreate">取消</Button> 
+            </FormItem>
         </Form>
     </div>
 </template>
 <script>
 export default {
+    props:{
+        close:Function,
+        submit:Function,
+    },
     data(){
        return{
          formItem:{
@@ -100,6 +108,9 @@ export default {
         this.getCommunityList();
     },
     methods:{
+       showCreate(){
+           this.close && this.close();
+       },
        getCommunityList(){
             this.$http.get('get-space-community-list', '').then((res)=>{
                 res.data.items.map((item,index)=>{
@@ -139,15 +150,29 @@ export default {
                     title:err.message
                 });
             }) 
+      },
+      handleSubmit(){
+          let formItem=this.formItem;
+         this.$refs.formItem.validate((valid) => {
+             if(valid){
+                this.submit && this.submit(formItem);
+             }
+           
+         })
       }
-
-    }
+    },
+    
 }
 </script>
 <style lang="less">
 .g-create-space{
     width:300px;
-    margin:10px auto;
+    margin:10px auto 0;
+    .u-btn-list{
+      .ivu-form-item-content{
+          margin-left:60px !important;
+      }  
+    }
 }
 </style>
 

@@ -6,6 +6,8 @@
         <div class="flow-chart-content">
             <div :id="drawingBoard" class="drawing-board" :style="{height:'700px',background:'#f5f5f5'}"></div>  
         </div>
+
+        <div  :id="drawingPicture">导出</div>
          
     </div>
 </template>
@@ -26,6 +28,7 @@ var scrollDom='';
     data(){
         return{
             drawingBoard:'drawingPlanBoard' + this._uid,
+            drawingPicture:'drawingPlanPicture'+this._uid,
             scroll:{
                 top:0,
                 left:0
@@ -37,10 +40,11 @@ var scrollDom='';
         flowChart =  init(
             go,
             this.drawingBoard,
+            this.drawingPicture,
             dataFormat.init(canvasData),
             this.mouseClick,
             this.mouseEnter,
-            this.mouseLeave,
+            this.mouseLeave
         )
         scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
         if(scrollDom){

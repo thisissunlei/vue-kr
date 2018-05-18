@@ -1,4 +1,4 @@
-function draw (go,content,data,clickFn,enterFn,leaveFn) {
+function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -12,7 +12,21 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             //是否可以缩放
             allowZoom: false,
             allowMove: false
-        });     
+        });
+
+    var button = document.getElementById(pic);
+        button.addEventListener('click', function() {
+          var newWindow = window.open("","newWindow");
+          if (!newWindow) return;
+          var newDocument = newWindow.document;
+          var svg = myDiagram.makeSvg({
+            document: newDocument,  // create SVG DOM in new document context
+            scale:1
+          });
+          newDocument.body.appendChild(svg);
+    }, false);
+    
+
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {

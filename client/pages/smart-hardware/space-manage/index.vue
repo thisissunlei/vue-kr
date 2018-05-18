@@ -47,17 +47,35 @@
             />
             <div  slot="footer"></div>
         </Modal>
+        <Modal
+            v-model="openEdit"
+            title="编辑空间"
+            ok-text="确定"
+            cancel-text="取消"
+            width="500"
+            class="u-create"
+        >
+            <EditSpace 
+                v-if="openEdit"
+                :submit="editSubmit"
+                :close="showEdit"
+                :detail="detail"
+            />
+            <div  slot="footer"></div>
+        </Modal>
     </div>
 </template>
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 import CreateSpace from './createSpace';
+import EditSpace from './editSpace';
 
 export default {
     components:{
       SectionTitle,
-      CreateSpace
+      CreateSpace,
+      EditSpace
    },
     data(){
         return{
@@ -70,6 +88,8 @@ export default {
             },
             formData:"",
             openCreate:false,
+            openEdit:false,
+            detail:{},
             spaceColumns:[
                 {
                   title: '社区',
@@ -157,7 +177,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpEdit(obj.row)
+                                            this.showEdit(obj.row)
                                         }
                                     }
                                 }, '编辑'),
@@ -200,21 +220,15 @@ export default {
         }
     },
     mounted(){
-        // this.tableList=[
-        //     {
-        //         communityName:'创业大街社区',
-        //         floor:20,
-        //         type:"OFFICE"
-        //     },
-        //     {
-        //         communityName:'创业大街社区',
-        //         floor:30,
-        //         type:"BOARDROOM"
-        //     },
-        // ]
         this.getTableData(this.tabParams)
     },
     methods:{
+        showEdit(params){
+            if(params){
+                this.detail=params;
+            }
+            this.openEdit=!this.openEdit;
+        },
         showCreate(){
             this.openCreate=!this.openCreate;
         },
@@ -244,12 +258,25 @@ export default {
                     title:'新建成功'
                 });
                 this.openCreate=false;
+                this.getTableData(this.tabParams);
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
                 });
             })
         },
+        editSubmit(form){
+             this.$http.post('edit-actions-space', form).then((res)=>{
+                this.$Notice.success({
+                    title:'编辑成功'
+                });
+                this.openCreate=false;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+        }
         
 
     }

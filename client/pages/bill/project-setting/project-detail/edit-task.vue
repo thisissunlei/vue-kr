@@ -339,6 +339,9 @@ export default {
                 if(code==47){
                     this.switchPrompt();
                 }
+                if(code===15){
+                        this.cancelSure()
+                    }
             });
         },
         switchEndEdit(){

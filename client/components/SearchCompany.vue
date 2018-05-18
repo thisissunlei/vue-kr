@@ -11,7 +11,6 @@
             filterable
             remote
             :loading="loading1"
-             clearable
             @on-change="changeContent"
             :remote-method="remoteCustomer"
             >
@@ -26,7 +25,7 @@
 
 
 <script>
-
+import http from '~/plugins/http.js';
 
     export default {
         props:{
@@ -48,35 +47,33 @@
                 this.onchange(value)
             },
             remoteCustomer (query) {
-                 if (query !== '') {
-                    this.loading1 = true;
-                    setTimeout(() => {
-                        this.loading1 = false;
-                        this.getCusomerList(query)
-                    }, 200);
-                } else {
-                   this.getCusomerList('');
-                }
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.getCusomerList(query)
+                }, 200);
             },
             getCusomerList:function(name,type){
-                 let params = {
-                    companyName:name
+                let params = {
+                    company:name || ''
                 }
                 let list = [];
                 let _this = this;
-                this.$http.get('getCompanyInfo', params, r => {
-                    list = r.data;
+                http.get('get-customer', params).then( r => {
+                    list = r.data.customerList;
                     list.map((item)=>{
                         let obj = item;
-                        obj.label = item.companyName;
-                        obj.value = item.csrId;
+                        obj.label = item.company;
+                        obj.value = item.id+'';
                         return obj;
                     });
+                    _this.loading1 = false;
+
                     _this.companyOptions = list;
-                }, e => {
-                    console.log('error',e)
+                }).catch( e => {
+                    console.log('error--->',e)
                 })
-                return list;
+               
+               
             }
                     
                

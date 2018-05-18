@@ -7,11 +7,11 @@
       </div>
       
       <FloorPlan
-        v-if="canvasData.length"
-        @click="this.mouseClick"
-        @enter="this.mouseEnter"
-        @leave="this.mouseLeave"
-        :data="canvasData"
+            v-if="canvasData.length"
+            @click="this.mouseClick"
+            @enter="this.mouseEnter"
+            @leave="this.mouseLeave"
+            :data="canvasData"
       />
 
       

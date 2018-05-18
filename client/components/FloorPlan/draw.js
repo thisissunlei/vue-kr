@@ -11,7 +11,10 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             isReadOnly: true,
             //是否可以缩放
             allowZoom: false,
-            allowMove: false
+            allowMove: false,
+            scrollsPageOnFocus:false,
+            allowDragOut:false,
+            allowDrop:false
         });
 
     var button = document.getElementById(pic);

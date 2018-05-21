@@ -2,7 +2,10 @@
     <div class='m-reduce-list'>
             <div class='list-banner'>
                     <div class='list-btn'>
-                        <Button type="primary" @click="jumpReduce">减租</Button>
+                        <Button type="primary" @click="jumpJoin" class='join-btn'>入驻</Button>
+                        <Button type="primary" @click="jumpRenew" class='join-btn'>续租</Button>
+                        <Button type="primary" @click="jumpReduce" class='join-btn'>减租</Button>
+                        <Button type="primary" @click="jumpReplace">换租</Button>
                     </div>
 
                     <div class='list-search'>
@@ -421,6 +424,16 @@
             jumpView(params){
                 window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,'_blank');
             },
+            jumpReplace(){
+                window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
+            },
+            jumpJoin(){
+                window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
+            },
+
+            jumpRenew(){
+                window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
+            },
 
             closeNullify(){
                 this.openNullify=!this.openNullify;
@@ -442,12 +455,15 @@
             padding:0 0 0 20px;
             .list-btn{
                 display:inline-block;
-                width:20%;
+                width:40%;
+                .join-btn{
+                    margin-right:20px;
+                }
             }
             .list-search{
                 margin-bottom:10px;
                 display:inline-block;
-                width:80%;
+                width:60%;
                 text-align:right;
                 .lower-search{
                     display:inline-block;

@@ -1,16 +1,5 @@
 <template>
     <div class="com-select-community">
-        <!-- <Select
-            :v-model="test.communityId"
-            filterable
-            remote
-            :placeholder="value"
-            :remote-method="remoteMethod1"
-            :loading="loading1"
-            @on-change="changeContent"
-            >
-            <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
-        </Select> -->
         <Select :v-model="test.communityId" filterable @on-change="changeContent" :placeholder="value" :disabled="disabled">
             <Option v-for="(option, index) in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>

@@ -3,7 +3,7 @@
 
     <div class="object-detail-title">
         <div class="task-name">
-            <span>{{data.name}}</span>
+            <span style="font-weight: bold;">{{data.name}}</span>
             <span 
                 v-if="data.taskStatus"
                 class="task-status" 
@@ -13,8 +13,7 @@
                     class="actual"
                     :style="{
                         background:getActualBgColor(),
-                        color:getActualColor(),
-                        border:getActualBorder()
+                        color:'#495060'
                     }"
                 >{{data.taskStatusDesc}}</span>
             </span>
@@ -41,23 +40,19 @@ export default{
    },
    watch:{
        taskStatus:function (params) {
-           console.log("--------")
+      
            this.status = this.taskStatus;
        }
    },
    methods:{
        getActualBgColor(){
-            let taskStatus = this.data.taskStatus;
-            return publicFn.getActualBgColor(taskStatus);
+            let taskStatus = this.taskStatus;
+            if(taskStatus == "DONE"){
+                return '#afd882'
+            }else{
+                return "#eee"
+            }
        },
-       getActualColor(){
-          let taskStatus = this.data.taskStatus;
-            return publicFn.getLabelColor(taskStatus);
-       },
-       getActualBorder(){
-            let taskStatus = this.data.taskStatus;
-            return publicFn.getActualBorder(taskStatus)
-       }
    }
 }
 	

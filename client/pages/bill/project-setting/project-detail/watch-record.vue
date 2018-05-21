@@ -137,7 +137,7 @@ export default {
             var data = Object.assign({},this.params);
             data.startTime = publicFn.timeToStr(data.startTime);
             data.endTime = publicFn.timeToStr(data.endTime);
-            // console.log(data,"pppp")
+           
             // return;
             this.$emit('searchClick',data)
         },

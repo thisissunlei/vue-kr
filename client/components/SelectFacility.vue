@@ -12,14 +12,14 @@
 <template>
     <div class="com-select-customers">
          <Select
-            v-model="facility.lableType"
-            filterable
-            remote
-            :label="facility.lableTypeName"
-            :placeholder="value"
-            :remote-method="remoteFacility"
-            :loading="loading1"
-            :disabled="disabled"
+                v-model="facility.lableType"
+                filterable
+                remote
+                :label="facility.lableTypeName"
+                :placeholder="value"
+                :remote-method="remoteFacility"
+                :loading="loading1"
+                :disabled="disabled"
             @on-change="changeContent"
             >
             <Option v-for="(option, index) in facilityTypeList" :value="option.value" :key="option.value">{{option.label}}</Option>

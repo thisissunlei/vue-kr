@@ -217,7 +217,7 @@ export default {
                 width:utils.dateDiff(actualStart,actualEnd)+1,
                 office:utils.dateDiff(min,actualStart)
             }
-            //  console.log(officeStart,min,"pppp",this.planDetail)
+            
             var lineOffice = 0;
             var lineWidth = 0;
             if(data.planEndTime<data.actualStartTime){

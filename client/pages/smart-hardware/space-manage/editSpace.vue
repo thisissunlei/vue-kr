@@ -111,8 +111,10 @@ export default {
        } 
     },
     created(){
+       
         this.getCommunityList();
         this.getInfo();
+       
     },
     mounted(){
        
@@ -123,16 +125,20 @@ export default {
            let form={
                id:id
            }
+           var _this=this;
            this.$http.get('get-space-edit-info', form).then((res)=>{
                let data=Object.assign({}, res.data)
               data.communityId=JSON.stringify(res.data.communityId);
               data.floor=JSON.stringify(res.data.floor)
               this.formItem=data;
               this.formItem.communityId=data.communityId;
-              this.floorName=res.data.floor;
               this.communityName=res.data.communityName;
-              this.communityChange(res.data.communityId)
+              this.floorName=res.data.floor;
               
+              setTimeout(function(){
+                   _this.communityChange(res.data.communityId,res.data.floor)
+              },100)
+             
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -158,17 +164,18 @@ export default {
                 });
             }) 
       },
-      communityChange(id){
-          let reg=/^[0-9]*$/;
-          if(reg.test(id)){
-              if(id){
-                    this.getFloor(id);
-                }else{
-                    this.floorLis=[];
-                    this.formItem.floor=""
-              }
-          }
-        
+      communityChange(id,floorName){
+            this.floorLis=[];
+            this.formItem.floor="";
+            if(floorName){
+                 this.formItem.floor=JSON.stringify(floorName);
+                 this.floorName=floorName;
+            }
+            if(id){
+                this.getFloor(id);
+            }
+            
+
          
       },
       getFloor(id){

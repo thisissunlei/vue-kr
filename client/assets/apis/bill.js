@@ -219,7 +219,11 @@ export default  {
       url: '/api/krspace-pay/bill/wait/list',
       method: 'get'
     },
-   
+    //账单中心--客户接口--优化后
+    'get-payment-customer-like': {
+      url: '/api/krspace-pay/payment/customer/like',
+      method: 'get'
+    },
     
 
   }

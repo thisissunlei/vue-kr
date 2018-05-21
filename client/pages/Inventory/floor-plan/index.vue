@@ -2,12 +2,16 @@
   <div class="inventory-floor-map">
       <SectionTitle title="库存平面图"/>
       <div class="bar">
-          <SearchForm />
-          <Discount />
+          <SearchForm 
+           @searchForm="searchForm"
+          />
+          <Discount 
+           @countChange="countChange"
+          />
       </div>
       
       <FloorPlan
-            v-if="canvasData.length"
+            v-if="isLoading"
             @click="this.mouseClick"
             @enter="this.mouseEnter"
             @leave="this.mouseLeave"
@@ -29,7 +33,8 @@ import FloorPlan from '~/components/FloorPlan/index';
 import SectionTitle from '~/components/SectionTitle';
 import SearchForm from './searchForm';
 import publicFn from './publicFn';
-import Discount from './discount'
+import Discount from './discount';
+import utils from '~/plugins/utils';
 export default {
   components: {
     FloorPlan,
@@ -40,28 +45,38 @@ export default {
   data(){
     return{
        canvasData:[],
-       isClick:false
+       isClick:false,
+       tabForms:{},
+       isLoading:false,
+       discount:""
     }
-  },
-  mounted(){
-    this.getMapData({communityId:1,currentDate:'',floor:''});
   },
   methods:{
     //获取数据
     getMapData(values){
+        this.isLoading=false;
+        values.currentDate=utils.dateCompatible(values.currentDate);
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
+           this.isLoading=true;
         }).catch((error)=>{
            this.$Notice.error({
               title:error.message
             });
         })        
     },
+    searchForm(formItem){
+        this.tabForms=Object.assign({},formItem);
+        this.getMapData(this.tabForms);
+    },
+    countChange(param,countRadio){
+        this.discount=countRadio==1?'':param;
+    },
     mouseClick(event,every,all){
        this.isClick=true;
     },
     mouseEnter(event,every,all,canvas,scroll){
-        publicFn.poptipOver(event,every,all,canvas,scroll)
+        publicFn.poptipOver(event,every,all,canvas,scroll,this.discount)
     },
     mouseLeave(event,every,all){
         if(!this.isClick){
@@ -102,7 +117,9 @@ export default {
           z-index: 999;
           transition: all .1s;
           .title{
-              float: right;
+              position: absolute;
+              right:6px;
+              top:10px;
               width:10px;
               height:10px;
               font-size: 14px;
@@ -116,6 +133,9 @@ export default {
               background: transparent;
               display:inline-block;
               vertical-align: middle;
+          }
+          #gantt-chart-tool-tip-content{
+              padding-right:14px;
           }
       }
       .top-triangle{

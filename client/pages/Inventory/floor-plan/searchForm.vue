@@ -13,8 +13,9 @@
 
                 <Select 
                         v-model="formItem.floor" 
-                        placeholder="请输入楼层" 
+                        placeholder="全部楼层" 
                         style="width: 90px;margin-right:54px;"
+                        @on-change="floorChange"
                     >
                         <Option v-for="item in floorList" :value="item.floor" :key="item.floor">{{ item.floorName }}</Option>
                 </Select> 
@@ -22,9 +23,10 @@
 
             <Form-item label="库存日期" class='daily-form'>
                 <DatePicker 
-                    v-model="formItem.inventoryDate" 
+                    v-model="formItem.currentDate" 
                     placeholder="请输入库存日期"
                     style="width: 200px;margin-right: 9px;"
+                    @on-change="dateChange"
                 />
             </Form-item>
             <Tooltip content="查询某一天，以平面图的方式展示某个社区库存情况。如需查询某个时间段的可租商品，可前往可租商品查询页进行查询" placement="bottom">
@@ -44,14 +46,51 @@ export default {
        formItem:{
           communityId:'',
           floor:'',
-          inventoryDate:publicFn.getToDay()
+          currentDate:publicFn.getToDay()
        }
     }
   },
+  mounted(){
+      this.getCommunityList();
+  },
   methods:{
-     communityChange(){
-
-     }
+     //社区接口
+    getCommunityList(id){
+        var params={
+            cityId:id?id:''
+        }
+        this.$http.get('getDailyCommunity',params).then((res)=>{
+            this.communityList=res.data;
+            this.formItem.communityId=res.data?res.data[0].id:'';
+        }).catch((error)=>{
+            this.$Notice.error({
+                title:error.message
+            });
+        })
+    },
+    //楼层接口
+    getFloorList(param){
+        this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
+            this.floorList=res.data;
+        }).catch((error)=>{
+            this.$Notice.error({
+                title:error.message
+            });
+        })
+    },
+    communityChange(param){
+        this.formItem.communityId=param;
+        this.$emit('searchForm',this.formItem);
+        this.getFloorList(param); 
+    },
+    floorChange(param){
+        this.formItem.floor=param;
+        this.$emit('searchForm',this.formItem);
+    },
+    dateChange(param){
+        this.formItem.currentDate=param;
+        this.$emit('searchForm',this.formItem);
+    }
   }
 }
 </script>

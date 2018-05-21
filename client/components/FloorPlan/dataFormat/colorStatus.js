@@ -11,7 +11,7 @@ function colorStatus(status){
             color='#FFC684'
             break; 
         default:{
-            color:'#E4E4E4'
+            color='#E4E4E4'
             break;  
         }
     }

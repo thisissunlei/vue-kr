@@ -12,12 +12,14 @@
       
       <FloorPlan
             v-if="isLoading"
-            @click="this.mouseClick"
-            @enter="this.mouseEnter"
-            @leave="this.mouseLeave"
-            :data="canvasData"
+            v-for="item in canvasData"
+            :key="item.id"
+            @click="mouseClick"
+            @enter="mouseEnter"
+            @leave="mouseLeave"
+            :data="item"
       />
-
+      
       
       <div id="gantt-chart-tool-tip">
           <div class="title" @click="this.closePop"/>

@@ -23,14 +23,14 @@
 <script>
 import init from './draw';
 import dataFormat from './dataFormat';
-var canvasData =[]
+var canvasData ={};
 var flowChart= '';
 var scrollDom='';
  export default {
     props:{
         data:{
-          default:()=>[],
-          type:Array 
+          type:Object,
+          default:{}
         }
     },
     data(){

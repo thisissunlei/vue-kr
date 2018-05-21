@@ -6,14 +6,16 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
     var myDiagram =
        $(go.Diagram, content,         
         {   
-            initialDocumentSpot: go.Spot.TopLeft,
-            //是否可以拖动
+            //在视口中左上对齐(背景可以不被拖动)
+            contentAlignment:go.Spot.TopLeft,
+            //不允许用户更改图表
             isReadOnly: true,
             //是否可以缩放
             allowZoom: false,
+            //是否可以移动对象
             allowMove: false
         });
-    
+       
     //导出
     var button = document.getElementById(pic);
         button.addEventListener('click', function() {
@@ -39,11 +41,12 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
         return {stroke: "white", font: "bold 12px PingFangSC-Medium" };
     }
 
+    
     myDiagram.add(
         $(go.Part,  // this Part is not bound to any model data
           { layerName: "Background", position: new go.Point(0, 0),
             selectable: false, pickable: false },
-          $(go.Picture, "https://upload.wikimedia.org/wikipedia/commons/9/9a/Sample_Floorplan.jpg")
+          $(go.Picture, "http://optest03.krspace.cn/krspace_oa_web/doc/docFile/viewFile?sourceservicetoken=AF6nQfcS0uARjSHa6gf4EDwKqoPfHQctOaDrWZTN7GB_Sw_ciIv4_J1PT1Edew1D&operater=2&fileId=54194")
         ));
     
     //绘制

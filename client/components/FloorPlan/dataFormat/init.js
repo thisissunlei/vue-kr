@@ -1,12 +1,12 @@
 import colorStatus from './colorStatus';
 function init(data){
     var dataRender=[];
-    if(data.length){
+    if(data.figures.length){
         var spaceArr=[];
         var minW=36;
         var minH=36;
         var min=36;
-        data[0].figures.map((item,index)=>{
+        data.figures.map((item,index)=>{
             //找空间最小宽度
             if(item.belongType=='SPACE'){
                 spaceArr.push(item);

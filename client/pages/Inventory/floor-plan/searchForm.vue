@@ -13,7 +13,7 @@
 
                 <Select 
                         v-model="formItem.floor" 
-                        placeholder="全部楼层" 
+                        placeholder="请输入楼层" 
                         style="width: 90px;margin-right:54px;"
                         @on-change="floorChange"
                     >
@@ -45,7 +45,7 @@ export default {
        floorList:[],
        formItem:{
           communityId:'',
-          floor:'',
+          floor:' ',
           currentDate:publicFn.getToDay()
        }
     }
@@ -72,6 +72,10 @@ export default {
     getFloorList(param){
         this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
             this.floorList=res.data;
+            if(res.data.length>1){
+                this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
+            }
+            this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
         }).catch((error)=>{
             this.$Notice.error({
                 title:error.message

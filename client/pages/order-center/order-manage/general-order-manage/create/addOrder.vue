@@ -77,8 +77,8 @@
                     </FormItem>
                 </Col>
                  <Col  class="col">
-                    <FormItem label="部门" style="width:252px" prop="saleDate">
-                    <SelectSaler name="formItem.salesperson" :onchange="onSalerChange" :value="salerName"/>
+                    <FormItem label="部门" style="width:252px" prop="department">
+                    <SelectSaler name="formItem.department" :onchange="onSalerChange" :value="salerName"/>
                     </FormItem>
                 </Col>
                 
@@ -149,7 +149,8 @@ export default {
                     remark:'',
                     salesperson:1,
                     money:'',
-                    feeType:''
+                    feeType:'',
+                    department:''
                 },
 
                 ruleCustom:{

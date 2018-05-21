@@ -34,6 +34,22 @@ export default  {
     'getOptionalStatiscal': {
         url: '/api/krspace-finance-web/inventory/rent-statistics',
         method: 'get'
+    },
+    //每日库存-时间轴
+    'getDailyTimeLine': {
+        url: '/api/krspace-finance-web/inventory/list/timeline',
+        method: 'get'
+    },
+    //可租库存-时间轴
+    'getOptionalTimeLine': {
+        url: '/api/krspace-finance-web/inventory/rent-list/timeline',
+        method: 'get'
+    },
+
+    //社区招商
+    'community-investment-list': {
+        url: '/api/krspace-finance-web/inventory/cmt-investment/list',
+        method: 'get'
     }
   }
   

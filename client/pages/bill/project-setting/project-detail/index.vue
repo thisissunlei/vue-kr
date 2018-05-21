@@ -6,37 +6,51 @@
                     <div class='title-name-line'><span class='title-name'>项目档案</span></div>
                     <div class='title-bread'>
                         <Breadcrumb separator=">">
-                            <BreadcrumbItem to="/bill/project-setting">开业进度总览</BreadcrumbItem>
+                            <BreadcrumbItem to="/bill/project-setting">首页</BreadcrumbItem>
                             <BreadcrumbItem><span @click="currentClick" style="cursor:pointer;">{{queryData.name}}</span></BreadcrumbItem>
                         </Breadcrumb>
                     </div>
                 </div>
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
-                <!-- <div class='title-right' v-if="signMask" style="margin-right:20px;"><Button type="primary" @click="cancelSure">确认合同已签署</Button></div> -->
             </div>
-            <GanttChart
-                v-if="!isLoading "
-                :data="listData"
-                :treeData="treeData"
-                type="edit"
-                :start="startTime"
-                :end="endTime"
-                :treeIds="taskIds"
-                @rightOver="rightOver"
-                @treeClick="treeClick"
-                @editClick="editTask"
-            >
-                <div class='detail-detail' slot="leftBar">
-                    <DetailTaskList
-                        :data="listData"
-                        @addClick="addTask"
-                        @editClick="editTask"
-                        @leftOver="leftOver"
-                        @iconClick="iconClick"
-                        :scrollWidth="scrollWidth"
-                    />
-                </div>
-            </GanttChart>
+            <Tabs size="default" @on-click="tabClick" :animated="false">
+                <TabPane label="物业档案" name="property">
+                    <ArchivesManagement v-if="activeTab=='property'" code="property"/>
+
+                </TabPane>
+                <TabPane label="产品档案"  name="product">
+
+                    
+                    <ArchivesManagement v-if="activeTab=='product'" code="product"/>
+                </TabPane>
+                 <!-- <TabPane label="项目进度" name="tab3">
+                        <GanttChart
+                            v-if="!isLoading "
+                            :data="listData"
+                            :treeData="treeData"
+                            type="edit"
+                            :start="startTime"
+                            :end="endTime"
+                            :treeIds="taskIds"
+                            @rightOver="rightOver"
+                            @treeClick="treeClick"
+                            @editClick="editTask"
+                        >
+                            <div class='detail-detail' slot="leftBar">
+                                <DetailTaskList
+                                    :data="listData"
+                                    @addClick="addTask"
+                                    @editClick="editTask"
+                                    @leftOver="leftOver"
+                                    @iconClick="iconClick"
+                                    :scrollWidth="scrollWidth"
+                                />
+                            </div>
+                        </GanttChart>
+
+                </TabPane> -->
+            </Tabs>
+         
 
         </div>
 
@@ -131,6 +145,7 @@ import Vue from 'vue';
 import publicFn from '../publicFn';
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from './object-detail-title';
+import ArchivesManagement from '../archives-management';
 var ganttChartScrollTop = 0;
 
 
@@ -143,7 +158,8 @@ export default {
         GanttChart,
         Message,
         Drawer,
-        ObjectDetailTitle
+        ObjectDetailTitle,
+        ArchivesManagement
     },
     data(){
         return{
@@ -176,6 +192,7 @@ export default {
                 pageSize:10,
                 totalPages:1,
             },
+            activeTab:'property',
             difference:7,
             endTime:this.getEndDay(11),
             watchRecord:[],
@@ -184,7 +201,6 @@ export default {
             taskStatus:'',
 
             treeData:[],
-            signMask:false,
             openSure:false,
             scrollWidth:0,
 
@@ -209,37 +225,16 @@ export default {
         this.queryData=this.$route.query;
     },
     mounted(){
-        // return;
-         this.scrollWidth= utils.getScrollBarSize();
+       
          GLOBALSIDESWITCH("false");
-         this.signMask=this.queryData.status==1?true:false;
-
-         this.leftOver();
-         this.rightOver();
-         this.getSelectData();
-         setTimeout(() => {
-            var leftDom=document.getElementById('vue-chart-left-detail-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            if(leftDom){
-                leftDom.style.maxHeight = clientHeight - 362+"px";
-            }
-            if(rightDom){
-                rightDom.style.maxHeight = clientHeight - 362 +"px";
-            }
-         }, 200);
-         window.addEventListener('resize',()=>{
-            var leftDom=document.getElementById('vue-chart-left-detail-list');
-            var rightDom = document.getElementById("vue-chart-right-draw-content");
-            var clientHeight = document.documentElement.clientHeight;
-            var dom = document.getElementById('layout-content-main');
-            dom.style.height = document.documentElement.clientHeight-130 + "px"
-            leftDom.style.maxHeight = clientHeight - 362+"px";
-            rightDom.style.maxHeight = clientHeight - 362 +"px";
-         },false)
+       
     
     },
     methods:{
+        tabClick(name){
+            this.activeTab = name;
+            console.log(name,"ppppp")
+        },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-detail-list');
             var rightDom=document.getElementById('vue-chart-right-draw-content');
@@ -269,7 +264,7 @@ export default {
         },
         getSelectData(){
 
-            this.$http.post('get-enum-all-data',{
+            this.$http.get('get-enum-all-data',{
                 enmuKey:'com.krspace.erp.api.enums.pm.PmDepartment'
             }).then((response)=>{
                this.selectFormat(response.data)
@@ -313,7 +308,7 @@ export default {
            this.cancelStar();
         },
         currentClick(){
-           this.initTree();
+        //    this.initTree();
         },
         cancelStar(){
             this.openStar=!this.openStar;
@@ -687,6 +682,34 @@ export default {
        width:100%;
        background: #fff;
        display:inline-block;
+       .ivu-tabs{
+            overflow: visible;
+        }
+        .nav-text.ivu-tabs-nav{
+            width: 100%;
+        }
+        .ivu-tabs-ink-bar{
+            top:0px;
+            height: 4px;
+           
+            border-top: 0px;
+            border-bottom: 0px;
+            box-sizing: border-box;
+        }
+        .ivu-tabs-nav .ivu-tabs-tab{
+            width: 50%;
+            text-align: center;
+            line-height: 35px;
+            padding: 8px 20px;
+            
+        }
+        .ivu-tabs-no-animation{
+            overflow: visible !important;
+        }
+        .ivu-tabs-bar{
+            margin: 0px;
+        }
+       
        .detail-title{
            background: #F5F6FA;
            height:50px;

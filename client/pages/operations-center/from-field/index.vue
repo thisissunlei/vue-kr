@@ -306,6 +306,7 @@
                 if(!isSubmit){
                     return;
                 }
+                console.log("------",this.newPageData)
                 var params =Object.assign({},this.newPageData);
                 this.$http.post('post-from-field-newpage',params, r => {
                     this.isNewPageSubmit = false;
@@ -328,9 +329,9 @@
             newPageDataChange(data){
                 if(data){
                     data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
-                    data.leaveDate = dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.leaveDate))
                     this.newPageData = Object.assign({},data);
                     var params = Object.assign({},data)
+                  
                     this.$http.post('post-create-from-field',params, r => {
                         this.isNewPageSubmit = true;
                     }, e => {

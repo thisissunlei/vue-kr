@@ -8,13 +8,6 @@
 <template>
 
     <div>
-        <Waiting 
-            :type="MessageType" 
-            :openMessage="openMessage"
-            :warn="warn"
-            @changeOpen="onChangeOpen"
-        ></Waiting>
-    
     </div>
 </template>
 <script>

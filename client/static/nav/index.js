@@ -73,11 +73,12 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value);
-        if(j_li.length){
-            j_li[0].setAttribute("class", "active");
+        var j_li = document.getElementsByName(value)[0];
+        if(j_li){
+            j_li.setAttribute("class", "active");
+        }else{
+            return
         }
-
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -162,9 +163,11 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
+            console.log(item,"kkkkkkkkkk")
             let iconName = item.iconName ? item.iconName : '';
-            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
+                html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
+            
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -422,7 +425,6 @@
 
     global.GLOBALHEADERSET = Router.setDefaultHeader;
 
-
     Router.init();
     //第一级菜单
     function firstMenus(firstData) {
@@ -468,7 +470,6 @@
             }
 
         })
-
         return arr;
     }
     //第三级菜单
@@ -587,6 +588,11 @@
                             router: 'user/personalManage/peopleState',
 
                         },
+                        {
+                            primaryText: '工作人员职务',
+                            menuCode: 'hrm_job_list',
+                            router: 'user/basicConfig/postList',
+                        },
                     ]
                 },
             ]
@@ -605,7 +611,6 @@
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
-
                         {
 
                             primaryText: '社区',
@@ -649,24 +654,6 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
-
-                        {
-                            primaryText: '门禁权限组管理',
-                            menuCode: 'auth_user_group_list',
-                            router: 'doorpermission/doorgroupmanage',
-                        }, {
-                            primaryText: "企业门禁授权",
-                            router: 'member/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        }
-                    ]
-                },
-                {
-                    primaryText: '社区经营',
-                    iconName: 'icon-com',
-                    iconColor: '#79859a',
-                    router: 'community',
-                    menuItems: [
                         {
                             primaryText: '库存平面图',
                             menuCode: 'cmt_run',
@@ -683,15 +670,20 @@
                             menuCode: 'stat_group',
                         },
                         {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]
-                },
-            ]
+                    ]	
+                }, 
+             ]
         }
-
     }
     // 社区运营
     function getOperationNav(params) {
@@ -826,6 +818,12 @@
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
                         // },
+                        {
+                            primaryText: '电视图库管理',
+                            menuCode: 'tv_ad_storage',
+                            type: 'vue',
+                            router: 'smart-hardware/map-depot'
+                        },
                     ]
                 },
                 {
@@ -928,6 +926,12 @@
                             primaryText: '业务代码配置',
                             router: 'permission/opCode',
                             menuCode: 'sso_businessCode_base',
+                        },
+                        {
+                            primaryText: '运维工具',
+                            menuCode: 'ops_tool_management',
+                            type: 'vue',
+                            router: 'ops'
                         },
 
                     ]
@@ -1202,6 +1206,11 @@
                         primaryText: "账单(老数据)",
                         router: 'finance/manage/orderbill/orderList',
                         menuCode: 'fina_account_list'
+                    },
+                    {
+                        primaryText: "审核列表(老数据)",
+                        router: 'finance/manage/audit/auditlist',
+                        menuCode: 'fina_verify_page'
                     },
                     {
                         primaryText: "回款",

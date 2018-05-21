@@ -20,6 +20,7 @@
             :loading="loading1"
             :disabled="disabled"
             @on-change="changeContent"
+            :label-in-value="labelInValue"
             >
             <Option v-for="(option, index) in customerOptions" :value="option.value" :key="option.value">{{option.label}}</Option>
         </Select>
@@ -34,7 +35,11 @@ import http from '~/plugins/http.js';
         props:{
             onchange :Function,
             value:String,
-            disabled:Boolean
+            disabled:Boolean,
+            labelInValue:{
+                default:false,
+                type:Boolean
+            },
         },
         data () {
             

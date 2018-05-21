@@ -1,10 +1,11 @@
 <template>
-	<div class="edit-label">
+	<div class="ui-kr-cascader">
         <EditLabel 
             :readOrEdit="readOrEdit" 
             :value="labelValue"
             @okClick="okClick"
             @cancelClick="cancelClick"
+            @recordClick="recordClick"
         >
             <Cascader
                 :data="data"
@@ -13,7 +14,8 @@
                 :clearable='clearable'
                 @on-change="change"
                 @on-visible-change="visibleChange"
-                style="width:252px;"
+               
+                
             />
         </EditLabel>
 	</div>
@@ -52,6 +54,14 @@ export default {
             default:false,
             type:Boolean
         },
+        width:{
+            default:250,
+            type:[String,Number]
+        },
+        inline:{
+            default:false,
+            type:Boolean
+        }
 	},
 	data(){
 		return {
@@ -71,6 +81,10 @@ export default {
         this.cityValue = this.cityValue.reverse();
     },
 	methods:{
+        recordClick(value){
+            
+            this.$emit('recordClick',value)
+        },
         change(value){
             this.labelValue=(value&&value.length) ? this.fnTreeId(value[2],this.data) : '';
             this.$emit('change',value);
@@ -115,7 +129,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.edit-label{
+.ui-kr-cascader{
+    position: relative;
+    height: 40px;
+    .edit-label{
+       height: 40px;
+    }
 	.edit-icon{
 		
 		position: absolute;

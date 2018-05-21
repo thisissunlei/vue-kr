@@ -78,7 +78,21 @@
                 </Col>
                  <Col  class="col">
                     <FormItem label="部门" style="width:252px" prop="department">
-                    <SelectSaler name="formItem.department" :onchange="onSalerChange" :value="salerName"/>
+                    <!-- <SelectSaler name="formItem.department" :onchange="onSalerChange" :value="salerName"/> -->
+                     <Select 
+                        v-model="formItem.department" 
+                        placeholder="请输入费用明细类型" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in departmentList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.desc }}
+                        </Option>
+                     </Select> 
                     </FormItem>
                 </Col>
                 
@@ -140,7 +154,7 @@ export default {
                 typeList:[],
                 freeList:[],
                 type:false,
-
+                departmentList:[],
                 formItem: {
                     customerId: 1,
                     communityId: 1,
@@ -192,9 +206,25 @@ export default {
          mounted(){
             GLOBALSIDESWITCH("false");
             this.getTypeData();
+            this.getDepartmentData();
         },
         
          methods: {
+            
+            getDepartmentData(){
+                this.$http.get('get-enum-all-data',{
+                    enmuKey:'com.krspace.op.api.enums.orderCurrency.Department'
+                }).then((response)=>{
+                    // this.selectFormat(response.data)
+                    // console.log("-------",response.data)
+                    this.departmentList = [].concat(response.data);
+
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    })
+                })
+            },
             submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 

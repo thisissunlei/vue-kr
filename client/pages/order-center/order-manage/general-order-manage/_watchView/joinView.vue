@@ -33,8 +33,8 @@
 			<LabelText label="销售日期：">
 				{{saleDate}}
 			</LabelText>
-			<LabelText label="销售日期：">
-				{{basicInfo.department}}
+			<LabelText label="部门：">
+				{{basicInfo.departmentName||'无'}}
 			</LabelText>
 			<div class='remak'>
 				<span>备注信息：</span>

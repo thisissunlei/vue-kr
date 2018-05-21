@@ -79,7 +79,23 @@
                 </Col>
                  <Col  class="col">
                     <FormItem label="部门" style="width:252px" prop="department">
-                        <SelectSaler name="formItem.department"  :value="salespersonName" disabled/>
+                        <!-- <SelectSaler name="formItem.department"  :value="salespersonName" disabled/> -->
+                        <Select 
+                            v-model="formItem.department" 
+                            :placeholder="formItem.department?'请输入部门':'无'" 
+                            style="width: 252px"
+                            clearable
+                            disabled
+                        >
+                            <Option 
+                                v-for="item in departmentList" 
+                                :value="item.value" 
+                                :key="item.value"
+                               
+                            >
+                                {{ item.desc }}
+                            </Option>
+                        </Select> 
                     </FormItem>
                 </Col>
                 <FormItem label="备注信息" prop="remark" style="width:702px">
@@ -142,6 +158,7 @@ export default {
                 customerName:'',
                 communityName:'',
                 salespersonName:'请选择',
+                departmentList:[],
 
                 formItem: {
                     customerId: '',
@@ -190,13 +207,28 @@ export default {
         },
 
          mounted(){
+             GLOBALSIDESWITCH("false");
             this.getTypeData();
             this.getDetailData();
-            GLOBALSIDESWITCH("false");
+            this.getDepartmentData();
+            
         },
 
         methods: {
+             getDepartmentData(){
+                this.$http.get('get-enum-all-data',{
+                    enmuKey:'com.krspace.op.api.enums.orderCurrency.Department'
+                }).then((response)=>{
+                    // this.selectFormat(response.data)
+                    // console.log("-------",response.data)
+                    this.departmentList = [].concat(response.data);
 
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    })
+                })
+            },
             getDetailData(){
                 let {params}=this.$route;
                 let from={

@@ -120,8 +120,12 @@
                     },
                      {
                         title: '部门',
-                        key: 'money',
-                        align:'center'
+                        key: 'departmentName',
+                        align:'center',
+                        render(tag, params){
+                            let str = params.row.departmentName?params.row.departmentName:'无'
+                            return str;
+                        }
                     },
                     {
                         title: '订单金额',

@@ -50,5 +50,10 @@ export default  {
         url: '/api/krspace-op-web/operation/due/list',
         method: 'post'
     },
+    //社区招商
+    'community-investment-list': {
+        url: '/api/krspace-finance-web/inventory/cmt-investment/list',
+        method: 'get'
+    }
   }
   

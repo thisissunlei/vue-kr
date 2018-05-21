@@ -1,5 +1,6 @@
 <template>
-    <div class='m-reduce-list'>
+    <div class='m-join-list'>
+            
             <div class='list-banner'>
                     <div class='list-btn'>
                         <Button type="primary" @click="jumpJoin" class='join-btn'>入驻</Button>
@@ -17,20 +18,19 @@
                                 style="width: 252px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
-                        </div>
-                        <div class='m-search' @click="submitLowerSearch">搜索</div>
-                        <div class="m-bill-search" @click="showSearch">
-                          <span/>  
-                        </div> 
+                         </div>
+                         <div class='m-search' @click="submitLowerSearch">搜索</div>
+                         <div class="m-bill-search" @click="showSearch">
+                           <span/>
+                         </div> 
                    </div>
             </div>
 
-
-            <Table :columns="joinOrder" :data="joinData" border class='list-table'/>
-            <div style="margin: 10px 20px;overflow: hidden">
-                    <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_reduce_export'/>
+            <Table :columns="joinOrder" :data="joinData" border  class='list-table'/>
+            <div  class='list-footer'>
+                    <!-- <Buttons label='导出'  type='primary' @click='submitExport' checkAction='seat_order_in_export'/> -->
                     <div style="float: right;">
-                        <Page :total="totalCount" :page-size='15' @on-change="onPageChange" show-total show-elevator/>
+                        <Page :total="totalCount" :page-size='15' show-total show-elevator @on-change="onPageChange"/>
                     </div>
             </div>
 
@@ -39,13 +39,13 @@
                 title="高级搜索"
                 width="660"
             >
-                <HeightSearch @bindData="onUpperChange" mask='reduce' :keys="mask" :params="switchParams"/>
+                <HeightSearch mask='replace' @bindData="onUpperChange" :keys="mask" :params="switchParams"/>
                 <div slot="footer">
                     <Button type="primary" @click="submitUpperSearch">确定</Button>
-                    <Button type="ghost" style="margin-left: 8px" @click="showSearch">取消</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
                 </div>
             </Modal>
-
+            
             <Modal
                 v-model="openNullify"
                 title="提示信息"
@@ -53,7 +53,7 @@
             >
                 <Nullify/>
                 <div slot="footer">
-                    <Button type="primary" @click="submitNullify" :disabled="nullDisabled">确定</Button>
+                    <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
                 </div>
             </Modal>
@@ -72,7 +72,7 @@
             >
                 <ApplyContract/>
                 <div slot="footer">
-                    <Button type="primary" @click="submitApply" :disabled="applyDisabled">确定</Button>
+                    <Button type="primary" :disabled="applyDisabled" @click="submitApply">确定</Button>
                     <Button type="ghost" style="margin-left:8px" @click="closeApply">取消</Button>
                 </div>
             </Modal>
@@ -82,16 +82,18 @@
 
 
 <script>
+
     import HeightSearch from './heightSearch';
-    import ApplyContract from './applyContract';
     import Nullify from './nullify';
+    import ApplyContract from './applyContract';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
     import Buttons from '~/components/Buttons';
+    
 
     export default {
-        name:'Reduce',
+        name:'Replace',
         components:{
             HeightSearch,
             Nullify,
@@ -109,9 +111,12 @@
                     page:1,
                     pageSize:15,
                     customerName:"",
+                    orderType:'REPLACE'
                 },
 
-                switchParams:{},
+                switchParams:{
+                     orderType:'REPLACE'
+                },
                 openMessage:false,
                 nullDisabled:false,
                 applyDisabled:false,
@@ -119,9 +124,9 @@
                 MessageType:'',
                 upperData:{},
                 upperError:false,
-                totalCount:1,
                 id:'',
                 props:{},
+                totalCount:1,
                 openSearch:false,
                 openNullify:false,
                 openApply:false,
@@ -144,55 +149,93 @@
                         align:'center'
                     },
                     {
-                        title: '减租开始日期',
-                        key: 'startDate',
+                        title: '服务费总额',
+                        key: 'rentAmount',
                         align:'center',
-                        render(tag,params){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate));
-                            return time;
+                        render(h,params){ 
+                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):params.row.rentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                  
                         }
                     },
                     {
-                        title: '减租金额',
-                        key: 'rentAmount',
+                        title: '服务保证金',
+                        key: 'depositAmount',
                         align:'center',
-                        render(tag,params){ 
-                          var money=params.row.rentAmount?utils.thousand(params.row.rentAmount):'';                  
-                          return <span class="u-txt">{money}</span>;
+                        render(h,params){ 
+                          var money=params.row.depositAmount?utils.thousand(params.row.depositAmount):params.row.depositAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
+                        }
+                    },
+                    {
+                        title: '服务期限',
+                        key: 'startDate',
+                        align:'center',
+                         width:100,
+                        render(h, params){
+                            return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)) 
+                        }
+                    },
+                    {
+                        title: '旧服务费退还',
+                        key: 'refundRentAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.refundRentAmount?utils.thousand(params.row.refundRentAmount):params.row.refundRentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
+                        }
+                    },
+                    {
+                        title: '保证金旧转新',
+                        key: 'transferDepositAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.transferDepositAmount?utils.thousand(params.row.transferDepositAmount):params.row.transferDepositAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
+                        }
+                    },
+                     {
+                        title: '扣除保证金',
+                        key: 'deductRentAmount',
+                        align:'center',
+                        render(h,params){ 
+                          var money=params.row.deductRentAmount?utils.thousand(params.row.deductRentAmount):params.row.deductRentAmount;
+                          return h('div', [
+                                h('span', {
+                                    props: {
+                                        class: 'u-txt'
+                                    },
+                                }, money),
+                            ]);                 
                         }
                     },
                     {
                         title: '订单状态',
-                        key: 'orderStatus',
+                        key: 'orderStatusName',
                         align:'center',
-                        render(tag, params){
-                             var orderStatus={
-                               'NOT_EFFECTIVE':'未生效',
-                               'EFFECTIVE':'已生效',
-                               'INVALID':'已作废'
-                            }
-                            for(var item in orderStatus){
-                                if(item==params.row.orderStatus){
-                                    var style={};
-                                    if(item=='NOT_EFFECTIVE'){
-                                        style='u-red';
-                                    }
-                                    if(item=='INVALID'){
-                                        style='u-nullify';
-                                    }
-                                    return <span class={`u-txt ${style}`}>{orderStatus[item]}</span>;
-                                }
-                            }
-                        }
-                    },
-                    {
-                        title: '创建时间',
-                        key: 'ctime',
-                        align:'center',
-                        render(tag, params){
-                            let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
-                            return time;
-                        }
                     },
                     {
                         title: '生效时间',
@@ -212,7 +255,7 @@
                                tag(Buttons, {
                                    props: {
                                         type: 'text',
-                                        checkAction:'seat_order_reduce_view',
+                                        checkAction:'seat_order_view',
                                         label:'查看',
                                         styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                     },
@@ -223,7 +266,7 @@
                                     }
                                 })];
                            if(params.row.orderStatus=='NOT_EFFECTIVE'){
-                               btnRender.push( 
+                               btnRender.push(
                                 tag(Buttons,{
                                    props: {
                                         type: 'text',
@@ -251,11 +294,11 @@
                                     }
                                 }))
                                 if(params.row.versionType!=1){
-                                   btnRender.push(
-                                     tag(Buttons, {
+                                 btnRender.push(
+                                    tag(Buttons, {
                                         props: {
                                             type: 'text',
-                                            checkAction:'seat_order_reduce_edit',
+                                            checkAction:params.row.orderType=='CONTINUE'?'seat_order_continue_edit':'seat_order_in_edit',
                                             label:'编辑',
                                             styles:'color:rgb(43, 133, 228);padding: 2px 7px;'
                                         },
@@ -264,7 +307,7 @@
                                                 this.jumpEdit(params)
                                             }
                                         }
-                                    }, '编辑'))
+                                    }))
                                 }
                            }
                            return tag('div',btnRender);  
@@ -278,7 +321,7 @@
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='reduce'){
+                    if(nextProps.mask=='replace'){
                        this.getListData(this.switchParams);
                        this.params=this.switchParams; 
                     }
@@ -288,32 +331,18 @@
         
         mounted(){
             let mask=this.$route.query.mask;
-            if(!mask||mask=='reduce'){
-               sessionStorage.setItem('paramsReduce',JSON.stringify(this.$route.query));
+            if(!mask||mask=='replace'){
+               sessionStorage.setItem('paramsReplace',JSON.stringify(this.$route.query));
             }
 
-            let jsonJoin=JSON.parse(sessionStorage.getItem('paramsReduce'));
-            this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15});
+            let jsonJoin=JSON.parse(sessionStorage.getItem('paramsReplace'));
+            this.switchParams=Object.assign({},jsonJoin,{page:1,pageSize:15, orderType:'REPLACE'});
             this.getListData(this.switchParams);
             this.params=this.switchParams;
         },
 
-
-        methods:{
-            getListData(params){
-                 this.$http.get('reduce-bill-list', params).then((response)=>{
-                     this.totalCount=response.data.totalCount;
-                     this.joinData=response.data.items;
-                     this.openSearch=false;
-                 }).catch((error)=>{
-                     this.openMessage=true;
-                     this.MessageType="error";
-                     this.warn=error.message;
-                 })
-            },
-
+        methods:{   
             submitNullify (){
-                var _this=this;
                 let params={
                     id:this.id
                 };
@@ -322,10 +351,31 @@
                  }
                  this.nullDisabled=true;
                  this.closeNullify();
-                 this.$http.post('join-nullify', params).then((response)=>{
+                 this.$http.post('join-nullify', params).then((response) => {
                      this.openMessage=true;
                      this.MessageType="success";
                      this.warn='作废成功';
+                     this.getListData(this.params);
+                }).catch( (error) => {
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                })
+            },
+
+            submitApply(){
+                let params={
+                    id:this.id
+                };
+                if(this.applyDisabled){
+                    return ;
+                }
+                 this.applyDisabled=true;
+                 this.closeApply();
+                 this.$http.post('apply-contract', params).then((response)=>{
+                     this.openMessage=true;
+                     this.MessageType="success";
+                     this.warn='申请成功';
                      this.getListData(this.params);
                  }).catch((error)=>{
                      this.openMessage=true;
@@ -333,31 +383,10 @@
                      this.warn=error.message;
                  })
             },
-            
-            submitApply(){
-                let params={
-                    id:this.id
-                };   
-                if(this.applyDisabled){
-                    return ;
-                }  
-                 this.applyDisabled=true;
-                 this.closeApply();
-                 this.$http.post('apply-contract', params).then((response)=>{
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='申请成功';
-                    this.getListData(this.params);
-                 }).catch((error)=>{
-                    this.openMessage=true;
-                    this.MessageType="error";
-                    this.warn=error.message;
-                 })   
-            },
 
-            submitLowerSearch(){
-                 this.params.mask='reduce';
-                 utils.addParams(this.params);
+            submitExport (){
+                this.props=Object.assign({},this.props,this.params);
+                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-add/export');
             },
 
             submitUpperSearch(){
@@ -365,19 +394,31 @@
                     return ;
                 }
                 this.params=Object.assign({},this.params,this.upperData);
-                this.params.mask='reduce';
+                this.params.mask='replace';
                 this.params.page=1;
                 this.params.pageSize=15;
-                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
-                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 this.params.effectEnd=this.params.effectEnd?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectEnd)):'';
                 this.params.effectStart=this.params.effectStart?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.effectStart)):'';
+                this.params.cStartDate=this.params.cStartDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cStartDate)):'';
+                this.params.cEndDate=this.params.cEndDate?dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(this.params.cEndDate)):'';
                 utils.addParams(this.params);
             },
 
-            submitExport (){
-                this.props=Object.assign({},this.props,this.params);
-                utils.commonExport(this.props,'/api/krspace-op-web/order-seat-reduce/export');
+            submitLowerSearch(){
+                this.params.mask='replace';
+                utils.addParams(this.params);
+            },
+
+            getListData(params){
+                 this.$http.get('get-replace-list', params).then((response)=>{
+                     this.totalCount=response.data.totalCount;
+                     this.joinData=response.data.items;
+                     this.openSearch=false;
+                 }).catch((error)=>{
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
             },
 
             onPageChange (index) {
@@ -391,48 +432,53 @@
                 this.upperData=params;
             },
 
-            onKeyEnter: function (ev) {
-                this.submitLowerSearch();
-            },
-
             onMessageChange(data){
                 this.openMessage=data;
             },
 
-            showSearch () {
-                this.openSearch=!this.openSearch;
+            onKeyEnter: function (ev) {
+                this.submitLowerSearch();
             },
 
-            showNullify(params){
-                this.id=params.row.id;
-                this.closeNullify();
-            },
-
-            jumpReduce(){
-                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
-            },
-
-            jumpEdit(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduce`,'_blank')
-            },
-
-            showApply(params){
-                this.id=params.row.id;
-                this.closeApply();
-            },
-
-            jumpView(params){
-                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/reduceView`,'_blank');
-            },
-            jumpReplace(){
-                window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
-            },
             jumpJoin(){
                 window.open('/order-center/order-manage/station-order-manage/create/join','_blank');
             },
 
             jumpRenew(){
                 window.open('/order-center/order-manage/station-order-manage/create/renew','_blank');
+            },
+            jumpReplace(){
+                window.open('/order-center/order-manage/station-order-manage/create/replace','_blank');
+            },
+
+            jumpReduce(){
+                window.open('/order-center/order-manage/station-order-manage/create/reduce','_blank')
+            },
+
+
+            jumpView(params){
+                let edit = params.row.orderStatus ==='NOT_EFFECTIVE'?true:false
+                window.open(`/order-center/order-manage/station-order-manage/${params.row.id}/replaceView?edit=${edit}`,'_blank');
+            },
+
+            jumpEdit(values){
+                var popup = window.open();
+                let params={
+                    orderId:values.row.id
+                }
+                this.$http.get('order-first-payed', params).then((response)=>{
+                    popup.location = `/order-center/order-manage/station-order-manage/${values.row.id}/replace`;
+                 }).catch((error)=>{
+                     popup.close();
+                     this.openMessage=true;
+                     this.MessageType="error";
+                     this.warn=error.message;
+                 })
+            },
+
+            showNullify(params){
+                this.id=params.row.id;
+                this.closeNullify();
             },
 
             closeNullify(){
@@ -443,13 +489,22 @@
             closeApply(){
                 this.openApply=!this.openApply;
                 this.applyDisabled=false;
+            },
+
+            showSearch () {
+                this.openSearch=!this.openSearch;
+            },
+
+            showApply(params){
+                this.id=params.row.id;
+                this.closeApply();
             }
         }
     }
 </script>
 
 <style lang='less' scoped>
-   .m-reduce-list{
+   .m-join-list{
         .list-banner{
             width:100%;
             padding:0 0 0 20px;

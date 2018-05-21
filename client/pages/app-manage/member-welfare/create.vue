@@ -43,7 +43,7 @@
                        <FormItem label="福利面值"  style="width:294px" prop="faceValue">
                           <Input 
                               v-model="formItem.faceValue" 
-                              :placeholder="[formItem.couponType=='OFFLINESTORE'?'10个字符以内,如“9折”':'10个字符以内,如“1000元礼券”']"
+                              :placeholder="formItem.couponType=='OFFLINESTORE'?'10个字符以内,如“9折”':'10个字符以内,如“1000元礼券”'"
                               :maxlength="faceValueLength"
                           />
                       </FormItem>
@@ -81,7 +81,7 @@
                                     <div class="demo-upload-list" v-if="this.imgLogoUrl">
                                         <img :src="this.imgLogoUrl">
                                         <div class="demo-upload-list-cover">
-                                            <Icon type="ios-trash-outline" @click.native="handleRemove()"></Icon>
+                                            <Icon type="ios-trash-outline" @click.native="logoRemove()"></Icon>
                                         </div>
                                     </div>
                                     <Upload
@@ -562,7 +562,6 @@ export default {
             return list;
             
       },
-
   }
 
 }

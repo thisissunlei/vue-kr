@@ -38,6 +38,7 @@ import http from '~/plugins/http.js';
 			originStationList:Array
 		},
         data () {
+        	console.log('this.stationData.submitData',this.stationData.submitData)
             return {
                 data:'',//平面图基础数据
                 selectedObjs:this.stationData.submitData,//编辑带回的数据
@@ -45,7 +46,7 @@ import http from '~/plugins/http.js';
                 // otherData:{},
                 newfloor:'3',//当前算选择的楼层
                 submitData:[],//已选择工位
-                scaleNumber:40,//比例
+                scaleNumber:60,//比例
                 Map:'',
                 inputEnd:'',//开始工位
                 inputStart:'',//结束工位
@@ -195,6 +196,7 @@ import http from '~/plugins/http.js';
 				let data = this.data;
 				let newfloor = this.newfloor;
 				let selectedObjs = this.selectedObjs;
+				console.log('渲染',selectedObjs)
 				let startToEnd = []
 				let originStationList = this.origin || [];
 				for (let i = 0; i < data.length; i++) {
@@ -336,13 +338,7 @@ import http from '~/plugins/http.js';
 						selectedObj['a'+floor].push(item)
 					})
 				}
-
-				console.log('selectedObj',selectedObjs)
-
-				
-				
-				
-				
+								
 				let del = [].concat(selectedObjs);
 				var delDataObj = Object.assign({}, deleteArr);
 				var allDataObj = Object.assign({}, submitData);
@@ -372,24 +368,18 @@ import http from '~/plugins/http.js';
 					}
 					submitDataAll = submitDataAll.concat(allDataObj[i]);
 				}
-				console.log('allDataObj',allDataObj,'all',submitDataAll)
-				console.log('selectedObj----2',selectedObjs)
 
 
 				for (let i in selectedObjs) {
-					console.log('selectedObjs[i]',selectedObjs[i].id)
 					for (let j in submitDataAll){
-						console.log('submitDataAll[i]',submitDataAll[j].id)
 
 						if(selectedObjs[i].name == submitDataAll[j].name){
-							console.log('selectedObjs[i].id == submitDataAll[j].id')
 							submitDataAll[j].originalPrice = selectedObjs[i].originalPrice ;
 						}
 					}
 					// submitDataAll = submitDataAll.concat(selectedObj[i]);
 				}
 
-				console.log('selectedObj',selectedObjs,'all',submitDataAll)
 
 
 				for (let i in delDataObj) {
@@ -410,7 +400,8 @@ import http from '~/plugins/http.js';
 					obj1.belongType = belongType;
 					obj1.whereFloor = item.whereFloor || item.floor;
 					obj1.name = item.name;
-					obj1.seatPrice = item.seatPrice || item.guidePrice;
+					// obj1.seatPrice = item.seatPrice || item.guidePrice || 0;
+					obj1.seatPrice = item.seatPrice;
 					obj1.capacity = item.capacity;
 					obj1.originalPrice = item.originalPrice || obj1.seatPrice|| '';
 					return obj1

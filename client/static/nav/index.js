@@ -73,11 +73,12 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value);
-        if(j_li.length){
-            j_li[0].setAttribute("class", "active");
+        var j_li = document.getElementsByName(value)[0];
+        if(j_li){
+            j_li.setAttribute("class", "active");
+        }else{
+            return
         }
-
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -422,7 +423,6 @@
 
     global.GLOBALHEADERSET = Router.setDefaultHeader;
 
-
     Router.init();
     //第一级菜单
     function firstMenus(firstData) {
@@ -586,6 +586,11 @@
                             menuCode: 'hrm_resourcesList_incumbency',
                             router: 'user/personalManage/peopleState',
 
+                        },
+                        {
+                            primaryText: '工作人员职务',
+                            menuCode: 'hrm_job_list',
+                            router: 'user/basicConfig/postList',
                         },
                     ]
                 },
@@ -800,6 +805,12 @@
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
                         // },
+                        {
+                            primaryText: '电视图库管理',
+                            menuCode: 'tv_ad_storage',
+                            type: 'vue',
+                            router: 'smart-hardware/map-depot'
+                        },
                     ]
                 },
                 {

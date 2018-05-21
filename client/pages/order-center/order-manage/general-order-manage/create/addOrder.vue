@@ -76,7 +76,25 @@
                     <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
                     </FormItem>
                 </Col>
-
+                 <Col  class="col">
+                    <FormItem label="部门" style="width:252px" prop="department">
+                    <!-- <SelectSaler name="formItem.department" :onchange="onSalerChange" :value="salerName"/> -->
+                     <Select 
+                        v-model="formItem.department" 
+                        placeholder="请输入部门" 
+                        style="width: 252px"
+                        clearable
+                    >
+                        <Option 
+                            v-for="item in departmentList" 
+                            :value="item.value" 
+                            :key="item.value"
+                        >
+                            {{ item.desc }}
+                        </Option>
+                     </Select> 
+                    </FormItem>
+                </Col>
                 
                 <FormItem label="备注信息" prop="remark" style="width:702px">
                     <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
@@ -136,7 +154,7 @@ export default {
                 typeList:[],
                 freeList:[],
                 type:false,
-
+                departmentList:[],
                 formItem: {
                     customerId: 1,
                     communityId: 1,
@@ -145,7 +163,8 @@ export default {
                     remark:'',
                     salesperson:1,
                     money:'',
-                    feeType:''
+                    feeType:'',
+                    department:''
                 },
 
                 ruleCustom:{
@@ -187,9 +206,25 @@ export default {
          mounted(){
             GLOBALSIDESWITCH("false");
             this.getTypeData();
+            this.getDepartmentData();
         },
         
          methods: {
+            
+            getDepartmentData(){
+                this.$http.get('get-enum-all-data',{
+                    enmuKey:'com.krspace.op.api.enums.orderCurrency.Department'
+                }).then((response)=>{
+                    // this.selectFormat(response.data)
+                    // console.log("-------",response.data)
+                    this.departmentList = [].concat(response.data);
+
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    })
+                })
+            },
             submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
                 let formItem = {}; 

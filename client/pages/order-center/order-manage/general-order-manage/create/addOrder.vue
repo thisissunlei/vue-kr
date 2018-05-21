@@ -76,7 +76,11 @@
                     <DatePicker type="date" placeholder="销售日期" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
                     </FormItem>
                 </Col>
-
+                 <Col  class="col">
+                    <FormItem label="部门" style="width:252px" prop="saleDate">
+                    <SelectSaler name="formItem.salesperson" :onchange="onSalerChange" :value="salerName"/>
+                    </FormItem>
+                </Col>
                 
                 <FormItem label="备注信息" prop="remark" style="width:702px">
                     <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>

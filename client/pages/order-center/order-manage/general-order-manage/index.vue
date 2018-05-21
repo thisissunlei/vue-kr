@@ -118,6 +118,11 @@
                         key: 'communityName',
                         align:'center'
                     },
+                     {
+                        title: '部门',
+                        key: 'money',
+                        align:'center'
+                    },
                     {
                         title: '订单金额',
                         key: 'money',

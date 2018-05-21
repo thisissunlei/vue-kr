@@ -125,12 +125,11 @@ export default {
            }
            this.$http.get('get-space-edit-info', form).then((res)=>{
                let data=Object.assign({}, res.data)
-              data.communityId=toString(res.data.communityId);
-              data.floor=toString(res.data.floor)
+              data.communityId=JSON.stringify(res.data.communityId);
+              data.floor=JSON.stringify(res.data.floor)
               this.formItem=data;
               this.formItem.communityId=data.communityId;
               this.floorName=res.data.floor;
-              console.log(' this.floorName', this.floorName)
               this.communityName=res.data.communityName;
               this.communityChange(res.data.communityId)
               
@@ -195,7 +194,10 @@ export default {
             }) 
       },
       handleSubmit(){
-          let formItem=this.formItem;
+          let id=JSON.stringify(this.detail.id)
+          let formItem=Object.assign({}, this.formItem);
+           formItem.spaceId= id;
+           
          this.$refs.formItem.validate((valid) => {
              if(valid){
                 this.submit && this.submit(formItem);

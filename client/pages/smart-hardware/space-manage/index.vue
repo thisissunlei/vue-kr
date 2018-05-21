@@ -382,7 +382,8 @@ export default {
                 this.$Notice.success({
                     title:'编辑成功'
                 });
-                this.openCreate=false;
+                this.openEdit=false;
+                this.getTableData(this.tabParams);
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message

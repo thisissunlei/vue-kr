@@ -13,9 +13,10 @@
             :loading="loading1"
             @on-change="changeContent"
             :remote-method="remoteCustomer"
+            clearable
             >
             <Option 
-                v-for="(option, index) in companyOptions" 
+                v-for="option in companyOptions" 
                 :value="option.value" 
                 :key="option.value"
             >{{option.label}}</Option>
@@ -54,12 +55,12 @@ import http from '~/plugins/http.js';
             },
             getCusomerList:function(name,type){
                 let params = {
-                    company:name || ''
+                    customerName:name || ''
                 }
                 let list = [];
                 let _this = this;
-                http.get('get-customer', params).then( r => {
-                    list = r.data.customerList;
+                http.get('get-payment-customer-like', params).then( r => {
+                    list = r.data.items;
                     list.map((item)=>{
                         let obj = item;
                         obj.label = item.company;

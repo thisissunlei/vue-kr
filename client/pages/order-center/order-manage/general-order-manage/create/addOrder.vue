@@ -81,7 +81,7 @@
                     <!-- <SelectSaler name="formItem.department" :onchange="onSalerChange" :value="salerName"/> -->
                      <Select 
                         v-model="formItem.department" 
-                        placeholder="请输入费用明细类型" 
+                        placeholder="请输入部门" 
                         style="width: 252px"
                         clearable
                     >

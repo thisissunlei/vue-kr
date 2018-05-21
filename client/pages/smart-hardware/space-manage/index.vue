@@ -86,6 +86,21 @@
             />
             <div  slot="footer"></div>
         </Modal>
+         <Modal
+            v-model="deleteSpace"
+            title="删除"
+            ok-text="确定"
+            cancel-text="取消"
+            width="490"
+        >
+            <div class="u-cancel-title">
+                确认要删除该空间吗？
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="onDeleteSpace">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDelete">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 <script>
@@ -112,6 +127,7 @@ export default {
             formData:"",
             openCreate:false,
             openEdit:false,
+            deleteSpace:false,
             detail:{},
             formItem:{
                 communityId:'',
@@ -243,7 +259,7 @@ export default {
                                     },
                                     on: {
                                         click: () => {
-                                            this.jumpEdit(obj.row)
+                                            this.openDelete(obj.row)
                                         }
                                     }
                                 }, '删除'),
@@ -276,6 +292,29 @@ export default {
         this.getCommunityList();
     },
     methods:{
+        openDelete(params){
+           if(params){
+              this.detail=params
+           }
+           this.deleteSpace=!this.deleteSpace;
+            
+        },
+        onDeleteSpace(){
+            let form={
+                id:this.detail.id
+            }
+            this.$http.delete('delete-basic-space', form).then((res)=>{
+               this.$Notice.success({
+                    title:'删除成功'
+                });
+                this.openDelete();
+                this.getTableData(this.tabParams);
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            });
+        },
         getCommunityList(){
             this.$http.get('get-space-community-list', '').then((res)=>{
                 res.data.items.map((item,index)=>{
@@ -424,5 +463,9 @@ export default {
        padding:0; 
     }
 }
+.u-cancel-title{
+    margin-top: 30px;
+    text-align: center;
+} 
 
 </style>  

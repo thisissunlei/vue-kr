@@ -22,7 +22,8 @@
                     placeholder="请选择"
                     clearable
                     remote
-                    :label="floor"
+                    filterable
+                    :label="floorName"
                 >
                     <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
                 </Select>
@@ -69,7 +70,7 @@ export default {
          communityList:[],
          floorList:[],
          communityName:'',
-         floor:'',
+         floorName:'',
          typeList:[
              {
                  label:'会议室',
@@ -109,24 +110,30 @@ export default {
          
        } 
     },
-    mounted(){
+    created(){
         this.getCommunityList();
         this.getInfo();
     },
+    mounted(){
+       
+    },
     methods:{
        getInfo(){
+          let id=JSON.stringify(this.detail.id)
            let form={
-               id:this.detail.id
+               id:id
            }
            this.$http.get('get-space-edit-info', form).then((res)=>{
                let data=Object.assign({}, res.data)
               data.communityId=toString(res.data.communityId);
               data.floor=toString(res.data.floor)
               this.formItem=data;
-              this.communityChange(data.communityId);
-             // this.communityName=res.data.communityName;
-             // this.floor=res.data.floor;
-
+              this.formItem.communityId=data.communityId;
+              this.floorName=res.data.floor;
+              console.log(' this.floorName', this.floorName)
+              this.communityName=res.data.communityName;
+              this.communityChange(res.data.communityId)
+              
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -143,7 +150,7 @@ export default {
                     item.value=item.id;
                     return  item;
                 })
-               this.communityList=res.data.items
+               this.communityList=res.data.items;
               
             
             }).catch((err)=>{
@@ -153,12 +160,17 @@ export default {
             }) 
       },
       communityChange(id){
-         if(id){
-                this.getFloor(id);
-            }else{
-                this.floorLis=[];
-                this.formItem.floor=""
+          let reg=/^[0-9]*$/;
+          if(reg.test(id)){
+              if(id){
+                    this.getFloor(id);
+                }else{
+                    this.floorLis=[];
+                    this.formItem.floor=""
+              }
           }
+        
+         
       },
       getFloor(id){
           let form={

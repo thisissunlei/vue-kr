@@ -1,6 +1,7 @@
 import colorStatus from './colorStatus';
-function init(data){
+function init(data,picProperty){
     var dataRender=[];
+    var scale=1;
     if(data.figures.length){
         var spaceArr=[];
         var minW=36;
@@ -45,7 +46,7 @@ function init(data){
             }
             min=minW<minH?minW:minH;
         })
-        var scale=(36/min)<0.3?0.3:(36/min);
+        scale=(36/min)<0.3?0.3:(36/min);
 
         //尺寸缩放
         dataRender.map((list,index)=>{
@@ -57,6 +58,13 @@ function init(data){
             list.cellCoordY=Number(list.cellCoordY)*scale;
         })
     }
-    return [].concat(dataRender);
+    //pic尺寸
+    picProperty={
+        width:picProperty.width*scale,
+        height:picProperty.height*scale,
+        pos:data.graphFilePath
+    }
+    return {data:[].concat(dataRender),pic:picProperty};
 }
+
 export default init;

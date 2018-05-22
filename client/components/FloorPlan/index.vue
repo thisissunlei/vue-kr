@@ -17,6 +17,7 @@
             <div :id="drawingBoard" class="drawing-board" :style="{height:'600px',background:'#f5f5f5'}"></div>  
         </div>
         
+        
     </div>
 </template>
 
@@ -50,22 +51,45 @@ var scrollDom='';
         }
     },
     mounted(){
-        canvasData=this.data;
-        flowChart =  init(
-            go,
-            this.drawingBoard,
-            this.drawingPicture,
-            dataFormat.init(canvasData),
-            this.mouseClick,
-            this.mouseEnter,
-            this.mouseLeave
-        )
-        scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
-        if(scrollDom){
-          scrollDom.addEventListener('scroll',this.canvasScroll);            
-        } 
+        //背景图
+        var img=new Image();
+        img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
+        var _this=this;
+        this.imgLoad(img,function(){
+            //初始化数据
+            canvasData=_this.data;
+            flowChart =  init(
+                go,
+                _this.drawingBoard,
+                _this.drawingPicture,
+                dataFormat.init(canvasData,{width:img.width,height:img.height}),
+                _this.mouseClick,
+                _this.mouseEnter,
+                _this.mouseLeave
+            )  
+
+            //滚动监听
+            scrollDom=document.querySelectorAll('#'+_this.drawingBoard+' > div')[0];
+            if(scrollDom){
+            scrollDom.addEventListener('scroll',function(event){
+                _this.scroll={
+                    top:event.target.scrollTop,
+                    left:event.target.scrollLeft
+                }
+            });            
+          } 
+        });
     },
     methods:{
+        //图片加载完
+        imgLoad(img, callback) {
+            var timer = setInterval(function() {
+                if (img.complete) {
+                    callback(img)
+                    clearInterval(timer)
+                }
+            },10)
+        },
         mouseEnter(event,node){
              var every=node.data;
              var everyData =every?every:{};
@@ -80,13 +104,7 @@ var scrollDom='';
             var every=event.subject.part.data;
             var everyData =every?every:{};
             this.$emit('click',event,everyData,canvasData); 
-        },
-        canvasScroll(){ 
-            this.scroll={
-                top:scrollDom.scrollTop,
-                left:scrollDom.scrollLeft
-            }
-        }  
+        }
     }
  }
 </script>

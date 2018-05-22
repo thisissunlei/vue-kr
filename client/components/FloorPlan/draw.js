@@ -16,7 +16,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
        
-    //导出
+    //导出svg图片
     var button = document.getElementById(pic);
         button.addEventListener('click', function() {
           var newWindow = window.open("","newWindow");
@@ -40,14 +40,16 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
     function textStyle() {
         return {stroke: "white", font: "bold 12px PingFangSC-Medium" };
     }
-
     
-    myDiagram.add(
-        $(go.Part,  // this Part is not bound to any model data
-          { layerName: "Background", position: new go.Point(0, 0),
-            selectable: false, pickable: false },
-          $(go.Picture, "http://optest03.krspace.cn/krspace_oa_web/doc/docFile/viewFile?sourceservicetoken=AF6nQfcS0uARjSHa6gf4EDwKqoPfHQctOaDrWZTN7GB_Sw_ciIv4_J1PT1Edew1D&operater=2&fileId=54194")
+    //背景图
+    if(data.pic){
+        myDiagram.add(
+            $(go.Part,  // this Part is not bound to any model data
+            { layerName: "Background", position: new go.Point(0, 0),
+                selectable: false, pickable: false },
+            $(go.Picture, "http://optest03.krspace.cn"+data.pic.pos,{width:data.pic.width,height:data.pic.height})
         ));
+    }
     
     //绘制
     myDiagram.nodeTemplate =
@@ -61,10 +63,10 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             new go.Binding("position", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
             //元件名称
             $(go.Panel, "Table",
+                //元件属性
                 $(go.TextBlock,textStyle(),
                 { row: 0, column: 0,margin:5,textAlign:'center'},
-                new go.Binding("text", "name")),
-                //元件属性
+                new go.Binding("text", "name")),      
                 $(go.TextBlock,textStyle(),
                 { row: 1, column: 0},
                 new go.Binding("text", "property")),
@@ -79,10 +81,11 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             }
         );
     
+    var endData=data.data?data.data:[];
     var myModel = $(go.Model);
-    myModel.nodeDataArray =[].concat(data);
+    myModel.nodeDataArray =[].concat(endData);
     myDiagram.model = myModel;
-
+    
     return {diagram:myDiagram};
 }
 

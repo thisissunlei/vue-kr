@@ -11,10 +11,12 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     
     var obj = getToolTipContent(every,discount); 
     contentDom.innerHTML = obj.str;
+    
     var toolLocation={
         left:Number(every.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-12-scroll.top
     }
+    
     tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';

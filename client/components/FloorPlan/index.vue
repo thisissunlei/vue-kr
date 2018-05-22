@@ -54,31 +54,35 @@ var img='';
         //背景图
         img=new Image();
         img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
-        img.setAttribute("crossOrigin",'Anonymous');
-        img.addEventListener('load',this.imgLoad);
+        //img.setAttribute("crossOrigin",'Anonymous');
+        var _this=this;
+        img.addEventListener('load',function(event){
+            _this.imgLoad(event);
+        });
     },
     
     methods:{
         //将图片地址转换成base64格式
         getBase64Image(img) {
-            var canvas = document.createElement('canvas'); 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            var dataURL = canvas.toDataURL("image/png");
-            return dataURL
+            // var canvas = document.createElement('canvas'); 
+            // canvas.width = img.width;
+            // canvas.height = img.height;
+            // var ctx = canvas.getContext("2d");
+            // ctx.drawImage(img, 0, 0, img.width, img.height);
+            // var dataURL = canvas.toDataURL("image/png");
+            // return dataURL
         },
         //图片加载完
-        imgLoad() {
-            var dataUrl = this.getBase64Image(img);
+        imgLoad(event) {
+            var picImg=event.path[0];
+            var dataUrl = this.getBase64Image(picImg);
              //初始化数据
             canvasData=this.data;
             flowChart =  init(
                 go,
                 this.drawingBoard,
                 this.drawingPicture,
-                dataFormat.init(canvasData,{width:img.width,height:img.height},dataUrl),
+                dataFormat.init(canvasData,{width:picImg.width,height:picImg.height},dataUrl),
                 this.mouseClick,
                 this.mouseEnter,
                 this.mouseLeave
@@ -171,7 +175,7 @@ var img='';
             font-size: 14px;
             color: #FFFFFF;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 9px;
             cursor: pointer;
         }
     }

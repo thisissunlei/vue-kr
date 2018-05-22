@@ -1,14 +1,14 @@
 <template>
     <div class="g-space-manage">
-         <SectionTitle title="空间管理" />
-         <div class="u-search" >
-            <Button type="primary" @click="showCreate">新建空间</Button> 
+        <SectionTitle title="空间管理" />
+        <div class="u-search" >
+            <Button type="primary" @click="showCreate">新建空间</Button>
             <div class="u-select-content">
                 <div class="u-select">
-                    <Select 
-                            v-model="formItem.communityId" 
+                    <Select
+                            v-model="formItem.communityId"
                             style="width:200px"
-                            placeholder="请选择社区" 
+                            placeholder="请选择社区"
                             filterable
                             clearable
                             @on-change="communityChange"
@@ -17,10 +17,10 @@
                         </Select>
                 </div>
                  <div class="u-select">
-                     <Select 
-                            v-model="formItem.floor" 
+                     <Select
+                            v-model="formItem.floor"
                             style="width:200px"
-                            placeholder="请选择楼层" 
+                            placeholder="请选择楼层"
                             clearable
                             @on-change="floorChange"
                         >
@@ -28,8 +28,8 @@
                     </Select>
                 </div>
                 <div class="u-select">
-                    <Select 
-                        v-model="formItem.type" 
+                    <Select
+                        v-model="formItem.type"
                         style="width:200px"
                         placeholder="请选择空间类型"
                         clearable
@@ -44,11 +44,11 @@
               <Table  border :columns="spaceColumns" :data="tableList" />
               <div style="margin: 10px;overflow: hidden">
                   <div style="float: right;">
-                      <Page 
+                      <Page
                           :current="page"
                           :total="totalCount"
-                          :page-size="pageSize" 
-                          show-total 
+                          :page-size="pageSize"
+                          show-total
                           show-elevator
                           @on-change="changePage"
                       />
@@ -63,7 +63,7 @@
             width="500"
             class="u-create"
         >
-            <CreateSpace 
+            <CreateSpace
                 v-if="openCreate"
                 :submit="createSubmit"
                 :close="showCreate"
@@ -78,7 +78,7 @@
             width="500"
             class="u-create"
         >
-            <EditSpace 
+            <EditSpace
                 v-if="openEdit"
                 :submit="editSubmit"
                 :close="showEdit"
@@ -206,7 +206,7 @@ export default {
                         let time=dateUtils.dateToStr("YYYY-MM-DD HH:mm",new Date(obj.row.ctime));
                         return time;
                     }
-                    
+
                   }
                 },
                 {
@@ -230,9 +230,7 @@ export default {
                                         }
                                     }
                                 }, '管理子空间')
-                                
-
-                            ]); 
+                            ]);
                       }else{
                             return h('div', [
                                 h('Button', {
@@ -277,9 +275,9 @@ export default {
                                         }
                                     }
                                 }, '管理子空间')
-                                
 
-                            ]); 
+
+                            ]);
                     }
                   }
               }
@@ -297,7 +295,7 @@ export default {
               this.detail=params
            }
            this.deleteSpace=!this.deleteSpace;
-            
+
         },
         onDeleteSpace(){
             let form={
@@ -327,7 +325,7 @@ export default {
                 this.$Notice.error({
                     title:err.message
                 });
-            }) 
+            })
         },
         communityChange(id){
             if(id){
@@ -337,7 +335,7 @@ export default {
                 this.formItem.floor=""
                 this.tabParams.floor=""
             }
-            
+
             this.tabParams.page=1;
             this.tabParams.communityId=id;
             this.getTableData(this.tabParams);
@@ -366,13 +364,13 @@ export default {
                     })
 
                 this.floorList=floorList
-                
-                
+
+
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
                     });
-                }) 
+                })
         },
         showEdit(params){
             if(params){
@@ -387,13 +385,13 @@ export default {
             this.$http.get('get-space-actions-list', params).then((res)=>{
                 this.tableList=res.data.items;
                 this.totalCount=res.data.totalCount;
-            
+
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
                 });
             })
-            
+
         },
         changePage(page){
             this.tabParams.page=page;
@@ -428,26 +426,27 @@ export default {
                     title:err.message
                 });
             })
+        },
+        jumpEdit(params){
+            this.$router.push(`/smart-hardware/space-manage/${params.id}/son-space`)
         }
-        
-
     }
 }
 </script>
- 
+
 <style lang="less">
 .g-space-manage{
-        .u-search{
-            height:32px;
-            margin:16px 0;
-            padding:0 20px;
-        }
-        .u-table{
-            padding:0 20px;
-        } 
-        .ivu-table-cell{
-            padding:0;
-        }
+    .u-search{
+        height:32px;
+        margin:16px 0;
+        padding:0 20px;
+    }
+    .u-table{
+        padding:0 20px;
+    }
+    .ivu-table-cell{
+        padding:0;
+    }
     .u-select-content{
         float:right;
         width:650px;
@@ -460,12 +459,12 @@ export default {
 }
 .u-create{
     .ivu-modal-footer{
-       padding:0; 
+       padding:0;
     }
 }
 .u-cancel-title{
     margin-top: 30px;
     text-align: center;
-} 
+}
 
-</style>  
+</style>

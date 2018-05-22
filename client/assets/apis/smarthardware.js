@@ -1,6 +1,6 @@
 //公共的api
 export default  {
-    
+
     //图库管理--创建图库
     'create-tv-ad-storage': {
         url: '/api/iot-platform/tv-ad-storage/actions/create',
@@ -68,7 +68,7 @@ export default  {
     },
      //空间管理--空间管理--添加子空间
      'add-children': {
-        url: '/api/sso/space/actions/add-children',
+        url: '/api/sso/basic/space/actions/add-children',
         method: 'post'
     },
      //空间管理--空间管理--移除子空间
@@ -86,5 +86,6 @@ export default  {
         url: '/api/krspace-finance-web/cmt/community/select/use/floor',
         method: 'get'
     },
+
   }
-  
+

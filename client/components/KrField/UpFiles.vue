@@ -68,8 +68,8 @@
 				<button type="button" class="up-icon" @click="addFileClick">
 					<div class="add-icon"></div>
 	                <div class="add-text">上传文件</div>
-					<div v-if="isLoadding" style="height:30px;line-height:30px;">
-						<Progress :percent="percent" :stroke-width="3"></Progress>
+					<div style="height:30px;line-height:30px;">
+						<Progress v-if="isLoadding" :percent="percent" :stroke-width="3"></Progress>
 					</div>
 					
 				</button>
@@ -285,11 +285,16 @@ export default{
 		fileChange(event){
 			console.log('change---')
 			this.isLoadding = true;
+			this.percent = 0
 			// this.isClickLadding = false;
 			var that = this;
 			var file = event.target.files[0];
+			console.log(file,"ppppp")
 			if(file){
 				that.getUpFileUrl(file);
+			}else{
+				this.isLoadding = false;
+				
 			}
 			// return ;
 			
@@ -310,7 +315,7 @@ export default{
 		// },
 		upLoading(){
 			if(!this.upLoading){
-				this.percent= 0;
+				
 				return ;
 			}
 			this.percent +=1;
@@ -346,7 +351,7 @@ export default{
 						});
 					}
 					that.isLoadding=false;
-					that.percent = 0;
+					that.percent = 100;
 				}
 			};
 			xhrfile.open('POST', serverUrl, true);

@@ -2,11 +2,14 @@
     background-color: transparent;
   }
   .operation-community{
-
+    padding-left:5px;
+    min-width:1028px;
+    overflow: auto;
   }
   .community{
     background-color: #fff;
     margin-bottom: 20px;
+    margin-right: 20px;
     border-radius: 4px;
     height: 58px;
     line-height: 58px;
@@ -29,6 +32,7 @@
   }
   .card-three{
     flex:1.5;
+    margin-right: 20px;
     background-color: transparent;
   }
   .item .content{
@@ -52,9 +56,13 @@
   }
   .card-three{
     margin-left:20px;
+    .tabs{
+      display: flex;
+    }
   }
   .card-three>.tabs>span{
-    width:150px;
+    max-width:150px;
+    flex:1;
     height:33px;
     line-height: 34px;
     display: inline-block;
@@ -67,6 +75,12 @@
     display: flex;
     border-radius: 0 4px 4px 4px;
     border-bottom:1px solid #fff;
+  }
+  .card-one,.card-two{
+    &:hover{
+      cursor: pointer;
+      box-shadow: 6px 5px  20px rgba(126, 125, 130, .5)
+    }
   }
   .card-three .content .number{
     flex:1;
@@ -105,21 +119,28 @@
     display: flex;
     margin-bottom: 20px;
   }
+  .ellipsis{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
   .line-one .box{
     flex:1;
     height:255px;
     margin-right: 21px;
     background-color: #fff;
     border-radius: 4px;
+    overflow: hidden;
     &:hover{
-      box-shadow: 0 0 20px rgba(126, 125, 130, .5)
+      box-shadow: 6px 5px  20px rgba(126, 125, 130, .5)
     }
   }
   .line-one .box .header{
-      height:50px;
+      height:52px;
       line-height:50px;
       font-size: 18px;
       color:#333;
+      position: relative;
       border-bottom:1px solid #F1F2F7;
       div{
         display:inline-block;
@@ -127,6 +148,8 @@
       .header-right{
         float:right;
         margin-right:20px;
+        position: absolute;
+        right: 0;
       }
       .header-left{
         position: relative;
@@ -147,21 +170,41 @@
 
       }
   }
+  .ivu-tooltip{
+    height: 51px;
+    overflow: hidden;
+  }
   .bill-list{
     .contents{
+
       ul{
         margin:0 20px;
         li{
-          display: table;
+          display: flex;
           width:100%;
-
-          height: 50px;
+          height: 51px;
           line-height: 50px;
-          span{
-            display: table-cell;
+           border-bottom:1px solid  #F1F2F7;
+          .table-cell{
+            flex:1;
             font-size: 14px;
+            min-width: 40px;
+            height: 50px;
+            overflow: hidden;
             color: #666666;
-            border-bottom:1px solid  #F1F2F7;;
+            vertical-align: top;
+            .ivu-tooltip{
+              position: relative;
+            }
+            .ivu-tooltip-rel{
+              display: block;
+            }
+            .ivu-tooltip-inner{
+              white-space: normal;
+            }
+          }
+          .customer{
+            flex:4;
           }
           
         }

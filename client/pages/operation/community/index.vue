@@ -17,7 +17,7 @@
         </div> 
         <!-- 第一行内容区 -->
         <div class="tab-list">
-          <div class="card-one item">
+          <div class="card-one item"  v-on:click="openCustomer">
             <span class="content">
               <img src="~/assets/images/customer.png" alt="" style="margin:15px auto;width:30px;height:30px;margin-top:20px;">
             </span>
@@ -33,31 +33,46 @@
           </div>
           <div class="card-three">
             <div class="tabs">
-              <span class="title active">全部工位数</span>
-              <span class="title">独立办公室(30间)</span>
-              <span class="title">固定办公桌(10个)</span>
-              <span class="title">移动办公桌(5个)</span>
+              <span class="title"  v-bind:class="{active:tab=='all'}" v-on:click="changeTab('all')">全部工位数</span>
+              <span class="title" v-bind:class="{active:tab=='office'}" v-on:click="changeTab('office')">独立办公室(30间)</span>
+              <span class="title" v-bind:class="{active:tab=='fixedDest'}"  v-on:click="changeTab('fixedDest')">固定办公桌(10个)</span>
+              <span class="title" v-bind:class="{active:tab=='mobileDesk'}"  v-on:click="changeTab('mobileDesk')">移动办公桌(5个)</span>
             </div>
             <div class="content">
               <span class="number">
                 <span class="title">总数</span>
-                <span class="num" style="font-size:44px;color: #232428;">255</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #232428;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #232428;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #232428;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #232428;">0</span>
               </span>
               <span class="number">
                 <span class="title">在租</span>
-                <span class="num" style="font-size:44px;color: #F5A623;">255</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #F5A623;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #F5A623;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #F5A623;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #F5A623;">0</span>
               </span>
               <span class="number">
                 <span class="title">合同未生效</span>
-                <span class="num" style="font-size:44px;color: #FAD27B;">255</span>
+                <span class="num"  v-if="tab=='all'" style="font-size:44px;color: #FAD27B;">255</span>
+                <span class="num" v-if="tab=='office'"  style="font-size:44px;color: #FAD27B;">25</span>
+                <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: #FAD27B;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: #FAD27B;">0</span>
               </span>
               <span class="number">
                 <span class="title">未租</span>
-                <span class="num" style="font-size:44px;color: #35BC9B;">255</span>
+                <span class="num" v-if="tab=='all'"style="font-size:44px;color: #35BC9B;">255</span>
+                <span class="num" v-if="tab=='office'"style="font-size:44px;color: #35BC9B;">25</span>
+                <span class="num" v-if="tab=='fixedDest'"style="font-size:44px;color: #35BC9B;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'"style="font-size:44px;color: #35BC9B;">0</span>
               </span>
               <span class="number">
                 <span class="title">不可用</span>
-                <span class="num" style="font-size:44px;color: #8290A8;">255</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #8290A8;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #8290A8;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #8290A8;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #8290A8;">0</span>
               </span>
             </div>
             
@@ -69,18 +84,28 @@
             <div class="box">
               <div class="header">
                 <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
+                <div class="header-right" v-if="list.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
-              <div class="contents">
+
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+              </div>
+
+              <div class="contents"  v-if="list.length">
                 <ul >
                   <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
+                    <Tooltip :content="item.id" placement="top-start" class="table-cell">
+                        <div class="ellipsis">{{item.id}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">{{item.number}}</span>
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer" >
+                      <div class="ellipsis">{{item.customer}}</div>
+                    </Tooltip>
+                    <span class="table-cell">{{item.date}}</span>
                   </li>        
                 </ul>
               </div>
@@ -88,19 +113,114 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
+                <div class="header-left">即将到期  ></div>
+                <div class="header-right" v-if="list.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
-              <div class="contents">
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+              </div>
+              <div class="contents" v-if="list.length">
                 <ul >
                   <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
+                     <Tooltip :content="item.id" placement="top" class="table-cell">
+                        <div class="ellipsis" >{{item.id}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">{{item.number}}</span>
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer">
+                      <div class="ellipsis">{{item.customer}}</div>
+                    </Tooltip>
+                    <span class="table-cell">{{item.date}}</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+
+          </div>
+          <div class="line-one">
+           <div class="box">
+              <div class="header">
+                <div class="header-left">已起租未付   ></div>
+                <div class="header-right" v-if="list.length">
+                  <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
+                  <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+              </div>
+              <div class="contents" v-if="list.length">
+                <ul >
+                  <li v-for="item in list" >
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;flex:2">{{item.id}}</div>
+                    
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer">
+                      <div class="ellipsis" >{{item.customer}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">3232313元</span>
+                    <span class="table-cell">{{item.date}}</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+
+            <div class="box">
+              <div class="header">
+                <div class="header-left">逾期未付(工位) ></div>
+                <div class="header-right" v-if="list.length">
+                  <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
+                  <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+              </div>
+              <div class="contents" v-if="list.length">
+                <ul >
+                  <li v-for="item in list" >
+                    <div class="ellipsis table-cell"  style="color:#4A90E2">{{item.id}}</div>
+                    
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer">
+                      <div class="ellipsis">{{item.customer}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">{{item.number}}元</span>
+                    <span class="table-cell">{{item.date}}</span>
+                  </li>        
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="line-one">
+            
+
+            <div class="box">
+              <div class="header">
+                <div class="header-left">逾期未付(会议室) ></div>
+                <div class="header-right" v-if="list.length">
+                  <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
+                  <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
+                </div>
+              </div>
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+              </div>
+              <div class="contents" v-if="list.length">
+                <ul >
+                  <li v-for="item in list" >
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.id}}</div>
+                    
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer">
+                      <div class="ellipsis">{{item.customer}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">{{item.number}}元</span>
+                    <span class="table-cell">{{item.date}}</span>
                   </li>        
                 </ul>
               </div>
@@ -109,19 +229,26 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
+                <div class="header-left">逾期未付(打印) ></div>
+                <div class="header-right" v-if="list.length">
+                  <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
+                  <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
                 </div>
               </div>
-              <div class="contents">
+              <div class="contents" style="text-align:center" v-if="!list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+              </div>
+              <div class="contents" v-if="list.length">
                 <ul >
                   <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.id}}</div>
+                    
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer">
+                      <div class="ellipsis">{{item.customer}}</div>
+                    </Tooltip>
+                    <span  class="table-cell">{{item.number}}元</span>
+                    <span class="table-cell">{{item.date}}</span>
                   </li>        
                 </ul>
               </div>
@@ -131,127 +258,42 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
-                </div>
+                <div class="header-left">预约参观  ></div>
               </div>
-              <div class="contents">
-                <ul >
-                  <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
-                  </li>        
-                </ul>
+              <div class="contents" style="text-align:center">
+                <img src="~/assets/images/waiting.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">小哥哥小姐姐正在尽全力开发，敬请期待哦亲~</div>
               </div>
             </div>
 
             <div class="box">
               <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
+                <div class="header-left">会员访客   ></div>
+                <div class="header-right" v-if="list.length">今日：
+                  <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
               </div>
-              <div class="contents">
+              <div class="contents" style="text-align:center" v-if="list.length">
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+              </div>
+
+              <div class="contents" v-if="!list.length">
                 <ul >
                   <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
+                    <span class="table-cell ellipsis" style="flex:2">{{item.id}}</span>
+                    <span class="table-cell"> → </span>
+                    <Tooltip :content="item.customer" placement="top" class="table-cell customer" style="flex:5">
+                      <div class="ellipsis" >{{item.customer}}</div>
+                    </Tooltip>
+                    <span class="table-cell">{{item.date}}</span>
                   </li>        
                 </ul>
               </div>
             </div>
 
 
-            <div class="box">
-              <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
-                </div>
-              </div>
-              <div class="contents">
-                <ul >
-                  <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
-                  </li>        
-                </ul>
-              </div>
-            </div>
-          </div>
 
-          <div class="line-one">
-            <div class="box">
-              <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
-                </div>
-              </div>
-              <div class="contents">
-                <ul >
-                  <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
-                  </li>        
-                </ul>
-              </div>
-            </div>
-
-            <div class="box">
-              <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
-                </div>
-              </div>
-              <div class="contents">
-                <ul >
-                  <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
-                  </li>        
-                </ul>
-              </div>
-            </div>
-
-
-            <div class="box">
-              <div class="header">
-                <div class="header-left">即将进场  ></div>
-                <div class="header-right">今日：
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
-                </div>
-              </div>
-              <div class="contents">
-                <ul >
-                  <li v-for="item in list" >
-                    <span>{{item.id}}</span>
-                    <span>{{item.number}}</span>
-                    <span>{{item.customer}}</span>
-                    <span>{{item.date}}</span>
-                  </li>        
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
     </div>
@@ -259,6 +301,7 @@
 
 <script>
 import './index.less';
+import ToolTip from '~/components/ToolTip';
 export default {
   name:'List',
   head(){
@@ -270,14 +313,21 @@ export default {
      return {
        city:'',
        community:'',
+       tab:'all',
        optionList:[],
        communityList:[],
        list:[
         {
+          id:'VIP办公室（16人间）',
+          number:'16工位',
+          customer:'上海今日头条科技有限公司上海今日头条科技有限公司上海今日头条科技有限公司上海今日头条科技有限公司 ',
+          date:'3日后  '
+        },
+        {
           id:111,
           number:'2哥',
           customer:'上海今日头条科技有限公司 ',
-          date:'3日后  '
+          date:'23日后  '
         },
         {
           id:111,
@@ -286,21 +336,16 @@ export default {
           date:'3日后  '
         },
         {
-          id:111,
-          number:'2哥',
+          id:'你好啊',
+          number:'你好啊',
           customer:'上海今日头条科技有限公司 ',
-          date:'3日后  '
-        },
-        {
-          id:111,
-          number:'2哥',
-          customer:'上海今日头条科技有限公司 ',
-          date:'3日后  '
+          date:'13日后  '
         },
        ],
      }
   },
   components:{
+    ToolTip
   },
   watch:{
     city(value){
@@ -343,6 +388,13 @@ export default {
     },
     changeCommunity(value){
       console.log('changeCommunity',value)
+      this.community = value
+    },
+    changeTab(type){
+      this.tab = type;
+    },
+    openCustomer(){
+       window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.community,'_blank')
     }
 
   }

@@ -83,7 +83,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">即将进场  ></div>
+                <div class="header-left" @click="openEnter">即将进场  ></div>
                 <div class="header-right" v-if="list.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
@@ -113,7 +113,7 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left">即将到期  ></div>
+                <div class="header-left" @click="openOver">即将到期  ></div>
                 <div class="header-right" v-if="list.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">个</span>/
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">工位</span>
@@ -143,7 +143,7 @@
           <div class="line-one">
            <div class="box">
               <div class="header">
-                <div class="header-left">已起租未付   ></div>
+                <div class="header-left" @click="openrented">已起租未付   ></div>
                 <div class="header-right" v-if="list.length">
                   <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
                   <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
@@ -170,7 +170,7 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left">逾期未付(工位) ></div>
+                <div class="header-left" @click="openOverUnpaid('station')">逾期未付(工位) ></div>
                 <div class="header-right" v-if="list.length">
                   <span style="color: #FF6868;">19</span><span style="font-size:12px">笔</span>/共
                   <span style="color: #FF6868;">3033333</span><span style="font-size:12px">元</span>
@@ -268,7 +268,7 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left">会员访客   ></div>
+                <div class="header-left" @click="openVisitor">会员访客   ></div>
                 <div class="header-right" v-if="list.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
@@ -370,7 +370,26 @@ export default {
     },
     openCustomer(){
        window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.community,'_blank')
+    },
+    openVisitor(){
+      window.open('/new/#/community/visitor/list','_blank')
+    },
+    openEnter(){
+      window.open('/inventory/enter-field','_blank')
+    },
+    openOver(){
+      window.open('/inventory/over-date','_blank')
+    },
+    openOver(){
+      window.open('/inventory/over-date','_blank')
+    },
+    openrented(){
+      window.open('/inventory/rented-unpaid','_blank')
+    },
+    openOverUnpaid(type){
+      window.open('/inventory/over-date-unpaid?type='+type,'_blank')
     }
+
 
   }
  }

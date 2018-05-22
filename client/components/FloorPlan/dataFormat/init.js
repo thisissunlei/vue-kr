@@ -1,5 +1,5 @@
 import colorStatus from './colorStatus';
-function init(data,picProperty){
+function init(data,picProperty,dataUrl){
     var dataRender=[];
     var scale=1;
     if(data.figures.length){
@@ -62,7 +62,9 @@ function init(data,picProperty){
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
-        pos:data.graphFilePath
+        pos:data.graphFilePath,
+        picName:data.graphFileName,
+        dataUrl:dataUrl
     }
     return {data:[].concat(dataRender),pic:picProperty};
 }

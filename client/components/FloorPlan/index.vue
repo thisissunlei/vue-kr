@@ -17,7 +17,6 @@
             <div :id="drawingBoard" class="drawing-board" :style="{height:'600px',background:'#f5f5f5'}"></div>  
         </div>
         
-        
     </div>
 </template>
 
@@ -27,6 +26,7 @@ import dataFormat from './dataFormat';
 var canvasData ={};
 var flowChart= '';
 var scrollDom='';
+var img='';
  export default {
     props:{
         data:{
@@ -52,43 +52,46 @@ var scrollDom='';
     },
     mounted(){
         //背景图
-        var img=new Image();
+        img=new Image();
         img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
-        var _this=this;
-        this.imgLoad(img,function(){
-            //初始化数据
-            canvasData=_this.data;
+        img.setAttribute("crossOrigin",'Anonymous');
+        img.addEventListener('load',this.imgLoad);
+    },
+    
+    methods:{
+        getBase64Image(img) {
+            var canvas = document.createElement('canvas'); 
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            var dataURL = canvas.toDataURL("image/png");
+            return dataURL
+        },
+        //图片加载完
+        imgLoad() {
+            var dataUrl = this.getBase64Image(img);
+             //初始化数据
+            canvasData=this.data;
             flowChart =  init(
                 go,
-                _this.drawingBoard,
-                _this.drawingPicture,
-                dataFormat.init(canvasData,{width:img.width,height:img.height}),
-                _this.mouseClick,
-                _this.mouseEnter,
-                _this.mouseLeave
-            )  
-
+                this.drawingBoard,
+                this.drawingPicture,
+                dataFormat.init(canvasData,{width:img.width,height:img.height},dataUrl),
+                this.mouseClick,
+                this.mouseEnter,
+                this.mouseLeave
+            ) 
             //滚动监听
-            scrollDom=document.querySelectorAll('#'+_this.drawingBoard+' > div')[0];
+            scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
             if(scrollDom){
             scrollDom.addEventListener('scroll',function(event){
-                _this.scroll={
+                this.scroll={
                     top:event.target.scrollTop,
                     left:event.target.scrollLeft
                 }
             });            
           } 
-        });
-    },
-    methods:{
-        //图片加载完
-        imgLoad(img, callback) {
-            var timer = setInterval(function() {
-                if (img.complete) {
-                    callback(img)
-                    clearInterval(timer)
-                }
-            },10)
         },
         mouseEnter(event,node){
              var every=node.data;

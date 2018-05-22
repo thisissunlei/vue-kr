@@ -654,6 +654,12 @@
                             router: 'product/communityManage/detail',
                         },
                         {
+                            primaryText: '平面图自测',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory',
+                        },
+                        {
                             primaryText: '销控',
                             menuCode: 'cmt_sell_control',
                             router: 'product/communityManage/controlTable',

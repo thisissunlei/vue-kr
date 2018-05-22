@@ -45,7 +45,7 @@ export default {
        floorList:[],
        formItem:{
           communityId:'',
-          floor:' ',
+          floor:'',
           currentDate:publicFn.getToDay()
        }
     }
@@ -72,10 +72,13 @@ export default {
     getFloorList(param){
         this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
             this.floorList=res.data;
-            if(res.data.length>1){
-                this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
+            var len=res.data.length;
+            if(len){
+                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                if(len>1){
+                    this.floorList.push({floor:' ',floorName:"全部楼层"})  
+                }
             }
-            this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
         }).catch((error)=>{
             this.$Notice.error({
                 title:error.message
@@ -84,7 +87,6 @@ export default {
     },
     communityChange(param){
         this.formItem.communityId=param;
-        this.$emit('searchForm',this.formItem);
         this.getFloorList(param); 
     },
     floorChange(param){

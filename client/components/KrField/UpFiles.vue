@@ -63,11 +63,17 @@
 					type="file" 
 					style="display:none;" 
 					@change="fileChange"
+					
 				>
-				<div class="up-icon" @click="addFileClick">
+				<button type="button" class="up-icon" @click="addFileClick">
 					<div class="add-icon"></div>
 	                <div class="add-text">上传文件</div>
-				</div>
+					<div style="height:30px;line-height:30px;">
+						<Progress v-if="isLoadding" :percent="percent" :stroke-width="3"></Progress>
+					</div>
+					
+				</button>
+				
 			</div>
 		</EditLabel>
 		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
@@ -119,12 +125,18 @@ export default{
 			eyeIndex:0,
 			fileTypes:[],
 			newFileArr: [],
+			percent:0,
+			isLoadding:false,
+			// isClickLadding:false
         }
 	},
 	mounted(){
 		this.fileArr = [].concat(this.value)
 		this.newFileArr = [].concat(this.value);
 		this.fileTypes = [].concat(this.setFileArrType(this.newFileArr));
+		document.body.onclick = function(event){
+			console.log(event.target,"oooooo")
+		}
 	},
 	methods:{
 		setFileArrType(data){
@@ -134,8 +146,8 @@ export default{
 			}
 			return [].concat(types);
 		},
+		
 		getTyep(type,url){
-			console.log(this.getExt(url),"ppppp")
 			if(type=="other" && this.getExt(url)=="other"){
 				return true;
 			}else{
@@ -164,27 +176,10 @@ export default{
 			return decodeURI(filename);
 		},
 		downImg(url,id){
-				// window.location.href = '/api/op/sys/downFile?fileId='+id;
+			
 			utils.downImg(url);
-			// // down-file
+			
 			return ;
-			//  this.$http.get('down-file',{
-            //     fileId:id
-            // }).then((response)=>{
-			// 	console.log("======",response)
-			// 	var aLink = document.createElement('a');
-			// 	var blob = new Blob([response]);
-			// 	var evt = document.createEvent("HTMLEvents");
-			// 	evt.initEvent("click", false, false);//initEvent 不加后两个参数在FF下会报错, 感谢 Barret Lee 的反馈
-			// 	aLink.download = "fileName";
-			// 	aLink.href = URL.createObjectURL(blob);
-			// 	aLink.dispatchEvent(evt);
-            //     // utils.downImg(response)
-            // }).catch((error)=>{
-            //     // this.MessageType="error";
-            //     // this.openMessage=true;
-            //     // this.warn=error.message;
-            // })
 		},
 		downFile(url,id){
 			
@@ -282,23 +277,68 @@ export default{
 		},
 		addFileClick(){
 			var inputDom = document.getElementById(this.inputId);
+			// this.isClickLadding = true;
+			
+			// this.clickLadding();
 			inputDom.click();
 		},
 		fileChange(event){
-			
+			console.log('change---')
+			this.isLoadding = true;
+			this.percent = 0
+			// this.isClickLadding = false;
 			var that = this;
 			var file = event.target.files[0];
-			that.getUpFileUrl(file);
+			console.log(file,"ppppp")
+			if(file){
+				that.getUpFileUrl(file);
+			}else{
+				this.isLoadding = false;
+				
+			}
+			// return ;
 			
+
+			
+		},
+		// clickLadding(){
+		// 	if(!this.isClickLadding){
+		// 		return ;
+		// 	}
+		// 	this.percent+=1
+		// 	if(this.percent>14){
+		// 		this.percent = 14;
+		// 	}
+		// 	setTimeout(()=>{
+		// 		this.clickLadding();
+		// 	},500)
+		// },
+		upLoading(){
+			if(!this.upLoading){
+				
+				return ;
+			}
+			this.percent +=1;
+			if(this.percent>87){
+				this.percent=87;
+			}
+			setTimeout(()=>{
+				this.upLoading();
+			},200)
 		},
 		upfile(form,serverUrl){
 			var that  = this;
+			
+			this.upLoading();
 			var xhrfile = new XMLHttpRequest();
+			xhrfile.timeout = 600000;
 			xhrfile.onreadystatechange = function() {
 				if (xhrfile.readyState === 4) {
 					var fileResponse = xhrfile.response;
 					if (xhrfile.status === 200) {
 						if (fileResponse && fileResponse.code > 0) {
+							// that.isLoadding=false;
+							// that.percent = 0;
 							var data = fileResponse.data;
 							that.newFileArr.push({fieldUrl:data.url,fieldId:data.id});
 							that.fileTypes.push(that.getExt(data.url));
@@ -306,8 +346,12 @@ export default{
 						
 						}
 					} else{
-
+						that.$Notice.error({
+							title:'上传失败请稍后重试'
+						});
 					}
+					that.isLoadding=false;
+					that.percent = 100;
 				}
 			};
 			xhrfile.open('POST', serverUrl, true);
@@ -315,11 +359,14 @@ export default{
 			xhrfile.send(form);
 		},
         getUpFileUrl(event){
+			console.log("getUpFileUrl")
 			let category = 'op/upload';
 			let that = this;
 			let file = event;
 			var fileName= event.name;
 			var form = new FormData();
+		
+			
 			this.$http.get('get-vue-upload-url', {
 				category:category,
 				isPublic:that.publicUse

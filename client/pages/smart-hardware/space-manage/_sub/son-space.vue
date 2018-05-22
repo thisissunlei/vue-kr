@@ -1,6 +1,11 @@
 <template>
     <div class="g-spacemanage-detail">
-        <SectionTitle title="已添加空间" />
+        <div class='u-bread'>
+            <Breadcrumb>
+                    <BreadcrumbItem>主页</BreadcrumbItem>
+                    <BreadcrumbItem to="/smart-hardware/space-manage">{{faterName}}</BreadcrumbItem>
+            </Breadcrumb>
+        </div>
         <div class="u-search" >
             <Button class='u-btn-add' type="primary" @click="showCreate">添加空间</Button>
             <Button type="error" @click="deleteAll">批量移除</Button>
@@ -115,17 +120,16 @@
     </div>
 </template>
 <script>
-import SectionTitle from '~/components/SectionTitle';
 import dateUtils from 'vue-dateutils';
 export default {
     components:{
-       SectionTitle,
     },
     props:{
 
     },
     data(){
         return{
+            faterName:'',
             page:1,
             pageSize:15,
             totalCount:0,
@@ -307,7 +311,7 @@ export default {
         }
     },
     mounted(){
-        GLOBALSIDESWITCH('false');
+        this.faterName = this.$route.query.name
         this.getTableData(this.tabParams);
         this.getTableAllData(this.tabAllParams);
         this.getCommunityList();
@@ -497,6 +501,9 @@ export default {
     .ivu-table-cell{
         padding:0;
     }
+}
+.u-bread{
+    padding:20px 0 0 20px;
 }
 .u-search{
     height:32px;

@@ -427,8 +427,8 @@ export default {
                 });
             })
         },
-        jumpEdit(params){
-            this.$router.push(`/smart-hardware/space-manage/${params.id}/son-space`)
+        jumpEdit(param){
+            this.$router.push({path:`/smart-hardware/space-manage/${param.id}/son-space`,query:{name:param.name}})
         }
     }
 }

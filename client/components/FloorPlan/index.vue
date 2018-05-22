@@ -59,6 +59,7 @@ var img='';
     },
     
     methods:{
+        //将图片地址转换成base64格式
         getBase64Image(img) {
             var canvas = document.createElement('canvas'); 
             canvas.width = img.width;

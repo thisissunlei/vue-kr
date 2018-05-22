@@ -17,21 +17,14 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
 
-
+     
     //导出svg图片
     var button = document.getElementById(pic);
         button.addEventListener('click', function() {
-        //   var newWindow = window.open("","newWindow");
-        //   if (!newWindow) return;
-        //   var newDocument = newWindow.document;
           var svg = myDiagram.makeImage({
-        //    document: newDocument,  // create SVG DOM in new document context
               scale:1,
           })
-          console.log('--eee-',svg);
-          utils.downImg(svg.src,data.pic.picName);
-          //newDocument.body.appendChild(svg);
-        
+          utils.downImg(svg.src,data.pic.picName);    
     }, false);
 
 
@@ -45,7 +38,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
     function textStyle() {
         return {stroke: "white", font: "bold 12px PingFangSC-Medium" };
     }
-    console.log('pic--',data.pic.dataUrl);
+   
     //背景图
     if(data.pic){
         myDiagram.add(

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+var count='';
 export default {
     data() {
         return{
@@ -33,6 +34,7 @@ export default {
         var mapCount=localStorage.getItem('inventory-floor-map-discount');
         var mapSelf=localStorage.getItem('inventory-floor-map-countSelf');
         this.params.discount=mapCount?Number(mapCount):' ';
+        count=this.params.discount;
         this.mapNull=mapSelf;
         this.params.countSelf=mapSelf?mapSelf:'1';
     },
@@ -46,7 +48,7 @@ export default {
         //折扣价
         countChange(param){
             this.num=this.num+1;
-            if(this.num!=1||!this.mapNull){
+            if(this.num!=1||!this.mapNull||count==' '){
                 this.params.countSelf=(typeof param)=='number'?'0':'1';
             }
             localStorage.setItem('inventory-floor-map-discount',param);

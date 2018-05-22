@@ -38,6 +38,7 @@
 
 <script>
 import publicFn from './publicFn';
+var oldFloor='';
 export default {
   data(){
     return{
@@ -74,7 +75,12 @@ export default {
             this.floorList=res.data;
             var len=res.data.length;
             if(len){
-                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                var floor=this.floorList[0].floor;
+                this.formItem.floor=this.floorList.length?floor:''; 
+                if(oldFloor==floor){
+                    this.floorChange(floor);
+                }
+                oldFloor=floor; 
                 if(len>1){
                     this.floorList.push({floor:' ',floorName:"全部楼层"})  
                 }

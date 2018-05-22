@@ -78,7 +78,11 @@ export default {
        this.isClick=true;
     },
     mouseEnter(event,every,all,canvas,scroll){
-        publicFn.poptipOver(event,every,all,canvas,scroll,this.discount)
+         var tirDom = document.getElementById('gantt-chart-tool-tip');
+         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+         tirDom.style.display = 'block';
+         angleDom.style.display = 'block';
+         publicFn.poptipOver(event,every,all,canvas,scroll,this.discount)
     },
     mouseLeave(event,every,all){
         if(!this.isClick){
@@ -88,8 +92,8 @@ export default {
     closeCommon(){
         var tirDom = document.getElementById('gantt-chart-tool-tip');
         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-        tirDom.style.opacity = 0;
-        angleDom.style.opacity = 0;
+        tirDom.style.display = 'none';
+        angleDom.style.display = 'none';
     },
     closePop(){
         this.isClick=false;
@@ -108,7 +112,8 @@ export default {
      }
     #gantt-chart-tool-tip{
           max-width: 280px;
-          opacity: 0;
+          display: none;
+          //opacity: 0;
           background: #575D6A;
           position: fixed;
           top: 0px;
@@ -147,9 +152,9 @@ export default {
           border-color: transparent transparent rgba(70,76,91,.9)  transparent;
       }
       #gantt-chart-tool-tip-triangle{
-          opacity: 0;
+          //opacity: 0;
           position: fixed;
-          display:block;
+          display:none;
           width:0;
           height:0;
           border-style:solid;

@@ -8,22 +8,23 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     var tirDetail=tirDom.getBoundingClientRect();
     var canvasDetail=canvasDom.getBoundingClientRect();
     
-    
+
     var obj = getToolTipContent(every,discount); 
+    
     contentDom.innerHTML = obj.str;
+    tirDetail=tirDom.getBoundingClientRect();
+    contentDom=document.getElementById('gantt-chart-tool-tip-content');
     
     var toolLocation={
         left:Number(every.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-12-scroll.top
     }
-    
+   
     tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
     angleDom.style.left = toolLocation.left+tirDetail.width/2-5+ 'px';
     angleDom.style.top = toolLocation.top+tirDetail.height+ 'px';
-    tirDom.style.opacity = 1;
-    angleDom.style.opacity = 1;
 }
 
 

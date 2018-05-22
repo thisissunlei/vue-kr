@@ -19,7 +19,7 @@
 
 					<KrImg 
 						v-if="getIsPhoto(item.fieldUrl)" 
-						@click="eyePhotoAlbum(item.fieldUrl,$event)" 
+						@click="eyePhotoAlbum(item.fieldUrl,'edit',$event)" 
 						:src="item.fieldUrl" 
 						width="210"
 						height="135"
@@ -127,6 +127,8 @@ export default{
 			newFileArr: [],
 			percent:0,
 			isLoadding:false,
+			callback:null,
+			type:'view'
 			// isClickLadding:false
         }
 	},
@@ -134,9 +136,9 @@ export default{
 		this.fileArr = [].concat(this.value)
 		this.newFileArr = [].concat(this.value);
 		this.fileTypes = [].concat(this.setFileArrType(this.newFileArr));
-		document.body.onclick = function(event){
-			console.log(event.target,"oooooo")
-		}
+		// document.body.onclick = function(event){
+		// 	console.log(event.target,"oooooo")
+		// }
 	},
 	methods:{
 		setFileArrType(data){
@@ -218,6 +220,8 @@ export default{
             this.$emit('recordClick',value)
         },
 		close(){
+			console.log(this.callback,"pppp",this.type)
+			this.callback && this.callback(this.type);
 			this.openPhotoAlbum = !this.openPhotoAlbum;
 		},
 		okClick(){
@@ -248,7 +252,11 @@ export default{
 			this.newFileArr = [].concat(this.fileArr);
 		},
 		//查看图片
-		eyePhotoAlbum(url,event){
+		eyePhotoAlbum(url,type,event,callback){
+			this.type = type;
+			this.callback = callback;
+			// console.log(event.target)
+			console.log(event,"lllllll")
 			let urlArr = [];
 			for (var i = 0; i < this.newFileArr.length; i++) {
 				let everyUrl = this.newFileArr[i].fieldUrl;

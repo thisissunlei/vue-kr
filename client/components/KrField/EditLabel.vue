@@ -22,7 +22,7 @@
 
 						<KrImg 
 							v-if="getIsPhoto(item.fieldUrl)" 
-							@click="eyePhotoAlbum(item.fieldUrl,$event)" 
+							@click="eyePhotoAlbum(item.fieldUrl,'view',$event)" 
 							:src="item.fieldUrl" 
 							width="210"
 							height="135"
@@ -164,8 +164,15 @@ export default {
 		switchMask(){
 			this.openMessage = !this.openMessage;
 		},
-		eyePhotoAlbum(url,event){
-			this.$emit('eyePhotoAlbum',url,event)
+		eyePhotoAlbum(url,type,event){
+			console.log(event,"======")
+			this.$emit('eyePhotoAlbum',url,type,event,(type)=>{
+				if(type == 'view'){
+					this.isEdit = false;
+				}else{
+					this.isEdit = false;
+				}
+			})
 		},
 		getFileArr(){
 			

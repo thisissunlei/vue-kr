@@ -5,9 +5,9 @@ export default {
         url: '/api/krspace-op-web/customer/manager/list',
         method: 'get'
     },
-    //获取企业管理员详情
-    'customer-manager-detail': {
-        url: '/api/krspace-op-web/customer/manager/detail',
+    //获取企业管理员详情--员工信息
+    'customer-manager-staff-list': {
+        url: 'api/krspace-op-web/customer/manager/staff/list',
         method: 'get'
     },
     //修改管理员
@@ -79,6 +79,11 @@ export default {
     //客户转移－判断所选客户是否能转移
     'customer-is-switch': {
         url: '/api/krspace-op-web/customer-center/transfer/check',
+        method: 'get'
+    },
+    //获取企业管理员详情--企业信息
+    'customer-community-enter-info': {
+        url: '/api/krspace-op-web/customer/community/enter-info',
         method: 'get'
     }
 } 

@@ -7,20 +7,12 @@
 				<p slot="title" class="card-title">
 					企业信息
 				</p>
-				<LabelText :inline="inline" label="企业名称：">
-                    {{detail.csrName}}
+				<LabelText :inline="true" label="企业名称：">
+                    {{companyInfo.csrName}}
                 </LabelText>
                  <Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
 			</Card>
 		</div>
-		<!-- <div class="u-detail-info">
-			<LabelText label="企业名称：" style="width:100%;">
-				{{detail.csrName}}
-			</LabelText>	
-			<LabelText label="已入驻社区：" style="width:100%;">
-				{{detail.cmtName}}
-			</LabelText>
-		</div> -->
 		<div class="u-company-info">
 			<Card id="u-step-two">
 				<p slot="title" class="card-title">
@@ -111,6 +103,7 @@ export default {
 			managerCount:0,
 			mbrName:'',
 			isRefresh:false,
+			companyInfo:{},
 			list:[
 				{
 				 title: '姓名',
@@ -129,64 +122,23 @@ export default {
 				},
 				{
 				 title: '入驻社区',
-                 key: 'mbrEmail',
+                 key: 'enterCmtName',
 				 align:'center',
 				},
 				{
 				 title: '管理员',
-                 key: 'mbrEmail',
+                 key: 'isManager',
 				 align:'center',
+				 render(h,obj){
+					let manager= obj.row.isManager=="1"?'是':'否';
+					return manager;
+				 }
 				},
 				{
 				 title: '管理的社区',
-                 key: 'mbrEmail',
+                 key: 'manageCmtName',
 				 align:'center',
-				},
-				{
-				 title: '操作',
-                 key: 'mbrEmail',
-				 align:'center',
-				 render(h, obj){
-					 if(obj.row.isManager=='1'){
-						  return h('div', [
-                                 h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#FF6868'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            _this.cancelManager(obj.row)
-                                        }
-                                    }
-                                }, '取消管理员')
-                            ]);  
-						  
-					 }else if(obj.row.isManager=='0'){
-						  return h('div', [
-                                 h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            _this.setManager(obj.row)
-                                        }
-                                    }
-                                }, '设置管理员')
-                            ]);  
-						  
-					 }
-                        
-                }
-				},
+				}
 			],
 			companyColumns:[
 				{
@@ -221,7 +173,7 @@ export default {
 	mounted:function(){
 		GLOBALSIDESWITCH("false");
 		this.getInfo();
-		
+	
 	},
 	methods:{
 		renderList(){
@@ -271,7 +223,7 @@ export default {
                         
                 }
 				};
-				if(this.list.length<4){
+				if(this.list.length<7){
 					this.list.push(obj);
 				}else{
 					this.list.pop();
@@ -283,7 +235,7 @@ export default {
 		getInfo(){
 			let {params}=this.$route;
 			this.Params.csrId=params.csrId;
-			this.$http.get('customer-manager-detail', this.Params).then((res)=>{
+			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;
 			}).catch((err)=>{
@@ -291,15 +243,30 @@ export default {
 					title:err.message
 				});
 			})
+			this.getCompanyInfo(params);
 			this.getCount();
+			
+		},
+		getCompanyInfo(params){
+			this.$http.get('customer-community-enter-infot', {
+				csrId:params.csrId
+			}).then((res)=>{
+				this.companyInfo=res.data;
+				this.companyList=res.data.enterList;
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
 		},
 		getCount(){
+			let {params}=this.$route;
 			let Params={
-				csrId:this.detail.csrId
+				csrId:params.csrId
 			}
 			this.$http.get('get-manager-count', Params).then((res)=>{
 				this.managerCount=res.data.managerCount;
-				//this.renderList();
+				this.renderList();
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -308,8 +275,8 @@ export default {
 			
 		},
 		changePage(page){
-                this.Params.page=page;
-                this.getInfo();
+			this.Params.page=page;
+			this.getInfo();
 		},
 		cancelManager(params){
 			this.TipTxt="取消";

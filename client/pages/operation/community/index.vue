@@ -273,12 +273,12 @@
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="list.length">
+              <div class="contents" style="text-align:center" v-if="!list.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
               </div>
 
-              <div class="contents" v-if="!list.length">
+              <div class="contents" v-if="list.length">
                 <ul >
                   <li v-for="item in list" >
                     <span class="table-cell ellipsis" style="flex:2">{{item.id}}</span>
@@ -316,32 +316,7 @@ export default {
        tab:'all',
        optionList:[],
        communityList:[],
-       list:[
-        {
-          id:'VIP办公室（16人间）',
-          number:'16工位',
-          customer:'上海今日头条科技有限公司上海今日头条科技有限公司上海今日头条科技有限公司上海今日头条科技有限公司 ',
-          date:'3日后  '
-        },
-        {
-          id:111,
-          number:'2哥',
-          customer:'上海今日头条科技有限公司 ',
-          date:'23日后  '
-        },
-        {
-          id:111,
-          number:'2哥',
-          customer:'上海今日头条科技有限公司 ',
-          date:'3日后  '
-        },
-        {
-          id:'你好啊',
-          number:'你好啊',
-          customer:'上海今日头条科技有限公司 ',
-          date:'13日后  '
-        },
-       ],
+       list:[],
      }
   },
   components:{

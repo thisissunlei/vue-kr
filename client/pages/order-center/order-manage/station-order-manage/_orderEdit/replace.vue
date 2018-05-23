@@ -845,9 +845,6 @@
                 if(this.formItem.communityId && this.formItem.customerId){
                     let params = {
                         communityId:this.formItem.communityId,
-                        // communityId:4,
-
-                        // customerId:1715
                         customerId:this.formItem.customerId
                     }
                      this.$http.get('get-community-floor', params).then( r => {
@@ -1880,6 +1877,7 @@
                             }
                         })
                         this.formItem.communityId = response.data.communityId+'';
+                        this.formItem.salerId = JSON.stringify(response.data.saleId);
                         this.formItem.communityName = response.data.communityName;
                         this.discountNum = response.data.discount;
                         this.discountCon = response.data.discount;
@@ -1895,6 +1893,7 @@
                         
 
                     }).catch((error)=>{
+                        console.log(error)
                         this.$Notice.error({
                             title:error.message
                         });

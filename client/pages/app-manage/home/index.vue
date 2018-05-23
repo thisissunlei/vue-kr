@@ -49,7 +49,7 @@
                         filterable
                         clearable
                     >
-                        <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+                        <Option  v-for="item in communityList" :value="item.cmtId" :key="item.cmtId"> {{ item.cmtName }}</Option>
                 </Select>
         </div>
         <div slot="footer">
@@ -96,6 +96,7 @@ export default {
    },
    mounted(){
       this.activeKey=sessionStorage.getItem('paymentMask')||'member';
+      this.getCommunity();
    },
    methods:{
         openCommunity(){
@@ -122,14 +123,14 @@ export default {
             this.formItem.endDate=data[1];
         },
         getCommunity(){
-            //   this.$http.get('join-bill-community','').then((res)=>{
-            //     this.communityList=res.data.items;
+              this.$http.get('get-community-new-list','').then((res)=>{
+                this.communityList=res.data.cmts;
 
-            //     }).catch((error)=>{
-            //         this.$Notice.error({
-            //             title:error.message
-            //         });
-            //     })
+                }).catch((error)=>{
+                    this.$Notice.error({
+                        title:error.message
+                    });
+                })
          }
     }
 }

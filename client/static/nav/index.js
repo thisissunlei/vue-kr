@@ -703,6 +703,12 @@
                         menuCode: 'operation_home',
                     },
                     {
+                        primaryText: '即将到期',
+                        router: 'inventory/over-date',
+                        type:'vue',
+                        menuCode: 'operation_home',
+                    },
+                    {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
                         router: 'community/communityManage/visitorsToRecord'

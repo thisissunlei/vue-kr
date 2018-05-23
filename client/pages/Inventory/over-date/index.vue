@@ -347,8 +347,8 @@ var layoutScrollHeight=0;
             },
             getData(params){
                 console.log('=====',params)
-                //getDueList
-                this.$http.post('getDailyInventory', params).then((res)=>{
+                //getDailyInventory 
+                this.$http.post('getDueList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -371,6 +371,7 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
+                utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
                 console.log('submitExport')
             },
             //滚动监听

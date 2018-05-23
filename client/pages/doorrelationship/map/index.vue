@@ -113,7 +113,7 @@ export default {
                                 memo : itemData.memo,
                                 name : itemData.name,
                                 x : parseInt(locationArr[0]+0),
-                                x : parseInt(locationArr[1]+0)
+                                y : parseInt(locationArr[1]+0)
                             };
                             _this.editDataReq(param);
                             _this.nodeDragged = false;
@@ -259,8 +259,8 @@ export default {
                 id : this.editData.id,
                 memo :this.editData.memo,
                 name : this.editData.name,
-                x : location[0].toFixed(2),
-                y : location[1].toFixed(2),
+                x : parseInt(location[0]),
+                y : parseInt(location[1]),
             }
             this.editDataReq(params);
         },

@@ -438,7 +438,10 @@ export default {
             this.getCommunityList(param)
         },
         communityChange(param){
-            this.getFloorList(param);
+            if(param){
+                this.getFloorList(param);
+            }
+            
         },
         
     }

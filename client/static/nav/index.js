@@ -742,7 +742,7 @@
                     iconColor: '#79859a',
                     menuItems: [
                         {
-                            primaryText: 'APP主页',
+                            primaryText: '产品运营主页',
                             menuCode: 'app_console_push',
                             type: 'vue',
                             router: 'app-manage/home'

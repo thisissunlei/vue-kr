@@ -9,8 +9,7 @@
                     filterable
                     clearable
                     @on-change="communityChange"
-                    remote
-                    :label="communityName"
+                    value="communityName"
                 >
                     <Option v-for="item in communityList" :value="`${item.id}`" :key="item.id">{{ item.name }}</Option>
                 </Select>
@@ -21,9 +20,8 @@
                     style="width:200px"
                     placeholder="请选择"
                     clearable
-                    remote
                     filterable
-                    :label="floorName"
+                    value="floorName"
                 >
                     <Option v-for="item in floorList" :value="`${item.value}`" :key="item.value">{{ item.label }}</Option>
                 </Select>
@@ -112,12 +110,12 @@ export default {
     },
     created(){
 
-        this.getCommunityList();
-        this.getInfo();
+
 
     },
     mounted(){
-
+        this.getCommunityList();
+        this.getInfo();
     },
     methods:{
        getInfo(){
@@ -155,7 +153,9 @@ export default {
                     item.value=item.id;
                     return  item;
                 })
+
                 this.communityList=res.data.items;
+                console.log(this.communityList)
 
             }).catch((err)=>{
                 this.$Notice.error({

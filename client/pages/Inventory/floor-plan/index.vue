@@ -158,7 +158,7 @@ export default {
           display: none;
           //opacity: 0;
           background: #575D6A;
-          position: fixed;
+          position: absolute;
           top: 0px;
           left: 0px;
           border-radius: 4px;
@@ -196,7 +196,7 @@ export default {
       }
       .gantt-chart-tool-tip-triangle{
           //opacity: 0;
-          position: fixed;
+          position: absolute;
           display:none;
           width:0;
           height:0;

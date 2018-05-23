@@ -17,8 +17,8 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
     
     var toolLocation={
-        left:Number(every.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
-        top:Number(every.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-12//scroll.top
+        left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
+        top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
     
     tirDom.style.maxWidth = obj.width + 'px';

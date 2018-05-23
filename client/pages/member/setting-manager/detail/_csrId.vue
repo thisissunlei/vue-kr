@@ -50,7 +50,10 @@
         cancel-text="取消"
         width="443"
      >
-	 
+		<CommunityManage  
+			v-if="openTip"
+			:detail="itemDetail"
+		/>
 	  <div slot="footer">
 			<Button type="primary" @click="tipSubmit">确定</Button>
 			<Button type="ghost" style="margin-left: 8px" @click="hideTip">取消</Button>
@@ -65,12 +68,13 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
-
+import CommunityManage from './communityManage';
 export default {
 	components:{
 		SectionTitle,
 		DetailStyle,
 		LabelText,
+		CommunityManage
 	},
 	data(){
 		return{

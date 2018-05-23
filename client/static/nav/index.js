@@ -654,10 +654,16 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
+                        // {
+                        //     primaryText: '库存平面图',
+                        //     menuCode: 'cmt_run',
+                        //     router: 'product/communityManage/detail',
+                        // },
                         {
                             primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory',
                         },
                         {
                             primaryText: '销控',

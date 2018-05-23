@@ -1932,7 +1932,7 @@
 
                     this.oldStationData = array;
                     this.newStationData = array;
-                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                    overViewData.changeServiceFee = response.data.feeResultVO.changeServiceFee;
                     overViewData.back = response.data.feeResultVO.lockDeposit
                     overViewData.transferDepositAmount = response.data.feeResultVO.transferDeposit+''
 

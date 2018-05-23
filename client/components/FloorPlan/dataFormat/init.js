@@ -62,6 +62,8 @@ function init(data,picProperty,dataUrl,drawWrap){
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
+        oldWidth:picProperty.width,
+        oldHeight:picProperty.height,
         pos:data.graphFilePath,
         picName:data.graphFileName,
         dataUrl:dataUrl

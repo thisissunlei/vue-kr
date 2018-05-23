@@ -24,6 +24,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             button.addEventListener('click', function() {
             var svg = myDiagram.makeImage({
                 scale:1,
+                size: new go.Size(data.pic.oldWidth,data.pic.oldHeight)
             })
             utils.downFile(svg.src,data.pic.picName);    
         }, false);

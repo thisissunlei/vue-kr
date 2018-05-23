@@ -16,7 +16,7 @@
         <div class="flow-chart-content">
             <div :id="drawingBoard" class="drawing-board" :style="{background:'#f5f5f5'}"></div>  
         </div>
-        
+
     </div>
 </template>
 

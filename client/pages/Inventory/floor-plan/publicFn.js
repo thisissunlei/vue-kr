@@ -18,7 +18,7 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     
     var toolLocation={
         left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
-        top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop//scroll.top
+        top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
     
     tirDom.style.maxWidth = obj.width + 'px';

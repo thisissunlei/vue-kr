@@ -7,9 +7,9 @@
         label-position="right"  
         :rules="ruleValidate"
         :label-width="100">
-        <FormItem label="设备组名称："   prop="groupName">
+        <FormItem label="设备组名称："   prop="name">
             <Input
-                v-model="formItem.groupName"
+                v-model="formItem.name"
                 placeholder="设备组名称"
                 style="width: 300px"
             />
@@ -31,12 +31,12 @@ export default{
     data (){
 		return{
 			formItem:{
-                groupName:'',
+                name:'',
                 memo:'',
             },
             formValidate:'formValidate',
             ruleValidate : {
-                groupName: [
+                name: [
                         { required: true, message: '设备组名称必填', trigger: 'blur' },
                         { type: 'string', max: 10, message: '组名称最长10个字符', trigger: 'blur' }
                     ],

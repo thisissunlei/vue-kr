@@ -1,5 +1,14 @@
 <template>
     <div class="door-relationship">
+        <Select
+            v-model="communityId"
+            style="width:150px"
+            placeholder="请选择社区"
+            filterable
+            clearable
+        >
+            <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+        </Select>
        <Button  type="primary" @click="newCreateEquipmentGroup">新增设备组</Button>
        <Modal
             v-model="openNewCreateModal"
@@ -44,6 +53,11 @@ export default {
             myDiagram:null,
             model : null,
             editInitailData : {},
+            addNewNode : 0 ,
+            communityId : null,
+            communityList :[],
+            dateTemplate :{},
+            
        }
    },
    components:{
@@ -51,82 +65,93 @@ export default {
     EditForm
    },
    mounted(){
-       let _this =this;
-        var $ = go.GraphObject.make;
-        this.myDiagram = $(go.Diagram, "myDiagramDiv",
-        {
-            // start everything in the middle of the viewport
-            initialContentAlignment: go.Spot.Center,
-            "undoManager.isEnabled": true, // enable Ctrl-Z to undo and Ctrl-Y to redo
-            // have mouse wheel events zoom in and out instead of scroll up and down
-            "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-        });
-        // the template we defined earlier
-        this.myDiagram.nodeTemplate =
-        $(go.Node, "Auto",
-            // { background: "#44CCFF" },
-            new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-            $(go.Shape, "RoundedRectangle",
-                {
-                    parameter1: 10,  // the corner has a large radius
-                    fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
-                    stroke: null,
-                    portId: "",  // this Shape is the Node's port, not the whole Node
-                    fromLinkable: true, fromLinkableDuplicates: true,
-                    toLinkable: true,toLinkableDuplicates: true,
-                    cursor: "pointer"
-                }),
-            $(go.TextBlock, "groupName",
-            { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
-             new go.Binding("text","groupName").makeTwoWay())
-        );
 
-        // unlike the normal selection Adornment, this one includes a Button
-        this.myDiagram.nodeTemplate.selectionAdornmentTemplate =
-        
-            $(go.Adornment, "Spot",
-                $(go.Panel, "Auto",
-                $(go.Shape, { fill: null, stroke: "blue", strokeWidth: 1 }),
-                $(go.Placeholder)  // a Placeholder sizes itself to the selected Node
-                ),
-                // the button to create a "next" node, at the top-right corner
-                $("Button",
-                {
-                    alignment: go.Spot.TopRight,
-                    click: _this.editItemData,  // this function is defined below
-                    
-                },
-                $(go.TextBlock, "编辑",  // the Button content
-                    { font: "normal 10pt sans-serif" }),
-                $(go.Shape, "PlusLine", { width: 6, height: 6 })
-                ) // end button
-            ); // end Adornment
-
-        var dateTemplate = { "nodeKeyProperty": "id",
-                            "nodeDataArray": [
-                                { "id": 0, "loc": "120 120", "groupName": "设备组1" ,"memo":"111233"},
-                                { "id": 1, "loc": "330 120", "groupName": "First down" },
-                                { "id": 2, "loc": "226 376", "groupName": "First up" },
-                                { "id": 3, "loc": "60 276", "groupName": "Second down" },
-                                { "id": 4, "loc": "226 226", "groupName": "Wait" }
-                            ],
-                            "linkDataArray": [
-                                { "from": 0, "to": 1, "curviness": 20 },
-                                { "from": 1, "to": 2 },
-                                { "from": 1, "to": 4 },
-                                { "from": 2, "to": 0 },
-                                { "from": 2, "to": 3 },
-                                { "from": 3, "to": 0 },
-                                { "from": 4, "to": 0 },
-                            ]
-                            }
-        this.model = go.Model.fromJson(dateTemplate);
-        
-        this.myDiagram.model = this.model;
-
-        
+       this.getCommunity();
+       this.drawMap()
    },
+  
    methods:{
+        drawMap(){
+            console.log("dldkfldk")
+            let _this =this;
+            var $ = go.GraphObject.make;
+            this.myDiagram = $(go.Diagram, "myDiagramDiv",
+            {
+                initialContentAlignment: go.Spot.Center,
+                "undoManager.isEnabled": true, 
+                "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+            });
+            this.myDiagram.nodeTemplate =
+            $(go.Node, "Auto",
+                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                $(go.Shape, "RoundedRectangle",
+                    {
+                        parameter1: 10,  
+                        fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
+                        stroke: null,
+                        portId: "",  
+                        fromLinkable: true, fromLinkableDuplicates: true,
+                        toLinkable: true,toLinkableDuplicates: true,
+                        cursor: "pointer"
+                    }),
+                $(go.TextBlock, "name",
+                { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
+                new go.Binding("text","name").makeTwoWay())
+            );
+
+            this.myDiagram.nodeTemplate.selectionAdornmentTemplate =
+            
+                $(go.Adornment, "Spot",
+                    $(go.Panel, "Auto",
+                    $(go.Shape, { fill: null, stroke: "#000", strokeWidth: 1 }),
+                    $(go.Placeholder)  
+                    ),
+                     
+                    $("Button",
+                    {
+                        alignment: go.Spot.TopRight,
+                        click: _this.editItemData, 
+                        
+                    },
+                    $(go.TextBlock, "编辑", 
+                        { font: "normal 10pt sans-serif" }),
+                    $(go.Shape, "PlusLine", { width: 6, height: 6 })
+                    ) 
+                ); 
+
+            var dateTemplate = this.dateTemplate;
+            this.model = go.Model.fromJson(dateTemplate);
+            this.myDiagram.model = this.model;
+        },
+
+        getMapData(params){
+            this.$http.get('getDoorRelationshipData', params).then((res)=>{
+                var reponseData = res.data;
+                var nodeDataArrayNew = [];
+                for(var i = 0 ;i< reponseData.setList.length;i++){
+                    nodeDataArrayNew[i] = {
+                        "id": reponseData.setList[i].id,
+                        "loc": reponseData.setList[i].x + " "+ reponseData.setList[i].y,
+                        "name" : reponseData.setList[i].name,
+                        "memo" : reponseData.setList[i].memo,
+                        "communityId " : reponseData.setList[i].communityId,
+                    }
+                }
+                this.dateTemplate = { "nodeKeyProperty": "id",
+                                "nodeDataArray":nodeDataArrayNew,
+                                "linkDataArray":reponseData.setRelationList
+                                }
+                var dateTemplate = this.dateTemplate;
+                this.model = go.Model.fromJson(dateTemplate);
+            
+            this.myDiagram.model = this.model;
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
+
         newCreateEquipmentGroup(){
            
             this.openNewCreateModal = !this.openNewCreateModal;
@@ -141,30 +166,64 @@ export default {
             this.editData=form;
         },
         sumbmitNewCreateData(){
-            console.log("newCreateData",this.newCreateData);
-            var newCreateData = Object.assign({},this.newCreateData)
+            var locationY = (this.addNewNode)*70
+            var location  = 0+ " " + locationY
+            var newCreateData = Object.assign({},this.newCreateData,{"loc":location})
+            this.addNewNode +=1;
+            
             this.myDiagram.startTransaction("make new node");
             this.myDiagram.model.addNodeData(newCreateData);
             this.myDiagram.commitTransaction("make new node");
             // 获取model数据
-            console.log("this.myDiagram.model.toJson()",this.myDiagram.model.toJson())
+            this.addNewCreateDataReq(newCreateData);
         },
+
         sumbmitEditData(){
             console.log("editDate",this.editData);
-            
         },
+
         editItemData (e, obj){
             console.log("e",e,"obj",obj,obj.part.adornedPart.data);
             this.editInitailData = obj.part.adornedPart.data;
             this.openEditFormModal();
-
         },
+
         openEditFormModal(){
             this.openEditModal = !this.openEditModal
-        }
+        },
+        addNewCreateDataReq(sendMsg){
+            let _this =this;
+            var locationArr = sendMsg.loc.split(' ');
+            console.log("locationArr",locationArr)
+            var realsendMsg = {
+                communityId : _this.communityId,
+                memo :sendMsg.memo,
+                name :sendMsg.name,
+                x :locationArr[0],
+                y :locationArr[1],
+            }
+            this.$http.post('newCreateDoorRelationship', realsendMsg).then((res)=>{
+				console.log("新增成功")
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
+        getCommunity(){
+            
+            this.$http.get('join-bill-community','').then((res)=>{
+                this.communityList=res.data.items;
+                this.communityId = res.data.items[0].id
 
-
-
+                var params = {communityId : this.communityId}
+                this.getMapData(params);
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+         }
         
     }
  }

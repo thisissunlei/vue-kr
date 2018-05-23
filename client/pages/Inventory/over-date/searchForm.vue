@@ -385,10 +385,13 @@ export default {
             console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                this.floorList=res.data.map(item=>{
+                
+                if(this.floorList.length){
+                    this.floorList=res.data.map(item=>{
                         item.floor = item.floor+'';
                         return item;
                     });
+                }
                 if(this.floorList.length>1){
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})
                                             

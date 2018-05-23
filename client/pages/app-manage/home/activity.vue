@@ -60,7 +60,7 @@ export default {
             this.page=page;
             this.getTableData(this.params);
         },
-        getTableData(){
+        getTableData(params){
              this.$http.get('get-app-operation-activity-data', params).then((res)=>{
                     this.billList=res.data.items;
                     this.totalCount=res.data.totalCount;

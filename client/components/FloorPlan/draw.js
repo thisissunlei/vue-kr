@@ -24,12 +24,12 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             button.addEventListener('click', function() {
             var svg = myDiagram.makeImage({
                 scale:1,
-                size: new go.Size(data.pic.oldWidth,data.pic.oldHeight)
+                size: new go.Size(data.pic.width,data.pic.width)
             })
             utils.downFile(svg.src,data.pic.picName);    
         }, false);
-   }
-   
+    }
+    
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",
         function(e) {

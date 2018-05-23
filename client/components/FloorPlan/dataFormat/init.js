@@ -46,8 +46,18 @@ function init(data,picProperty,dataUrl,drawWrap){
             }
             min=minW<minH?minW:minH;
         })
-        scale=(36/min)<0.3?0.3:(36/min);
 
+        var firstScale=36/min;
+        if(firstScale<0.3){
+            scale=0.3
+        }else{
+            if(firstScale>1){
+                scale=1
+            }else{
+                scale=firstScale
+            }
+        }
+        
         //尺寸缩放
         dataRender.map((list,index)=>{
             list.size=Number(list.cellWidth)*scale+' '+Number(list.cellHeight)*scale;
@@ -62,12 +72,11 @@ function init(data,picProperty,dataUrl,drawWrap){
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
-        oldWidth:picProperty.width,
-        oldHeight:picProperty.height,
         pos:data.graphFilePath,
         picName:data.graphFileName,
         dataUrl:dataUrl
     }
+   
     //高度自适应图片高度
     drawWrap.style.height=picProperty.height+20+'px';
     return {data:[].concat(dataRender),pic:picProperty};

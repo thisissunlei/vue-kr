@@ -84,9 +84,9 @@
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="3" >等于</Option>
-                                <Option value="2" >长于</Option>
-                                <Option value="1">少于</Option>
+                                <Option value="EQ" >等于</Option>
+                                <Option value="LT" >长于</Option>
+                                <Option value="GT">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
@@ -138,9 +138,9 @@
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="3" >等于</Option>
-                                <Option value="2" >长于</Option>
-                                <Option value="1">少于</Option>
+                                <Option value="EQ" >等于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="rentDays" style="display:inline-block;">
@@ -262,26 +262,26 @@ export default {
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    leaseRemainingType:'2',
-                    rentType:'2',
+                    leaseRemainingType:'GT',
+                    rentType:'GT',
                     reletTypeName:' ',
                     goodsName:'',
                     customerName:'',
                 },
                 renewList:[
                     {value:' ',label:'全部'},
-                    {value:'1',label:'可续租（时长不限）'},
-                    {value:'2',label:'不可续租'},
-                    {value:'3',label:'只可续部分时间'}
+                    {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
+                    {value:'RENT_NO_PERMIT',label:'不可续租'},
+                    {value:'RENT_CAN_TO',label:'只可续部分时间'}
                 ],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'1',label:'固定办公桌'},
-                    {value:'0',label:'独立办公室'},
-                    {value:'2',label:'移动办公桌'}
+                    {value:'SPACE',label:'固定办公桌'},
+                    {value:'OPEN',label:'独立办公室'},
+                    {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
                     {value:'AVAILABLE',label:'未租'},

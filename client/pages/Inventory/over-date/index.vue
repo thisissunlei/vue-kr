@@ -40,7 +40,7 @@ import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
 import SearchForm from './searchForm';
 import Message from '~/components/Message';
-import SlotHead from '../slotHead';
+import SlotHead from './slotHead';
 import Loading from '~/components/Loading';
 var layoutScrollHeight=0;
     export default {
@@ -104,26 +104,31 @@ var layoutScrollHeight=0;
                     {
                         title: '商品类型',
                         key: 'type',
+                        width:110,
                         align:'center',
                     },
                     {
                         title: '工位数量',
                         key: 'capacity',
+                        width:80,
                         align:'center',
                     },
                     {
                         title: '进场日',
                         align:'center',
+                        width:80,
                         key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
+                        width:80,
                         key: 'endDate',
                     },
                     {
                         title: '租期',
                         align:'center',
+                        width:80,
                         key: 'rentDays',
                         render(h, params){
                             if(params.row.rentDays<30){
@@ -165,21 +170,25 @@ var layoutScrollHeight=0;
                     {
                         title: '当前签约价',
                         align:'right',
+                        width:80,
                         key: 'price',
                     },
                     {
                         title: '当前客户',
                         align:'center',
+                        width:110,
                         key: 'customerName',
                     },
                     {
                         title: '客户当前在租工位数',
                         align:'center',
+                        width:80,
                         key: 'customerStatoons',
                     },
                     {
                         title: '随后可续时段',
                         align:'center',
+                        width:80,
                         key: 'reletTypeName',
                         render(h, params){
                             console.log(params.row.reletTypeName)
@@ -196,7 +205,9 @@ var layoutScrollHeight=0;
                                         }, [
                                         h('div', [
                                             h('div',{
-                                                color:'#FF6868'
+                                                style:{
+                                                    color:'#FF6868'
+                                                }
                                             },'不可续租')
                                         ]),
                                         h('div', {slot:'content'},[
@@ -224,7 +235,9 @@ var layoutScrollHeight=0;
                                         }, [
                                         h('div', [
                                             h('div',{
-                                                color:'#FF6868'
+                                                style:{
+                                                    color:'#FF6868'
+                                                }
                                             },'只可续租至')
                                         ]),
                                         h('div', [
@@ -256,6 +269,7 @@ var layoutScrollHeight=0;
                     {
                         title: '商品定价',
                         align:'right',
+                        width:80,
                         key: 'quotedPrice',
                     },
                 ],
@@ -333,7 +347,8 @@ var layoutScrollHeight=0;
             },
             getData(params){
                 console.log('=====',params)
-                this.$http.post('getDueList', params).then((res)=>{
+                //getDueList
+                this.$http.post('getDailyInventory', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;
@@ -408,7 +423,7 @@ var layoutScrollHeight=0;
 .enter-filed{
     .enter-filed-table{
         position: relative;
-        padding: 0 20px;
+        padding: 0 ;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
         }
@@ -482,9 +497,8 @@ var layoutScrollHeight=0;
     }
 }
      .enter-filed-table{
-            
-            padding:20px;
             padding-bottom:77px; 
+            margin:0 20px;
             margin-top: 30px;
             position: relative;
             .ivu-tooltip{

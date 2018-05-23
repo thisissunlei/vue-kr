@@ -84,9 +84,9 @@
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="EQ" >等于</Option>
-                                <Option value="GT" >长于</Option>
-                                <Option value="LT">少于</Option>
+                                <Option value="3" >等于</Option>
+                                <Option value="2" >长于</Option>
+                                <Option value="1">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
@@ -102,11 +102,11 @@
 
                     <div style="display:inline-block;margin-right:20px;margin-left:90px;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">当前客户</span>
-                        <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
+                        <Form-item  style="width:auto;display:inline-block;" prop="customerName">
                             <i-input 
-                                v-model="formItem.person" 
+                                v-model="formItem.customerName" 
                                 style="width: 200px"
-                                placeholder="请输入联系人"
+                                placeholder="请输入当前客户"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -138,9 +138,9 @@
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
-                                <Option value="EQ" >等于</Option>
-                                <Option value="GT" >长于</Option>
-                                <Option value="LT">少于</Option>
+                                <Option value="3" >等于</Option>
+                                <Option value="2" >长于</Option>
+                                <Option value="1">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="rentDays" style="display:inline-block;">
@@ -256,32 +256,32 @@ export default {
             };
             return {  
                 formItem:{
-                    name:'',
                     communityId:' ',
                     cityId:'',
                     floor:' ',
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    leaseRemainingType:'GT',
-                    rentType:'GT',
+                    leaseRemainingType:'22',
+                    rentType:'2',
                     reletType:' ',
-                    goodsName:''
+                    goodsName:'',
+                    customerName:'',
                 },
                 renewList:[
                     {value:' ',label:'全部'},
-                    {value:'AVAILABLE',label:'可续租（时长不限）'},
-                    {value:'PERIOD',label:'不可续租'},
-                    {value:'DISABLED',label:'只可续部分时间'}
+                    {value:'1',label:'可续租（时长不限）'},
+                    {value:'2',label:'不可续租'},
+                    {value:'3',label:'只可续部分时间'}
                 ],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
+                    {value:'1',label:'固定办公桌'},
+                    {value:'0',label:'独立办公室'},
+                    {value:'2',label:'移动办公桌'}
                 ],
                 inventoryList:[
                     {value:'AVAILABLE',label:'未租'},
@@ -311,10 +311,14 @@ export default {
                     rentDays: [
                         { validator: validateNum, trigger: 'change' }
                     ],
+                    customerName:[
+                        { validator: validateName, trigger: 'change' }
+                    ],
                 }
             }
     },
     mounted(){
+        this.formItem = Object.assign({},this.formItem,this.$route.query)
         this.getCityList();
     },
     head() {

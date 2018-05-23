@@ -26,7 +26,7 @@
           </div>
           <div class="card-two item">
             <span class="content">
-              <img src="~/assets/images/member.png" alt="" style="margin:15px auto;width:30px;height:30px;margin-top:20px;">
+              <img src="~/assets/images/member.png" alt="" style="margin:12px auto;width:36px;height:33px;margin-top:20px;">
             </span>
             <span class="content title">先入住会员</span>
             <span class="content number"><span>305</span>个</span>
@@ -41,38 +41,38 @@
             <div class="content">
               <span class="number">
                 <span class="title">总数</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #232428;">255</span>
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #232428;">25</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #232428;">2</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #232428;">0</span>
+                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #232428;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #232428;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #232428;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #232428;">0</span>
               </span>
               <span class="number">
                 <span class="title">在租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #F5A623;">255</span>
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #F5A623;">25</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #F5A623;">2</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #F5A623;">0</span>
+                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #F5A623;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #F5A623;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #F5A623;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #F5A623;">0</span>
               </span>
               <span class="number">
                 <span class="title">合同未生效</span>
-                <span class="num"  v-if="tab=='all'" style="font-size:44px;color: #FAD27B;">255</span>
-                <span class="num" v-if="tab=='office'"  style="font-size:44px;color: #FAD27B;">25</span>
-                <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: #FAD27B;">2</span>
-                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: #FAD27B;">0</span>
+                <span class="num"  v-if="tab=='all'" style="font-size:40px;color: #FAD27B;">255</span>
+                <span class="num" v-if="tab=='office'"  style="font-size:40px;color: #FAD27B;">25</span>
+                <span class="num" v-if="tab=='fixedDest'"  style="font-size:40px;color: #FAD27B;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:40px;color: #FAD27B;">0</span>
               </span>
               <span class="number">
                 <span class="title">未租</span>
-                <span class="num" v-if="tab=='all'"style="font-size:44px;color: #35BC9B;">255</span>
-                <span class="num" v-if="tab=='office'"style="font-size:44px;color: #35BC9B;">25</span>
-                <span class="num" v-if="tab=='fixedDest'"style="font-size:44px;color: #35BC9B;">2</span>
-                <span class="num" v-if="tab=='mobileDesk'"style="font-size:44px;color: #35BC9B;">0</span>
+                <span class="num" v-if="tab=='all'"style="font-size:40px;color: #35BC9B;">255</span>
+                <span class="num" v-if="tab=='office'"style="font-size:40px;color: #35BC9B;">25</span>
+                <span class="num" v-if="tab=='fixedDest'"style="font-size:40px;color: #35BC9B;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'"style="font-size:40px;color: #35BC9B;">0</span>
               </span>
               <span class="number">
                 <span class="title">不可用</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #8290A8;">255</span>
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #8290A8;">25</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #8290A8;">2</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #8290A8;">0</span>
+                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #8290A8;">255</span>
+                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #8290A8;">25</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #8290A8;">2</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #8290A8;">0</span>
               </span>
             </div>
             

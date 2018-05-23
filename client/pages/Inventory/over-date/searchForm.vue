@@ -382,19 +382,23 @@ export default {
         //楼层接口
         getFloorList(param){
             let params = this.$route.query;
+            console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                if(this.floorList.length>1){
-                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})
-                    this.floorList=res.data.map(item=>{
+                this.floorList=res.data.map(item=>{
                         item.floor = item.floor+'';
                         return item;
-                    });                        
+                    });
+                if(this.floorList.length>1){
+                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})
+                                            
                 }
                 if(!params.floor){
                     this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                }else{
+                   this.formItem.floor = params.floor; 
                 }
-                this.formItem.floor = params.floor;
+                
 
             }).catch((error)=>{
                 this.$Notice.error({
@@ -438,7 +442,10 @@ export default {
             this.getCommunityList(param)
         },
         communityChange(param){
-            this.getFloorList(param);
+            if(param){
+                this.getFloorList(param);
+            }
+            
         },
         
     }

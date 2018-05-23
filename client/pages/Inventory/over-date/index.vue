@@ -191,7 +191,6 @@ var layoutScrollHeight=0;
                         width:80,
                         key: 'reletTypeName',
                         render(h, params){
-                            console.log(params.row.reletTypeName)
                             if(!params.row.reletTypeName){
                                 return params.row.reletTypeName
                             }
@@ -323,7 +322,6 @@ var layoutScrollHeight=0;
             },
             //搜索
             searchClick(formItem){
-                console.log('搜索===',formItem)
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.dataParams(this.tabForms);
                 utils.addParams(this.tabForms);
@@ -337,7 +335,6 @@ var layoutScrollHeight=0;
             },
             //数据变化
             dataParams(data){
-                console.log('数据变化',data)
                 this.endParams=Object.assign({},data);
                 this.getData(this.endParams);
             },
@@ -346,7 +343,6 @@ var layoutScrollHeight=0;
                 this.dataParams(this.tabForms);
             },
             getData(params){
-                console.log('=====',params)
                 //getDailyInventory 
                 this.$http.post('getDueList', params).then((res)=>{
                     this.tableList=res.data.items;
@@ -372,7 +368,6 @@ var layoutScrollHeight=0;
             },
             submitExport(){
                 utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
-                console.log('submitExport')
             },
             //滚动监听
         onScrollListener(){            

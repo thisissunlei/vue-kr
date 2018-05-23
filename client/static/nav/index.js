@@ -696,17 +696,22 @@
         return {
         primaryText: "社区运营",
         router: 'community',
-        originUrl: '#/community/operation/index',
         menuItems: [
             {
                 primaryText: "社区运营",
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
-                router: 'index',
                 menuItems: [
                     {
                         primaryText: '社区主页',
-                        router: 'community/operation/index',
+                        router: 'operation/community',
+                        type:'vue',
+                        menuCode: 'operation_home',
+                    },
+                    {
+                        primaryText: '即将到期',
+                        router: 'inventory/over-date',
+                        type:'vue',
                         menuCode: 'operation_home',
                     },
                     {

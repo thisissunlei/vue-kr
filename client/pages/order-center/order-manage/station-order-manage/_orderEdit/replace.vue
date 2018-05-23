@@ -1879,6 +1879,7 @@
                         this.formItem.communityId = response.data.communityId+'';
                         this.formItem.salerId = JSON.stringify(response.data.saleId);
                         this.formItem.communityName = response.data.communityName;
+                        this.salerName = response.data.saleName;
                         this.discountNum = response.data.discount;
                         this.discountCon = response.data.discount;
                         this.deposit = response.data.deposit;

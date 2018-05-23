@@ -116,7 +116,7 @@
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">随后可续</span>
                         <Form-item class='priceForm'>
                             <Select 
-                            v-model="formItem.reletType" 
+                            v-model="formItem.reletTypeName" 
                             placeholder="请选择随后可续" 
                             style="width: 200px"
                             clearable
@@ -262,9 +262,9 @@ export default {
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    leaseRemainingType:'22',
+                    leaseRemainingType:'2',
                     rentType:'2',
-                    reletType:' ',
+                    reletTypeName:' ',
                     goodsName:'',
                     customerName:'',
                 },
@@ -318,8 +318,9 @@ export default {
             }
     },
     mounted(){
-        this.formItem = Object.assign({},this.formItem,this.$route.query)
         this.getCityList();
+        
+
     },
     head() {
         return {
@@ -351,8 +352,10 @@ export default {
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
                 }  
-                this.$emit('initData',this.formItem);
+                
                 this.formItemOld=Object.assign({},this.formItem);
+                this.formItem = Object.assign({},this.formItem,this.$route.query)
+                this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -384,6 +387,9 @@ export default {
         },
         //清除
         clearClick(){
+            
+            console.log('clearClick===1',this.formItem)
+            console.log('clearClick===2',this.formItemOld)
             this.formItem=Object.assign({},this.formItemOld);
             this.$emit('clearClick',this.formItem);
         },

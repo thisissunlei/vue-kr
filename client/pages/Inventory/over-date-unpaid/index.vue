@@ -106,7 +106,6 @@ import Message from '~/components/Message';
         mounted(){
             this.endParams = this.$route.query;
             console.log('mounted',this.endParams)
-            // this.initData = this.$route.query
             this.getData(this.endParams);
         },
         methods:{

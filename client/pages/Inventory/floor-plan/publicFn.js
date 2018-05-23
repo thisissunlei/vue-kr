@@ -1,9 +1,10 @@
 import dateUtils from 'vue-dateutils';
 //鼠标滑过气泡的位置
 function poptipOver(ev,every,all,canvas,scroll,discount) {
-    var tirDom = document.getElementById('gantt-chart-tool-tip');
-    var contentDom=document.getElementById('gantt-chart-tool-tip-content');
-    var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+    var mainDom=document.getElementById('layout-content-main');
+    var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
+    var contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
+    var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+every.item.id);
     var canvasDom= document.querySelectorAll('#'+canvas+' canvas')[0];
     var tirDetail=tirDom.getBoundingClientRect();
     var canvasDetail=canvasDom.getBoundingClientRect();
@@ -13,11 +14,11 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     
     contentDom.innerHTML = obj.str;
     tirDetail=tirDom.getBoundingClientRect();
-    contentDom=document.getElementById('gantt-chart-tool-tip-content');
+    contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
     
     var toolLocation={
         left:Number(every.cellCoordX)+Number(canvasDetail.left)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
-        top:Number(every.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-6-scroll.top
+        top:Number(every.cellCoordY)+Number(canvasDetail.top)+5-Number(tirDetail.height)-6//scroll.top
     }
     
     tirDom.style.maxWidth = obj.width + 'px';

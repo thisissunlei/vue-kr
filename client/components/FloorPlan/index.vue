@@ -14,7 +14,7 @@
         </div>
         
         <div class="flow-chart-content">
-            <div :id="drawingBoard" class="drawing-board" :style="{height:'660px',background:'#f5f5f5'}"></div>  
+            <div :id="drawingBoard" class="drawing-board" :style="{background:'#f5f5f5'}"></div>  
         </div>
         
     </div>
@@ -55,23 +55,13 @@ var img='';
         img=new Image();
         img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
         img.setAttribute("crossOrigin",'Anonymous');
-        var _this=this;
         img.addEventListener('load',this.imgLoad);
-        this.setContentHeight();
-        window.addEventListener('resize',this.setContentHeight);
     },
-    destroyed(){
-      window.removeEventListener('resize',this.setContentHeight);  
+    destroyed(){ 
       img.removeEventListener('load',this.imgLoad); 
       scrollDom.removeEventListener('scroll',this.scrollFn); 
     },
     methods:{
-        //设置高
-        setContentHeight(){
-            var dom=document.querySelectorAll('#'+this.drawingBoard)[0]; 
-            var clientHeight = document.documentElement.clientHeight;
-            dom.style.maxHeight=clientHeight - 316 + "px";     
-        },
         //将图片地址转换成base64格式
         getBase64Image(img) {
             var canvas = document.createElement('canvas'); 
@@ -86,13 +76,14 @@ var img='';
         imgLoad(event) {
             var picImg=event.path[0];
             var dataUrl = this.getBase64Image(picImg);
+            var drawWrap=document.querySelectorAll('#'+this.drawingBoard)[0];
              //初始化数据
             canvasData=this.data;
             flowChart =  init(
                 go,
                 this.drawingBoard,
                 this.drawingPicture,
-                dataFormat.init(canvasData,{width:picImg.width,height:picImg.height},dataUrl),
+                dataFormat.init(canvasData,{width:picImg.width,height:picImg.height},dataUrl,drawWrap),
                 this.mouseClick,
                 this.mouseEnter,
                 this.mouseLeave
@@ -105,7 +96,7 @@ var img='';
         },
         scrollFn(event){
             this.scroll={
-                top:event.target.scrollTop,
+                //top:event.target.scrollTop,
                 left:event.target.scrollLeft
             }
         },

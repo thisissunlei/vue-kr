@@ -1,5 +1,5 @@
 import colorStatus from './colorStatus';
-function init(data,picProperty,dataUrl){
+function init(data,picProperty,dataUrl,drawWrap){
     var dataRender=[];
     var scale=1;
     if(data.figures.length){
@@ -66,6 +66,8 @@ function init(data,picProperty,dataUrl){
         picName:data.graphFileName,
         dataUrl:dataUrl
     }
+    //高度自适应图片高度
+    drawWrap.style.height=picProperty.height+20+'px';
     return {data:[].concat(dataRender),pic:picProperty};
 }
 

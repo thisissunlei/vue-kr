@@ -16,7 +16,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             //是否可以移动对象
             allowMove: false
         });
-
+        
      
     //导出svg图片
     if(data.pic){

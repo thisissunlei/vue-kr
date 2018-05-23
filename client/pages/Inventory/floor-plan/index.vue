@@ -1,5 +1,5 @@
 <template>
-  <div class="inventory-floor-map">
+  <div class="inventory-floor-map" id="inventory-floor-map-wrap">
       <SectionTitle title="库存平面图"/>
       <div class="bar">
           <SearchForm 
@@ -20,13 +20,6 @@
             :data="item"
       />
       
-      
-      <div id="gantt-chart-tool-tip">
-          <div class="title" @click="this.closePop"/>
-          <div id="gantt-chart-tool-tip-content" />
-      </div>
-      <div id="gantt-chart-tool-tip-triangle" class="top-triangle" />
-
   </div>
 </template>
 
@@ -37,6 +30,10 @@ import SearchForm from './searchForm';
 import publicFn from './publicFn';
 import Discount from './discount';
 import utils from '~/plugins/utils';
+var wrapDom='';
+var mainDom='';
+//点击的dom存进一个数组
+var clickNone=[];
 export default {
   components: {
     FloorPlan,
@@ -47,13 +44,25 @@ export default {
   data(){
     return{
        canvasData:[],
-       isClick:false,
        tabForms:{},
        isLoading:false,
-       discount:""
+       discount:"",
+       isFirstClick:false   
     }
   },
+  mounted(){
+     wrapDom=document.getElementById('inventory-floor-map-wrap');  
+     mainDom=document.getElementById('layout-content-main');
+     mainDom.addEventListener('scroll',this.mainScroll);
+  },
+  destroyed(){ 
+     document.body.removeEventListener('click',this.bodyClick);
+     mainDom.removeEventListener('scroll',this.mainScroll);
+  },
   methods:{
+    mainScroll(event){
+        this.isFirstClick=true;
+    },
     //获取数据
     getMapData(values){
         this.isLoading=false;
@@ -75,29 +84,63 @@ export default {
         this.discount=countRadio==1?'':param;
     },
     mouseClick(event,every,all){
-       this.isClick=true;
+        if(!this.isFirstClick){
+            mainDom.scrollTop=0;
+            this.isFirstClick=true;
+        }
+        clickNone.push(every.item.id);
     },
     mouseEnter(event,every,all,canvas,scroll){
-         var tirDom = document.getElementById('gantt-chart-tool-tip');
-         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+         if(clickNone.indexOf(every.item.id)!=-1){
+            return ;
+         } 
+         this.createDom(every);
+         //监听click事件
+         document.body.addEventListener('click',this.bodyClick);
+         //显示
+         var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
+         var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+every.item.id);
          tirDom.style.display = 'block';
          angleDom.style.display = 'block';
          publicFn.poptipOver(event,every,all,canvas,scroll,this.discount)
     },
-    mouseLeave(event,every,all){
-        if(!this.isClick){
-            this.closeCommon();
+    bodyClick(event){
+        var id=event.target.getAttribute('data-titleId');
+        var parentNode=event.target.parentNode.parentNode;
+        if(id){
+            this.titleClose(parentNode,id);
         }
     },
-    closeCommon(){
-        var tirDom = document.getElementById('gantt-chart-tool-tip');
-        var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
-        tirDom.style.display = 'none';
-        angleDom.style.display = 'none';
+    mouseLeave(event,every,all){
+        if(clickNone.indexOf(every.item.id)!=-1){
+            return ;
+        }    
+        var parentNode=document.getElementById('gantt-chart-tool-tip'+every.item.id).parentNode;
+        this.closeCommon(parentNode,every.item.id);
     },
-    closePop(){
-        this.isClick=false;
-        this.closeCommon();        
+    //关闭dom
+    closeCommon(parentNode,id){
+        wrapDom.removeChild(parentNode);
+    },
+    //点击关闭套弹窗
+    titleClose(parentNode,id){
+        var index =clickNone.indexOf(id);
+        if (index > -1) {
+           clickNone.splice(index, 1);
+        }
+        this.closeCommon(parentNode,id);    
+    },
+    //生成dom
+    createDom(every){
+         var productDom=
+            '<div id="gantt-chart-tool-tip'+every.item.id+'" class="gantt-chart-tool-tip">'+
+                '<div class="title" data-titleId='+every.item.id+'></div>'+
+                '<div id="gantt-chart-tool-tip-content'+every.item.id+'" class="gantt-chart-tool-tip-content"></div>'+
+            '</div>'+
+            '<div id="gantt-chart-tool-tip-triangle'+every.item.id+'" class="top-triangle gantt-chart-tool-tip-triangle" />';
+         var el = document.createElement('div');
+         el.innerHTML = productDom;
+         wrapDom.appendChild(el);
     }
   }
 }
@@ -110,7 +153,7 @@ export default {
      .section-title{
          background:#fff;
      }
-    #gantt-chart-tool-tip{
+    .gantt-chart-tool-tip{
           max-width: 280px;
           display: none;
           //opacity: 0;
@@ -122,7 +165,7 @@ export default {
           padding: 5px;
           color: #ffffff;
           z-index: 999;
-          transition: all .1s;
+          //transition: all .1s;
           .title{
               position: absolute;
               right:6px;
@@ -141,7 +184,7 @@ export default {
               display:inline-block;
               vertical-align: middle;
           }
-          #gantt-chart-tool-tip-content{
+          .gantt-chart-tool-tip-content{
               padding-right:14px;
           }
       }
@@ -151,7 +194,7 @@ export default {
       .bottom-triangle{
           border-color: transparent transparent rgba(70,76,91,.9)  transparent;
       }
-      #gantt-chart-tool-tip-triangle{
+      .gantt-chart-tool-tip-triangle{
           //opacity: 0;
           position: fixed;
           display:none;
@@ -161,7 +204,7 @@ export default {
           border-width:5px;
           top: 0px;
           left: 10px;
-          transition: all .1s;
+          //transition: all .1s;
           z-index: 999;
       }
       .bar{

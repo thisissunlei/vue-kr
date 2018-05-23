@@ -50,7 +50,7 @@
         cancel-text="取消"
         width="443"
      >
-    
+	 
 	  <div slot="footer">
 			<Button type="primary" @click="tipSubmit">确定</Button>
 			<Button type="ghost" style="margin-left: 8px" @click="hideTip">取消</Button>
@@ -225,8 +225,6 @@ export default {
 			}
 			this.isRefresh=true;
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
-				
-				
 				this.getInfo();
 			}).catch((err)=>{
 				this.$Notice.error({

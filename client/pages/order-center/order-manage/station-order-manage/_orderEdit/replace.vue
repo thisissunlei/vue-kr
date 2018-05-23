@@ -1864,7 +1864,7 @@
                             return item;
                         });
 
-                        overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                        overViewData.changeServiceFee = response.data.feeResultVO.changeServiceFee;
                         overViewData.freeStartDate = response.data.freeStartDate || '';
                         this.freeStartDate = response.data.freeStartDate || '';
                         overViewData.startDate = response.data.realStartDate

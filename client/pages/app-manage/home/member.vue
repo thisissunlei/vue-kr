@@ -1,18 +1,18 @@
 <template>
-     <div class="u-table">
-         <Table border  :columns="memberColumns" :data="memberList" ref="table" stripe></Table>
-         <div style="margin: 10px 0 ;overflow: hidden">
-            <div style="float: right;">
-                <Page
-                    :current="page"
-                    :total="totalCount"
-                    :page-size="pageSize"
-                    @on-change="changePage"
-                    show-total
-                    show-elevator
-                ></Page>
+    <div class="u-table">
+            <Table border  :columns="memberColumns" :data="memberList" ref="table" stripe></Table>
+            <div style="margin: 10px 0 ;overflow: hidden">
+                <div style="float: right;">
+                    <Page
+                        :current="page"
+                        :total="totalCount"
+                        :page-size="pageSize"
+                        @on-change="changePage"
+                        show-total
+                        show-elevator
+                    ></Page>
+                </div>
             </div>
-          </div>
     </div>
 </template>
 <script>

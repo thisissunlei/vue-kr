@@ -14,7 +14,12 @@
         </div>
     </div>
       <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
-            <Tab-pane label="会员7天线上化率" name="member">   
+            <Tab-pane label="会员7天线上化率" name="member"> 
+                <div class="u-member-tip" v-if="isTip">
+                    <div class="u-member-small-trigon"></div>
+                    已入驻会员获得会员权限满7天后，通过是否登录过APP计算“7天线上化率”，用以分析引导入驻会员加入线上APP社群情况；
+                    <span class="u-member-tip-close" @click="tipClose"></span>
+                </div>
                 <Member   
                     :mask="key"
                     :detail="formItem"
@@ -86,6 +91,7 @@ export default {
               endDate:'',
            },
            communityList:[],
+           isTip:true,
 
        }
    },
@@ -99,10 +105,16 @@ export default {
       this.getCommunity();
    },
    methods:{
+        tipClose(){
+            this.isTip=!this.isTip
+        },
         openCommunity(){
             this.openDialog=!this.openDialog
         },
         tabsClick(key){
+            if(key=="member"){
+               this.isTip=true; 
+            }
            this.key=key;
         },
         memberChangePage(){
@@ -166,6 +178,38 @@ export default {
       width: 200px
 
   }
+  .u-member-tip{
+        width:760px;
+        background:rgba(0,0,0,0.7);
+        font-size:12px;
+        color:#fff;
+        padding:8px;
+        border-radius: 3px;
+        margin-left:15px;
+        text-align: left;
+        line-height: 18px;
+        box-shadow:0 0 2px rgba(0,0,0,.2);
+        position: relative;
+    }
+    .u-member-small-trigon{
+        width:0;
+        height:0;
+        border:6px solid transparent;
+        border-bottom-color: rgba(0,0,0,0.7);
+        position: absolute;
+        top:-12px;
+        left:8%;
+        margin-left:-3px;
+    } 
+    .u-member-tip-close{
+        float:right;
+        width:10px;
+        height:10px;
+        background: url('~/assets/images/close.svg') no-repeat center center;
+        background-size:100% 100%;
+        margin-top:3px;
+        margin-right:10px;
+    }
   
 }
 .m-community-dialog{

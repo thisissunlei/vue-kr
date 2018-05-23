@@ -85,5 +85,6 @@ export default {
     'customer-community-enter-info': {
         url: '/api/krspace-op-web/customer/community/enter-info',
         method: 'get'
-    }
+    },
+    
 } 

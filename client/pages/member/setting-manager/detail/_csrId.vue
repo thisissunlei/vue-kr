@@ -104,6 +104,7 @@ export default {
 			mbrName:'',
 			isRefresh:false,
 			companyInfo:{},
+			cmtIds:"",
 			list:[
 				{
 				 title: '姓名',
@@ -143,16 +144,6 @@ export default {
 			companyColumns:[
 				{
 				 title: '社区名称',
-                 key: 'mbrName',
-				 align:'center',
-				},
-				{
-				 title: '入驻开始日期',
-                 key: 'mbrName',
-				 align:'center',
-				},
-				{
-				 title: '入驻结束日期',
                  key: 'mbrName',
 				 align:'center',
 				},
@@ -296,7 +287,7 @@ export default {
 		tipSubmit(){
 			let Params={
 				mbrId:this.itemDetail.mbrId,
-				isManager:this.isManager
+				cmtIds:this.cmtIds
 			}
 			this.isRefresh=true;
 			this.$emit('changeOpen',this.isRefresh);

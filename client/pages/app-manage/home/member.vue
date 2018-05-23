@@ -61,7 +61,18 @@ export default {
         getTableData(){
 
         }
-    }
+    },
+    watch: {
+            $props: {
+                deep: true,
+                handler(nextProps) {
+                    if(nextProps.mask=='paid'){
+                       this.getTableData(this.queryParams);
+                       this.tabParams=this.tabParams;
+                    }
+                }
+            }
+        },
 }
 </script>
 <style lang="less">

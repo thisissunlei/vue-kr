@@ -51,6 +51,8 @@ export default {
                 if(nextProps.mask=='bind'){
                     this.getTableData(this.params);
                 }
+            }
+        }
     },      
     methods:{
         changePage(page){
@@ -62,6 +64,7 @@ export default {
 
         }
     }
+
 }
 </script>
 <style lang="less">

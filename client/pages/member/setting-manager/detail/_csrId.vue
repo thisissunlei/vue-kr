@@ -50,18 +50,13 @@
         cancel-text="取消"
         width="443"
      >
-      <p class="u-tip">确定要{{TipTxt}}管理员吗？</p>
+    
 	  <div slot="footer">
 			<Button type="primary" @click="tipSubmit">确定</Button>
 			<Button type="ghost" style="margin-left: 8px" @click="hideTip">取消</Button>
       </div>
     </Modal>
-	<Message 
-        :type="MessageType" 
-        :openMessage="openMessage"
-        :warn="warn"
-        @changeOpen="onChangeOpen"
-    ></Message>
+	
 </div>
 </template>
 <script>
@@ -70,14 +65,12 @@ import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
 import LabelText from '~/components/LabelText';
 import dateUtils from 'vue-dateutils';
-import Message from '~/components/Message';
 
 export default {
 	components:{
 		SectionTitle,
 		DetailStyle,
 		LabelText,
-		Message
 	},
 	data(){
 		return{
@@ -90,21 +83,34 @@ export default {
 			listInfo:[],
 			totalCount:0,
 			pageSize:15,
-			TipTxt:'',
 			Params:{
                 page:1,
                 pageSize:15
 			},
-			isManager:'',
-			openMessage:false,
-			warn:'',
-			MessageType:'',
+			
 			itemDetail:{},
 			managerCount:0,
 			mbrName:'',
 			isRefresh:false,
 			companyInfo:{},
 			cmtIds:"",
+			companyColumns:[
+				{
+				 title: '社区名称',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '当前入驻状态',
+                 key: 'mbrName',
+				 align:'center',
+				},
+				{
+				 title: '该社区管理员数量',
+                 key: 'mbrName',
+				 align:'center',
+                }
+			],
 			list:[
 				{
 				 title: '姓名',
@@ -139,24 +145,30 @@ export default {
 				 title: '管理的社区',
                  key: 'manageCmtName',
 				 align:'center',
-				}
-			],
-			companyColumns:[
-				{
-				 title: '社区名称',
-                 key: 'mbrName',
-				 align:'center',
 				},
 				{
-				 title: '当前入驻状态',
-                 key: 'mbrName',
+				 title: '操作',
+                 key: 'operation',
 				 align:'center',
+				 render(h,obj){
+					return h('div', [
+							h('Button', {
+							props: {
+								type: 'text',
+								size: 'small'
+							},
+							style: {
+								color:'#2b85e4'
+							},
+							on: {
+								click: () => {
+									_this.setManager(obj.row)
+								}
+							}
+						}, '设置管理员')
+                    ]);  
+				 }
 				},
-				{
-				 title: '该社区管理员数量',
-                 key: 'mbrName',
-				 align:'center',
-                }
 			],
 			companyList:[],
 		}
@@ -167,62 +179,6 @@ export default {
 	
 	},
 	methods:{
-		renderList(){
-			var _this=this;
-			let obj={
-				 title: `管理员(${this.managerCount})`,
-                 key: 'isManager',
-				 align:'center',
-				 render(h, obj){
-					 if(obj.row.isManager=='1'){
-						  return h('div', [
-                                 h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#FF6868'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            _this.cancelManager(obj.row)
-                                        }
-                                    }
-                                }, '取消管理员')
-                            ]);  
-						  
-					 }else if(obj.row.isManager=='0'){
-						  return h('div', [
-                                 h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#2b85e4'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            _this.setManager(obj.row)
-                                        }
-                                    }
-                                }, '设置管理员')
-                            ]);  
-						  
-					 }
-                        
-                }
-				};
-				if(this.list.length<7){
-					this.list.push(obj);
-				}else{
-					this.list.pop();
-					this.list.push(obj);
-				}
-			
-			
-		},
 		getInfo(){
 			let {params}=this.$route;
 			this.Params.csrId=params.csrId;
@@ -235,7 +191,7 @@ export default {
 				});
 			})
 			this.getCompanyInfo(params);
-			this.getCount();
+			//this.getCount();
 			
 		},
 		getCompanyInfo(params){
@@ -250,34 +206,12 @@ export default {
 				});
 			})
 		},
-		getCount(){
-			let {params}=this.$route;
-			let Params={
-				csrId:params.csrId
-			}
-			this.$http.get('get-manager-count', Params).then((res)=>{
-				this.managerCount=res.data.managerCount;
-				this.renderList();
-			}).catch((err)=>{
-				this.$Notice.error({
-					title:err.message
-				});
-			})
-			
-		},
 		changePage(page){
 			this.Params.page=page;
 			this.getInfo();
 		},
-		cancelManager(params){
-			this.TipTxt="取消";
-			this.isManager=0;
-			this.itemDetail=params;
-			this.hideTip();
-		},
+		
 		setManager(params){
-			this.TipTxt="设置";
-			this.isManager=1;
 			this.itemDetail=params;
 			this.hideTip();
 		},
@@ -290,27 +224,15 @@ export default {
 				cmtIds:this.cmtIds
 			}
 			this.isRefresh=true;
-			this.$emit('changeOpen',this.isRefresh);
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
-				if(res.code==-1){
-					this.MessageType="error";
-					this.warn=res.message;
-					this.openMessage=true;
-					return;
-				}
-				this.openTip=false;
-				this.MessageType="success";
-				this.warn=`${this.TipTxt}管理员成功！`
-				this.openMessage=true;
+				
+				
 				this.getInfo();
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
 				});
 			})
-		},
-		onChangeOpen(data){
-                this.openMessage=data;
 		},
 		lowerSubmit(){
 			  	this.Params.page=1;

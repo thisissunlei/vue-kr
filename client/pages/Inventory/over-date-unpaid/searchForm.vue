@@ -59,7 +59,7 @@
                             style="width: 150px"
                             clearable
                         >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
                     </Form-item>
 
@@ -231,12 +231,7 @@ export default {
                 communityList:[],
                 cityList:[],
                 floorList:[],
-                productList:[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-                ],
+                typeList:[],
                 inventoryList:[
                     {value:'AVAILABLE',label:'未租'},
                     {value:'NOT_EFFECT',label:'合同未生效'},
@@ -269,7 +264,9 @@ export default {
             }
     },
     mounted(){
+        this.formItem = this.$route.query;
         this.getCityList();
+        this.getBillType()
     },
     methods:{
         //社区接口
@@ -323,7 +320,7 @@ export default {
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
                     console.log('搜索',this.formItem)
-                    // this.$emit('searchClick',this.formItem);
+                    this.$emit('searchClick',this.formItem);
                 }
             })
         },
@@ -355,6 +352,19 @@ export default {
         },
         communityChange(param){
             this.getFloorList(param);
+        },
+        getBillType(){
+                this.$http.get('get-bill-type', '').then((res)=>{
+                    res.data.enums.map((item)=>{
+                        item.label=item.name;
+                        item.value=item.code; 
+                    })
+                    this.typeList=res.data.enums;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
         },
     }
 }

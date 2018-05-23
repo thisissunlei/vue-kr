@@ -104,17 +104,23 @@ import Message from '~/components/Message';
             }
         },
         mounted(){
+            this.endParams = this.$route.query;
+            console.log('mounted',this.endParams)
+            // this.initData = this.$route.query
             this.getData(this.endParams);
         },
         methods:{
             //搜索
             searchClick(formItem){
+                console.log('搜索======',formItem)
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.dataParams(this.tabForms);
+                utils.addParams(this.tabForms);
             },
             //清空
             clearClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
+                utils.addParams(this.tabForms);
                 this.dataParams(this.tabForms);
             },
             //数据变化

@@ -372,11 +372,13 @@ export default {
         floorChange(form){
             this.tabAllParams.page=1;
             this.tabAllParams.floor=form;
+            this.pageAll=1
             this.getTableAllData(this.tabAllParams);
         },
         typeChange(form){
             this.tabAllParams.page=1;
             this.tabAllParams.type=form;
+            this.pageAll=1
             this.getTableAllData(this.tabAllParams);
         },
         getFloor(id){

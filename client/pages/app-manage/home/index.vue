@@ -112,9 +112,6 @@ export default {
             this.openDialog=!this.openDialog
         },
         tabsClick(key){
-            if(key=="member"){
-               this.isTip=true; 
-            }
            this.key=key;
         },
         memberChangePage(){
@@ -179,9 +176,9 @@ export default {
 
   }
   .u-member-tip{
-        width:760px;
+        width:800px;
         background:rgba(0,0,0,0.7);
-        font-size:12px;
+        font-size:13px;
         color:#fff;
         padding:8px;
         border-radius: 3px;

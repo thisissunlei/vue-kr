@@ -325,7 +325,7 @@ var layoutScrollHeight=0;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 0;
+                padding:17px 0 20px 20px;
             }
             .priceClass{
                 .ivu-table-cell{
@@ -358,6 +358,7 @@ var layoutScrollHeight=0;
             padding:20px;
             padding-bottom:77px; 
             margin-top: 30px;
+            position: relative;
             .ivu-tooltip{
                 width:100%
             }

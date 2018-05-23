@@ -9,6 +9,18 @@ export default  {
         url: '/api/iot-platform/door-set/relation-map',
         method: 'get'
     },
+    'editDoorRelationshipData': {
+        url: '/api/iot-platform/door-set/actions/edit',
+        method: 'post'
+    },
+    'newCreateDoorGroupConnect': {
+        url: '/api/iot-platform/door-set/actions/create-relation',
+        method: 'post'
+    },
+    'deleteLinkConnect': {
+        url: '/api/iot-platform/door-set/actions/delete-relation',
+        method: 'delete'
+    },
     
   }
   

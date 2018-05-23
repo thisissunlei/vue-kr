@@ -382,6 +382,7 @@ export default {
         //楼层接口
         getFloorList(param){
             let params = this.$route.query;
+            console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
                 if(this.floorList.length>1){
@@ -393,8 +394,10 @@ export default {
                 }
                 if(!params.floor){
                     this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                }else{
+                   this.formItem.floor = params.floor; 
                 }
-                this.formItem.floor = params.floor;
+                
 
             }).catch((error)=>{
                 this.$Notice.error({

@@ -156,6 +156,14 @@ export default {
                 {
                     label:'通用空间',
                     value:'COMMON'
+                },
+                {
+                    label:'独立办公室',
+                    value:'OFFICE'
+                },
+                {
+                    label:'工位',
+                    value:'STATION'
                 }
             ],
             spaceColumns:[

@@ -3,7 +3,7 @@
     <div class="u-home-main-part">
         <div class="u-community-info">
            <span class="u-community-name">{{communityName}}</span>
-           <span class="u-change-community-btn">切换社区</span>
+           <span class="u-change-community-btn" @click="openCommunity">切换社区</span>
            <DatePicker 
                 class="u-date-right" 
                 type="daterange" 
@@ -15,13 +15,22 @@
     </div>
       <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
             <Tab-pane label="会员7天线上化率" name="member">   
-                <Member   :mask="key"/>
+                <Member   
+                    :mask="key"
+                    :detail="formItem"
+                />
             </Tab-pane>
             <Tab-pane label="入驻会员活跃情况" name="joinMember">
-                <JoinMember :mask="key" /> 
+                <JoinMember 
+                    :mask="key"
+                    :detail="formItem" 
+                /> 
             </Tab-pane>
             <Tab-pane label="活动情况" name="activity">
-               <Activity :mask="key"/>
+               <Activity 
+                    :mask="key"
+                    :detail="formItem"
+                />
             </Tab-pane>
       </Tabs>  
      <Modal
@@ -29,12 +38,23 @@
         title="选择社区"
         ok-text="确定"
         cancel-text="取消"
-        width="652"
+        width="500"
      >
-        
-         <div slot="footer">
+        <div class="m-community-dialog">
+                <span class="u-community-label">社区</span>
+                <Select
+                        v-model="formItem.cmtId"
+                        style="width:250px"
+                        placeholder="请选择社区"
+                        filterable
+                        clearable
+                    >
+                        <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+                </Select>
+        </div>
+        <div slot="footer">
             <Button type="primary" @click="changeCommunity">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="openCancel">取消</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openCommunity">取消</Button>
         </div>
     </Modal>
   </div>
@@ -64,7 +84,9 @@ export default {
               beginDate:'',
               cmtId:'',
               endDate:'',
-           }
+           },
+           communityList:[],
+
        }
    },
    components:{
@@ -76,7 +98,7 @@ export default {
       this.activeKey=sessionStorage.getItem('paymentMask')||'member';
    },
    methods:{
-        openCancel(){
+        openCommunity(){
             this.openDialog=!this.openDialog
         },
         tabsClick(key){
@@ -98,7 +120,17 @@ export default {
         changeDate(data){
             this.formItem.beginDate=data[0];
             this.formItem.endDate=data[1];
-        }
+        },
+        getCommunity(){
+            //   this.$http.get('join-bill-community','').then((res)=>{
+            //     this.communityList=res.data.items;
+
+            //     }).catch((error)=>{
+            //         this.$Notice.error({
+            //             title:error.message
+            //         });
+            //     })
+         }
     }
 }
 </script>
@@ -134,6 +166,13 @@ export default {
 
   }
   
+}
+.m-community-dialog{
+    width:300px;
+    margin:20px auto;
+    .u-community-label{
+        padding-right: 20px; 
+    }
 }
 </style>
 

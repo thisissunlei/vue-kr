@@ -436,7 +436,7 @@ export default {
             })
         },
         jumpEdit(param){
-            this.$router.push({path:`/smart-hardware/space-manage/${param.id}/son-space`,query:{name:param.name}})
+            window.open(`/smart-hardware/space-manage/${param.id}/son-space?name=${param.name}&communityId=${param.communityId}`)
         }
     }
 }

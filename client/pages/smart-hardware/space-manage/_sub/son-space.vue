@@ -3,7 +3,7 @@
         <div class='u-bread'>
             <Breadcrumb>
                     <BreadcrumbItem>主页</BreadcrumbItem>
-                    <BreadcrumbItem to="/smart-hardware/space-manage">{{faterName}}</BreadcrumbItem>
+                    <BreadcrumbItem>{{faterName}}</BreadcrumbItem>
             </Breadcrumb>
         </div>
         <div class="u-search" >
@@ -50,18 +50,6 @@
                 <div class="u-search" >
                     <Button type="primary" @click="addAll">批量添加</Button>
                     <div class="u-select-content">
-                        <div class="u-select">
-                            <Select
-                                    v-model="formItem.communityId"
-                                    style="width:200px"
-                                    placeholder="请选择社区"
-                                    filterable
-                                    clearable
-                                    @on-change="communityChange"
-                                >
-                                    <Option v-for="item in communityList" :value="`${item.id}`" :key="item.id">{{ item.name }}</Option>
-                                </Select>
-                        </div>
                         <div class="u-select">
                             <Select
                                     v-model="formItem.floor"
@@ -319,10 +307,13 @@ export default {
         }
     },
     mounted(){
+        GLOBALSIDESWITCH("false");
         this.faterName = this.$route.query.name
         this.getTableData(this.tabParams);
+        let communityId = this.$route.query.communityId
+        this.tabAllParams.communityId= communityId
         this.getTableAllData(this.tabAllParams);
-        this.getCommunityList();
+        this.getFloor(communityId)
     },
     methods:{
         showCreate(){
@@ -368,7 +359,6 @@ export default {
         },
         getTableData(para){
             let {params}=this.$route;
-
             para.parentId = params.sub
             this.$http.get('get-space-actions-list', para).then((res)=>{
                 this.tableList=res.data.items;
@@ -378,33 +368,6 @@ export default {
                     title:err.message
                 });
             })
-        },
-        getCommunityList(){
-            this.$http.get('get-space-community-list', '').then((res)=>{
-                res.data.items.map((item,index)=>{
-                    item.label=item.name;
-                    item.value=item.id;
-                    return  item;
-                })
-                this.communityList=res.data.items;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
-        communityChange(id){
-            if(id){
-                this.getFloor(id);
-            }else{
-                this.floorLis=[];
-                this.formItem.floor=""
-                this.tabParams.floor=""
-            }
-
-            this.tabAllParams.page=1;
-            this.tabAllParams.communityId=id;
-            this.getTableAllData(this.tabAllParams);
         },
         floorChange(form){
             this.tabAllParams.page=1;
@@ -523,7 +486,6 @@ export default {
 }
 .u-select-content{
     float:right;
-    width:650px;
     .u-select{
        float:left;
        width:200px;

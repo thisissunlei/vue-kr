@@ -1,7 +1,17 @@
 <template>
   <div class="g-app-manage-home">
     <div class="u-home-main-part">
-
+        <div class="u-community-info">
+           <span class="u-community-name">{{communityName}}</span>
+           <span class="u-change-community-btn">切换社区</span>
+           <DatePicker 
+                class="u-date-right" 
+                type="daterange" 
+                placement="bottom-end" 
+                placeholder="日期" 
+                @on-change="changeDate"
+             />
+        </div>
     </div>
       <Tabs :value="activeKey" :animated="false" @on-click="tabsClick">
             <Tab-pane label="会员7天线上化率" name="member">   
@@ -14,7 +24,19 @@
                <Activity :mask="key"/>
             </Tab-pane>
       </Tabs>  
-    
+     <Modal
+        v-model="openDialog"
+        title="选择社区"
+        ok-text="确定"
+        cancel-text="取消"
+        width="652"
+     >
+        
+         <div slot="footer">
+            <Button type="primary" @click="changeCommunity">确定</Button>
+            <Button type="ghost" style="margin-left: 8px" @click="openCancel">取消</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -36,8 +58,13 @@ export default {
            joinMemberTotalCount:0,
            pageSize:15,
            memberList:[],
-           
-           
+           communityName:'全部社区',
+           openDialog:false,
+           formItem:{
+              beginDate:'',
+              cmtId:'',
+              endDate:'',
+           }
        }
    },
    components:{
@@ -49,6 +76,9 @@ export default {
       this.activeKey=sessionStorage.getItem('paymentMask')||'member';
    },
    methods:{
+        openCancel(){
+            this.openDialog=!this.openDialog
+        },
         tabsClick(key){
            this.key=key;
         },
@@ -61,6 +91,13 @@ export default {
             this.params.page=page;
             this.page=page;
             this.getTableData(this.params);
+        },
+        changeCommunity(){
+
+        },
+        changeDate(data){
+            this.formItem.beginDate=data[0];
+            this.formItem.endDate=data[1];
         }
     }
 }
@@ -75,7 +112,26 @@ export default {
     line-height: 60px;
     margin-bottom: 20px;
     box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.1);
-    margin-bottom:10px;
+    margin-bottom:20px;
+  }
+ 
+  .u-community-name{
+        padding-left:40px;
+        font-size: 18px;
+        color: #394457;
+        margin-right: 30px; 
+  }
+  .u-change-community-btn{
+        font-size: 14px;
+        color: #2D8DCD;
+        cursor: pointer;
+  }
+  .u-date-right{
+      float:right;
+      margin-top:14px;
+      margin-right:28px;
+      width: 200px
+
   }
   
 }

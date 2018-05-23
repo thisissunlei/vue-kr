@@ -648,13 +648,13 @@
                             menuCode: 'lessor_management_base',
                             router: 'product/customerManage/lessorManage',
                         },
+                        // {
+                        //     primaryText: '库存平面图',
+                        //     menuCode: 'cmt_run',
+                        //     router: 'product/communityManage/detail',
+                        // },
                         {
                             primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
-                        },
-                        {
-                            primaryText: '平面图自测',
                             router: 'inventory/floor-plan',
                             type: 'vue',
                             menuCode: 'inventory',

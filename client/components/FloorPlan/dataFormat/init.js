@@ -21,7 +21,7 @@ function init(data,picProperty,dataUrl){
                 y:item.cellCoordY-item.cellHeight/2
             }
             var list={};
-            var isName=item.belongType=='SPACE'?'305':'';
+            var isName=item.belongType=='SPACE'?item.cellName:'';
             var isSuite=item.belongType=='SPACE'?item.capacity+'工位':'';
             list.name=isName;
             list.property=isSuite;

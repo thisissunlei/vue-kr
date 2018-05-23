@@ -59,7 +59,15 @@ export default {
             this.getTableData(this.params);
         },
         getTableData(){
-
+             this.$http.get('get-app-operation-use-rate', params).then((res)=>{
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                    this.openSearch=false;
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
         }
     },
     watch: {

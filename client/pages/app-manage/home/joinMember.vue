@@ -2,7 +2,6 @@
      <div class="u-table">
         <Table border  :columns="joinMemberColumns" :data="joinMemberList" ref="table" stripe></Table>
         <div style="margin: 10px 0 ;overflow: hidden">
-            
             <div style="float: right;">
                 <Page
                     :current="page"
@@ -59,8 +58,16 @@ export default {
             this.page=page;
             this.getTableData(this.params);
         },
-        getTableData(){
-
+        getTableData(params){
+              this.$http.get('get-app-operation-online-data', params).then((res)=>{
+                    this.billList=res.data.items;
+                    this.totalCount=res.data.totalCount;
+                    this.openSearch=false;
+                }).catch((err)=>{
+                    this.$Notice.error({
+						title:err.message
+					});
+                })
         }
     },
     watch: {

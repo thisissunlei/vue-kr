@@ -65,10 +65,29 @@ var img='';
         //将图片地址转换成base64格式
         getBase64Image(img) {
             var canvas = document.createElement('canvas'); 
-            canvas.width = img.width;
-            canvas.height = img.height;
             var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+            var devicePixelRatio = window.devicePixelRatio || 1
+            var backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
+                                    ctx.mozBackingStorePixelRatio ||
+                                    ctx.msBackingStorePixelRatio ||
+                                    ctx.oBackingStorePixelRatio ||
+                                    ctx.backingStorePixelRatio || 1
+            var ratio = devicePixelRatio / backingStoreRatio;
+            
+            canvas.width = img.width*ratio;
+            canvas.height = img.height*ratio;
+            canvas.style.width = img.width + 'px';
+            canvas.style.height = img.height + 'px';
+           
+            ctx.scale(ratio,ratio);
+            ctx.drawImage(img, 0, 0, img.width*ratio, img.height*ratio);
+            ctx.font = ctx.font.replace(
+                /(\d+)(px|em|rem|pt)/g,
+                function(w, m, u) {
+                    return (m / ratio) + u;
+                }
+            );
+            ctx.scale(1/ratio, 1/ratio);
             var dataURL = canvas.toDataURL("image/png");
             return dataURL
         },

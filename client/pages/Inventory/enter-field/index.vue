@@ -52,6 +52,11 @@ var layoutScrollHeight=0;
             ToolTip,
             Loading
         },
+        head() {
+            return {
+                title: '即将进场'
+            }
+        },
         data () {
             return {  
                 dailyOldData:[],

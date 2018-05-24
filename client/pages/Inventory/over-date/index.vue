@@ -52,6 +52,11 @@ var layoutScrollHeight=0;
             ToolTip,
             Loading
         },
+        head() {
+            return {
+                title: '即将到期'
+            }
+        },
         data () {
             return {  
                 dailyOldData:[],

@@ -83,7 +83,7 @@ export default {
     },
     //获取企业管理员详情--企业信息
     'customer-community-enter-info': {
-        url: '/api/krspace-op-web/customer/community/enter-info',
+        url: '/api/krspace-op-web/customer/manager/community/enter-info',
         method: 'get'
     },
     //获取企业管理员详情--获取管理的社区列表

@@ -7,7 +7,7 @@
 				<p slot="title" class="card-title">
 					企业信息
 				</p>
-				<LabelText :inline="true" label="企业名称：">
+				<LabelText :inline="false" label="企业名称：" >
                     {{companyInfo.csrName}}
                 </LabelText>
                  <Table :columns="companyColumns" style="margin-bottom:20px" :data="companyList"></Table>
@@ -101,17 +101,17 @@ export default {
 			companyColumns:[
 				{
 				 title: '社区名称',
-                 key: 'mbrName',
+                 key: 'cmtName',
 				 align:'center',
 				},
 				{
 				 title: '当前入驻状态',
-                 key: 'mbrName',
+                 key: 'enterStatusDesc',
 				 align:'center',
 				},
 				{
 				 title: '该社区管理员数量',
-                 key: 'mbrName',
+                 key: 'managerNum',
 				 align:'center',
                 }
 			],
@@ -186,6 +186,7 @@ export default {
 		getInfo(){
 			let {params}=this.$route;
 			this.Params.csrId=params.csrId;
+			this.getCompanyInfo(params);
 			this.$http.get('customer-manager-staff-list', this.Params).then((res)=>{
 				this.listInfo=res.data.items;
 				this.totalCount=res.data.totalCount;
@@ -194,12 +195,12 @@ export default {
 					title:err.message
 				});
 			})
-			this.getCompanyInfo(params);
+			
 			//this.getCount();
 			
 		},
 		getCompanyInfo(params){
-			this.$http.get('customer-community-enter-infot', {
+			this.$http.get('customer-community-enter-info', {
 				csrId:params.csrId
 			}).then((res)=>{
 				this.companyInfo=res.data;

@@ -17,6 +17,8 @@
             <div :id="drawingBoard" class="drawing-board" :style="{background:'#f5f5f5'}"></div>  
         </div>
 
+        <img :src="imgSrc" />
+
     </div>
 </template>
 
@@ -44,6 +46,7 @@ var img='';
             ],
             drawingBoard:'drawingPlanBoard' + this._uid,
             drawingPicture:'drawingPlanPicture'+this._uid,
+            imgSrc:'',
             scroll:{
                 top:0,
                 left:0
@@ -72,7 +75,8 @@ var img='';
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, img.width, img.height);
             var dataURL = canvas.toDataURL("image/png");
-            return dataURL
+            this.imgSrc=dataURL;
+            //return dataURL
         },
         //图片加载完
         imgLoad(event) {

@@ -53,6 +53,7 @@
 		<CommunityManage  
 			v-if="openTip"
 			:detail="itemDetail"
+			@checkData="getCheckData"
 		/>
 	  <div slot="footer">
 			<Button type="primary" @click="tipSubmit">确定</Button>
@@ -95,7 +96,6 @@ export default {
 			itemDetail:{},
 			managerCount:0,
 			mbrName:'',
-			isRefresh:false,
 			companyInfo:{},
 			cmtIds:"",
 			companyColumns:[
@@ -200,9 +200,6 @@ export default {
 					title:err.message
 				});
 			})
-			
-			//this.getCount();
-			
 		},
 		getCompanyInfo(params){
 			this.$http.get('customer-community-enter-info', {
@@ -220,8 +217,6 @@ export default {
 			this.Params.page=page;
 			this.getInfo();
 		},
-		
-		
 		hideTip(){
 			this.openTip=!this.openTip;
 		},
@@ -230,9 +225,13 @@ export default {
 				mbrId:this.itemDetail.mbrId,
 				cmtIds:this.cmtIds
 			}
-			this.isRefresh=true;
+			console.log('Params',Params)
 			this.$http.post('edit-customer-manager', Params).then((res)=>{
 				this.getInfo();
+				this.openTip=false;
+				this.$Notice.success({
+					title:'设置管理员成功'
+				});
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
@@ -244,6 +243,9 @@ export default {
                 this.Params.mbrName=this.mbrName;
                 this.getInfo();
 		},
+		getCheckData(form){
+			this.cmtIds=form;
+		}
 
 	},
 	

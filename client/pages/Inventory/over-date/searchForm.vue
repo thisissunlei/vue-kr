@@ -254,6 +254,14 @@ export default {
                     callback();
                 }
             };
+            const validatecName = (rule, value, callback) => {
+                console.log('value=',value,value.length)
+                if(value&&value.length>40){
+                    callback('名称最多40个字');
+                }else{
+                    callback();
+                }
+            };
             return {  
                 formItem:{
                     communityId:' ',
@@ -313,7 +321,7 @@ export default {
                         { validator: validateNum, trigger: 'change' }
                     ],
                     customerName:[
-                        { validator: validateName, trigger: 'change' }
+                        { validator: validatecName, trigger: 'change' }
                     ],
                 }
             }

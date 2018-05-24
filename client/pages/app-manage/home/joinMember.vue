@@ -17,7 +17,10 @@
 </template>
 <script>
 export default {
-
+    props:{
+        mask:String,
+        detail:Object
+    },
     data(){
         return{
            page:1,
@@ -78,8 +81,9 @@ export default {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='joinMember'){
-                       this.getTableData(this.queryParams);
-                       this.tabParams=this.tabParams;
+                        let tabParams=Object.assign(nextProps.detail,this.tabParams)
+                        this.getTableData(tabParams);
+                        this.tabParams=tabParams;
                     }
                 }
             }

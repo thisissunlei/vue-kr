@@ -123,6 +123,7 @@ export default {
         submitChange(){
              this.communityName= this.communityObj.label;
              this.formItem.cmtId=this.cmtId;
+             this.openDialog=false;
         },
         changeDate(data){
             this.formItem.beginDate=data[0];

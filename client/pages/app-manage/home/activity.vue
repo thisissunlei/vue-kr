@@ -5,7 +5,10 @@
 </template>
 <script>
 export default {
-
+    props:{
+        mask:String,
+        detail:Object
+    },
     data(){
         return{
            tabParams:{
@@ -46,7 +49,9 @@ export default {
             deep: true,
             handler(nextProps) {
                 if(nextProps.mask=='activity'){
-                    this.getTableData(this.tabParams);
+                  let tabParams=Object.assign(nextProps.detail,this.tabParams)
+                    this.getTableData(tabParams);
+                    this.tabParams=tabParams;
                 }
             }
         }

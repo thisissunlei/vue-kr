@@ -17,7 +17,10 @@
 </template>
 <script>
 export default {
-    
+    props:{
+        mask:String,
+        detail:Object
+    },
     data(){
         return{
            page:1,
@@ -76,8 +79,10 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='member'){
-                       this.getTableData(this.tabParams);
+                    if(nextProps.mask=='member' ){
+                        let tabParams=Object.assign(nextProps.detail,this.tabParams)
+                        this.getTableData(tabParams);
+                        this.tabParams=tabParams;
                     }
                 }
             }

@@ -321,6 +321,15 @@ export default {
             this.spaceList=!this.spaceList
         },
         spaceListCancel(){
+            this.formItem={
+                communityId:'',
+                floor:'',
+                type:''
+            },
+            this.getTableAllData({
+                page:1,
+                pageSize:10,
+            })
             this.showSpaceList=!this.showSpaceList;
         },
         changePage(page){

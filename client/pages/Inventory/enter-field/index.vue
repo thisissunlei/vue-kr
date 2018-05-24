@@ -133,7 +133,6 @@ var layoutScrollHeight=0;
                     {
                         title: '即将进场客户',
                         align:'center',
-                        width:80,
                         key: 'rentDays'
                     },
                     {

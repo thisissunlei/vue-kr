@@ -115,7 +115,6 @@ var layoutScrollHeight=0;
                     {
                         title: '服务内容',
                         key: 'capacity',
-                        width:150,
                         align:'center',
                     },
                     {

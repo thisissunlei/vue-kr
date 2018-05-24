@@ -321,12 +321,15 @@ export default {
             this.spaceList=!this.spaceList
         },
         spaceListCancel(){
+            let communityId = this.$route.query.communityId
+            this.tabAllParams.communityId= communityId
             this.formItem={
-                communityId:'',
+                communityId:communityId,
                 floor:'',
                 type:''
             },
             this.getTableAllData({
+                communityId:communityId,
                 page:1,
                 pageSize:10,
             })

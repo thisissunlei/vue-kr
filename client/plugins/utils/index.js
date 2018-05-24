@@ -123,6 +123,7 @@ import tableSort from './tableSort';
         // a.target = '_blank';
         //a.download = filename;
         a.download = filename;
+        console.log('a--',a);
         a.click();
        
      

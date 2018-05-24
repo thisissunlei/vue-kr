@@ -114,10 +114,39 @@ var layoutScrollHeight=0;
                         align:'center',
                     },
                     {
+                        title: '距进场日',
+                        align:'center',
+                        width:80,
+                        key: 'startDate',
+                    },
+                    {
                         title: '进场日',
                         align:'center',
                         width:80,
                         key: 'startDate',
+                    },
+                    {
+                        title: '即将进场客户',
+                        align:'center',
+                        width:80,
+                        key: 'rentDays'
+                    },
+                    {
+                        title: '客户是否新入住',
+                        width:100,
+                        key: 'price',
+                    },
+                    {
+                        title: '联系人',
+                        align:'center',
+                        width:100,
+                        key: 'customerName',
+                    },
+                    {
+                        title: '联系方式',
+                        align:'center',
+                        width:80,
+                        key: 'customerStatoons',
                     },
                     {
                         title: '离场日',
@@ -127,146 +156,6 @@ var layoutScrollHeight=0;
                     },
                     {
                         title: '租期',
-                        align:'center',
-                        width:80,
-                        key: 'rentDays',
-                        render(h, params){
-                            if(params.row.rentDays<30){
-                                return h('div', [
-                                        h('div', [
-                                            h('span', { 
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            }, params.row.rentDays),
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, '天'),
-                                        ])
-                            ])
-                            }else{ 
-                               return h('div', [
-                                        h('div', {slot:'zu'},[
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, params.row.rentDays),
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, '天'),
-                                        ])
-                            ])
-                            }
-
-                            
-                                        
-                        }
-                    },
-                    {
-                        title: '当前签约价',
-                        align:'right',
-                        width:80,
-                        key: 'price',
-                    },
-                    {
-                        title: '当前客户',
-                        align:'center',
-                        width:110,
-                        key: 'customerName',
-                    },
-                    {
-                        title: '客户当前在租工位数',
-                        align:'center',
-                        width:80,
-                        key: 'customerStatoons',
-                    },
-                    {
-                        title: '随后可续时段',
-                        align:'center',
-                        width:80,
-                        key: 'reletTypeName',
-                        render(h, params){
-                            if(!params.row.reletTypeName){
-                                return params.row.reletTypeName
-                            }
-
-                            if(params.row.reletTypeName.indexOf('不可续租')!=-1){
-                                return h('div', [
-                                        h('Tooltip', {
-                                            props: {
-                                                placement: 'top'
-                                            }
-                                        }, [
-                                        h('div', [
-                                            h('div',{
-                                                style:{
-                                                    color:'#FF6868'
-                                                }
-                                            },'不可续租')
-                                        ]),
-                                        h('div', {slot:'content'},[
-                                            h('p',{
-                                            },params.row.reletCustomerName),
-                                            h('p',{
-                                            },'合同起始日：'+params.row.reletStartDate),
-                                            h('p',{
-                                            },'合同结束日：'+params.row.reletEndDate),
-                                            h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
-                                            h('p',{
-                                            },'签约价：'+params.row.reletPrice),
-                                        ]),
-                                    ])
-                                ])
-                            }else if(params.row.reletTypeName.indexOf('可续租时长不限')!=-1){
-                                return '可续租时长不限'
-                            }else{
-                                return h('div', [
-                                        h('Tooltip', {
-                                            props: {
-                                                placement: 'top'
-                                            }
-                                        }, [
-                                        h('div', [
-                                            h('div',{
-                                                style:{
-                                                    color:'#FF6868'
-                                                }
-                                            },'只可续租至')
-                                        ]),
-                                        h('div', [
-                                            h('div',{
-                                                color:'#FF6868'
-                                            },params.row.reletStartDate)
-                                        ]),
-                                        h('div', {slot:'content'},[
-                                            h('p',{
-                                            },params.row.reletCustomerName),
-                                            h('p',{
-                                            },'合同起始日：'+params.row.reletStartDate),
-                                            h('p',{
-                                            },'合同结束日：'+params.row.reletEndDate),
-                                            h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
-                                            h('p',{
-                                            },'签约价：'+params.row.reletPrice),
-                                        ]),
-                                    ])
-                                ])
-                            }
-
-                            
-                                        
-                        }
-
-                    },
-                    {
-                        title: '商品定价',
                         align:'right',
                         width:80,
                         key: 'quotedPrice',

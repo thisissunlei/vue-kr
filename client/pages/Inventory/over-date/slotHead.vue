@@ -5,7 +5,8 @@
             v-for="item in data"
             :key="item"
          >
-            {{item}}
+         <span>{{item}}</span>
+            
        </div>
     </div>
 </template>
@@ -30,27 +31,29 @@
 .slot-head-warp{
      position: fixed;
      top:60px;
-     display: -moz-box; 
-     display: -webkit-box; 
-     display: box; 
+     /*display: -moz-box; */
+     /*display: -webkit-box; */
+     display: flex; 
      white-space: normal;
     word-break: break-all;
      height:55px;
      /*line-height:40px;*/
      background-color: #f8f8f9;
      z-index:999;
+
      vertical-align: middle;
-  .slot-head-class{
+  .slot-head-class, .slot-optional-class{
         text-align: center;
         border-right:solid 1px #e9eaec;
         border-bottom:solid 1px #e9eaec;
         white-space: normal;
         word-break: break-all;
         font-weight: 700;
+        height: 50px;
         &:nth-child(2),&:nth-child(8){
             width:110px;
         }
-        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(9),&:nth-child(10),&:nth-child(11){
+        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(10),&:nth-child(9),&:nth-child(11){
             width:80px;
         }
         &:nth-child(7){
@@ -58,41 +61,17 @@
         }
         &:nth-child(1){
             width:100%;
-            -moz-box-flex: 1; 
-            -webkit-box-flex: 1; 
-            box-flex:1;
+            flex: 1.5;
+            /*-moz-box-flex: 1; */
+            /*-webkit-box-flex: 1; */
+            /*box-flex:1;*/
             border-left: solid 1px #e9eaec;
         }
-    }
-    .slot-optional-class{
-        text-align: center;
-        border-right:solid 1px #e9eaec;
-        border-bottom:solid 1px #e9eaec;
-        font-weight: 700;
-        &:nth-child(2){
-            width:110px;
-        }
-        &:nth-child(4){
-            width:80px;
-        }
-        &:nth-child(5),&:nth-child(6),&:nth-child(7){
-            width:100px;
-        }
-        &:nth-child(8),&:nth-child(9){
-            width:130px;
-        }
-        &:nth-child(1){
-            width:100%;
-            -moz-box-flex: 1; 
-            -webkit-box-flex: 1; 
-            box-flex:1;
-            border-left: solid 1px #e9eaec;
-        }
-        &:nth-child(3){
-            width:100%;
-            -moz-box-flex: 1; 
-            -webkit-box-flex: 1; 
-            box-flex:1;
+        span{
+            width: 100%;
+            display: inline-block;
+            transform: translateY(-50%);
+            margin-top: 25px;
         }
     }
 }

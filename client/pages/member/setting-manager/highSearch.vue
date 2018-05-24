@@ -52,14 +52,11 @@
                         v-model="formItem.cmtId" 
                         style="width:250px"
                         placeholder="请选择社区" 
+                        clearable
+                        filterable
                     >
-                        <Option 
-                            v-for="item in communityList" 
-                            :value="item.id" 
-                            :key="item.id"
-                        >
-                            {{ item.name }}
-                        </Option>
+                        <Option   v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+                       
                     </Select>
             </FormItem> 
             <FormItem label="是否已设管理员" class="u-input">

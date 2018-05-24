@@ -316,7 +316,6 @@
         
         mounted(){
             let mask=this.$route.query.mask;
-            console.log('join==========',mask)
             if(!mask||mask=='join'){
                sessionStorage.setItem('paramsJoin',JSON.stringify(this.$route.query));
             }

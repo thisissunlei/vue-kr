@@ -17,7 +17,7 @@
                 :clearable='clearable'
                 :filterable='filterable'
                 @on-change="change"
-
+                ref="selectss"
                 style="width:250px;"
             >
             <Option v-for="item in selectData" :value="''+item.value" :key="item.value">{{ item.label}}</Option>
@@ -85,6 +85,7 @@ export default {
         this.getSelectData(this.selectParam,()=>{
             this.getLabel(this.selectValue);
         });
+        console.log(this.$refs.selectss,"ppppp")
     },
 	methods:{
         getSelectData(value,callback){

@@ -73,11 +73,12 @@
     }
     //设置页面的一级路由
     GlobalRouter.prototype.setDefaultHeader = function (value) {
-        var j_li = document.getElementsByName(value);
-        if(j_li.length){
-            j_li[0].setAttribute("class", "active");
+        var j_li = document.getElementsByName(value)[0];
+        if(j_li){
+            j_li.setAttribute("class", "active");
+        }else{
+            return
         }
-
     }
     //路由发生变化
     GlobalRouter.prototype.refresh = function () {
@@ -162,9 +163,11 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
+            console.log(item,"kkkkkkkkkk")
             let iconName = item.iconName ? item.iconName : '';
-            html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
+                html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
+            
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -422,7 +425,6 @@
 
     global.GLOBALHEADERSET = Router.setDefaultHeader;
 
-
     Router.init();
     //第一级菜单
     function firstMenus(firstData) {
@@ -468,7 +470,6 @@
             }
 
         })
-
         return arr;
     }
     //第三级菜单
@@ -587,6 +588,11 @@
                             router: 'user/personalManage/peopleState',
 
                         },
+                        {
+                            primaryText: '工作人员职务',
+                            menuCode: 'hrm_job_list',
+                            router: 'user/basicConfig/postList',
+                        },
                     ]
                 },
             ]
@@ -670,6 +676,12 @@
                             menuCode: 'stat_group',
                         },
                         {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
@@ -719,12 +731,14 @@
                         type: 'vue',
                         menuCode: 'checklist_list',
                     },
+                    {
+                        primaryText: '电视图库管理',
+                        menuCode: 'tv_ad_storage',
+                        type: 'vue',
+                        router: 'smart-hardware/map-depot'
+                    },
                 ]
             },
-
-
-
-
         ]
     }
     }
@@ -748,6 +762,12 @@
                             primaryText: '活动',
                             menuCode: 'oper_activity_base',
                             router: 'operation/communityAllocation/activity'
+                        },
+                        {
+                            primaryText: '会员福利',
+                            menuCode: 'op_member_coupon_external',
+                            type: 'vue',
+                            router: 'app-manage/member-welfare'
                         },
                         {
                             primaryText: '广告',
@@ -794,12 +814,7 @@
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
                         },
-                        {
-                            primaryText: '会员福利',
-                            menuCode: 'op_member_coupon_external',
-                            type: 'vue',
-                            router: 'app-manage/member-welfare'
-                        },
+                       
                         // {
                         //     primaryText: '免费额度优惠券',
                         //     menuCode: 'op_member_coupon_internal',
@@ -835,6 +850,12 @@
                             primaryText: '关键词配置',
                             menuCode: 'sem_list',
                             router: 'WebBackstage/keyword',
+                        },
+                        {
+                            primaryText: '计算器配置',
+                            menuCode: 'cbd_list',
+                            type:'vue',
+                            router: 'official-website/calculator',
                         }
                     ]
                 },

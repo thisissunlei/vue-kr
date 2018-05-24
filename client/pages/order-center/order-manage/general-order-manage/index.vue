@@ -118,6 +118,15 @@
                         key: 'communityName',
                         align:'center'
                     },
+                     {
+                        title: '部门',
+                        key: 'departmentName',
+                        align:'center',
+                        render(tag, params){
+                            let str = params.row.departmentName?params.row.departmentName:'无'
+                            return str;
+                        }
+                    },
                     {
                         title: '订单金额',
                         key: 'money',

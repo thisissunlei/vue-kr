@@ -48,6 +48,10 @@ export default  {
     //每日库存-平面图
     'getInventoryMap': {
         url: '/api/krspace-finance-web/cmt/floor-graph/list',
+    },
+    //社区招商
+    'community-investment-list': {
+        url: '/api/krspace-finance-web/inventory/cmt-investment/list',
         method: 'get'
     }
   }

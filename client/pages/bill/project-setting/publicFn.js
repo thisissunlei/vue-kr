@@ -81,11 +81,14 @@ function lineShow(data) {
 }
 //鼠标滑过气泡的位置
 function poptipOver(event,data,domName) {
+    let winWidth =  document.body.clientWidth;
+    let offsetTop = 130-60;
     var e = event || window.event;
     var dom = event.target;
     var detail = dom.getBoundingClientRect();
     var tirDom = document.getElementById('gantt-chart-tool-tip');
     var angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
+    var mainDom = document.getElementById("layout-content-main");
 
     var tirLocation = {
         left: e.clientX,
@@ -95,13 +98,13 @@ function poptipOver(event,data,domName) {
     if(data.planEndTimeStr || data.actualEndTimeStr){
         tirDom.innerHTML = obj.str;
         tirDom.style.left = tirLocation.left - 30 + 'px';
-        tirDom.style.top = tirLocation.top + 10 - (130-60) + 'px';
+        tirDom.style.top = tirLocation.top + 10 - offsetTop + mainDom.scrollTop + 'px';
         tirDom.style.width = obj.width + 'px';
         angleDom.style.left = tirLocation.left - 30 + 5 + 'px';
-        angleDom.style.top = tirLocation.top - (130-60) + 'px';
-        locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName)
-        tirDom.style.opacity = 1;
-        angleDom.style.opacity = 1;
+        angleDom.style.top = tirLocation.top - offsetTop +mainDom.scrollTop + 'px';
+        tirDom.style.display = 'block';
+        angleDom.style.display = 'block';
+        locationCorrect(tirDom, tirLocation.left - 30, tirLocation.left - 30 + obj.width,domName,winWidth)
     }
 }
 //气泡的具体内容
@@ -109,11 +112,11 @@ function getToolTipContent(thatData) {
         var str = '<div class="title">' + thatData.label + '</div>';
         var data = Object.assign({}, thatData);
         var width = 155;
-        if(data.planEndTimeStr){
-            str+='<div class="content" > 计划日期：' + data.planEndTimeStr +  '</div>';
+        if(data.planEndTime){
+            str+='<div class="content" > 计划日期：' + dateUtils.dateToStr("YYYY/MM/DD", new Date(data.planEndTime))+ '</div>';
         }
-        if(data.actualEndTimeStr){
-            str+='<div class="content" > 完成日期：' + data.actualEndTimeStr +  '</div>';
+        if(data.actualEndTime){
+            str+='<div class="content" > 完成日期：' + dateUtils.dateToStr("YYYY/MM/DD", new Date(data.actualEndTime))+ '</div>';
         }
         
         return {
@@ -125,6 +128,7 @@ function getToolTipContent(thatData) {
 //气泡的位置微调
 function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     //滚动条的框
+    // return;
     let contentDom = document.getElementById(domName);
     let angleDom = document.getElementById('gantt-chart-tool-tip-triangle');
     let tirDetail = tirDom.getBoundingClientRect();
@@ -135,11 +139,10 @@ function locationCorrect(tirDom, nowLeft, tirRightToleft,domName) {
     if (contentToRigth > tirToRigth) {
         tirDom.style.left = nowLeft - (contentToRigth - tirToRigth) + 'px';
     }
-    
     if (detail.top + detail.height < parseInt(tirDom.style.top) + 155+100){
-        tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 65 +'px'; 
+        tirDom.style.top = parseInt(tirDom.style.top) - tirDetail.height - 60 +'px'; 
         angleDom.className = 'top-triangle';
-        angleDom.style.top = parseInt(angleDom.style.top)-55+ "px";
+        angleDom.style.top = parseInt(angleDom.style.top)- 50 + "px";
     }else {
         angleDom.className = 'bottom-triangle'
     }

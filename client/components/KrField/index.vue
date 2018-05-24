@@ -97,6 +97,7 @@
 
         <KrCascader
             v-if="type==='cascader'"
+            :width="width"
             :data="data"
             :name="name"
             :value="value"
@@ -109,6 +110,7 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
+            :inline="inline"
         />
         
          <KrCity
@@ -270,6 +272,14 @@ export default {
         selectParam:{
             default:'',
             type:String
+        },
+        width:{
+            default:250,
+            type:[String,Number]
+        },
+        inline:{
+            default:false,
+            type:Boolean
         }
     },
     data(){

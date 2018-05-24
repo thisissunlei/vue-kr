@@ -281,6 +281,7 @@ var layoutScrollHeight=0;
             }
         },
         mounted(){
+            console.log('this.$route.query',this.$route.query)
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
@@ -332,8 +333,10 @@ var layoutScrollHeight=0;
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+               
+                this.tabForms=Object.assign({},formItem);
+                 console.log('=====',this.tabForms)
+                // this.dataParams(this.tabForms);
                 utils.addParams(this.tabForms);
             },
             //数据变化

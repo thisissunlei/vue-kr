@@ -53,7 +53,7 @@ var img='';
     mounted(){
         //背景图
         img=new Image();
-        img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
+        img.src="http://op.krspace.cn"+this.data.graphFilePath;
         img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },
@@ -70,7 +70,6 @@ var img='';
             var ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, img.width, img.height);
             var dataURL = canvas.toDataURL("image/png");
-            console.log('dataURL',dataURL);
             return dataURL
         },
         //图片加载完

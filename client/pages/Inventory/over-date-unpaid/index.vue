@@ -221,7 +221,7 @@ var layoutScrollHeight=0;
             },
             getData(params){
                 //getDailyInventory 
-                this.$http.post('getDueList', params).then((res)=>{
+                this.$http.get('getDueList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;

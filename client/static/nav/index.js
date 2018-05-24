@@ -618,11 +618,6 @@
                             router: 'product/communityAllocation/communityList'
                         },
                         {
-                            primaryText: '社区平面图',
-                            menuCode: 'oper_cmt_graph_base',
-                            router: 'product/communityAllocation/communityPlanList'
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -632,6 +627,12 @@
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
                         },
+                        {
+                            primaryText: '平面图配置',
+                            menuCode: 'oper_cmt_graph_base',
+                            router: 'product/communityAllocation/communityPlanList'
+                        },
+                        
                         {
                             primaryText: "每日库存查询",
                             router: 'inventory/daily-inventory',
@@ -643,6 +644,28 @@
                             router: 'inventory/optional-inventory',
                             type: 'vue',
                             menuCode: 'inventory',
+                        },
+                        {
+                            primaryText: '库存平面图',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory',
+                        },
+                        {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
+                            primaryText: '销控',
+                            menuCode: 'cmt_sell_control',
+                            router: 'product/communityManage/controlTable',
+                        },
+                        {
+                            primaryText: "招商数据",
+                            router: 'product/statistical/index',
+                            menuCode: 'stat_group',
                         },
                         {
                             primaryText: '注册地址',
@@ -658,29 +681,7 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        // },
-                        {
-                            primaryText: '库存平面图',
-                            router: 'inventory/floor-plan',
-                            type: 'vue',
-                            menuCode: 'inventory',
-                        },
-                        {
-                            primaryText: '销控',
-                            menuCode: 'cmt_sell_control',
-                            router: 'product/communityManage/controlTable',
-                        },
-                        {
-                            primaryText: "招商数据",
-                            router: 'product/statistical/index',
-                            menuCode: 'stat_group',
-                        },
-                        {
-                            primaryText: "社区招商情况",
-                            router: 'community/attract-investment',
-                            type: 'vue',
-                            menuCode: 'cmt_investment',
-                        },
+                        // }, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',

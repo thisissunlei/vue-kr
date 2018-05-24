@@ -48,7 +48,7 @@
         title="提示"
         ok-text="确定"
         cancel-text="取消"
-        width="443"
+        width="600"
      >
 		<CommunityManage  
 			v-if="openTip"
@@ -143,7 +143,7 @@ export default {
 				 render(h,obj){
 					let manager= obj.row.isManager=="1"?'是':'否';
 					return manager;
-				 }
+				  }
 				},
 				{
 				 title: '管理的社区',
@@ -154,9 +154,9 @@ export default {
 				 title: '操作',
                  key: 'operation',
 				 align:'center',
-				 render(h,obj){
-					return h('div', [
-							h('Button', {
+				 render:(h,obj)=>{
+					  return h('div', [
+						h('Button', {
 							props: {
 								type: 'text',
 								size: 'small'
@@ -166,11 +166,12 @@ export default {
 							},
 							on: {
 								click: () => {
-									_this.setManager(obj.row)
+									this.setManager(obj.row)
 								}
 							}
 						}, '设置管理员')
-                    ]);  
+						
+					]);
 				 }
 				},
 			],
@@ -183,6 +184,10 @@ export default {
 	
 	},
 	methods:{
+		setManager(params){
+			this.itemDetail=params;
+			this.hideTip();
+		},
 		getInfo(){
 			let {params}=this.$route;
 			this.Params.csrId=params.csrId;
@@ -216,10 +221,7 @@ export default {
 			this.getInfo();
 		},
 		
-		setManager(params){
-			this.itemDetail=params;
-			this.hideTip();
-		},
+		
 		hideTip(){
 			this.openTip=!this.openTip;
 		},

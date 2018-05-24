@@ -116,7 +116,7 @@
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">随后可续</span>
                         <Form-item class='priceForm'>
                             <Select 
-                            v-model="formItem.reletTypeName" 
+                            v-model="formItem.reletType" 
                             placeholder="请选择随后可续" 
                             style="width: 200px"
                             clearable
@@ -264,7 +264,7 @@ export default {
                     goodsType:' ',
                     leaseRemainingType:'GT',
                     rentType:'GT',
-                    reletTypeName:' ',
+                    reletType:' ',
                     goodsName:'',
                     customerName:'',
                     leaseRemainingDays:''
@@ -273,7 +273,7 @@ export default {
                     {value:' ',label:'全部'},
                     {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
                     {value:'RENT_NO_PERMIT',label:'不可续租'},
-                    {value:'RENT_CAN_TO',label:'只可续部分时间'}
+                    {value:'RENT_CAN_TO',label:'只可续租部分时间'}
                 ],
                 communityList:[],
                 cityList:[],

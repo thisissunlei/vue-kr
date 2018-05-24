@@ -1,7 +1,8 @@
 <template>
     <div class='make-invoice-form'>
         <div class="community-header">
-            <Form ref="formItemInvestment" :model="formItem" :rules="ruleInvestment" label-position="left">
+            <!-- :rules="ruleInvestment" -->
+            <Form ref="formItemInvestment" :model="formItem"  label-position="left">
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;"> 
@@ -172,6 +173,8 @@ export default {
     data() {
             //工位数量
             const validateStation = (rule, value, callback) => {
+                // callback();
+                return ;
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
@@ -185,6 +188,8 @@ export default {
             };
             //签约价
             const validatePrice = (rule, value, callback) => {
+                // callback();
+                return ;
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
@@ -198,6 +203,8 @@ export default {
             };
             //商品定价
             const validateOrder = (rule, value, callback) => {
+                // callback();
+                return ;
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
@@ -212,6 +219,8 @@ export default {
             //折扣
             const validateDiscount = (rule, value, callback) => {
                 var reg=/^(([1-9]{1})|([0-9]{1}\.\d{1}))$/;
+                //  callback();
+                return ;
                 if(value&&!reg.test(value)){
                     callback('请输入0-10之间的数字,最多1位小数');
                 }else if (this.formItem.discountMin&&this.formItem.discountMax&&Number(this.formItem.discountMin)>Number(this.formItem.discountMax)) {
@@ -242,84 +251,80 @@ export default {
             return { 
                 loading:false, 
                 formItem:{
-                    investmentStatus:'',
-                    status:[],
+                    applyNum:'',
+                    billNums:'',
 
-                    name:'',
                     communityId:'',
-                    cityId:'',
-                    floor:' ',
-                    stationsMax:'',
-                    stationsMin:'',
-                    goodsType:' ',
-                    priceMin:'',
-                    priceMax:'',
-                    discountMin:'',
-                    discountMax:'',
-                    sellerId:'',
-                    orderPriceMin:'',
-                    orderPriceMax:'',
-                    rentTime:'',
-                    rentTimeType:'GT',
+                    companyId:'',
+                    contentType:'',
+                    endAmount:' ',
+                    endRefundTime:'',
+                    endTicketTime:'',
 
+                    endTime:' ',
+                    invoiceTitle:'',
+                    invoiceType:'',
+                    startAmount:'',
 
-                    source:[],
-                    sourceId:'',
-                    subSourceId:''
+                    startRefundTime:'',
+                    startTicketTime:'',
+
+                    startTime:'',
                 },
-                sourceData:[],
                 communityList:[],
                 cityList:[],
-                floorList:[],
-                sellerList:[],
                 productList:[
                     {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
-                inventoryList:[
-                    {value:'AVAILABLE',label:'未招商'},
-                    {value:'INVITING',label:'招商中'},
-                    {value:'RENTING',label:'已招商'},
-                    {value:'DISABLED',label:'不可招商'}
-                ],
-                timeList:[
-                   {value:'LT',label:'小于'},
-                   {value:'EQ',label:'等于'},
-                   {value:'GT',label:'大于'}
-                ],
                 
                 formItemOld:{},
                 ruleInvestment: {
-                    name:[
+                    applyNum:[
                         { validator: validateName, trigger: 'change' }
                     ],
-                    stationsMin: [
+                    billNums: [
                         { validator: validateStation, trigger: 'change' }
                     ],
-                    stationsMax: [
+                    communityId: [
                         { validator: validateStation, trigger: 'change' }
                     ],
-                    priceMin: [
+                    companyId: [
                         { validator: validatePrice, trigger: 'change' }
                     ],
-                    priceMax: [
+                    contentType: [
                         { validator: validatePrice, trigger: 'change' }
                     ],
-                    orderPriceMin: [
+                    endAmount: [
                         { validator: validateOrder, trigger: 'change' }
                     ],
-                    orderPriceMax: [
+                    endRefundTime: [
                         { validator: validateOrder, trigger: 'change' }
                     ],
-                    discountMin: [
+                    endTicketTime: [
                         { validator: validateDiscount, trigger: 'change' }
                     ],
-                    discountMax: [
+                    endTime: [
                         { validator: validateDiscount, trigger: 'change' }
                     ],
-                    rentTime:[
+                    invoiceTitle:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    invoiceType:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    startAmount:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    startRefundTime:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    startTicketTime:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    startTime:[
                         { validator: validateTime, trigger: 'change' }
                     ]
                 }
@@ -350,7 +355,6 @@ export default {
             this.$http.get('get-saler',{phoneOrEmail:name}).then((res)=>{
                 list = res.data.slice(0,10);
                 this.loading= false;
-                this.sellerList=list;
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -360,7 +364,7 @@ export default {
         //渠道来源
         getSourceData(){
             this.$http.get('get-customer-source').then((res)=>{
-                // this.sourceData=publicFn.sourceStyleSwitch(res.data);
+              
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -389,24 +393,13 @@ export default {
                 });
             })
         },
-        //楼层接口
-        getFloorList(param){
-            this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
-                this.floorList=res.data;
-                if(this.floorList.length>1){
-                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
-                }
-                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
-                
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
+      
         //搜索
         searchClick(){
+            console.log("0000000")
             this.$refs['formItemInvestment'].validate((valid) => {
+                 this.$emit('searchClick',this.formItem);
+                 console.log(valid,"pppppp")
                 if (valid) {
                     //招商状态格式转换
                     var str='';
@@ -420,7 +413,7 @@ export default {
                         this.formItem.sourceId=this.formItem.source[0];
                         this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
                     }
-                    this.$emit('searchClick',this.formItem);
+                   
                 }
             })
         },
@@ -440,7 +433,7 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            this.getFloorList(param);
+            
         }
     }
 }

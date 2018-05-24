@@ -31,6 +31,7 @@
 
 <script>
     import SearchFrom from './search-from';
+    import utils from '~/plugins/utils';
     import List from './list';
     export default {
        
@@ -59,7 +60,8 @@
                 this.type = val;
             },
             searchClick(params){
-                //   utils.addParams(params);
+                console.log(params,"lllllll")
+                utils.addParams(params);
             },
             clearClick(params){
                 //   utils.addParams(params);

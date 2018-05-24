@@ -6,23 +6,42 @@
                 <Row style="margin-bottom:30px">  
                     <Col span="12" class="col">
                         <FormItem label="客户名称" style="width:252px" prop="customerId">
-                        <selectCustomers name="formItem.customerId" :onchange="changeCustomer"></selectCustomers>
+                            <selectCustomers 
+                                :disabled="isReady" 
+                                name="formItem.customerId" 
+                                :onchange="changeCustomer"
+                            />
                         </FormItem>
                     </Col>
-        
+
                     <Col class="col">
                         <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                        <selectCommunities test="formItem" :onchange="changeCommunity"></selectCommunities>
+                            <selectCommunities 
+                                :disabled="isReady" 
+                                test="formItem" 
+                                :onchange="changeCommunity"
+                            />
                         </FormItem>
                     </Col>
                     <Col class="col">
                         <FormItem label="提交人员" style="width:252px" prop="salerId">
-                            <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
+                            <SelectSaler 
+                                :disabled="isReady"  
+                                name="formItem.salerId" 
+                                :value="salerName" 
+                                :onchange="changeSaler" 
+                            />
                         </FormItem>
                     </Col>
                     <Col class="col">
                         <FormItem label="提交时间" style="width:252px" prop="startDate">
-                            <DatePicker type="date" placeholder="提交时间" v-model="formItem.startDate" style="display:block" ></DatePicker>
+                            <DatePicker 
+                                :disabled="isReady" 
+                                type="date" 
+                                placeholder="提交时间" 
+                                v-model="formItem.startDate" 
+                                style="display:block" 
+                            />
                             <!-- <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div> -->
                         </FormItem>
                         
@@ -33,36 +52,56 @@
                 <Row  style="margin-bottom:30px">   
                     <Col class="col">
                         <FormItem label="发票抬头" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入发票抬头" />
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />
                         </FormItem>
                     </Col>
                
                     <Col class="col">
                         <FormItem label="纳税人识别码" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入纳税人识别码" />
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入纳税人识别码" 
+                            />
                         </FormItem>
                     </Col>
                  
                     <Col class="col">
                         <FormItem label="注册地址" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入注册地址" />
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入注册地址" 
+                            />
                         </FormItem>
                     </Col>
                 
                     <Col class="col">
                         <FormItem label="注册电话" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入注册电话" />
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入注册电话" 
+                            />
                         </FormItem>
                     </Col>
                 
                     <Col class="col">
                         <FormItem label="开户银行" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入开户银行" />
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入开户银行" 
+                            />
                         </FormItem>
                     </Col>
                      <Col class="col">
                         <FormItem label="银行账户" style="width:252px" >
-                            <Input v-model="formItem.timeRange" placeholder="请输入银行账户" />
+                            <Input :disabled="isReady" v-model="formItem.timeRange" placeholder="请输入银行账户" />
                         </FormItem>
                     </Col>
                 </Row>
@@ -85,10 +124,7 @@
     </div>
 </template>
 
-
 <script>
-
-
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
@@ -110,32 +146,7 @@ import utils from '~/plugins/utils';
                 }
             };
             return {
-                discountError:false,
-                depositAmount:'',
-                disabled:false,
-                delStation:[],
-                stationAmount:'',
-                installmentType:'',
-                maxDiscount:{},//折扣最大限制
-                timeError:false,//租赁时间校验
-                stationData:{
-                    submitData:[],
-                    deleteData:[],
-                    clearAll:false
-                },
-                stationAll:{},
-               
-                params:{},
-                depositList:[
-                    {label:'2个月',value:'2'},
-                    {label:'3个月',value:'3'},
-                    {label:'4个月',value:'4'},
-                    {label:'5个月',value:'5'},
-                    {label:'6个月',value:'6'},
-                ],
-                saleAmount:0,
-                saleAmounts:utils.smalltoBIG(0),
-                youhui:[],
+                isReady:true, //只读页面
                 tableColumns: [
                     {
                         title: '账单编号',
@@ -170,42 +181,26 @@ import utils from '~/plugins/utils';
                             let price = params.row.originalPrice;
                             
                             return h('Input', {
-                                    props: {
-                                        min:params.row.guidePrice,
-                                        value:params.row.originalPrice,
-                                    },
-                                    on:{
-                                        'on-change':(event)=>{
+                                props: {
+                                    min:params.row.guidePrice,
+                                    value:params.row.originalPrice,
+                                    disabled:this.isReady
+                                },
+                                on:{
+                                    'on-change':(event)=>{
 
-                                            this.tabelInputChange(event);
-                                        },
-                                        // 'on-blur':()=>{
-                                        //     var pattern =/^[0-9]+(.[0-9]{1,2})?$/;
-                                        //     if(price && !pattern.test(price)){
-                                        //         this.$Notice.error({
-                                        //             title:'单价不得多余小数点后两位'
-                                        //         })
-                                        //         var num2=Number(price).toFixed(3);
-                                        //         price = num2.substring(0,num2.lastIndexOf('.')+3) 
-                                        //     }
-                                        //     if(price<params.row.guidePrice){
-                                        //         price = params.row.guidePrice
-                                        //         this.$Notice.error({
-                                        //             title:'单价不得小于'+params.row.guidePrice
-                                        //         })
-                                        //     }
-                                        //     this.changePrice(params.index,price)
-                                        // }
+                                        this.tabelInputChange(event);
                                     }
-                                },'44')
+                                }
+                            },'44')
                         }
                     }
                 ],
+                //列表数据
                 stationList: [
                     {customerId:'33333'}
                 ],
-                floors:[],
-                selectedStation:[],
+               
                 formItem: {
                     customerId: '',
                     communityId: '',
@@ -220,8 +215,7 @@ import utils from '~/plugins/utils';
                     items:[],
                     stationAmount:0,
                 },
-
-                errorPayType:false,//付款方式的必填错误信息
+                //校验
                 ruleCustom:{
                     startDate: [
                         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
@@ -248,21 +242,7 @@ import utils from '~/plugins/utils';
                         { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
                     ]
                 },
-                getFloor:+new Date(),
-                changeSale:+new Date(),
-                salerName:'请选择',
-                ssoId:'',
-                errorAmount:false,
-                ssoName:'',
-                discount:0,
-                minDiscount:'',
-                change:{},
-                showSaleDiv:true,
-                openPrice:false,
-                price:'',
-                priceError:false,
-                //录入单价的数组
-                priceToStation:[]
+                salerName:'请选择'
 
             }
         },
@@ -281,37 +261,6 @@ import utils from '~/plugins/utils';
         },
          mounted(){
             GLOBALSIDESWITCH("false");
-            this.getFreeDeposit();
-        },
-        watch:{
-           getFloor(){
-            let _this = this;
-            if(this.formItem.communityId && this.formItem.customerId){
-                let params = {
-                    communityId:this.formItem.communityId,
-                    customerId:this.formItem.customerId
-                }
-                 this.$http.get('get-community-floor', params, r => {
-                    _this.floors = r.data.floor;
-                    _this.ssoId = r.data.ssoId;
-                    _this.ssoName = r.data.ssoName;
-                    if(!_this.formItem.salerId){
-                        _this.formItem.salerId = JSON.stringify(r.data.ssoId);
-                        _this.salerName = r.data.ssoName
-
-                    }
-
-                }, e => {
-                    _this.$Notice.error({
-                        title:e.message
-                    });
-
-                })
-            }
-           },
-           disabled(val){
-            console.log('disabled-->',val)
-           }
         },
         methods: {
             tabelInputChange(event){
@@ -335,7 +284,9 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
                 
             },
-          
+            changeSaler(){
+
+            },
             changeCustomer(value){
                 // 客户
                 if(value){
@@ -346,36 +297,6 @@ import utils from '~/plugins/utils';
                 this.getFloor = +new Date()
 
             },
-            changeSaler(value){
-                // 销售员
-                this.formItem.salerId = value;
-            },
-           
-           
-            selectRow(selection){
-                // 工位表单的全选
-                let selectionList = [];
-                selectionList = selection.map((item)=>{
-                    return item.seatId
-                })
-                this.selectedStation = selectionList;
-            },
-            getFreeDeposit(){
-                this.$http.get('get-seat-deposit-free', '').then( r => {
-                    this.showFree = r.data;
-                    if(r.data){
-                        this.depositList.push({value:'0',label:'无押金'},)
-                        this.depositList.push({value:'1',label:'1个月'},)
-                    }
-                }).catch( e => {
-                        this.$Notice.error({
-                            title:e.message
-                        })
-
-                })
-            },
-                    
-               
         }
     }
 </script>

@@ -46,8 +46,8 @@ function init(data,picProperty,dataUrl,drawWrap){
             }
             min=minW<minH?minW:minH;
         })
-
-        var firstScale=36/min;
+        
+        var firstScale=40/min;
         if(firstScale<0.3){
             scale=0.3
         }else{
@@ -73,11 +73,11 @@ function init(data,picProperty,dataUrl,drawWrap){
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
-        pos:data.graphFilePath,
+        pos:data.graphFileId,
         picName:data.communityName+data.currentDate,
         dataUrl:dataUrl
     }
-   
+    
     //高度自适应图片高度
     drawWrap.style.height=picProperty.height+20+'px';
     return {data:[].concat(dataRender),pic:picProperty};

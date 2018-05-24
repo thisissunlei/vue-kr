@@ -96,6 +96,10 @@ export default {
             mainDom.scrollTop=0;
             this.isFirstClick=true;
         }
+        var index=this.findEle(clickNone,'id',every.item.id);
+        if(index!=-1){
+            return ;
+        } 
         clickNone.push({id:every.item.id,everyData:every});
     },
     findEle(array,attr,val){

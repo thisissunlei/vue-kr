@@ -57,12 +57,12 @@ function getToolTipContent(thatData,discount) {
     
     var nameStr='';
     var proStr='';
-    var signStr='';
-    var productStr='';
+    var signStr=(status=='IN_RENT'||status=='NOT_EFFECT'&&disPrice)?'<div>签约价：' + disPrice + '</div>':'';
+    var priceStr='';
+    var dateEnd=rentEnd?'<div>可租结束日：' + rentEnd + '</div>':'';
     if(data.item.belongType=='SPACE'){
         proStr='<div>商品属性：' + property + '</div>';
-        signStr=(status=='IN_RENT'||status=='NOT_EFFECT')?'<div>签约价：' + disPrice + '</div>':'';
-        productStr='<div>商品定价：' + disTotal + '</div>';
+        priceStr='<div>工位单价：' + disUnitPrice + '</div>';
     }else{
         nameStr='<div>固定办公桌:'+data.item.cellName+'</div>';
     }
@@ -70,9 +70,9 @@ function getToolTipContent(thatData,discount) {
     var str = '<div class="content">' + 
            nameStr+
          '<div>可租起始日：' +rentStart + '</div>' +
-         '<div>可租结束日：' + rentEnd + '</div>' + 
-         '<div>工位单价：' + disUnitPrice + '</div>' +
-           productStr+
+           dateEnd + 
+           priceStr+
+         '<div>商品定价：' + disTotal + '</div>'
            signStr+
            proStr+  
          '</div>'

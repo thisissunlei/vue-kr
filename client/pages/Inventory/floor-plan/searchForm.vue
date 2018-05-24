@@ -64,11 +64,6 @@ export default {
           communityId:'',
           floor:'',
           currentDate:publicFn.getToDay()
-       },
-       isStore:{
-           city:'',
-           community:'',
-           floor:''
        }
     }
   },

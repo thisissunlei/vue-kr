@@ -9,31 +9,27 @@
         >
             <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
         </Select>
-       <Button  type="primary" @click="newCreateEquipmentGroup">新增设备组</Button>
-       <Modal
-            v-model="openNewCreateModal"
-            width="490"
-            title="新建设备组"
-            @on-ok="sumbmitNewCreateData">
-            <NewCreate @formData="getNewCreateData" v-if="openNewCreateModal"/>
-        </Modal>
-        <Modal
-            v-model="openEditModal"
-            width="490"
-            title="编辑设备组"
-            @on-ok="sumbmitEditData">
-            <EditForm @formData="getEditForm" v-if="openEditModal" :initialData="editInitailData"/>
-        </Modal>
-        <div id="myDiagramDiv" style="width:1000px; height:500px; background-color: #DAE4E4;">
+       <!-- <Button  type="primary" @click="newCreateEquipmentGroup">新增设备组</Button> -->
+       
+       
+        <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #DAE4E4;">
 
         </div>
+        <Drawer
+            :openDrawer="openEquipmentDetail"
+            iconType="view-icon"
+            :close="closeEquipmentDEtail"
+            width="540"
+        >
+
+            <GroupDetail/>
+        </Drawer>
     </div>
 </template>
 
 <script>
-import Buttons from '~/components/Buttons';
-import NewCreate from './newCreate';
-import EditForm from './editForm';
+import Drawer from '~/components/Drawer';
+import GroupDetail from './groupDetail';
 
 export default {
    name:'doorRelationship',
@@ -44,7 +40,7 @@ export default {
     },
    data(){
        return {
-            openNewCreateModal :false,
+            openEquipmentDetail : false,
             openEditModal : false,
             newCreateData : {},
             editData : {},
@@ -56,14 +52,15 @@ export default {
             addNewNode : 0 ,
             communityId : null,
             communityList :[],
+            //图表数据
             dateTemplate :{},
             nodeDragged : false,
-            
+            refreshedMapData : false,
        }
    },
    components:{
-    NewCreate,
-    EditForm
+    Drawer,
+    GroupDetail,
    },
    mounted(){
 
@@ -73,17 +70,39 @@ export default {
   
    methods:{
         drawMap(){
-            console.log("dldkfldk")
             let _this =this;
             var $ = go.GraphObject.make;
-            this.myDiagram = $(go.Diagram, "myDiagramDiv",
+            
+            this.myDiagram = $(go.Diagram, "doorGroupRelationshipMap",
             {
-                initialContentAlignment: go.Spot.Center,
+                // initialContentAlignment: go.Spot.Center,
                 // "undoManager.isEnabled": true, 
+                "clickCreatingTool.archetypeNodeData": { "name": "新设备组" },
                 "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+                "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
+                    console.log("loc",loc);
+                    this.archetypeNodeData = {
+                        // key: getNextKey(), // assign the key based on the number of nodes
+                        name: "新设备组",
+                        title: ""
+                    };
+                    
+                    var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
+                    _this.addNewCreateDataReq(newCreateNodeParams);
+                    return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
+                }
             });
             this.myDiagram.nodeTemplate =
+           
             $(go.Node, "Auto",
+
+                { // second arg will be this GraphObject, which in this case is the Node itself:
+                    doubleClick: function(e, node) {
+                        console.log("点击了节点","node",node.data);
+                        _this.closeEquipmentDEtail();
+                        
+                    }
+                },
                 {
                     dragComputation: function(part, pt, gridpt){
                        var diagram = part.diagram;
@@ -103,7 +122,7 @@ export default {
                     isActionable : false,
                    
                     mouseLeave:function(e,node){
-                        console.log("e",e,"node",node);
+                        // console.log("e",e,"node",node);
                         var itemData = node.data;
                         var locationArr = itemData.loc.split(" ");
                        
@@ -120,20 +139,24 @@ export default {
                         }
                     },
                     linkConnected : function(node,link,obj){
-                        console.log("node.data",node.data,"link.data",link.data,"obj.data",obj.part.data.id)
-                        console.log("link.data.from ",link.data.from );
-                        if(link.data.from ==obj.part.data.id ){
+
+                        console.log("连接obj",obj);
+                        if(!link.data.id && link.data.from ==obj.part.data.id ){
                             
                             _this.newCreateConnect(link.data);
-                        }
+                        };
                     },
                     linkDisconnected : function(node,link,obj){
-                        console.log("node.data",node.data,"link.data",link.data,"obj.data",obj.part.data.id)
-                        console.log("link.data.from ",link.data.from )
-                        if(link.data.from ==obj.part.data.id ){
-                            console.log("删除一个连接")
+
+                        console.log("断开连接obj",obj);
+                        
+    
+                        if(link.data.id && link.data.from ==obj.part.data.id ){
+                           
                             _this.deleteLinkConnect(link.data);
+                            
                         }
+                       
                     },
                    
                 },
@@ -149,41 +172,36 @@ export default {
                         cursor: "pointer",
                         
                     }),
+                
                
                 $(go.TextBlock, "name",
                 
                 { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
                 new go.Binding("text","name").makeTwoWay())
             );
-            $(go.DraggingTool,
-                {
-                    computeMove: function(n, newloc, draggedparts, result){
-                        console.log("n",n,"newloc",newloc,"draggedparts",draggedparts,"result",result)
-                    }
-                }
-            
-            );
+        
+           
            
 
-            this.myDiagram.nodeTemplate.selectionAdornmentTemplate =
+            // this.myDiagram.nodeTemplate.selectionAdornmentTemplate =
             
-                $(go.Adornment, "Spot",
-                    $(go.Panel, "Auto",
-                    $(go.Shape, { fill: null, stroke: "#000", strokeWidth: 1 }),
-                    $(go.Placeholder)  
-                    ),
+            //     $(go.Adornment, "Spot",
+            //         $(go.Panel, "Auto",
+            //         $(go.Shape, { fill: null, stroke: "#000", strokeWidth: 1 }),
+            //         $(go.Placeholder)  
+            //         ),
                      
-                    $("Button",
-                    {
-                        alignment: go.Spot.TopRight,
-                        click: _this.editItemData, 
+            //         $("Button",
+            //         {
+            //             alignment: go.Spot.TopRight,
+            //             click: _this.editItemData, 
                         
-                    },
-                    $(go.TextBlock, "编辑", 
-                        { font: "normal 10pt sans-serif" }),
-                    $(go.Shape, "PlusLine", { width: 6, height: 6 })
-                    ) 
-                ); 
+            //         },
+            //         $(go.TextBlock, "编辑", 
+            //             { font: "normal 10pt sans-serif" }),
+            //         $(go.Shape, "PlusLine", { width: 6, height: 6 })
+            //         ) 
+            //     ); 
 
             var dateTemplate = this.dateTemplate;
             this.model = go.Model.fromJson(dateTemplate);
@@ -191,6 +209,7 @@ export default {
         },
 
         getMapData(params){
+            this.refreshedMapData = true;
             this.$http.get('getDoorRelationshipData', params).then((res)=>{
                 var reponseData = res.data;
                 var nodeDataArrayNew = [],linkConnectArr = [];
@@ -217,8 +236,7 @@ export default {
                                 }
                 var dateTemplate = this.dateTemplate;
                 this.model = go.Model.fromJson(dateTemplate);
-            
-            this.myDiagram.model = this.model;
+                this.myDiagram.model = this.model;
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message
@@ -226,31 +244,14 @@ export default {
 			})
         },
 
-        newCreateEquipmentGroup(){
-           
-            this.openNewCreateModal = !this.openNewCreateModal;
-            
-        },
-        getNewCreateData(form,callback,cancel){
-            
-            this.newCreateData=form;
-
-        },
-        getEditForm(form){
-            this.editData=form;
-        },
-        sumbmitNewCreateData(){
-            var locationY = (this.addNewNode)*70
-            var location  = 0+ " " + locationY
-            var newCreateData = Object.assign({},this.newCreateData,{"loc":location})
-            this.addNewNode +=1;
-            
-            this.myDiagram.startTransaction("make new node");
-            this.myDiagram.model.addNodeData(newCreateData);
-            this.myDiagram.commitTransaction("make new node");
-            // 获取model数据
-            this.addNewCreateDataReq(newCreateData);
-        },
+       closeEquipmentDEtail(){
+           this.openEquipmentDetail = !this.openEquipmentDetail
+       },
+       
+        // getEditForm(form){
+        //     this.editData=form;
+        // },
+       
 
         sumbmitEditData(){
             
@@ -259,8 +260,8 @@ export default {
                 id : this.editData.id,
                 memo :this.editData.memo,
                 name : this.editData.name,
-                x : parseInt(location[0]),
-                y : parseInt(location[1]),
+                x : parseInt(location[0]+0),
+                y : parseInt(location[1]+0),
             }
             this.editDataReq(params);
         },
@@ -271,10 +272,13 @@ export default {
         },
         editDataReq(sendMsg){
             this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
-                console.log("编辑成功")
+                
                 if(this.openEditModal){
                     this.openEditFormModal();
                 }
+                var mapDataParam = {communityId : this.communityId}
+                this.getMapData(mapDataParam);
+
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message
@@ -285,29 +289,33 @@ export default {
             this.openEditModal = !this.openEditModal
         },
         addNewCreateDataReq(sendMsg){
+            
+            console.log("sendMsg",sendMsg);
             let _this =this;
-            var locationArr = sendMsg.loc.split(' ');
-            console.log("locationArr",locationArr)
-            var realsendMsg = {
-                communityId : _this.communityId,
-                memo :sendMsg.memo,
-                name :sendMsg.name,
-                x :locationArr[0],
-                y :locationArr[1],
-            }
-            this.$http.post('newCreateDoorRelationship', realsendMsg).then((res)=>{
-				console.log("新增成功")
+            this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
+                console.log("新增成功",res);
+                var useData = res.data
+                var locData = useData.x + " " + useData.y;
+                var toData = {
+                    id : useData.id,
+                    name : useData.name,
+                    loc : locData,
+                    memo : useData.memo,
+                }
+                var model = _this.myDiagram.model;
+                model.addNodeData(toData);
 			}).catch((error)=>{
-				// this.$Notice.error({
-				// 	title:error.message
-				// });
+				this.$Notice.error({
+					title:error.message
+				});
 			})
         },
         getCommunity(){
             
             this.$http.get('join-bill-community','').then((res)=>{
+
                 this.communityList=res.data.items;
-                this.communityId = res.data.items[0].id
+                this.communityId = res.data.items[1].id
 
                 var params = {communityId : this.communityId}
                 this.getMapData(params);
@@ -318,28 +326,45 @@ export default {
             })
         },
         newCreateConnect(param){
-            console.log("param",param);
+
+            
+            if(param.id){
+                return;
+            }
             let _this =this;
+            var paramMapData = {communityId : _this.communityId}
             var newParams = {
                                 communityId:_this.communityId,
                                 preSetId:param.from,
                                 setId:param.to,
                             };
             this.$http.post('newCreateDoorGroupConnect',newParams).then((res)=>{
-                console.log("新建联系成功");
+                
+                this.getMapData(paramMapData);
             }).catch((error)=>{
+                
+                this.getMapData(paramMapData);
                 this.$Notice.error({
                     title:error.message
                 });
             })
         },
         deleteLinkConnect(param){
+
+            
             let _this =this;
+            console.log("param.id",param.id)
+            if(!param.id){
+                return;
+            }
             var newParams = {
                                 id : param.id
                             };
             this.$http.delete('deleteLinkConnect',newParams).then((res)=>{
-                console.log("删除联系成功");
+                
+                var param={communityId : _this.communityId};
+                _this.getMapData(param);
+                
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

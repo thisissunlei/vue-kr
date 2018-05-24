@@ -319,20 +319,20 @@ export default {
         showCreate(){
             this.showSpaceList=!this.showSpaceList;
             this.spaceList=!this.spaceList
-        },
-        spaceListCancel(){
             let communityId = this.$route.query.communityId
-            this.tabAllParams.communityId= communityId
             this.formItem={
                 communityId:communityId,
                 floor:'',
                 type:''
-            },
-            this.getTableAllData({
-                communityId:communityId,
+            }
+            this.tabAllParams={
                 page:1,
                 pageSize:10,
-            })
+                communityId:communityId
+            }
+            this.getTableAllData(this.tabAllParams)
+        },
+        spaceListCancel(){
             this.showSpaceList=!this.showSpaceList;
         },
         changePage(page){

@@ -398,7 +398,7 @@
                 value = new Date(value).getTime()
                 if (value === '') {
                     callback(new Error('请先选择换租服务开始日'));
-                } else if(value < today){
+                } else if(value < today && value != this.originBeginTime){
                     callback(new Error('换租服务开始日不得小于等于今日'));
                 }else if(value > this.oldStation[0].leaseEnddate){
                      callback(new Error('换租服务开始日不得大于原结束日期'));
@@ -425,6 +425,7 @@
                 }
             };
             return {
+                originBeginTime:'',
                 discountCon:'',
                 entryPriceList:[],
                 openPrice:false,
@@ -1160,14 +1161,17 @@
                 //TODO 联调时需修改判断条件
                 //出发更新列表中的欲更换信息
                 var today = new Date()
+                this.formItem.leaseBegindate = value;
                 this.selectAllChecked = false;
                 this.selectAllAbled = false;
                 this.formItem.oldSeatInfo = []
                 today = today.setDate(today.getDate()+1);
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
                 today = new Date(today).getTime()
+
+                let change = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(value))
                 //选择日期小于当前日+1或大于原服务结束日，否则全部不可选
-                if(new Date(value).getTime()<today){
+                if(new Date(value).getTime()<today && new Date(change).getTime() != this.originBeginTime){
                     this.selectAllAbled = true;
                     this.oldStation = this.oldStation.map((item,index)=>{
                         item.checked = false;
@@ -1845,11 +1849,13 @@
                     // step1页内数据（overViewData有）
                     
                     // 编辑版
-                    
+                    this.originBeginTime = response.data.realStartDate;
                     this.formItem.communityId = response.data.communityId+'';
                     this.formItem.communityName = response.data.communityName;
                     this.getFloor = new Date()
                     this.formItem.signDate = new Date(response.data.saleDate);
+                    this.formItem.salerId = JSON.stringify(response.data.saleId);
+                    this.salerName = response.data.saleName;
                     let _this = this;
                     setTimeout(function(){
                         _this.getCustomerToCom()
@@ -1926,7 +1932,7 @@
 
                     this.oldStationData = array;
                     this.newStationData = array;
-                    overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                    overViewData.changeServiceFee = response.data.feeResultVO.changeServiceFee;
                     overViewData.back = response.data.feeResultVO.lockDeposit
                     overViewData.transferDepositAmount = response.data.feeResultVO.transferDeposit+''
 

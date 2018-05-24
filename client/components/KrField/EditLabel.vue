@@ -2,16 +2,16 @@
 <template>
 	<div class="edit-label">
 		<div style="height:100%;" v-if="readOrEdit">        
-			<div v-if="!isEdit && labeType=='label'" >
-				<div v-if="value" class="label-text">{{value}}</div>
-				<div v-if="!value" class="error-label-text">未填写</div>
+			<div v-if="!isEdit && labeType=='label'"  >
+				<div v-if="value" class="label-text" @click="editClick">{{value}}</div>
+				<div v-if="!value" class="error-label-text" @click="editClick">未填写</div>
 				<span class="edit-icon" @click="editClick"></span>
 				<span class="record-icon" @click="recordClick"></span>
 				
 				
 			</div>
 			<div v-if="!isEdit && labeType=='file'">
-				<div class="file-view-box">
+				<div class="file-view-box" @click="editClick">
 					
 				
 					<div v-if="!value || !value.length" class="to-upload">待上传</div>
@@ -22,7 +22,7 @@
 
 						<KrImg 
 							v-if="getIsPhoto(item.fieldUrl)" 
-							@click="eyePhotoAlbum(item.fieldUrl,$event)" 
+							@click="eyePhotoAlbum(item.fieldUrl,'view',$event)" 
 							:src="item.fieldUrl" 
 							width="210"
 							height="135"
@@ -164,8 +164,15 @@ export default {
 		switchMask(){
 			this.openMessage = !this.openMessage;
 		},
-		eyePhotoAlbum(url,event){
-			this.$emit('eyePhotoAlbum',url,event)
+		eyePhotoAlbum(url,type,event){
+			console.log(event,"======")
+			this.$emit('eyePhotoAlbum',url,type,event,(type)=>{
+				if(type == 'view'){
+					this.isEdit = false;
+				}else{
+					this.isEdit = false;
+				}
+			})
 		},
 		getFileArr(){
 			
@@ -230,7 +237,7 @@ export default {
 			// var isclose = this.editClick();
 			// if(isclose){
 			// }
-			this.isEdit = !this.isEdit;
+			this.isEdit = true;
 
 			
 		},

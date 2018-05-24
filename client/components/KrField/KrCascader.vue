@@ -13,9 +13,7 @@
                 :placeholder="placeholder"
                 :clearable='clearable'
                 @on-change="change"
-                @on-visible-change="visibleChange"
-               
-                
+                @on-visible-change="visibleChange"   
             />
         </EditLabel>
 	</div>

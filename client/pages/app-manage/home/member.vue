@@ -31,38 +31,40 @@ export default {
            memberColumns:[
               {
                   title: '日期',
-                  key: 'payAccount',
+                  key: 'dataDate',
                   align:'center',
               },
               {
                   title: '入驻满7天且登录过APP的会员数',
-                  key: 'payAccount',
+                  key: 'enterNum',
                   align:'center',
               },
               {
                   title: '入驻满7天会员数',
-                  key: 'payAccount',
+                  key: 'loginNum',
                   align:'center',
               },
               {
                   title: '7天线上化率',
-                  key: 'payAccount',
+                  key: 'useRate',
                   align:'center',
               }
            ],
         }
     },
+    mounted(){
+         this.getTableData(this.tabParams);
+    },
     methods:{
         changePage(page){
             this.tabParams.page=page;
             this.page=page;
-            this.getTableData(this.params);
+            this.getTableData(this.tabParams);
         },
         getTableData(params){
              this.$http.get('get-app-operation-use-rate', params).then((res)=>{
-                    this.billList=res.data.items;
+                    this.memberList=res.data.items;
                     this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
@@ -74,9 +76,8 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='paid'){
-                       this.getTableData(this.queryParams);
-                       this.tabParams=this.tabParams;
+                    if(nextProps.mask=='member'){
+                       this.getTableData(this.tabParams);
                     }
                 }
             }

@@ -31,8 +31,11 @@ export default {
 
         }
     },
-    mounted(){
+    created(){
         this.getCommunityList()
+    },
+    mounted(){
+        
     },
     methods:{
         getCommunityList(){

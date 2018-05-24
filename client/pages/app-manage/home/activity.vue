@@ -8,9 +8,6 @@ export default {
 
     data(){
         return{
-           page:1,
-           totalCount:0,
-           pageSize:15, 
            tabParams:{
                page:1,
                pageSize:15
@@ -19,37 +16,37 @@ export default {
            activityColumns:[
               {
                   title: '社区活动总数',
-                  key: 'payAccount',
+                  key: 'cmtActivityNum',
                   align:'center',
               },
               {
                   title: '全国活动总数',
-                  key: 'payAccount',
+                  key: 'nationActivityNum',
                   align:'center',
               },
               {
                   title: '活动报名总数',
-                  key: 'payAccount',
+                  key: 'activityJoinNum',
                   align:'center',
               },
               {
                   title: '活动回帖总数',
-                  key: 'payAccount',
+                  key: 'activityTopicNum',
                   align:'center',
               }
            ]
         }
     },
-    created(){
-             this.getTableData(this.$route.query);
-             this.params=this.$route.query;
+    
+    mounted(){
+        this.getTableData(this.tabParams)
     },
     watch: {
         $props: {
             deep: true,
             handler(nextProps) {
-                if(nextProps.mask=='bind'){
-                    this.getTableData(this.params);
+                if(nextProps.mask=='activity'){
+                    this.getTableData(this.tabParams);
                 }
             }
         }
@@ -61,10 +58,11 @@ export default {
             this.getTableData(this.params);
         },
         getTableData(params){
+             let activityList=[];
              this.$http.get('get-app-operation-activity-data', params).then((res)=>{
-                    this.billList=res.data.items;
-                    this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
+                  activityList.push(res.data)
+                    this.activityList=activityList;
+                   
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message

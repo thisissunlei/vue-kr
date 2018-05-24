@@ -31,38 +31,41 @@ export default {
            joinMemberColumns:[
               {
                   title: '日期',
-                  key: 'payAccount',
+                  key: 'dataDate',
                   align:'center',
               },
               {
                   title: '入驻会员数',
-                  key: 'payAccount',
+                  key: 'enterNum',
                   align:'center',
               },
               {
                   title: '在线会员数',
-                  key: 'payAccount',
+                  key: 'onlineNum',
                   align:'center',
               },
               {
                   title: '平均在线时长',
-                  key: 'payAccount',
+                  key: 'onlineTime',
                   align:'center',
               }
            ],
         }
     },
+    mounted(){
+        this.getTableData(this.tabParams)
+    },
     methods:{
         changePage(page){
             this.tabParams.page=page;
             this.page=page;
-            this.getTableData(this.params);
+            this.getTableData(this.tabParams);
         },
         getTableData(params){
               this.$http.get('get-app-operation-online-data', params).then((res)=>{
-                    this.billList=res.data.items;
+                    this.joinMemberList=res.data.items;
                     this.totalCount=res.data.totalCount;
-                    this.openSearch=false;
+                    
                 }).catch((err)=>{
                     this.$Notice.error({
 						title:err.message
@@ -74,7 +77,7 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='paid'){
+                    if(nextProps.mask=='joinMember'){
                        this.getTableData(this.queryParams);
                        this.tabParams=this.tabParams;
                     }

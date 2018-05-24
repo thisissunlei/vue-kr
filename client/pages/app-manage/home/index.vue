@@ -48,17 +48,19 @@
         <div class="m-community-dialog">
                 <span class="u-community-label">社区</span>
                 <Select
-                        v-model="formItem.cmtId"
+                        v-model="cmtId"
                         style="width:250px"
                         placeholder="请选择社区"
                         filterable
                         clearable
+                        :label-in-value="true"
+                        @on-change="changeCommunity"
                     >
                         <Option  v-for="item in communityList" :value="item.cmtId" :key="item.cmtId"> {{ item.cmtName }}</Option>
                 </Select>
         </div>
         <div slot="footer">
-            <Button type="primary" @click="changeCommunity">确定</Button>
+            <Button type="primary" @click="submitChange">确定</Button>
             <Button type="ghost" style="margin-left: 8px" @click="openCommunity">取消</Button>
         </div>
     </Modal>
@@ -90,9 +92,10 @@ export default {
               cmtId:'',
               endDate:'',
            },
+           cmtId:'',
            communityList:[],
            isTip:true,
-
+           communityObj:{},
        }
    },
    components:{
@@ -114,18 +117,12 @@ export default {
         tabsClick(key){
            this.key=key;
         },
-        memberChangePage(){
-            this.params.page=page;
-            this.page=page;
-            this.getTableData(this.params);
+        changeCommunity(form){
+            this.communityObj=form;
         },
-        joinMemberChangePage(){
-            this.params.page=page;
-            this.page=page;
-            this.getTableData(this.params);
-        },
-        changeCommunity(){
-
+        submitChange(){
+             this.communityName= this.communityObj.label;
+             this.formItem.cmtId=this.cmtId;
         },
         changeDate(data){
             this.formItem.beginDate=data[0];

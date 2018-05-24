@@ -104,7 +104,7 @@ export default {
       Activity      
    },
    mounted(){
-      this.activeKey=sessionStorage.getItem('paymentMask')||'member';
+      this.activeKey=sessionStorage.getItem('hometMask')||'member';
       this.getCommunity();
    },
    methods:{
@@ -116,6 +116,7 @@ export default {
         },
         tabsClick(key){
            this.key=key;
+           sessionStorage.setItem('hometMask',key);
         },
         changeCommunity(form){
             this.communityObj=form;

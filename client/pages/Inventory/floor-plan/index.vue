@@ -9,6 +9,8 @@
            @countChange="countChange"
           />
       </div>
+
+      <Loading v-if="!isLoading"/>
       
       <FloorPlan
             v-if="isLoading"
@@ -17,6 +19,7 @@
             @click="mouseClick"
             @enter="mouseEnter"
             @leave="mouseLeave"
+            @scroll="scroll"
             :data="item"
       />
       
@@ -30,6 +33,7 @@ import SearchForm from './searchForm';
 import publicFn from './publicFn';
 import Discount from './discount';
 import utils from '~/plugins/utils';
+import Loading from '~/components/Loading';
 var wrapDom='';
 var mainDom='';
 //点击的dom存进一个数组
@@ -39,7 +43,8 @@ export default {
     FloorPlan,
     SectionTitle,
     SearchForm,
-    Discount
+    Discount,
+    Loading
   },
   data(){
     return{
@@ -88,10 +93,19 @@ export default {
             mainDom.scrollTop=0;
             this.isFirstClick=true;
         }
-        clickNone.push(every.item.id);
+        clickNone.push({id:every.item.id,everyData:every});
+    },
+    findEle(array,attr,val){
+        for (var i=0;i<array.length;i++){
+            if(array[i][attr]==val){
+                return i;
+            }
+        }
+        return -1;
     },
     mouseEnter(event,every,all,canvas,scroll){
-         if(clickNone.indexOf(every.item.id)!=-1){
+         var index=this.findEle(clickNone,'id',every.item.id);
+         if(index!=-1){
             return ;
          } 
          this.createDom(every);
@@ -102,7 +116,7 @@ export default {
          var angleDom = document.getElementById('gantt-chart-tool-tip-triangle'+every.item.id);
          tirDom.style.display = 'block';
          angleDom.style.display = 'block';
-         publicFn.poptipOver(event,every,all,canvas,scroll,this.discount)
+         publicFn.poptipOver(every,all,canvas,scroll,this.discount)
     },
     bodyClick(event){
         var id=event.target.getAttribute('data-titleId');
@@ -112,11 +126,17 @@ export default {
         }
     },
     mouseLeave(event,every,all){
-        if(clickNone.indexOf(every.item.id)!=-1){
+        var index=this.findEle(clickNone,'id',every.item.id);
+        if(index!=-1){
             return ;
-        }    
+        }     
         var parentNode=document.getElementById('gantt-chart-tool-tip'+every.item.id).parentNode;
         this.closeCommon(parentNode,every.item.id);
+    },
+    scroll(all,canvas,scroll){
+        clickNone.map((item,index)=>{
+            publicFn.poptipOver(item.everyData,all,canvas,scroll,this.discount)
+        })
     },
     //关闭dom
     closeCommon(parentNode,id){
@@ -124,7 +144,7 @@ export default {
     },
     //点击关闭套弹窗
     titleClose(parentNode,id){
-        var index =clickNone.indexOf(id);
+        var index=this.findEle(clickNone,'id',id);
         if (index > -1) {
            clickNone.splice(index, 1);
         }

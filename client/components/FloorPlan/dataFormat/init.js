@@ -73,7 +73,7 @@ function init(data,picProperty,dataUrl,drawWrap){
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
-        pos:data.graphFileId,
+        pos:data.graphFilePath,
         picName:data.communityName+data.currentDate,
         dataUrl:dataUrl
     }

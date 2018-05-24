@@ -333,26 +333,22 @@ var layoutScrollHeight=0;
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-
             },
             //清空
             clearClick(formItem){
-               
                 this.tabForms=Object.assign({},formItem);
-                 console.log('=====',this.tabForms)
-                // this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-            },
-            //数据变化
-            dataParams(data){
-                this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
+            },
+            dataParams(data){
+                    this.endParams=Object.assign({},data);
+                    this.getData(this.endParams);
             },
             getData(params){
                 //getDailyInventory 

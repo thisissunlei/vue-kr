@@ -271,7 +271,7 @@ var layoutScrollHeight=0;
                     {
                         title: '商品定价',
                         align:'right',
-                        width:80,
+                        width:100,
                         key: 'quotedPrice',
                     },
                 ],

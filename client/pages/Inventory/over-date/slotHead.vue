@@ -53,10 +53,10 @@
         &:nth-child(2),&:nth-child(8){
             width:110px;
         }
-        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(11){
+        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6){
             width:80px;
         }
-        &:nth-child(7){
+        &:nth-child(7),&:nth-child(11){
             width:100px;
         }
         &:nth-child(1),&:nth-child(10),&:nth-child(9){

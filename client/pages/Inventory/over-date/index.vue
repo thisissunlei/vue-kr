@@ -52,6 +52,11 @@ var layoutScrollHeight=0;
             ToolTip,
             Loading
         },
+        head() {
+            return {
+                title: '即将到期'
+            }
+        },
         data () {
             return {  
                 dailyOldData:[],
@@ -170,7 +175,7 @@ var layoutScrollHeight=0;
                     {
                         title: '当前签约价',
                         align:'right',
-                        width:80,
+                        width:100,
                         key: 'price',
                     },
                     {

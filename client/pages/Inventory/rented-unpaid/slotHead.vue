@@ -21,7 +21,7 @@
     },
     data() {
         return{
-            data:['商品','商品类型','工位数量','进场日','离场日','租期','当前签约价','当前客户','客户当前在租工位数','随后可续时段','商品当前定价'],
+            data:['账单类型-ID','客户名称','服务内容','服务费明细','服务开始日','账单金额','欠款金额','逾期时长(服务开始日起)'],
         }
     }
 }
@@ -50,13 +50,13 @@
         word-break: break-all;
         font-weight: 700;
         height: 50px;
-        &:nth-child(2),&:nth-child(8){
+        &:nth-child(2),&:nth-child(4),&:nth-child(5){
             width:110px;
         }
-        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(10),&:nth-child(9),&:nth-child(11){
-            width:80px;
+        &:nth-child(3),&:nth-child(8){
+            width:150px;
         }
-        &:nth-child(7){
+         &:nth-child(6),&:nth-child(7){
             width:100px;
         }
         &:nth-child(1){

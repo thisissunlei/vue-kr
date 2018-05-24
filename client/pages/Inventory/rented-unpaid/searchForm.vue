@@ -259,12 +259,22 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
+            let params = this.$route.query;
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
+                this.communityList=res.data.map(item=>{
+                    item.id = item.id+'';
+                    return item;
+                });
                 if(this.communityList.length>1){
                     this.communityList.unshift({id:' ',name:"全部社区"})
                 }
-                this.formItem.communityId=this.communityList[0].id;
+                if(!params.communityId){
+                    this.formItem.communityId=this.communityList[0].id;
+                }else{
+                    this.getFloorList(params.communityId)
+                    this.formItem.communityId = params.communityId;
+                }
+                
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -273,16 +283,27 @@ export default {
         },
         //城市接口
         getCityList(){
+            let params = this.$route.query;
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data;
+                this.cityList=res.data.map(item=>{
+                    item.cityId = item.cityId+' ';
+                    return item;
+                });
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
                     this.formItem.cityId=this.cityList[1].cityId;
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
-                }  
-                this.$emit('initData',this.formItem);
+                }
+                if(params.cityId){
+                    this.getCommunityList();
+                    this.formItem.cityId = params.cityId;
+                    console.log('=-0900',typeof params.cityId)
+                }
+                
                 this.formItemOld=Object.assign({},this.formItem);
+                this.formItem = Object.assign({},this.formItem,this.$route.query)
+                this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -291,12 +312,28 @@ export default {
         },
         //楼层接口
         getFloorList(param){
+            let params = this.$route.query;
+            console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                if(this.floorList.length>1){
-                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
+                
+                if(this.floorList.length){
+                    this.floorList=res.data.map(item=>{
+                        item.floor = item.floor+'';
+                        return item;
+                    });
                 }
-                this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                if(this.floorList.length>1){
+                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})
+                                            
+                }
+                if(!params.floor){
+                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
+                }else{
+                   this.formItem.floor = params.floor; 
+                }
+                
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -308,7 +345,7 @@ export default {
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
                     console.log('搜索',this.formItem)
-                    // this.$emit('searchClick',this.formItem);
+                    this.$emit('searchClick',this.formItem);
                 }
             })
         },

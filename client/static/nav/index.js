@@ -715,6 +715,12 @@
                         menuCode: 'operation_home',
                     },
                     {
+                        primaryText: '即将进场',
+                        router: 'inventory/enter-field',
+                        type:'vue',
+                        menuCode: 'operation_home',
+                    },
+                    {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
                         router: 'community/communityManage/visitorsToRecord'

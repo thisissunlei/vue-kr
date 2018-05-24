@@ -58,11 +58,11 @@
             tabsClick(val){
                 this.type = val;
             },
-            searchClick(){
-
+            searchClick(params){
+                //   utils.addParams(params);
             },
-            clearClick(){
-
+            clearClick(params){
+                //   utils.addParams(params);
             },
             initData(){
 

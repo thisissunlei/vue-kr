@@ -76,7 +76,10 @@
         },
       
         created(){
-        
+                // var params=Object.assign({},this.tableParams,this.$route.query);
+                // this.getListData(params);
+                // this.tableParams=params; 
+                //   utils.addParams(this.params);
         },
 
         methods:{

@@ -53,18 +53,20 @@ var img='';
     mounted(){
         //背景图
         img=new Image();
-        img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
+        img.src="http://optest03.krspace.cn/api/krspace-op-web/sys/downFile?fileId="+this.data.graphFileId;
         img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },
     destroyed(){ 
       img.removeEventListener('load',this.imgLoad); 
-      scrollDom.removeEventListener('scroll',this.scrollFn); 
+      if(scrollDom){
+          scrollDom.removeEventListener('scroll',this.scrollFn); 
+      }
     },
     methods:{
         //将图片地址转换成base64格式
         getBase64Image(img) {
-           var canvas = document.createElement('canvas'); 
+            var canvas = document.createElement('canvas'); 
             canvas.width = img.width;
             canvas.height = img.height;
             var ctx = canvas.getContext("2d");

@@ -3,9 +3,23 @@
       <Form ref="formItemFloor" :model="formItem" label-position="left" style="padding:18px 20px 0 20px;background:#fff;">
             <Form-item label="社区" class='daily-form'>
                 <Select 
+                    v-model="formItem.cityId" 
+                    placeholder="请输入城市" 
+                    style="width: 90px;margin-right:10px;"
+                    @on-change="cityChange"
+                >
+                    <Option 
+                        v-for="item in cityList" 
+                        :value="item.cityId" 
+                        :key="item.cityId"
+                    >
+                        {{ item.cityName }}
+                    </Option>
+                </Select>
+                <Select 
                         v-model="formItem.communityId" 
                         placeholder="请输入社区" 
-                        style="width: 200px;margin-right:10px;"
+                        style="width:150px;margin-right:10px;"
                         @on-change="communityChange"
                     >
                         <Option v-for="item in communityList" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -42,19 +56,37 @@ var oldFloor='';
 export default {
   data(){
     return{
+       cityList:[],
        communityList:[],
        floorList:[],
        formItem:{
+          cityId:'',
           communityId:'',
           floor:'',
           currentDate:publicFn.getToDay()
+       },
+       isStore:{
+           city:'',
+           community:'',
+           floor:''
        }
     }
   },
   mounted(){
-      this.getCommunityList();
+      this.getCityList();
   },
   methods:{
+    //城市接口
+    getCityList(){
+        this.$http.get('getDailyCity').then((res)=>{
+            this.cityList=res.data;
+            this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+        }).catch((error)=>{
+            this.$Notice.error({
+                title:error.message
+            });
+        })
+    },
      //社区接口
     getCommunityList(id){
         var params={
@@ -91,16 +123,16 @@ export default {
             });
         })
     },
+    cityChange(param){
+        this.getCommunityList(param);
+    },
     communityChange(param){
-        this.formItem.communityId=param;
         this.getFloorList(param); 
     },
     floorChange(param){
-        this.formItem.floor=param;
         this.$emit('searchForm',this.formItem);
     },
     dateChange(param){
-        this.formItem.currentDate=param;
         this.$emit('searchForm',this.formItem);
     }
   }

@@ -1813,6 +1813,18 @@ var scrollWidth = 0;
             width: 46px;
              margin: auto;
         }
+        .u-table-list{
+            .u-left-box-hide{
+                width:152px;
+                transition:width .2s;
+            }
+            .u-left-box-show{
+                width:252px;
+                transition:width .2s;
+            }
+
+        }
+        
      }
 }
 @media all and (min-width: 1400px)  and (max-width: 1500px){

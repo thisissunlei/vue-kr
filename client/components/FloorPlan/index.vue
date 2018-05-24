@@ -59,12 +59,14 @@ var img='';
     },
     destroyed(){ 
       img.removeEventListener('load',this.imgLoad); 
-      scrollDom.removeEventListener('scroll',this.scrollFn); 
+      if(scrollDom){
+          scrollDom.removeEventListener('scroll',this.scrollFn); 
+      }
     },
     methods:{
         //将图片地址转换成base64格式
         getBase64Image(img) {
-           var canvas = document.createElement('canvas'); 
+            var canvas = document.createElement('canvas'); 
             canvas.width = img.width;
             canvas.height = img.height;
             var ctx = canvas.getContext("2d");

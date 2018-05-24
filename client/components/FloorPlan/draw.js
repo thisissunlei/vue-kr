@@ -17,7 +17,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
         
-     
+   
     //导出svg图片
     if(data.pic){
         var button = document.getElementById(pic);

@@ -85,8 +85,8 @@
                                 clearable
                             >
                                 <Option value="EQ" >等于</Option>
-                                <Option value="LT" >长于</Option>
-                                <Option value="GT">少于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
@@ -267,6 +267,7 @@ export default {
                     reletTypeName:' ',
                     goodsName:'',
                     customerName:'',
+                    leaseRemainingDays:''
                 },
                 renewList:[
                     {value:' ',label:'全部'},
@@ -339,6 +340,7 @@ export default {
                 }
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
+                    this.floorList = []
                 }else{
                     this.getFloorList(params.communityId)
                     this.formItem.communityId = params.communityId;
@@ -385,6 +387,9 @@ export default {
             console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
+                if(!res.data.length){
+                    this.floorList = []
+                }
                 
                 if(this.floorList.length){
                     this.floorList=res.data.map(item=>{

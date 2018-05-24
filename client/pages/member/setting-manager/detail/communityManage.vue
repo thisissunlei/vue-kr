@@ -53,6 +53,11 @@ export default {
                     }
                 })
                 this.checkAllGroup=arr;
+                if(this.checkAllGroup.length==this.communityList.length){
+                     this.checkAll=true; 
+                }else{
+                     this.checkAll=false; 
+                }
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message

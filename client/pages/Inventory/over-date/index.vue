@@ -119,6 +119,48 @@ var layoutScrollHeight=0;
                         align:'center',
                     },
                     {
+                        title: '剩余租期',
+                        align:'center',
+                        width:80,
+                        key: 'leaseRemainingDays',
+                        render(h, params){
+                            if(params.row.leaseRemainingDays<30){
+                                return h('div', [
+                                        h('div', [
+                                            h('span', { 
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            }, params.row.leaseRemainingDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }else{ 
+                               return h('div', [
+                                        h('div', {slot:'zu'},[
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, params.row.leaseRemainingDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }
+
+                            
+                                        
+                        }
+                    },
+                    {
                         title: '进场日',
                         align:'center',
                         width:80,
@@ -135,42 +177,6 @@ var layoutScrollHeight=0;
                         align:'center',
                         width:80,
                         key: 'rentDays',
-                        render(h, params){
-                            if(params.row.rentDays<30){
-                                return h('div', [
-                                        h('div', [
-                                            h('span', { 
-                                                style: {
-                                                    color:'#FF6868'
-                                                }       
-                                            }, params.row.rentDays),
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, '天'),
-                                        ])
-                            ])
-                            }else{ 
-                               return h('div', [
-                                        h('div', {slot:'zu'},[
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, params.row.rentDays),
-                                            h('span', { 
-                                                style: {
-                                                    color:'#333'
-                                                }       
-                                            }, '天'),
-                                        ])
-                            ])
-                            }
-
-                            
-                                        
-                        }
                     },
                     {
                         title: '当前签约价',

@@ -170,7 +170,7 @@ var layoutScrollHeight=0;
                     {
                         title: '当前签约价',
                         align:'right',
-                        width:80,
+                        width:100,
                         key: 'price',
                     },
                     {

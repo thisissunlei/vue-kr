@@ -1,6 +1,6 @@
 import dateUtils from 'vue-dateutils';
 //鼠标滑过气泡的位置
-function poptipOver(ev,every,all,canvas,scroll,discount) {
+function poptipOver(every,all,canvas,scroll,discount) {
     var mainDom=document.getElementById('layout-content-main');
     var tirDom = document.getElementById('gantt-chart-tool-tip'+every.item.id);
     var contentDom=document.getElementById('gantt-chart-tool-tip-content'+every.item.id);
@@ -9,7 +9,7 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
     var tirDetail=tirDom.getBoundingClientRect();
     var canvasDetail=canvasDom.getBoundingClientRect();
     
-
+    
     var obj = getToolTipContent(every,discount); 
     
     contentDom.innerHTML = obj.str;
@@ -20,11 +20,21 @@ function poptipOver(ev,every,all,canvas,scroll,discount) {
         left:Number(every.cellCoordX)+5-(Number(tirDetail.width)-Number(every.cellWidth))/2-scroll.left,
         top:Number(every.cellCoordY)+Number(canvasDetail.top)-Number(tirDetail.height)-15-70+mainDom.scrollTop //scroll.top
     }
-    
+   
+    //临近边界偏移
+    var bodyWidth=document.body.clientWidth;
+    var boundTip=toolLocation.left+canvasDetail.left;
+    var offset=0;
+    if(Number(bodyWidth)-Number(boundTip)<230){
+        toolLocation.left=toolLocation.left-Number(tirDetail.width)/3;
+        offset=Number(tirDetail.width)/3;
+    }
+     
+    //计算位置赋值
     tirDom.style.maxWidth = obj.width + 'px';
     tirDom.style.left = toolLocation.left+ 'px';
     tirDom.style.top = toolLocation.top+ 'px';
-    angleDom.style.left = toolLocation.left+tirDetail.width/2-5+ 'px';
+    angleDom.style.left = toolLocation.left+tirDetail.width/2-5+offset+ 'px';
     angleDom.style.top = toolLocation.top+tirDetail.height+ 'px';
 }
 

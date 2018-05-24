@@ -99,6 +99,7 @@ var img='';
                 //top:event.target.scrollTop,
                 left:event.target.scrollLeft
             }
+            this.$emit('scroll',canvasData,this.drawingBoard,this.scroll);
         },
         mouseEnter(event,node){
              var every=node.data;

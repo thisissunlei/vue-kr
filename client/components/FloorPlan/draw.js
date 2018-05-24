@@ -17,7 +17,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
         
-     
+   
     //导出svg图片
     if(data.pic){
         var button = document.getElementById(pic);
@@ -48,7 +48,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             $(go.Part,  // this Part is not bound to any model data
             { layerName: "Background", position: new go.Point(0, 0),
                 selectable: false, pickable: false },
-            $(go.Picture,data.pic.dataUrl,{width:data.pic.width,height:data.pic.height})
+            $(go.Picture,"http://optest03.krspace.cn"+data.pic.pos,{width:data.pic.width,height:data.pic.height})
         ));
     }
     

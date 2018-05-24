@@ -68,12 +68,13 @@ function init(data,picProperty,dataUrl,drawWrap){
             list.cellCoordY=Number(list.cellCoordY)*scale;
         })
     }
+    
     //pic尺寸
     picProperty={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
         pos:data.graphFilePath,
-        picName:data.graphFileName,
+        picName:data.communityName+data.currentDate,
         dataUrl:dataUrl
     }
    

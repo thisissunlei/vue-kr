@@ -60,7 +60,7 @@ export default {
      mainDom=document.getElementById('layout-content-main');
      mainDom.addEventListener('scroll',this.mainScroll);
   },
-  destroyed(){ 
+  destroyed(){
      document.body.removeEventListener('click',this.bodyClick);
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
@@ -74,6 +74,9 @@ export default {
         values.currentDate=utils.dateCompatible(values.currentDate);
         this.$http.get('getInventoryMap',values).then((res)=>{
            this.canvasData=[].concat(res.data.items);
+           this.canvasData.map((item,index)=>{
+                item.currentDate=this.tabForms.currentDate.split(' ')[0];
+           })
            this.isLoading=true;
         }).catch((error)=>{
            this.$Notice.error({

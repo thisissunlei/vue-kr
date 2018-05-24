@@ -54,23 +54,25 @@ var img='';
         //背景图
         img=new Image();
         img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
-        img.setAttribute("crossOrigin",'Anonymous');
+        //img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },
     destroyed(){ 
       img.removeEventListener('load',this.imgLoad); 
-      scrollDom.removeEventListener('scroll',this.scrollFn); 
+      if(scrollDom){
+          scrollDom.removeEventListener('scroll',this.scrollFn); 
+      }
     },
     methods:{
         //将图片地址转换成base64格式
         getBase64Image(img) {
-           var canvas = document.createElement('canvas'); 
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            var dataURL = canvas.toDataURL("image/png");
-            return dataURL
+            // var canvas = document.createElement('canvas'); 
+            // canvas.width = img.width;
+            // canvas.height = img.height;
+            // var ctx = canvas.getContext("2d");
+            // ctx.drawImage(img, 0, 0, img.width, img.height);
+            // var dataURL = canvas.toDataURL("image/png");
+            // return dataURL
         },
         //图片加载完
         imgLoad(event) {

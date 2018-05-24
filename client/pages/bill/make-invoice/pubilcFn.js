@@ -1,10 +1,37 @@
+import dateUtils from 'vue-dateutils';
 function initListData(){
     return [
         {
             title: '申请编号',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all'
+            type:'waitMake,alreadyMake,returnMake,all',
+            render:(h,params)=>{
+                // var arr=[];
+                // for(let i=0;i<3;i++){
+                //     arr.push(h('div', {
+                //         style: {
+                //             borderBottom:'1px solid #e9eaec',
+                //             padding:'8px 10px'
+                //         },
+                //         on: {
+                //             click: () => {
+                //                 this.openView()
+                //             }
+                //         }
+                //     }, '查看'),)
+                // }
+                return h('div',{
+                    style: {
+                        color:'#2b85e4'
+                    },
+                    on:{
+                        click:()=>{
+                            this.goAddPage();
+                        }
+                    }
+                }, 'dfsf')
+            }
         },
         {
             title: '社区名称',
@@ -40,13 +67,47 @@ function initListData(){
             title: '发票内容',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all'
+            type:'waitMake,alreadyMake,returnMake,all',
+            render:(h,params)=>{
+                var arr=[];
+                for(let i=0;i<3;i++){
+                    arr.push(h('div', {
+                        style: {
+                            borderBottom:'1px solid #e9eaec',
+                            padding:'8px 10px'
+                        },
+                        on: {
+                            click: () => {
+                                this.openView()
+                            }
+                        }
+                    }, '查看'),)
+                }
+                return h('div',arr , '重开')
+            }
         },
         {
-            title: '金额',
+            title: '开票金额',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitMake,alreadyMake,all',
+            render:(h,params)=>{
+                var arr=[];
+                for(let i=0;i<3;i++){
+                    arr.push(h('div', {
+                        style: {
+                            borderBottom:'1px solid #e9eaec',
+                            padding:'8px 10px'
+                        },
+                        on: {
+                            click: () => {
+                                this.openView()
+                            }
+                        }
+                    }, '查看'),)
+                }
+                return h('div',arr , '重开')
+            }
         },
         {
             title: '需退发票金额',
@@ -100,20 +161,32 @@ function initListData(){
             title: '申请时间',
             key: 'name',
             align:'center',
-            type:'waitMake'
+            type:'waitMake',
+            render(tag, params){
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                return time;
+            }
         },
         {
             title: '开票时间',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitMake,alreadyMake,all',
+            render(tag, params){
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                return time;
+            }
 
         },
         {
             title: '退换时间',
             key: 'name',
             align:'center',
-            type:'returnMake'
+            type:'returnMake',
+            render(tag, params){
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                return time;
+            }
             
         },
         {
@@ -181,7 +254,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.makeInvaice()
                                 }
                             }
                         }, '开票'),
@@ -195,7 +268,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.goBack()
                                 }
                             }
                         }, '退回') 

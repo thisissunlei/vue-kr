@@ -4,6 +4,7 @@
               @searchClick="searchClick"
               @clearClick="clearClick"
               @initData="initData"
+              :type="type"
         />
         <div style="padding:0px 20px;">
             <Tabs 

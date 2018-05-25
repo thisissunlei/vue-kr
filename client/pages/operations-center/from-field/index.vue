@@ -76,7 +76,6 @@
 <script>
     import SectionTitle from '~/components/SectionTitle.vue';
     import Loading from '~/components/Loading';
-    import krUpload from '~/components/KrUpload.vue';
     import dateUtils from 'vue-dateutils';
     import utils from '~/plugins/utils';
     import Message from '~/components/Message';
@@ -86,7 +85,6 @@
     export default {
         components: {
             SectionTitle,
-            krUpload,
             Loading,
             Message,
             HeightSearch,

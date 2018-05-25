@@ -25,13 +25,11 @@
 		</div>
 		<div v-if="type=='select-up'">
 		
-			<Button 
-				type='text'  
-				label='上传附件'
-				styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
+			<div 
+				style="color: rgb(43, 133, 228);padding: 2px 7px;cursor: pointer;display:inlie-block;" 
 				@click = "switchList" 
 			
-			>上传附件</Button>
+			>上传附件</div>
 			
 			<div class = "list-box" v-show = "isOpenList">
 				<div class="mask" @click = "switchList" ></div>
@@ -62,7 +60,7 @@
 
 <script>
 // import http from '~/plugins/http.js';
-// import utils from '~/plugins/utils';
+import utils from '~/plugins/utils';
 import KrImg from './KrImg';
 export default{
 	name:'krUpload',
@@ -164,14 +162,14 @@ export default{
 				form.append('callback', response.callback);
 				form.append('x:original_name', file.name);
 				form.append('file', file);
-				that.upfile(form,response.serverUrl)
+				that.upfile(form,response.serverUrl,fileName)
 			}).catch((err)=>{
 				this.$Notice.error({
 					title:err.message
 				});
 			})
 		},
-		upfile(form,serverUrl){
+		upfile(form,serverUrl,fileName){
 			var that  = this;
 			
 			var xhrfile = new XMLHttpRequest();
@@ -184,7 +182,15 @@ export default{
 							// that.isLoadding=false;
 							// that.percent = 0;
 							var data = fileResponse.data;
-							that.onSuccess(data);
+							var params = {};
+							
+							params.name = fileName;
+							params.url = fileResponse.data.url;
+							params.fileId = ""+fileResponse.data.id;
+							params.fileName = fileName;
+							params.fileUrl = fileResponse.data.url;
+							params.type = "ATTACHMENT"
+							that.onSuccess(params);
 						} else {
 						
 						}
@@ -218,7 +224,7 @@ export default{
 			}
 			
 			// this.submitUpload([detail]);
-			this.$emit('upSuccess',this.defaultList,[detail]);
+			this.$emit('upSuccess',[detail],this.columnDetail);
 			
 		},
 		onTokenSuccess(){
@@ -232,7 +238,7 @@ export default{
 				id:params.fileId,
 				
 			}, (response) => {
-				// utils.downFile(response.data)
+				utils.downFile(response.data)
 			
 			}, (error) => {
 				that.$Notice.error({

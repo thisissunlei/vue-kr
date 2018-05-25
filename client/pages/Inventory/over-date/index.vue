@@ -17,7 +17,7 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}">
+        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="dailyOldData.length>0">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>

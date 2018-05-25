@@ -53,7 +53,8 @@
                         </Select> 
                     </Form-item>
                     
-                     <Form-item label="商品名称" class='daily-form' prop="goodsName">
+                     <Form-item  class='daily-form' prop="goodsName">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品名称</span>
                         <i-input 
                             v-model="formItem.goodsName" 
                             placeholder="房间号或工位编号"
@@ -63,7 +64,8 @@
                     </Form-item>
 
 
-                    <Form-item label="商品类型" class='daily-form'> 
+                    <Form-item class='daily-form'> 
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品类型</span>
                         <Select 
                             v-model="formItem.goodsType" 
                             placeholder="请输入商品类型" 

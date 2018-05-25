@@ -6,6 +6,7 @@
             placeholder="请选择社区"
             filterable
             clearable
+            on-change="onChangeCommunity"
         >
             <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
         </Select>
@@ -73,6 +74,9 @@ export default {
    },
   
    methods:{
+       onChangeCommunity(option){
+           console.log("option",option);
+       },
         drawMap(){
             let _this =this;
             var $ = go.GraphObject.make;

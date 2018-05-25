@@ -32,25 +32,28 @@
                         </div>
                     </div>
                     <div class="tiem-box" style="margin-left:19px;">
-                        <div class="time-title">完成时间</div>
-                        <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
-                        <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
-                            <DatePicker
-                                :open="endOpen"
-                                :value="newEnd"
-                                confirm
-                                type="date"
-                                :clearable="false"
-                                @on-change="endChange"
-                                @on-clear="endClear"
-                                @on-ok="endOk">
-                                <a href="javascript:void(0)" @click="switchEndTime">
-                                
-                                    <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                        <div class="time-view">
+                            <div class="time-title">完成时间</div>
+                            <div v-if="!actualEnd&&!isEndEdit" class="time-bottom-success" @click="switchEndEdit"><span class="ok-icon"></span>已完成</div>
+                            <div v-if="actualEnd||isEndEdit" style="height:36px;line-height:36px;margin-top:20px;">
+                                <DatePicker
+                                    :open="endOpen"
+                                    :value="newEnd"
+                                    confirm
+                                    type="date"
+                                    :options="endOptions"
+                                    :clearable="false"
+                                    @on-change="endChange"
+                                    @on-clear="endClear"
+                                    @on-ok="endOk">
+                                    <a href="javascript:void(0)" @click="switchEndTime">
                                     
-                                    <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
-                                </a>
-                            </DatePicker>
+                                        <div style="display:inline-block;font-size:20px;color:#333;min-width:110px;"> {{ numToDate(actualEnd) }} </div>
+                                        
+                                        <Icon style="margin-left:10px;" type="ios-calendar-outline"></Icon>
+                                    </a>
+                                </DatePicker>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,10 +114,20 @@
             title="提示"
             width="440"
             >
-            <div class='sure-sign'>“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
+            <div class="sure-sign" style="text-align: center;font-size: 14px;">“确认已签署合同”后，该项目自动固化后续任务计划完成时间 </div>
             <div slot="footer">
                 <Button type="primary" @click="submitSure()">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="cancelSure">取消</Button>
+            </div>
+        </Modal>
+         <Modal
+            v-model="openPrompt"
+            title="提示"
+            width="440"
+            >
+            <div class="sure-sign" style="text-align: center;font-size: 14px;">清空已完成时间后，该项目将会移入“待开业项目”列表</div>
+            <div slot="footer">
+                <Button type="ghost" style="margin-left:8px" @click="switchPrompt">关闭</Button>
             </div>
         </Modal>
     </div>
@@ -163,23 +176,70 @@ export default {
             isStartEdit:false,
             endOpen:false,
             isEndEdit:false,
-            newStart:this.planEnd||'',
-            newEnd:this.actualEnd||'',
+            newStart:this.getEdit.planEndTime||'',
+            newEnd:this.getEdit.actualEndTime||'',
             totalFields:0,
             validFields:0,
             openSure:false,
+            openPrompt:false,
+            endOptions:{
+                disabledDate (date) {
+                    return date && date.valueOf() > Date.now();
+                }
+            }
 
         }
     },
     created(){    
         this.queryData=Object.assign({},this.$route.query); 
     },
+    watch:{
+        startOpen(){
+            if(this.startOpen){
+                this.permissions();
+            }
+            
+        },
+        endOpen(){
+            if(this.endOpen){
+                this.permissions();
+            }
+        }
+    },
     mounted(){
          
     },
    
     methods:{
-         submitSure(){
+        switchPrompt(){
+            this.openPrompt = !this.openPrompt;
+        },
+        permissions(){
+            var code= 'pm_manage_date_del';
+            this.$nextTick(()=>{
+                var doms = document.querySelectorAll('.edit-task .time-view .ivu-picker-confirm .ivu-btn-text');
+                if(!doms){
+                    return;
+                }
+                console.log(doms,"pppp")
+                for(let i=0;i<doms.length;i++){
+                     if(window.resourcesCode.indexOf(code)>-1){
+                        doms[i].style.display="inline-block";
+                    }else{
+                        doms[i].style.display="none";
+                    }
+                }
+                // doms.map((item)=>{
+                //     if(window.resourcesCode.indexOf(code)>-1){
+                //         item.style.display="inline-block";
+                //     }else{
+                //         item.style.display="none";
+                //     }
+                // })
+            })
+             window.resourcesCode;
+        },
+        submitSure(){
             let params={
                 id:this.taskId,
                 projectId:this.projectId
@@ -201,8 +261,8 @@ export default {
             this.openSure=!this.openSure;
         },
         switchStartTime(){
+            console.log(this.newStart,"ppppp")
             this.startOpen = !this.startOpen;
-            
         },
         switchEndTime(){
             this.endOpen = !this.endOpen;
@@ -243,21 +303,26 @@ export default {
             this.newEnd = data;
         },
         endClear(){
-
+            this.isEndEdit = false;
+            this.actualEnd = this.newEnd = '';
+            this.endOpen = false;
+            this.endOk()
         },
         okClick(){
           
-              this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
-                    console.log("=========")
-                    this.params.actualEndTime = this.actualEnd;
-                    this.isEndEdit = true;
-                    var data = Object.assign({},this.params);
-                    data.planEndTime = this.numToDate(data.planEndTime);
-                    data.actualEndTime = this.numToDate(data.actualEndTime)
-                    this.$emit("dataChange",data,()=>{
+            this.getArchivesDetail({projectId:this.projectId,code:this.getEdit.code},()=>{
+                
+                this.params.actualEndTime = this.actualEnd;
+                var data = Object.assign({},this.params);
+                data.planEndTime = this.numToDate(data.planEndTime);
+                data.actualEndTime = this.numToDate(data.actualEndTime)
+                this.$emit("dataChange",data,(code)=>{
+                    if(code===15){
                         this.cancelSure()
-                    });
-              })
+                    }
+                    
+                });
+            })
         },
         endOk(flag){
             this.actualEnd = this.newEnd;
@@ -268,8 +333,14 @@ export default {
             if(!flag){
                 this.switchEndTime();
             }
-            this.$emit("dataChange",data,()=>{
-                 this.cancelSure()
+            this.$emit("dataChange",data,(code)=>{
+                
+                if(code==47){
+                    this.switchPrompt();
+                }
+                if(code===15){
+                        this.cancelSure()
+                }
             });
         },
         switchEndEdit(){
@@ -281,8 +352,11 @@ export default {
             var data = Object.assign({},this.params);
             data.planEndTime = this.numToDate(data.planEndTime);
             data.actualEndTime = this.numToDate(data.actualEndTime)
-            this.$emit("dataChange",data,()=>{
-                this.cancelSure()
+            this.$emit("dataChange",data,(code)=>{
+                if(code==15){
+                    this.cancelSure()
+                }
+                
             });
         },
         goArchivesClick(){
@@ -400,7 +474,11 @@ export default {
             font-weight: bold;
         }
     }
-  
+    .sure-sign{
+        text-align: center;
+        font-size: 14px;
+
+    }
     
    
     .file-box{

@@ -97,6 +97,7 @@
 
         <KrCascader
             v-if="type==='cascader'"
+            :width="width"
             :data="data"
             :name="name"
             :value="value"
@@ -109,7 +110,6 @@
             @visibleChange="visibleChange"
             @okClick="okClick"
             :isOk="isOk"
-            :width="width"
             :inline="inline"
         />
         

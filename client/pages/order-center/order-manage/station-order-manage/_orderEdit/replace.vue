@@ -390,9 +390,10 @@
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
                 today = new Date(today).getTime()
                 value = new Date(value).getTime()
+                console.log(value,'originBeginTime',this.originBeginTime)
                 if (value === '') {
                     callback(new Error('请先选择换租服务开始日'));
-                } else if(value < today){
+                } else if(value < today && value != this.originBeginTime){
                     callback(new Error('换租服务开始日不得小于等于今日'));
                 }else if(value > this.oldStation[0].leaseEnddate){
                      callback(new Error('换租服务开始日不得大于原结束日期'));
@@ -419,6 +420,7 @@
                 }
             };
             return {
+                originBeginTime:'',
                 discountCon:'',
                 entryPriceList:[],
                 price:'',
@@ -845,9 +847,6 @@
                 if(this.formItem.communityId && this.formItem.customerId){
                     let params = {
                         communityId:this.formItem.communityId,
-                        // communityId:4,
-
-                        // customerId:1715
                         customerId:this.formItem.customerId
                     }
                      this.$http.get('get-community-floor', params).then( r => {
@@ -1141,6 +1140,7 @@
 
             },
             changeBeginTime(value){
+                this.formItem.leaseBegindate = value;
                 //TODO 联调时需修改判断条件
                 //出发更新列表中的欲更换信息
                 var today = new Date()
@@ -1149,9 +1149,12 @@
                 this.formItem.oldSeatInfo = []
                 today = today.setDate(today.getDate()+1);
                 today = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(today))
-                today = new Date(today).getTime()
+                today = new Date(today).getTime();
+
+
+                let change = dateUtils.dateToStr('YYYY-MM-DD 00:00:00',new Date(value))
                 //选择日期小于当前日+1或大于原服务结束日，否则全部不可选
-                if(new Date(value).getTime()<today){
+                if(new Date(value).getTime()<today && new Date(change).getTime() != this.originBeginTime){
                     this.selectAllAbled = true;
                     this.oldStation = this.oldStation.map((item,index)=>{
                         item.checked = false;
@@ -1861,7 +1864,7 @@
                             return item;
                         });
 
-                        overViewData.changeServiceFee = response.data.feeResultVO.reduceServiceFee;
+                        overViewData.changeServiceFee = response.data.feeResultVO.changeServiceFee;
                         overViewData.freeStartDate = response.data.freeStartDate || '';
                         this.freeStartDate = response.data.freeStartDate || '';
                         overViewData.startDate = response.data.realStartDate
@@ -1880,7 +1883,9 @@
                             }
                         })
                         this.formItem.communityId = response.data.communityId+'';
+                        this.formItem.salerId = JSON.stringify(response.data.saleId);
                         this.formItem.communityName = response.data.communityName;
+                        this.salerName = response.data.saleName;
                         this.discountNum = response.data.discount;
                         this.discountCon = response.data.discount;
                         this.deposit = response.data.deposit;
@@ -1888,6 +1893,7 @@
                         this.stationData.submitData = this.selecedStationList;
                         this.originStationList = this.selecedStationList
                         let _this = this;
+                        this.originBeginTime = response.data.realStartDate;
                         setTimeout(function(){
                             _this.getCustomerToCom()
                         },200)
@@ -1895,6 +1901,7 @@
                         
 
                     }).catch((error)=>{
+                        console.log(error)
                         this.$Notice.error({
                             title:error.message
                         });

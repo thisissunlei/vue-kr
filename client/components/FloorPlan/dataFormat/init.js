@@ -57,6 +57,10 @@ function init(data,picProperty,dataUrl,drawWrap){
                 scale=firstScale
             }
         }
+
+        if((picProperty.width*scale<600)&&(picProperty.height*scale<600)){
+            scale=Number(picProperty.width*scale/600);
+        }
         
         //尺寸缩放
         dataRender.map((list,index)=>{
@@ -68,6 +72,7 @@ function init(data,picProperty,dataUrl,drawWrap){
             list.cellCoordY=Number(list.cellCoordY)*scale;
         })
     }
+
     
     //pic尺寸
     picProperty={

@@ -59,11 +59,14 @@
         &:nth-child(7){
             width:60px;
         }
-        &:nth-child(3),&:nth-child(4){
+        &:nth-child(3){
             width:70px;
         }
         &:nth-child(12),&:nth-child(8){
             width:100px;
+        }
+        &:nth-child(4){
+            width:90px;
         }
         &:nth-child(10){
             width:95px;

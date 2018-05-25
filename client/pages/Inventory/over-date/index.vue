@@ -121,7 +121,7 @@ var layoutScrollHeight=0;
                     {
                         title: '剩余租期',
                         align:'center',
-                        width:70,
+                        width:90,
                         key: 'leaseRemainingDays',
                         render(h, params){
                             if(params.row.leaseRemainingDays<30){
@@ -227,7 +227,7 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+(params.row.reletEffectStatus==1?'生效':'没有生效')),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'已生效':'未生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),
@@ -267,7 +267,7 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+(params.row.reletEffectStatus==1?'生效':'没有生效')),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'已生效':'未生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),

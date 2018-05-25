@@ -343,17 +343,19 @@ export default {
                 this.formItem.floor=""
                 this.tabParams.floor=""
             }
-
+            this.page=1
             this.tabParams.page=1;
             this.tabParams.communityId=id;
             this.getTableData(this.tabParams);
         },
         floorChange(form){
+            this.page=1
             this.tabParams.page=1;
             this.tabParams.floor=form;
             this.getTableData(this.tabParams);
         },
         typeChange(form){
+            this.page=1
             this.tabParams.page=1;
             this.tabParams.type=form;
             this.getTableData(this.tabParams);

@@ -75,7 +75,8 @@ function init(data,picProperty,dataUrl,drawWrap){
         height:picProperty.height*scale,
         pos:data.graphFilePath,
         picName:data.communityName+data.currentDate,
-        dataUrl:dataUrl
+        dataUrl:dataUrl,
+        picId:data.graphFileId
     }
     
     //高度自适应图片高度

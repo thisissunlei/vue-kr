@@ -27,7 +27,12 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
                 size: new go.Size(data.pic.width,data.pic.height),
                 maxSize:new go.Size(data.pic.width,data.pic.height)
             })
-            utils.downFile(svg.src,data.pic.picName);    
+            var picId=data.pic.picId;
+            if(picId==493){
+                window.open(svg.src,'_blank');
+            }else{
+                utils.downFile(svg.src,data.pic.picName);
+            }
         }, false);
     }
     
@@ -48,7 +53,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             $(go.Part,  // this Part is not bound to any model data
             { layerName: "Background", position: new go.Point(0, 0),
                 selectable: false, pickable: false },
-            $(go.Picture,"http://optest03.krspace.cn"+data.pic.pos,{width:data.pic.width,height:data.pic.height})
+            $(go.Picture,data.pic.dataUrl,{width:data.pic.width,height:data.pic.height})
         ));
     }
     

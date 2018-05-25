@@ -10,7 +10,7 @@ function init(data,picProperty,dataUrl,drawWrap){
         data.figures.map((item,index)=>{
             //找空间最小宽度
             if(item.belongType=='SPACE'){
-                nameWidth.innerHTML='611';
+                nameWidth.innerHTML=item.cellName?item.cellName:'601';
                 caWidth.innerHTML=item.capacity+'工位';
                 parentMin=caWidth.offsetWidth>nameWidth.offsetWidth?caWidth.offsetWidth:nameWidth.offsetWidth;
                 item.parentMin=parentMin;

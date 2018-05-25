@@ -4,9 +4,10 @@
     <div>
         <krUpload 
             action="//jsonplaceholder.typicode.com/posts/"
-            file="newArr"
-            columnDetail="params.row||{}"
-            onUpUrl="mmmmmmm"
+            :file="[]"
+            type="only"
+            :columnDetail="{}"
+            :onUpUrl="()=>{}"
         />
     </div>
   </section>

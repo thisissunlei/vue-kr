@@ -2,16 +2,10 @@
   <div class="project-setting" id="projectSetting">
         <Tabs size="default" :value="tabs" @on-click="tabsClick" :animated="false">
             <TabPane label="待开业项目" name="PREPARE">
-                <!--项目管理档案列表
-                 <Archives v-if="mask"/> 
-                -->
                 <ProjectView  v-if="tabs=='PREPARE'"/>
             </TabPane>
-            <TabPane label="已开业项目" name="OPENED">
 
-                <!-- 项目总览
-                    <ProgressView v-if="!mask"/> 
-                -->
+            <TabPane label="已开业项目" name="OPENED">
                <ProjectView  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
@@ -21,11 +15,9 @@
 
 <script>
 
-import Archives from './archives'
 import ProjectView from './project-view';
 export default {
     components:{
-        Archives,
         ProjectView
     },
     data(){

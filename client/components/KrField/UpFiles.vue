@@ -291,7 +291,7 @@ export default{
 			inputDom.click();
 		},
 		fileChange(event){
-			console.log('change---')
+			
 			this.isLoadding = true;
 			this.percent = 0
 			// this.isClickLadding = false;

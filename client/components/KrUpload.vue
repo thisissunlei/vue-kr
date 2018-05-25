@@ -1,26 +1,43 @@
 <template>
 	<div>
-		<div>
-			<Buttons 
+		<input 
+			:id="inputId" 
+			type="file" 
+			style="display:none;" 
+			@change="onChange"
+			
+		>
+		<div class="only-up" v-if="type=='only'">
+			<div class="up-show">
+				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
+					<KrImg :src="item.url" width="60" height="60" type="cover"/>
+					<div class="img-mask">
+						
+						<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
+					</div>
+				</div>
+			</div>
+			<div v-if="!defaultList || !defaultList.length" class="up-icon" @click="upBtnClick">
+				<Icon type="plus-round"></Icon>
+			</div>
+			<slot  name="up-btn" ></slot>
+		
+		</div>
+		<div v-if="type=='select-up'">
+		
+			<Button 
 				type='text'  
-				checkAction='contract_file_upload'
 				label='上传附件'
 				styles='color:rgb(43, 133, 228);padding: 2px 7px;' 
 				@click = "switchList" 
 			
-			/>
+			>上传附件</Button>
 			
 			<div class = "list-box" v-show = "isOpenList">
 				<div class="mask" @click = "switchList" ></div>
 				<div class="list" :style ="listStyle" >
 					<div>
-						<input 
-							:id="inputId" 
-							type="file" 
-							style="display:none;" 
-							@change="onChange"
-							
-						>
+						
 						
 						<Button type="ghost" icon="ios-plus-outline" @click="upBtnClick" >上传附件</Button>
 						<!-- <Icon type="ios-plus-outline"></Icon> -->
@@ -44,14 +61,13 @@
 
 
 <script>
-import http from '~/plugins/http.js';
-import utils from '~/plugins/utils';
-import Buttons from './Buttons';
-
+// import http from '~/plugins/http.js';
+// import utils from '~/plugins/utils';
+import KrImg from './KrImg';
 export default{
 	name:'krUpload',
 	components: {
-		Buttons,
+		KrImg
 	},
 	/**
 	 *  @param {Object} columnDetail 当用在列表是的上传组件所在行的所有数据
@@ -66,7 +82,15 @@ export default{
 			default:false,
 			type:Boolean
 		},
-		onUpUrl:Function
+		onUpUrl:Function,
+		type:{
+			type:String,
+			default:'select-up'
+		},
+		multiple:{
+			type:Boolean,
+			default:true,
+		}
 	},
 	data(){
 		return {
@@ -88,6 +112,12 @@ export default{
 		
 	},
 	methods:{
+		delClick(index){
+			console.log(index,this.defaultList);
+			var list = [].concat(this.defaultList);
+			list.splice(index, 1);
+			this.defaultList = [].concat(list);
+		},
 		upBtnClick(){
 			let fileDom = document.getElementById(this.inputId);
 			fileDom.click();
@@ -100,7 +130,7 @@ export default{
 			});
         },
 		//上传列表的开关
-		switchList:function(event){
+		switchList(event){
 			var detail = event.target.getBoundingClientRect();
 			this.isOpenList = !this.isOpenList;
 			if(this.isOpenList){
@@ -114,149 +144,95 @@ export default{
 				transform:"translateX(-50%)"
 			}
 		},
-		submitUpload(detail){
-			this.config();
-			this.onUpUrl && this.onUpUrl(detail,this.columnDetail);
-			
-		},
-		//获取上传图片
-		getUpUrl(){
-
-			var that=this;
-			var category="op/upload";
-			this.config();
-			http.get('get-vue-upload-url', {
-				isPublic:true,
-				category,
-			}, (response) => {
-				this.serverUrl = response.data.serverUrl;
-			}, (error) => {
-				that.$Notice.error({
-                        title:error.message
-                });
-			})   
-		},
-		onChange(event){
+		//获取上传的接口
+		getUpFileUrl(event){
+			let category = 'op/upload';
 			let that = this;
-			// let file = event.target.files[0];
-			// var fileName= file.name;
 			let file = event;
 			var fileName= event.name;
-		
-			if (!file) {
-				return;
-			}
-			let category = 'op/upload';
-			if (file) {
-				this.isShowProgress = "block";
-				this.progress = 0;
-				var timer = window.setInterval(function() {
-					if (that.progress >= 100) {
-							window.clearInterval(timer);
-					}
-					that.progress += 10;
-				}, 300);
-			}
 			var form = new FormData();
-			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200) {
-						var response = xhr.response.data;
-						form.append('OSSAccessKeyId', response.ossAccessKeyId);
-						form.append('policy', response.policy);
-						form.append('Signature', response.sign);
-						form.append('key', response.pathPrefix+'/'+file.name);
-						form.append('uid', response.uid);
-						form.append('callback', response.callback);
-						form.append('x:original_name', file.name);
-						form.append('file', file);
-
-						that.onTokenSuccess({
-							sourceservicetoken: response.token,
-							docTypeCode: response.docTypeCode,
-							operater: response.operater
-						});
+			this.$http.get('get-vue-upload-url', {
+				category:category,
+				isPublic:that.publicUse
+			}).then((res)=>{
+				var response = res.data;
+				form.append('OSSAccessKeyId', response.ossAccessKeyId);
+				form.append('policy', response.policy);
+				form.append('Signature', response.sign);
+				form.append('key', response.pathPrefix+'/'+file.name);
+				form.append('uid', response.uid);
+				form.append('callback', response.callback);
+				form.append('x:original_name', file.name);
+				form.append('file', file);
+				that.upfile(form,response.serverUrl)
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+		},
+		upfile(form,serverUrl){
+			var that  = this;
+			
+			var xhrfile = new XMLHttpRequest();
+			xhrfile.timeout = 600000;
+			xhrfile.onreadystatechange = function() {
+				if (xhrfile.readyState === 4) {
+					var fileResponse = xhrfile.response;
+					if (xhrfile.status === 200) {
+						if (fileResponse && fileResponse.code > 0) {
+							// that.isLoadding=false;
+							// that.percent = 0;
+							var data = fileResponse.data;
+							that.onSuccess(data);
+						} else {
 						
-						var xhrfile = new XMLHttpRequest();
-						xhrfile.onreadystatechange = function() {
-							if (xhrfile.readyState === 4) {
-								var fileResponse = xhrfile.response;
-								if (xhrfile.status === 200) {
-									if (fileResponse && fileResponse.code > 0) {
-									
-										var params = {};
-										that.isShowProgress = "none";
-										that.progress = 100;
-										params.name = fileName;
-										params.url = fileResponse.data.url;
-										params.fileId = ""+fileResponse.data.id;
-										params.fileName = fileName;
-										params.fileUrl = fileResponse.data.url;
-										params.type = "ATTACHMENT"
-										that.onSuccess(params)
-
-									} else {
-										//报错
-										that.isShowProgress = "none";
-										that.progress = 100;
-										console.log(fileResponse.msg)
-										that.$Notice.error({
-												title:fileResponse.msg
-										});
-										// that.onError(fileResponse.msg);
-									}
-								} else if (xhrfile.status == 413) {
-									that.isShowProgress = "none";
-									that.progress = 100;
-									
-									that.$Notice.error({
-										title:"您上传的文件过大！"
-									});
-									// that.onError('您上传的文件过大！');
-								} else {
-									that.isShowProgress = "none";
-									that.progress = 100;
-									
-									that.$Notice.error({
-										title:'后台报错请联系管理员！'
-									});
-								
-								}
-							}
-						};
-						xhrfile.open('POST', response.serverUrl, true);
-						xhrfile.responseType = 'json';
-						xhrfile.send(form);
-					} else {
-						that.onTokenError();
+						}
+					} else{
+						that.$Notice.error({
+							title:'上传失败请稍后重试'
+						});
 					}
+					that.isLoadding=false;
+					that.percent = 100;
 				}
-				
 			};
-
-			xhr.open('GET', '/api/krspace-op-web/sys/upload-policy?isPublic='+that.publicUse+'&category='+category, true);
-			xhr.responseType = 'json';
-			xhr.send();
+			xhrfile.open('POST', serverUrl, true);
+			xhrfile.responseType = 'json';
+			xhrfile.send(form);
+		},
+		onChange(event){
+			var file = event.target.files[0];
+			if(file){
+				this.getUpFileUrl(file);
+			}
 		},
 		//上传成功
 		onSuccess(params){
+			
 			var detail = Object.assign({},params);
-			this.defaultList.push(detail)
-			this.submitUpload([detail]);
+			if(this.multiple){
+				this.defaultList.push(detail)
+			}else{
+				this.defaultList = [detail];
+			}
+			
+			// this.submitUpload([detail]);
+			this.$emit('upSuccess',this.defaultList,[detail]);
 			
 		},
 		onTokenSuccess(){
 
 		},
 		downFille(params){
+            return ;
 			var that=this;
 			
 			this.$http.post('get-station-contract-pdf-url', {
 				id:params.fileId,
 				
 			}, (response) => {
-				utils.downFile(response.data)
+				// utils.downFile(response.data)
 			
 			}, (error) => {
 				that.$Notice.error({
@@ -315,5 +291,56 @@ export default{
 		cursor: pointer;
 	}
 }
+.only-up{
+	.up-icon{
+		height: 58px;
+		width: 58px;
+		text-align: center;
+		line-height: 58px;
+		border: 1px dashed #dddee1;
+		cursor: pointer;
+		font-size: 30px;
+		vertical-align: middle;
+		font-size: 26px;
+		transition: all 0.3s;
+	}
+	.up-icon:hover{
+		color: #2d8cf0;
+		border: 1px dashed #57a3f3;
+	}
+	.up-show-box{
+		display: inline-block;
+		position: relative;
+		width: 60px;
+		height: 60px;
+		border-radius: 4px;
+		overflow: hidden;
+		.img-mask{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			z-index: 2;
+			background-color: rgba(0,0,0,0.5);
+			color:#fff;
+			top: 0px;
+			left: 0px;
+			display: none;
+			font-size: 20px;
+		}
 
+	}
+	.up-show-box:hover .img-mask{
+		display: block;
+		text-align: center;
+		.delete-icon{
+			cursor: pointer;
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-left: -7px;
+			margin-top: -10px;
+		}
+	}
+	
+}
 </style>

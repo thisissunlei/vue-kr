@@ -5,6 +5,7 @@
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
 
                 <div style="white-space: nowrap;">
+                    <div style="display:inline-block;vertical-align: top;">
                     <Form-item class='daily-form community-form'>
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;">社<span style="display:inline-block;width:27px;"></span>区</span>
                         <Select 
@@ -52,9 +53,10 @@
                                 </Option>
                         </Select> 
                     </Form-item>
+                </div>
                     
                      <Form-item  class='daily-form' prop="goodsName">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品名称</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;margin-right:11px;">商品名称</span>
                         <i-input 
                             v-model="formItem.goodsName" 
                             placeholder="房间号或工位编号"
@@ -65,7 +67,7 @@
 
 
                     <Form-item class='daily-form'> 
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品类型</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;margin-right:11px;">商品类型</span>
                         <Select 
                             v-model="formItem.goodsType" 
                             placeholder="请输入商品类型" 

@@ -17,7 +17,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             allowMove: false
         });
         
-   
+    
     //导出svg图片
     if(data.pic){
         var button = document.getElementById(pic);
@@ -27,12 +27,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
                 size: new go.Size(data.pic.width,data.pic.height),
                 maxSize:new go.Size(data.pic.width,data.pic.height)
             })
-            var picId=data.pic.picId;
-            if(picId==493){
-                window.open(svg.src,'_blank');
-            }else{
-                utils.downFile(svg.src,data.pic.picName);
-            }
+            utils.downFile(svg.src,data.pic.picName);
         }, false);
     }
     

@@ -52,7 +52,6 @@ function getToolTipContent(thatData,discount) {
     var price=(data.item.price||data.item.price===0)?data.item.price:'';
     var total=(data.item.totalPrice||data.item.totalPrice===0)?data.item.totalPrice:'';
     var disUnitPrice=discount&&unitPrice?'折后'+parseInt(unitPrice*discount*0.1):unitPrice;
-    var disPrice=(discount&&price)?'折后'+parseInt(price*discount*0.1):price;
     var disTotal=(discount&&total)?'折后'+parseInt(total*discount*0.1):total;
     var rentStart = data.item.recentStart ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.item.recentStart)) : '';
     var rentEnd = data.item.recentEnd ? dateUtils.dateToStr('YYYY-MM-DD', new Date(data.item.recentEnd)) : '';
@@ -61,7 +60,7 @@ function getToolTipContent(thatData,discount) {
     
     var nameStr='';
     var proStr='';
-    var signStr=(status=='IN_RENT'||status=='NOT_EFFECT'&&price)?'<div>签约价：' + disPrice + '</div>':'';
+    var signStr=(status=='IN_RENT'||status=='NOT_EFFECT'&&price)?'<div>签约价：' + price + '</div>':'';
     var priceStr='';
     var dateEnd=rentEnd?'<div>可租结束日：' + rentEnd + '</div>':'';
     if(data.item.belongType=='SPACE'){

@@ -56,7 +56,7 @@
                      <Form-item label="商品名称" class='daily-form' prop="goodsName">
                         <i-input 
                             v-model="formItem.goodsName" 
-                            placeholder="请输入商品名称"
+                            placeholder="房间号或工位编号"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
@@ -281,15 +281,15 @@ export default {
                     {value:' ',label:'全部'},
                     {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
                     {value:'RENT_NO_PERMIT',label:'不可续租'},
-                    {value:'RENT_CAN_TO',label:'只可续租部分时间'}
+                    {value:'RENT_CAN_TO',label:'只可续租一段时间'}
                 ],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'SPACE',label:'固定办公桌'},
-                    {value:'OPEN',label:'独立办公室'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
@@ -377,7 +377,6 @@ export default {
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
-                    console.log('=-0900',typeof params.cityId)
                 }
                 
                 this.formItemOld=Object.assign({},this.formItem);

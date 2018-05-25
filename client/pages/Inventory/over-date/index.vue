@@ -17,7 +17,7 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
@@ -115,13 +115,13 @@ var layoutScrollHeight=0;
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:80,
+                        width:70,
                         align:'center',
                     },
                     {
                         title: '剩余租期',
                         align:'center',
-                        width:80,
+                        width:70,
                         key: 'leaseRemainingDays',
                         render(h, params){
                             if(params.row.leaseRemainingDays<30){
@@ -163,13 +163,13 @@ var layoutScrollHeight=0;
                     {
                         title: '进场日',
                         align:'center',
-                        width:80,
+                        width:100,
                         key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:80,
+                        width:100,
                         key: 'endDate',
                     },
                     {
@@ -187,17 +187,18 @@ var layoutScrollHeight=0;
                     {
                         title: '当前客户',
                         align:'center',
-                        width:110,
                         key: 'customerName',
                     },
                     {
                         title: '客户当前在租工位数',
                         align:'center',
+                        width:110,
                         key: 'customerStatoons',
                     },
                     {
                         title: '随后可续时段',
                         align:'center',
+                        width:100,
                         key: 'reletTypeName',
                         render(h, params){
                             if(!params.row.reletTypeName){
@@ -226,7 +227,7 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'生效':'没有生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),
@@ -261,7 +262,7 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'生效':'没有生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),
@@ -291,7 +292,7 @@ var layoutScrollHeight=0;
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                this.getData(this.tabForms); 
+                // this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -315,6 +316,8 @@ var layoutScrollHeight=0;
                 this.onScrollListener();
             },
             tabForms:function(val,old){
+                console.log('watch-----')
+
                 this.getCommonParam();
                 this.getData(this.tabForms); 
             }
@@ -343,12 +346,13 @@ var layoutScrollHeight=0;
                 utils.addParams(this.tabForms);
             },
             initData(formItem){
+                console.log('init---')
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
             dataParams(data){
                     this.endParams=Object.assign({},data);
-                    this.getData(this.endParams);
+                    // this.getData(this.endParams);
             },
             getData(params){
                 //getDailyInventory 

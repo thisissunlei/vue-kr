@@ -698,8 +698,8 @@
                 menuItems: [
                     {
                         primaryText: '社区主页',
-                        router: 'operation/community',
-                        type:'vue',
+                        router: 'community/operation/index',
+                        // type:'vue',
                         menuCode: 'operation_home',
                     },
                     {
@@ -708,12 +708,12 @@
                         type:'vue',
                         menuCode: 'operation_home',
                     },
-                    {
-                        primaryText: '即将进场',
-                        router: 'inventory/enter-field',
-                        type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '即将进场',
+                    //     router: 'inventory/enter-field',
+                    //     type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',

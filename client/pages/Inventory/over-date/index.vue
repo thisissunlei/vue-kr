@@ -375,7 +375,7 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
+                utils.commonExport(this.tabForms,'/api/krspace-order-web/operation/due/list-excel');
             },
             //滚动监听
         onScrollListener(){            

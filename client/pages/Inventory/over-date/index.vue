@@ -190,15 +190,15 @@ var layoutScrollHeight=0;
                         key: 'customerName',
                     },
                     {
-                        title: '客户当前在租工位数',
+                        title: '当前在租工位数',
                         align:'center',
-                        width:110,
+                        width:95,
                         key: 'customerStatoons',
                     },
                     {
                         title: '随后可续时段',
                         align:'center',
-                        width:100,
+                        width:110,
                         key: 'reletTypeName',
                         render(h, params){
                             if(!params.row.reletTypeName){

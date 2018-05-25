@@ -5,12 +5,13 @@
             <div style="float: right;">
                 <Page
                     :current="page"
-                    :total="page"
+                    :total="totalCount"
                     :page-size="pageSize"
                     @on-change="changePage"
                     show-total
                     show-elevator
                 ></Page>
+               
             </div>
         </div>
     </div>  

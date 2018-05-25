@@ -437,6 +437,7 @@ var layoutScrollHeight=0;
     .enter-filed-table{
         position: relative;
         padding: 0 ;
+        padding-bottom:77px;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
         }
@@ -475,13 +476,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{
@@ -540,13 +542,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{

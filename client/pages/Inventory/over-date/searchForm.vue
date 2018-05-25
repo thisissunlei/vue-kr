@@ -147,7 +147,7 @@
                             <i-input 
                                 v-model="formItem.rentDays" 
                                 style="width: 90px;"
-                                placeholder="请输入租期天数"
+                                placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -161,7 +161,6 @@
                             <i-input 
                                 v-model="formItem.stationsMin" 
                                 style="width: 90px"
-                                placeholder="请输入工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -169,7 +168,6 @@
                         <Form-item  prop="stationsMax" style="width:auto;display:inline-block;">
                             <i-input 
                                 v-model="formItem.stationsMax" 
-                                placeholder="请输入工位数量"
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />

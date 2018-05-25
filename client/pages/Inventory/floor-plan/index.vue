@@ -22,6 +22,9 @@
             @scroll="scroll"
             :data="item"
       />
+
+      <span id="spanWidthMapInventoryName" style="visibility:hidden;"></span>
+      <span id="spanWidthMapInventoryCapacity" style="visibility:hidden;"></span>
       
   </div>
 </template>

@@ -2,17 +2,19 @@ import colorStatus from './colorStatus';
 function init(data,picProperty,dataUrl,drawWrap){
     var dataRender=[];
     var scale=1;
+    var nameWidth=document.getElementById('spanWidthMapInventoryName');
+    var caWidth=document.getElementById('spanWidthMapInventoryCapacity');
     if(data.figures.length){
         var spaceArr=[];
-        var minW=36;
-        var minH=36;
-        var min=36;
+        var parentMin=32;
         data.figures.map((item,index)=>{
             //找空间最小宽度
             if(item.belongType=='SPACE'){
+                nameWidth.innerHTML='611';
+                caWidth.innerHTML=item.capacity+'工位';
+                parentMin=caWidth.offsetWidth>nameWidth.offsetWidth?caWidth.offsetWidth:nameWidth.offsetWidth;
+                item.parentMin=parentMin;
                 spaceArr.push(item);
-                minW=spaceArr[0].cellWidth;
-                minH=spaceArr[0].cellHeight;
             }
             
             //左上,根据中心点坐标转换成左上角坐标值
@@ -35,29 +37,28 @@ function init(data,picProperty,dataUrl,drawWrap){
             list.item=item;
             dataRender.push(list);
         })
-
-        //scale计算
-        spaceArr.map((item,index)=>{
-            if(Number(item.cellWidth)<Number(minW)){
-                minW=Number(item.cellWidth);
-            }
-            if(Number(item.cellHeight)<Number(minH)){
-                minH=Number(item.cellHeight);
-            }
-            min=minW<minH?minW:minH;
-        })
         
-        var firstScale=40/min;
-        if(firstScale<0.3){
-            scale=0.3
-        }else{
-            if(firstScale>1){
-                scale=1
-            }else{
-                scale=firstScale
+      
+        //scale计算
+        var minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
+        var minH=32/spaceArr[0].cellHeight;
+        var min=32;
+        spaceArr.map((item,index)=>{
+            if((item.parentMin/item.cellWidth)>minW){
+                minW=item.parentMin/item.cellWidth;
             }
+            if((32/item.cellHeight)>minH){
+                minH=32/item.cellHeight;
+            }
+        }) 
+        min=minW>minH?minW:minH;
+        if(min>1){
+            scale=1
+        }else{
+            scale=min
         }
-
+        
+        //极限尺寸
         if((picProperty.width*scale<600)&&(picProperty.height*scale<600)){
             scale=Number(picProperty.width*scale/600);
         }

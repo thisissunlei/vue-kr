@@ -21,6 +21,14 @@ export default  {
         url: '/api/iot-platform/door-set/actions/delete-relation',
         method: 'delete'
     },
+    'deleteDoorGroupInRelation':{
+        url : '/api/iot-platform/door-set/actions/delete',
+        method: 'delete'
+    },
+    'getFloorOptions':{
+        url :'/api/krspace-finance-web/cmt/community/select/use/floor',
+        method: 'get'
+    }
     
   }
   

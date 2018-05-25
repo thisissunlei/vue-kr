@@ -18,11 +18,15 @@
         <Drawer
             :openDrawer="openEquipmentDetail"
             iconType="view-icon"
-            :close="closeEquipmentDEtail"
+            :close="closeEquipmentDetail"
             width="540"
         >
 
-            <GroupDetail/>
+            <GroupDetail
+                :editInitialDataProps="editInitailData"
+                @closeGroupDetailModal="closeEquipmentDetail"
+                :communityId ="communityId"
+            />
         </Drawer>
     </div>
 </template>
@@ -41,9 +45,9 @@ export default {
    data(){
        return {
             openEquipmentDetail : false,
-            openEditModal : false,
+            // openEditModal : false,
             newCreateData : {},
-            editData : {},
+            // editData : {},
             callback:null,
             cancelCallback:null,
             myDiagram:null,
@@ -96,11 +100,10 @@ export default {
            
             $(go.Node, "Auto",
 
-                { // second arg will be this GraphObject, which in this case is the Node itself:
+                { 
                     doubleClick: function(e, node) {
-                        console.log("点击了节点","node",node.data);
-                        _this.closeEquipmentDEtail();
-                        
+                        console.log("node.data",node.data);
+                        _this.openEquipmentDetailFun(node.data);
                     }
                 },
                 {
@@ -179,6 +182,22 @@ export default {
                 { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
                 new go.Binding("text","name").makeTwoWay())
             );
+
+            this.myDiagram.linkTemplate =
+            $(go.Link, 
+                 {
+                    routing: go.Link.AvoidsNodes,
+                    curve: go.Link.JumpOver,
+                    corner: 5, toShortLength: 4,
+                    // relinkableFrom: true,
+                    // relinkableTo: true,
+                    // reshapable: false,
+                    resegmentable: true,
+                    // mouseEnter: function(e, link) { link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)"; },
+                },
+            
+            
+            )
         
            
            
@@ -244,13 +263,19 @@ export default {
 			})
         },
 
-       closeEquipmentDEtail(){
+       closeEquipmentDetail(){
            this.openEquipmentDetail = !this.openEquipmentDetail
        },
        
         // getEditForm(form){
         //     this.editData=form;
         // },
+
+        openEquipmentDetailFun(nodeData){
+            this.editInitailData = nodeData;
+            this.closeEquipmentDetail()
+
+        },
        
 
         sumbmitEditData(){
@@ -266,25 +291,11 @@ export default {
             this.editDataReq(params);
         },
 
-        editItemData (e, obj){
-            this.editInitailData = obj.part.adornedPart.data;
-            this.openEditFormModal();
-        },
-        editDataReq(sendMsg){
-            this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
-                
-                if(this.openEditModal){
-                    this.openEditFormModal();
-                }
-                var mapDataParam = {communityId : this.communityId}
-                this.getMapData(mapDataParam);
-
-			}).catch((error)=>{
-				this.$Notice.error({
-					title:error.message
-				});
-			})
-        },
+        // editItemData (e, obj){
+        //     this.editInitailData = obj.part.adornedPart.data;
+        //     this.openEditFormModal();
+        // },
+        
         openEditFormModal(){
             this.openEditModal = !this.openEditModal
         },

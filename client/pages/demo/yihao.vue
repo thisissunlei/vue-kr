@@ -2,14 +2,18 @@
 <template>
   <section class="container">
     <div>
-        yihao
+        <krUpload 
+            action="//jsonplaceholder.typicode.com/posts/"
+            file="newArr"
+            columnDetail="params.row||{}"
+            onUpUrl="mmmmmmm"
+        />
     </div>
   </section>
 </template>
 
 <script>
-import krInput from '~/components/EnglishInput.vue'
-
+import krUpload from '~/components/KrUpload.vue';
 export default {
      
     data() {
@@ -20,7 +24,7 @@ export default {
         }
     },
     components: {
-      
+      krUpload
     },
     methods:{
      

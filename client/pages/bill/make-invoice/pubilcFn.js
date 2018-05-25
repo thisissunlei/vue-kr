@@ -3,24 +3,11 @@ function initListData(){
     return [
         {
             title: '申请编号',
-            key: 'name',
+            key: 'applyNum',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all',
             render:(h,params)=>{
-                // var arr=[];
-                // for(let i=0;i<3;i++){
-                //     arr.push(h('div', {
-                //         style: {
-                //             borderBottom:'1px solid #e9eaec',
-                //             padding:'8px 10px'
-                //         },
-                //         on: {
-                //             click: () => {
-                //                 this.openView()
-                //             }
-                //         }
-                //     }, '查看'),)
-                // }
+                
                 return h('div',{
                     style: {
                         color:'#2b85e4'
@@ -30,47 +17,52 @@ function initListData(){
                             this.goAddPage();
                         }
                     }
-                }, 'dfsf')
+                }, params.row.applyNum)
             }
         },
         {
             title: '社区名称',
-            key: 'name',
+            key: 'communityName',
             align:'center',            
             type:'waitMake,alreadyMake,returnMake,all'
         },
         {
             title: '我司主体',
             align:'center',
-            key: 'name',
+            key: 'corporationName',
             type:'all'
         },
         {
             title: '发票抬头',
-            key: 'name',
+            key: 'invoiceTitle',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all'
         },
         {
             title: '纳税人识别号',
-            key: 'name',
+            key: 'taxpayerNumber',
             align:'center',
             type:'waitMake,alreadyMake,all'
         },
         {
             title: '发票规格',
-            key: 'name',
+            key: 'invoiceType',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all'
         },
         {
             title: '发票内容',
-            key: 'name',
+            key: 'detailList',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all',
-            render:(h,params)=>{
+            render:(h,obj)=>{
                 var arr=[];
-                for(let i=0;i<3;i++){
+              
+                if( !obj.row.detailList || !obj.row.detailList.length){
+                    return ;
+                }
+                var detailList = [].concat(obj.row.detailList)
+                for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -78,10 +70,10 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                this.openView()
+                                // this.openView()
                             }
                         }
-                    }, '查看'),)
+                    }, detailList[i].contentType))
                 }
                 return h('div',arr , '重开')
             }
@@ -91,9 +83,14 @@ function initListData(){
             key: 'name',
             align:'center',
             type:'waitMake,alreadyMake,all',
-            render:(h,params)=>{
+            render:(h,obj)=>{
                 var arr=[];
-                for(let i=0;i<3;i++){
+              
+                if( !obj.row.detailList || !obj.row.detailList.length){
+                    return ;
+                }
+                var detailList = [].concat(obj.row.detailList)
+                for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -101,10 +98,10 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                this.openView()
+                                // this.openView()
                             }
                         }
-                    }, '查看'),)
+                    }, detailList[i].amount))
                 }
                 return h('div',arr , '重开')
             }
@@ -122,44 +119,14 @@ function initListData(){
             type:'returnMake'
         },
         {
-            title: '税率',
-            key: 'name',
-            align:'center',
-            type:'waitMake,alreadyMake,all'
-        },
-        {
-            title: '税额',
-            key: 'name',
-            align:'center',
-            type:'waitMake,alreadyMake,all'
-        },
-        {
-            title: '不含税额',
-            key: 'name',
-            align:'center',
-            type:'waitMake,alreadyMake,all'
-        },
-        {
             title: '备注',
-            key: 'name',
+            key: 'remark',
             align:'center',
             type:'waitMake,alreadyMake,all'
-        },
-        {
-            title: '退换状态',
-            key: 'name',
-            align:'center',
-            type:'returnMake'
-        },
-        {
-            title: '申请状态',
-            key: 'name',
-            align:'center',
-            type:'all'
         },
         {
             title: '申请时间',
-            key: 'name',
+            key: 'ctime',
             align:'center',
             type:'waitMake',
             render(tag, params){
@@ -173,7 +140,7 @@ function initListData(){
             align:'center',
             type:'waitMake,alreadyMake,all',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ticketTime));
                 return time;
             }
 
@@ -184,7 +151,7 @@ function initListData(){
             align:'center',
             type:'returnMake',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.refundTime));
                 return time;
             }
             
@@ -193,7 +160,7 @@ function initListData(){
             title: '发票张数',
             key: 'name',
             align:'center',
-            type:'alreadyMake'
+            type:'invoiceCount'
         },
         {
             title: '操作',

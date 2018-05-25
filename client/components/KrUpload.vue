@@ -14,17 +14,21 @@
 				<div class="mask" @click = "switchList" ></div>
 				<div class="list" :style ="listStyle" >
 					<div>
-						<Upload 
-							action="//jsonplaceholder/"
-							:before-upload= "onChange"
-						>
-							<Button type="ghost" icon="ios-plus-outline" >上传附件</Button>
-							<!-- <Icon type="ios-plus-outline"></Icon> -->
-							<div v-bind:style="{display:isShowProgress}">
-								<Progress  :percent="progress" :stroke-width="5"></Progress>	
-							</div>
+						<input 
+							:id="inputId" 
+							type="file" 
+							style="display:none;" 
+							@change="onChange"
 							
-						</Upload>
+						>
+						
+						<Button type="ghost" icon="ios-plus-outline" @click="upBtnClick" >上传附件</Button>
+						<!-- <Icon type="ios-plus-outline"></Icon> -->
+						<div v-bind:style="{display:isShowProgress}">
+							<Progress  :percent="progress" :stroke-width="5"></Progress>	
+						</div>
+							
+					
 						<div class="item-box">
 							<div class="file-list" :key="item.id" v-for="item in defaultList" @click="downFille(item)" >
 								{{item.fileName}}
@@ -71,6 +75,7 @@ export default{
 				left:0,
 				top:0,
 			},
+			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
 			defaultList:!this.file.length?[]:this.file,
@@ -83,6 +88,10 @@ export default{
 		
 	},
 	methods:{
+		upBtnClick(){
+			let fileDom = document.getElementById(this.inputId);
+			fileDom.click();
+		},
 		//错误提示
 		config:function(){
 			this.$Notice.config({

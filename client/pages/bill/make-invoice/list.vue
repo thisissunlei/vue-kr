@@ -26,6 +26,15 @@
             >
             <div style="text-align:center;">
                 <span>发票张数:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" />
+                  <KrField 
+                        name="name"
+                        style="display:inline-block;"
+                        :readOrEdit="false" 
+                        type="upFiles" 
+                        label="含税" 
+                        :value="[]"
+                        placeholder="请输入..." 
+                    />
             </div>
             <div slot="footer">
                 <Button type="primary" @click="makeInvaiceSubmit">确定</Button>
@@ -52,13 +61,19 @@
 
 <script>
     import publicFn from './pubilcFn';
-    import KrTd from '~/components/KrTd'
+    import KrField from '~/components/KrField';
 
     export default {
+        components:{
+            KrField
+        },
         props:{
             type:{
                 type:String,
                 
+            },
+            status:{
+                type:String,
             }
         },
         data () {
@@ -71,6 +86,8 @@
                     page:1,
                     pageSize:15,
                     totalCount:0,
+                    flag:'list',
+                    invoiceStatus:this.status
                 },
            }
         },
@@ -80,6 +97,9 @@
                 // this.getListData(params);
                 // this.tableParams=params; 
                 //   utils.addParams(this.params);
+        },
+        mounted(){
+            this.getListData(this.tableParams);
         },
 
         methods:{
@@ -118,7 +138,8 @@
             },
             //开票提交
             makeInvaiceSubmit(){
-                this.$http.post('get-project-home', tabParams).then((res)=>{
+
+                this.$http.post('post-make-invoice', tabParams).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchMakeInvaice();
@@ -134,9 +155,12 @@
             },
             //获取列表数据
             getListData(){
-
-                this.$http.get('get-project-home', tabParams).then((res)=>{
+                let tabParams = Object.assign({},this.tableParams);
+                this.$http.get('get-invoice-list', tabParams).then((res)=>{
                         this.listData=res.data.items;
+                        console.log(res.data,"========")
+                        this.tableParams.totalCount = res.data.totalCount;
+                        this.tableParams.page = res.data.page;
                      
                 }).catch((err)=>{
                     this.$Notice.error({

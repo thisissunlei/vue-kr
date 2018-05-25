@@ -61,7 +61,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
-            new go.Binding("fill","color")),
+            new go.Binding("fill","color"),{ stroke: null }),
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置

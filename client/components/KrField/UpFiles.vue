@@ -179,13 +179,10 @@ export default{
 		},
 		downImg(url,id){
 			utils.downImg(url);
-			
 			return ;
 		},
 		downFile(url,id){
-			
-			utils.downFile(url);
-			
+			utils.downFile(url);	
 		},
 		getIsPhoto(url){
 			var img="png,jpg,jpeg";

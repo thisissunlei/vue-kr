@@ -1,5 +1,5 @@
-import utils from '~/plugins/utils';
-function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
+
+function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -16,18 +16,22 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn) {
             //是否可以移动对象
             allowMove: false
         });
-        
+    
+
+    function myCallback(blob) {
+        downLoadPic(blob,data.pic.picName);
+    }
     
     //导出svg图片
     if(data.pic){
         var button = document.getElementById(pic);
             button.addEventListener('click', function() {
-            var svg = myDiagram.makeImage({
+            var svg = myDiagram.makeImageData({
                 scale:1,
-                size: new go.Size(data.pic.width,data.pic.height),
-                maxSize:new go.Size(data.pic.width,data.pic.height)
+                maxSize:new go.Size(data.pic.width,data.pic.height),
+                returnType: "blob",
+                callback: myCallback
             })
-            utils.downFile(svg.src,data.pic.picName);
         }, false);
     }
     

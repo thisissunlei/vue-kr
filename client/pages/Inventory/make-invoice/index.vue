@@ -11,17 +11,21 @@
                 :animated="false"
                 @on-click="tabsClick"
             >
-                <TabPane label="待开发票" name="waitMake"> 
-                    <List v-if="type == 'waitMake'" :type="type" status="APPLYING"/>
+            <!-- waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn -->
+                <TabPane label="待签收" name="waitArrive"> 
+                    <List v-if="type == 'waitArrive'" :type="type"/>
                 </TabPane>
-                <TabPane label="已开发票" name="alreadyMake" >
-                    <List v-if="type == 'alreadyMake'" :type="type" status="INVOICED"/>
+                <TabPane label="待邮寄" name="waitMail" >
+                    <List v-if="type == 'waitMail'" :type="type"/>
                 </TabPane>
-                <TabPane label="待重开" name="returnMake" >
-                    <List v-if="type == 'returnMake'" :type="type" status="RECOVERYED" />
+                <TabPane label="待领取" name="waitReceive" >
+                    <List v-if="type == 'waitReceive'" :type="type"/>
                 </TabPane>
-                <TabPane label="全部" name="all">
-                    <List v-if="type == 'all'" :type="type"/>
+                <TabPane label="已领取" name="alreadyReceive">
+                    <List v-if="type == 'alreadyReceive'" :type="type"/>
+                </TabPane>
+                <TabPane label="待退还" name="waitReturn">
+                    <List v-if="type == 'waitReturn'" :type="type"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -46,7 +50,7 @@
         },
         data () {
            return {
-               type:'waitMake',
+               type:'waitArrive',
            }
         },
       

@@ -748,7 +748,7 @@
                         menuCode: 'tv_ad_storage',
                         type: 'vue',
                         router: 'smart-hardware/map-depot'
-                    },
+                    }
                 ]
             },
         ]
@@ -1264,7 +1264,7 @@
                     },
                     {
                         primaryText: "运营端",
-                        router: 'bill/make-invoice',
+                        router: 'inventory/make-invoice',
                         type: 'vue',
                         menuCode: 'pay_deal_flow_page'
                     },

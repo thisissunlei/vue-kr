@@ -21,20 +21,22 @@
         </div>
         <Modal
                 v-model="openMakeInvaice"
-                title="提示信息"
+                title="邮寄信息"
                 width="500"
             >
             <div style="text-align:center;">
-                <span>发票张数:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" />
-                  <KrField 
-                        name="name"
-                        style="display:inline-block;"
-                        :readOrEdit="false" 
-                        type="upFiles" 
-                        label="含税" 
-                        :value="[]"
-                        placeholder="请输入..." 
-                    />
+                <span>快递公司:</span>
+                <Select 
+                     style="display:inline-block;width:255px;margin-left:30px;text-align:left;"
+                    placeholder="请输入发票规格" 
+                    clearable
+                ><Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option></Select>
+                
+                <!-- <Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" /> -->
+                <div>
+                    <span>快递编号:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" />
+                </div>
+                
             </div>
             <div slot="footer">
                 <Button type="primary" @click="makeInvaiceSubmit">确定</Button>
@@ -43,11 +45,11 @@
         </Modal>
         <Modal
                 v-model="openGoBack"
-                title="提示信息"
-                width="660"
+                title="修改金额"
+                width="500"
             >
-            <div>
-                <span style="height:30px;display:inline-block;">回退原因:</span><Input type="textarea" :rows="4" placeholder="请输入退回原因" />
+            <div >
+                 <span>实际退回金额:</span><Input  placeholder="请输入发票张数" />
             </div>
             <div slot="footer">
                 <Button type="primary" @click="goBackSubmit">确定</Button>
@@ -61,19 +63,14 @@
 
 <script>
     import publicFn from './pubilcFn';
-    import KrField from '~/components/KrField';
+    import KrTd from '~/components/KrTd';
+
 
     export default {
-        components:{
-            KrField
-        },
         props:{
             type:{
                 type:String,
                 
-            },
-            status:{
-                type:String,
             }
         },
         data () {
@@ -83,12 +80,16 @@
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
                 tableParams:{
-                    page:1,
+                    page:0,
                     pageSize:15,
                     totalCount:0,
-                    flag:'list',
-                    invoiceStatus:this.status
                 },
+                productList:[
+                    {value:' ',label:'全部'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
+                    {value:'MOVE',label:'移动办公桌'}
+                ]
            }
         },
       
@@ -97,9 +98,6 @@
                 // this.getListData(params);
                 // this.tableParams=params; 
                 //   utils.addParams(this.params);
-        },
-        mounted(){
-            this.getListData(this.tableParams);
         },
 
         methods:{
@@ -138,8 +136,7 @@
             },
             //开票提交
             makeInvaiceSubmit(){
-
-                this.$http.post('post-make-invoice', tabParams).then((res)=>{
+                this.$http.post('get-project-home', tabParams).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchMakeInvaice();
@@ -155,12 +152,9 @@
             },
             //获取列表数据
             getListData(){
-                let tabParams = Object.assign({},this.tableParams);
-                this.$http.get('get-invoice-list', tabParams).then((res)=>{
+
+                this.$http.get('get-project-home', tabParams).then((res)=>{
                         this.listData=res.data.items;
-                        console.log(res.data,"========")
-                        this.tableParams.totalCount = res.data.totalCount;
-                        this.tableParams.page = res.data.page;
                      
                 }).catch((err)=>{
                     this.$Notice.error({

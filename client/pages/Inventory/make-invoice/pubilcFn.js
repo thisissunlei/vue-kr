@@ -5,9 +5,8 @@ function initListData(){
             title: '申请编号',
             key: 'applyNum',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all',
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
             render:(h,params)=>{
-                
                 return h('div',{
                     style: {
                         color:'#2b85e4'
@@ -17,52 +16,42 @@ function initListData(){
                             this.goAddPage();
                         }
                     }
-                }, params.row.applyNum)
+                }, 'dfsf')
             }
         },
         {
             title: '社区名称',
             key: 'communityName',
             align:'center',            
-            type:'waitMake,alreadyMake,returnMake,all'
-        },
-        {
-            title: '我司主体',
-            align:'center',
-            key: 'corporationName',
-            type:'all'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '发票抬头',
             key: 'invoiceTitle',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '纳税人识别号',
             key: 'taxpayerNumber',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive'
         },
         {
             title: '发票规格',
             key: 'invoiceType',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '发票内容',
-            key: 'detailList',
+            key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all',
-            render:(h,obj)=>{
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            render:(h,params)=>{
                 var arr=[];
-              
-                if( !obj.row.detailList || !obj.row.detailList.length){
-                    return ;
-                }
-                var detailList = [].concat(obj.row.detailList)
-                for(let i=0;i<detailList.length;i++){
+                console.log(params,"-----")
+                for(let i=0;i<3;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -70,10 +59,10 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                // this.openView()
+                                this.openView()
                             }
                         }
-                    }, detailList[i].contentType))
+                    }, '查看'),)
                 }
                 return h('div',arr , '重开')
             }
@@ -82,15 +71,10 @@ function initListData(){
             title: '开票金额',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all',
-            render:(h,obj)=>{
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive',
+            render:(h,params)=>{
                 var arr=[];
-              
-                if( !obj.row.detailList || !obj.row.detailList.length){
-                    return ;
-                }
-                var detailList = [].concat(obj.row.detailList)
-                for(let i=0;i<detailList.length;i++){
+                for(let i=0;i<3;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -98,10 +82,10 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                // this.openView()
+                                this.openView()
                             }
                         }
-                    }, detailList[i].amount))
+                    }, '查看'),)
                 }
                 return h('div',arr , '重开')
             }
@@ -110,63 +94,70 @@ function initListData(){
             title: '需退发票金额',
             key: 'name',
             align:'center',
-            type:'returnMake'
+            type:'waitReturn'
         },
         {
             title: '实际退回发票金额',
             key: 'name',
             align:'center',
-            type:'returnMake'
+            type:'waitReturn'
         },
         {
-            title: '备注',
-            key: 'remark',
+            title: '收回状态',
+            key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitReturn'
         },
         {
-            title: '申请时间',
-            key: 'ctime',
+            title: '领取人',
+            key: 'name',
             align:'center',
-            type:'waitMake',
+            type:'alreadyReceive'
+        },
+        {
+            title: '领取时间',
+            key: 'name',
+            align:'center',
+            type:'alreadyReceive',
             render(tag, params){
                 let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                 return time;
             }
         },
         {
+            title: '发票张数',
+            key: 'name',
+            align:'center',
+            type:'waitArrive,waitMail,waitReceive'
+        },
+        {
             title: '开票时间',
             key: 'name',
             align:'center',
-            type:'waitMake,alreadyMake,all',
+            type:'waitArrive,waitReceive,',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ticketTime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                 return time;
             }
 
         },
         {
-            title: '退换时间',
+            title: '回收时间',
             key: 'name',
             align:'center',
-            type:'returnMake',
+            type:'waitReturn',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.refundTime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
                 return time;
             }
             
         },
-        {
-            title: '发票张数',
-            key: 'name',
-            align:'center',
-            type:'invoiceCount'
-        },
+       
         {
             title: '操作',
             key: 'name',
             align:'center',
-            type:'returnMake',
+            type:'waitArrive',
             render:(h,params)=>{
                
                 return h('div', [
@@ -183,7 +174,19 @@ function initListData(){
                                     this.openView()
                                 }
                             }
-                        }, '查看'),
+                        }, '签收')
+                ]);  
+              
+            }
+        },
+        {
+            title: '操作',
+            key: 'name',
+            align:'center',
+            type:'waitMail',
+            render:(h,params)=>{
+               
+                return h('div', [
                         h('Button', {
                             props: {
                                 type: 'text',
@@ -197,8 +200,7 @@ function initListData(){
                                     this.openView()
                                 }
                             }
-                        }, '重开')
-                       
+                        }, '邮寄')
                 ]);  
               
             }
@@ -207,7 +209,7 @@ function initListData(){
             title: '操作',
             key: 'name',
             align:'center',
-            type:'waitMake',
+            type:'waitReturn',
             render:(h,params)=>{
                
                 return h('div', [
@@ -224,7 +226,7 @@ function initListData(){
                                     this.makeInvaice()
                                 }
                             }
-                        }, '开票'),
+                        }, '查看'),
                         h('Button', {
                             props: {
                                 type: 'text',
@@ -238,7 +240,21 @@ function initListData(){
                                     this.goBack()
                                 }
                             }
-                        }, '退回') 
+                        }, '收回'),
+                        h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.goBack()
+                                }
+                            }
+                        }, '修改')  
                 ]);  
               
             }

@@ -54,10 +54,10 @@
             width:110px;
         }
         &:nth-child(5),&:nth-child(6){
-            width:100px;
+            width:110px;
         }
         &:nth-child(7){
-            width:80px;
+            width:60px;
         }
         &:nth-child(3),&:nth-child(4){
             width:70px;

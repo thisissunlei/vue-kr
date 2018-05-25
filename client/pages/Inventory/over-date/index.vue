@@ -163,19 +163,19 @@ var layoutScrollHeight=0;
                     {
                         title: '进场日',
                         align:'center',
-                        width:100,
+                        width:110,
                         key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:100,
+                        width:110,
                         key: 'endDate',
                     },
                     {
                         title: '租期',
                         align:'center',
-                        width:80,
+                        width:60,
                         key: 'rentDays',
                     },
                     {
@@ -234,7 +234,12 @@ var layoutScrollHeight=0;
                                     ])
                                 ])
                             }else if(params.row.reletTypeName.indexOf('可续租时长不限')!=-1){
-                                return '可续租时长不限'
+                                return h('div',[
+                                            h('p',{
+                                            },'可续租'),
+                                            h('p',{
+                                            },'时长不限'),
+                                        ])
                             }else{
                                 return h('div', [
                                         h('Tooltip', {

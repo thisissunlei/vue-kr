@@ -23,7 +23,7 @@
         </FormItem>
        
     </Form>
-     <Modal
+    <Modal
         v-model="openDeleteTip"
         title="注意"
         ok-text="确定"

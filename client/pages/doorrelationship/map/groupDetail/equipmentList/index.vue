@@ -1,7 +1,7 @@
 
 <template>
 <div >
-  <EquipmentSearch :communityId="communityId"/>
+  <EquipmentSearch :communityId="communityId" @searchEquipment="searchEquipment"/>
   <div>
 
     设备列表
@@ -29,7 +29,9 @@ export default{
         "communityId"
      ],
     methods:{
-       
+       searchEquipment(params){
+         console.log("params",params);
+       }
     },
     updated:function(){
 

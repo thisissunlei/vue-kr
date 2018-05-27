@@ -31,6 +31,7 @@ export default{
     methods:{
        searchEquipment(params){
          console.log("params",params);
+         
        }
     },
     updated:function(){

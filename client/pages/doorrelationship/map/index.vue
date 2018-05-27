@@ -59,7 +59,6 @@ export default {
    data(){
        return {
             openEquipmentDetail : false,
-            // openEditModal : false,
             newCreateData : {},
             selectedNodeData : {},
             callback:null,
@@ -68,11 +67,10 @@ export default {
             model : null,
             editInitailData : {},
             addNewNode : 0 ,
-            communityId : null,
+            communityId : 1,
             communityList :[],
             //图表数据
             dateTemplate :{},
-            // nodeDragged : false,
             refreshedMapData : false,
             openDeleteTip :false
        }
@@ -84,13 +82,20 @@ export default {
    mounted(){
 
        this.getCommunity(this.getMapData,this.drawMap);
-    //    this.drawMap()
    },
   
    methods:{
        onChangeCommunity(option){
-           this.communityId = option;
-           console.log("option",option);
+            let _this =this;
+            this.communityId = option;
+            this.getMapData({communityId :this.communityId },this.refreshMap)
+            
+       },
+       refreshMap(){
+           var dateTemplate =this.dateTemplate;
+            console.log("dateTemplate",dateTemplate);
+            this.model = go.Model.fromJson(dateTemplate);
+            this.myDiagram.model = this.model;
        },
        openDeleteTipModel(){
            this.openDeleteTip = !this.openDeleteTip;
@@ -335,6 +340,7 @@ export default {
                                 "nodeDataArray":nodeDataArrayNew,
                                 "linkDataArray":linkConnectArr
                                 }
+                console.log("this.dateTemplate ",this.dateTemplate )
                 drawMapCallback && drawMapCallback();
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -471,7 +477,7 @@ export default {
             this.$http.get('join-bill-community','').then((res)=>{
 
                 this.communityList=res.data.items;
-                this.communityId = res.data.items[2].id
+                // this.communityId = res.data.items[2].id
 
                 var params = {communityId : this.communityId}
                 getMapDataCallback && getMapDataCallback(params,drawMapCallback)

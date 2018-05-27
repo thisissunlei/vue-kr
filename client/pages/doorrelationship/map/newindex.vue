@@ -29,6 +29,19 @@
                 :communityId ="communityId"
             />
         </Drawer>
+        <Modal
+            v-model="openDeleteTip"
+            title="注意"
+            ok-text="确定"
+            cancel-text="取消"
+            width="600"
+        >
+            <p class="delete-tip">删除设备组或组织间的关系时，将同事删除掉组及与该组有关的关系，确认删除吗？</p>
+            <div slot="footer">
+                <Button type="primary" @click="confirmDeleteGroup">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -46,9 +59,8 @@ export default {
    data(){
        return {
             openEquipmentDetail : false,
-            // openEditModal : false,
             newCreateData : {},
-            // editData : {},
+            selectedNodeData : {},
             callback:null,
             cancelCallback:null,
             myDiagram:null,
@@ -59,8 +71,8 @@ export default {
             communityList :[],
             //图表数据
             dateTemplate :{},
-            nodeDragged : false,
             refreshedMapData : false,
+            openDeleteTip :false
        }
    },
    components:{
@@ -75,99 +87,84 @@ export default {
   
    methods:{
        onChangeCommunity(option){
-           this.communityId = option;
-           console.log("option",option);
+            this.communityId = option;
+            this.getCommunity(this.getMapData,this.drawMap);
+           
+       },
+       openDeleteTipModel(){
+           this.openDeleteTip = !this.openDeleteTip;
        },
         drawMap(){
             let _this =this;
             var $ = go.GraphObject.make;
             
-            this.myDiagram = $(go.Diagram, "doorGroupRelationshipMap",
-            {
-                // initialContentAlignment: go.Spot.Center,
-                // "undoManager.isEnabled": true, 
-                "clickCreatingTool.archetypeNodeData": { "name": "新设备组" },
-                "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-                "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
-                    console.log("loc",loc);
-                    this.archetypeNodeData = {
-                        // key: getNextKey(), // assign the key based on the number of nodes
-                        name: "新设备组",
-                        title: ""
-                    };
-                    
-                    var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
-                    _this.addNewCreateDataReq(newCreateNodeParams);
-                    return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
-                }
-            });
+            this.myDiagram =
+                $(go.Diagram, "doorGroupRelationshipMap",  // must name or refer to the DIV HTML element
+                    {
+                        // start everything in the middle of the viewport
+                        initialContentAlignment: go.Spot.Center,
+                        // have mouse wheel events zoom in and out instead of scroll up and down
+                        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+                        // support double-click in background creating a new node
+                        "clickCreatingTool.archetypeNodeData": { text: "new node" },
+                        // enable undo & redo
+                        "undoManager.isEnabled": true,
+                        "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
+                            this.archetypeNodeData = {
+                                // key: getNextKey(), // assign the key based on the number of nodes
+                                name: "新设备组",
+                                memo: ""
+                            };
+                            
+                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
+                            _this.addNewCreateDataReq(newCreateNodeParams);
+                            return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
+                        },
+                        // "clickSelectingTool.standardMouseSelect": function(e) {
+                        //     console.log("this.model===========",e)
+                        //     var diagram = _this.myDiagram;
+                        //     console.log("diagram",diagram)
+                        //     // if (diagram.findPartAt(diagram.lastInput.documentPoint, false) === null) return;
+                        //     // go.Tool.prototype.standardMouseSelect.call(this);
+                        // },
+                    }
+                );
             this.myDiagram.nodeTemplate =
            
             $(go.Node, "Auto",
 
+
                 { 
-                    doubleClick: function(e, node) {
-                        console.log("node.data",node.data);
-                        _this.openEquipmentDetailFun(node.data);
-                    }
-                },
-                {
-                    // dragComputation: function(part, pt, gridpt){
-                    //    var diagram = part.diagram;
-                    //     if (diagram === null) return pt;
-                    //     // compute the area inside the viewport
-                    //     var v = diagram.viewportBounds.copy();
-                    //     v.subtractMargin(diagram.padding);
-                    //     // get the bounds of the part being dragged
-                    //     var b = part.actualBounds;
-                    //     var loc = part.location;
-                    //     // now limit the location appropriately
-                    //     var x = Math.max(v.x+1, Math.min(pt.x, v.right-b.width-2)) + (loc.x-b.x);
-                    //     var y = Math.max(v.y+1, Math.min(pt.y, v.bottom-b.height-2)) + (loc.y-b.y);
-                    //     _this.nodeDragged  = true;
-                    //     return new go.Point(x, y);
-                    // },
-                    isActionable : false,
-                   
-                    mouseLeave:function(e,node){
-                        // console.log("e",e,"node",node);
-                        var itemData = node.data;
-                        var locationArr = itemData.loc.split(" ");
-                       
-                        if(_this.nodeDragged){
-                            var param = {
-                                id : itemData.id,
-                                memo : itemData.memo,
-                                name : itemData.name,
-                                x : parseInt(locationArr[0]+0),
-                                y : parseInt(locationArr[1]+0)
-                            };
-                            _this.editDataReq(param);
-                            _this.nodeDragged = false;
-                        }
+                    click: function(e, obj) { 
+                            _this.selectedNodeData = obj.part.data;
+                            // console.log("_this.selectedNodeData",_this.selectedNodeData)
                     },
-                    // linkConnected : function(node,link,obj){
-
-                    //     console.log("连接obj",obj,"node",node.data);
-                    //     if(!link.data.id && link.data.from ==obj.part.data.id ){
-                            
-                    //         _this.newCreateConnect(link.data);
-                    //     };
-                    // },
-                    // linkDisconnected : function(node,link,obj){
-
-                    //     console.log("断开连接obj",obj,"node",node.data);
-                        
-    
-                    //     if(link.data.id && link.data.from ==obj.part.data.id ){
-                           
-                    //         _this.deleteLinkConnect(link.data);
-                            
-                    //     }
+                    doubleClick: function(e, node) {
+                        _this.openEquipmentDetailFun(node.data);
+                    },
+                    selectionChanged: function(part) {
+                        // console.log("part.data",part.data)
+                        _this.selectedNodeData = part.data;
+                    },
+                    // mouseLeave:function(e,node){
+                        // console.log("e",e,"node",node);
+                        // var itemData = node.data;
+                        // var locationArr = itemData.loc.split(" ");
                        
+                        // if(_this.nodeDragged){
+                        //     var param = {
+                        //         id : itemData.id,
+                        //         memo : itemData.memo,
+                        //         name : itemData.name,
+                        //         x : parseInt(locationArr[1]+0),
+                        //         y : parseInt(locationArr[0]+0)
+                        //     };
+                            // _this.editDataReq(param);
+                            // _this.nodeDragged = false;
+                        // }
                     // },
-                   
-                },
+                    
+                }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
                 $(go.Shape, "RoundedRectangle",
                     {
@@ -185,59 +182,130 @@ export default {
                 $(go.TextBlock, "name",
                 
                 { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
-                new go.Binding("text","name").makeTwoWay())
+                new go.Binding("text","name").makeTwoWay()),
+                
             );
 
             this.myDiagram.linkTemplate =
-            $(go.Link, 
-                 {
-                    routing: go.Link.AvoidsNodes,
-                    curve: go.Link.JumpOver,
-                    corner: 5, toShortLength: 4,
-                    // relinkableFrom: true,
-                    // relinkableTo: true,
-                    // reshapable: false,
-                    resegmentable: true,
-                    // mouseEnter: function(e, link) { link.findObject("HIGHLIGHT").stroke = "rgba(30,144,255,0.2)"; },
+            $(go.Link,  // the whole link panel
+                
+                {
+                // routing: go.Link.AvoidsNodes ,
+                curve: go.Link.Bezier, adjusting: go.Link.Stretch,
+                //  relinkableFrom: true, relinkableTo: true,
+                toShortLength: 3
                 },
-                $(go.Panel, "Auto",
-                new go.Binding("visible", "isSelected").ofObject(),
-                $(go.Shape, "RoundedRectangle",  // the link shape
-                    { fill: "#F8F8F8", stroke: null }),
-            
-                )
-            
-            
-            )
-        
-           
-           
+                new go.Binding("points").makeTwoWay(),
+                new go.Binding("curviness"),
+                $(go.Shape,  // the link shape
+                { strokeWidth: 1.5 }),
+                $(go.Shape,  // the arrowhead
+                { toArrow: "standard", stroke: null }),
+                
+               
+            );
 
-            // this.myDiagram.nodeTemplate.selectionAdornmentTemplate =
-            
-            //     $(go.Adornment, "Spot",
-            //         $(go.Panel, "Auto",
-            //         $(go.Shape, { fill: null, stroke: "#000", strokeWidth: 1 }),
-            //         $(go.Placeholder)  
-            //         ),
-                     
-            //         $("Button",
-            //         {
-            //             alignment: go.Spot.TopRight,
-            //             click: _this.editItemData, 
+            this.myDiagram.addModelChangedListener(function(evt) {
+                // ignore unimportant Transaction events
+               
+                if (!evt.isTransactionFinished) return;
+                var txn = evt.object;  // a Transaction
+                if (txn === null) return;
+                // iterate over all of the actual ChangedEvents of the Transaction
+                txn.changes.each(function(e) {
+                    // record node insertions and removals
+                    // if (e.change === go.ChangedEvent.Property) {
+
+                    //     if (e.modelChange === "linkFromKey") {
+                    //     console.log(evt.propertyName + " changed From key of link: " +
+                    //                 e.object + " from: " + e.oldValue + " to: " + e.newValue);
+                    //     } else if (e.modelChange === "linkToKey") {
+                    //     console.log(evt.propertyName + " changed To key of link: " +
+                    //                 e.object + " from: " + e.oldValue + " to: " + e.newValue);
+                    //     }
+                    // } else
+                    // console.log("e.modelChange",e.modelChange,e.change);
+                     if (e.change === go.ChangedEvent.Insert ) {
+                         if(e.modelChange === "linkDataArray"){
+                            var linkData = e.newValue;
+                            var param = {
+                                            preSetId :linkData.from,
+                                            setId :linkData.to,
+                                            communityId : _this.communityId
+                                        }
+                            if(linkData.points){
+                                _this.newCreateConnect(param,linkData);
+                            }
+                         }else if(e.modelChange === "nodeDataArray"){
+                             console.log("e.newData",e.newData)
+                         }
                         
-            //         },
-            //         $(go.TextBlock, "编辑", 
-            //             { font: "normal 10pt sans-serif" }),
-            //         $(go.Shape, "PlusLine", { width: 6, height: 6 })
-            //         ) 
-            //     ); 
+                        
 
-            var dateTemplate = this.dateTemplate;
-            console.log("dateTemplate",dateTemplate)
+                    } else if (e.change === go.ChangedEvent.Remove) {
+                        if(e.modelChange === "linkDataArray"){
+                        
+                            var linkData = e.oldValue;
+                            var param = {
+                                            id :linkData.id,
+                                        }
+                            // _this.deleteLinkConnectFun(param)
+                        }else if(e.modelChange === "nodeDataArray"){
+                        
+                            var linkData = e.oldValue;
+                            var param = {
+                                            id :linkData.id,
+                                        }
+                            // _this.deleteEquipmentGroup(param)
+                        }
+                        
+                    }
+                });
+            });
+
+            // this.myDiagram.mouseDrop = function(e,obj){
+                // console.log("mouseDrop,e",e,"obj",obj)
+                // console.log("this.selectedNodeData",this.selectedNodeData);
+                // var selectedData = this.selectedNodeData;
+                // var locationArr = selectedData.split(" ");
+                // this.editDataReq()
+            // };
+            _this.myDiagram.commandHandler.deleteSelection = function(e){
+            //    console.log("e",e);
+                // console.log("this.selectedNodeData",_this.selectedNodeData);
+                _this.openDeleteTipModel();
+
+            }
+            _this.myDiagram.addDiagramListener("ObjectSingleClicked",
+                function(e) {
+                    var part = e.subject.part;
+                    if ((part instanceof go.Link)) {
+                        _this.selectedNodeData = part.data;
+                    }
+                }
+            );
+
+            _this.myDiagram.addDiagramListener("SelectionMoved",
+                function(e) {
+                    var partData= e.diagram.selection.first().data;
+                    
+                    var location  = partData.loc.split(" ");
+                    var params = {
+                        id : partData.id,
+                        memo :partData.memo,
+                        name : partData.name,
+                        x : parseInt(location[0]+0),
+                        y : parseInt(location[1]+0),
+                    }
+                    _this.editDataReq(params);
+                }
+            );
+        
+            var dateTemplate =this.dateTemplate;
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
-            // this.myDiagram.isModified = false
+
+            
         },
 
         getMapData(params,drawMapCallback){
@@ -278,9 +346,7 @@ export default {
            this.openEquipmentDetail = !this.openEquipmentDetail
        },
        
-        // getEditForm(form){
-        //     this.editData=form;
-        // },
+       
 
         openEquipmentDetailFun(nodeData){
             this.editInitailData = nodeData;
@@ -310,22 +376,89 @@ export default {
         openEditFormModal(){
             this.openEditModal = !this.openEditModal
         },
+        editDataReq(sendMsg){
+            this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
+               
+                // this.$Notice.success({
+                //     title: '编辑成功',
+                //     desc: '编辑设备组成功',
+                //     render: h => {
+                //         console.log("dklldfkldk")
+                //         return h('span', ['编辑设备组成功'])
+                //     }
+                // });
+
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
         addNewCreateDataReq(sendMsg){
-            
-            console.log("sendMsg",sendMsg);
             let _this =this;
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
-                console.log("新增成功",res);
-                var useData = res.data
-                var locData = useData.x + " " + useData.y;
-                var toData = {
-                    id : useData.id,
-                    name : useData.name,
-                    loc : locData,
-                    memo : useData.memo,
+                
+                //修改node的id
+                _this.myDiagram.startTransaction();
+                var selectedNodeData = _this.selectedNodeData;
+                var findNodeData = _this.myDiagram.findNodesByExample({__gohashid: selectedNodeData.__gohashid }).first();
+                if (findNodeData) {
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "id",res.data.id);
                 }
-                var model = _this.myDiagram.model;
-                model.addNodeData(toData);
+                _this.myDiagram.commitTransaction("changed id");
+
+
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
+        confirmDeleteGroup(){
+            
+            var param = this.selectedNodeData
+            console.log(param,"param");
+            if(param.from){
+                console.log("dsklfkfdlkfd");
+                this.deleteLinkConnectFun(param);
+            }else{
+                this.deleteEquipmentGroup(param);
+            }
+            
+        },
+        deleteEquipmentGroup(param){
+            var sendParam = {id : param.id}
+            let _this =this;
+            this.$http.delete('deleteDoorGroupInRelation', sendParam).then((res)=>{
+                
+                this.$Notice.success({
+                    title: '删除成功',
+                    desc: '删除组成功',
+                    render: h => {
+                        return h('span', ['删除组成功'])
+                    }
+                });
+
+
+                var deletedNode = _this.myDiagram.findNodesByExample(sendParam).first();
+                // var connectedLinks = deletedNode.findLinksConnected();
+                // connectedLinks.each(function(link){
+                //     console.log("link",link.data)
+                // })
+
+                // console.log("deletedNode.linksConnected",deletedNode.linksConnected)
+                
+                _this.myDiagram.startTransaction('removing links');
+                _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
+                _this.myDiagram.commitTransaction('removing links');
+
+
+                _this.myDiagram.model.removeNodeData(param);
+                
+
+                this.openDeleteTipModel();
+                
+
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message
@@ -348,46 +481,55 @@ export default {
                 });
             })
         },
-        newCreateConnect(param){
+        newCreateConnect(param,linkData){
             
-            
-            if(param.id){
-                return;
-            }
             let _this =this;
-            var paramMapData = {communityId : _this.communityId}
-            var newParams = {
-                                communityId:_this.communityId,
-                                preSetId:param.from,
-                                setId:param.to,
-                            };
-            this.$http.post('newCreateDoorGroupConnect',newParams).then((res)=>{
+            this.$http.post('newCreateDoorGroupConnect',param).then((res)=>{
                 
-                this.getMapData(paramMapData);
+                // this.getMapData(paramMapData);
+                this.$Notice.success({
+                    title: '新增成功',
+                    desc: '新增关系成功',
+                    render: h => {
+                        return h('span', ['新增关系成功'])
+                    }
+                });
+                if(linkData){
+                    
+                    var link = _this.myDiagram.findLinksByExample({ __gohashid: linkData.__gohashid }).first();
+                    if (link !== null) _this.myDiagram.model.setDataProperty(link.data, "id",res.data.id);
+                    
+               }
+
             }).catch((error)=>{
-                
-                this.getMapData(paramMapData);
+                    
+                _this.myDiagram.commandHandler.undo()
+                    
                 this.$Notice.error({
                     title:error.message
                 });
             })
         },
-        deleteLinkConnect(param){
+        deleteLinkConnectFun(param){
 
-            
-            let _this =this;
-            console.log("param.id",param.id)
-            if(!param.id){
-                return;
-            }
-            var newParams = {
-                                id : param.id
-                            };
-            this.$http.delete('deleteLinkConnect',newParams).then((res)=>{
+            var sendParam = {id : param.id}
+            this.$http.delete('deleteLinkConnect',sendParam).then((res)=>{
                 
-                var param={communityId : _this.communityId};
-                _this.getMapData(param);
-                
+                this.openDeleteTipModel();
+                this.$Notice.success({
+                    title: '删除成功',
+                    desc: '删除关系成功',
+                    render: h => {
+                        return h('span', ['删除关系成功'])
+                    }
+                });
+
+                var myDiagram = this.myDiagram;
+                var linkData = myDiagram.findLinksByExample(sendParam);
+                myDiagram.startTransaction('removing links');
+                myDiagram.removeParts(linkData,false);
+                myDiagram.commitTransaction('removing links');
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -402,5 +544,8 @@ export default {
     .door-relationship{
         width:100%;
         height:100%;
+    }
+    .delete-tip{
+        text-align : center;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="view-invoice">
         <SectionTitle title="发票详情"></SectionTitle>
-        <Form ref="formItem" :model="formItem" class="creat-order-form">
+        <Form ref="formItem" label-position="top"  :model="formItem" class="creat-order-form">
 
             <DetailStyle v-if="type=='view'" info="发票信息" >
                 <Row style="margin-bottom:30px">  
@@ -135,7 +135,7 @@
                     </Col>
                      <Col class="col">
                         <FormItem label="先关" style="width:252px" >
-                            <div>345353453453</div>
+                            <div>343333</div>
                            
                         </FormItem>
                         

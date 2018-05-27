@@ -115,47 +115,47 @@ var layoutScrollHeight=0;
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:80,
+                        width:70,
                         align:'center',
                     },
                     {
                         title: '距进场日',
                         align:'center',
-                        width:80,
-                        key: 'startDate',
+                        width:110,
+                        key: 'toPutawayDays',
                     },
                     {
                         title: '进场日',
                         align:'center',
-                        width:80,
+                        width:110,
                         key: 'startDate',
                     },
                     {
                         title: '即将进场客户',
                         align:'center',
-                        key: 'rentDays'
+                        key: 'customerName'
                     },
                     {
                         title: '客户是否新入住',
-                        width:100,
-                        key: 'price',
+                        width:90,
+                        key: 'ifNewCustomer',
                     },
                     {
                         title: '联系人',
                         align:'center',
                         width:100,
-                        key: 'customerName',
+                        key: 'contactName',
                     },
                     {
                         title: '联系方式',
                         align:'center',
-                        width:80,
-                        key: 'customerStatoons',
+                        width:130,
+                        key: 'contactTel',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:80,
+                        width:110,
                         key: 'endDate',
                     },
                     {

@@ -72,7 +72,7 @@ export default {
             communityList :[],
             //图表数据
             dateTemplate :{},
-            nodeDragged : false,
+            // nodeDragged : false,
             refreshedMapData : false,
             openDeleteTip :false
        }
@@ -120,7 +120,14 @@ export default {
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
-                        }
+                        },
+                        // "clickSelectingTool.standardMouseSelect": function(e) {
+                        //     console.log("this.model===========",e)
+                        //     var diagram = _this.myDiagram;
+                        //     console.log("diagram",diagram)
+                        //     // if (diagram.findPartAt(diagram.lastInput.documentPoint, false) === null) return;
+                        //     // go.Tool.prototype.standardMouseSelect.call(this);
+                        // },
                     }
                 );
             this.myDiagram.nodeTemplate =
@@ -131,6 +138,7 @@ export default {
                 { 
                     click: function(e, obj) { 
                             _this.selectedNodeData = obj.part.data;
+                            console.log("_this.selectedNodeData",_this.selectedNodeData)
                     },
                     doubleClick: function(e, node) {
                         _this.openEquipmentDetailFun(node.data);
@@ -139,11 +147,26 @@ export default {
                         console.log("part.data",part.data)
                         _this.selectedNodeData = part.data;
                     },
-                   
+                    mouseLeave:function(e,node){
+                        // console.log("e",e,"node",node);
+                        // var itemData = node.data;
+                        // var locationArr = itemData.loc.split(" ");
+                       
+                        // if(_this.nodeDragged){
+                        //     var param = {
+                        //         id : itemData.id,
+                        //         memo : itemData.memo,
+                        //         name : itemData.name,
+                        //         x : parseInt(locationArr[1]+0),
+                        //         y : parseInt(locationArr[0]+0)
+                        //     };
+                            // _this.editDataReq(param);
+                            // _this.nodeDragged = false;
+                        // }
+                    },
                     
                 }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-                // new go.Binding("id", "id").makeTwoWay(), 
                 $(go.Shape, "RoundedRectangle",
                     {
                         parameter1: 10,  
@@ -170,7 +193,7 @@ export default {
                 {
                 // routing: go.Link.AvoidsNodes ,
                 curve: go.Link.Bezier, adjusting: go.Link.Stretch,
-                 relinkableFrom: true, relinkableTo: true,
+                //  relinkableFrom: true, relinkableTo: true,
                 toShortLength: 3
                 },
                 new go.Binding("points").makeTwoWay(),
@@ -179,6 +202,7 @@ export default {
                 { strokeWidth: 1.5 }),
                 $(go.Shape,  // the arrowhead
                 { toArrow: "standard", stroke: null }),
+                
                
             );
 
@@ -226,7 +250,7 @@ export default {
                             var param = {
                                             id :linkData.id,
                                         }
-                            _this.deleteLinkConnect(param)
+                            // _this.deleteLinkConnectFun(param)
                         }else if(e.modelChange === "nodeDataArray"){
                         
                             var linkData = e.oldValue;
@@ -240,19 +264,43 @@ export default {
                 });
             });
 
-            this.myDiagram.mouseDrop = function(e,obj){
+            // this.myDiagram.mouseDrop = function(e,obj){
                 // console.log("mouseDrop,e",e,"obj",obj)
                 // console.log("this.selectedNodeData",this.selectedNodeData);
                 // var selectedData = this.selectedNodeData;
                 // var locationArr = selectedData.split(" ");
                 // this.editDataReq()
-            };
+            // };
             _this.myDiagram.commandHandler.deleteSelection = function(e){
             //    console.log("e",e);
-                console.log("this.selectedNodeData",_this.selectedNodeData);
+                // console.log("this.selectedNodeData",_this.selectedNodeData);
                 _this.openDeleteTipModel();
 
             }
+            _this.myDiagram.addDiagramListener("ObjectSingleClicked",
+                function(e) {
+                    var part = e.subject.part;
+                    if ((part instanceof go.Link)) {
+                        _this.selectedNodeData = part.data;
+                    }
+                }
+            );
+
+            _this.myDiagram.addDiagramListener("SelectionMoved",
+                function(e) {
+                    var partData= e.diagram.selection.first().data;
+                    
+                    var location  = partData.loc.split(" ");
+                    var params = {
+                        id : partData.id,
+                        memo :partData.memo,
+                        name : partData.name,
+                        x : parseInt(location[0]+0),
+                        y : parseInt(location[1]+0),
+                    }
+                    _this.editDataReq(params);
+                }
+            );
         
             var dateTemplate =this.dateTemplate;
             this.model = go.Model.fromJson(dateTemplate);
@@ -329,6 +377,24 @@ export default {
         openEditFormModal(){
             this.openEditModal = !this.openEditModal
         },
+        editDataReq(sendMsg){
+            this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
+               
+                // this.$Notice.success({
+                //     title: '编辑成功',
+                //     desc: '编辑设备组成功',
+                //     render: h => {
+                //         console.log("dklldfkldk")
+                //         return h('span', ['编辑设备组成功'])
+                //     }
+                // });
+
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
         addNewCreateDataReq(sendMsg){
             let _this =this;
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
@@ -350,12 +416,18 @@ export default {
 			})
         },
         confirmDeleteGroup(){
-
+            
             var param = this.selectedNodeData
-            this.deleteEquipmentGroup(param);
+            console.log(param,"param");
+            if(param.from){
+                console.log("dsklfkfdlkfd");
+                this.deleteLinkConnectFun(param);
+            }else{
+                this.deleteEquipmentGroup(param);
+            }
+            
         },
         deleteEquipmentGroup(param){
-            console.log("param",param)
             var sendParam = {id : param.id}
             let _this =this;
             this.$http.delete('deleteDoorGroupInRelation', sendParam).then((res)=>{
@@ -370,13 +442,22 @@ export default {
 
 
                 var deletedNode = _this.myDiagram.findNodesByExample(sendParam).first();
-                var connectedLinks = deletedNode.findLinksConnected();
-                connectedLinks.each(function(link){
-                    console.log("link",link.data)
-                })
+                // var connectedLinks = deletedNode.findLinksConnected();
+                // connectedLinks.each(function(link){
+                //     console.log("link",link.data)
+                // })
+
+                // console.log("deletedNode.linksConnected",deletedNode.linksConnected)
+                
+                _this.myDiagram.startTransaction('removing links');
+                _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
+                _this.myDiagram.commitTransaction('removing links');
+
+
+                _this.myDiagram.model.removeNodeData(param);
+                
 
                 this.openDeleteTipModel();
-                _this.myDiagram.model.removeNodeData(param);
                 
 
 			}).catch((error)=>{
@@ -430,12 +511,12 @@ export default {
                 });
             })
         },
-        deleteLinkConnect(param){
+        deleteLinkConnectFun(param){
 
-            
-            this.$http.delete('deleteLinkConnect',param).then((res)=>{
+            var sendParam = {id : param.id}
+            this.$http.delete('deleteLinkConnect',sendParam).then((res)=>{
                 
-                
+                this.openDeleteTipModel();
                 this.$Notice.success({
                     title: '删除成功',
                     desc: '删除关系成功',
@@ -443,6 +524,13 @@ export default {
                         return h('span', ['删除关系成功'])
                     }
                 });
+
+                var myDiagram = this.myDiagram;
+                var linkData = myDiagram.findLinksByExample(sendParam);
+                myDiagram.startTransaction('removing links');
+                myDiagram.removeParts(linkData,false);
+                myDiagram.commitTransaction('removing links');
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

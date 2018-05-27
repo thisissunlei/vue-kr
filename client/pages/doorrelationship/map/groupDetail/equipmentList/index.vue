@@ -4,7 +4,7 @@
   <EquipmentSearch :communityId="communityId" @searchEquipment="searchEquipment"/>
   <div>
 
-    设备列表
+    
   </div>
    
 </div>
@@ -15,7 +15,7 @@ export default{
     name:'equipmentList',
     data (){
       return{
-              
+            doorListData : {}  
               
       }
     },
@@ -23,7 +23,8 @@ export default{
       EquipmentSearch,
     },
     mounted(){
-       
+        var params = {communityId : this.communityId};
+        this.getEquipmentListData(params);
     },
      props:[
         "communityId"
@@ -31,7 +32,20 @@ export default{
     methods:{
        searchEquipment(params){
          console.log("params",params);
+         var sendParams = Object.assign({},{communityId:this.communityId},params)
+         this.getEquipmentListData(sendParams)
          
+       },
+       getEquipmentListData(param){
+
+        this.$http.get('getDoorListByGroup', param).then((res)=>{
+          
+          this.doorListData = res.data;
+        }).catch((error)=>{
+          this.$Notice.error({
+            title:error.message
+          });
+        })
        }
     },
     updated:function(){

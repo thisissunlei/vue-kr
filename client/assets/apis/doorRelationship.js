@@ -28,6 +28,10 @@ export default  {
     'getFloorOptions':{
         url :'/api/krspace-finance-web/cmt/community/select/use/floor',
         method: 'get'
+    },
+    'getDoorListByGroup':{
+        url :'/api/iot-platform/door-set/door/list',
+        method: 'get'
     }
     
   }

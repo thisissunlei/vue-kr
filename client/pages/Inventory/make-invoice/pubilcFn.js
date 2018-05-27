@@ -171,7 +171,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.receivedClick()
                                 }
                             }
                         }, '签收')
@@ -197,7 +197,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.mailClick()
                                 }
                             }
                         }, '邮寄')
@@ -223,7 +223,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.makeInvaice()
+                                    this.goView()
                                 }
                             }
                         }, '查看'),
@@ -237,7 +237,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goBack()
+                                    this.callbackClick()
                                 }
                             }
                         }, '收回'),
@@ -251,7 +251,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goBack()
+                                    this.modifyClick()
                                 }
                             }
                         }, '修改')  

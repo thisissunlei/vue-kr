@@ -1,11 +1,12 @@
 <template>
     <div class="view-invoice">
         <SectionTitle title="发票详情"></SectionTitle>
-        <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
-            <DetailStyle info="发票信息">
+        <Form ref="formItem" :model="formItem" class="creat-order-form">
+
+            <DetailStyle v-if="type=='view'" info="发票信息" >
                 <Row style="margin-bottom:30px">  
                     <Col class="col">
-                        <FormItem label="申请编号" style="width:252px" prop="customerId">
+                        <FormItem label="申请编号" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -15,7 +16,7 @@
                     </Col>
 
                     <Col class="col">
-                        <FormItem label="发票规格" style="width:252px"  prop="communityId">
+                        <FormItem label="发票规格" style="width:252px"  >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -24,7 +25,7 @@
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="发票金额" style="width:252px" prop="salerId">
+                        <FormItem label="发票金额" style="width:252px" >
                              <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -32,8 +33,33 @@
                             />  
                         </FormItem>
                     </Col>
+                
                     <Col class="col">
-                        <FormItem label="发票张数" style="width:252px" prop="startDate">
+                        <FormItem label="发票张数" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                            <!-- <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div> -->
+                        </FormItem>
+                        
+                    </Col>
+                    <Col class="col" style="width:711px;max-width:711px;">
+                        <FormItem label="备注信息" >
+                            <Input 
+                                :autosize="{minRows: 2,maxRows: 5}"
+                                type="textarea"
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                            <!-- <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div> -->
+                        </FormItem>
+                        
+                    </Col>
+                     <Col class="col">
+                        <FormItem label="申请人员" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -44,18 +70,7 @@
                         
                     </Col>
                      <Col class="col">
-                        <FormItem label="申请人员" style="width:252px" prop="startDate">
-                            <Input 
-                                :disabled="isReady" 
-                                v-model="formItem.timeRange" 
-                                placeholder="请输入发票抬头" 
-                            />  
-                            <!-- <div class="pay-error" v-if="timeError">租赁开始时间不得大于结束时间</div> -->
-                        </FormItem>
-                        
-                    </Col>
-                     <Col class="col">
-                        <FormItem label="申请时间" style="width:252px" prop="startDate">
+                        <FormItem label="申请时间" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -67,8 +82,67 @@
                     </Col>
                 </Row>
             </DetailStyle>
+             <DetailStyle v-if="type=='back'" info="发票信息" >
+                <Row style="margin-bottom:30px">  
+                    <Col class="col">
+                        <FormItem label="申请编号" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
 
-            <DetailStyle info="明细信息">
+                    <Col class="col">
+                        <FormItem label="发票规格" style="width:252px"  >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                    <Col class="col">
+                        <FormItem label="需退换发票金额" style="width:252px" >
+                             <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                
+                    <Col class="col">
+                        <FormItem label="实际退换发票金额" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                     <Col class="col">
+                        <FormItem label="发票内容" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                            
+                        </FormItem>
+                        
+                    </Col>
+                     <Col class="col">
+                        <FormItem label="先关" style="width:252px" >
+                            <div>345353453453</div>
+                           
+                        </FormItem>
+                        
+                    </Col>
+                </Row>
+            </DetailStyle>
+            <DetailStyle v-if="type=='view'" info="明细信息">
                   <Table border ref="selection" :columns="tableColumns" :data.sync="stationList" ></Table>
             </DetailStyle>
 
@@ -131,10 +205,19 @@
                 </Row>
             </DetailStyle>
 
-             <DetailStyle info="我司信息">
+            <DetailStyle info="我司信息">
                 <Row style="margin-bottom:30px">  
                     <Col class="col">
-                        <FormItem label="社区名称" style="width:252px" prop="customerId">
+                        <FormItem label="社区名称" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                    <Col class="col">
+                        <FormItem label="公司名称" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.timeRange" 
@@ -145,18 +228,74 @@
                 </Row>
             </DetailStyle>
 
-            <DetailStyle info="可开票数据">
+            <DetailStyle info="领取方式" v-if="type=='view'">
+                <Row style="margin-bottom:30px">  
+                    <Col class="col">
+                        <FormItem label="领取方式" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                    <Col class="col">
+                        <FormItem label="收件人员" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                     <Col class="col">
+                        <FormItem label="手机号码" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                     <Col class="col">
+                        <FormItem label="收件地址" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                </Row>
+            </DetailStyle>
+
+              <DetailStyle info="账单信息" v-if="type=='view'">
                   <Table border ref="selection" :columns="tableColumns" :data.sync="stationList" ></Table>
             </DetailStyle>
-            <FormItem style="padding-left:24px;margin-top:40px" >
-                <div style="text-align: right;padding:0px 20px;">
-                    总金额：<span>￥100000</span>
-                    <Button type="error" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">提交</Button>
-                    <Button  disabled v-if="disabled">提交</Button>
-                </div>
-                <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
-            </FormItem>
 
+            <DetailStyle v-if="type=='view'" info="其他信息">
+                <Row style="margin-bottom:30px">  
+                    <Col class="col">
+                        <FormItem label="开票人员" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                    <Col class="col">
+                        <FormItem label="开票时间" style="width:252px" >
+                            <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.timeRange" 
+                                placeholder="请输入发票抬头" 
+                            />  
+                        </FormItem>
+                    </Col>
+                </Row>
+            </DetailStyle>
+           
         </Form>
 
         
@@ -176,18 +315,9 @@ import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
     export default {
         data() {
-            const validateFirst = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.formItem.startDate)<new Date(value)){
-                    callback(new Error('首付款日期不得晚于起始日期'));
-                }else{
-                     callback();
-                }
-            };
             return {
-                isReady:true, //只读页面
-                disabled:false,
+                isReady:true, //只读页面,
+                type:'back',
                 tableColumns: [
                     {
                         title: '账单编号',
@@ -218,23 +348,6 @@ import utils from '~/plugins/utils';
                     {
                         title: '申请开票金额',
                         key: 'guidePrice',
-                        render: (h, params) => {
-                            let price = params.row.originalPrice;
-                            
-                            return h('Input', {
-                                props: {
-                                    min:params.row.guidePrice,
-                                    value:params.row.originalPrice,
-                                    disabled:this.isReady
-                                },
-                                on:{
-                                    'on-change':(event)=>{
-
-                                        this.tabelInputChange(event);
-                                    }
-                                }
-                            },'44')
-                        }
                     }
                 ],
                 //列表数据
@@ -243,53 +356,16 @@ import utils from '~/plugins/utils';
                 ],
                
                 formItem: {
-                    customerId: '',
-                    communityId: '',
-                    startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
-                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
-                    endDate: '',
-                    timeRange:'',
-                    floor:'',
-                    city:'',
-                    firstPayTime:'',
-                    rentAmount:'',
-                    items:[],
-                    stationAmount:0,
+                    
                 },
                 //校验
-                ruleCustom:{
-                    startDate: [
-                        { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
-                    ],
-                    firstPayTime: [
-                        { required: true, trigger: 'change' ,validator: validateFirst},
-                    ],
-                    endDate: [
-                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                    ],
-                    endDateStatus: [
-                        { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                    ],
-                    communityId:[
-                        { required: true, message: '请选择社区', trigger: 'change' }
-                    ],
-                    customerId:[
-                        { required: true, message: '请选择客户', trigger: 'change' }
-                    ],
-                    salerId:[
-                        { required: true, message: '请选择销售员', trigger: 'change' }
-                    ],
-                    signDate:[
-                        { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
-                    ]
-                },
                 salerName:'请选择'
 
             }
         },
         head() {
             return {
-                title: '新建订单'
+                title: '开票查看'
             }
         },
         components: {
@@ -304,39 +380,9 @@ import utils from '~/plugins/utils';
             GLOBALSIDESWITCH("false");
         },
         methods: {
-            tabelInputChange(event){
-                console.log(event,"pppppppppp")
-            },
+            
             back(){
                 window.history.go(-1);
-            },
-            handleSubmit:function(name) {
-               
-            },
-            changeCommunity(value){
-                // 选择社区
-                if(value){
-                    this.formItem.communityId = value;
-                   
-                }else{
-                    this.formItem.communityId = '';
-                }
-               
-                this.getFloor = +new Date()
-                
-            },
-            changeSaler(){
-
-            },
-            changeCustomer(value){
-                // 客户
-                if(value){
-                    this.formItem.customerId = value;
-                }else{
-                    this.formItem.customerId = '';
-                }
-                this.getFloor = +new Date()
-
             },
         }
     }

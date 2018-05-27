@@ -19,41 +19,18 @@
             </div>
            
         </div>
+        
         <Modal
-                v-model="openMakeInvaice"
-                title="邮寄信息"
-                width="500"
-            >
-            <div style="text-align:center;">
-                <span>快递公司:</span>
-                <Select 
-                     style="display:inline-block;width:255px;margin-left:30px;text-align:left;"
-                    placeholder="请输入发票规格" 
-                    clearable
-                ><Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option></Select>
-                
-                <!-- <Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" /> -->
-                <div>
-                    <span>快递编号:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" />
-                </div>
-                
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="makeInvaiceSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="switchMakeInvaice">取消</Button>
-            </div>
-        </Modal>
-        <Modal
-                v-model="openGoBack"
+                v-model="openModify"
                 title="修改金额"
                 width="500"
             >
             <div >
-                 <span>实际退回金额:</span><Input  placeholder="请输入发票张数" />
+                 <span>实际退回金额:</span><Input  placeholder="实际退回金额" />
             </div>
             <div slot="footer">
-                <Button type="primary" @click="goBackSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="switchGoBack">取消</Button>
+                <Button type="primary" @click="modifySubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="switchModify">取消</Button>
             </div>
         </Modal>
      
@@ -76,7 +53,7 @@
         data () {
            return {
                 listData:[{name:'123'}],
-                openMakeInvaice:false,
+                openModify:false,
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
                 tableParams:{
@@ -101,20 +78,13 @@
         },
 
         methods:{
-            //跳转创建页面
-            goAddPage(params){
-
+          
+            //修改弹窗开关
+            switchModify(){
+                this.openModify = !this.openModify;
             },
-            //回退按钮点击
-            goBack(){
-                this.switchGoBack();
-            },
-            //回退退弹窗开关
-            switchGoBack(){
-                this.openGoBack = !this.openGoBack;
-            },
-            //回退提交
-            goBackSubmit(){
+            //修改提交
+            modifySubmit(){
                 this.$http.post('get-project-home', tabParams).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
@@ -125,26 +95,25 @@
                     });
                 })
             },
-            //开票按钮点击
-            makeInvaice(){  
-               
-                this.switchMakeInvaice();
+            //签收按钮点击
+            receivedClick(){
+
             },
-            //开票页面开关
-            switchMakeInvaice(){
-                this.openMakeInvaice = !this.openMakeInvaice;
+            //邮寄按钮点击
+            mailClick(){
+
             },
-            //开票提交
-            makeInvaiceSubmit(){
-                this.$http.post('get-project-home', tabParams).then((res)=>{
-                    // this.listData=res.data.items;
-                    this.getListData();
-                    this.switchMakeInvaice();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
+            //修改按钮点击
+            modifyClick(){
+
+            },
+            //跳转查看页面
+            goView(){
+
+            },
+            //回收按钮点击
+            callbackClick(){
+
             },
             //页面切换
             changePage(){
@@ -162,7 +131,7 @@
                     });
                 })
             },
-            //获取要显示的title
+            //获取要显示的th
             formattingColumns(data){
                 
                 var arr = [];

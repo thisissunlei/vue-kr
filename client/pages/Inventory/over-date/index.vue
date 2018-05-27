@@ -293,11 +293,9 @@ var layoutScrollHeight=0;
             }
         },
         mounted(){
-            console.log('this.$route.query',this.$route.query)
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                // this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -321,8 +319,6 @@ var layoutScrollHeight=0;
                 this.onScrollListener();
             },
             tabForms:function(val,old){
-                console.log('watch-----')
-
                 this.getCommonParam();
                 this.getData(this.tabForms); 
             }

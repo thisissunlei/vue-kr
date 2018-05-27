@@ -173,8 +173,7 @@ var layoutScrollHeight=0;
         mounted(){
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
-                this.getCommonParam();
-                this.getData(this.tabForms); 
+                this.getCommonParam(); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -216,27 +215,27 @@ var layoutScrollHeight=0;
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
 
             },
             //清空
             clearClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },
             //数据变化
             dataParams(data){
                 this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
+                // this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
             getData(params){
-                //getDailyInventory 
+                // getImtPutawayList
                 this.$http.get('getDueList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
@@ -260,7 +259,7 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
+                utils.commonExport(this.tabForms,'/api/order/operation/imtPutaway/list-excel');
             },
             //滚动监听
         onScrollListener(){            
@@ -313,6 +312,7 @@ var layoutScrollHeight=0;
     .enter-filed-table{
         position: relative;
         padding: 0 ;
+        padding-bottom:77px;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
         }
@@ -351,13 +351,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{
@@ -416,13 +417,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{

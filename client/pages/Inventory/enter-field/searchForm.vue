@@ -53,9 +53,9 @@
                         </Select> 
                     </Form-item>
                     
-                     <Form-item label="客户名称" class='daily-form' prop="goodsName">
+                     <Form-item label="客户名称" class='daily-form' prop="customerName">
                         <i-input 
-                            v-model="formItem.goodsName" 
+                            v-model="formItem.customerName" 
                             placeholder="请输入客户名称"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -80,18 +80,18 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">距进场日</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.leaseRemainingType" 
+                                v-model="formItem.toPutawayType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
                                 <Option value="EQ" >等于</Option>
-                                <Option value="LT" >长于</Option>
-                                <Option value="GT">少于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
+                        <Form-item  prop="toPutawayDays" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.leaseRemainingDays" 
+                                v-model="formItem.toPutawayDays" 
                                 style="width: 90px;"
                                 placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -102,9 +102,9 @@
 
                     <div style="display:inline-block;margin-right:20px;margin-left:90px;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系人：</span>
-                        <Form-item  style="width:auto;display:inline-block;" prop="customerName">
+                        <Form-item  style="width:auto;display:inline-block;" prop="contactName">
                             <i-input 
-                                v-model="formItem.customerName" 
+                                v-model="formItem.contactName" 
                                 style="width: 200px"
                                 placeholder="请输入联系人"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -112,11 +112,12 @@
                         </Form-item>
                     </div>
 
-                     <div style="display:inline-block;">
-                        <Form-item label="商品名称" class='daily-form' prop="goodsName">
+                      <div style="display:inline-block">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品名称</span>
+                        <Form-item class='daily-form' prop="goodsName">
                         <i-input 
                             v-model="formItem.goodsName" 
-                            placeholder="请输入商品名称"
+                            placeholder="房间号或工位编号"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
@@ -152,9 +153,9 @@
                     </div>
 
 
-                        <Form-item label="联系方式" class='daily-form' prop="goodsName"  style="margin-left:90px;">
+                        <Form-item label="联系方式" class='daily-form' prop="contactTel"  style="margin-left:90px;">
                         <i-input 
-                            v-model="formItem.goodsName" 
+                            v-model="formItem.contactTel" 
                             placeholder="请输入联系方式"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -262,6 +263,22 @@ export default {
                     callback();
                 }
             };
+            const validateNames = (rule, value, callback) => {
+                if(value&&value.length>40){
+                    callback('名称最多40个字符');
+                }else{
+                    callback();
+                }
+            };
+            const validatephone = (rule, value, callback) => {
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (value&&!phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
+                }
+            };
             return {  
                 formItem:{
                     communityId:' ',
@@ -270,10 +287,12 @@ export default {
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    leaseRemainingType:'GT',
+                    toPutawayType:'GT',
                     rentType:'GT',
                     reletTypeName:' ',
                     goodsName:'',
+                    customerName:'',
+                    contactTel:'',
                     customerName:'',
                 },
                 renewList:[
@@ -287,8 +306,8 @@ export default {
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'SPACE',label:'固定办公桌'},
-                    {value:'OPEN',label:'独立办公室'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
@@ -311,7 +330,7 @@ export default {
                         { validator: validateStation, trigger: 'change' }
                     ],
                     goodsName:[
-                        { validator: validateName, trigger: 'change' }
+                        { validator: validateNames, trigger: 'change' }
                     ],
                     leaseRemainingDays: [
                         { validator: validateNum, trigger: 'change' }
@@ -321,6 +340,15 @@ export default {
                     ],
                     customerName:[
                         { validator: validateName, trigger: 'change' }
+                    ],
+                    contactName:[
+                        { validator: validateNames, trigger: 'change' }
+                    ],
+                    contactTel:[
+                        { validator: validatephone, trigger: 'change' }
+                    ],
+                    toPutawayDays:[
+                        { validator: validateNum, trigger: 'change' }
                     ],
                 }
             }
@@ -347,6 +375,7 @@ export default {
                 }
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
+                    this.floorList = []
                 }else{
                     this.getFloorList(params.communityId)
                     this.formItem.communityId = params.communityId;
@@ -375,7 +404,6 @@ export default {
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
-                    console.log('=-0900',typeof params.cityId)
                 }
                 
                 this.formItemOld=Object.assign({},this.formItem);
@@ -393,7 +421,9 @@ export default {
             console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                
+                if(!res.data.length){
+                    this.floorList = []
+                }
                 if(this.floorList.length){
                     this.floorList=res.data.map(item=>{
                         item.floor = item.floor+'';
@@ -421,7 +451,6 @@ export default {
         searchClick(){
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
-                    console.log('搜索',this.formItem)
                     this.$emit('searchClick',this.formItem);
                 }
             })

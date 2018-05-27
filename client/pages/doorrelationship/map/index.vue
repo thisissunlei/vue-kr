@@ -10,7 +10,6 @@
         >
             <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
         </Select>
-       <!-- <Button  type="primary" @click="newCreateEquipmentGroup">新增设备组</Button> -->
        
        
         <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #DAE4E4;">
@@ -25,8 +24,10 @@
 
             <GroupDetail
                 :editInitialDataProps="editInitailData"
-                @closeGroupDetailModal="closeEquipmentDetail"
+                @deleteEquipmentGroup="deleteEquipmentGroup"
                 :communityId ="communityId"
+                @editNodeDataInDetail = "editNodeDataInDetail"
+                @openDeleteTipFromDetail = "openDeleteTipModel"
             />
         </Drawer>
         <Modal
@@ -38,7 +39,7 @@
         >
             <p class="delete-tip">删除设备组或组织间的关系时，将同事删除掉组及与该组有关的关系，确认删除吗？</p>
             <div slot="footer">
-                <Button type="primary" @click="confirmDeleteGroup">确定</Button>
+                <Button type="primary" @click="confirmDelete">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">取消</Button>
             </div>
         </Modal>
@@ -147,6 +148,7 @@ export default {
                     },
                     doubleClick: function(e, node) {
                         _this.openEquipmentDetailFun(node.data);
+                        _this.selectedNodeData = node.data;
                     },
                     selectionChanged: function(part) {
                         // console.log("part.data",part.data)
@@ -421,7 +423,7 @@ export default {
 				});
 			})
         },
-        confirmDeleteGroup(){
+        confirmDelete(){
             
             var param = this.selectedNodeData
             // console.log(param,"param");
@@ -448,12 +450,7 @@ export default {
 
 
                 var deletedNode = _this.myDiagram.findNodesByExample(sendParam).first();
-                // var connectedLinks = deletedNode.findLinksConnected();
-                // connectedLinks.each(function(link){
-                //     console.log("link",link.data)
-                // })
-
-                // console.log("deletedNode.linksConnected",deletedNode.linksConnected)
+                
                 
                 _this.myDiagram.startTransaction('removing links');
                 _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
@@ -464,6 +461,7 @@ export default {
                 
 
                 this.openDeleteTipModel();
+                this.openEquipmentDetail = false;
                 
 
 			}).catch((error)=>{
@@ -471,6 +469,15 @@ export default {
 					title:error.message
 				});
 			})
+        },
+        deleteEquipmentGroupFromDetail(param){
+
+            var deletedNode = _this.myDiagram.findNodesByExample(param).first();
+            _this.myDiagram.startTransaction('removing links');
+            _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
+            _this.myDiagram.commitTransaction('removing links');
+
+            _this.myDiagram.model.removeNodeData(param);
         },
         getCommunity(getMapDataCallback,drawMapCallback){
             
@@ -543,6 +550,28 @@ export default {
                 });
             })
         },
+
+
+        editNodeDataInDetail(sendMsg){
+            console.log("sendMsg编辑完成传到map页",sendMsg);
+           
+            let _this =this;
+            
+            
+            var newObj = Object.assign({},sendMsg);
+            
+            //修改node的id
+            _this.myDiagram.startTransaction();
+            var selectedNodeData = _this.selectedNodeData;
+            var findNodeData = _this.myDiagram.findNodesByExample({id: sendMsg.id}).first();
+            if (findNodeData) {
+                console.log("-----------",findNodeData.data)
+                // _this.myDiagram.model.setDataProperty(findNodeData.data, "name",newObj.name);
+                _this.myDiagram.model.setDataProperty(findNodeData.data, "memo",newObj.memo);
+            }
+            _this.myDiagram.commitTransaction("changed name and memo");
+
+        }
         
     }
  }

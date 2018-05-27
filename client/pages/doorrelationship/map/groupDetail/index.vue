@@ -2,7 +2,14 @@
 <template>
 <div class="group-detail">
    
-     <EditForm @formData="getEditForm"  :initialData="editInitailData" v-if="showEditForm" @closeGroupDetailModal= "closeGroupDetailModal"/>
+     <EditForm 
+        @formData="getEditForm"  
+        :initialData="editInitailData" 
+        v-if="showEditForm" 
+        @deleteEquipmentGroup= "deleteEquipmentGroup"
+        @editNodeDataInDetail="editNodeDataInDetail"
+        @openDeleteTipFromDetail = "openDeleteTipFromDetail"
+    />
 
      <EquipmentList :communityId="communityId"/>
 </div>
@@ -39,8 +46,14 @@ export default{
         getEditForm(form){
             this.editData=form;
         },
-        closeGroupDetailModal(){
-            this.$emit('closeGroupDetailModal');
+        deleteEquipmentGroup(sendMsg){
+            this.$emit('deleteEquipmentGroup',sendMsg);
+        },
+        editNodeDataInDetail(sendMsg){
+            this.$emit("editNodeDataInDetail",sendMsg);
+        },
+        openDeleteTipFromDetail(sendMsg){
+             this.$emit("openDeleteTipFromDetail",sendMsg);
         }
     },
     updated:function(){

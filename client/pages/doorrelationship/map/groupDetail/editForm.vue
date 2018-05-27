@@ -23,19 +23,7 @@
         </FormItem>
        
     </Form>
-    <Modal
-        v-model="openDeleteTip"
-        title="注意"
-        ok-text="确定"
-        cancel-text="取消"
-        width="660"
-     >
-        <p>删除设备组时，将删除组内设备及该组的级联关系，确认删除吗？</p>
-         <div slot="footer">
-            <Button type="primary" @click="confirmDeleteGroup">确定</Button>
-            <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">取消</Button>
-        </div>
-    </Modal>
+ 
     <div>
         <Button type="primary" @click="submitEdit">提交编辑</Button>
         <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">删除设备组</Button>
@@ -75,32 +63,8 @@ export default{
      ],
     methods:{
         openDeleteTipModel : function(){
-            this.openDeleteTip = !this.openDeleteTip;
-        },
-        deleteEquipmentGroup:function(){
-            console.log("formItem",this.formItem);
-            this.openDeleteTipModel();
-        },
-        confirmDeleteGroup : function(){
-
-            var sendMsg = {id : this.formItem.id}
-             this.$http.delete('deleteDoorGroupInRelation', sendMsg).then((res)=>{
-                this.$emit('closeGroupDetailModal');
-                this.openDeleteTipModel();
-                this.$Notice.success({
-                    title: '删除成功',
-                    desc: '删除设备组成功',
-                    render: h => {
-                        console.log("dklldfkldk")
-                        return h('span', ['删除设备组成功'])
-                    }
-                });
-
-			}).catch((error)=>{
-				this.$Notice.error({
-					title:error.message
-				});
-			})
+            
+            this.$emit('openDeleteTipFromDetail',this.formItem);
         },
 
         submitEdit:function(){
@@ -112,16 +76,16 @@ export default{
             this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
                 
                
-                // var mapDataParam = {communityId : this.communityId}
-                // this.getMapData(mapDataParam);
                 this.$Notice.success({
                     title: '编辑成功',
                     desc: '编辑设备组成功',
                     render: h => {
-                        console.log("dklldfkldk")
                         return h('span', ['编辑设备组成功'])
                     }
                 });
+                var sendMsgObj = Object.assign({},sendMsg)
+                this.$emit("editNodeDataInDetail",sendMsgObj);
+                
 
 			}).catch((error)=>{
 				this.$Notice.error({

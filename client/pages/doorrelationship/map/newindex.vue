@@ -25,7 +25,7 @@
 
             <GroupDetail
                 :editInitialDataProps="editInitailData"
-                @closeGroupDetailModal="closeEquipmentDetail"
+                @deleteEquipmentGroup="deleteEquipmentGroup"
                 :communityId ="communityId"
             />
         </Drawer>

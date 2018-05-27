@@ -102,25 +102,25 @@ export default {
             this.myDiagram =
                 $(go.Diagram, "doorGroupRelationshipMap",  // must name or refer to the DIV HTML element
                     {
-                    // start everything in the middle of the viewport
-                    initialContentAlignment: go.Spot.Center,
-                    // have mouse wheel events zoom in and out instead of scroll up and down
-                    "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
-                    // support double-click in background creating a new node
-                    "clickCreatingTool.archetypeNodeData": { text: "new node" },
-                    // enable undo & redo
-                    "undoManager.isEnabled": true,
-                    "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
-                        this.archetypeNodeData = {
-                            // key: getNextKey(), // assign the key based on the number of nodes
-                            name: "新设备组",
-                            title: ""
-                        };
-                        
-                        var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
-                        _this.addNewCreateDataReq(newCreateNodeParams);
-                        return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
-                    }
+                        // start everything in the middle of the viewport
+                        initialContentAlignment: go.Spot.Center,
+                        // have mouse wheel events zoom in and out instead of scroll up and down
+                        "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+                        // support double-click in background creating a new node
+                        "clickCreatingTool.archetypeNodeData": { text: "new node" },
+                        // enable undo & redo
+                        "undoManager.isEnabled": true,
+                        "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
+                            this.archetypeNodeData = {
+                                // key: getNextKey(), // assign the key based on the number of nodes
+                                name: "新设备组",
+                                memo: ""
+                            };
+                            
+                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
+                            _this.addNewCreateDataReq(newCreateNodeParams);
+                            return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
+                        }
                     }
                 );
             this.myDiagram.nodeTemplate =
@@ -130,19 +130,19 @@ export default {
 
                 { 
                     click: function(e, obj) { 
-                            console.log("e",e,"点击node",obj.part.data); 
                             _this.selectedNodeData = obj.part.data;
-                            console.log("")
                     },
                     doubleClick: function(e, node) {
                         _this.openEquipmentDetailFun(node.data);
                     },
                     selectionChanged: function(part) {
-                        console.log("parts",part.data)
+                        console.log("part.data",part.data)
+                        _this.selectedNodeData = part.data;
                     }
                     
                 }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                // new go.Binding("id", "id").makeTwoWay(), 
                 $(go.Shape, "RoundedRectangle",
                     {
                         parameter1: 10,  
@@ -160,9 +160,7 @@ export default {
                 
                 { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
                 new go.Binding("text","name").makeTwoWay()),
-                {
-                    
-                }
+                
             );
 
             this.myDiagram.linkTemplate =
@@ -185,7 +183,7 @@ export default {
 
             this.myDiagram.addModelChangedListener(function(evt) {
                 // ignore unimportant Transaction events
-                
+               
                 if (!evt.isTransactionFinished) return;
                 var txn = evt.object;  // a Transaction
                 if (txn === null) return;
@@ -203,18 +201,21 @@ export default {
                     //     }
                     // } else
                     // console.log("e.modelChange",e.modelChange,e.change);
-                     if (e.change === go.ChangedEvent.Insert && e.modelChange === "linkDataArray") {
-
-                        var linkData = e.newValue;
+                     if (e.change === go.ChangedEvent.Insert ) {
+                         if(e.modelChange === "linkDataArray"){
+                            var linkData = e.newValue;
+                            var param = {
+                                            preSetId :linkData.from,
+                                            setId :linkData.to,
+                                            communityId : _this.communityId
+                                        }
+                            if(linkData.points){
+                                _this.newCreateConnect(param,linkData);
+                            }
+                         }else if(e.modelChange === "nodeDataArray"){
+                             console.log("e.newData",e.newData)
+                         }
                         
-                        var param = {
-                                        preSetId :linkData.from,
-                                        setId :linkData.to,
-                                        communityId : _this.communityId
-                                    }
-                        if(linkData.points){
-                            _this.newCreateConnect(param,linkData);
-                        }
                         
 
                     } else if (e.change === go.ChangedEvent.Remove) {
@@ -239,7 +240,7 @@ export default {
             });
 
             this.myDiagram.mouseDrop = function(e,obj){
-                console.log("mouseDrop,e",e,"obj",obj)
+                // console.log("mouseDrop,e",e,"obj",obj)
                 // console.log("this.selectedNodeData",this.selectedNodeData);
                 // var selectedData = this.selectedNodeData;
                 // var locationArr = selectedData.split(" ");
@@ -256,8 +257,6 @@ export default {
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
 
-
-            
             
         },
 
@@ -330,19 +329,30 @@ export default {
             this.openEditModal = !this.openEditModal
         },
         addNewCreateDataReq(sendMsg){
-            
             let _this =this;
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
-                var useData = res.data
-                var locData = useData.x + " " + useData.y;
-                var toData = {
-                    id : useData.id,
-                    name : useData.name,
-                    loc : locData,
-                    memo : useData.memo,
-                }
-                var model = _this.myDiagram.model;
-                model.addNodeData(toData);
+                // var useData = res.data
+                // var locData = useData.x + " " + useData.y;
+                // var toData = {
+                //     id : useData.id,
+                //     name : useData.name,
+                //     loc : locData,
+                //     memo : useData.memo,
+                // }
+                // var model = _this.myDiagram.model;
+                // model.addNodeData(toData);
+                // if(nodeData){
+                    _this.myDiagram.startTransaction();
+                    var selectedNodeData = _this.selectedNodeData;
+                    var findNodeData = _this.myDiagram.findNodesByExample({__gohashid: selectedNodeData.__gohashid }).first();
+                    console.log("findNodeData",findNodeData);
+                    if (findNodeData) {
+                        _this.myDiagram.model.setDataProperty(findNodeData.data, "id",res.data.id);
+                    }
+                    _this.myDiagram.commitTransaction("changed id");
+
+                
+
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message

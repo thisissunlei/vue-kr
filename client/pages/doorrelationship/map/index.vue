@@ -93,7 +93,7 @@ export default {
        },
        refreshMap(){
            var dateTemplate =this.dateTemplate;
-            console.log("dateTemplate",dateTemplate);
+            // console.log("dateTemplate",dateTemplate);
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
        },
@@ -340,7 +340,7 @@ export default {
                                 "nodeDataArray":nodeDataArrayNew,
                                 "linkDataArray":linkConnectArr
                                 }
-                console.log("this.dateTemplate ",this.dateTemplate )
+                // console.log("this.dateTemplate ",this.dateTemplate )
                 drawMapCallback && drawMapCallback();
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -424,9 +424,9 @@ export default {
         confirmDeleteGroup(){
             
             var param = this.selectedNodeData
-            console.log(param,"param");
+            // console.log(param,"param");
             if(param.from){
-                console.log("dsklfkfdlkfd");
+                // console.log("dsklfkfdlkfd");
                 this.deleteLinkConnectFun(param);
             }else{
                 this.deleteEquipmentGroup(param);

@@ -138,16 +138,16 @@ export default {
                 { 
                     click: function(e, obj) { 
                             _this.selectedNodeData = obj.part.data;
-                            console.log("_this.selectedNodeData",_this.selectedNodeData)
+                            // console.log("_this.selectedNodeData",_this.selectedNodeData)
                     },
                     doubleClick: function(e, node) {
                         _this.openEquipmentDetailFun(node.data);
                     },
                     selectionChanged: function(part) {
-                        console.log("part.data",part.data)
+                        // console.log("part.data",part.data)
                         _this.selectedNodeData = part.data;
                     },
-                    mouseLeave:function(e,node){
+                    // mouseLeave:function(e,node){
                         // console.log("e",e,"node",node);
                         // var itemData = node.data;
                         // var locationArr = itemData.loc.split(" ");
@@ -163,7 +163,7 @@ export default {
                             // _this.editDataReq(param);
                             // _this.nodeDragged = false;
                         // }
-                    },
+                    // },
                     
                 }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),

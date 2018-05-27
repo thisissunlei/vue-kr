@@ -138,7 +138,8 @@ export default {
                     selectionChanged: function(part) {
                         console.log("part.data",part.data)
                         _this.selectedNodeData = part.data;
-                    }
+                    },
+                   
                     
                 }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
@@ -331,27 +332,16 @@ export default {
         addNewCreateDataReq(sendMsg){
             let _this =this;
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
-                // var useData = res.data
-                // var locData = useData.x + " " + useData.y;
-                // var toData = {
-                //     id : useData.id,
-                //     name : useData.name,
-                //     loc : locData,
-                //     memo : useData.memo,
-                // }
-                // var model = _this.myDiagram.model;
-                // model.addNodeData(toData);
-                // if(nodeData){
-                    _this.myDiagram.startTransaction();
-                    var selectedNodeData = _this.selectedNodeData;
-                    var findNodeData = _this.myDiagram.findNodesByExample({__gohashid: selectedNodeData.__gohashid }).first();
-                    console.log("findNodeData",findNodeData);
-                    if (findNodeData) {
-                        _this.myDiagram.model.setDataProperty(findNodeData.data, "id",res.data.id);
-                    }
-                    _this.myDiagram.commitTransaction("changed id");
-
                 
+                //修改node的id
+                _this.myDiagram.startTransaction();
+                var selectedNodeData = _this.selectedNodeData;
+                var findNodeData = _this.myDiagram.findNodesByExample({__gohashid: selectedNodeData.__gohashid }).first();
+                if (findNodeData) {
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "id",res.data.id);
+                }
+                _this.myDiagram.commitTransaction("changed id");
+
 
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -377,8 +367,18 @@ export default {
                         return h('span', ['删除组成功'])
                     }
                 });
+
+
+                var deletedNode = _this.myDiagram.findNodesByExample(sendParam).first();
+                var connectedLinks = deletedNode.findLinksConnected();
+                connectedLinks.each(function(link){
+                    console.log("link",link.data)
+                })
+
                 this.openDeleteTipModel();
                 _this.myDiagram.model.removeNodeData(param);
+                
+
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message
@@ -418,6 +418,7 @@ export default {
                     
                     var link = _this.myDiagram.findLinksByExample({ __gohashid: linkData.__gohashid }).first();
                     if (link !== null) _this.myDiagram.model.setDataProperty(link.data, "id",res.data.id);
+                    
                }
 
             }).catch((error)=>{

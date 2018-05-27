@@ -236,8 +236,6 @@ export default {
                             if(linkData.points){
                                 _this.newCreateConnect(param,linkData);
                             }
-                         }else if(e.modelChange === "nodeDataArray"){
-                             console.log("e.newData",e.newData)
                          }
                         
                         
@@ -417,9 +415,9 @@ export default {
         confirmDeleteGroup(){
             
             var param = this.selectedNodeData
-            console.log(param,"param");
+            // console.log(param,"param");
             if(param.from){
-                console.log("dsklfkfdlkfd");
+                // console.log("dsklfkfdlkfd");
                 this.deleteLinkConnectFun(param);
             }else{
                 this.deleteEquipmentGroup(param);

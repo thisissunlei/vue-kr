@@ -167,7 +167,7 @@
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
-            
+
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -687,8 +687,8 @@
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]	
-                }, 
+                    ]
+                },
              ]
         }
     }
@@ -1110,7 +1110,21 @@
                     }
                 ]
         },
-            ],
+        {
+                primaryText: "空间管理",
+                iconName: 'icon-card',
+                iconColor: '#79859a',
+                router :'',
+                menuItems: [
+                        {
+                            primaryText: '空间管理',
+                            menuCode: 'basic_space',
+                            type: 'vue',
+                            router: 'smart-hardware/space-manage'
+                        },
+                    ]
+            },
+        ],
         }
     }
     // 订单合同

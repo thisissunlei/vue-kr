@@ -1,10 +1,21 @@
 
 <template>
-<div >
-  <EquipmentSearch :communityId="communityId" @searchEquipment="searchEquipment"/>
-  <div>
 
-    
+<div >
+  <div>
+      <Button type="primary" @click="openAddEquipmentModalFun">添加设备</Button>
+  </div>
+  <EquipmentSearch 
+    :communityId="communityId" 
+    @searchEquipment="searchEquipment"
+  />
+  <div>
+    <ul>
+
+      <li v-for="item in doorListData.items">
+        {{item.title}}
+      </li>
+    </ul>
   </div>
    
 </div>
@@ -46,6 +57,10 @@ export default{
             title:error.message
           });
         })
+       },
+       openAddEquipmentModalFun(){
+        //  console.log(":--------");
+         this.$emit("openAddEquipmentModalFun")
        }
     },
     updated:function(){

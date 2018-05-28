@@ -1,6 +1,7 @@
 <template>
 
 <div>
+     
     <Form  :model="formItem" label-position="left">
            
            <FormItem label="楼层：">
@@ -30,6 +31,7 @@
         <div>
             <Button type="primary" @click="searchEquipment">搜索</Button>
         </div>
+
 </div>
 
 </template>
@@ -41,7 +43,7 @@ export default{
     data (){
 		return{
 			formItem : {},
-            floorOptions : []
+            floorOptions : [],
 		}
 
     },
@@ -78,7 +80,7 @@ export default{
          searchEquipment(){
             console.log("this.formItem",this.formItem);
             this.$emit('searchEquipment',this.formItem);  
-         }
+         },
     },
     updated:function(){
         this.$emit('formData', this.formItem);

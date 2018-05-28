@@ -28,6 +28,7 @@
                 :communityId ="communityId"
                 @editNodeDataInDetail = "editNodeDataInDetail"
                 @openDeleteTipFromDetail = "openDeleteTipModel"
+                @openAddEquipmentModalFun = "openAddEquipmentModalFun"
             />
         </Drawer>
         <Modal
@@ -43,12 +44,27 @@
                 <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">取消</Button>
             </div>
         </Modal>
+        <Modal
+            v-model="openAddEquipmentModal"
+            title="所有设备列表"
+            ok-text="添加"
+            cancel-text="取消"
+            width="953"
+            class-name="all-equipment-modal"
+        >
+            <AllEquipmentList
+                @addEquipmentToGroup="addEquipmentToGroup"
+            />
+           
+            <div slot="footer" class="displayNone"></div>
+        </Modal>
     </div>
 </template>
 
 <script>
 import Drawer from '~/components/Drawer';
 import GroupDetail from './groupDetail';
+import AllEquipmentList from './allEquipmentList';
 
 export default {
    name:'doorRelationship',
@@ -59,6 +75,7 @@ export default {
     },
    data(){
        return {
+            openAddEquipmentModal : false,
             openEquipmentDetail : false,
             newCreateData : {},
             selectedNodeData : {},
@@ -79,6 +96,7 @@ export default {
    components:{
     Drawer,
     GroupDetail,
+    AllEquipmentList,
    },
    mounted(){
 
@@ -147,13 +165,13 @@ export default {
                             // console.log("_this.selectedNodeData",_this.selectedNodeData)
                     },
                     doubleClick: function(e, node) {
-                        _this.openEquipmentDetailFun(node.data);
                         _this.selectedNodeData = node.data;
+                        _this.openEquipmentDetailFun(node.data);
                     },
-                    selectionChanged: function(part) {
-                        // console.log("part.data",part.data)
-                        _this.selectedNodeData = part.data;
-                    },
+                    // selectionChanged: function(part) {
+                    //     // console.log("part.data",part.data)
+                    //     _this.selectedNodeData = part.data;
+                    // },
                     // mouseLeave:function(e,node){
                         // console.log("e",e,"node",node);
                         // var itemData = node.data;
@@ -571,6 +589,38 @@ export default {
             }
             _this.myDiagram.commitTransaction("changed name and memo");
 
+        },
+
+
+        openAddEquipmentModalFun(){
+            this.openAddEquipmentModal = !this.openAddEquipmentModal;
+        },
+
+        addEquipmentToGroup(selection){
+            this.openAddEquipmentModalFun();
+            this.senReqEquipmentToGroup(selection);
+        },
+        senReqEquipmentToGroup(selection){
+
+            let _this =this;
+            var equipmentIds = [];
+            for(var i=0;i<selection.length;i++){
+                equipmentIds.push(selection[i].id)
+            }
+            var equipmentIdsStr = equipmentIds.join(",");
+            var sendParams = {
+                communityId : _this.communityId,
+                setId : _this.selectedNodeData.id,
+                doorIds : equipmentIdsStr
+
+            }
+            this.$http.post('addEquipmentToGroup', sendParams).then((res)=>{
+                this.$Message.success('添加成功');
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
         }
         
     }
@@ -584,4 +634,13 @@ export default {
     .delete-tip{
         text-align : center;
     }
+    .displayNone{
+        display:none;
+    }
+    .all-equipment-modal{
+        .ivu-modal-footer{
+            display : none;
+        }
+    }
+    
 </style>

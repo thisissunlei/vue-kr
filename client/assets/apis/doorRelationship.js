@@ -32,6 +32,14 @@ export default  {
     'getDoorListByGroup':{
         url :'/api/iot-platform/door-set/door/list',
         method: 'get'
+    },
+    'getAllEquipmentList':{
+        url :'/api/iot-platform/door-device/select-items',
+        method: 'get'
+    },
+    'addEquipmentToGroup':{
+        url :'/api/iot-platform/door-set/actions/add-door',
+        method: 'post'
     }
     
   }

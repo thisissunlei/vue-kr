@@ -11,7 +11,10 @@
         @openDeleteTipFromDetail = "openDeleteTipFromDetail"
     />
 
-     <EquipmentList :communityId="communityId"/>
+    <EquipmentList 
+        :communityId="communityId"
+        @openAddEquipmentModalFun="openAddEquipmentModalFun"
+    />
 </div>
 </template>
 <script>
@@ -54,6 +57,10 @@ export default{
         },
         openDeleteTipFromDetail(sendMsg){
              this.$emit("openDeleteTipFromDetail",sendMsg);
+        },
+        openAddEquipmentModalFun(){
+            
+            this.$emit("openAddEquipmentModalFun")
         }
     },
     updated:function(){

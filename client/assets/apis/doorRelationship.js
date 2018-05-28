@@ -44,7 +44,12 @@ export default  {
     'deleteEquipmentFromGroup':{
         url :'/api/iot-platform/door-set/actions/remove-door',
         method: 'delete'
-    }
+    },
+
+    'getGroupByEquipmentDetailInfo':{
+        url :'/api/iot-platform/door-set/actions/search',
+        method: 'get'
+    },
     
     
   }

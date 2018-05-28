@@ -5,11 +5,19 @@
             style="width:150px"
             placeholder="请选择社区"
             filterable
-            clearable
             @on-change="onChangeCommunity"
         >
             <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
         </Select>
+        <div class="right-part">   
+            <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button>
+            <span>输入内容查找设备所在的组：</span>
+            <SearchForm 
+                :searchFilter="searchFilter"
+                :onSubmit="onSubmitSearchForm"
+            />
+            
+        </div>
        
        
         <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #DAE4E4;">
@@ -67,7 +75,9 @@
 </template>
 
 <script>
+
 import Drawer from '~/components/Drawer';
+import SearchForm from '~/components/SearchForm';
 import GroupDetail from './groupDetail';
 import AllEquipmentList from './allEquipmentList';
 
@@ -96,13 +106,29 @@ export default {
             dateTemplate :{},
             refreshedMapData : false,
             openDeleteTip :false,
-            groupDetailDoorListData : {}
+            groupDetailDoorListData : {},
+            searchFilter:[
+                    {
+                        label:'屏幕编号',
+                        value:'doorCode'
+                    },
+                    {
+                        label:'屏幕标题',
+                        value:'title'
+                    },
+                    {
+                        label:'硬件ID',
+                        value:'deviceId'
+                    }
+            ],
+            searchGroupId : -1,
+            searchGroupIdsArr : [],
        }
    },
    components:{
     Drawer,
     GroupDetail,
-    AllEquipmentList,
+    AllEquipmentList,SearchForm
    },
    mounted(){
 
@@ -151,13 +177,7 @@ export default {
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
                         },
-                        // "clickSelectingTool.standardMouseSelect": function(e) {
-                        //     console.log("this.model===========",e)
-                        //     var diagram = _this.myDiagram;
-                        //     console.log("diagram",diagram)
-                        //     // if (diagram.findPartAt(diagram.lastInput.documentPoint, false) === null) return;
-                        //     // go.Tool.prototype.standardMouseSelect.call(this);
-                        // },
+                       
                     }
                 );
             this.myDiagram.nodeTemplate =
@@ -175,47 +195,40 @@ export default {
 
                         _this.openEquipmentDetailFun(node.data);
                     },
-                    // selectionChanged: function(part) {
-                    //     // console.log("part.data",part.data)
-                    //     _this.selectedNodeData = part.data;
-                    // },
-                    // mouseLeave:function(e,node){
-                        // console.log("e",e,"node",node);
-                        // var itemData = node.data;
-                        // var locationArr = itemData.loc.split(" ");
-                       
-                        // if(_this.nodeDragged){
-                        //     var param = {
-                        //         id : itemData.id,
-                        //         memo : itemData.memo,
-                        //         name : itemData.name,
-                        //         x : parseInt(locationArr[1]+0),
-                        //         y : parseInt(locationArr[0]+0)
-                        //     };
-                            // _this.editDataReq(param);
-                            // _this.nodeDragged = false;
-                        // }
-                    // },
+                    
                     
                 }, 
                 new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
                 $(go.Shape, "RoundedRectangle",
                     {
+                        
                         parameter1: 10,  
-                        fill: $(go.Brush, "Linear", { 0: "rgb(254, 201, 0)", 1: "rgb(254, 162, 0)" }),
-                        stroke: null,
+                        stroke : null,
                         portId: "",  
                         fromLinkable: true, fromLinkableDuplicates: true,
                         toLinkable: true,toLinkableDuplicates: true,
                         cursor: "pointer",
                         
-                    }),
+                        
+                    },
+                    new go.Binding(
+                            "fill", 
+                            "isHighlighted", 
+                            function(h) { 
+                                console.log("h",h);
+                                return h ? "#f89903" : "#328cf1"; 
+                            }
+                    ).ofObject()
+                ),
+
                 
                
                 $(go.TextBlock, "name",
                 
                 { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
-                new go.Binding("text","name").makeTwoWay()),
+                new go.Binding("text","titleText").makeTwoWay()),
+                
+                
                 
             );
 
@@ -223,7 +236,6 @@ export default {
             $(go.Link,  // the whole link panel
                 
                 {
-                // routing: go.Link.AvoidsNodes ,
                 curve: go.Link.Bezier, adjusting: go.Link.Stretch,
                 //  relinkableFrom: true, relinkableTo: true,
                 toShortLength: 3
@@ -346,13 +358,16 @@ export default {
             this.$http.get('getDoorRelationshipData', params).then((res)=>{
                 var reponseData = res.data;
                 var nodeDataArrayNew = [],linkConnectArr = [];
-                for(var i = 0 ;i< reponseData.setList.length;i++){
+                var setListData = reponseData.setList;
+                for(var i = 0 ;i< setListData.length;i++){
+                    var countNum = setListData[i].elementCount || "0"
                     nodeDataArrayNew[i] = {
-                        "id": reponseData.setList[i].id,
-                        "loc": reponseData.setList[i].x + " "+ reponseData.setList[i].y,
-                        "name" : reponseData.setList[i].name,
-                        "memo" : reponseData.setList[i].memo,
-                        "communityId " : reponseData.setList[i].communityId,
+                        "id": setListData[i].id,
+                        "loc": setListData[i].x + " "+ setListData[i].y,
+                        "name" :setListData[i].name,
+                        "memo" : setListData[i].memo,
+                        "communityId " : setListData[i].communityId,
+                        "titleText" : setListData[i].name + "（"+ countNum + ")"
                     }
                 }
                 for(var i = 0 ;i< reponseData.setRelationList.length;i++){
@@ -593,7 +608,7 @@ export default {
             var selectedNodeData = _this.selectedNodeData;
             var findNodeData = _this.myDiagram.findNodesByExample({id: sendMsg.id}).first();
             if (findNodeData) {
-                console.log("-----------",findNodeData.data)
+                // console.log("-----------",findNodeData.data)
                 // _this.myDiagram.model.setDataProperty(findNodeData.data, "name",newObj.name);
                 _this.myDiagram.model.setDataProperty(findNodeData.data, "memo",newObj.memo);
             }
@@ -673,7 +688,44 @@ export default {
             this.detailMadalEquipmentListSearchData= msg;
             this.getEquipmentListData(msg,"refresh");
             
+        },
+
+        onSubmitSearchForm(data){
+            console.log("data---",data);
+            var param = data;
+            this.getGroupByEquipmentInfo(param);
+
+        },
+        getGroupByEquipmentInfo(param){
+            
+            let _this = this;
+            this.$http.get('getGroupByEquipmentDetailInfo', param).then((res)=>{
+                
+                this.myDiagram.clearHighlighteds();
+                // _this.myDiagram.startTransaction();
+                console.log("res",res.data.items);
+                var isHighlightedNodeIdArr = [190,192];
+                for(var i=0;i<isHighlightedNodeIdArr.length;i++){
+                    var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
+                    if (findNodeData) {
+                        _this.myDiagram.model.setDataProperty(findNodeData, "isHighlighted",true);
+                    }
+                    _this.myDiagram.commitTransaction("changed highLight");
+                }
+                
+                // _this.searchGroupIdsArr = isHighlightedNodeIdArr;
+            
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+        },
+
+        clearAll(){
+            
         }
+
         
     }
  }
@@ -682,6 +734,15 @@ export default {
     .door-relationship{
         width:100%;
         height:100%;
+        .right-part{
+            float : right;
+            .text-span{
+                display: inline-block;
+                height: 31px;
+                color: #495060;
+                line-height: 30px;
+            }
+        }
     }
     .delete-tip{
         text-align : center;

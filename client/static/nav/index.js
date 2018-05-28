@@ -618,11 +618,6 @@
                             router: 'product/communityAllocation/communityList'
                         },
                         {
-                            primaryText: '社区平面图',
-                            menuCode: 'oper_cmt_graph_base',
-                            router: 'product/communityAllocation/communityPlanList'
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -632,6 +627,12 @@
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
                         },
+                        {
+                            primaryText: '平面图配置',
+                            menuCode: 'oper_cmt_graph_base',
+                            router: 'product/communityAllocation/communityPlanList'
+                        },
+                        
                         {
                             primaryText: "每日库存查询",
                             router: 'inventory/daily-inventory',
@@ -645,19 +646,16 @@
                             menuCode: 'inventory',
                         },
                         {
-                            primaryText: '注册地址',
-                            menuCode: 'cmt_registerAddress_list',
-                            router: 'product/communityAllocation/registeredAddress'
-                        },
-                        {
-                            primaryText: "我方合同主体",
-                            menuCode: 'lessor_management_base',
-                            router: 'product/customerManage/lessorManage',
-                        },
-                        {
                             primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory_graph',
+                        },
+                        {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
                         },
                         {
                             primaryText: '销控',
@@ -670,11 +668,20 @@
                             menuCode: 'stat_group',
                         },
                         {
-                            primaryText: "社区招商情况",
-                            router: 'community/attract-investment',
-                            type: 'vue',
-                            menuCode: 'cmt_investment',
+                            primaryText: '注册地址',
+                            menuCode: 'cmt_registerAddress_list',
+                            router: 'product/communityAllocation/registeredAddress'
                         },
+                        {
+                            primaryText: "我方合同主体",
+                            menuCode: 'lessor_management_base',
+                            router: 'product/customerManage/lessorManage',
+                        },
+                        // {
+                        //     primaryText: '库存平面图',
+                        //     menuCode: 'cmt_run',
+                        //     router: 'product/communityManage/detail',
+                        // }, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
@@ -690,19 +697,30 @@
         return {
         primaryText: "社区运营",
         router: 'community',
-        originUrl: '#/community/operation/index',
         menuItems: [
             {
                 primaryText: "社区运营",
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
-                router: 'index',
                 menuItems: [
                     {
                         primaryText: '社区主页',
                         router: 'community/operation/index',
+                        // type:'vue',
                         menuCode: 'operation_home',
                     },
+                    {
+                        primaryText: '即将到期',
+                        router: 'inventory/over-date',
+                        type:'vue',
+                        menuCode: 'operation_home',
+                    },
+                    // {
+                    //     primaryText: '即将进场',
+                    //     router: 'inventory/enter-field',
+                    //     type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',

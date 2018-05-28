@@ -165,5 +165,9 @@ export default  {
         url: '/api/krspace-finance-web/coupon/city-and-type',
         method: 'get'
     },
+    'get-community-list': {
+        url: '/api/krspace-finance-web/operation/city-cmt-list',
+        method: 'get'
+    },
 }
   

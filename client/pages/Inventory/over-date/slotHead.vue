@@ -57,7 +57,7 @@
             width:110px;
         }
         &:nth-child(7){
-            width:60px;
+            width:80px;
         }
         &:nth-child(3){
             width:70px;

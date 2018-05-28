@@ -175,7 +175,7 @@ var layoutScrollHeight=0;
                     {
                         title: '租期',
                         align:'center',
-                        width:60,
+                        width:80,
                         key: 'rentDays',
                         render(h, params){
                             return params.row.rentDays+'天'

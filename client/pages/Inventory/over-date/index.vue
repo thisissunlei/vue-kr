@@ -177,6 +177,9 @@ var layoutScrollHeight=0;
                         align:'center',
                         width:60,
                         key: 'rentDays',
+                        render(h, params){
+                            return params.row.rentDays+'天'
+                        }
                     },
                     {
                         title: '当前签约价',

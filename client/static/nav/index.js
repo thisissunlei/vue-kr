@@ -649,7 +649,7 @@
                             primaryText: '库存平面图',
                             router: 'inventory/floor-plan',
                             type: 'vue',
-                            menuCode: 'inventory',
+                            menuCode: 'inventory_graph',
                         },
                         {
                             primaryText: "社区招商情况",

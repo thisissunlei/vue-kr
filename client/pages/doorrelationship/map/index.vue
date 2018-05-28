@@ -31,6 +31,7 @@
                 @openDeleteTipFromDetail = "openDeleteTipModel"
                 @openAddEquipmentModalFun = "openAddEquipmentModalFun"
                 @deleteEquipmentSendReq = "deleteEquipmentSendReq"
+                @searchEquipment ="searchEquipment"
             />
         </Drawer>
         <Modal
@@ -55,6 +56,7 @@
             class-name="all-equipment-modal"
         >
             <AllEquipmentList
+                v-if="openAddEquipmentModal"
                 @addEquipmentToGroup="addEquipmentToGroup"
                 :communityId="communityId"
             />
@@ -664,6 +666,13 @@ export default {
                     title:error.message
                 });
             })
+        },
+
+        searchEquipment(msg){
+            console.log("将查询内容传到map",msg);
+            this.detailMadalEquipmentListSearchData= msg;
+            this.getEquipmentListData(msg,"refresh");
+            
         }
         
     }

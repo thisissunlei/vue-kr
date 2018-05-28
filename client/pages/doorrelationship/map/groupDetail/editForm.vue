@@ -2,23 +2,24 @@
 <template>
 <div class="edit-equipment">
     <Form  
+        inline
         ref="formValidate" 
         :model="formItem" 
         label-position="right"  
         :rules="ruleValidate"
-        :label-width="100">
+        >
         <FormItem label="设备组名称："   prop="name">
             <Input
                 v-model="formItem.name"
                 placeholder="设备组名称"
-                style="width: 300px"
+                style="width: 150px"
             />
         </FormItem>
         <FormItem label="组描述：" prop="memo">
             <Input
                 v-model="formItem.memo"
                 placeholder="组描述"
-                style="width: 300px"
+                style="width: 150px"
             />
         </FormItem>
        

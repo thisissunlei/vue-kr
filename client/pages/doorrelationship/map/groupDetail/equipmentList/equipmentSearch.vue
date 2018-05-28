@@ -98,7 +98,7 @@ export default{
                 })
          },
          searchEquipment(){
-            console.log("this.formItem",this.formItem);
+             
             this.$emit('searchEquipment',this.formItem);  
          },
     },
@@ -116,6 +116,7 @@ export default{
     }
     .search-btn{
         vertical-align: top;
+        margin-top: 33px;
     }
 
 

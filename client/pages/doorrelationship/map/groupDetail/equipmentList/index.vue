@@ -79,9 +79,9 @@ export default{
      ],
     methods:{
        searchEquipment(params){
-         console.log("params",params);
-         var sendParams = Object.assign({},{communityId:this.communityId},params)
-        //  this.getEquipmentListData(sendParams)
+
+          var sendParams = Object.assign({},{communityId:this.communityId},params)
+          this.$emit('searchEquipment',sendParams);  
          
        },
       //  getEquipmentListData(param){

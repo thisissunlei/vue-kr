@@ -16,6 +16,7 @@
         @openAddEquipmentModalFun="openAddEquipmentModalFun"
         :groupDetailDoorListData="groupDetailDoorListData"
         @deleteEquipmentFromGroup="deleteEquipmentFromGroup"
+        @searchEquipment="searchEquipment"
     />
 </div>
 </template>
@@ -82,6 +83,10 @@ export default{
             this.$emit("deleteEquipmentSendReq",paramsSend)
 
         },
+        searchEquipment(msg){
+            console.log("msg",msg);
+            this.$emit("searchEquipment",msg)
+        }
 
     },
     updated:function(){

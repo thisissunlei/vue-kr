@@ -43,7 +43,9 @@ export default {
    data(){
        return {
             selection : [],
-            searhFormData : {},
+            searhFormData : {
+                communityId : this.communityId
+            },
             columnsData: [
                     {
                         type: 'selection',
@@ -89,8 +91,8 @@ export default {
        SearchForm
    },
    mounted(){
-
-       this.getAllEquipmentList({});
+       console.log("mounted")
+       this.getAllEquipmentList(this.searhFormData);
    },
    props:[
         "communityId"
@@ -107,8 +109,11 @@ export default {
        },
        getAllEquipmentList(param){
            this.$http.get('getAllEquipmentList', param).then((res)=>{
-               
+                
                 var resData = res.data;
+
+               console.log("resData",resData,"param",param)
+                
                 this.allEquipmentListData = resData.items;
                 this.listTotalCount = resData.totalCount
 			}).catch((error)=>{
@@ -132,7 +137,7 @@ export default {
        },
        searchEquipment(formData,allSearchData){
            let _this = this;
-           var params = Object.assign({},{communityId:_this.communityId},allSearchData);
+           var params = Object.assign({},allSearchData);
            this.searhFormData = params;
            _this.getAllEquipmentList(params);
 

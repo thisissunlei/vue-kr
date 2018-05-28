@@ -49,11 +49,12 @@
             title="所有设备列表"
             ok-text="添加"
             cancel-text="取消"
-            width="953"
+            width="1000"
             class-name="all-equipment-modal"
         >
             <AllEquipmentList
                 @addEquipmentToGroup="addEquipmentToGroup"
+                :communityId="communityId"
             />
            
             <div slot="footer" class="displayNone"></div>

@@ -3,6 +3,8 @@
 
         <SearchForm
             @addEquipmentToGroup = "addEquipmentToGroup"
+            :communityId = "communityId"
+            @searchEquipment="searchEquipment"
         />
         <div>
             <Table  
@@ -41,6 +43,7 @@ export default {
    data(){
        return {
             selection : [],
+            searhFormData : {},
             columnsData: [
                     {
                         type: 'selection',
@@ -65,7 +68,7 @@ export default {
                     {
                         title: '硬件ID',
                         key: 'deviceId',
-                        width: 180,
+                        width: 200,
                     },
                     {
                         title: '门类型',
@@ -89,16 +92,22 @@ export default {
 
        this.getAllEquipmentList({});
    },
+   props:[
+        "communityId"
+    ],
   
    methods:{
        changePage(page){
-           console.log("page",page);
-           var param = {page :page}
-           this.getAllEquipmentList(param);
+
+           let _this =this;
+           console.log("communityId",this.communityId);
+           var param = {page :page,communityId : _this.communityId}
+           var sendParam = Object.assign({},_this.searhFormData,param)
+           this.getAllEquipmentList(sendParam);
        },
        getAllEquipmentList(param){
            this.$http.get('getAllEquipmentList', param).then((res)=>{
-                // console.log("res",res);
+               
                 var resData = res.data;
                 this.allEquipmentListData = resData.items;
                 this.listTotalCount = resData.totalCount
@@ -120,6 +129,13 @@ export default {
            }else{
                this.$emit("addEquipmentToGroup",selectionData)
            }
+       },
+       searchEquipment(formData,allSearchData){
+           let _this = this;
+           var params = Object.assign({},{communityId:_this.communityId},allSearchData);
+           this.searhFormData = params;
+           _this.getAllEquipmentList(params);
+
        }
 
    }

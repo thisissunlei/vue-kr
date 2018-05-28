@@ -9,8 +9,8 @@
                     style="width:150px"
                     placeholder="请选择社区"
                     filterable
-                    clearable
                     @on-change="onChangeCommunity"
+                    disabled
                 >
                     <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
                 </Select>
@@ -33,7 +33,7 @@
             </FormItem>
             <FormItem label="门类型：">
                 <Select
-                    v-model="formItem.floor"
+                    v-model="formItem.doorType"
                     style="width:150px"
                     placeholder="请选择门类型"
                     
@@ -47,12 +47,11 @@
                     </Option>
                 </Select>
             </FormItem>
-            <FormItem label="客户名称：" >
-                 <Input
-                    v-model="formItem.serialNo"
-                    placeholder="请输入设备ID"
-                    style="width: 150px"
-               />
+            <FormItem label="其他："> 
+                <SearchForm 
+                    :searchFilter="searchFilter"
+                    :onSubmit="onSubmitSearchForm"
+                />
             </FormItem>
         </Form>
         
@@ -64,12 +63,12 @@
 </template>
 
 <script>
-
+import SearchForm from '~/components/SearchForm';
 export default{
     name:'equipmentSearch',
     data (){
 		return{
-            communityId : null,
+           
             communityList :[],
 			formItem : {},
             floorOptions : [],
@@ -77,20 +76,37 @@ export default{
                 {value:"GATE",label : "大门"},
                 {value:"MEETING",label : "会议室"},
                 {value:"OFFICE",label : "独立办公室"}
-            ]
+            ],
+            searchFilter:[
+                    {
+                        label:'屏幕编号',
+                        value:'doorCode'
+                    },
+                    {
+                        label:'屏幕标题',
+                        value:'title'
+                    },
+                    {
+                        label:'硬件ID',
+                        value:'deviceId'
+                    }
+            ],
+            searchFormData:{},
+            otherSearchData : {}
 		}
 
     },
     mounted(){
- 
-        this.getCommunity();
+
+        var param = {communityId : this.communityId};
+        this.getCommunity(this.getfloorOptions,param);
         
     },
     props:[
-        
+        "communityId"
     ],
     components: {
-     
+     SearchForm
     },
     methods:{
 
@@ -114,15 +130,19 @@ export default{
                 })
          },
          searchEquipment(){
+             let _this = this;
             console.log("this.formItem",this.formItem);
-            this.$emit('searchEquipment',this.formItem);  
+            var newSearchData = Object.assign({},_this.otherSearchData,_this.formItem)
+            console.log("newSearchData",newSearchData);
+            this.$emit('searchEquipment',_this.formItem,newSearchData);  
          },
-        getCommunity(){
+        getCommunity(callback,sendMsg){
             
             this.$http.get('join-bill-community','').then((res)=>{
 
                 this.communityList=res.data.items;
 
+                callback && callback(sendMsg);
                 
             }).catch((error)=>{
                 this.$Notice.error({
@@ -136,7 +156,17 @@ export default{
         },
         addEquipmentToGroup(){
             this.$emit("addEquipmentToGroup")
-        }
+        },
+
+
+
+        onSubmitSearchForm(value){
+            console.log("value",value);
+            this.otherSearchData = value;
+
+        },
+
+
     },
     updated:function(){
         this.$emit('formData', this.formItem);

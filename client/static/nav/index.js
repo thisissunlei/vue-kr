@@ -709,12 +709,12 @@
                         // type:'vue',
                         menuCode: 'operation_home',
                     },
-                    {
-                        primaryText: '即将到期',
-                        router: 'inventory/over-date',
-                        type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '即将到期',
+                    //     router: 'inventory/over-date',
+                    //     type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     // {
                     //     primaryText: '即将进场',
                     //     router: 'inventory/enter-field',

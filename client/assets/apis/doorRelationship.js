@@ -40,7 +40,12 @@ export default  {
     'addEquipmentToGroup':{
         url :'/api/iot-platform/door-set/actions/add-door',
         method: 'post'
+    },
+    'deleteEquipmentFromGroup':{
+        url :'/api/iot-platform/door-set/actions/remove-door',
+        method: 'delete'
     }
+    
     
   }
   

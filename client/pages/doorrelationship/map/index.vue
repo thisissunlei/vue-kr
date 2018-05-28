@@ -19,16 +19,18 @@
             :openDrawer="openEquipmentDetail"
             iconType="view-icon"
             :close="closeEquipmentDetail"
-            width="540"
+            width="652"
         >
 
             <GroupDetail
                 :editInitialDataProps="editInitailData"
                 @deleteEquipmentGroup="deleteEquipmentGroup"
+                :groupDetailDoorListData="groupDetailDoorListData"
                 :communityId ="communityId"
                 @editNodeDataInDetail = "editNodeDataInDetail"
                 @openDeleteTipFromDetail = "openDeleteTipModel"
                 @openAddEquipmentModalFun = "openAddEquipmentModalFun"
+                @deleteEquipmentSendReq = "deleteEquipmentSendReq"
             />
         </Drawer>
         <Modal
@@ -91,7 +93,8 @@ export default {
             //图表数据
             dateTemplate :{},
             refreshedMapData : false,
-            openDeleteTip :false
+            openDeleteTip :false,
+            groupDetailDoorListData : {}
        }
    },
    components:{
@@ -167,6 +170,7 @@ export default {
                     },
                     doubleClick: function(e, node) {
                         _this.selectedNodeData = node.data;
+
                         _this.openEquipmentDetailFun(node.data);
                     },
                     // selectionChanged: function(part) {
@@ -377,8 +381,11 @@ export default {
        
 
         openEquipmentDetailFun(nodeData){
+
             this.editInitailData = nodeData;
-            this.closeEquipmentDetail()
+            // console.log("nodeData",nodeData)
+            this.getEquipmentListData({setId : nodeData.id},"openDetail")
+            
 
         },
        
@@ -598,7 +605,7 @@ export default {
         },
 
         addEquipmentToGroup(selection){
-            this.openAddEquipmentModalFun();
+            // this.openAddEquipmentModalFun();
             this.senReqEquipmentToGroup(selection);
         },
         senReqEquipmentToGroup(selection){
@@ -617,11 +624,46 @@ export default {
             }
             this.$http.post('addEquipmentToGroup', sendParams).then((res)=>{
                 this.$Message.success('添加成功');
+
+
+                var getEquipmentParam = {setId : this.selectedNodeData.id}
+                this.getEquipmentListData(getEquipmentParam);
+
+
 			}).catch((error)=>{
 				this.$Notice.error({
 					title:error.message
 				});
 			})
+        },
+        getEquipmentListData(param,strParam){
+
+
+            this.$http.get('getDoorListByGroup', param).then((res)=>{
+
+                this.groupDetailDoorListData = res.data;
+                if(strParam=="openDetail"){
+                    this.closeEquipmentDetail()
+                }
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+
+        deleteEquipmentSendReq(params){
+
+            this.$http.delete('deleteEquipmentFromGroup', params).then((res)=>{
+
+                var getEquipmentParam = {setId : this.selectedNodeData.id}
+                this.getEquipmentListData(getEquipmentParam)
+
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
         }
         
     }

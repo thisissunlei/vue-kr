@@ -111,5 +111,7 @@ export default{
 }
 </script>
 <style lang="less">
-
+    .edit-equipment{
+        padding-bottom : 15px;
+    }
 </style>

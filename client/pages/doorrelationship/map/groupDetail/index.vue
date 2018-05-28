@@ -14,6 +14,8 @@
     <EquipmentList 
         :communityId="communityId"
         @openAddEquipmentModalFun="openAddEquipmentModalFun"
+        :groupDetailDoorListData="groupDetailDoorListData"
+        @deleteEquipmentFromGroup="deleteEquipmentFromGroup"
     />
 </div>
 </template>
@@ -43,7 +45,8 @@ export default{
     },
      props:[
         "editInitialDataProps",
-        "communityId"
+        "communityId",
+        "groupDetailDoorListData"
      ],
     methods:{
         getEditForm(form){
@@ -61,7 +64,25 @@ export default{
         openAddEquipmentModalFun(){
             
             this.$emit("openAddEquipmentModalFun")
-        }
+        },
+        deleteEquipmentFromGroup(selection){
+
+            let _this =this;
+            var toDleteEquipmentArr = [];
+            for(var i=0;i<selection.length;i++){
+                toDleteEquipmentArr.push(selection[i].id)
+            }
+            var toDleteEquipmentStr = toDleteEquipmentArr.join(",");
+            console.log("toDleteEquipmentStr",toDleteEquipmentStr);
+            var paramsSend = {
+                doorIds : toDleteEquipmentStr,
+                setId : _this.editInitialDataProps.id
+            }
+            console.log("paramsSend",paramsSend);
+            this.$emit("deleteEquipmentSendReq",paramsSend)
+
+        },
+
     },
     updated:function(){
 

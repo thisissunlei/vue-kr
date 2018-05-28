@@ -9,6 +9,7 @@
         @deleteEquipmentGroup= "deleteEquipmentGroup"
         @editNodeDataInDetail="editNodeDataInDetail"
         @openDeleteTipFromDetail = "openDeleteTipFromDetail"
+        
     />
 
     <EquipmentList 
@@ -17,6 +18,7 @@
         :groupDetailDoorListData="groupDetailDoorListData"
         @deleteEquipmentFromGroup="deleteEquipmentFromGroup"
         @searchEquipment="searchEquipment"
+        :doorTypeOptions = "doorTypeOptions"
     />
 </div>
 </template>
@@ -47,7 +49,8 @@ export default{
      props:[
         "editInitialDataProps",
         "communityId",
-        "groupDetailDoorListData"
+        "groupDetailDoorListData",
+        "doorTypeOptions"
      ],
     methods:{
         getEditForm(form){
@@ -56,8 +59,8 @@ export default{
         deleteEquipmentGroup(sendMsg){
             this.$emit('deleteEquipmentGroup',sendMsg);
         },
-        editNodeDataInDetail(sendMsg){
-            this.$emit("editNodeDataInDetail",sendMsg);
+        editNodeDataInDetail(sendMsg,res){
+            this.$emit("editNodeDataInDetail",sendMsg,res);
         },
         openDeleteTipFromDetail(sendMsg){
              this.$emit("openDeleteTipFromDetail",sendMsg);

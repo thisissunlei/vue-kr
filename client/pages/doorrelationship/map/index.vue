@@ -40,6 +40,7 @@
                 @openAddEquipmentModalFun = "openAddEquipmentModalFun"
                 @deleteEquipmentSendReq = "deleteEquipmentSendReq"
                 @searchEquipment ="searchEquipment"
+                :doorTypeOptions = "doorTypeOptions"
             />
         </Drawer>
         <Modal
@@ -67,6 +68,7 @@
                 v-if="openAddEquipmentModal"
                 @addEquipmentToGroup="addEquipmentToGroup"
                 :communityId="communityId"
+                :doorTypeOptions = "doorTypeOptions"
             />
            
             <div slot="footer" class="displayNone"></div>
@@ -121,6 +123,7 @@ export default {
                         value:'deviceId'
                     }
             ],
+            doorTypeOptions :[],
             searchGroupId : -1,
             searchGroupIdsArr : [],
        }
@@ -131,7 +134,8 @@ export default {
     AllEquipmentList,SearchForm
    },
    mounted(){
-
+       var doorTypeParam = {enmuKey : "com.krspace.iot.platform.api.enums.door.DoorType"}
+       this.getBasicDataDoorType(doorTypeParam);
        this.getCommunity(this.getMapData,this.drawMap);
    },
   
@@ -169,8 +173,11 @@ export default {
                         "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
                             this.archetypeNodeData = {
                                 // key: getNextKey(), // assign the key based on the number of nodes
+                                titleText: "新设备组（0）",
                                 name: "新设备组",
-                                memo: ""
+                                memo: "",
+                                equipmentCount : 0
+
                             };
                             
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
@@ -335,6 +342,7 @@ export default {
                     var partData= e.diagram.selection.first().data;
                     
                     var location  = partData.loc.split(" ");
+                    console.log("location",location);
                     var params = {
                         id : partData.id,
                         memo :partData.memo,
@@ -361,13 +369,15 @@ export default {
                 var setListData = reponseData.setList;
                 for(var i = 0 ;i< setListData.length;i++){
                     var countNum = setListData[i].elementCount || "0"
+                    console.log("countNum",countNum);
                     nodeDataArrayNew[i] = {
                         "id": setListData[i].id,
                         "loc": setListData[i].x + " "+ setListData[i].y,
                         "name" :setListData[i].name,
                         "memo" : setListData[i].memo,
                         "communityId " : setListData[i].communityId,
-                        "titleText" : setListData[i].name + "（"+ countNum + ")"
+                        "titleText" : setListData[i].name + "（"+ countNum + ")",
+                        "equipmentCount" :countNum
                     }
                 }
                 for(var i = 0 ;i< reponseData.setRelationList.length;i++){
@@ -410,6 +420,7 @@ export default {
         sumbmitEditData(){
             
             var location  = this.editData.loc.split(" ");
+            
             var params = {
                 id : this.editData.id,
                 memo :this.editData.memo,
@@ -595,22 +606,22 @@ export default {
         },
 
 
-        editNodeDataInDetail(sendMsg){
-            console.log("sendMsg编辑完成传到map页",sendMsg);
+        editNodeDataInDetail(sendMsg,res){
            
             let _this =this;
+            console.log("sendMsg编辑完成传到map页",sendMsg,"res",res,"_this.selectNodeData",_this.selectedNodeData,"_this.editInitailData",_this.editInitailData);
             
             
             var newObj = Object.assign({},sendMsg);
-            
+            var varEquipmentNum = _this.editInitailData.equipmentCount || 0;
+            var textTitleRes = sendMsg.name +"（"+ _this.editInitailData.equipmentCount +"）"
             //修改node的id
             _this.myDiagram.startTransaction();
             var selectedNodeData = _this.selectedNodeData;
             var findNodeData = _this.myDiagram.findNodesByExample({id: sendMsg.id}).first();
             if (findNodeData) {
-                // console.log("-----------",findNodeData.data)
-                // _this.myDiagram.model.setDataProperty(findNodeData.data, "name",newObj.name);
-                _this.myDiagram.model.setDataProperty(findNodeData.data, "memo",newObj.memo);
+                
+                _this.myDiagram.model.setDataProperty(findNodeData.data, "titleText",textTitleRes);
             }
             _this.myDiagram.commitTransaction("changed name and memo");
 
@@ -640,11 +651,22 @@ export default {
 
             }
             this.$http.post('addEquipmentToGroup', sendParams).then((res)=>{
+
+                let _this =this;
                 this.$Message.success('添加成功');
-
-
                 var getEquipmentParam = {setId : this.selectedNodeData.id}
                 this.getEquipmentListData(getEquipmentParam);
+
+
+
+                var textTitleRes = this.selectedNodeData.name + "("+ res.data.count+")"
+                _this.myDiagram.startTransaction();
+                var selectedNodeData = _this.selectedNodeData;
+                var findNodeData = _this.myDiagram.findNodesByExample({id : _this.selectedNodeData.id}).first();
+                if (findNodeData) {
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "titleText",textTitleRes);
+                }
+                _this.myDiagram.commitTransaction("changed name show");
 
 
 			}).catch((error)=>{
@@ -684,14 +706,14 @@ export default {
         },
 
         searchEquipment(msg){
-            console.log("将查询内容传到map",msg);
+            
             this.detailMadalEquipmentListSearchData= msg;
             this.getEquipmentListData(msg,"refresh");
             
         },
 
         onSubmitSearchForm(data){
-            console.log("data---",data);
+            
             var param = data;
             this.getGroupByEquipmentInfo(param);
 
@@ -703,7 +725,6 @@ export default {
                 
                 this.myDiagram.clearHighlighteds();
                 // _this.myDiagram.startTransaction();
-                console.log("res",res.data.items);
                 var isHighlightedNodeIdArr = [190,192];
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
                     var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
@@ -724,6 +745,30 @@ export default {
 
         clearAll(){
             this.myDiagram.clearHighlighteds();
+        },
+        getBasicDataDoorType(param){
+            
+            let _this =this;
+            this.$http.get('getBasicDataDoorType', param).then((res)=>{
+               
+                var resData = res.data;
+                
+                var newArr = [];
+                for(var i=0;i<resData.length;i++){
+                    var objNew = {
+                        label:resData[i].desc,
+                        value:resData[i].value,
+                    }
+                    newArr.push(objNew);
+                }
+                _this.doorTypeOptions = newArr;
+
+			}).catch((error)=>{
+				this.$Notice.error({
+					title:error.message
+				});
+			})
+
         }
 
         

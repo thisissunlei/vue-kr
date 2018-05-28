@@ -59,22 +59,19 @@ export default{
 		return{
 			formItem : {},
             floorOptions : [],
-            doorTypeOptions:[
-                {value:"GATE",label : "大门"},
-                {value:"MEETING",label : "会议室"},
-                {value:"OFFICE",label : "独立办公室"}
-            ],
+           
 		}
 
     },
     mounted(){
     //   this.getfloorOptions();
         console.log("this.communityId",this.communityId);
+
         this.getfloorOptions();
         
     },
     props:[
-        "communityId"
+        "communityId","doorTypeOptions"
     ],
     methods:{
 

@@ -85,7 +85,7 @@ export default{
                     }
                 });
                 var sendMsgObj = Object.assign({},sendMsg)
-                this.$emit("editNodeDataInDetail",sendMsgObj);
+                this.$emit("editNodeDataInDetail",sendMsgObj,res);
                 
 
 			}).catch((error)=>{

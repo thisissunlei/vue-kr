@@ -9,6 +9,7 @@
   <EquipmentSearch 
     :communityId="communityId" 
     @searchEquipment="searchEquipment"
+    :doorTypeOptions = "doorTypeOptions"
   />
   <div>
       <Table  
@@ -75,7 +76,8 @@ export default{
     },
      props:[
         "communityId",
-        "groupDetailDoorListData"
+        "groupDetailDoorListData",
+        "doorTypeOptions"
      ],
     methods:{
        searchEquipment(params){

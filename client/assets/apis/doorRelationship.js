@@ -50,6 +50,12 @@ export default  {
         url :'/api/iot-platform/door-set/actions/search',
         method: 'get'
     },
+
+    'getBasicDataDoorType':{
+        url :'/api/sso/sys/enmu',
+        method: 'get'
+    },
+    // ?enmuKey=com.krspace.iot.platform.api.enums.door.DoorType
     
     
   }

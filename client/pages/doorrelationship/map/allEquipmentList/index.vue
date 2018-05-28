@@ -5,6 +5,7 @@
             @addEquipmentToGroup = "addEquipmentToGroup"
             :communityId = "communityId"
             @searchEquipment="searchEquipment"
+            :doorTypeOptions="doorTypeOptions"
         />
         <div>
             <Table  
@@ -95,7 +96,7 @@ export default {
        this.getAllEquipmentList(this.searhFormData);
    },
    props:[
-        "communityId"
+        "communityId","doorTypeOptions"
     ],
   
    methods:{

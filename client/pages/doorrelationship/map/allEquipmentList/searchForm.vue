@@ -72,11 +72,7 @@ export default{
             communityList :[],
 			formItem : {},
             floorOptions : [],
-            doorTypeOptions:[
-                {value:"GATE",label : "大门"},
-                {value:"MEETING",label : "会议室"},
-                {value:"OFFICE",label : "独立办公室"}
-            ],
+            
             searchFilter:[
                     {
                         label:'屏幕编号',
@@ -103,7 +99,7 @@ export default{
         
     },
     props:[
-        "communityId"
+        "communityId","doorTypeOptions"
     ],
     components: {
      SearchForm

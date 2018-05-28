@@ -723,7 +723,7 @@ export default {
         },
 
         clearAll(){
-            
+            this.myDiagram.clearHighlighteds();
         }
 
         

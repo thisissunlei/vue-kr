@@ -196,7 +196,7 @@ var layoutScrollHeight=0;
                         key: 'customerStatoons',
                     },
                     {
-                        title: '随后可续时段',
+                        title: '随后可续',
                         align:'center',
                         width:110,
                         key: 'reletTypeName',

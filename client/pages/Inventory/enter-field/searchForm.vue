@@ -299,7 +299,7 @@ export default {
                     {value:' ',label:'全部'},
                     {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
                     {value:'RENT_NO_PERMIT',label:'不可续租'},
-                    {value:'RENT_CAN_TO',label:'只可续部分时间'}
+                    {value:'RENT_CAN_TO',label:'只可续租一段时间'}
                 ],
                 communityList:[],
                 cityList:[],

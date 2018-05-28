@@ -26,8 +26,8 @@ function poptipOver(every,all,canvas,scroll,discount) {
     var boundTip=toolLocation.left+canvasDetail.left;
     var offset=0;
     if(Number(bodyWidth)-Number(boundTip)<230){
-        toolLocation.left=toolLocation.left-Number(tirDetail.width)/3;
-        offset=Number(tirDetail.width)/3;
+        toolLocation.left=canvasDetail.width-tirDetail.width;
+        offset=tirDetail.width/2-10;
     }
     if(toolLocation.left<0){
         offset=toolLocation.left;

@@ -59,8 +59,8 @@ function init(data,picProperty,dataUrl,drawWrap){
         }
         
         //极限尺寸
-        if((picProperty.width*scale<600)&&(picProperty.height*scale<600)){
-            scale=Number(picProperty.width*scale/600);
+        if((picProperty.width*scale<500)&&(picProperty.height*scale<500)){
+            scale=500/picProperty.width;
         }
         
         //尺寸缩放

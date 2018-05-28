@@ -54,7 +54,7 @@ var img='';
     mounted(){
         //背景图
         img=new Image();
-        img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
+        img.src="http://op.krspace.cn"+this.data.graphFilePath;
         img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },

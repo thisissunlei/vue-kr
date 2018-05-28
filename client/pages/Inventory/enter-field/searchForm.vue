@@ -458,6 +458,7 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
+            this.floorList = []
             this.$emit('clearClick',this.formItem);
         },
         //回车

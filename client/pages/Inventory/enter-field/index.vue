@@ -123,6 +123,42 @@ var layoutScrollHeight=0;
                         align:'center',
                         width:110,
                         key: 'toPutawayDays',
+                        render(h, params){
+                            if(params.row.toPutawayDays<30){
+                                return h('div', [
+                                        h('div', [
+                                            h('span', { 
+                                                style: {
+                                                    color:'#FF6868'
+                                                }       
+                                            }, params.row.toPutawayDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }else{ 
+                               return h('div', [
+                                        h('div', {slot:'zu'},[
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, params.row.toPutawayDays),
+                                            h('span', { 
+                                                style: {
+                                                    color:'#333'
+                                                }       
+                                            }, '天'),
+                                        ])
+                            ])
+                            }
+
+                            
+                                        
+                        }
                     },
                     {
                         title: '进场日',
@@ -151,6 +187,13 @@ var layoutScrollHeight=0;
                         align:'center',
                         width:130,
                         key: 'contactTel',
+                        render(h,params){
+                            if(params.row.contactTel){
+                                return params.row.contactTel
+                            }else{
+                                return '-'
+                            }
+                        }
                     },
                     {
                         title: '离场日',
@@ -162,7 +205,7 @@ var layoutScrollHeight=0;
                         title: '租期',
                         align:'right',
                         width:80,
-                        key: 'quotedPrice',
+                        key: 'rentDays',
                     },
                 ],
                 openMessage:false,
@@ -221,7 +264,7 @@ var layoutScrollHeight=0;
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
+                this.tabForms=Object.assign({},formItem);
                 this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },

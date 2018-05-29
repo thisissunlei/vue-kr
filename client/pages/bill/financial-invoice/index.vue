@@ -11,11 +11,11 @@
                 :animated="false"
                 @on-click="tabsClick"
             >
-                <TabPane label="待审核" name="waitAudit"> 
-                    <List v-if="type == 'waitAudit'" :type="type"/>
+                <TabPane label="待审核" name="VERIFYING"> 
+                    <List v-if="type == 'VERIFYING'" :type="type"/>
                 </TabPane>
-                <TabPane label="已审核" name="alreadyAudit" >
-                    <List v-if="type == 'alreadyAudit'" :type="type"/>
+                <TabPane label="已审核" name="PASSED" >
+                    <List v-if="type == 'PASSED'" :type="type"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -40,7 +40,7 @@
         },
         data () {
            return {
-               type:'waitAudit',
+               type:'VERIFYING',
            }
         },
       
@@ -54,7 +54,7 @@
                 this.type = val;
             },
             searchClick(params){
-                console.log(params,"lllllll")
+               
                 utils.addParams(params);
             },
             clearClick(params){

@@ -125,14 +125,14 @@
 </template>
 
 <script>
-import SectionTitle from '~/components/SectionTitle.vue'
-import selectCommunities from '~/components/SelectCommunities.vue'
-import selectCustomers from '~/components/SelectCustomers.vue'
-import SelectSaler from '~/components/SelectSaler.vue'
+import SectionTitle from '~/components/SectionTitle';
+import selectCommunities from '~/components/SelectCommunities';
+import selectCustomers from '~/components/SelectCustomers';
+import SelectSaler from '~/components/SelectSaler';
 import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
+import planMap from '~/components/PlanMap';
 import dateUtils from 'vue-dateutils';
-
+import krUpload from '~/components/KrUpload';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
     export default {

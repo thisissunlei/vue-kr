@@ -1,85 +1,102 @@
 import dateUtils from 'vue-dateutils';
 function initListData(){
+    let that = this;
     return [
         {
             title: '申请编号',
-            key: 'name',
+            key: 'applyNo',
             align:'center',
-            type:'waitAudit,alreadyAudit,returnMake,all',
+            type:'VERIFYING,PASSED',
         },
         {
             title: '单位名称',
-            key: 'name',
+            key: 'invoiceTitle',
             align:'center',            
-            type:'waitAudit,alreadyAudit,returnMake,all'
+            type:'VERIFYING,PASSED'
         },
         {
             title: '单位类别',
             align:'center',
-            key: 'name',
-            type:'waitAudit,alreadyAudit'
+            key: 'titleType',
+            type:'VERIFYING,PASSED',
+            render(tag, params){
+                let val= that.unitTypeToStr(params.row.titleType);
+                return val;
+            }
         },
         {
             title: '纳税类型',
-            key: 'name',
+            key: 'taxpayerType',
             align:'center',
-            type:'waitAudit,alreadyAudit'
+            type:'VERIFYING,PASSED',
+            render(tag, params){
+                let val= that.taxTypeToStr(params.row.taxpayerType);
+                return val;
+            }
         },
         {
             title: '纳税人识别码',
-            key: 'name',
+            key: 'taxpayerNumber',
             align:'center',
-            type:'waitAudit,alreadyAudit'
+            type:'VERIFYING,PASSED'
         },
         {
             title: '注册地址',
-            key: 'name',
+            key: ' registerAddress',
             align:'center',
-            type:'waitAudit,alreadyAudit'
+            type:'VERIFYING,PASSED'
         },
         {
             title: '注册电话',
-            key: 'name',
+            key: 'registerPhone',
             align:'center',
-            type:'waitAudit,alreadyAudit',
+            type:'VERIFYING,PASSED',
         },
         {
             title: '开户银行',
-            key: 'name',
+            key: 'bank',
             align:'center',
-            type:'waitAudit,alreadyAudit',
+            type:'VERIFYING,PASSED',
         },
         {
             title: '银行账户',
-            key: 'name',
+            key: 'bankAccount',
             align:'center',
-            type:'waitAudit,alreadyAudit'
+            type:'VERIFYING,PASSED'
         },
         {
             title: '提交时间',
-            key: 'name',
+            key: 'ctime',
             align:'center',
-            type:'waitAudit'
+            type:'VERIFYING',
+            render(tag, params){
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                return time;
+            }
         },
         {
             title: '确认时间',
-            key: 'name',
+            key: 'verifyTime',
             align:'center',
-            type:'alreadyAudit'
+            type:'PASSED',
+            render(tag, params){
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.verifyTime));
+                return time;
+            }
         },
         {
             title: '确认人员',
-            key: 'name',
+            key: 'verifyUser',
             align:'center',
-            type:'alreadyAudit'
+            type:'PASSED'
         },
         {
             title: '操作',
             key: 'name',
             align:'center',
-            type:'waitAudit',
+            type:'VERIFYING',
             render:(h,params)=>{
-               
+                let colData = params.row;
                 return h('div', [
                         h('Button', {
                             props: {
@@ -91,7 +108,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    that.goView(colData)
                                 }
                             }
                         }, '查看'),
@@ -105,7 +122,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    that.goView()
                                 }
                             }
                         }, '确认'),
@@ -119,7 +136,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    that.goView()
                                 }
                             }
                         }, '驳回')
@@ -132,9 +149,9 @@ function initListData(){
             title: '操作',
             key: 'name',
             align:'center',
-            type:'alreadyAudit',
+            type:'PASSED',
             render:(h,params)=>{
-               
+                let colData = params.row;
                 return h('div', [
                         h('Button', {
                             props: {
@@ -146,7 +163,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.makeInvaice()
+                                    that.makeInvaice(colData)
                                 }
                             }
                         }, '查看'),
@@ -160,7 +177,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goBack()
+                                    that.goBack()
                                 }
                             }
                         }, '编辑') 

@@ -180,7 +180,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.goView()
                                 }
                             }
                         }, '查看'),
@@ -194,7 +194,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.openView()
+                                    this.makeInvaice()
                                 }
                             }
                         }, '重开')
@@ -209,7 +209,7 @@ function initListData(){
             align:'center',
             type:'waitMake',
             render:(h,params)=>{
-               
+                let colData = params.row;
                 return h('div', [
                         h('Button', {
                             props: {
@@ -221,7 +221,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.makeInvaice()
+                                    this.makeInvaice(colData)
                                 }
                             }
                         }, '开票'),
@@ -235,7 +235,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goBack()
+                                    this.goBack(colData)
                                 }
                             }
                         }, '退回') 

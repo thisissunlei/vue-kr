@@ -4,6 +4,7 @@
             :columns="listColumns" 
             :data="listData"
             border
+            :loading="isLoading"
         ></Table>
          <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
@@ -17,35 +18,7 @@
                     @on-change="changePage"
                 ></Page>
             </div>
-            
         </div>
-        <Modal
-                v-model="openMakeInvaice"
-                title="提示信息"
-                width="500"
-            >
-            <div style="text-align:center;">
-                <span>发票张数:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票张数" />
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="makeInvaiceSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="switchMakeInvaice">取消</Button>
-            </div>
-        </Modal>
-        <Modal
-                v-model="openGoBack"
-                title="提示信息"
-                width="660"
-            >
-            <div>
-                <span style="height:30px;display:inline-block;">回退原因:</span><Input type="textarea" :rows="4" placeholder="请输入退回原因" />
-            </div>
-            <div slot="footer">
-                <Button type="primary" @click="goBackSubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="switchGoBack">取消</Button>
-            </div>
-        </Modal>
-     
     </div>
 </template>
 
@@ -58,7 +31,6 @@
         props:{
             type:{
                 type:String,
-                
             }
         },
         data () {
@@ -66,67 +38,49 @@
                 listData:[{name:'123'}],
                 openMakeInvaice:false,
                 openGoBack:false,
+                isLoading:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
                 tableParams:{
                     page:1,
                     pageSize:15,
                     totalCount:0,
+                    verifyStatus:this.type,
+
                 },
            }
         },
       
         created(){
-                // var params=Object.assign({},this.tableParams,this.$route.query);
-                // this.getListData(params);
-                // this.tableParams=params; 
-                //   utils.addParams(this.params);
+            // var params=Object.assign({},this.tableParams,this.$route.query);
+            this.getListData();
+            // this.tableParams=params; 
+            //   utils.addParams(this.params);
         },
 
         methods:{
             //跳转创建页面
-            goAddPage(params){
-
+            goView(params){
+                window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}`,params.id);
             },
-            //回退按钮点击
-            goBack(){
-                this.switchGoBack();
+            unitTypeToStr(str){
+                switch(str){
+                    case 'COMPANY': 
+                        return '企业单位';
+                        break;
+                    case 'PERSON': 
+                        return '个人/非企业单位';
+                        break;
+                    default: 
+                        return '-';
+                        break;
+                }
             },
-            //回退退弹窗开关
-            switchGoBack(){
-                this.openGoBack = !this.openGoBack;
-            },
-            //回退提交
-            goBackSubmit(){
-                this.$http.post('get-project-home', tabParams).then((res)=>{
-                    // this.listData=res.data.items;
-                    this.getListData();
-                    this.switchGoBack();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
-            },
-            //开票按钮点击
-            makeInvaice(){  
-               
-                this.switchMakeInvaice();
-            },
-            //开票页面开关
-            switchMakeInvaice(){
-                this.openMakeInvaice = !this.openMakeInvaice;
-            },
-            //开票提交
-            makeInvaiceSubmit(){
-                this.$http.post('get-project-home', tabParams).then((res)=>{
-                    // this.listData=res.data.items;
-                    this.getListData();
-                    this.switchMakeInvaice();
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
+            taxTypeToStr(str){
+                 switch(str){
+                    case 'SMALL': return '小规模纳税人';
+                    case 'GENERAL': return '一般纳税人';
+                    default: return '-';
+                }
             },
             //页面切换
             changePage(){
@@ -134,8 +88,10 @@
             },
             //获取列表数据
             getListData(){
-
-                this.$http.get('get-project-home', tabParams).then((res)=>{
+                this.isLoading = true;
+                let params = Object.assign({},this.tableParams);
+                this.$http.get('get-financial-invoice-list', params).then((res)=>{
+                        this.isLoading = false;
                         this.listData=res.data.items;
                      
                 }).catch((err)=>{

@@ -1,14 +1,13 @@
 <template>
-	<div>
+	<div style="display:inline-block;">
 		<input 
 			:id="inputId" 
 			type="file" 
 			style="display:none;" 
-			@change="onChange"
-			
+			@change="onChange"	
 		>
 		<div class="only-up" v-if="type=='only'">
-			<div class="up-show">
+			<div class="content-box">
 				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
 					<div class="img-mask">
@@ -17,7 +16,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="!defaultList || !defaultList.length" class="up-icon" @click="upBtnClick">
+			<div v-if="upIconShow" class="up-icon" @click="upBtnClick">
 				<Icon type="plus-round"></Icon>
 			</div>
 			<slot  name="up-btn" ></slot>
@@ -97,6 +96,7 @@ export default{
 				left:0,
 				top:0,
 			},
+			upIconShow:true,
 			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
@@ -111,10 +111,11 @@ export default{
 	},
 	methods:{
 		delClick(index){
-			console.log(index,this.defaultList);
 			var list = [].concat(this.defaultList);
 			list.splice(index, 1);
+
 			this.defaultList = [].concat(list);
+			this.upIconShow =true;
 		},
 		upBtnClick(){
 			let fileDom = document.getElementById(this.inputId);
@@ -219,12 +220,14 @@ export default{
 			var detail = Object.assign({},params);
 			if(this.multiple){
 				this.defaultList.push(detail)
+				this.upIconShow = true;
 			}else{
 				this.defaultList = [detail];
+				this.upIconShow = false;
 			}
 			
 			// this.submitUpload([detail]);
-			this.$emit('upSuccess',[detail],this.columnDetail);
+			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
 			
 		},
 		onTokenSuccess(){
@@ -263,6 +266,7 @@ export default{
 	left: 0px;
 	top: 0px;
 	z-index: 999;
+
 	.list{
 		position: fixed;
 		// width: 100%;
@@ -309,6 +313,13 @@ export default{
 		vertical-align: middle;
 		font-size: 26px;
 		transition: all 0.3s;
+		display: inline-block;
+		box-sizing: content-box;
+		border-radius:4px;
+		margin: 0px 10px;
+	}
+	.content-box{
+		display: inline-block;
 	}
 	.up-icon:hover{
 		color: #2d8cf0;
@@ -321,6 +332,8 @@ export default{
 		height: 60px;
 		border-radius: 4px;
 		overflow: hidden;
+		margin: 0 10px;
+		vertical-align:middle;
 		.img-mask{
 			position: absolute;
 			width: 100%;

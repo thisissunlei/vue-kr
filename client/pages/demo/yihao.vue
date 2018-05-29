@@ -3,18 +3,17 @@
   <section class="container">
     <div>
         <krUpload 
-            action="//jsonplaceholder.typicode.com/posts/"
             :file="[]"
             type="only"
             :columnDetail="{}"
-            :onUpUrl="()=>{}"
+           
         />
     </div>
   </section>
 </template>
 
 <script>
-import krUpload from '~/components/KrUpload.vue';
+import krUpload from '~/components/KrUpload';
 export default {
      
     data() {

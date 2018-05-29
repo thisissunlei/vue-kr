@@ -703,12 +703,12 @@
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
                 menuItems: [
-                    {
-                        primaryText: '社区主页',
-                        router: 'community/operation/index',
-                        // type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '社区主页',
+                    //     router: 'community/operation/index',
+                    //     // type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '即将到期',
                         router: 'inventory/over-date',

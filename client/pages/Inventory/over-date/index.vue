@@ -109,19 +109,29 @@ var layoutScrollHeight=0;
                     {
                         title: '商品类型',
                         key: 'type',
-                        width:110,
+                        width:75,
                         align:'center',
+                        render(h,params){
+                            let one = params.row.type.substr(0,2);
+                            let two = params.row.type.substr(2,3);
+                            return h('div',[
+                                    h('p',{
+                                    },one),
+                                    h('p',{
+                                    },two),
+                            ])
+                        }
                     },
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:70,
+                        width:65,
                         align:'center',
                     },
                     {
                         title: '剩余租期',
                         align:'center',
-                        width:90,
+                        width:80,
                         key: 'leaseRemainingDays',
                         render(h, params){
                             if(params.row.leaseRemainingDays<30){
@@ -163,13 +173,13 @@ var layoutScrollHeight=0;
                     {
                         title: '进场日',
                         align:'center',
-                        width:110,
+                        width:105,
                         key: 'startDate',
                     },
                     {
                         title: '离场日',
                         align:'center',
-                        width:110,
+                        width:105,
                         key: 'endDate',
                     },
                     {
@@ -184,13 +194,34 @@ var layoutScrollHeight=0;
                     {
                         title: '当前签约价',
                         align:'right',
-                        width:100,
+                        width:80,
                         key: 'price',
                     },
                     {
                         title: '当前客户',
                         align:'center',
                         key: 'customerName',
+                        render(h, params){
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: params.row.customerName
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden'
+                                                }
+                                            },params.row.customerName),
+                                        ])
+                                    ])
+                            ])
+                        }
+
                     },
                     {
                         title: '当前在租工位数',
@@ -286,7 +317,7 @@ var layoutScrollHeight=0;
                     {
                         title: '商品定价',
                         align:'right',
-                        width:100,
+                        width:75,
                         key: 'quotedPrice',
                     },
                 ],

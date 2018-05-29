@@ -167,7 +167,7 @@
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
-            
+
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -649,7 +649,7 @@
                             primaryText: '库存平面图',
                             router: 'inventory/floor-plan',
                             type: 'vue',
-                            menuCode: 'inventory',
+                            menuCode: 'inventory_graph',
                         },
                         {
                             primaryText: "社区招商情况",
@@ -687,8 +687,8 @@
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]	
-                }, 
+                    ]
+                },
              ]
         }
     }
@@ -705,8 +705,8 @@
                 menuItems: [
                     {
                         primaryText: '社区主页',
-                        router: 'operation/community',
-                        type:'vue',
+                        router: 'community/operation/index',
+                        // type:'vue',
                         menuCode: 'operation_home',
                     },
                     {
@@ -715,12 +715,12 @@
                         type:'vue',
                         menuCode: 'operation_home',
                     },
-                    {
-                        primaryText: '即将进场',
-                        router: 'inventory/enter-field',
-                        type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '即将进场',
+                    //     router: 'inventory/enter-field',
+                    //     type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
@@ -1121,7 +1121,21 @@
                     }
                 ]
         },
-            ],
+        {
+                primaryText: "空间管理",
+                iconName: 'icon-card',
+                iconColor: '#79859a',
+                router :'',
+                menuItems: [
+                        {
+                            primaryText: '空间管理',
+                            menuCode: 'basic_space',
+                            type: 'vue',
+                            router: 'smart-hardware/space-manage'
+                        },
+                    ]
+            },
+        ],
         }
     }
     // 订单合同

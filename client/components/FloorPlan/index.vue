@@ -8,7 +8,7 @@
              </div>
 
              <span class="warning-tip"></span>
-             <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公桌和固定办公桌的库存</span> 
+             <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span> 
 
              <div class="export" :id="drawingPicture">导出高清图</div>    
         </div>
@@ -23,6 +23,7 @@
 <script>
 import init from './draw';
 import dataFormat from './dataFormat';
+import utils from '~/plugins/utils';
 var canvasData ={};
 var flowChart= '';
 var scrollDom='';
@@ -53,7 +54,7 @@ var img='';
     mounted(){
         //背景图
         img=new Image();
-        img.src="http://optest03.krspace.cn"+this.data.graphFilePath;
+        img.src='http://'+window.location.host+this.data.graphFilePath;
         img.setAttribute("crossOrigin",'Anonymous');
         img.addEventListener('load',this.imgLoad);
     },
@@ -88,7 +89,8 @@ var img='';
                 dataFormat.init(canvasData,{width:picImg.width,height:picImg.height},dataUrl,drawWrap),
                 this.mouseClick,
                 this.mouseEnter,
-                this.mouseLeave
+                this.mouseLeave,
+                this.downLoadPic
             ) 
             //滚动监听
             scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
@@ -96,9 +98,60 @@ var img='';
               scrollDom.addEventListener('scroll',this.scrollFn);            
             } 
         },
+        getUpFileUrl(url,name){
+			let category = 'op/upload';
+			let that = this;
+			let file = url;
+			var fileName= name;
+			var form = new FormData();
+			this.$http.get('get-vue-upload-url', {
+				category:'op/upload',
+				isPublic:false
+			}).then((res)=>{
+				var response = res.data;
+				form.append('OSSAccessKeyId', response.ossAccessKeyId);
+				form.append('policy', response.policy);
+				form.append('Signature', response.sign);
+				form.append('key', response.pathPrefix+'/'+fileName);
+				form.append('uid', response.uid);
+				form.append('callback', response.callback);
+				form.append('x:original_name', fileName);
+                form.append('file', file);
+				that.upfile(form,response.serverUrl)
+			}).catch((err)=>{
+				this.$Notice.error({
+					title:err.message
+				});
+			})
+        },
+        upfile(form,serverUrl){
+			var that  = this;
+			var xhrfile = new XMLHttpRequest();
+			xhrfile.timeout = 600000;
+			xhrfile.onreadystatechange = function() {
+				if (xhrfile.readyState === 4) {
+					var fileResponse = xhrfile.response;
+					if (xhrfile.status === 200) {
+						if (fileResponse && fileResponse.code > 0) {
+                            var data = fileResponse.data;
+							utils.downImg(data.url);
+						} 
+					} else{
+						that.$Notice.error({
+							title:'上传失败请稍后重试'
+						});
+                    }
+				}
+			};
+			xhrfile.open('POST', serverUrl, true);
+			xhrfile.responseType = 'json';
+			xhrfile.send(form);
+		},
+        downLoadPic(url,name){
+            this.getUpFileUrl(url,name);
+        },
         scrollFn(event){
             this.scroll={
-                //top:event.target.scrollTop,
                 left:event.target.scrollLeft
             }
             this.$emit('scroll',canvasData,this.drawingBoard,this.scroll);

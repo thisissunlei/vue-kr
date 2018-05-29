@@ -64,11 +64,6 @@ export default {
           communityId:'',
           floor:'',
           currentDate:publicFn.getToDay()
-       },
-       isStore:{
-           city:'',
-           community:'',
-           floor:''
        }
     }
   },
@@ -133,6 +128,7 @@ export default {
         this.$emit('searchForm',this.formItem);
     },
     dateChange(param){
+        this.formItem.currentDate=param;
         this.$emit('searchForm',this.formItem);
     }
   }

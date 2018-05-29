@@ -20,7 +20,7 @@
         </div>
        
        
-        <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #DAE4E4;">
+        <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #fff;border-top:'solid 1px #000'">
 
         </div>
         <Drawer
@@ -163,7 +163,7 @@ export default {
                 $(go.Diagram, "doorGroupRelationshipMap",  // must name or refer to the DIV HTML element
                     {
                         // start everything in the middle of the viewport
-                        initialContentAlignment: go.Spot.Center,
+                        // initialContentAlignment: go.Spot.Center,
                         // have mouse wheel events zoom in and out instead of scroll up and down
                         "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
                         // support double-click in background creating a new node
@@ -180,7 +180,7 @@ export default {
 
                             };
                             
-                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:loc.x,y:loc.y,communityId : _this.communityId})
+                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(loc.x),y:parseInt(loc.y),communityId : _this.communityId})
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
                         },
@@ -366,7 +366,7 @@ export default {
             this.$http.get('getDoorRelationshipData', params).then((res)=>{
                 var reponseData = res.data;
                 var nodeDataArrayNew = [],linkConnectArr = [];
-                var setListData = reponseData.setList;
+                var setListData = reponseData.setList || [];
                 for(var i = 0 ;i< setListData.length;i++){
                     var countNum = setListData[i].elementCount || "0"
                     console.log("countNum",countNum);
@@ -725,7 +725,8 @@ export default {
                 
                 this.myDiagram.clearHighlighteds();
                 // _this.myDiagram.startTransaction();
-                var isHighlightedNodeIdArr = [190,192];
+                var isHighlightedNodeIdArr = [200,201];
+                console.log("")
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
                     var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
                     if (findNodeData) {

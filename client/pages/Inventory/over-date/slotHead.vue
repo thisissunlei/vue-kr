@@ -39,7 +39,7 @@
      height:50px;
      /*line-height:40px;*/
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:23;
 
      vertical-align: middle;
   .slot-head-class, .slot-optional-class{

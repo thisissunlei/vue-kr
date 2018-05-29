@@ -206,6 +206,9 @@ var layoutScrollHeight=0;
                         align:'right',
                         width:80,
                         key: 'rentDays',
+                        render(h,params){
+                            return params.row.rentDays+'天'
+                        }
                     },
                 ],
                 openMessage:false,

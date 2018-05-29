@@ -279,7 +279,8 @@ export default {
 
                 }
             };
-            return {  
+            return { 
+                params :{}, 
                 formItem:{
                     communityId:' ',
                     cityId:'',
@@ -354,6 +355,7 @@ export default {
             }
     },
     mounted(){
+        this.params=this.$route.query
         this.getCityList();
     },
     head() {
@@ -364,7 +366,7 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
-            let params = this.$route.query;
+           let params = this.params;
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data.map(item=>{
                     item.id = item.id+'';
@@ -389,7 +391,7 @@ export default {
         },
         //城市接口
         getCityList(){
-            let params = this.$route.query;
+            let params = this.params;
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data.map(item=>{
                     item.cityId = item.cityId+' ';
@@ -417,7 +419,7 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            let params = this.$route.query;
+            let params = this.params;
             console.log(!params.floor,'=====',params.floor)
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
@@ -429,6 +431,9 @@ export default {
                         item.floor = item.floor+'';
                         return item;
                     });
+                }
+                if(this.floorList.lengt==1){
+                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' ';
                 }
                 if(this.floorList.length>1){
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})
@@ -480,10 +485,12 @@ export default {
             return sum;
         },
         cityChange(param){
+            this.params = {}
             this.getCommunityList(param)
         },
         communityChange(param){
             if(param){
+                this.params = {}
                 this.getFloorList(param);
             }
             

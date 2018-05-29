@@ -338,9 +338,9 @@ function getActualBorder(taskStatus) {
 //label的字体的颜色
 function getLabelColor(taskStatus) {
     if (taskStatus === 'NOT_EFFECT') {
-        return '#FFE08F';
+        return '#fea877';
     } else if(taskStatus === 'IN_RENT'){
-        return '#FCC17C';
+        return '#fedc82';
     } else if(taskStatus === 'AVAILABLE'){
         return '#BCE590';
     } 

@@ -167,7 +167,7 @@
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
-            
+
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -618,11 +618,6 @@
                             router: 'product/communityAllocation/communityList'
                         },
                         {
-                            primaryText: '社区平面图',
-                            menuCode: 'oper_cmt_graph_base',
-                            router: 'product/communityAllocation/communityPlanList'
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -632,6 +627,12 @@
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
                         },
+                        {
+                            primaryText: '平面图配置',
+                            menuCode: 'oper_cmt_graph_base',
+                            router: 'product/communityAllocation/communityPlanList'
+                        },
+                        
                         {
                             primaryText: "每日库存查询",
                             router: 'inventory/daily-inventory',
@@ -645,19 +646,16 @@
                             menuCode: 'inventory',
                         },
                         {
-                            primaryText: '注册地址',
-                            menuCode: 'cmt_registerAddress_list',
-                            router: 'product/communityAllocation/registeredAddress'
-                        },
-                        {
-                            primaryText: "我方合同主体",
-                            menuCode: 'lessor_management_base',
-                            router: 'product/customerManage/lessorManage',
-                        },
-                        {
                             primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory_graph',
+                        },
+                        {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
                         },
                         {
                             primaryText: '销控',
@@ -670,18 +668,27 @@
                             menuCode: 'stat_group',
                         },
                         {
-                            primaryText: "社区招商情况",
-                            router: 'community/attract-investment',
-                            type: 'vue',
-                            menuCode: 'cmt_investment',
+                            primaryText: '注册地址',
+                            menuCode: 'cmt_registerAddress_list',
+                            router: 'product/communityAllocation/registeredAddress'
                         },
+                        {
+                            primaryText: "我方合同主体",
+                            menuCode: 'lessor_management_base',
+                            router: 'product/customerManage/lessorManage',
+                        },
+                        // {
+                        //     primaryText: '库存平面图',
+                        //     menuCode: 'cmt_run',
+                        //     router: 'product/communityManage/detail',
+                        // }, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]	
-                }, 
+                    ]
+                },
              ]
         }
     }
@@ -1114,7 +1121,21 @@
                     }
                 ]
         },
-            ],
+        {
+                primaryText: "空间管理",
+                iconName: 'icon-card',
+                iconColor: '#79859a',
+                router :'',
+                menuItems: [
+                        {
+                            primaryText: '空间管理',
+                            menuCode: 'basic_space',
+                            type: 'vue',
+                            router: 'smart-hardware/space-manage'
+                        },
+                    ]
+            },
+        ],
         }
     }
     // 订单合同

@@ -175,8 +175,11 @@ var layoutScrollHeight=0;
                     {
                         title: '租期',
                         align:'center',
-                        width:60,
+                        width:80,
                         key: 'rentDays',
+                        render(h, params){
+                            return params.row.rentDays+'天'
+                        }
                     },
                     {
                         title: '当前签约价',
@@ -196,7 +199,7 @@ var layoutScrollHeight=0;
                         key: 'customerStatoons',
                     },
                     {
-                        title: '随后可续时段',
+                        title: '随后可续',
                         align:'center',
                         width:110,
                         key: 'reletTypeName',

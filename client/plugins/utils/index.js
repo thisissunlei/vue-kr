@@ -123,10 +123,12 @@ import tableSort from './tableSort';
         // a.target = '_blank';
         //a.download = filename;
         a.download = filename;
+        console.log('a--',a);
         a.click();
-       
-     
+        
+    
     }
+    //不要修改，修改找毅豪
     function downImg(href, filename) {
         var a = document.createElement('a');
         a.href = href;

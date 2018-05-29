@@ -264,7 +264,8 @@ export default {
                     callback();
                 }
             };
-            return {  
+            return { 
+                params :{},
                 formItem:{
                     communityId:' ',
                     cityId:'',
@@ -330,6 +331,7 @@ export default {
     },
     mounted(){
         this.getCityList();
+        this.params=this.$route.query
     },
     head() {
         return {
@@ -339,7 +341,7 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
-            let params = this.$route.query;
+            let params = this.params;
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data.map(item=>{
                     item.id = item.id+'';
@@ -364,7 +366,7 @@ export default {
         },
         //城市接口
         getCityList(){
-            let params = this.$route.query;
+            let params = this.params;
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data.map(item=>{
                     item.cityId = item.cityId+' ';
@@ -392,8 +394,7 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            let params = this.$route.query;
-            console.log(!params.floor,'=====',params.floor)
+            let params = this.params;
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
                 if(!res.data.length){
@@ -410,7 +411,10 @@ export default {
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})
                                             
                 }
-                if(!params.floor){
+                if(this.floorList.lengt==1){
+                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' ';
+                }
+                if(params.floor == ' ' || !params.floor){
                     this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
                 }else{
                    this.formItem.floor = params.floor; 
@@ -458,10 +462,12 @@ export default {
         },
         cityChange(param){
             this.getCommunityList(param)
+            this.params = {}
         },
         communityChange(param){
             if(param){
                 this.getFloorList(param);
+                this.params = {}
             }
             
         },

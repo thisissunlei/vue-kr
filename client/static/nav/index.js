@@ -736,12 +736,14 @@
                         type: 'vue',
                         menuCode: 'checklist_list',
                     },
+                    {
+                        primaryText: '电视图库管理',
+                        menuCode: 'tv_ad_storage',
+                        type: 'vue',
+                        router: 'smart-hardware/map-depot'
+                    },
                 ]
             },
-
-
-
-
         ]
     }
     }
@@ -765,6 +767,12 @@
                             primaryText: '活动',
                             menuCode: 'oper_activity_base',
                             router: 'operation/communityAllocation/activity'
+                        },
+                        {
+                            primaryText: '会员福利',
+                            menuCode: 'op_member_coupon_external',
+                            type: 'vue',
+                            router: 'app-manage/member-welfare'
                         },
                         {
                             primaryText: '广告',
@@ -811,24 +819,13 @@
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
                         },
-                        {
-                            primaryText: '会员福利',
-                            menuCode: 'op_member_coupon_external',
-                            type: 'vue',
-                            router: 'app-manage/member-welfare'
-                        },
+                       
                         // {
                         //     primaryText: '免费额度优惠券',
                         //     menuCode: 'op_member_coupon_internal',
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
                         // },
-                        {
-                            primaryText: '电视图库管理',
-                            menuCode: 'tv_ad_storage',
-                            type: 'vue',
-                            router: 'smart-hardware/map-depot'
-                        },
                     ]
                 },
                 {
@@ -858,6 +855,12 @@
                             primaryText: '关键词配置',
                             menuCode: 'sem_list',
                             router: 'WebBackstage/keyword',
+                        },
+                        {
+                            primaryText: '计算器配置',
+                            menuCode: 'cbd_list',
+                            type:'vue',
+                            router: 'official-website/calculator',
                         }
                     ]
                 },

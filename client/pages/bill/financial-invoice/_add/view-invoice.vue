@@ -6,21 +6,27 @@
                 <Row style="margin-bottom:30px">  
                     <Col span="12" class="col">
                         <FormItem label="企业类别" style="width:252px" prop="customerId">
-                            <Input 
-                                :disabled="isReady" 
+                            <Select 
+                                :disabled="isReady"
                                 v-model="formItem.titleType" 
-                                placeholder="请输入发票抬头" 
-                            />
+                                placeholder="请输入企业类别" 
+                                clearable
+                            >
+                                <Option v-for="item in unitTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
                         </FormItem>
                     </Col>
 
                     <Col class="col">
                         <FormItem label="纳税类型" style="width:252px"  prop="communityId">
-                             <Input 
+                            <Select 
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerType" 
                                 placeholder="请输入纳税类型" 
-                            />
+                                clearable
+                            >
+                                <Option v-for="item in taxTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
                         </FormItem>
                     </Col>
                     <Col class="col">
@@ -86,7 +92,9 @@
             </DetailStyle>
             <DetailStyle info="开票信息">
                 <Row  style="margin-bottom:30px">   
-                   
+                    <PhotoAlbum
+                      :data="imagesArr"
+                    />
                 </Row>
             </DetailStyle>
           
@@ -113,6 +121,7 @@ import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
+import PhotoAlbum from '~/components/PhotoAlbum';
 
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
@@ -130,6 +139,19 @@ import utils from '~/plugins/utils';
             return {
                 isReady:true, //只读页面
                 disabled:false,
+                //单位类型
+                unitTypeList:[
+                    {value:' ',label:'全部'},
+                    {value:'COMPANY',label:'企业单位'},
+                    {value:'PERSON',label:'个人/非企业单位'}
+                ],
+                //纳税类型
+                taxTypeList:[
+                    {value:' ',label:'全部'},
+                    {value:'SMALL',label:'小规模纳税人'},
+                    {value:'GENERAL',label:'一般纳税人'}
+                ],
+                imagesArr:[],
                 tableColumns: [
                     {
                         title: '账单编号',
@@ -236,6 +258,7 @@ import utils from '~/plugins/utils';
             selectCustomers,
             SelectSaler,
             planMap,
+            PhotoAlbum
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -243,12 +266,9 @@ import utils from '~/plugins/utils';
         },
         methods: {
             getViewDetail(){
-                let params = Object.assign({},this.$route.query)
-                this.$http.get('post-financial-invoice-detail', params).then((res)=>{
-                    // this.isLoading = false;
-                    // this.listData=res.data.items;
-                    console.log(res.data,"ppppppoolkkkjjjj")
-                     
+                let params = Object.assign({},this.$route.query);
+                this.$http.get('get-financial-invoice-detail',{id:params.id}).then((res)=>{
+                    this.formItem=Object.assign({},res.data);
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -265,7 +285,15 @@ import utils from '~/plugins/utils';
                 window.history.go(-1);
             },
             handleSubmit:function(name) {
-               
+               let editData=Object.assign({},this.formItem);   
+               delete editData.ctime;     
+               this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
+                    console.log('editok',res);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             changeCommunity(value){
                 // 选择社区

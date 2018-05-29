@@ -70,7 +70,7 @@ function initListData(){
             align:'center',
             type:'VERIFYING',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=params.row.ctime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime)):'-';
                 return time;
             }
         },
@@ -80,7 +80,7 @@ function initListData(){
             align:'center',
             type:'PASSED',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.verifyTime));
+                let time=params.row.verifyTime?dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.verifyTime)):'-';
                 return time;
             }
         },
@@ -122,7 +122,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView()
+                                    that.goView(colData)
                                 }
                             }
                         }, '确认'),
@@ -136,7 +136,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView()
+                                    that.goView(colData)
                                 }
                             }
                         }, '驳回')
@@ -163,7 +163,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.makeInvaice(colData)
+                                    that.goView(colData)
                                 }
                             }
                         }, '查看'),
@@ -177,7 +177,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goBack()
+                                    that.goView(colData)
                                 }
                             }
                         }, '编辑') 

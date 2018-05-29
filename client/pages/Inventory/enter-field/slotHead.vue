@@ -66,8 +66,11 @@
         &:nth-child(9){
             width:130px;
         }
-        &:nth-child(4),&:nth-child(5),&:nth-child(10){
+        &:nth-child(5),&:nth-child(10){
             width:110px;
+        }
+        &:nth-child(4){
+            width:70px;
         }
 
         &:nth-child(1),&:nth-child(6){

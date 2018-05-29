@@ -358,11 +358,6 @@ export default {
         this.params=this.$route.query
         this.getCityList();
     },
-    head() {
-        return {
-            title: '即将到期列表'
-        }
-    },
     methods:{
         //社区接口
         getCommunityList(id){
@@ -400,15 +395,17 @@ export default {
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
                     this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItemOld=Object.assign({},this.formItem,);
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
                 }
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
                 }
                 
-                this.formItemOld=Object.assign({},this.formItem);
+                
                 this.formItem = Object.assign({},this.formItem,this.$route.query)
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
@@ -464,6 +461,7 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.floorList = []
+            console.log('this.formItem',this.formItem)
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -485,8 +483,15 @@ export default {
             return sum;
         },
         cityChange(param){
-            this.params = {}
-            this.getCommunityList(param)
+            if(param){
+                if(param !== this.params.cityId){
+                  this.params = {}  
+                }
+                
+                this.getCommunityList(param)  
+            }
+
+            
         },
         communityChange(param){
             if(param){

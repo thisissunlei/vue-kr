@@ -375,15 +375,18 @@ export default {
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
                     this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
+
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
+
                 }
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
                 }
                 
-                this.formItemOld=Object.assign({},this.formItem);
                 this.formItem = Object.assign({},this.formItem,this.$route.query)
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
@@ -461,8 +464,13 @@ export default {
             return sum;
         },
         cityChange(param){
-            this.getCommunityList(param)
-            this.params = {}
+            if(param){
+                if(param !== this.params.cityId){
+                  this.params = {}  
+                }
+                
+                this.getCommunityList(param)  
+            }
         },
         communityChange(param){
             if(param){

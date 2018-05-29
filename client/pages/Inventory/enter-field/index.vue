@@ -121,7 +121,7 @@ var layoutScrollHeight=0;
                     {
                         title: '距进场日',
                         align:'center',
-                        width:110,
+                        width:70,
                         key: 'toPutawayDays',
                         render(h, params){
                             if(params.row.toPutawayDays<30){

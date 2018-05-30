@@ -1,7 +1,6 @@
 <template>
     <div class='make-invoice-form'>
         <div class="community-header">
-            <!-- :rules="ruleInvestment" -->
             <Form ref="formItemInvestment" :model="formItem"  label-position="left">
 
                 <!-- 第一行-->
@@ -67,7 +66,7 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in invoiceTypeList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                         </Form-item>
 
@@ -78,7 +77,7 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in contentTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
@@ -160,6 +159,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 // import publicFn from '../publicFn';
+import utils from '~/plugins/utils';
 import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
@@ -271,6 +271,11 @@ export default {
 
                     startTime:'',
                 },
+                //发票规格数组
+                invoiceTypeList:[],
+                //发票内容
+                contentTypeList:[],
+
                 communityList:[],
                 cityList:[],
                 productList:[
@@ -281,93 +286,36 @@ export default {
                 ],
                 
                 formItemOld:{},
-                ruleInvestment: {
-                    applyNum:[
-                        { validator: validateName, trigger: 'change' }
-                    ],
-                    billNums: [
-                        { validator: validateStation, trigger: 'change' }
-                    ],
-                    communityId: [
-                        { validator: validateStation, trigger: 'change' }
-                    ],
-                    companyId: [
-                        { validator: validatePrice, trigger: 'change' }
-                    ],
-                    contentType: [
-                        { validator: validatePrice, trigger: 'change' }
-                    ],
-                    endAmount: [
-                        { validator: validateOrder, trigger: 'change' }
-                    ],
-                    endRefundTime: [
-                        { validator: validateOrder, trigger: 'change' }
-                    ],
-                    endTicketTime: [
-                        { validator: validateDiscount, trigger: 'change' }
-                    ],
-                    endTime: [
-                        { validator: validateDiscount, trigger: 'change' }
-                    ],
-                    invoiceTitle:[
-                        { validator: validateTime, trigger: 'change' }
-                    ],
-                    invoiceType:[
-                        { validator: validateTime, trigger: 'change' }
-                    ],
-                    startAmount:[
-                        { validator: validateTime, trigger: 'change' }
-                    ],
-                    startRefundTime:[
-                        { validator: validateTime, trigger: 'change' }
-                    ],
-                    startTicketTime:[
-                        { validator: validateTime, trigger: 'change' }
-                    ],
-                    startTime:[
-                        { validator: validateTime, trigger: 'change' }
-                    ]
-                }
+            
             }
     },
     mounted(){
         this.getCityList();
-        this.getSourceData();
-        var _this=this;
-        setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            _this.formItemOld=Object.assign({},this.formItem);
-        },500);
+        this.getInvoiceTypeList();
     },
+
     methods:{
-        //销售员搜索
-        remoteSaler(query){
-            if (query !== '') {
-                this.loading = true;
-                setTimeout(() => {
-                    this.getSalerData(query)
-                }, 200);
-            }
-        },
-        //销售员
-        getSalerData(name){
-            let list = [];
-            this.$http.get('get-saler',{phoneOrEmail:name}).then((res)=>{
-                list = res.data.slice(0,10);
-                this.loading= false;
-            }).catch((error)=>{
+        //获取发票规格
+        getInvoiceTypeList(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
+            }).then((res)=>{
+                // utils.addAllselect('全部给个',res.data)
+                this.invoiceTypeList = [].concat(utils.addAllselect('全部规格',res.data));
+            }).catch((err)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:err.message
                 });
             })
         },
-        //渠道来源
-        getSourceData(){
-            this.$http.get('get-customer-source').then((res)=>{
-              
-            }).catch((error)=>{
+        getContentTypeList(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
+            }).then((res)=>{
+                this.contentTypeList = [].concat(utils.addAllselect('全部内容',res.data));
+            }).catch((err)=>{
                 this.$Notice.error({
-                    title:error.message
+                    title:err.message
                 });
             })
         },
@@ -396,10 +344,8 @@ export default {
       
         //搜索
         searchClick(){
-            console.log("0000000")
             this.$refs['formItemInvestment'].validate((valid) => {
                  this.$emit('searchClick',this.formItem);
-                 console.log(valid,"pppppp")
                 if (valid) {
                     //招商状态格式转换
                     var str='';

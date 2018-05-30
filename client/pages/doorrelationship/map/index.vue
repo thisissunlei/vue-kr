@@ -12,7 +12,7 @@
             </Select>
             <div class="right-part">   
                 <!-- <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button> -->
-                <span class="text-span">1111输入内容查找设备所在的组：</span>
+                <span class="text-span">输入内容查找设备所在的组：</span>
                 <SearchFormNew 
                     :searchFilter="searchFilter"
                     :onSubmit="onSubmitSearchForm"

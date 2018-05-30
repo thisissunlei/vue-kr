@@ -87,25 +87,16 @@ export default{
           this.$emit('searchEquipment',sendParams);  
          
        },
-      //  getEquipmentListData(param){
-
-      //   this.$http.get('getDoorListByGroup', param).then((res)=>{
-          
-      //     this.doorListData = res.data;
-      //   }).catch((error)=>{
-      //     this.$Notice.error({
-      //       title:error.message
-      //     });
-      //   })
-      //  },
+     
        openAddEquipmentModalFun(){
          this.$emit("openAddEquipmentModalFun")
        },
        onSelectionChange(selection){
-         console.log("sdklfkfdlkdld",selection);
          this.selection = selection;
        },
-       changePage(){
+       changePage(page){
+         console.log("page",page);
+         this.$emit("getEquipmentList",page);
 
        },
        deleteEquipmentFromGroup(){

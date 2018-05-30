@@ -17,6 +17,7 @@
         @deleteEquipmentFromGroup="deleteEquipmentFromGroup"
         @searchEquipment="searchEquipment"
         :doorTypeOptions = "doorTypeOptions"
+        @getEquipmentList ="getEquipmentList"
     />
 </div>
 </template>
@@ -78,13 +79,15 @@ export default{
                 doorIds : toDleteEquipmentStr,
                 setId : _this.editInitialDataProps.id
             }
-            console.log("paramsSend",paramsSend);
             this.$emit("deleteEquipmentSendReq",paramsSend)
 
         },
         searchEquipment(msg){
             console.log("msg",msg);
             this.$emit("searchEquipment",msg)
+        },
+        getEquipmentList(page){
+            this.$emit("changeDetailEquipmentListPage",page)
         }
 
     },

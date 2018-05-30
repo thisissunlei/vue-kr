@@ -42,6 +42,7 @@
                 @deleteEquipmentSendReq = "deleteEquipmentSendReq"
                 @searchEquipment ="searchEquipment"
                 :doorTypeOptions = "doorTypeOptions"
+                @changeDetailEquipmentListPage="changeDetailEquipmentListPage"
             />
         </Drawer>
         <Modal
@@ -127,7 +128,8 @@ export default {
             doorTypeOptions :[],
             searchGroupId : -1,
             searchGroupIdsArr : [],
-            scale : ''
+            scale : '',
+            detailMadalEquipmentListSearchData :{}
        }
    },
    components:{
@@ -717,9 +719,11 @@ export default {
         },
 
         searchEquipment(msg){
-            
-            this.detailMadalEquipmentListSearchData= msg;
-            this.getEquipmentListData(msg,"refresh");
+            let _this = this;
+            console.log("_this.selectedNodeData",_this.selectedNodeData);
+            var idparam = {setId : _this.selectedNodeData.id}
+            var newObj = Object.assign({},_this.detailMadalEquipmentListSearchData,msg,idparam)
+            this.getEquipmentListData(newObj,"refresh");
             
         },
 
@@ -781,6 +785,12 @@ export default {
 				});
 			})
 
+        },
+        changeDetailEquipmentListPage(page){
+            let _this =this;
+            var idparam = {setId : _this.selectedNodeData.id}
+            var newObj = Object.assign({},_this.detailMadalEquipmentListSearchData,{page:page},idparam)
+            this.getEquipmentListData(newObj,"refresh");
         }
 
         

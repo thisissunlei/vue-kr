@@ -14,6 +14,11 @@ export default  {
     'get-financial-invoice-edit': {
       url: '/ben/csr-invoice-qualification/edit',
       method: 'post'
-    }
+    },
+    //财务端-资质驳回
+     'get-financial-invoice-rejected': {
+      url: '/ben/csr-invoice-qualification/handle',
+      method: 'post'
+    },
 }
   

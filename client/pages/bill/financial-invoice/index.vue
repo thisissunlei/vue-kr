@@ -12,10 +12,10 @@
                 @on-click="tabsClick"
             >
                 <TabPane label="待审核" name="VERIFYING"> 
-                    <List v-if="type == 'VERIFYING'" :type="type"/>
+                    <List v-if="type == 'VERIFYING'&&searchForm.cStartTime" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="已审核" name="PASSED" >
-                    <List v-if="type == 'PASSED'" :type="type"/>
+                    <List v-if="type == 'PASSED'&&searchForm.cStartTime" :type="type" :searchForm="searchForm"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -41,6 +41,7 @@
         data () {
            return {
                type:'VERIFYING',
+               searchForm:{}
            }
         },
       
@@ -53,15 +54,14 @@
             tabsClick(val){
                 this.type = val;
             },
-            searchClick(params){
-               
+            searchClick(params){  
                 utils.addParams(params);
             },
             clearClick(params){
-                //   utils.addParams(params);
+                //utils.addParams(params);
             },
-            initData(){
-
+            initData(formItem){
+                this.searchForm=formItem;
             }
         }
     }

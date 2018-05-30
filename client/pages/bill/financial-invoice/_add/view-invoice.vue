@@ -129,7 +129,7 @@
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="!disabled">编辑</Button>
                     <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">确定</Button>
-                    <Button class="view-btn" >驳回</Button>
+                    <Button class="view-btn" @click="rejectedSubmit">驳回</Button>
                 </div>
                 <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
@@ -310,6 +310,15 @@ import utils from '~/plugins/utils';
             },
             downImg(url,id){
                 utils.downImg(url);
+            },
+            rejectedSubmit(){
+                // this.$http.put('get-financial-invoice-rejected',editData).then((res)=>{
+                //     console.log('editok',res);
+                // }).catch((err)=>{
+                //     this.$Notice.error({
+                //         title:err.message
+                //     });
+                // })
             },
             getViewDetail(){
                 let params = Object.assign({},this.$route.query);

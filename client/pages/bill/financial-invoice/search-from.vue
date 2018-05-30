@@ -1,12 +1,11 @@
 <template>
     <div class='make-invoice-form'>
         <div class="community-header">
-            <!-- :rules="ruleInvestment" -->
-            <Form ref="formItemInvestment" :model="formItem"  label-position="left">
+            <Form ref="formItemInvoiceFinance" :rules="ruleInvoiceFinance" :model="formItem"  label-position="left">
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;"> 
-                        <Form-item label="申请编号" class='daily-form'>
+                        <Form-item label="申请编号" class='daily-form' prop='applyNo'>
                             <i-input 
                                 v-model="formItem.applyNo" 
                                 placeholder="请输入申请编号"
@@ -40,7 +39,7 @@
                 <!-- 第二行-->
                 <div style="white-space: nowrap;">
                     <div style="width:847px;display:inline-block;"> 
-                        <Form-item label="纳税人识别码" class='daily-form' >
+                        <Form-item label="纳税人识别码" class='daily-form' prop='taxpayerNumber'>
                             <i-input 
                                 v-model="formItem.taxpayerNumber" 
                                 placeholder="请输入纳税人识别码"
@@ -101,15 +100,30 @@ export default {
        SelectSaler
     },
     data() {
+        const validateName = (rule, value, callback) => {
+                var str=this.fucCheckLength(value);
+                if(value&&str>20){
+                    callback('最多20个字节');
+                }else{
+                    callback();
+                }
+        };
+        const validateDate = (rule, value, callback) => {
+            if (this.formItem.cStartTime&&this.formItem.cEndTime&&this.formItem.cStartTime>this.formItem.cEndTime) {
+                callback('后者需要大于前者');
+            }else{
+                callback();
+            }
+        };
         return { 
             formItem:{
                 applyNo:'',
-                cEndTime:'',
+                cStartTime:this.getToDay(),
+                cEndTime:this.getToDay(),
                 invoiceTitle:'',
                 taxpayerNumber:'',
                 taxpayerType:' ',
-                titleType:' ',
-                verifyStatus:' ',
+                titleType:' '
             },
             //单位类型
             unitTypeList:[
@@ -123,38 +137,54 @@ export default {
                 {value:'SMALL',label:'小规模纳税人'},
                 {value:'GENERAL',label:'一般纳税人'}
             ],
-            ruleInvestment: {
-                // startTime:[
-                //     { validator: validateTime, trigger: 'change' }
-                // ]
+            ruleInvoiceFinance: {
+                    applyNo: [
+                        { validator: validateName, trigger: 'change' }
+                    ],
+                    invoiceTitle: [
+                        { validator: validateName, trigger: 'change' }
+                    ],
+                    taxpayerNumber:[
+                        { validator: validateName, trigger: 'change' }
+                    ],
+                    cStartTime: [
+                        { validator: validateDate, trigger: 'change' }
+                    ],
+                    cEndTime: [
+                        { validator: validateDate, trigger: 'change' }
+                    ]
             }
         }
     },
     mounted(){
-      
+       this.$emit('initData',this.formItem);
+       this.formItem=Object.assign({},this.formItem,this.$route.query);
     },
     methods:{
+        //检查输入字符串字节长度
+        fucCheckLength(strTemp) {
+            var i,sum;
+            sum=0;
+            var length = strTemp.length ;
+            for(i=0;i<length;i++) {
+                if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
+                    sum=sum+1;
+                }else {
+                    sum=sum+2;
+                }
+            }
+            return sum;
+        },
+        //获取今天的日期
+        getToDay(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+            return today; 
+        },
         //搜索
         searchClick(){
-            this.$emit('searchClick',this.formItem);
-            return ;
-            this.$refs['formItemInvestment'].validate((valid) => {
-                 this.$emit('searchClick',this.formItem);
-                 console.log(valid,"pppppp")
+            this.$refs['formItemInvoiceFinance'].validate((valid) => {    
                 if (valid) {
-                    //招商状态格式转换
-                    var str='';
-                    this.formItem.status.map((item,index)=>{
-                            str=str?str+','+item:item;
-                    }) 
-                    this.formItem.investmentStatus=str; 
-                    //渠道来源格式转换
-                    var length=this.formItem.source.length;
-                    if(length){
-                        this.formItem.sourceId=this.formItem.source[0];
-                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
-                    }
-                   
+                   this.$emit('searchClick',this.formItem); 
                 }
             })
         },
@@ -162,14 +192,13 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},{
                 applyNo:'',
-                cEndTime:'',
+                cStartTime:this.getToDay(),
+                cEndTime:this.getToDay(),
                 invoiceTitle:'',
-                taxpayerNumber:' ',
+                taxpayerNumber:'',
                 taxpayerType:' ',
-                titleType:' ',
-                verifyStatus:'',
+                titleType:' '
             });
-            this.formItem.status=[];
             this.$emit('clearClick',this.formItem);
         },
         //回车

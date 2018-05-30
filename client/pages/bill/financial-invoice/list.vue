@@ -25,12 +25,16 @@
 
 <script>
     import publicFn from './pubilcFn';
-    import KrTd from '~/components/KrTd'
-
+    import KrTd from '~/components/KrTd';
+    import utils from '~/plugins/utils';
+    
     export default {
         props:{
             type:{
                 type:String,
+            },
+            searchForm:{
+                type:Object
             }
         },
         data () {
@@ -49,18 +53,26 @@
                 },
            }
         },
-      
-        created(){
-            // var params=Object.assign({},this.tableParams,this.$route.query);
+         
+        mounted(){
+            var params=Object.assign({},this.tableParams,this.searchForm);
+            this.tableParams=params; 
             this.getListData();
-            // this.tableParams=params; 
-            //   utils.addParams(this.params);
+            //utils.addParams(this.params);
         },
-
+        
         methods:{
             //跳转创建页面
             goView(params){
                 window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}`,params.id);
+            },
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
             },
             unitTypeToStr(str){
                 switch(str){
@@ -89,7 +101,9 @@
             //获取列表数据
             getListData(){
                 this.isLoading = true;
-                let params = Object.assign({},this.tableParams);
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.cStartTime=this.dateSwitch(params.cStartTime);
+                params.cEndTime=this.dateSwitch(params.cEndTime);
                 this.$http.get('get-financial-invoice-list', params).then((res)=>{
                         this.isLoading = false;
                         this.listData=res.data.items;

@@ -9,6 +9,11 @@ export default  {
     'post-make-invoice': {
       url: 'csr-finance-openTicket',
       method: 'post'
-    }
+    },
+    //发票列表统一接口
+    'invoice-list-unified': {
+      url: '/ben/csr-invoice-list',
+      method: 'get'
+    },
 }
   

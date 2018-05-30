@@ -2,7 +2,7 @@
     <div class='make-invoice-form'>
         <div class="community-header">
             <!-- :rules="ruleInvestment" -->
-            <Form ref="formItemInvestment" :model="formItem"  label-position="left">
+            <Form ref="formItemOperation" :model="formItem"  :rules="ruleOperation" label-position="left">
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;"> 
@@ -67,7 +67,7 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in invoiceSpe" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </Form-item>
 
@@ -78,21 +78,21 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in invoiceDetail" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
                         </Form-item>
                         <div v-if="type !='alreadyReceive' && type !='waitReturn' " style="display:inline-block">
-                            <Form-item label="开票时间" class='priceForm' prop="endTime">
+                            <Form-item label="开票时间" class='priceForm' prop="ticketStartDate">
                                 <DatePicker 
-                                    v-model="formItem.startTime" 
+                                    v-model="formItem.ticketStartDate" 
                                     placeholder="开始日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endTime">
+                            <Form-item  class='priceForm' prop="ticketEndDate">
                                 <DatePicker 
-                                    v-model="formItem.endTime" 
+                                    v-model="formItem.ticketEndDate" 
                                     placeholder="结束日期"
                                     style="width: 90px"
                                 />
@@ -100,34 +100,34 @@
                         </div>
 
                          <div v-if="type =='alreadyReceive'" style="display:inline-block">
-                            <Form-item label="领取时间" class='priceForm' prop="endTime">
+                            <Form-item label="领取时间" class='priceForm' prop="receiveStartDate">
                                 <DatePicker 
-                                    v-model="formItem.startTime" 
+                                    v-model="formItem.receiveStartDate" 
                                     placeholder="开始日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endTime">
+                            <Form-item  class='priceForm' prop="receiveEndDate">
                                 <DatePicker 
-                                    v-model="formItem.endTime" 
+                                    v-model="formItem.receiveEndDate" 
                                     placeholder="结束日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                         </div>
                           <div v-if="type =='waitReturn' " style="display:inline-block">
-                            <Form-item label="收回时间" class='priceForm' prop="endTime">
+                            <Form-item label="收回时间" class='priceForm' prop="callbackStartDate">
                                 <DatePicker 
-                                    v-model="formItem.startTime" 
+                                    v-model="formItem.callbackStartDate" 
                                     placeholder="开始日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endTime">
+                            <Form-item  class='priceForm' prop="callbackEndDate">
                                 <DatePicker 
-                                    v-model="formItem.endTime" 
+                                    v-model="formItem.callbackEndDate" 
                                     placeholder="结束日期"
                                     style="width: 90px"
                                 />
@@ -186,78 +186,30 @@ export default {
        SelectSaler
     },
     data() {
-            //工位数量
-            const validateStation = (rule, value, callback) => {
-                // callback();
-                return ;
-                var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>999){
-                    callback('最大999个工位');
-                }else if (this.formItem.stationsMin&&this.formItem.stationsMax&&Number(this.formItem.stationsMin)>Number(this.formItem.stationsMax)) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };
-            //签约价
-            const validatePrice = (rule, value, callback) => {
-                // callback();
-                return ;
-                var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>9999999){
-                    callback('单价最高9999999');
-                }else if (this.formItem.priceMin&&this.formItem.priceMax&&Number(this.formItem.priceMin)>Number(this.formItem.priceMax)) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };
-            //商品定价
-            const validateOrder = (rule, value, callback) => {
-                // callback();
-                return ;
-                var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>9999999){
-                    callback('单价最高9999999');
-                }else if (this.formItem.orderPriceMin&&this.formItem.orderPriceMax&&Number(this.formItem.orderPriceMin)>Number(this.formItem.orderPriceMax)) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };
-            //折扣
-            const validateDiscount = (rule, value, callback) => {
-                var reg=/^(([1-9]{1})|([0-9]{1}\.\d{1}))$/;
-                //  callback();
-                return ;
-                if(value&&!reg.test(value)){
-                    callback('请输入0-10之间的数字,最多1位小数');
-                }else if (this.formItem.discountMin&&this.formItem.discountMax&&Number(this.formItem.discountMin)>Number(this.formItem.discountMax)) {
-                    callback('后者需要大于前者');
-                }else{
-                    callback();
-                }
-            };    
-            //商品名称
             const validateName = (rule, value, callback) => {
-                // var str=publicFn.fucCheckLength(value);
-                if(value&&str>20){
-                    callback('名称最多20个字节');
+                if(value&&value.length>20){
+                    callback('长度最多20');
                 }else{
                     callback();
                 }
             };
-            //租期天数
             const validateTime = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
-                    callback('请输入正整数');
+                var start='';
+                var end='';
+                if(rule.field=='ticketStartDate'||rule.field=='ticketEndDate'){
+                    start=this.formItem.ticketStartDate;
+                    end=this.formItem.ticketEndDate;
+                }
+                if(rule.field=='receiveStartDate'||rule.field=='receiveEndDate'){
+                    start=this.formItem.receiveStartDate;
+                    end=this.formItem.receiveEndDate;
+                }
+                if(rule.field=='callbackStartDate'||rule.field=='callbackEndDate'){
+                    start=this.formItem.callbackStartDate;
+                    end=this.formItem.callbackEndDate;
+                }
+                if (start&&end&&start>end) {
+                    callback('后者需要大于前者');
                 }else{
                     callback();
                 }
@@ -270,24 +222,36 @@ export default {
                     billNums:'',
 
                     communityId:'',
+                    cityId:'',
                     companyId:'',
-                    contentType:'',
-                    endAmount:' ',
-                    endRefundTime:'',
-                    endTicketTime:'',
+                    contentType:' ',
 
-                    endTime:' ',
                     invoiceTitle:'',
-                    invoiceType:'',
+                    invoiceType:' ',
                     startAmount:'',
 
-                    startRefundTime:'',
-                    startTicketTime:'',
-
-                    startTime:'',
+                    ticketEndDate:this.getToDay(),
+                    ticketStartDate:this.getToDay(),
+                    receiveEndDate:this.getToDay(),
+                    receiveStartDate:this.getToDay(),
+                    callbackStartDate:this.getToDay(),
+                    callbackEndDate:this.getToDay(),
                 },
                 communityList:[],
                 cityList:[],
+                invoiceSpe:[
+                    {value:' ',label:'全部规格'},
+                    {value:'COMMON_INVOICE',label:'增值税普通发票'},
+                    {value:'SPECIAL_INVOICE',label:'增值税专用发票'},
+                    {value:'SPECIAL_ELEC_INVOICE',label:'增值税普通电子发票'}
+                ],
+                invoiceDetail:[
+                    {value:' ',label:'全部内容'},
+                    {value:'SERVICE',label:'服务费'},
+                    {value:'SEAT',label:'工位服务费'},
+                    {value:'RENT',label:'租金'},
+                    {value:'SPACE_MANAGE',label:'众创空间管理费'}
+                ],
                 productList:[
                     {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
@@ -296,50 +260,29 @@ export default {
                 ],
                 
                 formItemOld:{},
-                ruleInvestment: {
+                ruleOperation: {
                     applyNum:[
                         { validator: validateName, trigger: 'change' }
                     ],
-                    billNums: [
-                        { validator: validateStation, trigger: 'change' }
+                    invoiceTitle: [
+                        { validator: validateName, trigger: 'change' }
                     ],
-                    communityId: [
-                        { validator: validateStation, trigger: 'change' }
-                    ],
-                    companyId: [
-                        { validator: validatePrice, trigger: 'change' }
-                    ],
-                    contentType: [
-                        { validator: validatePrice, trigger: 'change' }
-                    ],
-                    endAmount: [
-                        { validator: validateOrder, trigger: 'change' }
-                    ],
-                    endRefundTime: [
-                        { validator: validateOrder, trigger: 'change' }
-                    ],
-                    endTicketTime: [
-                        { validator: validateDiscount, trigger: 'change' }
-                    ],
-                    endTime: [
-                        { validator: validateDiscount, trigger: 'change' }
-                    ],
-                    invoiceTitle:[
+                    ticketEndDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    invoiceType:[
+                    ticketStartDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    startAmount:[
+                    receiveEndDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    startRefundTime:[
+                    receiveStartDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    startTicketTime:[
+                    callbackStartDate:[
                         { validator: validateTime, trigger: 'change' }
                     ],
-                    startTime:[
+                    callbackEndDate:[
                         { validator: validateTime, trigger: 'change' }
                     ]
                 }
@@ -351,8 +294,17 @@ export default {
         var _this=this;
         setTimeout(() => {
             _this.$emit('initData',this.formItem);
-            _this.formItemOld=Object.assign({},this.formItem);
+            _this.formItemOld=Object.assign({},_this.formItem);
+            _this.formItem=Object.assign({},_this.formItem,_this.$route.query);
+            
+            if(!_this.formItem.contentType){
+                _this.formItem.contentType=' ';
+            }
+            if(!_this.formItem.invoiceType){
+                _this.formItem.invoiceType=' ';
+            }
         },500);
+        
     },
     methods:{
         //销售员搜索
@@ -408,34 +360,22 @@ export default {
                 });
             })
         },
-      
+        //获取今天的日期
+        getToDay(){
+            var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+            return today; 
+        },
         //搜索
         searchClick(){
-            console.log("0000000")
-            this.$refs['formItemInvestment'].validate((valid) => {
-                 this.$emit('searchClick',this.formItem);
-                 console.log(valid,"pppppp")
+            this.$refs['formItemOperation'].validate((valid) => {
                 if (valid) {
-                    //招商状态格式转换
-                    var str='';
-                    this.formItem.status.map((item,index)=>{
-                            str=str?str+','+item:item;
-                    }) 
-                    this.formItem.investmentStatus=str; 
-                    //渠道来源格式转换
-                    var length=this.formItem.source.length;
-                    if(length){
-                        this.formItem.sourceId=this.formItem.source[0];
-                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
-                    }
-                   
+                    this.$emit('searchClick',this.formItem);
                 }
             })
         },
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
-            this.formItem.status=[];
             this.$emit('clearClick',this.formItem);
         },
         //回车

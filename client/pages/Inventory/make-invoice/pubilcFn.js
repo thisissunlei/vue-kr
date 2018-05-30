@@ -16,7 +16,7 @@ function initListData(){
                             this.goAddPage();
                         }
                     }
-                }, 'dfsf')
+                },params.row.applyNum)
             }
         },
         {
@@ -39,19 +39,23 @@ function initListData(){
         },
         {
             title: '发票规格',
-            key: 'invoiceType',
+            key: 'invoiceTypeName',
             align:'center',
             type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
         },
         {
             title: '发票内容',
-            key: 'name',
+            key: 'invoiceDetailList',
             align:'center',
             type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
-            render:(h,params)=>{
+            render:(h,obj)=>{
                 var arr=[];
-                console.log(params,"-----")
-                for(let i=0;i<3;i++){
+              
+                if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
+                    return ;
+                }
+                var detailList = [].concat(obj.row.invoiceDetailList)
+                for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -59,22 +63,27 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                this.openView()
+                                // this.openView()
                             }
                         }
-                    }, '查看'),)
+                    }, detailList[i].contentTypeName))
                 }
                 return h('div',arr , '重开')
             }
         },
         {
             title: '开票金额',
-            key: 'name',
+            key: 'invoiceDetailList',
             align:'center',
             type:'waitArrive,waitMail,waitReceive,alreadyReceive',
-            render:(h,params)=>{
+            render:(h,obj)=>{
                 var arr=[];
-                for(let i=0;i<3;i++){
+              
+                if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
+                    return ;
+                }
+                var detailList = [].concat(obj.row.invoiceDetailList)
+                for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
                             borderBottom:'1px solid #e9eaec',
@@ -82,23 +91,23 @@ function initListData(){
                         },
                         on: {
                             click: () => {
-                                this.openView()
+                                //this.openView()
                             }
                         }
-                    }, '查看'),)
+                    }, detailList[i].amount))
                 }
                 return h('div',arr , '重开')
             }
         },
         {
             title: '需退发票金额',
-            key: 'name',
+            key: 'needRefund',
             align:'center',
             type:'waitReturn'
         },
         {
             title: '实际退回发票金额',
-            key: 'name',
+            key: 'refund',
             align:'center',
             type:'waitReturn'
         },
@@ -110,13 +119,13 @@ function initListData(){
         },
         {
             title: '领取人',
-            key: 'name',
+            key: 'receiverName',
             align:'center',
             type:'alreadyReceive'
         },
         {
             title: '领取时间',
-            key: 'name',
+            key: 'receiveTime',
             align:'center',
             type:'alreadyReceive',
             render(tag, params){
@@ -126,13 +135,13 @@ function initListData(){
         },
         {
             title: '发票张数',
-            key: 'name',
+            key: 'invoiceCount',
             align:'center',
             type:'waitArrive,waitMail,waitReceive'
         },
         {
             title: '开票时间',
-            key: 'name',
+            key: 'ctime',
             align:'center',
             type:'waitArrive,waitReceive,',
             render(tag, params){

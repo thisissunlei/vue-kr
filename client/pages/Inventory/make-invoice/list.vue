@@ -41,6 +41,7 @@
 <script>
     import publicFn from './pubilcFn';
     import KrTd from '~/components/KrTd';
+    import utils from '~/plugins/utils';
 
 
     export default {
@@ -48,6 +49,9 @@
             type:{
                 type:String,
                 
+            },
+            searchForm:{
+                type:Object
             }
         },
         data () {
@@ -57,26 +61,42 @@
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
                 tableParams:{
-                    page:0,
+                    page:1,
                     pageSize:15,
                     totalCount:0,
-                },
-                productList:[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-                ]
+                    invoiceStatusList:''
+                }
            }
         },
-      
-        created(){
-                // var params=Object.assign({},this.tableParams,this.$route.query);
-                // this.getListData(params);
-                // this.tableParams=params; 
-                //   utils.addParams(this.params);
-        },
+        mounted(){
+           var status=[];
+           switch (this.type) {
+               case 'waitArrive':
+                   status.push('INVOICED');
+                   break;
+               case 'waitMail':
+                   status.push('SIGNED_POST');
+                   break;
+               case 'waitReceive':
+                   status.push('SIGNED');
+                   break;
+               case 'alreadyReceive':
+                   status.push('RECEIVED');
+                   break;
+               default:
+                   status.push('TO_RETURN');
+                   break;
+           } 
+           var str='';
+           status.map((item,index)=>{
+               str=str?item+','+str:item;    
+           })
+           this.tableParams.invoiceStatusList=str;
 
+           var params=Object.assign({},this.tableParams,this.searchForm);
+           this.tableParams=params; 
+           this.getListData();
+        },
         methods:{
           
             //修改弹窗开关
@@ -119,12 +139,25 @@
             changePage(){
 
             },
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
             //获取列表数据
             getListData(){
-
-                this.$http.get('get-project-home', tabParams).then((res)=>{
-                        this.listData=res.data.items;
-                     
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
+                params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
+                params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
+                params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
+                params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
+                params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+                this.$http.get('invoice-list-unified',params).then((res)=>{
+                    this.listData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

@@ -8,24 +8,25 @@
         />
         <div style="padding:0px 20px;">
             <Tabs 
+                :value="type"
                 :animated="false"
                 @on-click="tabsClick"
             >
             <!-- waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn -->
                 <TabPane label="待签收" name="waitArrive"> 
-                    <List v-if="type == 'waitArrive'" :type="type"/>
+                    <List v-if="type == 'waitArrive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待邮寄" name="waitMail" >
-                    <List v-if="type == 'waitMail'" :type="type"/>
+                    <List v-if="type == 'waitMail'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待领取" name="waitReceive" >
-                    <List v-if="type == 'waitReceive'" :type="type"/>
+                    <List v-if="type == 'waitReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="已领取" name="alreadyReceive">
-                    <List v-if="type == 'alreadyReceive'" :type="type"/>
+                    <List v-if="type == 'alreadyReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="待退还" name="waitReturn">
-                    <List v-if="type == 'waitReturn'" :type="type"/>
+                    <List v-if="type == 'waitReturn'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -51,27 +52,26 @@
         data () {
            return {
                type:'waitArrive',
+               searchForm:{}
            }
         },
-      
-        
-        created(){
-        
+        mounted(){
+             var tab=localStorage.getItem('operation-side-invoice');
+             this.type=tab?tab:'waitArrive';
         },
-
         methods:{
             tabsClick(val){
+                localStorage.setItem('operation-side-invoice',val);
                 this.type = val;
             },
             searchClick(params){
-                console.log(params,"lllllll")
                 utils.addParams(params);
             },
             clearClick(params){
-                //   utils.addParams(params);
+                utils.addParams(params);
             },
-            initData(){
-
+            initData(formItem){
+                this.searchForm=formItem;
             }
         }
     }

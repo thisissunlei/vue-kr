@@ -103,9 +103,8 @@ export default {
     },
     data() {
         const validateName = (rule, value, callback) => {
-                var str=this.fucCheckLength(value);
-                if(value&&str>20){
-                    callback('最多20个字节');
+                if(value&&value.length>20){
+                    callback('长度最多20');
                 }else{
                     callback();
                 }
@@ -169,20 +168,6 @@ export default {
        }
     },
     methods:{
-        //检查输入字符串字节长度
-        fucCheckLength(strTemp) {
-            var i,sum;
-            sum=0;
-            var length = strTemp.length ;
-            for(i=0;i<length;i++) {
-                if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
-                    sum=sum+1;
-                }else {
-                    sum=sum+2;
-                }
-            }
-            return sum;
-        },
         //获取今天的日期
         getToDay(){
             var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());

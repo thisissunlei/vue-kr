@@ -790,7 +790,7 @@ export default {
 <style lang="less">
     .door-relationship{
         width:100%;
-        height:100%;
+        height:90%;
         .right-part{
             float : right;
             .text-span{
@@ -807,7 +807,7 @@ export default {
         .doorGroupRelationshipMap{
                 width: 100%;
                 height: 100%;
-                padding-bottom:70px;
+                // padding-bottom:70px;
         }
     }
     .delete-tip{

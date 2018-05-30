@@ -1062,6 +1062,7 @@
                             {
                                 primaryText: '级联图谱',
                                 menuCode: 'door_relation',
+                                type: 'vue',
                                 router: 'doorrelationship/map',
                             }
                         ]

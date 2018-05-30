@@ -59,7 +59,9 @@
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="提交时间" class='priceForm' prop="cStartTime">
+                            <span v-if="type=='VERIFYING'" style="font-weight:500;margin-right:13px;">提交时间</span>
+                            <span v-if="type=='PASSED'" style="font-weight:500;margin-right:13px;">确认时间</span>
+                            <Form-item class='priceForm' prop="cStartTime">
                                 <DatePicker 
                                     v-model="formItem.cStartTime" 
                                     placeholder="开始日期"

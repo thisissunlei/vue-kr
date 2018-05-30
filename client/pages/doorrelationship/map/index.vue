@@ -1,26 +1,28 @@
 <template>
     <div class="door-relationship">
-        <Select
-            v-model="communityId"
-            style="width:150px"
-            placeholder="请选择社区"
-            filterable
-            @on-change="onChangeCommunity"
-        >
-            <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
-        </Select>
-        <div class="right-part">   
-            <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button>
-            <span>输入内容查找设备所在的组：</span>
-            <SearchForm 
-                :searchFilter="searchFilter"
-                :onSubmit="onSubmitSearchForm"
-            />
-            
+        <div class="top">
+            <Select
+                v-model="communityId"
+                style="width:150px"
+                placeholder="请选择社区"
+                filterable
+                @on-change="onChangeCommunity"
+            >
+                <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
+            </Select>
+            <div class="right-part">   
+                <!-- <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button> -->
+                <span class="text-span">输入内容查找设备所在的组：</span>
+                <SearchFormNew 
+                    :searchFilter="searchFilter"
+                    :onSubmit="onSubmitSearchForm"
+                />
+                
+            </div>
         </div>
        
        
-        <div id="doorGroupRelationshipMap" style="width: 100%; height: 400px; background-color: #fff;border-top:'solid 1px #000'">
+        <div id="doorGroupRelationshipMap" style="width: 100%; height:100%; background-color: #fff;border-top:'solid 1px #000';padding-bottom:70px;">
 
         </div>
         <Drawer
@@ -36,7 +38,6 @@
                 :groupDetailDoorListData="groupDetailDoorListData"
                 :communityId ="communityId"
                 @editNodeDataInDetail = "editNodeDataInDetail"
-                @openDeleteTipFromDetail = "openDeleteTipModel"
                 @openAddEquipmentModalFun = "openAddEquipmentModalFun"
                 @deleteEquipmentSendReq = "deleteEquipmentSendReq"
                 @searchEquipment ="searchEquipment"
@@ -79,7 +80,7 @@
 <script>
 
 import Drawer from '~/components/Drawer';
-import SearchForm from '~/components/SearchForm';
+import SearchFormNew from '~/components/SearchFormNew';
 import GroupDetail from './groupDetail';
 import AllEquipmentList from './allEquipmentList';
 
@@ -126,17 +127,19 @@ export default {
             doorTypeOptions :[],
             searchGroupId : -1,
             searchGroupIdsArr : [],
+            scale : ''
        }
    },
    components:{
     Drawer,
     GroupDetail,
-    AllEquipmentList,SearchForm
+    AllEquipmentList,SearchFormNew
    },
    mounted(){
        var doorTypeParam = {enmuKey : "com.krspace.iot.platform.api.enums.door.DoorType"}
        this.getBasicDataDoorType(doorTypeParam);
        this.getCommunity(this.getMapData,this.drawMap);
+       
    },
   
    methods:{
@@ -163,7 +166,7 @@ export default {
                 $(go.Diagram, "doorGroupRelationshipMap",  // must name or refer to the DIV HTML element
                     {
                         // start everything in the middle of the viewport
-                        // initialContentAlignment: go.Spot.Center,
+                        initialContentAlignment: go.Spot.Center,
                         // have mouse wheel events zoom in and out instead of scroll up and down
                         "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
                         // support double-click in background creating a new node
@@ -179,8 +182,12 @@ export default {
                                 equipmentCount : 0
 
                             };
-                            
-                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(loc.x),y:parseInt(loc.y),communityId : _this.communityId})
+                            // var diascale
+                            var myDiagramScale = _this.myDiagram.scale ;
+                            var x = loc.x*myDiagramScale;
+                            var y = loc.y*myDiagramScale;
+                            console.log("x",x,"y",y,"myDiagramScale",myDiagramScale,"loc.x",loc.x);
+                            var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(x),y:parseInt(y),communityId : _this.communityId})
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
                         },
@@ -343,12 +350,15 @@ export default {
                     
                     var location  = partData.loc.split(" ");
                     console.log("location",location);
+                    var myDiagramScale = _this.myDiagram.scale;
+                    var x = location[0]*myDiagramScale;
+                    var y = location[1]*myDiagramScale;
                     var params = {
                         id : partData.id,
                         memo :partData.memo,
                         name : partData.name,
-                        x : parseInt(location[0]+0),
-                        y : parseInt(location[1]+0),
+                        x : parseInt(x),
+                        y : parseInt(y),
                     }
                     _this.editDataReq(params);
                 }
@@ -459,6 +469,7 @@ export default {
         },
         addNewCreateDataReq(sendMsg){
             let _this =this;
+            // console.log("this.myDiagram.scale",_this.myDiagram.scale)
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
                 
                 //修改node的id
@@ -788,6 +799,15 @@ export default {
                 color: #495060;
                 line-height: 30px;
             }
+        }
+        .top{
+            padding: 10px;
+            border-bottom: 1px solid #e8e9e9;
+        }
+        .doorGroupRelationshipMap{
+                width: 100%;
+                height: 100%;
+                padding-bottom:70px;
         }
     }
     .delete-tip{

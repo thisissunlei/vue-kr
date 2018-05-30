@@ -2,10 +2,7 @@
 <template>
 
 <div class="list">
-  <div>
-      <Button type="primary" @click="openAddEquipmentModalFun" class="list-btn">添加设备</Button>
-      <Button type="primary" @click="deleteEquipmentFromGroup" class="list-btn">删除设备</Button>
-  </div>
+  
   <EquipmentSearch 
     :communityId="communityId" 
     @searchEquipment="searchEquipment"
@@ -27,6 +24,10 @@
           <div style="float: right;">
               <Page :total="groupDetailDoorListData.totalCount" :current="1" @on-change="changePage" :page-size=15></Page>
           </div>
+      </div>
+      <div class="btn-box">
+        <Button type="primary" @click="openAddEquipmentModalFun" class="list-btn">添加设备</Button>
+        <Button type="primary" @click="deleteEquipmentFromGroup" class="list-btn">删除设备</Button>
       </div>
   </div>
    
@@ -129,5 +130,9 @@ export default{
     .list-btn{
       margin-right:8px;
     }
+  }
+  .btn-box{
+    float: left;
+    margin-top: -42px;
   }
 </style>

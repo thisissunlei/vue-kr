@@ -7,6 +7,7 @@
         :model="formItem" 
         label-position="right"  
         :rules="ruleValidate"
+        class="edit-form"
         >
         <FormItem label="设备组名称："   prop="name">
             <Input
@@ -22,13 +23,12 @@
                 style="width: 150px"
             />
         </FormItem>
-       
+        <div class="submit-editData">
+            <Button type="primary" @click="submitEdit">提交编辑</Button>
+        </div>
     </Form>
  
-    <div>
-        <Button type="primary" @click="submitEdit">提交编辑</Button>
-        <Button type="ghost" style="margin-left: 8px" @click="openDeleteTipModel">删除设备组</Button>
-    </div>
+   
 </div>
 </template>
 <script>
@@ -63,10 +63,7 @@ export default{
         
      ],
     methods:{
-        openDeleteTipModel : function(){
-            
-            this.$emit('openDeleteTipFromDetail',this.formItem);
-        },
+        
 
         submitEdit:function(){
             console.log("formItem",this.formItem);
@@ -112,7 +109,13 @@ export default{
 }
 </script>
 <style lang="less">
-    .edit-equipment{
-        padding-bottom : 15px;
+    
+    .edit-form{
+        position: relative;
+    }
+    .submit-editData{
+        position: absolute;
+        top: 33px;
+        left: 320px;
     }
 </style>

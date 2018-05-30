@@ -8,8 +8,6 @@
         v-if="showEditForm" 
         @deleteEquipmentGroup= "deleteEquipmentGroup"
         @editNodeDataInDetail="editNodeDataInDetail"
-        @openDeleteTipFromDetail = "openDeleteTipFromDetail"
-        
     />
 
     <EquipmentList 
@@ -62,9 +60,7 @@ export default{
         editNodeDataInDetail(sendMsg,res){
             this.$emit("editNodeDataInDetail",sendMsg,res);
         },
-        openDeleteTipFromDetail(sendMsg){
-             this.$emit("openDeleteTipFromDetail",sendMsg);
-        },
+       
         openAddEquipmentModalFun(){
             
             this.$emit("openAddEquipmentModalFun")

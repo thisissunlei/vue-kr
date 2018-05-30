@@ -92,12 +92,39 @@
             </DetailStyle>
             <DetailStyle info="开票信息">
                 <Row  style="margin-bottom:30px">   
-                    <PhotoAlbum
-                      :data="imagesArr"
-                    />
+                    <Col style="display:block;">
+                       营业执照:
+                       <span 
+                        v-for="(item,index) in businessUrlName"
+                        :key="item.id"
+                        style="color:#499df1;cursor:pointer;margin-right:10px;"
+                        @click="businessClick(item,index,'bus')"
+                       >
+                         {{item.fileName}}
+                       </span>
+                    </Col>
+                    <Col style="display:block;margin-top:20px;">
+                       一般纳税人证明:
+                       <span 
+                        v-for="item in taxUrlName"
+                        :key="item.id"
+                        style="color:#499df1;cursor:pointer;margin-right:10px;"
+                        @click="businessClick(item,index,'txt')"
+                       >
+                         {{item.fileName}}
+                       </span>
+                    </Col>
                 </Row>
             </DetailStyle>
-          
+
+            <PhotoAlbum 
+                :data="imgData" 
+                v-if="openBussiness" 
+                :eyeIndex="eyeIndex" 
+                @close="bussinessClose"
+                @downFile="downImg"
+             />
+            
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="!disabled">编辑</Button>
@@ -139,6 +166,7 @@ import utils from '~/plugins/utils';
             return {
                 isReady:true, //只读页面
                 disabled:false,
+                openBussiness:false,
                 //单位类型
                 unitTypeList:[
                     {value:' ',label:'全部'},
@@ -151,7 +179,6 @@ import utils from '~/plugins/utils';
                     {value:'SMALL',label:'小规模纳税人'},
                     {value:'GENERAL',label:'一般纳税人'}
                 ],
-                imagesArr:[],
                 tableColumns: [
                     {
                         title: '账单编号',
@@ -242,7 +269,11 @@ import utils from '~/plugins/utils';
                 //         { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
                 //     ]
                 },
-                salerName:'请选择'
+                salerName:'请选择',
+                businessUrlName:[],
+                taxUrlName:[],
+                eyeIndex:0,
+                imgData:[]
 
             }
         },
@@ -265,10 +296,35 @@ import utils from '~/plugins/utils';
             this.getViewDetail();
         },
         methods: {
+            bussinessClose(){
+                this.openBussiness=!this.openBussiness;
+            },
+            businessClick(item,index,param){
+                if(param=='bus'){
+                    this.imgData=this.businessUrlName;
+                }else{
+                    this.imgData=this.taxUrlName;
+                }
+                this.eyeIndex=index;
+                this.bussinessClose();
+            },
+            downImg(url,id){
+                utils.downImg(url);
+            },
             getViewDetail(){
                 let params = Object.assign({},this.$route.query);
                 this.$http.get('get-financial-invoice-detail',{id:params.id}).then((res)=>{
                     this.formItem=Object.assign({},res.data);
+                    this.formItem.businessLicense.map((item,index)=>{
+                         var list=Object.assign({},item);
+                         list.fieldUrl=list.url;
+                         this.businessUrlName.push(list);
+                    })
+                    this.formItem.taxCertificate.map((item,index)=>{
+                         var list=Object.assign({},item);
+                         list.fieldUrl=list.url;
+                         this.taxUrlName.push(list)
+                    })
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

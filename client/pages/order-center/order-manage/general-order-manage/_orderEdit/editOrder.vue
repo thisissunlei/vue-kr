@@ -98,6 +98,30 @@
                         </Select> 
                     </FormItem>
                 </Col>
+
+                <Col  class="col" v-if="isAddDesk">
+                    <FormItem label="服务开始日" style="width:252px" prop="saleDate">
+                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
+                    </FormItem>
+                </Col>
+
+                <Col  class="col" v-if="isAddDesk">
+                    <FormItem label="服务结束日" style="width:252px" prop="saleDate">
+                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
+                    </FormItem>
+                </Col>
+
+                <Col class="col" v-if="isAddDesk">
+                   <Form-item label="加桌数量" style="width:252px" prop="money">
+                    <i-input 
+                        v-model="formItem.money" 
+                        placeholder="请输入加桌数量"
+                        style="width: 252px"
+                        disabled
+                    />
+                   </Form-item>
+                </Col>
+
                 <FormItem label="备注信息" prop="remark" style="width:702px">
                     <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..." disabled/>
                     <div style="text-align:right">{{formItem.remark?formItem.remark.length+"/500":0+"/500"}}</div>
@@ -151,7 +175,7 @@ export default {
             };
 
            return {
-               
+                isAddDesk:false,
                 disabled:false,
                 typeList:[],
                 freeList:[],
@@ -235,6 +259,7 @@ export default {
                     id:params.orderEdit
                 };
                 this.$http.get('general-order-watch', from, r => {
+                       this.isAddDesk=r.data.orderType=='w'?true:false;
                        this.getCostData(r.data.orderType);
                        this.formItem=Object.assign({},r.data);
 

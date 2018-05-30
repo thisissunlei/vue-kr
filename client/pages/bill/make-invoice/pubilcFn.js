@@ -7,14 +7,14 @@ function initListData(){
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all',
             render:(h,params)=>{
-                
+                let colData = params.row;
                 return h('div',{
                     style: {
                         color:'#2b85e4'
                     },
                     on:{
                         click:()=>{
-                            this.goAddPage();
+                            this.goAddPage(colData);
                         }
                     }
                 }, params.row.applyNum)
@@ -52,29 +52,31 @@ function initListData(){
         },
         {
             title: '发票内容',
-            key: 'detailList',
+            key: 'invoiceDetailList',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all',
             render:(h,obj)=>{
                 var arr=[];
               
-                if( !obj.row.detailList || !obj.row.detailList.length){
+                if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
                     return ;
                 }
-                var detailList = [].concat(obj.row.detailList)
-                for(let i=0;i<detailList.length;i++){
-                    arr.push(h('div', {
-                        style: {
-                            borderBottom:'1px solid #e9eaec',
-                            padding:'8px 10px'
-                        },
-                        on: {
-                            click: () => {
-                                // this.openView()
+
+                var detailList = [].concat(obj.row.invoiceDetailList)
+                if(detailList.length >1){
+                    for(let i=0;i<detailList.length;i++){
+                        arr.push(h('div', {
+                            style: {
+                                borderBottom:'1px solid #e9eaec',
+                                padding:'8px 10px'
                             }
-                        }
-                    }, detailList[i].contentType))
+                        }, detailList[i].contentType))
+                    }
+                }else{
+                    arr=h('div', detailList[0].contentTypeName);
                 }
+
+               
                 return h('div',arr , '重开')
             }
         },
@@ -86,35 +88,34 @@ function initListData(){
             render:(h,obj)=>{
                 var arr=[];
               
-                if( !obj.row.detailList || !obj.row.detailList.length){
+                if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
                     return ;
                 }
-                var detailList = [].concat(obj.row.detailList)
-                for(let i=0;i<detailList.length;i++){
-                    arr.push(h('div', {
-                        style: {
-                            borderBottom:'1px solid #e9eaec',
-                            padding:'8px 10px'
-                        },
-                        on: {
-                            click: () => {
-                                // this.openView()
+                var detailList = [].concat(obj.row.invoiceDetailList)
+                if(detailList.length >1){
+                    for(let i=0;i<detailList.length;i++){
+                        arr.push(h('div', {
+                            style: {
+                                borderBottom:'1px solid #e9eaec',
+                                padding:'8px 10px'
                             }
-                        }
-                    }, detailList[i].amount))
+                        }, detailList[i].contentType))
+                    }
+                }else{
+                    arr=h('div', detailList[0].amount);
                 }
                 return h('div',arr , '重开')
             }
         },
         {
             title: '需退发票金额',
-            key: 'name',
+            key: 'needRefund',
             align:'center',
             type:'returnMake'
         },
         {
             title: '实际退回发票金额',
-            key: 'name',
+            key: 'refund',
             align:'center',
             type:'returnMake'
         },

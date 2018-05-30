@@ -5,7 +5,7 @@
             <DetailStyle info="基本信息">
                 <Row style="margin-bottom:30px">  
                     <Col span="12" class="col">
-                        <FormItem label="客户名称" style="width:252px" prop="customerId">
+                        <FormItem label="客户名称" style="width:252px" >
                             <selectCustomers 
                                 :disabled="isReady" 
                                 name="formItem.customerId" 
@@ -15,26 +15,29 @@
                     </Col>
 
                     <Col class="col">
-                        <FormItem label="社区名称" style="width:252px"  prop="communityId">
-                            <selectCommunities 
-                                :disabled="isReady" 
-                                test="formItem" 
-                                :onchange="changeCommunity"
-                            />
+                        <FormItem label="社区名称" style="width:252px" >
+                             <Select 
+                                v-model="formItem.communityId" 
+                                placeholder="请选择社区名称" 
+                                style="width: 200px"
+                                clearable
+                            >
+                                <Option v-for="item in communityList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
+                            </Select> 
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="提交人员" style="width:252px" prop="salerId">
+                        <FormItem label="提交人员" style="width:252px" >
                             <SelectSaler 
                                 :disabled="isReady"  
-                                name="formItem.salerId" 
+                                name="formItem.committer" 
                                 :value="salerName" 
                                 :onchange="changeSaler" 
                             />
                         </FormItem>
                     </Col>
                     <Col class="col">
-                        <FormItem label="提交时间" style="width:252px" prop="startDate">
+                        <FormItem label="提交时间" style="width:252px">
                             <DatePicker 
                                 :disabled="isReady" 
                                 type="date" 
@@ -54,7 +57,7 @@
                         <FormItem label="发票抬头" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.timeRange" 
+                                v-model="formItem.invoiceTitle" 
                                 placeholder="请输入发票抬头" 
                             />
                         </FormItem>
@@ -64,7 +67,7 @@
                         <FormItem label="纳税人识别码" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.timeRange" 
+                                v-model="formItem.taxpayerNumber" 
                                 placeholder="请输入纳税人识别码" 
                             />
                         </FormItem>
@@ -74,7 +77,7 @@
                         <FormItem label="注册地址" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.timeRange" 
+                                v-model="formItem.registerAddress" 
                                 placeholder="请输入注册地址" 
                             />
                         </FormItem>
@@ -84,7 +87,7 @@
                         <FormItem label="注册电话" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.timeRange" 
+                                v-model="formItem.registerPhone" 
                                 placeholder="请输入注册电话" 
                             />
                         </FormItem>
@@ -94,26 +97,26 @@
                         <FormItem label="开户银行" style="width:252px" >
                             <Input 
                                 :disabled="isReady" 
-                                v-model="formItem.timeRange" 
+                                v-model="formItem.bank" 
                                 placeholder="请输入开户银行" 
                             />
                         </FormItem>
                     </Col>
                      <Col class="col">
                         <FormItem label="银行账户" style="width:252px" >
-                            <Input :disabled="isReady" v-model="formItem.timeRange" placeholder="请输入银行账户" />
+                            <Input :disabled="isReady" v-model="formItem.bankAccount" placeholder="请输入银行账户" />
                         </FormItem>
                     </Col>
                 </Row>
             </DetailStyle>
             <DetailStyle info="可开票数据">
-                  <Table border ref="selection" :columns="tableColumns" :data.sync="stationList" ></Table>
+                  <Table border ref="selection" :columns="tableColumns" :data.sync="detailList" ></Table>
             </DetailStyle>
             <FormItem style="padding-left:24px;margin-top:40px" >
                 <div style="text-align: right;padding:0px 20px;">
                     总金额：<span>￥100000</span>
-                    <Button type="error" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">提交</Button>
-                    <Button  disabled v-if="disabled">提交</Button>
+                    <Button type="error" @click="handleSubmit('formItem')" >提交</Button>
+            
                 </div>
                 <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
@@ -147,11 +150,13 @@ import utils from '~/plugins/utils';
                 }
             };
             return {
-                isReady:true, //只读页面
+                isReady:false, //只读页面
+                detailList:[],
+                communityList:[],
                 tableColumns: [
                     {
                         title: '账单编号',
-                        key: 'name'
+                        key: 'billNum'
                     },
                     {
                         title: '账单类型',
@@ -173,11 +178,11 @@ import utils from '~/plugins/utils';
                     },
                     {
                         title: '可开票金额',
-                        key: 'guidePrice'
+                        key: 'total'
                     },
                     {
                         title: '申请开票金额',
-                        key: 'guidePrice',
+                        key: 'applyAmount',
                         render: (h, params) => {
                             let price = params.row.originalPrice;
                             
@@ -203,18 +208,15 @@ import utils from '~/plugins/utils';
                 ],
                
                 formItem: {
-                    customerId: '',
-                    communityId: '',
-                    startDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
-                    signDate: dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
-                    endDate: '',
-                    timeRange:'',
-                    floor:'',
-                    city:'',
-                    firstPayTime:'',
-                    rentAmount:'',
-                    items:[],
-                    stationAmount:0,
+                    bank: '',
+                    bankAccount: '',
+                    committer: '',
+                    committerId: '',
+                    invoiceTitle: '',
+                    registerAddress:'',
+                    registerPhone:'',
+                    taxpayerNumber:'',
+                    
                 },
                 //校验
                 ruleCustom:{
@@ -260,7 +262,10 @@ import utils from '~/plugins/utils';
             SelectSaler,
             planMap,
         },
-         mounted(){
+        mounted(){
+            let isReady = this.$route.query.isReady!=='edit';
+            this.isReady = isReady;
+            // console.log(isReady,"oooooooo")
             GLOBALSIDESWITCH("false");
         },
         methods: {
@@ -288,16 +293,62 @@ import utils from '~/plugins/utils';
             changeSaler(){
 
             },
-            changeCustomer(value){
+            changeCustomer(value,data){
                 // 客户
+                console.log(data,"kkkkkkkk")
+
                 if(value){
-                    this.formItem.customerId = value;
-                }else{
-                    this.formItem.customerId = '';
+
+                    this.getDetailData(value);
+                    this.getDetailTabel(value);
+                    this.getCommunityList(value);
+                    
+
                 }
-                this.getFloor = +new Date()
+                // this.getFloor = +new Date()
 
             },
+            //获取表格
+            getDetailTabel(id){
+                
+                this.$http.get('get-make-invoice-detail-table', {
+                    customerId:id
+                }).then((res)=>{
+                    this.detailList = [].concat(res.data);
+                    // let formItem = Object.assign(this.formItem,res.data);
+                    // this.formItem = formItem;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            //获取详情
+            getDetailData(id){
+                this.$http.get('get-make-invoice-detail', {
+                    customerId:id
+                }).then((res)=>{
+                    let formItem = Object.assign(this.formItem,res.data);
+                    this.formItem = formItem;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            },
+            getCommunityList(id){
+                
+                this.$http.get('get-community-from-cusListr', {
+                    customerId:id
+                }).then((res)=>{
+                   
+                    this.communityList = [].concat(res.data);
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+            }
         }
     }
 </script>

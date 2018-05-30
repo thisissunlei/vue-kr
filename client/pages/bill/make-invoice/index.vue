@@ -52,15 +52,16 @@
       
         
         created(){
-        
+           
         },
+    
 
         methods:{
             tabsClick(val){
                 this.type = val;
             },
             searchClick(params){
-                console.log(params,"lllllll")
+                
                 utils.addParams(params);
             },
             clearClick(params){
@@ -69,6 +70,7 @@
             initData(){
 
             }
+            
         }
     }
 </script>

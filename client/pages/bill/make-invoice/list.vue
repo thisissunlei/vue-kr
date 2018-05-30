@@ -127,7 +127,7 @@
         methods:{
             //跳转创建页面
             goAddPage(params){
-
+                 window.open(`/bill/make-invoice/${params.id}/add-invoice?id=${params.id}&isReady=edit`);
             },
             //上传成功
             upSuccess(params){

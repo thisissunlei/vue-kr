@@ -83,7 +83,7 @@ export default {
                     title: '商品',
                     key: 'name',
                     align:'center',
-                    render(tag, params){
+                    render(h, params){
                         var location=params.row.location?params.row.location:'-'
                         return h('div', [
                                     h('Tooltip', {

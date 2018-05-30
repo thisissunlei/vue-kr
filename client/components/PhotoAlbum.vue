@@ -7,7 +7,7 @@
            
             <div  class="view-img-box" style="padding:0px 40px;">
                	<KrImg
-                    :src="data[urlIndex].fieldUrl" 
+                    :src="src" 
                     width="690"
                     height="460"
                     type="center"
@@ -31,13 +31,13 @@
                 </div>
                 <!-- <span class="close-btn " @click="close"></span> -->
                 <!-- <iframe height="0" width="0" :src="data[urlIndex].fieldUrl" name="saveImage" id="saveImage"></iframe> -->
-                <Button class="down-img" @click="downFile(data[urlIndex].fieldUrl,data[urlIndex].fieldId)" type="primary">下载原图</Button>
+                <Button class="down-img" @click="downFile(src,data[urlIndex].fieldId)" type="primary">下载原图</Button>
                 <div v-if="!ifDelete" class="down-img close-img" style="left: 65%;"   @click="close" type="ghost">关闭</div>
                 <div v-if="ifDelete" class="down-img close-img" style="left: 65%;"   @click="deleteImg(data[urlIndex].id)" type="ghost">删除</div>
             </div>
             
       </div>
-     
+      
   </div>
 </template>
 
@@ -61,23 +61,57 @@ export default {
     },
     data(){
         return {
-            urlIndex:this.eyeIndex
+            urlIndex:this.eyeIndex,
+            src:'',
+            isUrl:true
         }
     },
+    mounted(){
+        if(!this.data[this.eyeIndex].fieldUrl){
+            this.isUrl=false;
+            this.idToUrl(this.data[this.eyeIndex].fieldId);
+        }else{
+            this.isUrl=true;
+            this.src=this.data[this.eyeIndex].fieldUrl;
+        }
+        this.urlIndex = this.eyeIndex;
+    },
     methods:{
+        idToUrl(id){
+           this.$http.post('get-station-contract-pdf-url', {
+				id:id,	
+			}, (response) => {
+				this.src=response.data;
+			}, (error) => {
+				that.$Notice.error({
+                    title:error.message
+                });
+			})    
+        },
         backClick(){
             if(this.urlIndex == 0){
                 this.urlIndex = this.data.length -1;
             }else {
                 this.urlIndex--;
             }
-
+            if(!this.isUrl){
+                this.idToUrl(this.data[this.urlIndex].fieldId);
+            }else{
+                this.src=this.data[this.urlIndex].fieldUrl;
+            }
+            
         },
         forwardClick(){
             if(this.urlIndex == this.data.length -1){
                 this.urlIndex = 0;
             }else {
                 this.urlIndex++
+            }
+
+            if(!this.isUrl){
+                this.idToUrl(this.data[this.urlIndex].fieldId);
+            }else{
+                this.src=this.data[this.urlIndex].fieldUrl;
             }
 
         },
@@ -92,11 +126,6 @@ export default {
         deleteImg(id){
             this.$emit('deleteFile',id)
         }
-    },
-    mounted(){
-        // console.log(this.urlIndex,this.eyeIndex)
-        this.urlIndex = this.eyeIndex;
-
     }
 }
 </script>

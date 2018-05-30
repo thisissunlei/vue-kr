@@ -22,6 +22,9 @@
             @scroll="scroll"
             :data="item"
       />
+
+      <span id="spanWidthMapInventoryName" style="visibility:hidden;"></span>
+      <span id="spanWidthMapInventoryCapacity" style="visibility:hidden;"></span>
       
   </div>
 </template>
@@ -52,7 +55,8 @@ export default {
        tabForms:{},
        isLoading:false,
        discount:"",
-       isFirstClick:false   
+       isFirstClick:false,
+       scrollTop:0   
     }
   },
   mounted(){
@@ -65,7 +69,11 @@ export default {
      mainDom.removeEventListener('scroll',this.mainScroll);
   },
   methods:{
-    mainScroll(event){
+    mainScroll(event){  
+        this.scrollTop=event.target.scrollTop;
+        if(this.scrollTop==0){
+            return ;
+        }
         this.isFirstClick=true;
     },
     //获取数据
@@ -86,6 +94,13 @@ export default {
     },
     searchForm(formItem){
         this.tabForms=Object.assign({},formItem);
+        if(clickNone.length){
+            clickNone.map((item,index)=>{
+              var parentNode=document.getElementById('gantt-chart-tool-tip'+item.id).parentNode;
+              this.closeCommon(parentNode);  
+            })
+            clickNone=[];
+        }
         this.getMapData(this.tabForms);
     },
     countChange(param,countRadio){
@@ -94,7 +109,8 @@ export default {
     mouseClick(event,every,all){
         if(!this.isFirstClick){
             mainDom.scrollTop=0;
-            this.isFirstClick=true;
+        }else{
+            mainDom.scrollTop=this.scrollTop;
         }
         var index=this.findEle(clickNone,'id',every.item.id);
         if(index!=-1){
@@ -138,7 +154,7 @@ export default {
             return ;
         }     
         var parentNode=document.getElementById('gantt-chart-tool-tip'+every.item.id).parentNode;
-        this.closeCommon(parentNode,every.item.id);
+        this.closeCommon(parentNode);
     },
     scroll(all,canvas,scroll){
         clickNone.map((item,index)=>{
@@ -146,7 +162,7 @@ export default {
         })
     },
     //关闭dom
-    closeCommon(parentNode,id){
+    closeCommon(parentNode){
         wrapDom.removeChild(parentNode);
     },
     //点击关闭套弹窗
@@ -155,7 +171,7 @@ export default {
         if (index > -1) {
            clickNone.splice(index, 1);
         }
-        this.closeCommon(parentNode,id);    
+        this.closeCommon(parentNode);    
     },
     //生成dom
     createDom(every){

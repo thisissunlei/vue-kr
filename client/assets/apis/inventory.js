@@ -47,12 +47,12 @@ export default  {
     },
     // 即将到期
     'getDueList': {
-        url: '/api/krspace-order-web/operation/due/list',
+        url: '/api/order/operation/due/list',
         method: 'post'
     },
     // 即将到期导出
     'excelDueList': {
-        url: '/api/krspace-order-web/operation/due/list-excel',
+        url: '/api/order/operation/due/list-excel',
         method: 'post'
     },
     //社区招商

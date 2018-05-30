@@ -70,9 +70,14 @@ export default {
     url: '/api/krspace-finance-web/order/common/getBizTypeListAllBy',
     method: 'get'
   },
+  // //通用订单费用明细枚举列表
+  // 'general-cost-list': {
+  //   url: '/api/krspace-finance-web/order/common/getFeeTypeListBy',
+  //   method: 'get'
+  // },
   //通用订单费用明细枚举列表
   'general-cost-list': {
-    url: '/api/krspace-finance-web/order/common/getFeeTypeListBy',
+    url: '/api/krspace-finance-web/order/common/currencyOrderType',
     method: 'get'
   },
   //订单合同是否首付款

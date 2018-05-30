@@ -95,6 +95,28 @@
                      </Select> 
                     </FormItem>
                 </Col>
+
+                <Col  class="col" v-if="isAddDesk">
+                    <FormItem label="服务开始日" style="width:252px" prop="saleDate">
+                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    </FormItem>
+                </Col>
+
+                <Col  class="col" v-if="isAddDesk">
+                    <FormItem label="服务结束日" style="width:252px" prop="saleDate">
+                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    </FormItem>
+                </Col>
+
+                <Col class="col" v-if="isAddDesk">
+                   <Form-item label="加桌数量" style="width:252px" prop="money">
+                    <i-input 
+                        v-model="formItem.money" 
+                        placeholder="请输入加桌数量"
+                        style="width: 252px"
+                    />
+                   </Form-item>
+                </Col>
                 
                 <FormItem label="备注信息" prop="remark" style="width:702px">
                     <Input v-model="formItem.remark" :maxlength="500" type="textarea" :autosize="{minRows: 5,maxRows: 5}" style="width:100%;" placeholder="写入备注..."/>
@@ -149,7 +171,7 @@ export default {
             };
 
            return {
-
+                isAddDesk:false,
                 disabled:false,
                 typeList:[],
                 freeList:[],
@@ -287,6 +309,7 @@ export default {
 
             onTypeChange(value){
                 this.type=value?true:false;
+                this.isAddDesk=value=='w'?true:false;
                 if(value){
                     this.getCostData(value);
                 }

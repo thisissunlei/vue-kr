@@ -39,8 +39,8 @@ var img='';
         return{
             colorLabels:[
                 {label:'未租',color:'#BCE590'},
-                {label:'在租',color:'#FFC684'},
-                {label:'合同未生效',color:'#FFE08F'},
+                {label:'在租',color:'#fedc82'},
+                {label:'合同未生效',color:'#fea877'},
                 {label:'不可用',color:'#E4E4E4'}
             ],
             drawingBoard:'drawingPlanBoard' + this._uid,

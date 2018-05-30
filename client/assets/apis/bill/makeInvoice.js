@@ -10,6 +10,11 @@ export default  {
       url: 'csr-finance-openTicket',
       method: 'post'
     },
+    //发票列表统一接口
+    'invoice-list-unified': {
+      url: '/ben/csr-invoice-list',
+      method: 'get'
+    },
     //根据客户id获取可开票数据
     'get-make-invoice-detail': {
       url: '/ben/csr-invoice-qualification/info',

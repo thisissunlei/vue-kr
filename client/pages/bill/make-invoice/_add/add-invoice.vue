@@ -165,16 +165,16 @@ import utils from '~/plugins/utils';
                             let type = params.row.seatType;
                             let typeName = '开放工位';
                             if(type =='SPACE'){
-                                typeName = '独立办公室'
+                                typeName = '独立办公室';
                             }else{
-                                typeName = "开放工位"
+                                typeName = "开放工位";
                             }
-                            return typeName
+                            return typeName;
                         }
                     },
                     {
                         title:'费用类型',
-                        key:'capacity'
+                        key:'feeType'
                     },
                     {
                         title: '可开票金额',
@@ -184,8 +184,9 @@ import utils from '~/plugins/utils';
                         title: '申请开票金额',
                         key: 'applyAmount',
                         render: (h, params) => {
+                            let index = params.index;
                             let price = params.row.originalPrice;
-                            
+                            console.log(params,"ppppppppp")
                             return h('Input', {
                                 props: {
                                     min:params.row.guidePrice,
@@ -195,18 +196,15 @@ import utils from '~/plugins/utils';
                                 on:{
                                     'on-change':(event)=>{
 
-                                        this.tabelInputChange(event);
+                                        this.tabelInputChange(event,index);
                                     }
                                 }
                             },'44')
                         }
                     }
                 ],
-                //列表数据
-                stationList: [
-                    {customerId:'33333'}
-                ],
-               
+                totalAmount:0,
+                AmountList:[],
                 formItem: {
                     bank: '',
                     bankAccount: '',
@@ -265,12 +263,14 @@ import utils from '~/plugins/utils';
         mounted(){
             let isReady = this.$route.query.isReady!=='edit';
             this.isReady = isReady;
-            // console.log(isReady,"oooooooo")
             GLOBALSIDESWITCH("false");
         },
         methods: {
-            tabelInputChange(event){
-                console.log(event,"pppppppppp")
+            tabelInputChange(event,index){
+                let totalAmount = 0;
+                console.log(this.detailList,"ppppppp")
+                
+                
             },
             back(){
                 window.history.go(-1);

@@ -70,7 +70,7 @@
             width:110px;
         }
         &:nth-child(4){
-            width:70px;
+            width:80px;
         }
 
         &:nth-child(1),&:nth-child(6){

@@ -13,11 +13,11 @@
                     <Loading/>
             </div> 
         </Table>
-        <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily"/>
+        <SlotHead :class="theHead?'header-here':'header-no'" indentify="daily" />
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}" v-if="dailyOldData.length>0">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
@@ -121,7 +121,7 @@ var layoutScrollHeight=0;
                     {
                         title: '距进场日',
                         align:'center',
-                        width:70,
+                        width:80,
                         key: 'toPutawayDays',
                         render(h, params){
                             if(params.row.toPutawayDays<30){
@@ -172,7 +172,7 @@ var layoutScrollHeight=0;
                         key: 'customerName'
                     },
                     {
-                        title: '客户是否新入住',
+                        title: '客户是否新入驻',
                         width:90,
                         key: 'ifNewCustomer',
                     },

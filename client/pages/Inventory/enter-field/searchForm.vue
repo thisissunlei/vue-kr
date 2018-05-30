@@ -101,7 +101,9 @@
                     </div>
 
                     <div style="display:inline-block;margin-right:20px;margin-left:90px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系人：</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:7px;">联</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:7px;">系</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">人</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="contactName">
                             <i-input 
                                 v-model="formItem.contactName" 
@@ -163,7 +165,7 @@
                     </Form-item>
 
 
-                    <div style="display:inline-block;margin-right:20px">
+                    <div style="display:inline-block;margin-right:18px">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 

@@ -1062,7 +1062,7 @@
                             {
                                 primaryText: '级联图谱',
                                 menuCode: 'door_relation',
-                                router: '/doorrelationship/map',
+                                router: 'doorrelationship/map',
                             }
                         ]
                 }, {

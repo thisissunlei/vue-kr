@@ -74,7 +74,7 @@ export default{
             let _this =this;
             var toDleteEquipmentArr = [];
             for(var i=0;i<selection.length;i++){
-                toDleteEquipmentArr.push(selection[i].id)
+                toDleteEquipmentArr.push(selection[i].doorId)
             }
             var toDleteEquipmentStr = toDleteEquipmentArr.join(",");
             console.log("toDleteEquipmentStr",toDleteEquipmentStr);

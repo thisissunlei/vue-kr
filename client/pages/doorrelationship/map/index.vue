@@ -725,8 +725,8 @@ export default {
                 
                 this.myDiagram.clearHighlighteds();
                 // _this.myDiagram.startTransaction();
-                var isHighlightedNodeIdArr = [200,201];
-                console.log("")
+                var isHighlightedNodeIdArr = res.data.items ||[];
+                
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
                     var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
                     if (findNodeData) {

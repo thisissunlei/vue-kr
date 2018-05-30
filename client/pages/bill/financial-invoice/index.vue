@@ -8,6 +8,7 @@
         />
         <div style="padding:0px 20px;">
             <Tabs 
+                :value="type"
                 :animated="false"
                 @on-click="tabsClick"
             >
@@ -44,21 +45,20 @@
                searchForm:{}
            }
         },
-      
-        
-        created(){
-        
+        mounted(){
+            var tab=localStorage.getItem('financial-invoice-toAndDone');
+            this.type=tab?tab:'VERIFYING';
         },
-
         methods:{
             tabsClick(val){
+                localStorage.setItem('financial-invoice-toAndDone',val);
                 this.type = val;
             },
             searchClick(params){  
                 utils.addParams(params);
             },
             clearClick(params){
-                //utils.addParams(params);
+                utils.addParams(params);
             },
             initData(formItem){
                 this.searchForm=formItem;

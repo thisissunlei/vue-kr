@@ -89,7 +89,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 // import publicFn from '../publicFn';
-import SelectSaler from '~/components/SelectSaler.vue'
+import SelectSaler from '~/components/SelectSaler.vue';
 export default {
     props:{
         type:{
@@ -159,6 +159,12 @@ export default {
     mounted(){
        this.$emit('initData',this.formItem);
        this.formItem=Object.assign({},this.formItem,this.$route.query);
+       if(!this.formItem.taxpayerType){
+           this.formItem.taxpayerType=' ';
+       }
+       if(!this.formItem.titleType){
+           this.formItem.titleType=' ';
+       }
     },
     methods:{
         //检查输入字符串字节长度

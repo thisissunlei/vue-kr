@@ -295,8 +295,8 @@ export default {
                          if(e.modelChange === "linkDataArray"){
                             var linkData = e.newValue;
                             var param = {
-                                            preSetId :linkData.from,
-                                            setId :linkData.to,
+                                            preSetId :linkData.to,
+                                            setId :linkData.from,
                                             communityId : _this.communityId
                                         }
                             if(linkData.points){

@@ -21,7 +21,20 @@
             @leave="mouseLeave"
             @scroll="scroll"
             :data="item"
-      />
+      >
+            <div  class="flow-chart-top-toolbar" slot="toolbar">
+                <div class="toolbar-inner" v-for="item in colorLabels" :key="item.id">
+                    <span class="map-font-tip">{{item.label}}</span>
+                    <span class="map-color-tip" :style="'background:'+item.color"></span>
+                </div>
+
+                <span class="warning-tip"></span>
+                <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span> 
+            </div>
+            <template slot="export" slot-scope="props">
+                <div class="export" :id="props.id">导出高清图</div>
+            </template>    
+      </FloorPlan>
 
       <span id="spanWidthMapInventoryName" style="visibility:hidden;"></span>
       <span id="spanWidthMapInventoryCapacity" style="visibility:hidden;"></span>
@@ -51,6 +64,12 @@ export default {
   },
   data(){
     return{
+       colorLabels:[
+        {label:'未租',color:'#BCE590'},
+        {label:'在租',color:'#fedc82'},
+        {label:'合同未生效',color:'#fea877'},
+        {label:'不可用',color:'#E4E4E4'}
+       ],
        canvasData:[],
        tabForms:{},
        isLoading:false,
@@ -196,6 +215,56 @@ export default {
      .section-title{
          background:#fff;
      }
+     .flow-chart-top-toolbar{
+        padding-left:20px;
+        line-height: 50px;
+        height: 50px;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0,0,0,.1);
+        .toolbar-inner{
+             display:inline-block;
+             margin-right:30px;
+            .map-font-tip{
+                display:inline-block;
+                vertical-align: middle;
+                font-family: PingFangSC-Medium;
+                font-size: 14px;
+                color: #999999;
+            }
+            .map-color-tip{
+                display:inline-block;
+                width:33px;
+                height:15px;
+                margin-left:10px;
+                border-radius: 4px;  
+                vertical-align: middle;
+            }
+        }
+        .warning-tip{
+            display:inline-block;
+            width:19px;
+            height:23px;
+            background:url(img/warning.png) no-repeat center;
+            background-size: 100%;
+            margin-right:6px;
+            vertical-align: middle;
+        }
+        .export{
+            float:right;
+            width:109px;
+            height:30px;
+            line-height: 30px;
+            background: #499DF1;
+            box-shadow: 0 1px 4px 0 rgba(14,94,174,0.50);
+            border-radius: 4px;
+            font-size: 14px;
+            color: #FFFFFF;
+            text-align: center;
+            margin-top: 9px;
+            margin-right:20px;
+            cursor: pointer;
+        }
+    }
     .gantt-chart-tool-tip{
           max-width: 280px;
           display: none;

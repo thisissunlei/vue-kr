@@ -90,7 +90,7 @@ export default {
    name:'doorRelationship',
     head () {
         return {
-            title: "门禁级联关系"
+            title: "级联图谱"
         }
     },
    data(){
@@ -787,6 +787,7 @@ export default {
         height:90%;
         .margin-left{
             margin-left : 10px;
+            color: #495060;
         }
         .right-part{
             float : right;

@@ -9,7 +9,7 @@
                     v-model="formItem.floor"
                     style="width:80px"
                     placeholder="请选择楼层"
-                    
+                    clearable
                     >
                     <Option
                         v-for="item in floorOptions"
@@ -25,7 +25,7 @@
                     v-model="formItem.doorType"
                     style="width:120px"
                     placeholder="请选择门类型"
-                    
+                    clearable
                     >
                     <Option
                         v-for="item in doorTypeOptions"

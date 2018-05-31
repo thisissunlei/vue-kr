@@ -21,7 +21,7 @@
     },
     data() {
         return{
-            data:['商品','商品类型','工位数量','进场日','离场日','租期','当前签约价','当前客户','客户当前在租工位数','随后可续时段','商品当前定价'],
+            data:['商品','商品类型','工位数量','剩余租期','进场日','离场日','租期','当前签约价','当前客户','当前在租工位数','随后可续','商品定价'],
         }
     }
 }
@@ -39,7 +39,7 @@
      height:50px;
      /*line-height:40px;*/
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:23;
 
      vertical-align: middle;
   .slot-head-class, .slot-optional-class{
@@ -50,16 +50,40 @@
         word-break: break-all;
         font-weight: 700;
         height: 50px;
-        &:nth-child(2),&:nth-child(8){
-            width:110px;
+        &:nth-child(2){
+            width:75px;
         }
-        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(6),&:nth-child(11){
+        &:nth-child(4){
             width:80px;
         }
-        &:nth-child(7){
-            width:100px;
+        &:nth-child(3){
+            width:65px;
         }
-        &:nth-child(1),&:nth-child(10),&:nth-child(9){
+
+        &:nth-child(5),&:nth-child(6){
+            width:105px;
+        }
+        &:nth-child(7){
+            width:80px;
+        }
+        &:nth-child(8){
+            width:80px;
+        }
+        &:nth-child(10){
+            width:95px;
+        }
+        &:nth-child(11){
+            width:110px;
+        }
+        
+        
+        
+        &:nth-child(12){
+            width:75px;
+        }
+        
+        
+        &:nth-child(1),&:nth-child(9){
             width:100%;
             flex: 1.5;
             /*-moz-box-flex: 1; */

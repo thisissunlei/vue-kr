@@ -17,7 +17,7 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:'300px'}" v-if="dailyOldData.length>0">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
@@ -109,41 +109,39 @@ var layoutScrollHeight=0;
                     {
                         title: '商品类型',
                         key: 'type',
-                        width:110,
+                        width:75,
                         align:'center',
+                        render(h,params){
+                            let one = params.row.type.substr(0,2);
+                            let two = params.row.type.substr(2,3);
+                            return h('div',[
+                                    h('p',{
+                                    },one),
+                                    h('p',{
+                                    },two),
+                            ])
+                        }
                     },
                     {
                         title: '工位数量',
                         key: 'capacity',
-                        width:80,
+                        width:65,
                         align:'center',
                     },
                     {
-                        title: '进场日',
+                        title: '剩余租期',
                         align:'center',
                         width:80,
-                        key: 'startDate',
-                    },
-                    {
-                        title: '离场日',
-                        align:'center',
-                        width:80,
-                        key: 'endDate',
-                    },
-                    {
-                        title: '租期',
-                        align:'center',
-                        width:80,
-                        key: 'rentDays',
+                        key: 'leaseRemainingDays',
                         render(h, params){
-                            if(params.row.rentDays<30){
+                            if(params.row.leaseRemainingDays<30){
                                 return h('div', [
                                         h('div', [
                                             h('span', { 
                                                 style: {
                                                     color:'#FF6868'
                                                 }       
-                                            }, params.row.rentDays),
+                                            }, params.row.leaseRemainingDays),
                                             h('span', { 
                                                 style: {
                                                     color:'#333'
@@ -158,7 +156,7 @@ var layoutScrollHeight=0;
                                                 style: {
                                                     color:'#333'
                                                 }       
-                                            }, params.row.rentDays),
+                                            }, params.row.leaseRemainingDays),
                                             h('span', { 
                                                 style: {
                                                     color:'#333'
@@ -173,25 +171,68 @@ var layoutScrollHeight=0;
                         }
                     },
                     {
+                        title: '进场日',
+                        align:'center',
+                        width:105,
+                        key: 'startDate',
+                    },
+                    {
+                        title: '离场日',
+                        align:'center',
+                        width:105,
+                        key: 'endDate',
+                    },
+                    {
+                        title: '租期',
+                        align:'center',
+                        width:80,
+                        key: 'rentDays',
+                        render(h, params){
+                            return params.row.rentDays+'天'
+                        }
+                    },
+                    {
                         title: '当前签约价',
                         align:'right',
-                        width:100,
+                        width:80,
                         key: 'price',
                     },
                     {
                         title: '当前客户',
                         align:'center',
-                        width:110,
                         key: 'customerName',
+                        render(h, params){
+                            return h('div', [
+                                        h('Tooltip', {
+                                            props: {
+                                                placement: 'top',
+                                                content: params.row.customerName
+                                            }
+                                        }, [
+                                        h('div', [
+                                            h('div',{
+                                                style:{
+                                                    textOverflow:'ellipsis',
+                                                    whiteSpace:'nowrap',
+                                                    overflow: 'hidden'
+                                                }
+                                            },params.row.customerName),
+                                        ])
+                                    ])
+                            ])
+                        }
+
                     },
                     {
-                        title: '客户当前在租工位数',
+                        title: '当前在租工位数',
                         align:'center',
+                        width:95,
                         key: 'customerStatoons',
                     },
                     {
-                        title: '随后可续时段',
+                        title: '随后可续',
                         align:'center',
+                        width:110,
                         key: 'reletTypeName',
                         render(h, params){
                             if(!params.row.reletTypeName){
@@ -220,14 +261,19 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'已生效':'未生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),
                                     ])
                                 ])
                             }else if(params.row.reletTypeName.indexOf('可续租时长不限')!=-1){
-                                return '可续租时长不限'
+                                return h('div',[
+                                            h('p',{
+                                            },'可续租'),
+                                            h('p',{
+                                            },'时长不限'),
+                                        ])
                             }else{
                                 return h('div', [
                                         h('Tooltip', {
@@ -255,7 +301,7 @@ var layoutScrollHeight=0;
                                             h('p',{
                                             },'合同结束日：'+params.row.reletEndDate),
                                             h('p',{
-                                            },'是否生效：'+params.row.reletEffectStatus),
+                                            },'是否生效：'+(params.row.reletEffectStatus==1?'已生效':'未生效')),
                                             h('p',{
                                             },'签约价：'+params.row.reletPrice),
                                         ]),
@@ -271,7 +317,7 @@ var layoutScrollHeight=0;
                     {
                         title: '商品定价',
                         align:'right',
-                        width:80,
+                        width:75,
                         key: 'quotedPrice',
                     },
                 ],
@@ -284,7 +330,6 @@ var layoutScrollHeight=0;
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -326,24 +371,23 @@ var layoutScrollHeight=0;
             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.tabForms=Object.assign({},formItem);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },
-            //数据变化
-            dataParams(data){
-                this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
-            },
             initData(formItem){
+                console.log('init---')
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
+            },
+            dataParams(data){
+                    this.endParams=Object.assign({},data);
+                    // this.getData(this.endParams);
             },
             getData(params){
                 //getDailyInventory 
@@ -370,7 +414,7 @@ var layoutScrollHeight=0;
                 this.openMessage=data;
             },
             submitExport(){
-                utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
+                utils.commonExport(this.tabForms,'/api/order/operation/due/list-excel');
             },
             //滚动监听
         onScrollListener(){            
@@ -423,6 +467,7 @@ var layoutScrollHeight=0;
     .enter-filed-table{
         position: relative;
         padding: 0 ;
+        padding-bottom:77px;
         .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
             background-color: #f6f6f6;
         }
@@ -461,13 +506,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{
@@ -526,13 +572,14 @@ var layoutScrollHeight=0;
                 padding:20px 0 20px 20px;
                 position: absolute;
                 bottom: 0px;
+                padding-left:0;
             }
             .on-export-middle{
                 position: fixed;
                 bottom: 53px;
                 z-index: 999;
                 left: 20px;
-                padding:17px 0 20px 20px;
+                padding:17px 0 20px 0;
             }
             .priceClass{
                 .ivu-table-cell{

@@ -167,7 +167,7 @@
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
-            
+
                 html += '<ul>';
                 item.menuItems.map(function (child) {
                     var href = ""
@@ -618,11 +618,6 @@
                             router: 'product/communityAllocation/communityList'
                         },
                         {
-                            primaryText: '社区平面图',
-                            menuCode: 'oper_cmt_graph_base',
-                            router: 'product/communityAllocation/communityPlanList'
-                        },
-                        {
                             primaryText: '空间',
                             menuCode: 'oper_cmt_spaceList_base',
                             router: 'product/communityAllocation/CommunityMeetingRoom'
@@ -632,6 +627,12 @@
                             menuCode: 'oper_cmt_stationList_base',
                             router: 'product/communityAllocation/communityStation'
                         },
+                        {
+                            primaryText: '平面图配置',
+                            menuCode: 'oper_cmt_graph_base',
+                            router: 'product/communityAllocation/communityPlanList'
+                        },
+                        
                         {
                             primaryText: "每日库存查询",
                             router: 'inventory/daily-inventory',
@@ -645,19 +646,16 @@
                             menuCode: 'inventory',
                         },
                         {
-                            primaryText: '注册地址',
-                            menuCode: 'cmt_registerAddress_list',
-                            router: 'product/communityAllocation/registeredAddress'
-                        },
-                        {
-                            primaryText: "我方合同主体",
-                            menuCode: 'lessor_management_base',
-                            router: 'product/customerManage/lessorManage',
-                        },
-                        {
                             primaryText: '库存平面图',
-                            menuCode: 'cmt_run',
-                            router: 'product/communityManage/detail',
+                            router: 'inventory/floor-plan',
+                            type: 'vue',
+                            menuCode: 'inventory_graph',
+                        },
+                        {
+                            primaryText: "社区招商情况",
+                            router: 'community/attract-investment',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
                         },
                         {
                             primaryText: '销控',
@@ -670,18 +668,27 @@
                             menuCode: 'stat_group',
                         },
                         {
-                            primaryText: "社区招商情况",
-                            router: 'community/attract-investment',
-                            type: 'vue',
-                            menuCode: 'cmt_investment',
+                            primaryText: '注册地址',
+                            menuCode: 'cmt_registerAddress_list',
+                            router: 'product/communityAllocation/registeredAddress'
                         },
+                        {
+                            primaryText: "我方合同主体",
+                            menuCode: 'lessor_management_base',
+                            router: 'product/customerManage/lessorManage',
+                        },
+                        // {
+                        //     primaryText: '库存平面图',
+                        //     menuCode: 'cmt_run',
+                        //     router: 'product/communityManage/detail',
+                        // }, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
                             router: 'product/communityAllocation/equipmentList'
                         },
-                    ]	
-                }, 
+                    ]
+                },
              ]
         }
     }
@@ -696,23 +703,23 @@
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
                 menuItems: [
-                    {
-                        primaryText: '社区主页',
-                        router: 'operation/community',
-                        type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '社区主页',
+                    //     router: 'community/operation/index',
+                    //     // type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '即将到期',
                         router: 'inventory/over-date',
                         type:'vue',
-                        menuCode: 'operation_home',
+                        menuCode: 'vueList',
                     },
                     {
                         primaryText: '即将进场',
                         router: 'inventory/enter-field',
                         type:'vue',
-                        menuCode: 'operation_home',
+                        menuCode: 'imt_putaway_list',
                     },
                     {
                         primaryText: '已起租未付',
@@ -742,12 +749,14 @@
                         type: 'vue',
                         menuCode: 'checklist_list',
                     },
+                    {
+                        primaryText: '电视图库管理',
+                        menuCode: 'tv_ad_storage',
+                        type: 'vue',
+                        router: 'smart-hardware/map-depot'
+                    },
                 ]
             },
-
-
-
-
         ]
     }
     }
@@ -771,6 +780,12 @@
                             primaryText: '活动',
                             menuCode: 'oper_activity_base',
                             router: 'operation/communityAllocation/activity'
+                        },
+                        {
+                            primaryText: '会员福利',
+                            menuCode: 'op_member_coupon_external',
+                            type: 'vue',
+                            router: 'app-manage/member-welfare'
                         },
                         {
                             primaryText: '广告',
@@ -817,24 +832,13 @@
                             router: 'permission/systemManage/appLoginLogs',
                             menuCode: 'sso_appVersion_base',
                         },
-                        {
-                            primaryText: '会员福利',
-                            menuCode: 'op_member_coupon_external',
-                            type: 'vue',
-                            router: 'app-manage/member-welfare'
-                        },
+                       
                         // {
                         //     primaryText: '免费额度优惠券',
                         //     menuCode: 'op_member_coupon_internal',
                         //     type: 'vue',
                         //     router: 'app-manage/coupon'
                         // },
-                        {
-                            primaryText: '电视图库管理',
-                            menuCode: 'tv_ad_storage',
-                            type: 'vue',
-                            router: 'smart-hardware/map-depot'
-                        },
                     ]
                 },
                 {
@@ -864,6 +868,12 @@
                             primaryText: '关键词配置',
                             menuCode: 'sem_list',
                             router: 'WebBackstage/keyword',
+                        },
+                        {
+                            primaryText: '计算器配置',
+                            menuCode: 'cbd_list',
+                            type:'vue',
+                            router: 'official-website/calculator',
                         }
                     ]
                 },
@@ -1117,7 +1127,21 @@
                     }
                 ]
         },
-            ],
+        {
+                primaryText: "空间管理",
+                iconName: 'icon-card',
+                iconColor: '#79859a',
+                router :'',
+                menuItems: [
+                        {
+                            primaryText: '空间管理',
+                            menuCode: 'basic_space',
+                            type: 'vue',
+                            router: 'smart-hardware/space-manage'
+                        },
+                    ]
+            },
+        ],
         }
     }
     // 订单合同

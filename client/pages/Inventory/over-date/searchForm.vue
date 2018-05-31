@@ -5,6 +5,7 @@
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
 
                 <div style="white-space: nowrap;">
+                    <div style="display:inline-block;vertical-align: top;">
                     <Form-item class='daily-form community-form'>
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;">社<span style="display:inline-block;width:27px;"></span>区</span>
                         <Select 
@@ -52,18 +53,21 @@
                                 </Option>
                         </Select> 
                     </Form-item>
+                </div>
                     
-                     <Form-item label="商品名称" class='daily-form' prop="goodsName">
+                     <Form-item  class='daily-form' prop="goodsName">
+                        <span style="color:#333;font-weight: 500;display: inline-block;margin-right:11px;">商品名称</span>
                         <i-input 
                             v-model="formItem.goodsName" 
-                            placeholder="请输入商品名称"
+                            placeholder="房间号或工位编号"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
                     </Form-item>
 
 
-                    <Form-item label="商品类型" class='daily-form'> 
+                    <Form-item class='daily-form'> 
+                        <span style="color:#333;font-weight: 500;display: inline-block;margin-right:11px;">商品类型</span>
                         <Select 
                             v-model="formItem.goodsType" 
                             placeholder="请输入商品类型" 
@@ -85,8 +89,8 @@
                                 clearable
                             >
                                 <Option value="EQ" >等于</Option>
-                                <Option value="LT" >长于</Option>
-                                <Option value="GT">少于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
                         <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
@@ -116,7 +120,7 @@
                         <span style="font-weight:bold;display:inline-block;margin-right:12px;padding-top:7px;">随后可续</span>
                         <Form-item class='priceForm'>
                             <Select 
-                            v-model="formItem.reletTypeName" 
+                            v-model="formItem.reletType" 
                             placeholder="请选择随后可续" 
                             style="width: 200px"
                             clearable
@@ -147,7 +151,7 @@
                             <i-input 
                                 v-model="formItem.rentDays" 
                                 style="width: 90px;"
-                                placeholder="请输入租期天数"
+                                placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -161,7 +165,6 @@
                             <i-input 
                                 v-model="formItem.stationsMin" 
                                 style="width: 90px"
-                                placeholder="请输入工位数量"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -169,7 +172,6 @@
                         <Form-item  prop="stationsMax" style="width:auto;display:inline-block;">
                             <i-input 
                                 v-model="formItem.stationsMax" 
-                                placeholder="请输入工位数量"
                                 style="width: 90px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -254,7 +256,16 @@ export default {
                     callback();
                 }
             };
-            return {  
+            const validatecName = (rule, value, callback) => {
+                console.log('value=',value,value.length)
+                if(value&&value.length>40){
+                    callback('名称最多40个字');
+                }else{
+                    callback();
+                }
+            };
+            return { 
+                params :{},
                 formItem:{
                     communityId:' ',
                     cityId:'',
@@ -264,23 +275,24 @@ export default {
                     goodsType:' ',
                     leaseRemainingType:'GT',
                     rentType:'GT',
-                    reletTypeName:' ',
+                    reletType:' ',
                     goodsName:'',
                     customerName:'',
+                    leaseRemainingDays:''
                 },
                 renewList:[
                     {value:' ',label:'全部'},
                     {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
                     {value:'RENT_NO_PERMIT',label:'不可续租'},
-                    {value:'RENT_CAN_TO',label:'只可续部分时间'}
+                    {value:'RENT_CAN_TO',label:'只可续租一段时间'}
                 ],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'SPACE',label:'固定办公桌'},
-                    {value:'OPEN',label:'独立办公室'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
@@ -312,13 +324,14 @@ export default {
                         { validator: validateNum, trigger: 'change' }
                     ],
                     customerName:[
-                        { validator: validateName, trigger: 'change' }
+                        { validator: validatecName, trigger: 'change' }
                     ],
                 }
             }
     },
     mounted(){
         this.getCityList();
+        this.params=this.$route.query
     },
     head() {
         return {
@@ -328,7 +341,7 @@ export default {
     methods:{
         //社区接口
         getCommunityList(id){
-            let params = this.$route.query;
+            let params = this.params;
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
                 this.communityList=res.data.map(item=>{
                     item.id = item.id+'';
@@ -339,6 +352,7 @@ export default {
                 }
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
+                    this.floorList = []
                 }else{
                     this.getFloorList(params.communityId)
                     this.formItem.communityId = params.communityId;
@@ -352,7 +366,7 @@ export default {
         },
         //城市接口
         getCityList(){
-            let params = this.$route.query;
+            let params = this.params;
             this.$http.get('getDailyCity').then((res)=>{
                 this.cityList=res.data.map(item=>{
                     item.cityId = item.cityId+' ';
@@ -361,16 +375,18 @@ export default {
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
                     this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
+
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
+
                 }
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
-                    console.log('=-0900',typeof params.cityId)
                 }
                 
-                this.formItemOld=Object.assign({},this.formItem);
                 this.formItem = Object.assign({},this.formItem,this.$route.query)
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
@@ -381,10 +397,12 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            let params = this.$route.query;
-            console.log(!params.floor,'=====',params.floor)
+            let params = this.params;
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
+                if(!res.data.length){
+                    this.floorList = []
+                }
                 
                 if(this.floorList.length){
                     this.floorList=res.data.map(item=>{
@@ -396,7 +414,10 @@ export default {
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})
                                             
                 }
-                if(!params.floor){
+                if(this.floorList.lengt==1){
+                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' ';
+                }
+                if(params.floor == ' ' || !params.floor){
                     this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
                 }else{
                    this.formItem.floor = params.floor; 
@@ -443,11 +464,18 @@ export default {
             return sum;
         },
         cityChange(param){
-            this.getCommunityList(param)
+            if(param){
+                if(param !== this.params.cityId){
+                  this.params = {}  
+                }
+                
+                this.getCommunityList(param)  
+            }
         },
         communityChange(param){
             if(param){
                 this.getFloorList(param);
+                this.params = {}
             }
             
         },

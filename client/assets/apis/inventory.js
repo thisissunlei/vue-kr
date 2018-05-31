@@ -45,14 +45,18 @@ export default  {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
     },
+    //每日库存-平面图
+    'getInventoryMap': {
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
+    },
     // 即将到期
     'getDueList': {
-        url: '/api/krspace-order-web/operation/due/list',
+        url: '/api/order/operation/due/list',
         method: 'post'
     },
     // 即将到期导出
     'excelDueList': {
-        url: '/api/krspace-order-web/operation/due/list-excel',
+        url: '/api/order/operation/due/list-excel',
         method: 'post'
     },
     //余期未付
@@ -64,7 +68,17 @@ export default  {
     'community-investment-list': {
         url: '/api/krspace-finance-web/inventory/cmt-investment/list',
         method: 'get'
-    }
+    },
+    // 即将进场
+    'getImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list',
+        method: 'post'
+    },
+    // 即将进场导出
+    'excelImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list-excel',
+        method: 'get'
+    },
     
   }
   

@@ -77,7 +77,7 @@
 			</div>
 		</EditLabel>
 		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
-	
+	    
 	</div>
 	
 </template>
@@ -178,15 +178,11 @@ export default{
 			return decodeURI(filename);
 		},
 		downImg(url,id){
-			
 			utils.downImg(url);
-			
 			return ;
 		},
 		downFile(url,id){
-			
-			utils.downFile(url);
-			
+			utils.downFile(url);	
 		},
 		getIsPhoto(url){
 			var img="png,jpg,jpeg";

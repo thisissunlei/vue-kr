@@ -180,5 +180,9 @@ export default  {
         url: '/api/krspace-op-web/app/operation/activity-data',
         method: 'get'
     },
+    'get-community-list': {
+        url: '/api/krspace-finance-web/operation/city-cmt-list',
+        method: 'get'
+    },
 }
   

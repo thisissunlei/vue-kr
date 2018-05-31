@@ -305,11 +305,11 @@ export default {
                 },
                 {
                     title:'在租',
-                    color:"#FCC17C"
+                    color:"#fedc82"
                 },
                 {
                     title:'合同未生效',
-                    color:"#FFE08F"
+                    color:"#fea877"
                 },
                 {
                     title:'不可用',

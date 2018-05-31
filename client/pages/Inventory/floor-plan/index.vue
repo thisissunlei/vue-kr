@@ -31,7 +31,7 @@
                 <span class="warning-tip"></span>
                 <span style="font-size: 14px;color: #999999;vertical-align: middle;">图中仅展示独立办公室和固定办公桌的库存</span> 
             </div>
-            <template slot="export" slot-scope="props">
+            <template slot="export" slot-scope="props" style="display:inline-block;">
                 <div class="export" :id="props.id">导出高清图</div>
             </template>    
       </FloorPlan>
@@ -221,6 +221,7 @@ export default {
         height: 50px;
         background: #fff;
         box-shadow: 0 1px 1px rgba(0,0,0,.1);
+        display:inline-block;
         .toolbar-inner{
              display:inline-block;
              margin-right:30px;
@@ -249,21 +250,21 @@ export default {
             margin-right:6px;
             vertical-align: middle;
         }
-        .export{
-            float:right;
-            width:109px;
-            height:30px;
-            line-height: 30px;
-            background: #499DF1;
-            box-shadow: 0 1px 4px 0 rgba(14,94,174,0.50);
-            border-radius: 4px;
-            font-size: 14px;
-            color: #FFFFFF;
-            text-align: center;
-            margin-top: 9px;
-            margin-right:20px;
-            cursor: pointer;
-        }
+    }
+    .export{
+        float:right;
+        width:109px;
+        height:30px;
+        line-height: 30px;
+        background: #499DF1;
+        box-shadow: 0 1px 4px 0 rgba(14,94,174,0.50);
+        border-radius: 4px;
+        font-size: 14px;
+        color: #FFFFFF;
+        text-align: center;
+        margin-top: 9px;
+        margin-right:20px;
+        cursor: pointer;
     }
     .gantt-chart-tool-tip{
           max-width: 280px;

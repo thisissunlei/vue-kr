@@ -169,7 +169,6 @@ var img='';
     height: 100%;
     position: relative;
     box-sizing: border-box;
-    padding-top: 50px;
     background: #DAE4E4;
     transition: all 0.3 ease;
     .flow-chart-content{

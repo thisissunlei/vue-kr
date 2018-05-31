@@ -21,7 +21,7 @@
     },
     data() {
         return{
-            data:['账单类型-ID','客户名称','服务内容','服务费明细','服务开始日','账单金额','欠款金额','逾期时长(服务开始日起)'],
+            data:['账单类型-ID','客户名称','账单明细','服务开始日','账单金额','欠款金额','逾期时长(服务开始日起)'],
         }
     }
 }
@@ -50,18 +50,18 @@
         word-break: break-all;
         font-weight: 700;
         height: 50px;
-        &:nth-child(2),&:nth-child(4),&:nth-child(5){
+        &:nth-child(2),&:nth-child(3),&:nth-child(4){
             width:110px;
         }
-        &:nth-child(8){
-            width:150px;
-        }
-         &:nth-child(6),&:nth-child(7){
+         &:nth-child(5),&:nth-child(6){
             width:100px;
         }
-        &:nth-child(1),&:nth-child(3){
+        &:nth-child(7){
+            width:200px;
+        }
+         &:nth-child(1),&:nth-child(9){
             width:100%;
-            flex: 1.5;
+            flex: 1;
             /*-moz-box-flex: 1; */
             /*-webkit-box-flex: 1; */
             /*box-flex:1;*/

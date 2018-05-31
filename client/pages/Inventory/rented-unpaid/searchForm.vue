@@ -131,6 +131,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
+import utils from '~/plugins/utils';
 export default {
     props:{
        identify:{
@@ -183,8 +184,8 @@ export default {
                     communityId:'',
                     cityId:'',
                     //服务开始日
-                    serviceDateBegin:this. getToDay(),
-                    serviceDateEnd:this. getToDay(),
+                    serviceDateBegin:this.getToDay(),
+                    serviceDateEnd:this.getToDay(),
                     //欠款
                      debtMin:'',
                      debtMax:'',
@@ -227,11 +228,22 @@ export default {
     },
     mounted(){
         this.getCityList();
+        this.params=this.$route.query;
+        this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
+        this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
     },
     methods:{
+        //格式转换
+        dateSwitch(data){
+            if(data){
+                return utils.dateCompatible(data);
+            }else{
+                return '';
+            }
+        },
         getToDay() {
             var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
-            return today; 
+            return utils.dateCompatible(today); 
         },
         //社区接口
         getCommunityList(id){
@@ -243,12 +255,14 @@ export default {
                 });
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
+                    this.formItemOld=Object.assign({},this.formItem);
                 }else{
                     this.formItem.communityId = params.communityId;
                 }
 
-                this.formItemOld=Object.assign({},this.formItem,this.$route.query);
-                this.formItem=Object.assign({},this.formItemOld);
+                this.formItem = Object.assign({},this.formItem,this.$route.query);
+                this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
+                this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -271,7 +285,6 @@ export default {
                     this.formItem.cityId=this.cityList[0].cityId;
                 }
                 if(params.cityId){
-                    this.getCommunityList();
                     this.formItem.cityId = params.cityId;
                 }
             }).catch((error)=>{
@@ -291,7 +304,6 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
-            console.log('form',this.formItem);
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -335,7 +347,7 @@ export default {
                 }
             }
             .community-form{
-                min-width: 374px;
+                min-width: 250px;
                 vertical-align: middle;
                 .ivu-select-dropdown{
                     min-width:100px;

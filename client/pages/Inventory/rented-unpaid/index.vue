@@ -132,7 +132,7 @@ var layoutScrollHeight=0;
                     {
                         title: '逾期时长(服务开始日起)',
                         align:'center',
-                        width:150,
+                        width:200,
                         key: 'overdueDays',
                     },
                 ],
@@ -145,7 +145,6 @@ var layoutScrollHeight=0;
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -159,7 +158,6 @@ var layoutScrollHeight=0;
             LISTENSIDEBAROPEN(function (params) {
                 _this.sideBar=params;
             })
-
         },
         watch:{
             sideBar:function(val){
@@ -184,26 +182,24 @@ var layoutScrollHeight=0;
                 this.dailyOldData=[];
                 this.loading=true;
             },
-            //搜索
+             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.tabForms=Object.assign({},formItem);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
             },
-            //数据变化
+            initData(formItem){
+                this.tabForms=Object.assign({},formItem,this.tabForms);
+                this.dataParams(this.tabForms);
+            },
             dataParams(data){
                 this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
-            },
-            initData(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
             },
              //格式转换
             dateSwitch(data){

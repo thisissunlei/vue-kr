@@ -5,10 +5,10 @@ function colorStatus(status){
             color='#BCE590'
             break;
         case 'NOT_EFFECT':
-            color='#FFE08F'
+            color='#fea877'
             break; 
         case 'IN_RENT':
-            color='#FFC684'
+            color='#fedc82'
             break; 
         default:{
             color='#E4E4E4'

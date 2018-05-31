@@ -43,7 +43,7 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
     
     //公共字体样式
     function textStyle() {
-        return {stroke: "white", font: "bold 12px PingFangSC-Medium" };
+        return {stroke: "#999", font: "bold 12px PingFangSC-Medium" };
     }
     
     //背景图

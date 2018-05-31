@@ -533,7 +533,7 @@ export default {
 			})
         },
         deleteEquipmentGroupFromDetail(param){
-
+            console.log("param",param);
             var deletedNode = _this.myDiagram.findNodesByExample(param).first();
             _this.myDiagram.startTransaction('removing links');
             _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
@@ -662,6 +662,7 @@ export default {
                 var findNodeData = _this.myDiagram.findNodesByExample({id : _this.selectedNodeData.id}).first();
                 if (findNodeData) {
                     _this.myDiagram.model.setDataProperty(findNodeData.data, "titleText",textTitleRes);
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "equipmentCount",res.data.count);
                 }
                 _this.myDiagram.commitTransaction("changed name show");
 
@@ -689,11 +690,25 @@ export default {
         },
 
         deleteEquipmentSendReq(params){
-
+            console.log("params",params);
+            let _this = this;
+            var doorIdsArr = params.doorIds.split(",");
+            console.log("doorIdsArr",doorIdsArr);
             this.$http.delete('deleteEquipmentFromGroup', params).then((res)=>{
+
 
                 var getEquipmentParam = {setId : this.selectedNodeData.id}
                 this.getEquipmentListData(getEquipmentParam)
+                
+                _this.myDiagram.startTransaction();
+                var findNodeData = _this.myDiagram.findNodesByExample({id : params.setId}).first();
+                var newtextTitle =findNodeData.data.name+"（"+res.data.count+"）"
+
+                if (findNodeData) {
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "titleText",newtextTitle);
+                    _this.myDiagram.model.setDataProperty(findNodeData.data, "equipmentCount",res.data.count);
+                }
+                _this.myDiagram.commitTransaction("changed name and memo");
 
             }).catch((error)=>{
                 this.$Notice.error({

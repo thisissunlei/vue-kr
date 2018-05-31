@@ -104,6 +104,7 @@ export default{
            this.$Message.warning('您未选择要删除的设备');
          }else{
            this.$emit("deleteEquipmentFromGroup",this.selection)
+           this.selection = [];
          }
        }
     },

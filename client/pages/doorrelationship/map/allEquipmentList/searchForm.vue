@@ -84,7 +84,7 @@ export default{
                     },
                     {
                         label:'硬件ID',
-                        value:'deviceId'
+                        value:'serialNo'
                     }
             ],
             searchFormData:{},

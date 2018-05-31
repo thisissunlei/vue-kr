@@ -109,7 +109,7 @@
                     <div style="display:inline-block;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">客户名称</span>
 
-                        <Form-item class='daily-form' prop="name">
+                        <Form-item class='daily-form' prop="customerName">
                             <i-input 
                                 v-model="formItem.customerName" 
                                 placeholder="请输入客户名称"
@@ -146,11 +146,6 @@ export default {
                     start=this.formItem.serviceDateBegin;
                     end=this.formItem.serviceDateEnd;
                 }
-                // if(rule.field=='overdueMin'||rule.field=='overdueMax'){
-                //     start=this.formItem.overdueMin;
-                //     end=this.formItem.overdueMax;
-                // }
- 
                 if (start&&end&&start>end) {
                     callback('后者需要大于前者');
                 }else{
@@ -174,8 +169,8 @@ export default {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>10){ 
-                    callback('天数最高10');
+                }else if(value&&value.length>3){ 
+                    callback('天数最多999');
                 }else if (this.formItem.overdueMin&&this.formItem.overdueMax&&Number(this.formItem.overdueMin)>Number(this.formItem.overdueMax)) {
                     callback('后者需要大于前者');
                 }else{
@@ -185,10 +180,8 @@ export default {
             
             return {  
                 formItem:{
-                    name:'',
-                    communityId:' ',
+                    communityId:'',
                     cityId:'',
-                    floor:' ',
                     //服务开始日
                     serviceDateBegin:this. getToDay(),
                     serviceDateEnd:this. getToDay(),
@@ -205,45 +198,35 @@ export default {
                 },
                 communityList:[],
                 cityList:[],
-                floorList:[],
 
                 formItemOld:{},
                 ruleDaily: {
-                    // stationsMin: [
-                    //     { validator: validateStation, trigger: 'change' }
-                    // ],
-                     serviceDateBegin: [
+                    serviceDateBegin: [
                         { validator: validateTime, trigger: 'change' }
                     ],
-                     serviceDateEnd: [
+                    serviceDateEnd: [
                         { validator: validateTime, trigger: 'change' }
                     ],
                     overdueMin: [
                         { validator: validateOverdue, trigger: 'change' }
                     ],
-                     overdueMax: [
+                    overdueMax: [
                         { validator: validateOverdue, trigger: 'change' }
                     ],
                     debtMin: [
                         { validator: validatePrice, trigger: 'change' }
                     ],
-                     debtMax: [
+                    debtMax: [
                         { validator: validatePrice, trigger: 'change' }
                     ],
-                
-  
- 
-
-
-
-
-                },
-                typeList:[]
+                    customerName:[
+                        {  max: 20, trigger: 'change' ,message: '字数最长20'}
+                    ]
+                }
             }
     },
     mounted(){
         this.getCityList();
-        this.getBillType()
     },
     methods:{
         getToDay() {
@@ -258,15 +241,15 @@ export default {
                     item.id = item.id+'';
                     return item;
                 });
-                if(this.communityList.length>1){
-                    this.communityList.unshift({id:' ',name:"全部社区"})
-                }
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
                 }else{
                     this.formItem.communityId = params.communityId;
                 }
-                
+
+                this.formItemOld=Object.assign({},this.formItem,this.$route.query);
+                this.formItem=Object.assign({},this.formItemOld);
+                this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -290,12 +273,7 @@ export default {
                 if(params.cityId){
                     this.getCommunityList();
                     this.formItem.cityId = params.cityId;
-                    console.log('=-0900',typeof params.cityId)
                 }
-                
-                this.formItemOld=Object.assign({},this.formItem);
-                this.formItem = Object.assign({},this.formItem,this.$route.query)
-                this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -306,7 +284,6 @@ export default {
         searchClick(){
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
-                    console.log('搜索',this.formItem)
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -314,6 +291,7 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
+            console.log('form',this.formItem);
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -336,21 +314,7 @@ export default {
         },
         cityChange(param){
             this.getCommunityList(param)
-        },
-        getBillType(){
-            this.$http.get('get-bill-type', '').then((res)=>{
-                res.data.enums.map((item)=>{
-                     // this.billType[item.code]=item.name; 
-                     item.label=item.name;
-                    item.value=item.code+''; 
-                })
-                this.typeList=res.data.enums;
-            }).catch((err)=>{
-                this.$Notice.error({
-                    title:err.message
-                });
-            })
-        },
+        }
     }
 }
 </script>

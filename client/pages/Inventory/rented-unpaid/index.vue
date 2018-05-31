@@ -189,7 +189,6 @@ var layoutScrollHeight=0;
                 this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.dataParams(this.tabForms);
                 utils.addParams(this.tabForms);
-
             },
             //清空
             clearClick(formItem){
@@ -203,19 +202,20 @@ var layoutScrollHeight=0;
                 this.getData(this.endParams);
             },
             initData(formItem){
-                this.tabForms=Object.assign({},formItem,this.tabForms);
+                this.tabForms=Object.assign({},this.tabForms,formItem);
                 this.dataParams(this.tabForms);
             },
+             //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
             getData(params){
-                this.loading=false;
-                this.tableList=[
-                        {
-                            "billGuaDetail":"测试内容7jwv","billId":68040,"billServiceDetail":"测试内容8qtg","bizType":81437,"bizTypeName":"测试内容q7j6","customerName":"测试内容1g0j","debt":"测试内容781m","ifMultiperiod":46315,"overdueDays":"测试内容t484","payableAmount":"测试内容9c82","serviceEndDate":81308,"serviceStartDate":80302
-                        }
-                  ];
-                  this.dailyOldData=this.dailyOldData.concat(this.tableList);
-                return ;
-                //getDailyInventory 
+                params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
+                params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
                 this.$http.get('unpaidList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;

@@ -97,21 +97,21 @@
                 </Col>
 
                 <Col  class="col" v-if="isAddDesk">
-                    <FormItem label="服务开始日" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    <FormItem label="服务开始日" style="width:252px" prop="startTime">
+                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.startTime" style="display:block"/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col" v-if="isAddDesk">
-                    <FormItem label="服务结束日" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block"/>
+                    <FormItem label="服务结束日" style="width:252px" prop="endTime">
+                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.endTime" style="display:block"/>
                     </FormItem>
                 </Col>
 
                 <Col class="col" v-if="isAddDesk">
-                   <Form-item label="加桌数量" style="width:252px" prop="money">
+                   <Form-item label="加桌数量" style="width:252px" prop="deskCount">
                     <i-input 
-                        v-model="formItem.money" 
+                        v-model="formItem.deskCount" 
                         placeholder="请输入加桌数量"
                         style="width: 252px"
                     />
@@ -170,6 +170,29 @@ export default {
                 }
             };
 
+            const validateDate = (rule, value, callback) => {
+                if(!value){
+                    callback(new Error('请填写日期'));
+                }else if (this.formItem.startTime&&this.formItem.endTime&&this.formItem.startTime>this.formItem.endTime) {
+                    callback(new Error('后者需要大于前者'));
+                }else{
+                    callback();
+                }
+            };
+
+            const validateCount= (rule, value, callback) => {
+                var reg = /^\+?[1-9]\d*$/;
+                if(!value){
+                    callback(new Error('请填写加桌数量'));
+                }else if (value&&!reg.test(value)) {
+                    callback(new Error('输入正整数'));
+                }else if (value&&value.length>10) {
+                    callback(new Error('最多10位'));
+                }else{
+                    callback();
+                }
+            };
+
            return {
                 isAddDesk:false,
                 disabled:false,
@@ -186,7 +209,10 @@ export default {
                     salesperson:1,
                     money:'',
                     feeType:'',
-                    department:''
+                    department:'',
+                    startTime:'',
+                    endTime:'',
+                    deskCount:''
                 },
 
                 ruleCustom:{
@@ -210,13 +236,22 @@ export default {
                     ],
                     feeType:[
                         { required: true, message: '请选择费用明细类型', trigger: 'change' }
+                    ],
+                    startTime:[
+                        { validator: validateDate,type: 'date',required: true,  trigger: 'change' }
+                    ],
+                    endTime:[
+                        { validator: validateDate,type: 'date',required: true, trigger: 'change' }
+                    ],
+                    deskCount:[
+                        { validator:validateCount,required: true, trigger: 'change' }
                     ]
                 },
 
                 salerName:'请选择',
             }
         },
-
+        
         components: {
             sectionTitle,
             selectCommunities,
@@ -232,7 +267,14 @@ export default {
         },
         
          methods: {
-            
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
             getDepartmentData(){
                 this.$http.get('get-enum-all-data',{
                     enmuKey:'com.krspace.op.api.enums.orderCurrency.Department'
@@ -249,6 +291,8 @@ export default {
             },
             submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
+                this.formItem.startTime=this.dateSwitch(this.formItem.startTime);
+                this.formItem.endTime=this.dateSwitch(this.formItem.endTime);
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
                 let params=Object.assign({},this.formItem,formItem);
@@ -263,7 +307,7 @@ export default {
                     })
                })  
             },
-
+            
             handleSubmit:function(name) {
                 let message = '请正确填写完表单';
                 this.$Notice.config({
@@ -296,7 +340,7 @@ export default {
 
             getCostData(value){
                 let param={
-                    bizType:value
+                    currencyOrderType:value
                 }
                 this.$http.get('general-cost-list',param, r => {
                      this.freeList=r.data.items;
@@ -309,7 +353,7 @@ export default {
 
             onTypeChange(value){
                 this.type=value?true:false;
-                this.isAddDesk=value=='w'?true:false;
+                this.isAddDesk=value=='ADDDESK'?true:false;
                 if(value){
                     this.getCostData(value);
                 }

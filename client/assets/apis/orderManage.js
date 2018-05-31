@@ -42,22 +42,22 @@ export default {
   },
   //通用订单列表
   'general-order-list': {
-    url: '/api/krspace-finance-web/order/common/search',
+    url: '/xi/api/krspace-finance-web/order/common/search',
     method: 'get'
   },
   //新建通用订单
   'general-order-add': {
-    url: '/api/krspace-finance-web/order/common/add',
+    url: '/xi/api/krspace-finance-web/order/common/add',
     method: 'post'
   },
   //编辑通用订单
   'general-order-edit': {
-    url: '/api/krspace-finance-web/order/common/update',
+    url: '/xi/api/krspace-finance-web/order/common/update',
     method: 'post'
   },
   //查看通用订单
   'general-order-watch': {
-    url: '/api/krspace-finance-web/order/common/getDetails',
+    url: '/xi/api/krspace-finance-web/order/common/getDetails',
     method: 'get'
   },
   //作废通用订单
@@ -67,17 +67,12 @@ export default {
   },
   //通用订单类型枚举列表
   'general-common-list': {
-    url: '/api/krspace-finance-web/order/common/getBizTypeListAllBy',
+    url: '/xi/api/krspace-finance-web/order/common/getOrderTypeListAllBy',
     method: 'get'
   },
-  // //通用订单费用明细枚举列表
-  // 'general-cost-list': {
-  //   url: '/api/krspace-finance-web/order/common/getFeeTypeListBy',
-  //   method: 'get'
-  // },
   //通用订单费用明细枚举列表
   'general-cost-list': {
-    url: '/api/krspace-finance-web/order/common/currencyOrderType',
+    url: '/xi/api/krspace-finance-web/order/common/getFeeTypeListBy',
     method: 'get'
   },
   //订单合同是否首付款

@@ -100,21 +100,21 @@
                 </Col>
 
                 <Col  class="col" v-if="isAddDesk">
-                    <FormItem label="服务开始日" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
+                    <FormItem label="服务开始日" style="width:252px" prop="startTime">
+                    <DatePicker type="date" placeholder="服务开始日" format="yyyy-MM-dd" v-model="formItem.startTime" style="display:block" disabled/>
                     </FormItem>
                 </Col>
 
                 <Col  class="col" v-if="isAddDesk">
-                    <FormItem label="服务结束日" style="width:252px" prop="saleDate">
-                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.saleDate" style="display:block" disabled/>
+                    <FormItem label="服务结束日" style="width:252px" prop="endTime">
+                    <DatePicker type="date" placeholder="服务结束日" format="yyyy-MM-dd" v-model="formItem.endTime" style="display:block" disabled/>
                     </FormItem>
                 </Col>
 
                 <Col class="col" v-if="isAddDesk">
-                   <Form-item label="加桌数量" style="width:252px" prop="money">
+                   <Form-item label="加桌数量" style="width:252px" prop="deskCount">
                     <i-input 
-                        v-model="formItem.money" 
+                        v-model="formItem.deskCount" 
                         placeholder="请输入加桌数量"
                         style="width: 252px"
                         disabled
@@ -193,7 +193,10 @@ export default {
                     salesperson:'',
                     money:'',
                     feeType:'',
-                    department:''
+                    department:'',
+                    deskCount:'',
+                    startTime:'',
+                    endTime:''
                 },
 
                 ruleCustom:{
@@ -217,11 +220,20 @@ export default {
                     ],
                     feeType:[
                         { required: true, message: '请选择费用明细类型', trigger: 'change' }
+                    ],
+                    startTime:[
+                        { type: 'date',required: true,  trigger: 'change' }
+                    ],
+                    endTime:[
+                        { type: 'date',required: true, trigger: 'change' }
+                    ],
+                    deskCount:[
+                        { type:'number',required: true, trigger: 'change' }
                     ]
                 }
             }
         },
-
+        
         components: {
             sectionTitle,
             selectCommunities,
@@ -239,6 +251,14 @@ export default {
         },
 
         methods: {
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
              getDepartmentData(){
                 this.$http.get('get-enum-all-data',{
                     enmuKey:'com.krspace.op.api.enums.orderCurrency.Department'
@@ -259,7 +279,7 @@ export default {
                     id:params.orderEdit
                 };
                 this.$http.get('general-order-watch', from, r => {
-                       this.isAddDesk=r.data.orderType=='w'?true:false;
+                       this.isAddDesk=r.data.orderType=='ADDDESK'?true:false;
                        this.getCostData(r.data.orderType);
                        this.formItem=Object.assign({},r.data);
 
@@ -270,6 +290,8 @@ export default {
                        this.communityName = this.formItem.communityName;
                        this.salespersonName = this.formItem.salespersonName;
                        this.formItem.saleDate = new Date(this.formItem.saleDate);
+                       this.formItem.startTime = new Date(this.formItem.startTime);
+                       this.formItem.endTime = new Date(this.formItem.endTime);
                     }, e => {
                        this.$Notice.error({
                             title:e.message
@@ -289,7 +311,7 @@ export default {
 
             getCostData(value){
                 let param={
-                    bizType:value
+                    currencyOrderType:value
                 }
                 this.$http.get('general-cost-list',param, r => {
                      this.freeList=r.data.items;
@@ -299,9 +321,11 @@ export default {
                     })
                 })   
             },
-
+                
             submitForm(){
                 let saleDate = dateUtils.dateToStr("YYYY-MM-dd 00:00:00",new Date(this.formItem.saleDate));
+                this.formItem.startTime=this.dateSwitch(this.formItem.startTime);
+                this.formItem.endTime=this.dateSwitch(this.formItem.endTime);
                 let formItem = {}; 
                 formItem.saleDate = saleDate;
                 let params=Object.assign({},this.formItem,formItem);

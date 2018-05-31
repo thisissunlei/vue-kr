@@ -715,6 +715,12 @@
                         menuCode: 'operation_home',
                     },
                     {
+                        primaryText: '已起租未付',
+                        router: 'inventory/rented-unpaid',
+                        type:'vue',
+                        menuCode: 'rent_no_pay',
+                    },
+                    {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
                         router: 'community/communityManage/visitorsToRecord'

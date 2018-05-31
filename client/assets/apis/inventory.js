@@ -55,6 +55,11 @@ export default  {
         url: '/api/krspace-order-web/operation/due/list-excel',
         method: 'post'
     },
+    //余期未付
+    'unpaidList': {
+        url: '/api/order/operation/rentNoPay/list',
+        method: 'get'
+    },
     //社区招商
     'community-investment-list': {
         url: '/api/krspace-finance-web/inventory/cmt-investment/list',

@@ -44,7 +44,7 @@ import SlotHead from './slotHead';
 import Loading from '~/components/Loading';
 var layoutScrollHeight=0;
     export default {
-        name: 'EnterField',
+        bizType: 'EnterField',
         components:{
             SearchForm,
             SlotHead,
@@ -73,79 +73,67 @@ var layoutScrollHeight=0;
 
                 tabForms:{
                     page:1,
-                    pageSize:100,
+                    pageSize:15,
                 },
                 endParams:{},
                 tableList:[],
                 columns:[
                     {
                         title: '账单类型-ID',
-                        key: 'name',
+                        key: 'bizTypeName',
                         align:'center',
                         render(h, params){
-                            var location=params.row.location?params.row.location:'-'
-                            return h('div', [
-                                        h('Tooltip', {
-                                            props: {
-                                                placement: 'top',
-                                                content: location
-                                            }
-                                        }, [
-                                        h('div', [
-                                            h('div',{
-                                            },params.row.name),
-                                            h('div',{
-                                                style:{
-                                                    textOverflow:'ellipsis',
-                                                    whiteSpace:'nowrap',
-                                                    overflow: 'hidden'
-                                                }
-                                            },params.row.location),
-                                        ])
-                                    ])
-                            ])
+                          return h('div',{
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#499df1'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showNullify(params)
+                                        }
+                                    }
+                            },params.row.bizTypeName)
                         }
                     },
                     {
                         title: '客户名称',
-                        key: 'type',
+                        key: 'customerName',
                         width:110,
                         align:'center',
                     },
                     {
-                        title: '服务内容',
-                        key: 'capacity',
-                        align:'center',
-                    },
-                    {
-                        title: '服务费明细',
+                        title: '账单明细',
                         align:'center',
                         width:110,
-                        key: 'startDate',
+                        key: 'billServiceDetail',
                     },
                     {
                         title: '服务开始日',
                         align:'center',
                         width:110,
-                        key: 'endDate',
+                        key: 'serviceStartDate',
                     },
                     {
                         title: '账单金额',
                         align:'center',
                         width:100,
-                        key: 'rentDays',
+                        key: 'payableAmount',
                     },
                     {
                         title: '欠款金额',
                         align:'right',
                         width:100,
-                        key: 'price',
+                        key: 'debt',
                     },
                     {
                         title: '逾期时长(服务开始日起)',
                         align:'center',
                         width:150,
-                        key: 'customerName',
+                        key: 'overdueDays',
                     },
                 ],
                 openMessage:false,
@@ -219,8 +207,16 @@ var layoutScrollHeight=0;
                 this.dataParams(this.tabForms);
             },
             getData(params){
+                this.loading=false;
+                this.tableList=[
+                        {
+                            "billGuaDetail":"测试内容7jwv","billId":68040,"billServiceDetail":"测试内容8qtg","bizType":81437,"bizTypeName":"测试内容q7j6","customerName":"测试内容1g0j","debt":"测试内容781m","ifMultiperiod":46315,"overdueDays":"测试内容t484","payableAmount":"测试内容9c82","serviceEndDate":81308,"serviceStartDate":80302
+                        }
+                  ];
+                  this.dailyOldData=this.dailyOldData.concat(this.tableList);
+                return ;
                 //getDailyInventory 
-                this.$http.get('getDueList', params).then((res)=>{
+                this.$http.get('unpaidList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;

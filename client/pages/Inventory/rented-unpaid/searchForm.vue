@@ -25,7 +25,6 @@
                                 v-if="communityList && communityList.length !=0"
                                 placeholder="请输入社区" 
                                 style="width: 90px;"
-                                @on-change="communityChange"
                             >
                                 <Option 
                                     v-for="item in communityList" 
@@ -35,35 +34,20 @@
                                     {{ item.name }}
                                 </Option>
                         </Select>
-                    
-                        <Select 
-                                v-model="formItem.floor" 
-                                v-if="floorList && floorList.length !=0"
-                                placeholder="请输入楼层" 
-                                style="width: 90px;margin-left:20px;"
-                            >
-                                <Option 
-                                    v-for="item in floorList" 
-                                    :value="item.floor" 
-                                    :key="item.floor"
-                                >
-                                    {{ item.floorName }}
-                                </Option>
-                        </Select> 
                     </Form-item>
 
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                            <Form-item label="服务开始日" class='priceForm' prop="startDate">
+                            <Form-item label="服务开始日" class='priceForm' prop="serviceDateBegin">
                                 <DatePicker 
-                                    v-model="formItem.startDate" 
+                                    v-model="formItem.serviceDateBegin" 
                                     placeholder="开始日期"
                                     style="width: 105px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endDate">
+                            <Form-item  class='priceForm' prop="serviceDateEnd">
                                 <DatePicker 
-                                    v-model="formItem.endDate" 
+                                    v-model="formItem.serviceDateEnd" 
                                     placeholder="结束日期"
                                     style="width: 105px"
                                 />
@@ -71,17 +55,7 @@
                     </div>
 
 
-                    <Form-item label="账单类型" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入账单类型" 
-                            style="width: 150px"
-                            clearable
-                        >
-                            <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item>
-
+         
 
                      <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
@@ -89,18 +63,18 @@
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:14px;">欠款金额</span>
-                        <Form-item  prop="enterNum" style="display:inline-block;">
+                        <Form-item  prop="debtMin" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.enterNum" 
+                                v-model="formItem.debtMin" 
                                 style="width: 90px;"
                                 placeholder="金额"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
                         <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                        <Form-item  prop="enterNum" style="display:inline-block;">
+                        <Form-item  prop="debtMax" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.enterNum" 
+                                v-model="formItem.debtMax" 
                                 style="width: 90px;"
                                 placeholder="金额"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -109,27 +83,28 @@
                         
                     </div>
 
-                    <div style="display:inline-block;margin-right:20px;margin-left:111px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:23px;">工位数量</span>
-                        <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
+                    
+                    <div style="display:inline-block;margin-right:19px;vertical-align: top;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:14px;">逾期时长</span>
+                        <Form-item  prop="overdueMin" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.stationsMin" 
-                                style="width: 105px"
-                                placeholder="工位数量"
+                                v-model="formItem.overdueMin" 
+                                style="width: 90px;"
+                                placeholder="天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
-                        <span style="display:inline-block;margin:0 4px 0 5px;padding-top: 6px;">至</span>
-                        <Form-item  prop="stationsMax" style="width:auto;display:inline-block;">
+                        <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                        <Form-item  prop="overdueMax" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.stationsMax" 
-                                placeholder="工位数量"
-                                style="width: 105px"
+                                v-model="formItem.overdueMax" 
+                                style="width: 90px;"
+                                placeholder="天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
+                        
                     </div>
-
 
                     <div style="display:inline-block;">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">客户名称</span>
@@ -164,68 +139,69 @@ export default {
        }
     },
     data() {
-            const validateStation = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
-                if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>999){
-                    callback('最大999个工位');
-                }else if (this.formItem.stationsMin&&this.formItem.stationsMax&&Number(this.formItem.stationsMin)>Number(this.formItem.stationsMax)) {
+        const validateTime = (rule, value, callback) => {
+                var start=''; 
+                var end='';
+                if(rule.field=='serviceDateBegin'||rule.field=='serviceDateEnd'){
+                    start=this.formItem.serviceDateBegin;
+                    end=this.formItem.serviceDateEnd;
+                }
+                // if(rule.field=='overdueMin'||rule.field=='overdueMax'){
+                //     start=this.formItem.overdueMin;
+                //     end=this.formItem.overdueMax;
+                // }
+ 
+                if (start&&end&&start>end) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
             };
+
             const validatePrice = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>9999999){
+                }else if(value&&value>9999999){ 
                     callback('单价最高9999999');
-                }else if (this.formItem.priceMin&&this.formItem.priceMax&&Number(this.formItem.priceMin)>Number(this.formItem.priceMax)) {
+                }else if (this.formItem.debtMin&&this.formItem.debtMax&&Number(this.formItem.debtMin)>Number(this.formItem.debtMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
             };
-            const validateNum = (rule, value, callback) => {
+            const validateOverdue = (rule, value, callback) => {
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
-                }else if(value&&value>100){
-                    callback('最大可查范围为100天');
-                }else{
-                    callback();
-                }
-            };
-            const validateDate = (rule, value, callback) => {
-                if (this.formItem.startDate&&this.formItem.endDate&&this.formItem.startDate>this.formItem.endDate) {
+                }else if(value&&value>10){ 
+                    callback('天数最高10');
+                }else if (this.formItem.overdueMin&&this.formItem.overdueMax&&Number(this.formItem.overdueMin)>Number(this.formItem.overdueMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
-                }
+                } 
             };
-            const validateName = (rule, value, callback) => {
-                var str=this.fucCheckLength(value);
-                if(value&&str>20){
-                    callback('名称最多20个字节');
-                }else if(value&&!(this.formItem.communityId.toString().trim())){
-                    callback('请先选择社区');
-                }else{
-                    callback();
-                }
-            };
+            
             return {  
                 formItem:{
                     name:'',
                     communityId:' ',
                     cityId:'',
                     floor:' ',
-                    stationsMax:'',
-                    stationsMin:'',
-                    goodsType:' ',
-                    enterType:'large',
-                    rangeType:'large',
+                    //服务开始日
+                    serviceDateBegin:this. getToDay(),
+                    serviceDateEnd:this. getToDay(),
+                    //欠款
+                     debtMin:'',
+                     debtMax:'',
+                     //逾期
+                     overdueMin:"",
+                     overdueMax:'',
+
+                     customerName:'',
+
+
                 },
                 communityList:[],
                 cityList:[],
@@ -233,21 +209,34 @@ export default {
 
                 formItemOld:{},
                 ruleDaily: {
-                    stationsMin: [
-                        { validator: validateStation, trigger: 'change' }
+                    // stationsMin: [
+                    //     { validator: validateStation, trigger: 'change' }
+                    // ],
+                     serviceDateBegin: [
+                        { validator: validateTime, trigger: 'change' }
                     ],
-                    stationsMax: [
-                        { validator: validateStation, trigger: 'change' }
+                     serviceDateEnd: [
+                        { validator: validateTime, trigger: 'change' }
                     ],
-                    name:[
-                        { validator: validateName, trigger: 'change' }
+                    overdueMin: [
+                        { validator: validateOverdue, trigger: 'change' }
                     ],
-                    enterNum: [
-                        { validator: validateNum, trigger: 'change' }
+                     overdueMax: [
+                        { validator: validateOverdue, trigger: 'change' }
                     ],
-                    rangeNum: [
-                        { validator: validateNum, trigger: 'change' }
+                    debtMin: [
+                        { validator: validatePrice, trigger: 'change' }
                     ],
+                     debtMax: [
+                        { validator: validatePrice, trigger: 'change' }
+                    ],
+                
+  
+ 
+
+
+
+
                 },
                 typeList:[]
             }
@@ -257,6 +246,10 @@ export default {
         this.getBillType()
     },
     methods:{
+        getToDay() {
+            var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+            return today; 
+        },
         //社区接口
         getCommunityList(id){
             let params = this.$route.query;
@@ -271,7 +264,6 @@ export default {
                 if(!params.communityId){
                     this.formItem.communityId=this.communityList[0].id;
                 }else{
-                    this.getFloorList(params.communityId)
                     this.formItem.communityId = params.communityId;
                 }
                 
@@ -304,36 +296,6 @@ export default {
                 this.formItemOld=Object.assign({},this.formItem);
                 this.formItem = Object.assign({},this.formItem,this.$route.query)
                 this.$emit('initData',this.formItem);
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
-        //楼层接口
-        getFloorList(param){
-            let params = this.$route.query;
-            console.log(!params.floor,'=====',params.floor)
-            this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
-                this.floorList=res.data;
-                
-                if(this.floorList.length){
-                    this.floorList=res.data.map(item=>{
-                        item.floor = item.floor+'';
-                        return item;
-                    });
-                }
-                if(this.floorList.length>1){
-                    this.floorList.unshift({floor:' ',floorName:"全部楼层"})
-                                            
-                }
-                if(!params.floor){
-                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
-                }else{
-                   this.formItem.floor = params.floor; 
-                }
-                
-
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -374,9 +336,6 @@ export default {
         },
         cityChange(param){
             this.getCommunityList(param)
-        },
-        communityChange(param){
-            this.getFloorList(param);
         },
         getBillType(){
             this.$http.get('get-bill-type', '').then((res)=>{

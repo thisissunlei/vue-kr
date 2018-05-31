@@ -72,15 +72,8 @@ export default{
         },
         editDataReq(sendMsg){
             this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
-                
                
-                this.$Notice.success({
-                    title: '编辑成功',
-                    desc: '编辑设备组成功',
-                    render: h => {
-                        return h('span', ['编辑设备组成功'])
-                    }
-                });
+                this.$Message.success('编辑设备组成功');
                 var sendMsgObj = Object.assign({},sendMsg)
                 this.$emit("editNodeDataInDetail",sendMsgObj,res);
                 

@@ -128,7 +128,7 @@ export default{
          searchEquipment(){
              let _this = this;
             console.log("this.formItem",this.formItem);
-            var newSearchData = Object.assign({},_this.otherSearchData,_this.formItem)
+            var newSearchData = Object.assign({},_this.otherSearchData,_this.formItem,{communityId:_this.communityId})
             console.log("newSearchData",newSearchData);
             this.$emit('searchEquipment',_this.formItem,newSearchData);  
          },

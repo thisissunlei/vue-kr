@@ -10,6 +10,7 @@
             >
                 <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
             </Select>
+            <span  class="text-span margin-left">双击下方空白区域创建新设备组，双击设备组节点查看节点详情</span>
             <div class="right-part">   
                 <!-- <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button> -->
                 <span class="text-span">输入内容查找设备所在的组：</span>
@@ -175,7 +176,7 @@ export default {
                         "clickCreatingTool.archetypeNodeData": { text: "new node" },
                         // enable undo & redo
                         "undoManager.isEnabled": true,
-                        "clickCreatingTool.insertPart": function(loc) {  // customize the data for the new node
+                        "clickCreatingTool.insertPart": function(loc,) {  // customize the data for the new node
                             this.archetypeNodeData = {
                                 // key: getNextKey(), // assign the key based on the number of nodes
                                 titleText: "新设备组（0）",
@@ -190,6 +191,10 @@ export default {
                             var y = loc.y*myDiagramScale;
                             console.log("x",x,"y",y,"myDiagramScale",myDiagramScale,"loc.x",loc.x);
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(x),y:parseInt(y),communityId : _this.communityId})
+                            console.log("this",this);
+                            var oldcopies =  _this.myDiagram.model;
+                            console.log("oldcopies",oldcopies);
+                            _this.selectedNodeData = this;
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
                         },
@@ -454,14 +459,7 @@ export default {
         editDataReq(sendMsg){
             this.$http.post('editDoorRelationshipData', sendMsg).then((res)=>{
                
-                // this.$Notice.success({
-                //     title: '编辑成功',
-                //     desc: '编辑设备组成功',
-                //     render: h => {
-                //         console.log("dklldfkldk")
-                //         return h('span', ['编辑设备组成功'])
-                //     }
-                // });
+                
 
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -473,16 +471,18 @@ export default {
             let _this =this;
             // console.log("this.myDiagram.scale",_this.myDiagram.scale)
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
-                
+                console.log(",_this.myDiagram.model",_this.myDiagram.model.nodeDataArray);
+                var nodeDataArrayNew = _this.myDiagram.model.nodeDataArray;
+                var nowGohashid = nodeDataArrayNew[nodeDataArrayNew.length-1].id
+                console.log("nowGohashid",nowGohashid)
                 //修改node的id
                 _this.myDiagram.startTransaction();
-                var selectedNodeData = _this.selectedNodeData;
-                var findNodeData = _this.myDiagram.findNodesByExample({__gohashid: selectedNodeData.__gohashid }).first();
+                var findNodeData = _this.myDiagram.findNodesByExample({id: nowGohashid }).first();
                 if (findNodeData) {
                     _this.myDiagram.model.setDataProperty(findNodeData.data, "id",res.data.id);
                 }
                 _this.myDiagram.commitTransaction("changed id");
-
+                this.$Message.success('新增成功');
 
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -507,13 +507,8 @@ export default {
             let _this =this;
             this.$http.delete('deleteDoorGroupInRelation', sendParam).then((res)=>{
                 
-                this.$Notice.success({
-                    title: '删除成功',
-                    desc: '删除组成功',
-                    render: h => {
-                        return h('span', ['删除组成功'])
-                    }
-                });
+               
+                this.$Message.success('删除组成功');
 
 
                 var deletedNode = _this.myDiagram.findNodesByExample(sendParam).first();
@@ -567,14 +562,8 @@ export default {
             let _this =this;
             this.$http.post('newCreateDoorGroupConnect',param).then((res)=>{
                 
-                // this.getMapData(paramMapData);
-                this.$Notice.success({
-                    title: '新增成功',
-                    desc: '新增关系成功',
-                    render: h => {
-                        return h('span', ['新增关系成功'])
-                    }
-                });
+                
+                this.$Message.success('新增关系成功');
                 if(linkData){
                     
                     var link = _this.myDiagram.findLinksByExample({ __gohashid: linkData.__gohashid }).first();
@@ -597,13 +586,8 @@ export default {
             this.$http.delete('deleteLinkConnect',sendParam).then((res)=>{
                 
                 this.openDeleteTipModel();
-                this.$Notice.success({
-                    title: '删除成功',
-                    desc: '删除关系成功',
-                    render: h => {
-                        return h('span', ['删除关系成功'])
-                    }
-                });
+                
+                this.$Message.success('删除关系成功');
 
                 var myDiagram = this.myDiagram;
                 var linkData = myDiagram.findLinksByExample(sendParam);
@@ -739,7 +723,7 @@ export default {
             this.$http.get('getGroupByEquipmentDetailInfo', param).then((res)=>{
                 
                 this.myDiagram.clearHighlighteds();
-                // _this.myDiagram.startTransaction();
+                _this.myDiagram.startTransaction();
                 var isHighlightedNodeIdArr = res.data.items ||[];
                 
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
@@ -801,6 +785,9 @@ export default {
     .door-relationship{
         width:100%;
         height:90%;
+        .margin-left{
+            margin-left : 10px;
+        }
         .right-part{
             float : right;
             .text-span{
@@ -809,6 +796,7 @@ export default {
                 color: #495060;
                 line-height: 30px;
             }
+            
         }
         .top{
             padding: 10px;

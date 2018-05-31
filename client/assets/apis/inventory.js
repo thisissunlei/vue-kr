@@ -63,7 +63,17 @@ export default  {
     'community-investment-list': {
         url: '/api/krspace-finance-web/inventory/cmt-investment/list',
         method: 'get'
-    }
+    },
+    // 即将进场
+    'getImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list',
+        method: 'post'
+    },
+    // 即将进场导出
+    'excelImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list-excel',
+        method: 'get'
+    },
     
   }
   

@@ -180,6 +180,7 @@ export default {
             };
             
             return {  
+                num:0,
                 formItem:{
                     communityId:'',
                     cityId:'',
@@ -259,11 +260,15 @@ export default {
                 }else{
                     this.formItem.communityId = params.communityId;
                 }
-
-                this.formItem = Object.assign({},this.formItem,this.$route.query);
-                this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
-                this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
-                this.$emit('initData',this.formItem);
+                
+                if(this.num<=1){
+                    this.formItem = Object.assign({},this.formItem,this.$route.query);
+                    this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
+                    this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
+                    this.$emit('initData',this.formItem);
+                }else{
+                    this.formItem.communityId=this.communityList[0].id;
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -325,6 +330,7 @@ export default {
             return sum;
         },
         cityChange(param){
+            this.num=this.num+1;
             this.getCommunityList(param)
         }
     }

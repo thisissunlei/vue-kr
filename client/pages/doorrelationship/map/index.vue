@@ -21,10 +21,11 @@
                 
             </div>
         </div>
-       
-       
-        <div id="doorGroupRelationshipMap" style="width: 100%; height:100%; background-color: #fff;border-top:'solid 1px #000';padding-bottom:70px;">
-
+       <div class="canvas-box">
+            <div id="myOverviewDiv"></div>
+            <div id="doorGroupRelationshipMap" style="width: 100%; height:100%; background-color: #fff;border-top:'solid 1px #000';padding-bottom:70px;">
+            
+            </div>
         </div>
         <Drawer
             :openDrawer="openEquipmentDetail"
@@ -168,6 +169,7 @@ export default {
             this.myDiagram =
                 $(go.Diagram, "doorGroupRelationshipMap",  // must name or refer to the DIV HTML element
                     {
+                        initialAutoScale : go.Diagram.Uniform,
                         // start everything in the middle of the viewport
                         initialContentAlignment: go.Spot.Center,
                         // have mouse wheel events zoom in and out instead of scroll up and down
@@ -186,10 +188,11 @@ export default {
 
                             };
                             // var diascale
-                            var myDiagramScale = _this.myDiagram.scale ;
-                            var x = loc.x*myDiagramScale;
-                            var y = loc.y*myDiagramScale;
-                            console.log("x",x,"y",y,"myDiagramScale",myDiagramScale,"loc.x",loc.x);
+                            // var myDiagramScale = _this.myDiagram.scale ;
+                            // console.log("myDiagramScale-----",myDiagramScale)
+                            var x = loc.x;
+                            var y = loc.y;
+                            // console.log("x",x,"y",y,"myDiagramScale",myDiagramScale,"loc.x",loc.x);
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(x),y:parseInt(y),communityId : _this.communityId})
                             console.log("this",this);
                             var oldcopies =  _this.myDiagram.model;
@@ -357,9 +360,9 @@ export default {
                     
                     var location  = partData.loc.split(" ");
                     console.log("location",location);
-                    var myDiagramScale = _this.myDiagram.scale;
-                    var x = location[0]*myDiagramScale;
-                    var y = location[1]*myDiagramScale;
+                    // var myDiagramScale = _this.myDiagram.scale;
+                    var x = location[0];
+                    var y = location[1];
                     var params = {
                         id : partData.id,
                         memo :partData.memo,
@@ -374,6 +377,11 @@ export default {
             var dateTemplate =this.dateTemplate;
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
+
+            // create the Overview and initialize it to show the main Diagram
+  var myOverview =
+    $(go.Overview, "myOverviewDiv",
+      { observed: _this.myDiagram});
 
             
         },
@@ -399,8 +407,8 @@ export default {
                 }
                 for(var i = 0 ;i< reponseData.setRelationList.length;i++){
                     linkConnectArr[i] = {
-                        "from": reponseData.setRelationList[i].preSetId,
-                        "to": reponseData.setRelationList[i].setId,
+                        "from": reponseData.setRelationList[i].setId,
+                        "to": reponseData.setRelationList[i].preSetId,
                         "id" : reponseData.setRelationList[i].id,
                     }
                 }
@@ -834,6 +842,22 @@ export default {
         .ivu-modal-footer{
             display : none;
         }
+    }
+    #myOverviewDiv{
+        position: absolute;
+        width:170px;
+        height:100px;
+        bottom: 10px;
+        right: 10px;
+        background-color: aliceblue;
+        z-index: 300; /* make sure its in front */
+        border: solid 1px blue;
+
+    }
+    .canvas-box{
+        position: relative;
+        width: 100%;
+        height: 100%;
     }
     
 </style>

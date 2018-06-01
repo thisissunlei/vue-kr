@@ -39,7 +39,7 @@
      height:50px;
      /*line-height:40px;*/
      background-color: #f8f8f9;
-     z-index:999;
+     z-index:23;
      vertical-align: middle;
   .slot-head-class,.slot-optional-class{
         text-align: center;
@@ -51,12 +51,28 @@
         &:nth-child(2){
             width:110px;
         }
-        &:nth-child(7),&:nth-child(8){
+        &:nth-child(8){
             width:100px;
         }
-        &:nth-child(3),&:nth-child(4),&:nth-child(5),&:nth-child(9),&:nth-child(10),&:nth-child(11){
+        &:nth-child(11){
             width:80px;
         }
+        &:nth-child(7){
+            width:90px;
+        }
+        &:nth-child(3){
+            width:70px;
+        }
+        &:nth-child(9){
+            width:130px;
+        }
+        &:nth-child(5),&:nth-child(10){
+            width:110px;
+        }
+        &:nth-child(4){
+            width:80px;
+        }
+
         &:nth-child(1),&:nth-child(6){
             width:100%;
             -moz-box-flex: 1; 

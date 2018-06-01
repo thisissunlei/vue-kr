@@ -12,7 +12,6 @@
             </Select>
             <span  class="text-span margin-left">双击下方空白区域创建新设备组，双击设备组节点查看节点详情</span>
             <div class="right-part">   
-                <!-- <Button type="primary" icon="ios-search" @click="clearAll" class="search-btn">清除</Button> -->
                 <span class="text-span">输入内容查找设备所在的组：</span>
                 <SearchFormNew 
                     :searchFilter="searchFilter"
@@ -108,7 +107,6 @@ export default {
             addNewNode : 0 ,
             communityId : 1,
             communityList :[],
-            //图表数据
             dateTemplate :{},
             refreshedMapData : false,
             openDeleteTip :false,
@@ -187,12 +185,8 @@ export default {
                                 equipmentCount : 0
 
                             };
-                            // var diascale
-                            // var myDiagramScale = _this.myDiagram.scale ;
-                            // console.log("myDiagramScale-----",myDiagramScale)
                             var x = loc.x;
                             var y = loc.y;
-                            // console.log("x",x,"y",y,"myDiagramScale",myDiagramScale,"loc.x",loc.x);
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(x),y:parseInt(y),communityId : _this.communityId})
                             console.log("this",this);
                             var oldcopies =  _this.myDiagram.model;
@@ -280,20 +274,8 @@ export default {
                 if (!evt.isTransactionFinished) return;
                 var txn = evt.object;  // a Transaction
                 if (txn === null) return;
-                // iterate over all of the actual ChangedEvents of the Transaction
                 txn.changes.each(function(e) {
-                    // record node insertions and removals
-                    // if (e.change === go.ChangedEvent.Property) {
-
-                    //     if (e.modelChange === "linkFromKey") {
-                    //     console.log(evt.propertyName + " changed From key of link: " +
-                    //                 e.object + " from: " + e.oldValue + " to: " + e.newValue);
-                    //     } else if (e.modelChange === "linkToKey") {
-                    //     console.log(evt.propertyName + " changed To key of link: " +
-                    //                 e.object + " from: " + e.oldValue + " to: " + e.newValue);
-                    //     }
-                    // } else
-                    // console.log("e.modelChange",e.modelChange,e.change);
+                    
                      if (e.change === go.ChangedEvent.Insert ) {
                          if(e.modelChange === "linkDataArray"){
                             var linkData = e.newValue;
@@ -305,43 +287,15 @@ export default {
                             if(linkData.points){
                                 _this.newCreateConnect(param,linkData);
                             }
-                         }else if(e.modelChange === "nodeDataArray"){
-                             console.log("e.newData",e.newData)
                          }
                         
-                        
-
-                    } else if (e.change === go.ChangedEvent.Remove) {
-                        if(e.modelChange === "linkDataArray"){
-                        
-                            var linkData = e.oldValue;
-                            var param = {
-                                            id :linkData.id,
-                                        }
-                            // _this.deleteLinkConnectFun(param)
-                        }else if(e.modelChange === "nodeDataArray"){
-                        
-                            var linkData = e.oldValue;
-                            var param = {
-                                            id :linkData.id,
-                                        }
-                            // _this.deleteEquipmentGroup(param)
-                        }
-                        
-                    }
+                    } 
                 });
             });
 
-            // this.myDiagram.mouseDrop = function(e,obj){
-                // console.log("mouseDrop,e",e,"obj",obj)
-                // console.log("this.selectedNodeData",this.selectedNodeData);
-                // var selectedData = this.selectedNodeData;
-                // var locationArr = selectedData.split(" ");
-                // this.editDataReq()
-            // };
+            
             _this.myDiagram.commandHandler.deleteSelection = function(e){
-            //    console.log("e",e);
-                // console.log("this.selectedNodeData",_this.selectedNodeData);
+                
                 _this.openDeleteTipModel();
 
             }
@@ -417,7 +371,6 @@ export default {
                                 "nodeDataArray":nodeDataArrayNew,
                                 "linkDataArray":linkConnectArr
                                 }
-                // console.log("this.dateTemplate ",this.dateTemplate )
                 drawMapCallback && drawMapCallback();
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -435,7 +388,6 @@ export default {
         openEquipmentDetailFun(nodeData){
 
             this.editInitailData = nodeData;
-            // console.log("nodeData",nodeData)
             this.getEquipmentListData({setId : nodeData.id},"openDetail")
             
 
@@ -476,13 +428,11 @@ export default {
 			})
         },
         addNewCreateDataReq(sendMsg){
+
             let _this =this;
-            // console.log("this.myDiagram.scale",_this.myDiagram.scale)
             this.$http.post('newCreateDoorRelationship', sendMsg).then((res)=>{
-                console.log(",_this.myDiagram.model",_this.myDiagram.model.nodeDataArray);
                 var nodeDataArrayNew = _this.myDiagram.model.nodeDataArray;
                 var nowGohashid = nodeDataArrayNew[nodeDataArrayNew.length-1].id
-                console.log("nowGohashid",nowGohashid)
                 //修改node的id
                 _this.myDiagram.startTransaction();
                 var findNodeData = _this.myDiagram.findNodesByExample({id: nowGohashid }).first();
@@ -491,6 +441,7 @@ export default {
                 }
                 _this.myDiagram.commitTransaction("changed id");
                 this.$Message.success('新增成功');
+                _this.selectedNodeData = findNodeData.data;
 
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -501,16 +452,19 @@ export default {
         confirmDelete(){
             
             var param = this.selectedNodeData
-            // console.log(param,"param");
+            console.log(param,"param");
             if(param.from){
-                // console.log("dsklfkfdlkfd");
+                console.log("dsklfkfdlkfd");
                 this.deleteLinkConnectFun(param);
             }else{
+                console.log("dsklfkfdlkfd=====");
+                
                 this.deleteEquipmentGroup(param);
             }
             
         },
         deleteEquipmentGroup(param){
+
             var sendParam = {id : param.id}
             let _this =this;
             this.$http.delete('deleteDoorGroupInRelation', sendParam).then((res)=>{
@@ -541,7 +495,7 @@ export default {
 			})
         },
         deleteEquipmentGroupFromDetail(param){
-            console.log("param",param);
+            
             var deletedNode = _this.myDiagram.findNodesByExample(param).first();
             _this.myDiagram.startTransaction('removing links');
             _this.myDiagram.removeParts(new go.Set().addAll(deletedNode.linksConnected));
@@ -554,7 +508,6 @@ export default {
             this.$http.get('join-bill-community','').then((res)=>{
 
                 this.communityList=res.data.items;
-                // this.communityId = res.data.items[2].id
 
                 var params = {communityId : this.communityId}
                 getMapDataCallback && getMapDataCallback(params,drawMapCallback)
@@ -578,6 +531,12 @@ export default {
                     if (link !== null) _this.myDiagram.model.setDataProperty(link.data, "id",res.data.id);
                     
                }
+               var formToObj = {
+                   from : res.data.setId,
+                   to : res.data.preSetId,
+               }
+               var newObj = Object.assign({},res.data,formToObj)
+               _this.selectedNodeData = newObj;
 
             }).catch((error)=>{
                     
@@ -757,7 +716,6 @@ export default {
                     _this.myDiagram.commitTransaction("changed highLight");
                 }
                 
-                // _this.searchGroupIdsArr = isHighlightedNodeIdArr;
             
 			}).catch((error)=>{
 				this.$Notice.error({
@@ -829,7 +787,6 @@ export default {
         .doorGroupRelationshipMap{
                 width: 100%;
                 height: 100%;
-                // padding-bottom:70px;
         }
     }
     .delete-tip{

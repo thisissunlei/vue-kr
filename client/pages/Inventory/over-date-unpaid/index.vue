@@ -73,32 +73,33 @@ var layoutScrollHeight=0;
 
                 tabForms:{
                     page:1,
-                    pageSize:15,
+                    pageSize:100,
                 },
                 endParams:{},
                 tableList:[],
                 columns:[
-                    {
+                     {
                         title: '账单类型-ID',
                         key: 'bizTypeName',
                         align:'center',
-                        render(h, params){
-                          return h('div',{
-                                   props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        color:'#499df1',
+                        render:(h, obj)=>{
+                            return h('div', {
+                                props: {
+                                    type: 'text',
+                                    size: 'small'
+                                },
+                                style: {
+                                    color:'#499df1',
                                         cursor:'pointer'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.showNullify(params)
-                                        }
+                                },
+                                on: {
+                                    click: () => {
+                                        this.showDetail(obj.row)
                                     }
-                            },params.row.bizTypeName)
+                                }
+                            },obj.row.bizTypeName);
                         }
+                       
                     },
                     {
                         title: '客户名称',
@@ -217,6 +218,9 @@ var layoutScrollHeight=0;
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
+             showDetail(params){
+                window.open(`../../bill/list/detail/${params.billId}`,'_blank')
+            },
             getCommonParam(){
                 this.tabForms.page=1;
                 this.dailyOldData=[];

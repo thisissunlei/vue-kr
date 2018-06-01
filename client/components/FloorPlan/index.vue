@@ -89,7 +89,7 @@ let initData='';
             // var dataURL = canvas.toDataURL("image/png");
             // return dataURL
         },
-
+        
         /*导出图片*/
         exportClick(){
             var _this=this;
@@ -178,6 +178,7 @@ let initData='';
         mouseClick(event){
             var every=event.subject.part.data;
             var everyData =every?every:{};
+            console.log('everoo',everyData);
             this.$emit('click',event,everyData,canvasData); 
         }
     }

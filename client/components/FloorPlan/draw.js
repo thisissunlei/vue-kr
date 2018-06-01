@@ -39,19 +39,40 @@ function draw (go,content,data,clickFn,enterFn,leaveFn) {
             $(go.Picture,'http://optest03.krspace.cn'+data.pic.pos,{width:data.pic.width,height:data.pic.height})
         ));
     }
+
+    function incrementCounter(e, obj) {
+        var node = obj.part;
+        var data = node.data;
+        console.log('data--',data);
+        // if (data) {
+        //   node.diagram.startTransaction("clicked");
+        //   var old = data.clickCount;
+        //   data.clickCount++;
+        //   node.diagram.model.raiseDataChanged(data, "clickCount", old, data.clickCount);
+        //   node.diagram.commitTransaction("clicked");
+        // }
+      }
+    
+    function nodeCommonStatus(){
+        return null
+    }
     
     //绘制
     myDiagram.nodeTemplate =
         $(go.Node, "Auto",
             $(go.Shape, "Rectangle",
             //元素填充背景色
-            new go.Binding("fill","color"),{ stroke: null }),
+            new go.Binding("fill","color"),{ stroke:nodeCommonStatus()}),
             //元素尺寸
             new go.Binding("desiredSize", "size", go.Size.parse),
             //元素位置
             new go.Binding("position", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
             //元件名称
             $(go.Panel, "Table",
+                $("Button",
+                { margin: 2,
+                    click: incrementCounter },
+                $(go.Picture,{ width: 15, height: 15, source:"img/warning.png"})),
                 //元件属性
                 $(go.TextBlock,textStyle(),
                 { row: 0, column: 0,margin:5,textAlign:'center'},

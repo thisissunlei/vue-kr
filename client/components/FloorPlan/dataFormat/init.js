@@ -38,7 +38,7 @@ function init(data,picProperty,dataUrl){
             dataRender.push(list);
         })
         
-      
+        
         //scale计算
         var minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
         var minH=32/spaceArr[0].cellHeight;

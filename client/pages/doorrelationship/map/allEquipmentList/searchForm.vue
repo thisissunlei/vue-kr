@@ -48,9 +48,10 @@
                 </Select>
             </FormItem>
             <FormItem label="其他："> 
-                <SearchForm 
+                <SearchFormData 
                     :searchFilter="searchFilter"
                     :onSubmit="onSubmitSearchForm"
+                    @serachFormDataChanged="onSubmitSearchForm"
                 />
             </FormItem>
         </Form>
@@ -63,7 +64,7 @@
 </template>
 
 <script>
-import SearchForm from '~/components/SearchForm';
+import SearchFormData from '~/components/SearchFormData';
 export default{
     name:'equipmentSearch',
     data (){
@@ -84,7 +85,7 @@ export default{
                     },
                     {
                         label:'硬件ID',
-                        value:'serialNo'
+                        value:'deviceId'
                     }
             ],
             searchFormData:{},
@@ -102,7 +103,7 @@ export default{
         "communityId","doorTypeOptions"
     ],
     components: {
-     SearchForm
+     SearchFormData
     },
     methods:{
 
@@ -157,7 +158,7 @@ export default{
 
 
         onSubmitSearchForm(value){
-            console.log("value",value);
+            console.log("value-------",value);
             this.otherSearchData = value;
 
         },

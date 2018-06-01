@@ -29,7 +29,10 @@ function initListData(){
             title: '发票抬头',
             key: 'invoiceTitle',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
+            render:(h,params)=>{
+                return params.row.invoiceTitle
+            }
         },
         {
             title: '纳税人识别号',

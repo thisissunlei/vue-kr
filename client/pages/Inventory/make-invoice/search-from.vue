@@ -230,12 +230,12 @@ export default {
                     invoiceType:' ',
                     startAmount:'',
 
-                    ticketEndDate:this.getToDay(),
-                    ticketStartDate:this.getToDay(),
-                    receiveEndDate:this.getToDay(),
-                    receiveStartDate:this.getToDay(),
-                    callbackStartDate:this.getToDay(),
-                    callbackEndDate:this.getToDay(),
+                    ticketEndDate:'',
+                    ticketStartDate:'',
+                    receiveEndDate:'',
+                    receiveStartDate:'',
+                    callbackStartDate:'',
+                    callbackEndDate:'',
                 },
                 communityList:[],
                 cityList:[],
@@ -362,7 +362,7 @@ export default {
         },
         //获取今天的日期
         getToDay(){
-            var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+            var today = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date());
             return today; 
         },
         //搜索

@@ -63,7 +63,6 @@
                 tableParams:{
                     page:1,
                     pageSize:15,
-                    totalCount:0,
                     invoiceStatusList:''
                 }
            }

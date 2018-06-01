@@ -17,10 +17,12 @@
 import init from './draw';
 import dataFormat from './dataFormat';
 import utils from '~/plugins/utils';
-var canvasData ={};
-var flowChart= '';
-var scrollDom='';
-var img='';
+let canvasData ={};
+let flowChart= '';
+let scrollDom='';
+let exportButton='';
+let img='';
+let initData='';
  export default {
     props:{
         data:{
@@ -47,12 +49,36 @@ var img='';
         img.addEventListener('load',this.imgLoad);
     },
     destroyed(){ 
-      img.removeEventListener('load',this.imgLoad); 
-      if(scrollDom){
-          scrollDom.removeEventListener('scroll',this.scrollFn); 
-      }
+      img&&img.removeEventListener('load',this.imgLoad); 
+      scrollDom&&scrollDom.removeEventListener('scroll',this.scrollFn); 
+      exportButton&&exportButton.removeEventListener('click',this.exportClick);
     },
     methods:{
+        //图片加载完
+        imgLoad(event) {
+            var picImg=event.path[0];
+            var dataUrl = this.getBase64Image(picImg);
+             //初始化数据
+            canvasData=this.data;
+            initData=dataFormat.init(canvasData,picImg,dataUrl);
+            flowChart =  init(
+                go,
+                this.drawingBoard,
+                initData,
+                this.mouseClick,
+                this.mouseEnter,
+                this.mouseLeave,
+            ) 
+            
+            //高度自适应图片高度
+            var drawWrap=document.querySelectorAll('#'+this.drawingBoard)[0];
+            drawWrap.style.height=initData.pic.height+20+'px';
+            //滚动导出监听
+            scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
+            scrollDom&&scrollDom.addEventListener('scroll',this.scrollFn); 
+            exportButton = document.getElementById(this.exportPicture);
+            exportButton&&exportButton.addEventListener('click',this.exportClick);
+        },
         //将图片地址转换成base64格式
         getBase64Image(img) {
             // var canvas = document.createElement('canvas'); 
@@ -63,28 +89,22 @@ var img='';
             // var dataURL = canvas.toDataURL("image/png");
             // return dataURL
         },
-        //图片加载完
-        imgLoad(event) {
-            var picImg=event.path[0];
-            var dataUrl = this.getBase64Image(picImg);
-            var drawWrap=document.querySelectorAll('#'+this.drawingBoard)[0];
-             //初始化数据
-            canvasData=this.data;
-            flowChart =  init(
-                go,
-                this.drawingBoard,
-                this.exportPicture,
-                dataFormat.init(canvasData,{width:picImg.width,height:picImg.height},dataUrl,drawWrap),
-                this.mouseClick,
-                this.mouseEnter,
-                this.mouseLeave,
-                this.downLoadPic
-            ) 
-            //滚动监听
-            scrollDom=document.querySelectorAll('#'+this.drawingBoard+' > div')[0];
-            if(scrollDom){
-              scrollDom.addEventListener('scroll',this.scrollFn);            
-            } 
+
+        /*导出图片*/
+        exportClick(){
+            var _this=this;
+            var svg = flowChart.diagram.makeImageData({
+                scale:1,
+                maxSize:new go.Size(initData.pic.width,initData.pic.height),
+                returnType: "blob",
+                callback: _this.exportCallback
+            })
+        },
+        exportCallback(blob){
+            this.downLoadPic(blob,initData.pic.picName);
+        },
+        downLoadPic(url,name){
+            this.getUpFileUrl(url,name);
         },
         getUpFileUrl(url,name){
 			let category = 'op/upload';
@@ -134,13 +154,14 @@ var img='';
 			xhrfile.open('POST', serverUrl, true);
 			xhrfile.responseType = 'json';
 			xhrfile.send(form);
-		},
-        downLoadPic(url,name){
-            this.getUpFileUrl(url,name);
         },
+        /*导出图片*/
+        
+        //平面图滚动监听
         scrollFn(event){
             this.scroll={
-                left:event.target.scrollLeft
+                left:event.target.scrollLeft,
+                top:event.target.scrollTop
             }
             this.$emit('scroll',canvasData,this.drawingBoard,this.scroll);
         },

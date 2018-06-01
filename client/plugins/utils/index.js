@@ -209,7 +209,21 @@ import tableSort from './tableSort';
         
         return cached;
     }
-
+    
+    //创建dom
+    function createElement(){
+        var dom=document.createElement('span');
+        dom.style.visibility='hidden';
+        document.body.appendChild(dom);
+        return dom;
+    }
+    
+    //计算字符串长度
+    function getStrWidth(dom,data){
+        dom.innerHTML=data;
+        return dom.offsetWidth;
+    }
+    
 export default{
     smalltoBIG,
     clearForm,
@@ -229,7 +243,9 @@ export default{
     dateCompatible,
     tableSort,
     dateRange,
-    downImg
+    downImg,
+    createElement,
+    getStrWidth
 }
 
 

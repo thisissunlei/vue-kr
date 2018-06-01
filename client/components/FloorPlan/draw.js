@@ -1,5 +1,5 @@
 
-function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
+function draw (go,content,data,clickFn,enterFn,leaveFn) {
     if (window.goSamples) goSamples();  
     
     //gojs初始化
@@ -18,22 +18,6 @@ function draw (go,content,pic,data,clickFn,enterFn,leaveFn,downLoadPic) {
         });
     
 
-    function myCallback(blob) {
-        downLoadPic(blob,data.pic.picName);
-    }
-    
-    //导出svg图片
-    if(data.pic){
-        var button = document.getElementById(pic);
-            button.addEventListener('click', function() {
-            var svg = myDiagram.makeImageData({
-                scale:1,
-                maxSize:new go.Size(data.pic.width,data.pic.height),
-                returnType: "blob",
-                callback: myCallback
-            })
-        }, false);
-    }
     
     //点击事件
     myDiagram.addDiagramListener("ObjectSingleClicked",

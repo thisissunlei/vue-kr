@@ -1,18 +1,18 @@
 import colorStatus from './colorStatus';
-function init(data,picProperty,dataUrl,drawWrap){
+import utils from '~/plugins/utils';
+function init(data,picProperty,dataUrl){
     var dataRender=[];
     var scale=1;
-    var nameWidth=document.getElementById('spanWidthMapInventoryName');
-    var caWidth=document.getElementById('spanWidthMapInventoryCapacity');
+    var dom=utils.createElement();
     if(data.figures.length){
         var spaceArr=[];
         var parentMin=32;
         data.figures.map((item,index)=>{
             //找空间最小宽度
             if(item.belongType=='SPACE'){
-                nameWidth.innerHTML=item.cellName?item.cellName:'601';
-                caWidth.innerHTML=item.capacity+'工位';
-                parentMin=caWidth.offsetWidth>nameWidth.offsetWidth?caWidth.offsetWidth:nameWidth.offsetWidth;
+                var name=utils.getStrWidth(dom,item.cellName);
+                var opacity=utils.getStrWidth(dom,item.capacity+'工位');
+                parentMin=name>opacity?name:opacity;
                 item.parentMin=parentMin;
                 spaceArr.push(item);
             }
@@ -76,18 +76,16 @@ function init(data,picProperty,dataUrl,drawWrap){
 
     
     //pic尺寸
-    picProperty={
+    var pic={
         width:picProperty.width*scale,
         height:picProperty.height*scale,
         pos:data.graphFilePath,
         picName:data.communityName+data.currentDate,
-        dataUrl:dataUrl,
-        picId:data.graphFileId
+        dataUrl:dataUrl
     }
     
-    //高度自适应图片高度
-    drawWrap.style.height=picProperty.height+20+'px';
-    return {data:[].concat(dataRender),pic:picProperty};
+    
+    return {data:[].concat(dataRender),pic:pic};
 }
 
 export default init;

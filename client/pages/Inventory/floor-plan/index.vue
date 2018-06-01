@@ -35,9 +35,6 @@
                 <div class="export" :id="props.id">导出高清图</div>
             </template>    
       </FloorPlan>
-
-      <span id="spanWidthMapInventoryName" style="visibility:hidden;"></span>
-      <span id="spanWidthMapInventoryCapacity" style="visibility:hidden;"></span>
       
   </div>
 </template>

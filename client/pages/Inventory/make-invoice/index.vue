@@ -60,17 +60,37 @@
              this.type=tab?tab:'waitArrive';
         },
         methods:{
+            //格式转换
+            dateSwitch(data){
+                console.log('data=======',data)
+                if(data){
+                    return new Date(data).getTime();
+                }else{
+                    return '';
+                }
+            },
             tabsClick(val){
                 localStorage.setItem('operation-side-invoice',val);
                 this.type = val;
             },
             searchClick(params){
+                console.log('searchClick',params)
+                params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
+                params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
+                params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
+                params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
+                params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
+                params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+                console.log('params',params)
+                // return;
                 utils.addParams(params);
             },
             clearClick(params){
+                console.log('clearClick',params)
                 utils.addParams(params);
             },
             initData(formItem){
+                console.log('init--->',formItem)
                 this.searchForm=formItem;
             }
         }

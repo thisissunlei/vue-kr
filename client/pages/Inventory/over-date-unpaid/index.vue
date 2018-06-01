@@ -17,11 +17,11 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <!-- <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
-        </div>
+        </div> -->
     </div>
     <Message 
         :type="MessageType" 
@@ -44,7 +44,7 @@ import SlotHead from './slotHead';
 import Loading from '~/components/Loading';
 var layoutScrollHeight=0;
     export default {
-        name: 'EnterField',
+        bizType: 'EnterField',
         components:{
             SearchForm,
             SlotHead,
@@ -54,7 +54,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '逾期未付'
+                title: '已起租未付'
             }
         },
         data () {
@@ -73,79 +73,107 @@ var layoutScrollHeight=0;
 
                 tabForms:{
                     page:1,
-                    pageSize:100,
+                    pageSize:15,
                 },
                 endParams:{},
                 tableList:[],
                 columns:[
                     {
                         title: '账单类型-ID',
-                        key: 'name',
+                        key: 'bizTypeName',
                         align:'center',
                         render(h, params){
-                            var location=params.row.location?params.row.location:'-'
-                            return h('div', [
-                                        h('Tooltip', {
-                                            props: {
-                                                placement: 'top',
-                                                content: location
-                                            }
-                                        }, [
-                                        h('div', [
-                                            h('div',{
-                                            },params.row.name),
-                                            h('div',{
-                                                style:{
-                                                    textOverflow:'ellipsis',
-                                                    whiteSpace:'nowrap',
-                                                    overflow: 'hidden'
-                                                }
-                                            },params.row.location),
-                                        ])
-                                    ])
-                            ])
+                          return h('div',{
+                                   props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#499df1',
+                                        cursor:'pointer'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.showNullify(params)
+                                        }
+                                    }
+                            },params.row.bizTypeName)
                         }
                     },
                     {
                         title: '客户名称',
-                        key: 'type',
+                        key: 'customerName',
                         width:110,
                         align:'center',
                     },
-                    {
-                        title: '服务内容',
-                        key: 'capacity',
+                                       {
+                        title: '账单明细',
                         align:'center',
-                    },
-                    {
-                        title: '服务费明细',
-                        align:'center',
-                        width:110,
-                        key: 'startDate',
+                        width:250,
+                        key: 'billServiceDetail',
+                        render(h, params){
+                        var moneyDetail=params.row.bizType=='CONTRACT'?params.row.billServiceDetail:params.row.remark;
+                        var moneyDetailTitle=params.row.bizType=='CONTRACT'?params.row.serviceStartDate+'至'+params.row.serviceEndDate+'的服务费:':'';
+                        return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:moneyDetailTitle+moneyDetail
+                                        }
+                                    }, [
+                                    h('div', [
+                                        h('div',{
+                                        },moneyDetailTitle),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },moneyDetail),
+                                    ])
+                                ])
+                        ])
+                    }
                     },
                     {
                         title: '服务开始日',
                         align:'center',
                         width:110,
-                        key: 'endDate',
+                        key: 'serviceStartDate',
                     },
                     {
                         title: '账单金额',
-                        align:'center',
+                        align:'right',
+                        className:'statusClass',
                         width:100,
-                        key: 'rentDays',
+                        key: 'payableAmount',
+                         render(tag,params){ 
+                          var money=params.row.payableAmount?utils.thousand(params.row.payableAmount):params.row.payableAmount;                  
+                          return <span >{money}</span>;
+                        }
+                       
                     },
                     {
                         title: '欠款金额',
                         align:'right',
+                        className:'statusClass',
                         width:100,
-                        key: 'price',
+                        key: 'debt',
+                         render(tag,params){ 
+                          var money=params.row.debt?utils.thousand(params.row.debt):params.row.debt;                  
+                          return <span  style='color:red'>{money}</span>;
+                        }
                     },
                     {
                         title: '逾期时长(服务开始日起)',
                         align:'center',
-                        width:150,
-                        key: 'customerName',
+                        width:200,
+                        key: 'overdueDays',
+                        render(tag,params){ 
+                          var money=params.row.overdueDays?utils.thousand(params.row.overdueDays):params.row.overdueDays;                  
+                          return <span style='color:red'>{money}</span>;
+                        }
                     },
                 ],
                 openMessage:false,
@@ -157,7 +185,6 @@ var layoutScrollHeight=0;
             if(this.tabForms.cityId){
                 this.tabForms = this.$route.query;
                 this.getCommonParam();
-                this.getData(this.tabForms); 
             }   
             var dom=document.getElementById('layout-content-main');
             var dailyTableDom=document.getElementById('daily-inventory-table-list');
@@ -171,7 +198,6 @@ var layoutScrollHeight=0;
             LISTENSIDEBAROPEN(function (params) {
                 _this.sideBar=params;
             })
-
         },
         watch:{
             sideBar:function(val){
@@ -196,31 +222,38 @@ var layoutScrollHeight=0;
                 this.dailyOldData=[];
                 this.loading=true;
             },
-            //搜索
+             //搜索
             searchClick(formItem){
                 this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-
             },
             //清空
             clearClick(formItem){
-                this.tabForms=Object.assign({},this.tabForms,formItem);
-                this.dataParams(this.tabForms);
+                this.tabForms=Object.assign({},formItem);
+                this.endParams=Object.assign({},this.tabForms);
                 utils.addParams(this.tabForms);
-            },
-            //数据变化
-            dataParams(data){
-                this.endParams=Object.assign({},data);
-                this.getData(this.endParams);
             },
             initData(formItem){
                 this.tabForms=Object.assign({},formItem,this.tabForms);
                 this.dataParams(this.tabForms);
             },
+            dataParams(data){
+                this.endParams=Object.assign({},data);
+            },
+             //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
             getData(params){
-                //getDailyInventory 
-                this.$http.get('getDueList', params).then((res)=>{
+                params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
+                params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
+                this.$http.get('Overduelist', params).then((res)=>{
+
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
                     this.totalCount=res.data.totalCount;

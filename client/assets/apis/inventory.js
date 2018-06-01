@@ -59,9 +59,14 @@ export default  {
         url: '/api/order/operation/due/list-excel',
         method: 'post'
     },
-    //余期未付
+    //已起租未付
     'unpaidList': {
         url: '/api/order/operation/rentNoPay/list',
+        method: 'get'
+    },
+     //逾期未付
+     'Overduelist': {
+        url: '/api/order/operation/overDateNoPay/list',
         method: 'get'
     },
     //社区招商

@@ -66,7 +66,7 @@
                     </Form-item>
 
 
-                    <Form-item class='daily-form'> 
+                    <Form-item class='daily-form'>
                         <span style="color:#333;font-weight: 500;display: inline-block;margin-right:11px;">商品类型</span>
                         <Select 
                             v-model="formItem.goodsType" 

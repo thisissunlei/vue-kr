@@ -17,11 +17,11 @@
         <div class='spin-position-fix' v-if="spinLoading">
             <Spin fix size="large"></Spin>
         </div>
-        <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
+        <!-- <div  :class="theEnd?'list-footer':'on-export-middle'" :style="{left:theEnd?0:left+'px',width:width+'px'}">
             <div style="display:inline-block;">
                 <Button type='primary' @click='submitExport'>导出(共{{totalCount}}条)</Button>
             </div>
-        </div>
+        </div> -->
     </div>
     <Message 
         :type="MessageType" 
@@ -89,7 +89,8 @@ var layoutScrollHeight=0;
                                         size: 'small'
                                     },
                                     style: {
-                                        color:'#499df1'
+                                        color:'#499df1',
+                                         cursor:'pointer'
                                     },
                                     on: {
                                         click: () => {
@@ -108,8 +109,45 @@ var layoutScrollHeight=0;
                     {
                         title: '账单明细',
                         align:'center',
-                        width:110,
+                        width:250,
                         key: 'billServiceDetail',
+                        render(h, params){
+                        var bill=params.row.billGuaDetail?params.row.billGuaDetail:'';
+                        var billTitle=bill?'保证金:':'';
+                        var moneyDetail=params.row.billServiceDetail;
+                        var isTitle=params.row.ifMultiperiod;
+                        var moneyDetailTitle=isTitle==1?'包含了多个时段的服务费:':params.row.serviceStartDate+'至'+params.row.serviceEndDate+'的服务费:';
+                        return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:moneyDetailTitle+moneyDetail+billTitle+bill
+                                        }
+                                    }, [
+                                    h('div', [
+                                        h('div',{
+                                        },moneyDetailTitle),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },moneyDetail),
+                                        h('div',{
+                                        },billTitle),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },bill),
+                                    ])
+                                ])
+                        ])
+                    }
+                       
                     },
                     {
                         title: '服务开始日',
@@ -119,21 +157,36 @@ var layoutScrollHeight=0;
                     },
                     {
                         title: '账单金额',
-                        align:'center',
+                        align:'right',
+                        className:'statusClass',
                         width:100,
                         key: 'payableAmount',
+                         render(tag,params){ 
+                          var money=params.row.payableAmount?utils.thousand(params.row.payableAmount):params.row.payableAmount;                  
+                          return <span >{money}</span>;
+                        }
+                       
                     },
                     {
                         title: '欠款金额',
                         align:'right',
+                        className:'statusClass',
                         width:100,
                         key: 'debt',
+                         render(tag,params){ 
+                          var money=params.row.debt?utils.thousand(params.row.debt):params.row.debt;                  
+                          return <span  style='color:red'>{money}</span>;
+                        }
                     },
                     {
                         title: '逾期时长(服务开始日起)',
                         align:'center',
                         width:200,
                         key: 'overdueDays',
+                        render(tag,params){ 
+                          var money=params.row.overdueDays?utils.thousand(params.row.overdueDays):params.row.overdueDays;                  
+                          return <span style='color:red'>{money}</span>;
+                        }
                     },
                 ],
                 openMessage:false,
@@ -277,6 +330,12 @@ var layoutScrollHeight=0;
 
 <style lang="less">
 .vertical-center-modal{
+     .rig{
+                        padding: 0
+                    }
+        .rig{
+            padding: 0;
+        }
         display: flex;
         align-items: center;
         justify-content: center;
@@ -338,6 +397,8 @@ var layoutScrollHeight=0;
                 .ivu-table-cell{
                     padding:0;
                     padding-right:5px;
+                   
+                    
                 }
             }
             .statusClass{

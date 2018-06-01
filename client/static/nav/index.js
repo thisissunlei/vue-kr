@@ -728,6 +728,12 @@
                         menuCode: 'rent_no_pay',
                     },
                     {
+                        primaryText: '逾期未付',
+                        router: 'inventory/over-date-unpaid',
+                        type:'vue',
+                        menuCode: 'rent_no_pay',
+                    },
+                    {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',
                         router: 'community/communityManage/visitorsToRecord'

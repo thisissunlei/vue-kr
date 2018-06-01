@@ -36,25 +36,19 @@
                         </Select>
                     </Form-item>
 
-                    <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                            <Form-item label="服务开始日" class='priceForm' prop="serviceDateBegin">
-                                <DatePicker 
-                                    v-model="formItem.serviceDateBegin" 
-                                    placeholder="开始日期"
-                                    style="width: 105px"
-                                />
-                            </Form-item>
-                            <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="serviceDateEnd">
-                                <DatePicker 
-                                    v-model="formItem.serviceDateEnd" 
-                                    placeholder="结束日期"
-                                    style="width: 105px"
-                                />
-                            </Form-item>
+                    
+
+                    <div style="display:inline-block;     vertical-align: top;">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:15px;">客户名称</span>
+                        <Form-item class='daily-form' prop="customerName">
+                            <i-input 
+                                v-model="formItem.customerName" 
+                                placeholder="请输入客户名称"
+                                style="width: 165px;margin-right:311px;"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
                     </div>
-
-
          
 
                      <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
@@ -85,11 +79,11 @@
 
                     
                     <div style="display:inline-block;margin-right:19px;vertical-align: top;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:14px;">逾期时长</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:15px;">逾期时长</span>
                         <Form-item  prop="overdueMin" style="display:inline-block;">
                             <i-input 
                                 v-model="formItem.overdueMin" 
-                                style="width: 90px;"
+                                style="width: 71px;"
                                 placeholder="天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -98,7 +92,7 @@
                         <Form-item  prop="overdueMax" style="display:inline-block;">
                             <i-input 
                                 v-model="formItem.overdueMax" 
-                                style="width: 90px;"
+                                style="width: 71px;"
                                 placeholder="天数"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
@@ -106,20 +100,26 @@
                         
                     </div>
 
-                    <div style="display:inline-block;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">客户名称</span>
-
-                        <Form-item class='daily-form' prop="customerName">
-                            <i-input 
-                                v-model="formItem.customerName" 
-                                placeholder="请输入客户名称"
-                                style="width: 150px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
+                    <div style="display:inline-block;margin-right:10px;vertical-align: top;">
+                            <Form-item label="服务开始日" class='priceForm' prop="serviceDateBegin">
+                                <DatePicker 
+                                    v-model="formItem.serviceDateBegin" 
+                                    placeholder="开始日期"
+                                    style="width: 105px"
+                                />
+                            </Form-item>
+                            <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
+                            <Form-item  class='priceForm' prop="serviceDateEnd">
+                                <DatePicker 
+                                    v-model="formItem.serviceDateEnd" 
+                                    placeholder="结束日期"
+                                    style="width: 105px"
+                                />
+                            </Form-item>
                     </div>
+
                     
-                    <Button type="primary" @click="searchClick">搜索</Button>
+                    <Button type="primary" @click="searchClick" >搜索</Button>
                    
                 </div>
 
@@ -167,7 +167,7 @@ export default {
                 }
             };
             const validateOverdue = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                var reg = /^-?\d+$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
                 }else if(value&&value.length>3){ 

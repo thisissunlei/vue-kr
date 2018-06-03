@@ -306,7 +306,6 @@ export default {
     },
     mounted(){
         this.getCityList();
-<<<<<<< HEAD
         let params = Object.assign({},this.$route.query);
         this.formItem = publicFn.dateSwitch(params,'ms')
         // this.$emit('searchClick',params);
@@ -324,35 +323,6 @@ export default {
         //     console.log('init--->3',params)
         //     console.log('init--->1',_this.$route.query)
         //     console.log('init--->2',_this.formItem)
-=======
-        this.getSourceData();
-        var _this=this;
-        this.params = _this.$route.query;
-        _this.$emit('initData',this.formItem);
-        let params = Object.assign({},this.$route.query);
-        if(params.callbackEndDate){
-            params.callbackEndDate = new Date(parseInt(params.callbackEndDate)).getTime();
-        }
-        if(params.callbackStartDate){
-            params.callbackStartDate =  new Date(parseInt(params.callbackStartDate)).getTime();
-        }
-        if(params.receiveStartDate){
-            params.receiveStartDate = new Date(parseInt(params.receiveStartDate)).getTime();
-        }
-        if(params.receiveEndDate){
-            params.receiveEndDate =  new Date(parseInt(params.receiveEndDate)).getTime();
-        }
-        if(params.ticketStartDate){
-            params.ticketStartDate = new Date(parseInt(params.ticketStartDate)).getTime();
-        }
-        if(params.ticketEndDate){
-            params.ticketEndDate =  new Date(parseInt(params.ticketEndDate)).getTime();
-        }
-        this.formItem=Object.assign({},this.formItem,params);
-        console.log('======>',this.formItem)
-        setTimeout(() => {
-            
->>>>>>> 809c790e7d35ad1434b7314063d11c3b76e188ff
             
         //     if(!_this.formItem.contentType){
         //         _this.formItem.contentType=' ';

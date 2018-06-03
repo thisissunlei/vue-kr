@@ -129,4 +129,4 @@ function downImg(data, strFileName, strMimeType) {
 	}	
 	return true;
 } /* end download() */
-export default downImg
+export default downImg;

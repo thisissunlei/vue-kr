@@ -383,7 +383,10 @@
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,
                                         columnDetail:params.row||{},
-                                        onUpUrl:this.postUrlUpLoad
+                                       
+                                    },
+                                    on:{
+                                        upSuccess:this.postUrlUpLoad,
                                     },
                                     style: {
                                         color:'#2b85e4'

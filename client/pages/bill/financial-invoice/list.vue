@@ -70,8 +70,6 @@ import dateUtils from 'vue-dateutils';
             },
             //格式转换
             dateSwitch(data){
-                console.log('格式转换-->',data,typeof data);
-                console.log('===>',dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data)));
                 if(data){
                     data = parseInt(data);
                     return dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data));

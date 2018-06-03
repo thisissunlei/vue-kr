@@ -309,20 +309,30 @@ export default {
         this.getSourceData();
         var _this=this;
         this.params = _this.$route.query;
+        _this.$emit('initData',this.formItem);
         let params = Object.assign({},this.$route.query);
-        params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
-        params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
-        params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
-        params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
-        params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
-        params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+        if(params.callbackEndDate){
+            params.callbackEndDate = new Date(parseInt(params.callbackEndDate)).getTime();
+        }
+        if(params.callbackStartDate){
+            params.callbackStartDate =  new Date(parseInt(params.callbackStartDate)).getTime();
+        }
+        if(params.receiveStartDate){
+            params.receiveStartDate = new Date(parseInt(params.receiveStartDate)).getTime();
+        }
+        if(params.receiveEndDate){
+            params.receiveEndDate =  new Date(parseInt(params.receiveEndDate)).getTime();
+        }
+        if(params.ticketStartDate){
+            params.ticketStartDate = new Date(parseInt(params.ticketStartDate)).getTime();
+        }
+        if(params.ticketEndDate){
+            params.ticketEndDate =  new Date(parseInt(params.ticketEndDate)).getTime();
+        }
+        this.formItem=Object.assign({},this.formItem,params);
+        console.log('======>',this.formItem)
         setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            console.log('==',_this.formItem)
-            _this.formItem=Object.assign({},_this.$route.query);
-            console.log('init--->3',params)
-            console.log('init--->1',_this.$route.query)
-            console.log('init--->2',_this.formItem)
+            
             
             if(!_this.formItem.contentType){
                 _this.formItem.contentType=' ';
@@ -402,7 +412,7 @@ export default {
                 if(this.params.cityId){
                     this.formItem.cityId=this.params.cityId;
                 }else{
-                    this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                    this.formItem.cityId=res.data.length?res.data[0].cityId+'':'';
 
                 }
             }).catch((error)=>{

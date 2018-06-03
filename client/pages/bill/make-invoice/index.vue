@@ -49,6 +49,10 @@
                type:'waitMake',
            }
         },
+        mounted(){
+             var tab=localStorage.getItem('operation-side-invoice-bill');
+             this.type=tab?tab:'waitMake';
+        },
       
         
         created(){
@@ -58,17 +62,36 @@
 
         methods:{
             tabsClick(val){
+                localStorage.setItem('operation-side-invoice-bill',val);
                 this.type = val;
             },
-            searchClick(params){
+            searchClick(params){    
+                if(params.startRefundTime){
+                    params.startRefundTime = new Date(params.startRefundTime).getTime();
+                }
+                if(params.startTicketTime){
+                    params.startTicketTime = new Date(params.startTicketTime).getTime();
+                }
+                if(params.startTime){
+                    params.startTime = new Date(params.startTime).getTime();
+                }
+                if(params.endRefundTime){
+                    params.endRefundTime = new Date(params.endRefundTime).getTime();
+                }
+                if(params.endTicketTime){
+                    params.endTicketTime = new Date(params.endTicketTime).getTime();
+                }
+                if(params.endTime){
+                    params.endTime = new Date(params.endTime).getTime();
+                }
                 
                 utils.addParams(params);
             },
             clearClick(params){
-                //   utils.addParams(params);
+                utils.addParams(params);
             },
-            initData(){
-
+            initData(formItem){
+                this.searchForm=formItem;
             }
             
         }

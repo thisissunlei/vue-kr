@@ -253,23 +253,20 @@ export default {
                 formItem:{
                     applyNum:'',
                     billNums:'',
-
                     communityId:'',
                     companyId:'',
                     contentType:'',
                     endAmount:' ',
-                    endRefundTime:'',
-                    endTicketTime:'',
-
-                    endTime:' ',
                     invoiceTitle:'',
                     invoiceType:'',
                     startAmount:'',
 
                     startRefundTime:'',
                     startTicketTime:'',
-
                     startTime:'',
+                    endRefundTime:'',
+                    endTicketTime:'',
+                    endTime:' ',
                 },
                 //发票规格数组
                 invoiceTypeList:[],
@@ -292,6 +289,29 @@ export default {
     mounted(){
         this.getCityList();
         this.getInvoiceTypeList();
+        var _this=this;
+        this.params = _this.$route.query;
+        _this.$emit('initData',this.formItem);      
+        let params = Object.assign({},this.$route.query);
+        if(params.startRefundTime){
+            params.startRefundTime = new Date(parseInt(params.startRefundTime)).getTime();
+        }
+        if(params.startTicketTime){
+            params.startTicketTime =  new Date(parseInt(params.startTicketTime)).getTime();
+        }
+        if(params.startTime){
+            params.startTime = new Date(parseInt(params.startTime)).getTime();
+        }
+        if(params.endRefundTime){
+            params.endRefundTime =  new Date(parseInt(params.endRefundTime)).getTime();
+        }
+        if(params.endTicketTime){
+            params.endTicketTime = new Date(parseInt(params.endTicketTime)).getTime();
+        }
+        if(params.endTime){
+            params.endTime =  new Date(parseInt(params.endTime)).getTime();
+        }
+        this.formItem=Object.assign({},this.formItem,params);
     },
 
     methods:{
@@ -345,20 +365,10 @@ export default {
         //搜索
         searchClick(){
             this.$refs['formItemInvestment'].validate((valid) => {
-                 this.$emit('searchClick',this.formItem);
+                 
                 if (valid) {
-                    //招商状态格式转换
-                    var str='';
-                    this.formItem.status.map((item,index)=>{
-                            str=str?str+','+item:item;
-                    }) 
-                    this.formItem.investmentStatus=str; 
-                    //渠道来源格式转换
-                    var length=this.formItem.source.length;
-                    if(length){
-                        this.formItem.sourceId=this.formItem.source[0];
-                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
-                    }
+                    console.log('===>',this.formItem)
+                    this.$emit('searchClick',this.formItem);
                    
                 }
             })

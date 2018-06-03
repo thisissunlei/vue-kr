@@ -128,6 +128,12 @@ import dateUtils from 'vue-dateutils';
                     }
                 }
                 return arr;
+            },
+            makeSure(item){
+
+            },
+            cancel(item){
+                
             }
         }
     }

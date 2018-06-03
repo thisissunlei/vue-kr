@@ -98,7 +98,6 @@
                 utils.addParams(params);
             },
             initData(formItem){
-                console.log('init--->',formItem)
                 this.searchForm=formItem;
             }
         }

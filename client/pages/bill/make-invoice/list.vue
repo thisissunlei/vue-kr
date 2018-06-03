@@ -62,6 +62,21 @@
                 <Button type="ghost" style="margin-left: 8px" @click="switchGoBack">取消</Button>
             </div>
         </Modal>
+
+        <Modal
+                v-model="showSure"
+                title="提示信息"
+                width="660"
+            >
+            <div>
+                <span style="height:30px;display:inline-block;margin-left:20px;">发票张数:</span>
+                 <InputNumber :max="10" :min="1" v-model="piaoNumber" value="piaoNumber"></InputNumber>
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="sureSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="openSure">取消</Button>
+            </div>
+        </Modal>
      
     </div>
 </template>
@@ -71,6 +86,8 @@
     import publicFn from './pubilcFn';
     import KrField from '~/components/KrField';
     import krUpload from '~/components/KrUpload';
+import dateUtils from 'vue-dateutils';
+    
     export default {
         components:{
             KrField,
@@ -87,6 +104,9 @@
         },
         data () {
             return {
+                number:true,
+                piaoNumber:null,
+                showSure:false,
                 listData:[{name:'11'}],
                 openMakeInvaice:false,
                 openGoBack:false,
@@ -120,8 +140,30 @@
             // this.tableParams=params; 
             //   utils.addParams(this.params);
         },
-        mounted(){
-            this.getListData(this.tableParams);
+        mounted(){   
+            var status=[];
+           switch (this.type) {
+               case 'waitMake':
+                   status.push('APPLYING');
+                   break;
+               case 'alreadyMake':
+                   status.push('INVOICED');
+                   break;
+               case 'returnMake':
+                   status.push('RECOVERYED');
+                   break;
+               default:
+                   status.push(' ');
+                   break;
+           } 
+           var str='';
+           status.map((item,index)=>{
+               str=str?item+','+str:item;    
+           })
+
+           var params=Object.assign({},this.tableParams,this.searchForm);
+           this.tableParams=params; 
+           this.getListData();
         },
 
         methods:{
@@ -139,6 +181,12 @@
                         invoiceNum:'',
                     });
                 this.invoiceData=[].concat(arr);
+
+            },
+            openSure(item){
+                this.showSure = !this.showSure
+            },
+            sureSubmit(){
 
             },
             //回退按钮点击
@@ -201,10 +249,25 @@
             changePage(){
 
             },
+            //格式转换
+            dateSwitch(data){
+                if(data){
+                    data = parseInt(data);
+                    return dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data));
+                }else{
+                    return '';
+                }
+            },
             //获取列表数据
             getListData(){
-                let tabParams = Object.assign({},this.tableParams);
-                this.$http.get('get-invoice-list', tabParams).then((res)=>{
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                this.$http.get('get-invoice-list', params).then((res)=>{
                         this.listData=res.data.items;
                         this.tableParams.totalCount = res.data.totalCount;
                         this.tableParams.page = res.data.page;

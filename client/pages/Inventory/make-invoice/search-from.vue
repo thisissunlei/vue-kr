@@ -330,10 +330,7 @@ export default {
             params.ticketEndDate =  new Date(parseInt(params.ticketEndDate)).getTime();
         }
         this.formItem=Object.assign({},this.formItem,params);
-        console.log('======>',this.formItem)
         setTimeout(() => {
-            
-            
             if(!_this.formItem.contentType){
                 _this.formItem.contentType=' ';
             }
@@ -344,15 +341,6 @@ export default {
         
     },
     methods:{
-        //格式转换
-            dateSwitch(data){
-                console.log('data=======',data,new Date(data).getTime())
-                // if(data){
-                //     return new Date(data).getTime();
-                // }else{
-                //     return '';
-                // }
-            },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {

@@ -122,7 +122,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.makeSure(colData)
                                 }
                             }
                         }, '确认'),
@@ -136,7 +136,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.cancel(colData)
                                 }
                             }
                         }, '驳回')

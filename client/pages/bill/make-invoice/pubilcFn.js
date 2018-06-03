@@ -195,7 +195,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.makeInvaice()
+                                    this.openSure(params.row)
                                 }
                             }
                         }, '重开')
@@ -222,7 +222,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.makeInvaice(colData)
+                                    this.openSure(colData)
                                 }
                             }
                         }, '开票'),

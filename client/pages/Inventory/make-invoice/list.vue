@@ -39,10 +39,10 @@
 
 
 <script>
-    import publicFn from './pubilcFn';
+    import publicFn from './publicFn';
     import KrTd from '~/components/KrTd';
     import utils from '~/plugins/utils';
-import dateUtils from 'vue-dateutils';
+    import dateUtils from 'vue-dateutils';
 
 
     export default {
@@ -150,12 +150,9 @@ import dateUtils from 'vue-dateutils';
             //获取列表数据
             getListData(){
                 let params = Object.assign({},this.tableParams,this.$route.query);
-                params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
-                params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
-                params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
-                params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
-                params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
-                params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+                params = Object.assign({},publicFn.dateSwitch(params,'init')) 
+                console.log(params,"oooooooooo")
+                // return ;
                 this.$http.get('invoice-list-unified',params).then((res)=>{
                     this.listData=res.data.items;
                 }).catch((err)=>{

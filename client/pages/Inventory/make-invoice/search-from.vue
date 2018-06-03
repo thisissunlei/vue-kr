@@ -175,7 +175,7 @@
 
 <script>
 import dateUtils from 'vue-dateutils';
-// import publicFn from '../publicFn';
+import publicFn from './publicFn';
 import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
@@ -306,74 +306,35 @@ export default {
     },
     mounted(){
         this.getCityList();
-        this.getSourceData();
-        var _this=this;
-        this.params = _this.$route.query;
         let params = Object.assign({},this.$route.query);
-        params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
-        params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
-        params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
-        params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
-        params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
-        params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
-        setTimeout(() => {
-            _this.$emit('initData',this.formItem);
-            console.log('==',_this.formItem)
-            _this.formItem=Object.assign({},_this.$route.query);
-            console.log('init--->3',params)
-            console.log('init--->1',_this.$route.query)
-            console.log('init--->2',_this.formItem)
+        this.formItem = publicFn.dateSwitch(params,'ms')
+        // this.$emit('searchClick',params);
+        
+        // this.getSourceData();
+        // var _this=this;
+        // // this.params = _this.$route.query;
+        // console.log(typeof this.$route.query.ticketStartDate)
+        // let params = Object.assign({},this.$route.query);
+        // this.dateSwitch(params)
+        // setTimeout(() => {
+        //     _this.$emit('initData',this.formItem);
+        //     console.log('==',_this.formItem)
+        //     _this.formItem=Object.assign({},_this.$route.query);
+        //     console.log('init--->3',params)
+        //     console.log('init--->1',_this.$route.query)
+        //     console.log('init--->2',_this.formItem)
             
-            if(!_this.formItem.contentType){
-                _this.formItem.contentType=' ';
-            }
-            if(!_this.formItem.invoiceType){
-                _this.formItem.invoiceType=' ';
-            }
-        },500);
+        //     if(!_this.formItem.contentType){
+        //         _this.formItem.contentType=' ';
+        //     }
+        //     if(!_this.formItem.invoiceType){
+        //         _this.formItem.invoiceType=' ';
+        //     }
+        // },500);
         
     },
     methods:{
-        //格式转换
-            dateSwitch(data){
-                console.log('data=======',data,new Date(data).getTime())
-                // if(data){
-                //     return new Date(data).getTime();
-                // }else{
-                //     return '';
-                // }
-            },
-        //销售员搜索
-        remoteSaler(query){
-            if (query !== '') {
-                this.loading = true;
-                setTimeout(() => {
-                    this.getSalerData(query)
-                }, 200);
-            }
-        },
-        //销售员
-        getSalerData(name){
-            let list = [];
-            this.$http.get('get-saler',{phoneOrEmail:name}).then((res)=>{
-                list = res.data.slice(0,10);
-                this.loading= false;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
-        //渠道来源
-        getSourceData(){
-            this.$http.get('get-customer-source').then((res)=>{
-              
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
+      
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
@@ -420,12 +381,16 @@ export default {
         searchClick(){
             this.$refs['formItemOperation'].validate((valid) => {
                 if (valid) {
-                    this.$emit('searchClick',this.formItem);
+                    let params = publicFn.dateSwitch(this.formItem,'ms')
+                   
+                    this.$emit('searchClick',params);
+                    this.formItem = Object.assign({},params)
                 }
             })
         },
         //清除
         clearClick(){
+
             this.formItem=Object.assign({},this.formItemOld);
             this.$emit('clearClick',this.formItem);
         },

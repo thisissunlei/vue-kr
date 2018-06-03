@@ -274,4 +274,26 @@ function initListData(){
 
     ]
 }
-export default {initListData};
+function dateSwitch(params,type){
+    var data = Object.assign({},params);
+    var arr = ['ticketEndDate','ticketStartDate','receiveEndDate','receiveStartDate','callbackStartDate','callbackEndDate'];
+    for(let i=0;i<arr.length;i++){
+        // if(data[arr[i]]){
+        //     data[arr[i]]
+        // }
+        if(data[arr[i]]){
+            if(type == "init"){
+                data[arr[i]] = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(+data[arr[i]]));
+            }else if(type=='ms'){
+                data[arr[i]] = new Date(+data[arr[i]] ).getTime()
+            }else{
+                data[arr[i]] = dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(+data[arr[i]]));
+            }
+        }
+       
+
+       
+    }
+    return Object.assign(data);
+}
+export default {initListData,dateSwitch};

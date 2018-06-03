@@ -3,7 +3,6 @@
         <SearchFrom
               @searchClick="searchClick"
               @clearClick="clearClick"
-              @initData="initData"
               :type="type"
         />
         <div style="padding:0px 20px;">
@@ -14,19 +13,19 @@
             >
             <!-- waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn -->
                 <TabPane label="待签收" name="waitArrive"> 
-                    <List v-if="type == 'waitArrive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitArrive'" :type="type" />
                 </TabPane>
                 <TabPane label="待邮寄" name="waitMail" >
-                    <List v-if="type == 'waitMail'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitMail' " :type="type" />
                 </TabPane>
                 <TabPane label="待领取" name="waitReceive" >
-                    <List v-if="type == 'waitReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitReceive' " :type="type" />
                 </TabPane>
                 <TabPane label="已领取" name="alreadyReceive">
-                    <List v-if="type == 'alreadyReceive'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'alreadyReceive' " :type="type" />
                 </TabPane>
                 <TabPane label="待退还" name="waitReturn">
-                    <List v-if="type == 'waitReturn'&&searchForm.communityId" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'waitReturn' " :type="type" />
                 </TabPane>
             </Tabs>
         </div>
@@ -37,6 +36,7 @@
 <script>
     import SearchFrom from './search-from';
     import utils from '~/plugins/utils';
+    import publicFn from './publicFn';
     import List from './list';
     export default {
        
@@ -62,7 +62,7 @@
         methods:{
             //格式转换
             dateSwitch(data){
-                console.log('data=======',data)
+                
                 if(data){
                     return new Date(data).getTime();
                 }else{
@@ -74,15 +74,18 @@
                 this.type = val;
             },
             searchClick(params){
-                console.log('searchClick',params)
-                params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
-                params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
-                params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
-                params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
-                params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
-                params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
-                console.log('params',params)
+                // console.log('searchClick',params)
+                 this.searchForm= Object.assign({},publicFn.dateSwitch.call(this,params,'init'));
+                 console.log(this.searchForm,"ppppppp")
+                // params.ticketEndDate=this.dateSwitch(params.ticketEndDate);
+                // params.ticketStartDate=this.dateSwitch(params.ticketStartDate);
+                // params.receiveEndDate=this.dateSwitch(params.receiveEndDate);
+                // params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
+                // params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
+                // params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+                // console.log('params',params)
                 // return;
+                // return ;
                 utils.addParams(params);
             },
             clearClick(params){

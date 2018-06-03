@@ -2,7 +2,7 @@
 export default  {
     //账单中心--获取反结算信息
     'get-invoice-list': {
-      url: '/st/api/order/csr-invoice-list',
+      url: '/api/order/csr-invoice-list',
       method: 'get'
     },
     //开票接口

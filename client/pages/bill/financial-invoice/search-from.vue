@@ -119,8 +119,8 @@ export default {
         return { 
             formItem:{
                 applyNo:'',
-                cStartTime:this.getToDay(),
-                cEndTime:this.getToDay(),
+                cStartTime:'',
+                cEndTime:'',
                 invoiceTitle:'',
                 taxpayerNumber:'',
                 taxpayerType:' ',
@@ -159,7 +159,14 @@ export default {
     },
     mounted(){
        this.$emit('initData',this.formItem);
-       this.formItem=Object.assign({},this.formItem,this.$route.query);
+       let params = this.$route.query;
+       if(params.cStartTime){
+            params.cStartTime = new Date(parseInt(params.cStartTime)).getTime();
+        }
+        if(params.cEndTime){
+            params.cEndTime =  new Date(parseInt(params.cEndTime)).getTime();
+        }
+       this.formItem=Object.assign({},this.formItem,params);
        if(!this.formItem.taxpayerType){
            this.formItem.taxpayerType=' ';
        }
@@ -177,6 +184,7 @@ export default {
         searchClick(){
             this.$refs['formItemInvoiceFinance'].validate((valid) => {    
                 if (valid) {
+                    console.log('搜索====',this.formItem)
                    this.$emit('searchClick',this.formItem); 
                 }
             })
@@ -185,8 +193,8 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},{
                 applyNo:'',
-                cStartTime:this.getToDay(),
-                cEndTime:this.getToDay(),
+                cStartTime:'',
+                cEndTime:'',
                 invoiceTitle:'',
                 taxpayerNumber:'',
                 taxpayerType:' ',

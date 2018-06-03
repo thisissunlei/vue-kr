@@ -74,6 +74,7 @@
                 this.type = val;
             },
             searchClick(params){
+<<<<<<< HEAD
                 // console.log('searchClick',params)
                  this.searchForm= Object.assign({},publicFn.dateSwitch.call(this,params,'init'));
                  console.log(this.searchForm,"ppppppp")
@@ -86,10 +87,29 @@
                 // console.log('params',params)
                 // return;
                 // return ;
+=======
+                if(params.ticketEndDate){
+                    params.ticketEndDate = new Date(params.ticketEndDate).getTime();
+                }
+                if(params.ticketStartDate){
+                    params.ticketStartDate = new Date(params.ticketStartDate).getTime();
+                }
+                if(params.receiveEndDate){
+                    params.receiveEndDate = new Date(params.receiveEndDate).getTime();
+                }
+                if(params.receiveStartDate){
+                    params.receiveStartDate = new Date(params.receiveStartDate).getTime();
+                }
+                if(params.callbackStartDate){
+                    params.callbackStartDate = new Date(params.callbackStartDate).getTime();
+                }
+                if(params.callbackEndDate){
+                    params.callbackEndDate = new Date(params.callbackEndDate).getTime();
+                }
+>>>>>>> 809c790e7d35ad1434b7314063d11c3b76e188ff
                 utils.addParams(params);
             },
             clearClick(params){
-                console.log('clearClick',params)
                 utils.addParams(params);
             },
             initData(formItem){

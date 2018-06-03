@@ -142,6 +142,7 @@
             //格式转换
             dateSwitch(data){
                 if(data){
+                    data = parseInt(data);
                     return dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data));
                 }else{
                     return '';

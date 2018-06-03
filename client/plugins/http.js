@@ -19,6 +19,10 @@ axios.interceptors.request.use(config => {
     let data = Qs.stringify(config.data);
     config.data = data;
   }
+  if(config.method  == 'put'){
+    let data = Qs.stringify(config.data);
+    config.data = data;
+  }
   if(config.url.indexOf('mockjs ') !==-1 ){
     config.baseURL = 'http://rap.krspace.cn';
   }else if(config.url.indexOf('/st/') !==-1){

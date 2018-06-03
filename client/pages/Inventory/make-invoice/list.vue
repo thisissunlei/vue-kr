@@ -26,11 +26,38 @@
                 width="500"
             >
             <div >
-                 <span>实际退回金额:</span><Input  placeholder="实际退回金额" />
+                 <span>实际退回金额:</span><Input  placeholder="实际退回金额" v-model="changeMoney" />
             </div>
             <div slot="footer">
                 <Button type="primary" @click="modifySubmit">确定</Button>
-                <Button type="ghost" style="margin-left: 8px" @click="switchModify">取消</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="modifyClick">取消</Button>
+            </div>
+        </Modal>
+
+        <Modal
+                v-model="openPost"
+                title="邮寄信息"
+                width="500"
+            >
+            <div style="text-align:center">
+                <Select 
+                  v-model="expressCompany" 
+                  placeholder="请选择邮寄方式" 
+                  style="width: 300px;margin-bottom:20px;"
+                >
+                  <Option 
+                    v-for="item in postList" 
+                    :value="item.id" 
+                    :key="item.name"
+                  >
+                  {{ item.name }}
+                  </Option>
+                </Select>
+                <Input  placeholder="邮寄地址" v-model="postNum" style="width:300px"/>
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="postSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="mailClick">取消</Button>
             </div>
         </Modal>
      
@@ -59,13 +86,22 @@ import dateUtils from 'vue-dateutils';
            return {
                 listData:[{name:'123'}],
                 openModify:false,
+                openPost:false,
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),
+                changeMoney:'',
                 tableParams:{
                     page:1,
                     pageSize:15,
                     invoiceStatusList:''
-                }
+                },
+                editItem:{},
+                postList:[{
+                  id:'1',
+                  name:'000'
+                }],
+                expressCompany:'',
+                postNum:'',
            }
         },
         mounted(){
@@ -98,42 +134,84 @@ import dateUtils from 'vue-dateutils';
            this.getListData();
         },
         methods:{
-          
             //修改弹窗开关
-            switchModify(){
-                this.openModify = !this.openModify;
+            modifyClick(item){
+              this.editItem = item;
+              this.openModify = !this.openModify;
+            },
+            postSubmit(item){
+              let tabParams = {};
+              if(!this.expressCompany || !this.postNum){
+                return 
+              }
+              tabParams = {
+                id:item.id,
+                postNum:this.postNum,
+                expressCompany:this.expressCompany
+              }
+                this.$http.put('change-modify-post', tabParams).then((res)=>{
+                    // this.listData=res.data.items;
+                    this.getListData();
+                }).catch((err)=>{
+                  console.log('====',err)
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             //修改提交
             modifySubmit(){
-                this.$http.post('get-project-home', tabParams).then((res)=>{
+              let tabParams = {};
+              if(!this.changeMoney){
+                return 
+              }
+              tabParams = {
+                id:this.editItem.id,
+                amount:this.changeMoney
+              }
+                this.$http.put('change-modify-amount', tabParams).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
-                    this.switchGoBack();
                 }).catch((err)=>{
+                  console.log('====',err)
                     this.$Notice.error({
                         title:err.message
                     });
                 })
             },
             //签收按钮点击
-            receivedClick(){
-
+            receivedClick(item){
+              this.$http.put('change-modify-sign', {id:item.id}).then((res)=>{
+                    // this.listData=res.data.items;
+                    this.getListData();
+                }).catch((err)=>{
+                  console.log('====',err)
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             //邮寄按钮点击
-            mailClick(){
-
-            },
-            //修改按钮点击
-            modifyClick(){
+            mailClick(item){
+              this.openPost = !this.openPost;
 
             },
             //跳转查看页面
-            goView(){
+            goView(data){
+              
 
             },
             //回收按钮点击
-            callbackClick(){
-
+            callbackClick(item){
+              this.$http.put('change-modify-takeBack', {id:item.id}).then((res)=>{
+                    // this.listData=res.data.items;
+                    this.getListData();
+                }).catch((err)=>{
+                  console.log('====',err)
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             //页面切换
             changePage(){

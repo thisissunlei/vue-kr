@@ -13,7 +13,7 @@ function initListData(){
                     },
                     on:{
                         click:()=>{
-                            this.goAddPage();
+                            this.goView(params.row);
                         }
                     }
                 },params.row.applyNum)
@@ -183,7 +183,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.receivedClick()
+                                    this.receivedClick(params.row)
                                 }
                             }
                         }, '签收')
@@ -209,7 +209,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.mailClick()
+                                    this.mailClick(params.row)
                                 }
                             }
                         }, '邮寄')
@@ -223,6 +223,7 @@ function initListData(){
             align:'center',
             type:'waitReturn',
             render:(h,params)=>{
+                let colData = params.row;
                
                 return h('div', [
                         h('Button', {
@@ -235,7 +236,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goView()
+                                    this.goView(colData)
                                 }
                             }
                         }, '查看'),
@@ -249,7 +250,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.callbackClick()
+                                    this.callbackClick(colData)
                                 }
                             }
                         }, '收回'),
@@ -263,7 +264,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.modifyClick()
+                                    this.modifyClick(colData)
                                 }
                             }
                         }, '修改')  

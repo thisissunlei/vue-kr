@@ -24,7 +24,28 @@ export default  {
     'get-make-invoice-detail-table': {
       url: '/api/order/csr-invoice-amountDetail',
       method: 'get'
-    }
+    },
+     //修改
+    'change-modify-amount': {
+      url: '/api/order/csr-invoice/op/modifyAmount',
+      method: 'put'
+    },
+     //回收
+    'change-modify-takeBack': {
+      url: '/api/order/csr-invoice/op/takeBack',
+      method: 'put'
+    },
+     //邮寄
+    'change-modify-post': {
+      url: '/api/order/csr-invoice/op/post',
+      method: 'put'
+    },
+    //签收
+    'change-modify-sign': {
+      url: '/api/order/csr-invoice/op/sign',
+      method: 'put'
+    },
+   
    
 }
   

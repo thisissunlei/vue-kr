@@ -13,10 +13,10 @@
                 @on-click="tabsClick"
             >
                 <TabPane label="待审核" name="VERIFYING"> 
-                    <List v-if="type == 'VERIFYING'&&searchForm.cStartTime" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'VERIFYING'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
                 <TabPane label="已审核" name="PASSED" >
-                    <List v-if="type == 'PASSED'&&searchForm.cStartTime" :type="type" :searchForm="searchForm"/>
+                    <List v-if="type == 'PASSED'" :type="type" :searchForm="searchForm"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -54,7 +54,13 @@
                 localStorage.setItem('financial-invoice-toAndDone',val);
                 this.type = val;
             },
-            searchClick(params){  
+            searchClick(params){ 
+                if(params.cStartTime){
+                    params.cStartTime = new Date(params.cStartTime).getTime();
+                }
+                if(params.cEndTime){
+                    params.cEndTime = new Date(params.cEndTime).getTime();
+                }
                 utils.addParams(params);
             },
             clearClick(params){

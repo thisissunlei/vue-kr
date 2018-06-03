@@ -27,6 +27,7 @@
     import publicFn from './pubilcFn';
     import KrTd from '~/components/KrTd';
     import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
     
     export default {
         props:{
@@ -58,6 +59,7 @@
             var params=Object.assign({},this.tableParams,this.searchForm);
             this.tableParams=params; 
             this.getListData();
+            console.log('list====>')
             //utils.addParams(this.params);
         },
         
@@ -68,8 +70,11 @@
             },
             //格式转换
             dateSwitch(data){
+                console.log('格式转换-->',data,typeof data);
+                console.log('===>',dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data)));
                 if(data){
-                    return utils.dateCompatible(data);
+                    data = parseInt(data);
+                    return dateUtils.dateToStr("YYYY-MM-DD 00:00:00", new Date(data));
                 }else{
                     return '';
                 }

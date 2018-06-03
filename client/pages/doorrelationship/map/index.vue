@@ -7,7 +7,6 @@
                 placeholder="请选择社区"
                 filterable
                 @on-change="onChangeCommunity"
-                filterable
             >
                 <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
             </Select>

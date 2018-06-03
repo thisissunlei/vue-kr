@@ -92,7 +92,6 @@ export default {
        SearchForm
    },
    mounted(){
-       console.log("mounted")
        this.getAllEquipmentList(this.searhFormData);
    },
    props:[
@@ -103,7 +102,6 @@ export default {
        changePage(page){
 
            let _this =this;
-           console.log("communityId",this.communityId);
            var param = {page :page,communityId : _this.communityId}
            var sendParam = Object.assign({},_this.searhFormData,param)
            this.getAllEquipmentList(sendParam);
@@ -113,7 +111,6 @@ export default {
                 
                 var resData = res.data;
 
-               console.log("resData",resData,"param",param)
                 
                 this.allEquipmentListData = resData.items;
                 this.listTotalCount = resData.totalCount

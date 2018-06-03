@@ -43,23 +43,13 @@ export default{
              columnsData:[
                     {
                         type: 'selection',
-                        width: 60,
+                        width: 50,
                         align: 'center'
                     },
                     {
-                        title: '硬件ID',
-                        key: 'serialNo',
-                        width: 200,
-                    },
-                    {
-                        title: '屏幕显示标题',
-                        key: 'title',
-                        width: 150,
-                    },
-                    {
-                        title: '屏幕显示编号',
-                        key: 'doorCode',
-                        width: 150,
+                        title: '硬件ID~屏幕显示标题~屏幕显示编号',
+                        key: 'showData',
+                        width: 420,
                     }
                 ],
               equipmentListData:[],
@@ -72,7 +62,11 @@ export default{
     },
     mounted(){
         var params = {communityId : this.communityId};
-        // this.getEquipmentListData(params);
+        // var quipmentNewList = this.groupDetailDoorListData.items;
+        // for(var i=0;i<quipmentNewList.length;i++){
+        //   quipmentNewList[i].showData = quipmentNewList[i].serialNo+"~"+ quipmentNewList[i].title+"~"+quipmentNewList[i].doorCode
+        // }
+        // this.equipmentListData = quipmentNewList;
         
     },
      props:[
@@ -95,7 +89,6 @@ export default{
          this.selection = selection;
        },
        changePage(page){
-         console.log("page",page);
          this.$emit("getEquipmentList",page);
 
        },

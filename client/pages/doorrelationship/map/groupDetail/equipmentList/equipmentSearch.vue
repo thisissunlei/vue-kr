@@ -65,7 +65,6 @@ export default{
     },
     mounted(){
     //   this.getfloorOptions();
-        console.log("this.communityId",this.communityId);
 
         this.getfloorOptions();
         

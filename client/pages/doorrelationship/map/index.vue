@@ -10,7 +10,18 @@
             >
                 <Option  v-for="item in communityList" :value="item.id" :key="item.id"> {{ item.name }}</Option>
             </Select>
-            <span  class="text-span margin-left">双击下方空白区域创建新设备组，双击设备组节点查看节点详情</span>
+            <Tooltip placement="bottom">
+                <span  class="text-span margin-left">
+                    <Icon type="ios-bell-outline"></Icon>
+                    <span style="margin-left:5px">操作说明</span>
+                </span>
+                <div slot="content" class="tool-tip-box">
+                    <p>创建设备组：双击空白区域</p>
+                    <p>查看设备组详情：双击设备组</p>
+                    <p>删除设备组：选中设备组，敲击delete键</p>
+                    <p>删除关系：选中关系，敲击delete键</p>
+                </div>
+            </Tooltip>
             <div class="right-part">   
                 <span class="text-span">输入内容查找设备所在的组：</span>
                 <SearchFormNew 
@@ -30,7 +41,7 @@
             :openDrawer="openEquipmentDetail"
             iconType="view-icon"
             :close="closeEquipmentDetail"
-            width="652"
+            width="570"
         >
 
             <GroupDetail
@@ -44,6 +55,7 @@
                 @searchEquipment ="searchEquipment"
                 :doorTypeOptions = "doorTypeOptions"
                 @changeDetailEquipmentListPage="changeDetailEquipmentListPage"
+                @closeDetailPage = "closeDetailPage"
             />
         </Drawer>
         <Modal
@@ -145,6 +157,9 @@ export default {
    },
   
    methods:{
+       closeDetailPage(){
+           this.openEquipmentDetail = false;
+       },
        onChangeCommunity(option){
             let _this =this;
             this.communityId = option;
@@ -645,7 +660,19 @@ export default {
 
             this.$http.get('getDoorListByGroup', param).then((res)=>{
 
-                this.groupDetailDoorListData = res.data;
+                var quipmentNewList = res.data.items;
+                for(var i=0;i<quipmentNewList.length;i++){
+                    quipmentNewList[i].showData = quipmentNewList[i].serialNo+"~"+ quipmentNewList[i].title+"~"+quipmentNewList[i].doorCode
+                }
+                this.groupDetailDoorListData = {
+                    items : quipmentNewList,
+                    page : res.data.page,
+                    pageSize : res.data.pageSize,
+                    totalCount : res.data.totalCount,
+                    totalPages : res.data.totalPages,
+                }
+
+
                 if(strParam=="openDetail"){
                     this.closeEquipmentDetail()
                 }
@@ -767,8 +794,12 @@ export default {
         width:100%;
         height:90%;
         .margin-left{
-            margin-left : 10px;
+            margin-left: 10px;
             color: #495060;
+            display: inline-block;
+            border: solid 1px #dddee1;
+            padding: 6px;
+            border-radius: 2px;
         }
         .right-part{
             float : right;
@@ -815,6 +846,10 @@ export default {
         position: relative;
         width: 100%;
         height: 100%;
+    }
+    .tool-tip-box{
+        width:220px;
+       
     }
     
 </style>

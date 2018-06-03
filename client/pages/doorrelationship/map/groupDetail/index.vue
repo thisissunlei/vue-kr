@@ -8,6 +8,7 @@
         v-if="showEditForm" 
         @deleteEquipmentGroup= "deleteEquipmentGroup"
         @editNodeDataInDetail="editNodeDataInDetail"
+        @closeDetailPage = "closeDetailPage"
     />
 
     <EquipmentList 
@@ -40,7 +41,6 @@ export default{
         
     },
     mounted(){
-        console.log("editInitialDataProps",this.editInitialDataProps);
         this.editInitailData = this.editInitialDataProps;
         this.showEditForm = true;
       
@@ -74,7 +74,6 @@ export default{
                 toDleteEquipmentArr.push(selection[i].doorId)
             }
             var toDleteEquipmentStr = toDleteEquipmentArr.join(",");
-            console.log("toDleteEquipmentStr",toDleteEquipmentStr);
             var paramsSend = {
                 doorIds : toDleteEquipmentStr,
                 setId : _this.editInitialDataProps.id
@@ -83,11 +82,13 @@ export default{
 
         },
         searchEquipment(msg){
-            console.log("msg",msg);
             this.$emit("searchEquipment",msg)
         },
         getEquipmentList(page){
             this.$emit("changeDetailEquipmentListPage",page)
+        },
+        closeDetailPage(){
+            this.$emit("closeDetailPage")
         }
 
     },

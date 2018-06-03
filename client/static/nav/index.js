@@ -1060,7 +1060,7 @@
                                 router: 'smarthardware/doorManage/upgrademanage',
                             },
                             {
-                                primaryText: '级联图谱',
+                                primaryText: '门禁级联关系',
                                 menuCode: 'door_relation',
                                 type: 'vue',
                                 router: 'doorrelationship/map',

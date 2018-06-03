@@ -102,7 +102,7 @@ export default {
    name:'doorRelationship',
     head () {
         return {
-            title: "级联图谱"
+            title: "门禁级联关系"
         }
     },
    data(){

@@ -129,6 +129,7 @@ export default {
         changeDate(data){
             this.formItem.beginDate=data[0];
             this.formItem.endDate=data[1];
+            
         },
         getCommunity(){
               this.$http.get('get-community-new-list','').then((res)=>{

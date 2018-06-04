@@ -82,6 +82,7 @@ export default {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='joinMember'){
+                         this.tabParams.page=1
                         let tabParams=Object.assign(nextProps.detail,this.tabParams)
                         this.getTableData(tabParams);
                         this.tabParams=tabParams;

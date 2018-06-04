@@ -524,7 +524,7 @@
             menuItems: [
                 {
                     primaryText: '客户',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-customers',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -559,7 +559,7 @@
                 },
                 {
                     primaryText: '会员',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-members',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -607,7 +607,7 @@
             menuItems: [
                 {
                     primaryText: '产品商品',
-                    iconName: 'icon-donething',
+                    iconName: 'icon-product-goods',
                     iconColor: '#79859a',
                     router:'index',
                     menuItems: [
@@ -873,7 +873,7 @@
                 },
                 {
                     primaryText: 'OP配置',
-                    iconName: 'icon-website',
+                    iconName: 'icon-op-set',
                     iconColor: '#79859a',
                     menuItems: [
 
@@ -912,7 +912,7 @@
                 },
                 {
                     primaryText: 'OP权限',
-                    iconName: 'icon-website',
+                    iconName: 'icon-op-permission',
                     iconColor: '#79859a',
                     // router: 'activity',
                     menuItems: [
@@ -977,7 +977,7 @@
                 },
                 {
                     primaryText: "OP合同配置",
-                    iconName: 'icon-theLog',
+                    iconName: 'icon-op-contract',
                     iconColor: '#79859a',
                     menuItems: [
                         {
@@ -1036,7 +1036,7 @@
             menuItems: [
                     {
                         primaryText: "门禁管理",
-                        iconName: 'icon-card',
+                        iconName: 'icon-placket-manage',
                         iconColor: '#79859a',
                         router :'',
                         menuItems: [
@@ -1088,7 +1088,7 @@
                         ]
                 },{
                     primaryText: "中央控制管理",
-                    iconName: 'icon-card',
+                    iconName: 'icon-central-control',
                     iconColor: '#79859a',
                     router :'',
                     menuItems: [
@@ -1105,7 +1105,7 @@
                     ]
             },{
                 primaryText: "设备管理",
-                iconName: 'icon-card',
+                iconName: 'icon-equipment-manage',
                 iconColor: '#79859a',
                 router :'',
                 menuItems: [
@@ -1123,7 +1123,7 @@
         },
         {
                 primaryText: "空间管理",
-                iconName: 'icon-card',
+                iconName: 'icon-space-manage',
                 iconColor: '#79859a',
                 router :'',
                 menuItems: [
@@ -1147,7 +1147,7 @@
         menuItems: [
             {
                 primaryText: '订单',
-                iconName: 'icon-donething',
+                iconName: 'icon-orders',
                 router: 'office',
                 iconColor: '#79859a',
                 menuCode: 'public',
@@ -1174,7 +1174,7 @@
             },
             {
                 primaryText: '合同',
-                iconName: 'icon-donething',
+                iconName: 'icon-contracts',
                 router: 'office',
                 iconColor: '#79859a',
                 menuCode: 'wf_contract_list',

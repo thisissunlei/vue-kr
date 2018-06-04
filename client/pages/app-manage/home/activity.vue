@@ -48,12 +48,13 @@ export default {
         $props: {
             deep: true,
             handler(nextProps) {
-                if(nextProps.mask=='activity'){
+                if(nextProps.mask=='activity' && nextProps.detail){
                     this.tabParams.page=1;
-                  let tabParams=Object.assign(nextProps.detail,this.tabParams)
+                    let tabParams=Object.assign(nextProps.detail,this.tabParams)
                     this.getTableData(tabParams);
                     this.tabParams=tabParams;
                 }
+                   
             }
         }
     },      

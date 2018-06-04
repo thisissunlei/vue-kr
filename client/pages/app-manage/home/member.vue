@@ -56,6 +56,7 @@ export default {
         }
     },
     mounted(){
+         this.tabParams.page=1;
          this.getTableData(this.tabParams);
     },
     methods:{
@@ -79,12 +80,14 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
-                    if(nextProps.mask=='member' ){
-                         this.tabParams.page=1
+                    if(nextProps.mask=='member' && nextProps.detail){
+                         this.tabParams.page=1;
                         let tabParams=Object.assign(nextProps.detail,this.tabParams)
                         this.getTableData(tabParams);
+                        console.log('3333')
                         this.tabParams=tabParams;
                     }
+                    
                 }
             }
         },

@@ -247,8 +247,26 @@ import dateUtils from 'vue-dateutils';
                 })
             },
             //页面切换
-            changePage(){
-
+            changePage(page){
+                console.log('页面切换',page)
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                params.page = page;
+                this.$http.get('get-invoice-list', params).then((res)=>{
+                        this.listData=res.data.items;
+                        this.tableParams.totalCount = res.data.totalCount;
+                        this.tableParams.page = res.data.page;
+                     
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             //格式转换
             dateSwitch(data){

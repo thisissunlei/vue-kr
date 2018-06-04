@@ -293,7 +293,15 @@ import dateUtils from 'vue-dateutils';
                 params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
                 params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
                 this.$http.get('invoice-list-unified',params).then((res)=>{
-                    this.listData=res.data.items;
+                  let pages = {
+                      page:res.data.page,
+                      totalCount:res.data.totalCount,
+                      totalPages:res.data.totalPages,
+                      pageSize:15
+                  }
+                  this.tableParams = Object.assign({},pages)
+                  console.log('获取列表数据===',this.tableParams)
+                  this.listData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message

@@ -39,12 +39,12 @@ export default {
               },
               {
                   title: '入驻满7天且登录过APP的会员数',
-                  key: 'enterNum',
+                  key: 'loginNum',
                   align:'center',
               },
               {
                   title: '入驻满7天会员数',
-                  key: 'loginNum',
+                  key: 'enterNum',
                   align:'center',
               },
               {

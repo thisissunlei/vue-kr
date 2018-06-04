@@ -345,20 +345,6 @@ export default {
         onKeyEnter(){
             this.searchClick();
         },
-        //检查输入字符串字节长度
-        fucCheckLength(strTemp) {
-            var i,sum;
-            sum=0;
-            var length = strTemp.length ;
-            for(i=0;i<length;i++) {
-                if ((strTemp.charCodeAt(i)>=0) && (strTemp.charCodeAt(i)<=255)) {
-                    sum=sum+1;
-                }else {
-                    sum=sum+2;
-                }
-            }
-            return sum;
-        },
         cityChange(param){
             this.num=this.num+1;
             this.getCommunityList(param)

@@ -229,9 +229,9 @@ export default {
     },
     mounted(){
         this.getCityList();
-        this.params=this.$route.query;
-        this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
-        this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
+        if(this.$route.query.communityId){
+            this.params=this.$route.query;
+        }   
     },
     methods:{
         //格式转换

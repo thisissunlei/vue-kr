@@ -80,7 +80,7 @@ export default {
    data(){
        return {
            activeKey:'member',
-           key:'',
+           key:'member',
            joinMemberPage:1,
            joinMemberTotalCount:0,
            pageSize:15,

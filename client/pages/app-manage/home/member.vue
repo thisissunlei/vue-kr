@@ -80,6 +80,7 @@ export default {
             $props: {
                 deep: true,
                 handler(nextProps) {
+                    console.log('nextProps.mask',nextProps.mask)
                     if(nextProps.mask=='member' && nextProps.detail){
                          this.tabParams.page=1;
                         let tabParams=Object.assign(nextProps.detail,this.tabParams)

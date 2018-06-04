@@ -146,9 +146,10 @@
                     <div style="display:inline-block;width:850px;">
                        <Form-item v-if="type=='alreadyReceive'" label="领取人员" class='daily-form' prop="invoiceTitle">
                             <i-input 
-                                v-model="formItem.receiverId" 
+                                v-model="formItem.receiverName" 
                                 placeholder="请输入领取人员"
                                 style="width: 200px"
+                                @on-blur="receiveBlur"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                         </Form-item>
@@ -448,6 +449,15 @@ export default {
         },
         changeInvoiceStatus(val){
             this.formItem.invoiceStatusList = 'TO_RETURN,'+val
+        },
+        receiveBlur(){
+            if(this.formItem.receiverName){
+                this.getReceiverId(this.formItem.receiverName)
+            }
+            console.log('=====',this.formItem.receiverId)
+        },
+        getReceiverId(value){
+            
         }
     }
 }

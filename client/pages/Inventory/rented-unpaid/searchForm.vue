@@ -361,7 +361,7 @@ export default {
                     display:inline-block;
                     margin-right:4px;
                     .ivu-form-item-content{
-                        display:inline-block;
+                    display:inline-block;
                     }
                 }
                 .ivu-tooltip-popper{

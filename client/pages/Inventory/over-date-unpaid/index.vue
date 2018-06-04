@@ -29,11 +29,8 @@
         :warn="warn"
         @changeOpen="onMessageChange"
     />
-
   </div>
 </template>
-
-
 <script>
 import ToolTip from '~/components/ToolTip';
 import dateUtils from 'vue-dateutils';
@@ -54,7 +51,7 @@ var layoutScrollHeight=0;
         },
         head() {
             return {
-                title: '已起租未付'
+                title: '逾期未付'
             }
         },
         data () {
@@ -69,11 +66,9 @@ var layoutScrollHeight=0;
                 sideBar:true,
                 left:'',
                 width:'',
-
-
                 tabForms:{
-                    page:1,
-                    pageSize:100,
+                page:1,
+                pageSize:100,
                 },
                 endParams:{},
                 tableList:[],
@@ -97,9 +92,8 @@ var layoutScrollHeight=0;
                                         this.showDetail(obj.row)
                                     }
                                 }
-                            },obj.row.bizTypeName);
+                            },obj.row.bizTypeName+'-'+obj.row.billId);
                         }
-                       
                     },
                     {
                         title: '客户名称',
@@ -167,7 +161,7 @@ var layoutScrollHeight=0;
                         }
                     },
                     {
-                        title: '逾期时长(服务开始日起)',
+                        title: '逾期时长(最晚付款日起)',
                         align:'center',
                         width:200,
                         key: 'overdueDays',
@@ -319,7 +313,6 @@ var layoutScrollHeight=0;
         }
     }
 </script>
-
 <style lang="less">
 .vertical-center-modal{
         display: flex;

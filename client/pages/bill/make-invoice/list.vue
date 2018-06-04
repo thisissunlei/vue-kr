@@ -184,7 +184,8 @@ import dateUtils from 'vue-dateutils';
 
             },
             openSure(item){
-                this.showSure = !this.showSure
+                this.makeInvaice()
+                // this.showSure = !this.showSure
             },
             sureSubmit(){
 

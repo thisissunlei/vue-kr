@@ -145,13 +145,23 @@
                 <div style="white-space: nowrap;">
                     <div style="display:inline-block;width:850px;">
                        <Form-item v-if="type=='alreadyReceive'" label="领取人员" class='daily-form' prop="invoiceTitle">
-                            <i-input 
+                            <!-- <i-input 
                                 v-model="formItem.receiverName" 
                                 placeholder="请输入领取人员"
                                 style="width: 200px"
                                 @on-blur="receiveBlur"
                                 @keyup.enter.native="onKeyEnter($event)"
-                            />
+                            /> -->
+                            <Select
+                                v-model="receiverName"
+                                filterable
+                                remote
+                                :placeholder="formItem.receiverName"
+                                :label-in-value="labelValue"
+                                :remote-method="remoteFun"
+                                @on-change="receiveBlur">
+                                <Option v-for="(option, index) in receiverOptions" :value="option.uid" :key="option.name">{{option.name}}</Option>
+                            </Select>
                         </Form-item>
                         <Form-item v-if="type =='waitReturn'"   label="收回状态" class='daily-form'> 
                             <Select 
@@ -218,6 +228,9 @@ export default {
             };
 
             return { 
+                receiverName:'',
+                labelValue:true,
+                receiverOptions:[],
                 loading:false, 
                 params:{},
                 formItem:{
@@ -342,6 +355,37 @@ export default {
         
     },
     methods:{
+         remoteFun (query) {
+                if (query !== '') {
+                    this.loading1 = true;
+                    setTimeout(() => {
+                        this.getRecList(query)
+                    }, 200);
+                }
+
+            },
+        getRecList:function(name){
+                let params = {
+                    name:name
+                }
+                let list = [];
+                let _this = this;
+                this.$http.get('changeUserByName', params, r => {
+                    // list = r.data.slice(0,10);
+                    list = r.data;
+                    list.map((item)=>{
+                        let obj = item;
+                        obj.uid = item.uid+'';
+                        return obj;
+                    });
+                    _this.loading1 = false;
+                    _this.receiverOptions = list;
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {
@@ -450,15 +494,12 @@ export default {
         changeInvoiceStatus(val){
             this.formItem.invoiceStatusList = 'TO_RETURN,'+val
         },
-        receiveBlur(){
-            if(this.formItem.receiverName){
-                this.getReceiverId(this.formItem.receiverName)
+        receiveBlur(value){
+            if(value){
+                this.formItem.receiverName = value.label;
+                this.formItem.receiverId = value.value;
             }
-            console.log('=====',this.formItem.receiverId)
         },
-        getReceiverId(value){
-            
-        }
     }
 }
 </script>

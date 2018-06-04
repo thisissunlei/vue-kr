@@ -18,7 +18,7 @@ export default  {
     //财务端-资质驳回
      'get-financial-invoice-rejected': {
       url: '/api/order/csr-invoice-qualification/handle',
-      method: 'post'
+      method: 'put'
     },
 }
   

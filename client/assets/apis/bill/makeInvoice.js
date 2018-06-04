@@ -45,6 +45,11 @@ export default  {
       url: '/api/order/csr-invoice/op/sign',
       method: 'put'
     },
+    //认领人
+    'changeUserByName': {
+      url: '/api/order/csr-invoice/getUserByName',
+      method: 'get'
+    },
    
    
 }

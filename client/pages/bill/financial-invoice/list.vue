@@ -19,6 +19,19 @@
                 ></Page>
             </div>
         </div>
+        <Modal
+                v-model="openReject"
+                title="驳回理由"
+                width="500"
+            >
+            <div  v-if="openReject">
+                <span style="height:30px;display:inline-block;">驳回理由:</span><Input v-model="rejectReason" type="textarea" :rows="4" placeholder="请输入驳回理由" />
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="modifySubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="cancel">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -52,6 +65,9 @@ import dateUtils from 'vue-dateutils';
                     verifyStatus:this.type,
 
                 },
+                rejectReason:'',
+                editItem:{},
+                openReject:false,
            }
         },
          
@@ -59,7 +75,6 @@ import dateUtils from 'vue-dateutils';
             var params=Object.assign({},this.tableParams,this.searchForm);
             this.tableParams=params; 
             this.getListData();
-            console.log('list====>')
             //utils.addParams(this.params);
         },
         
@@ -109,6 +124,13 @@ import dateUtils from 'vue-dateutils';
                 params.cEndTime=this.dateSwitch(params.cEndTime);
                 this.$http.get('get-financial-invoice-list', params).then((res)=>{
                         this.isLoading = false;
+                        let pages = {
+                            page:res.data.page,
+                            totalCount:res.data.totalCount,
+                            totalPages:res.data.totalPages,
+                            pageSize:15
+                        }
+                        this.tableParams = Object.assign({},pages)
                         this.listData=res.data.items;
                      
                 }).catch((err)=>{
@@ -130,10 +152,41 @@ import dateUtils from 'vue-dateutils';
                 return arr;
             },
             makeSure(item){
-
+                let params = {
+                    handleType:'affirm',
+                    id :item.id,
+                    rejectReason:'' 
+                }
+                this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                        this.isLoading = false;
+                        this.getListData()
+                     
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             cancel(item){
-                
+                this.editItem = item;
+                this.openReject = !this.openReject;
+            },
+            modifySubmit(){
+                let params = {
+                    handleType:'reject',
+                    id :this.editItem.id,
+                    rejectReason:this.rejectReason
+                }
+                this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                        this.isLoading = false;
+                        this.getListData()
+                        this.openReject = !this.openReject;
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+
             }
         }
     }

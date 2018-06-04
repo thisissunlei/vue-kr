@@ -25,8 +25,8 @@
                 title="修改金额"
                 width="500"
             >
-            <div >
-                 <span>实际退回金额:</span><Input  placeholder="实际退回金额" v-model="changeMoney" />
+            <div v-if="openModify">
+                 <span>实际退回金额:</span><Input  placeholder="实际退回金额" v-model="changeMoney" style="width:200px" />
             </div>
             <div slot="footer">
                 <Button type="primary" @click="modifySubmit">确定</Button>
@@ -39,7 +39,7 @@
                 title="邮寄信息"
                 width="500"
             >
-            <div style="text-align:center">
+            <div style="text-align:center" v-if="openPost">
                 <Select 
                   v-model="expressCompany" 
                   placeholder="请选择邮寄方式" 
@@ -53,13 +53,19 @@
                   {{ item.name }}
                   </Option>
                 </Select>
-                <Input  placeholder="邮寄地址" v-model="postNum" style="width:300px"/>
+                <Input  placeholder="邮寄单号" v-model="postNum" style="width:300px"/>
             </div>
             <div slot="footer">
                 <Button type="primary" @click="postSubmit">确定</Button>
                 <Button type="ghost" style="margin-left: 8px" @click="mailClick">取消</Button>
             </div>
         </Modal>
+        <Message 
+                :type="MessageType" 
+                :openMessage="openMessage"
+                :warn="warn"
+                @changeOpen="onMessageChange"
+            />
      
     </div>
 </template>
@@ -70,6 +76,8 @@
     import KrTd from '~/components/KrTd';
     import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
+    import Message from '~/components/Message';
+
 
 
     export default {
@@ -96,13 +104,45 @@ import dateUtils from 'vue-dateutils';
                     invoiceStatusList:''
                 },
                 editItem:{},
-                postList:[{
-                  id:'1',
-                  name:'000'
-                }],
+                postList:[
+                  {
+                    id:'SHUNFENG',
+                    name:'顺风快递'
+                  },
+                  {
+                    id:'YUANTONG',
+                    name:'圆通快递'
+                  },
+                  {
+                    id:'SHENTONG',
+                    name:'申通快递'
+                  },
+                  {
+                    id:'ZHONGTONG',
+                    name:'中通快递'
+                  },
+                  {
+                    id:'YUNDA',
+                    name:'韵达快递'
+                  },
+                  {
+                    id:'BAISHI',
+                    name:'百世快递'
+                  },
+                  {
+                    id:'TIANTIAN',
+                    name:'天天快递'
+                  },
+                ],
                 expressCompany:'',
                 postNum:'',
+                openMessage:false,
+                MessageType:'',
+                warn:''
            }
+        },
+         components:{
+            Message,
         },
         mounted(){
            var status=[];
@@ -134,6 +174,9 @@ import dateUtils from 'vue-dateutils';
            this.getListData();
         },
         methods:{
+           onMessageChange(data){
+                this.openMessage=data;
+            },
             //修改弹窗开关
             modifyClick(item){
               this.editItem = item;
@@ -145,12 +188,15 @@ import dateUtils from 'vue-dateutils';
                 return 
               }
               tabParams = {
-                id:item.id,
+                id:this.editItem.id,
                 postNum:this.postNum,
                 expressCompany:this.expressCompany
               }
                 this.$http.put('change-modify-post', tabParams).then((res)=>{
                     // this.listData=res.data.items;
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='邮寄成功';
                     this.getListData();
                 }).catch((err)=>{
                   console.log('====',err)
@@ -165,12 +211,22 @@ import dateUtils from 'vue-dateutils';
               if(!this.changeMoney){
                 return 
               }
+              if(isNaN(this.changeMoney)){
+                  this.$Notice.error({
+                        title:'金额请填写数字'
+                    });
+                return
+              }
+              console.log('修改提交====',isNaN(this.changeMoney))
               tabParams = {
                 id:this.editItem.id,
                 amount:this.changeMoney
               }
                 this.$http.put('change-modify-amount', tabParams).then((res)=>{
                     // this.listData=res.data.items;
+                    this.openMessage=true;
+                    this.MessageType="success";
+                    this.warn='修改成功';
                     this.getListData();
                 }).catch((err)=>{
                   console.log('====',err)
@@ -194,6 +250,7 @@ import dateUtils from 'vue-dateutils';
             //邮寄按钮点击
             mailClick(item){
               this.openPost = !this.openPost;
+              this.editItem = item;
 
             },
             //跳转查看页面

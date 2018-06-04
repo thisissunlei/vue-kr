@@ -705,8 +705,8 @@
                 menuItems: [
                     // {
                     //     primaryText: '社区主页',
-                    //     router: 'community/operation/index',
-                    //     // type:'vue',
+                    //     router: 'operation/community',
+                    //     type:'vue',
                     //     menuCode: 'operation_home',
                     // },
                     {

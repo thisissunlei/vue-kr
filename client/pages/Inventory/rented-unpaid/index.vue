@@ -97,9 +97,9 @@ var layoutScrollHeight=0;
                                         this.showDetail(obj.row)
                                     }
                                 }
-                            },obj.row.bizTypeName);
+                            },obj.row.bizTypeName+'-'+obj.row.billId);
                         }
-                       
+
                     },
                     {
                         title: '客户名称',

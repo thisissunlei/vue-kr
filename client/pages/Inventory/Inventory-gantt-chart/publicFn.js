@@ -164,7 +164,7 @@ function getLabelColor(taskStatus) {
     } else if(taskStatus === 'AVAILABLE'){
         return '#BCE590';
     } else if(taskStatus === 'OFF'){
-        return '#BCE590';
+        return '#E4E4E4';
     } 
 }
 function timeToStr(time) {

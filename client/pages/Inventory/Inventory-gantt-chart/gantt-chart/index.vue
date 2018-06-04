@@ -336,11 +336,11 @@ export default {
                 },
                 {
                     title:'不可用',
-                    color:"#E4E4E4"
+                    color:"#bfc4cf"
                 },
                 {
                     title:'下架',
-                    color:"#ccc"
+                    color:"#E4E4E4"
                 }
             ],
             leftPic:false,

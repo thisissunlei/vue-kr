@@ -97,11 +97,11 @@ export default {
         getBackground(){
             var status=this.data.status;
             if(status=='DISABLE'){
-                return '#E4E4E4';
+                return '#bfc4cf';
             }else if(status=='AVAILABLE'&&!this.data.startDate&&!this.data.endDate){
                 return '#BCE590';
             }else if(status=='OFF'&&!this.data.startDate&&!this.data.endDate){
-                return '#ccc';
+                return '#E4E4E4';
             }
         },
         toolOver(event,param){

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# npm run build
+npm run build
 
 build_dir=kr-vue
 echo $1

@@ -10,7 +10,7 @@
             this.toolOut(event,'2')
         })"
     >
-        <!-- <div class="tag" :style="{width: todayDetail.width+ 'px',left:todayDetail.left+'px'}"></div> -->
+       
         <div class="article"
         >
             <div
@@ -100,6 +100,8 @@ export default {
                 return '#E4E4E4';
             }else if(status=='AVAILABLE'&&!this.data.startDate&&!this.data.endDate){
                 return '#BCE590';
+            }else if(status=='OFF'&&!this.data.startDate&&!this.data.endDate){
+                return '#ccc';
             }
         },
         toolOver(event,param){
@@ -127,54 +129,15 @@ export default {
             if(!data.startDate&&!data.endDate){
                 return ;
             }  
-            
-            var dates = publicFn.getAllMaxAndMin(data);
             var boxDetail={};
-
             var planStart = data.startDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.startDate)):this.start;
             var planEnd = data.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.endDate)):this.end;
-            
-            /*var actualStart = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualStartTime));
-            var actualEnd = dateUtils.dateToStr("YYYY-MM-DD",new Date(+data.actualEndTime));
-            var max = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.max));
-            var min = dateUtils.dateToStr("YYYY-MM-DD",new Date(dates.min));*/
             var officeStart = this.leftEndpoint.year+"-"+this.leftEndpoint.month+"-"+this.leftEndpoint.start;
-            //var officeEnd = min;
-            
-            
-            // this.boxDetail={
-            //     width:utils.dateDiff(startDate,endDate)+1,
-            //     office:utils.dateDiff(officeStart,startDate)
-            // }
-           
+          
             this.planDetail={
                 width:utils.dateDiff(planStart,planEnd)+1,
                 office:utils.dateDiff(officeStart,planStart)
             };
-            
-            /*this.actualDetail={
-                width:utils.dateDiff(actualStart,actualEnd)+1,
-                office:utils.dateDiff(min,actualStart)
-            }
-            //  console.log(officeStart,min,"pppp",this.planDetail)
-            var lineOffice = 0;
-            var lineWidth = 0;
-            if(data.planEndTime<data.actualStartTime){
-                lineOffice = this.planDetail.width+this.planDetail.office;
-                lineWidth = this.actualDetail.office - this.planDetail.office-this.planDetail.width;
-            }
-            if(data.actualEndTime<data.planStartTime){
-                lineOffice = this.actualDetail.width+this.actualDetail.office;
-                lineWidth = this.planDetail.office - this.actualDetail.office-this.actualDetail.width;
-            }
-            if(!data.actualEndTime || !data.actualStartTime){
-                lineOffice = this.planDetail.office;
-                lineWidth = this.planDetail.width;
-            }
-            this.lineDetail = {
-                width:lineWidth,
-                office:lineOffice
-            }*/
 
        },
 

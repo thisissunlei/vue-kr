@@ -12,6 +12,7 @@
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
             @nextTurnPage="nextTurnPage"
+            @sortChange="sortChange"
             :head="head"
             :left="left"
             :width="width"
@@ -137,13 +138,6 @@ export default {
         this.commonParams('today');
         this.leftOver();
         this.rightOver();
-        //GLOBALSIDESWITCH("false");
-        // setTimeout(() => {
-        //       publicFn.windowResize();
-        // }, 400);
-        // window.onresize=function(){
-        //     publicFn.windowResize();
-        // }
     },
     watch:{
         tabForms:function(val){
@@ -161,6 +155,10 @@ export default {
         window.removeEventListener('resize',this.onResize);  
     },
     methods:{
+        //排序
+        sortChange(param){
+           this.commonParams();
+        },
         //窗口
         onResize(){
             this.onScrollListener();
@@ -327,34 +325,17 @@ export default {
             }
             this.params.lineStartDate=yearRender+'-'+monthRender+'-'+1;
             this.params.lineEndDate=this.getEndDay(11,this.params.lineStartDate);
-            console.log('123',this.params.lineStartDate,this.params.lineEndDate);
             this.fixLeftRight('next');
         },
         //获取进度列表数据
         getListData(params,type){
             var url=this.identify=='daily'?'getDailyTimeLine':'getOptionalTimeLine';
-            /*if(allPage<params.page){
-                return;
-            }*/
             this.isLoading = true;
             var data = Object.assign({},params);
-            /*var startTime = data.startTime.split(" ")[0]+' 00:00:00';
-            var endTime = data.endTime.split(" ")[0]+' 00:00:00';
-            data.startTime = '';
-            data.endTime = '';*/
             this.$http.get(url,data).then((response)=>{
                 this.listData=response.data.items;
-                /*if(response.data.hasTime){
-                    this.minDay = this.getTimeToDay(response.data.firstStartTime);
-                    this.maxDay =  this.getTimeToDay(response.data.lastEndTime);
-                    this.params.startTime = publicFn.compareTime(this.params.startTime,response.data.firstStartTime);
-                    var endObj = this.monthAdd(response.data.lastEndTime);
-                    this.params.endTime=publicFn.compareEndTime(this.params.endTime,endObj.year+'-'+endObj.month+'-'+endObj.day);
-                }*/
                 this.totalCount=response.data.totalCount;
-                //allPage = totalPages==0?1:totalPages;
                 this.isLoading = false;
-               // this.params.page = response.data.page+1;
             }).catch((error)=>{
                 this.$Notice.error({
                    title: error.message,

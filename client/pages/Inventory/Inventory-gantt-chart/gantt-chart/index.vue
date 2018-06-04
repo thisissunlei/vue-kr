@@ -5,12 +5,23 @@
         <div class='chart-inventory-wrap'>
 
                 <div class="hander" >
+                    <!-- 新排序选择 -->
+                    <div style="display:inline-block;">
+                        <Select
+                            v-model="sortType"
+                            @on-change="sortChange"
+                            style="width:170px;margin-right:20px;text-align:left;color:#666;"
+                        >
+                            <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </div>
+
                     <!-- 刻度选择 -->
                     <div style="display:inline-block;">
                         <Select
                             v-model="barType"
                             @on-change="selectChange"
-                            style="width:220px;margin-right:20px;text-align:left;color:#666;"
+                            style="width:140px;margin-right:20px;text-align:left;color:#666;"
                         >
                             <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
@@ -270,7 +281,7 @@ export default {
             //所有周的数组数据
             weeks:[],
             //最小刻度的大小
-            minCalibration:20,
+            minCalibration:4,
             //原点数据
             leftEndpoint:{},
             //刻度的下拉选择项
@@ -288,8 +299,20 @@ export default {
                     label: '按天展示时间轴'
                 }
             ],
+            //排序下拉
+            sortList:[
+                {
+                    value: 'default',
+                    label: '默认排序'
+                },
+                {
+                    value: 'relationship',
+                    label: '按房间工位关联排序'
+                }
+            ],
+            sortType:'default',
             //下拉的默认值
-            barType: 'week',
+            barType: 'month',
             isLoading:true,
             scrollWidth:0,
             tagToLeft:0,
@@ -314,6 +337,10 @@ export default {
                 {
                     title:'不可用',
                     color:"#E4E4E4"
+                },
+                {
+                    title:'下架',
+                    color:"#ccc"
                 }
             ],
             leftPic:false,
@@ -329,6 +356,9 @@ export default {
         }, 100);
     },
     methods:{
+        sortChange(value){
+            this.$emit('sortChange',value); 
+        },
         scroolFix(data){
             var _this=this;
             var offerLeft = 0;
@@ -1149,8 +1179,9 @@ export default {
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;
-
-
+        }
+        .month-bar{
+            background: #FAFCFF;
         }
         .year-bar{
             background: #fff;

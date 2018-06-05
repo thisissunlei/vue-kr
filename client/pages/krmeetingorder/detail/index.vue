@@ -9,13 +9,13 @@
                         <dt>订单编号：</dt><dd>{{detail.orderNo}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单生成时间：</dt><dd>{{detail.ctime}}</dd>
+                        <dt>订单生成时间：</dt><dd>{{this.returnCtime(detail.ctime)}}</dd>
                     </dl>
                      <dl>
-                        <dt>订单金额：</dt><dd>{{detail.cost}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{detail.cost}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单状态：</dt><dd>{{detail.orderStatus}}</dd>
+                        <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderStatus)}}</dd>
                     </dl>
                     <dl>
                         <dt>下单会员ID：</dt><dd>{{detail.uid}}</dd>
@@ -36,10 +36,10 @@
                         <dt>会议室所在社区：</dt><dd>{{detail.communityName}}</dd>
                     </dl>
                      <dl>
-                        <dt>预订日期：</dt><dd>{{detail.meetingTime}}</dd>
+                        <dt>预订日期：</dt><dd>{{detail.meetingDay}}</dd>
                     </dl>
                     <dl>
-                        <dt>预订时段：</dt><dd>{{detail.orderStatus}}</dd>
+                        <dt>预订时段：</dt><dd>{{detail.meetingHour}}</dd>
                     </dl>
                     <dl>
                         <dt>会议主题：</dt><dd>{{detail.theme}}</dd>
@@ -48,7 +48,7 @@
                         <dt>联系电话：</dt><dd>{{detail.phone}}</dd>
                     </dl>
                     <dl>
-                        <dt>会议提醒：</dt><dd>{{detail.alertTime}}</dd>
+                        <dt>会议提醒：</dt><dd>{{this.returnMeetingRemind(detail.alertTime)}}</dd>
                     </dl>
                     
                 </div>
@@ -63,11 +63,11 @@
                 <SectionTitle title="参会人信息"></SectionTitle>
                 <div class="">
                     <div class="arrival-list-box">
-                        <h1 class="list-title">已到场（{{notarrivalList.length}}）</h1>
+                        <h1 class="list-title">已到场（{{arrivalList.length}}）</h1>
                         <ul class="list-ul first-ul">
-                            <template v-for="item in notarrivalList">
+                            <template v-for="item in arrivalList">
                                 <li class="list-li">
-                                    <img v-bind:src="item.wechatAvatar" class="head-img"/>
+                                    <img v-bind:src="item.wechatAvatar " class="head-img"/>
                                     <span class="person-name">{{ item.wechatNick }}</span>
                                 </li>
                             </template>
@@ -93,6 +93,7 @@
 <script>
 
 import SectionTitle from '~/components/SectionTitle';
+import dateUtils from 'vue-dateutils';
 
 export default {
    name:'krmeetingdetail',
@@ -103,111 +104,10 @@ export default {
     },
    data(){
        return {
+           arrivalCount : 0,
+           meetingStatusOptions :[],
            arrivalList:[],
-           notarrivalList : [
-               {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-                {arrving:false,
-               notArrving:true,
-                sponsor:true,
-                wechatAvatar:"https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJCJy1sNYg19STAVNCibpcJEQDfKVL4r4EzBlEmQP6b1hvlrx3zKiaFxBFXP46lF5a4PuQoJyzoOMQA/132",
-                wechatId:8195,
-                wechatNick:"耿耿于誰."},
-           ],
+           notarrivalList : [],
            detail : {},
            orderAboutMoney : [],
            tilteAndStyle:[
@@ -226,14 +126,23 @@ export default {
                     {
                         title: '订单金额（￥）',
                         key: 'totalAmount'
-                    }]
+                    }],
+           alertTimeOptions : [
+               {
+                   label:"不提醒",value:"NOALERT"
+               },{
+                   label:"会议开始前5分钟",value:"FIVE"
+               },{
+                   label:"会议开始前15分钟",value:"FIFTEEN"
+               }
+           ]
        }
    },
    components:{
        SectionTitle
    },
    mounted(){
-       
+       this.getkrmeetingStatus();
        this.getDetailInfo();
         
       
@@ -243,23 +152,71 @@ export default {
            let _this =this;
             var params = {orderId :this.$route.query.orderId };
             this.$http.get('get-kr-meeting-detail', params).then((res)=>{
-                this.detail = res.data;
+
                 var resData = res.data;
-                console.log("resData",resData)
                 _this.orderAboutMoney = [{
                     unitCost : resData.unitCost,
                     promotionCost : resData.promotionCost,
                     cost : resData.cost,
                     totalAmount : resData.totalAmount,
                 }]
-                this.arrivalList = resData.arrvingList || [];
-                // this.notarrivalList = resData.notArrvingList || [];
+
+                this.detail = res.data;
+                this.notarrivalList = resData.notArrvingList || [];
+                this.arrivalCount =  resData.arrvingCount;
+                
+                this.changeArrivalList(resData);
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
                 });
             })
-       }
+       },
+       changeArrivalList(resData){
+
+           if(resData.arrvingCount >resData.arrvingList.length){
+               var newArrivalList = resData.arrvingList;
+               newArrivalList.length = resData.arrvingCount;
+               this.arrivalList = newArrivalList;
+               return;
+           }
+           this.arrivalList = resData.arrvingList || [];
+       },
+       returnMeetingStatus(param){
+
+           let _this=this;
+            console.log("meetingStatusOptions",_this.meetingStatusOptions);
+            for(var i=0;i<_this.meetingStatusOptions.length;i++){
+                if(param==_this.meetingStatusOptions[i].name){
+                    return _this.meetingStatusOptions[i].desc
+                }
+            }
+       },
+        getkrmeetingStatus(){
+            
+            this.$http.get('getkrmeetingstatus','').then((res)=>{
+
+                var resultItems = res.data.status;
+                this.meetingStatusOptions = resultItems;
+                
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+
+        returnCtime(param){
+            var ctimeParse = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param))||"";
+            return ctimeParse;
+        },
+        returnMeetingRemind(param){
+            for(var i=0;i<this.alertTimeOptions.length;i++){
+                if(param ==this.alertTimeOptions[i].value){
+                    return this.alertTimeOptions[i].label
+                }
+            }
+        }
     }
  }
 </script>
@@ -269,13 +226,14 @@ export default {
     }
     .basic-info{
         height: 120px;
-        background: #e6f3fe;
+        background: #f6f6f6;
         border-radius: 6px;
         margin-top: 20px;
     }
     .content-box dl{
         float:left;
         width:30%;
+        height:30px;
     }
     .content-box dt{
         
@@ -291,7 +249,7 @@ export default {
         height:170px;
     }
     .order-info{
-        height: 135px;
+        height: 150px;
     }
     .list-li{
         display: inline-block;
@@ -319,7 +277,7 @@ export default {
         margin-top:10px;
     }
     .meeting-person-info{
-        background: #e6f3fe;
+        background: #f6f6f6;
         margin-top: 20px;
         border-radius: 6px;
     }
@@ -330,7 +288,7 @@ export default {
         padding: 10px 0 10px 25px;
     }
     .first-ul{
-        border-bottom: solid 1px #ccc;
+        border-bottom: 1px dashed #e9e9e9;
     }
     .kr-meeting-detail{
         padding-bottom: 20px;

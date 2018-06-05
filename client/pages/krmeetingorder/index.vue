@@ -57,7 +57,13 @@ export default {
                     },
                     {
                         title: '订单生成时间',
-                        key: 'ctime'
+                        key: 'ctime',
+                        render: (h, params) => {
+                            return h('div', [
+                               
+                                h('span', this.returnCtime(params.row.ctime))
+                            ]);
+                        }
                     },
                     {
                         title: '订单状态',
@@ -108,9 +114,9 @@ export default {
    },
    methods:{
         submitSearchData(params){
-
-            var beginTime = params.createBeginTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createBeginTime))||"";
-            var endTime = params.createBeginTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createEndTime))||"";
+            console.log("params",params);
+            var beginTime =( params.createBeginTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createBeginTime)))||"";
+            var endTime = (params.createEndTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createEndTime)))||"";
 
             var timeObject ={
                 createBeginTime : beginTime,
@@ -160,10 +166,13 @@ export default {
             })
         },
         onPageChange(page){
-            console.log("page",page);
             var newObj = Object.assign({},this.searchparams,{page:page})
             this.searchparams = newObj;
             this.getListData();
+        },
+        returnCtime(param){
+            var cTime = param && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(param))||"";
+            return cTime
         }
         
     }

@@ -6,7 +6,6 @@
                     v-model="formItem.communityId"
                     style="width:150px"
                     placeholder="请选择社区"
-                    filterable
                     clearable
                     >
                     <Option
@@ -95,7 +94,7 @@ export default {
                    label:'订单编号',
                    value:'ORDER'
                }
-           ],
+           ]
        }
    },
    props:[
@@ -132,6 +131,17 @@ export default {
             this.formItem = newObj;
         },
         submitSearchData(){
+            console.log("this.formItem",this.formItem,this.formItem.createBeginTime,this.formItem.createEndTime)
+            let _this =this;
+            var beginTime =new Date(_this.formItem.createBeginTime).getTime();
+            var endTime =new Date(_this.formItem.createEndTime).getTime();
+            if(beginTime && endTime && beginTime>endTime){
+                this.$Notice.warning({
+                    title: '订单生成开始时间不能大于结束时间',
+                    desc: true ? '' : '订单生成开始时间不能大于结束时间'
+                });
+                return;
+            }
             this.$emit("submitSearchData",this.formItem);
         },
         dataChanged(){

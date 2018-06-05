@@ -114,7 +114,6 @@ export default {
    },
    methods:{
         submitSearchData(params){
-            console.log("params",params);
             var beginTime =( params.createBeginTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createBeginTime)))||"";
             var endTime = (params.createEndTime && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss", new Date(params.createEndTime)))||"";
 
@@ -128,7 +127,6 @@ export default {
 
         },
         toDetail(params){
-            console.log("params-",params,params.row);
             window.open(`/krmeetingorder/detail?orderId=${params.row.orderId}`,'_blank');
         },
         getListData(){

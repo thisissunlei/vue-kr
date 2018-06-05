@@ -1165,6 +1165,12 @@
                         menuCode: 'fina_meeting_order_page'
                     },
                     {
+                        primaryText: "会议室订单",
+                        router: 'krmeetingorder',
+                        type: 'vue',
+                        menuCode: 'krm_order_base'
+                    },
+                    {
                         primaryText: "通用订单",
                         router: 'order-center/order-manage/general-order-manage',
                         type: 'vue',

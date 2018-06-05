@@ -131,7 +131,6 @@ export default {
             this.formItem = newObj;
         },
         submitSearchData(){
-            console.log("this.formItem",this.formItem,this.formItem.createBeginTime,this.formItem.createEndTime)
             let _this =this;
             var beginTime =new Date(_this.formItem.createBeginTime).getTime();
             var endTime =new Date(_this.formItem.createEndTime).getTime();

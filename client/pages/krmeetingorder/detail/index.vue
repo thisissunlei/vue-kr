@@ -63,12 +63,13 @@
                 <SectionTitle title="参会人信息"></SectionTitle>
                 <div class="">
                     <div class="arrival-list-box">
-                        <h1 class="list-title">已到场（{{arrivalList.length}}）</h1>
+                        <h1 class="list-title">已到场（{{arrivalCount}}）</h1>
                         <ul class="list-ul first-ul">
                             <template v-for="item in arrivalList">
                                 <li class="list-li">
-                                    <img v-bind:src="item.wechatAvatar " class="head-img"/>
-                                    <span class="person-name">{{ item.wechatNick }}</span>
+                                    <img v-if="item" v-bind:src="item &&item.wechatAvatar" class="head-img"/>
+                                    <img  src="./images/visitor.png" class="head-img"/>
+                                    <span class="person-name">{{ (item && item.wechatNick) || "嘉宾" }}</span>
                                 </li>
                             </template>
                         </ul>
@@ -164,6 +165,8 @@ export default {
                 this.detail = res.data;
                 this.notarrivalList = resData.notArrvingList || [];
                 this.arrivalCount =  resData.arrvingCount;
+
+                // this.arrivalCount = 9;
                 
                 this.changeArrivalList(resData);
             }).catch((err)=>{
@@ -173,10 +176,11 @@ export default {
             })
        },
        changeArrivalList(resData){
+           var arrivalListLength = (resData.arrvingList && resData.arrvingList.length) || 0;
+           if(this.arrivalCount >resData.arrvingList.length){
 
-           if(resData.arrvingCount >resData.arrvingList.length){
                var newArrivalList = resData.arrvingList;
-               newArrivalList.length = resData.arrvingCount;
+               newArrivalList.length = this.arrivalCount;
                this.arrivalList = newArrivalList;
                return;
            }
@@ -185,7 +189,6 @@ export default {
        returnMeetingStatus(param){
 
            let _this=this;
-            console.log("meetingStatusOptions",_this.meetingStatusOptions);
             for(var i=0;i<_this.meetingStatusOptions.length;i++){
                 if(param==_this.meetingStatusOptions[i].name){
                     return _this.meetingStatusOptions[i].desc

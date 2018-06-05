@@ -4,8 +4,10 @@
             :columns="listColumns" 
             :data="listData"
             border
-        ></Table>
-         <div style="margin: 10px;overflow: hidden">
+        >
+            
+        </Table>
+     <div style="margin: 10px;overflow: hidden">
             <!-- <Button type="primary" @click="onExport">导出</Button> -->
             <div style="float: right;">
                 <Page 
@@ -24,24 +26,25 @@
                 title="提示信息"
                 width="500"
             >
-            <div style="text-align:center;">
+            <div style="text-align:left;border:1px dashed #dddada;">
                 <div v-for="(item,index) in invoiceData" :key="index">
-                    <div  style="margin:10px 0px; text-align: left;width:350px;margin-left:50px;">  
-                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:30px;" placeholder="请输入发票编号" />  
+                    <div  style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">  
+                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-right:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  
                     </div>
-                    <div style="margin:10px 0px; text-align: left;width:350px;margin-left:50px;">
+                    <div style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">
                         <span>上传文件:</span>
                         <krUpload 
-                        style="margin-left:30px;"
                             :file="[]"
                             type="only"
-                            :columnDetail="{}"
+                            :columnDetail="item.slogn"
                             :multiple="false"
                             @upSuccess="upSuccess"
                         />
                     </div>
+                    <Button type="primary"  style="margin-right: 20px;float:right;margin-top:-45px;" @click="deleteData(index)" v-if="invoiceData.length>1">删除</Button>
+
                 </div>
-                
+                <Button type="primary" :disabled="addSubmit" style="margin-left: 20px;" @click="addData">添加</Button>
                 
             </div>
             <div slot="footer">
@@ -104,6 +107,9 @@ import dateUtils from 'vue-dateutils';
         },
         data () {
             return {
+                addSubmit:true,
+                changeData:new Date(),
+                editItem:{},
                 number:true,
                 piaoNumber:null,
                 showSure:false,
@@ -127,6 +133,10 @@ import dateUtils from 'vue-dateutils';
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
+                        slogn:{
+                            index:0
+                        },
+                        disabled:true
                     }
                 ]
 
@@ -165,6 +175,17 @@ import dateUtils from 'vue-dateutils';
            this.tableParams=params; 
            this.getListData();
         },
+        watch:{
+            changeData(val){ 
+                let disabled = false;
+                this.invoiceData.map(item=>{
+                    if(!item.fileId || !item.invoiceNum){
+                        disabled = true;
+                    }
+                })
+                this.addSubmit = disabled;
+            }
+        },
 
         methods:{
             //跳转创建页面
@@ -172,19 +193,36 @@ import dateUtils from 'vue-dateutils';
                  window.open(`/bill/make-invoice/${params.id}/add-invoice?id=${params.id}&isReady=edit`);
             },
             //上传成功
-            upSuccess(params){
-                let arr = [].concat(this.invoiceData);
-                arr[arr.length-1] = params[0].fileId;
-                arr.push( {
+            upSuccess(params,columnDetail){
+                console.log(params,'上传成功',columnDetail)
+                let index = columnDetail.index;
+                this.invoiceData[index].fileId = params[0].fileId;
+                this.changeData = new Date()
+            },
+            deleteData(index){
+                this.invoiceData.splice(index,1)
+            },
+            addData(){
+                let length = this.invoiceData.length
+                let obj ={
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
-                    });
-                this.invoiceData=[].concat(arr);
+                        slogn:{
+                            index:length
+                        },
+                        disabled:true
+                    };
+                this.invoiceData.push(obj);
+                this.changeData = new Date()
+                console.log('=======',this.invoiceData)
 
             },
+            openpiaozi(index){
+                this.changeData = new Date()
+            },
             openSure(item){
-                this.makeInvaice()
+                this.makeInvaice(item)
                 // this.showSure = !this.showSure
             },
             sureSubmit(){
@@ -218,20 +256,37 @@ import dateUtils from 'vue-dateutils';
                 })
             },
             //开票按钮点击
-            makeInvaice(){  
+            makeInvaice(data){  
                 this.invoiceData = [
                     {
                         fileId:'',
                         invoiceId:'',
                         invoiceNum:'',
+                        slogn:{
+                            index:0
+                        },
+                        disabled:true
                     }
                 ];
-
+                this.editItem = data;
                 this.switchMakeInvaice();
             },
             //开票页面开关
             switchMakeInvaice(){
                 this.openMakeInvaice = !this.openMakeInvaice;
+                if(!this.openMakeInvaice){
+                    this.invoiceData = [
+                        {
+                            fileId:'',
+                            invoiceId:'',
+                            invoiceNum:'',
+                            slogn:{
+                                index:0
+                            },
+                            disabled:true
+                        }
+                    ];
+                }
             },
             //开票提交
             makeInvaiceSubmit(){

@@ -36,17 +36,33 @@ function initListData(){
             title: '发票抬头',
             key: 'invoiceTitle',
             align:'center',
-            type:'waitMake,alreadyMake,returnMake,all'
+            type:'waitMake,alreadyMake,returnMake,all',
+            render:(h,obj)=>{
+                if(obj.row.qualificationVO){
+                    return obj.row.qualificationVO.invoiceTitle
+                }else{
+                    return '-'
+                }
+                 
+            }
         },
         {
             title: '纳税人识别号',
             key: 'taxpayerNumber',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitMake,alreadyMake,all',
+            render:(h,obj)=>{
+                if(obj.row.qualificationVO){
+                    return obj.row.qualificationVO.taxpayerNumber
+                }else{
+                    return '-'
+                }
+                 
+            }
         },
         {
             title: '发票规格',
-            key: 'invoiceType',
+            key: 'invoiceTypeName',
             align:'center',
             type:'waitMake,alreadyMake,returnMake,all'
         },
@@ -59,25 +75,26 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '-';
                 }
 
                 var detailList = [].concat(obj.row.invoiceDetailList)
-                if(detailList.length >1){
-                    for(let i=0;i<detailList.length;i++){
-                        arr.push(h('div', {
-                            style: {
-                                borderBottom:'1px solid #e9eaec',
-                                padding:'8px 10px'
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+                for(let i=0;i<detailList.length;i++){
+                    arr.push(h('div', {
+                        style: {
+                            borderBottom:line,
+                            padding:'8px 10px'
+                        },
+                        on: {
+                            click: () => {
+                                // this.openView()
                             }
-                        }, detailList[i].contentType))
-                    }
-                }else{
-                    arr=h('div', detailList[0].contentTypeName);
+                        }
+                    }, detailList[i].contentTypeName))
                 }
 
-               
-                return h('div',arr , '重开')
+                return h('div',arr , '')
             }
         },
         {
@@ -89,20 +106,22 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '-';
                 }
                 var detailList = [].concat(obj.row.invoiceDetailList)
-                if(detailList.length >1){
-                    for(let i=0;i<detailList.length;i++){
-                        arr.push(h('div', {
-                            style: {
-                                borderBottom:'1px solid #e9eaec',
-                                padding:'8px 10px'
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+                for(let i=0;i<detailList.length;i++){
+                    arr.push(h('div', {
+                        style: {
+                            borderBottom:line,
+                            padding:'8px 10px'
+                        },
+                        on: {
+                            click: () => {
+                                // this.openView()
                             }
-                        }, detailList[i].contentType))
-                    }
-                }else{
-                    arr=h('div', detailList[0].amount);
+                        }
+                    }, detailList[i].amount))
                 }
                 return h('div',arr , '重开')
             }
@@ -159,7 +178,7 @@ function initListData(){
         },
         {
             title: '发票张数',
-            key: 'name',
+            key: 'invoiceCount',
             align:'center',
             type:'invoiceCount'
         },

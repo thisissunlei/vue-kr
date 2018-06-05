@@ -29,7 +29,7 @@
             <div style="text-align:left;border:1px dashed #dddada;">
                 <div v-for="(item,index) in invoiceData" :key="index">
                     <div  style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">  
-                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-right:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  
+                        <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  
                     </div>
                     <div style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">
                         <span>上传文件:</span>
@@ -201,6 +201,7 @@ import dateUtils from 'vue-dateutils';
             },
             deleteData(index){
                 this.invoiceData.splice(index,1)
+                this.changeData = new Date()
             },
             addData(){
                 let length = this.invoiceData.length
@@ -288,14 +289,39 @@ import dateUtils from 'vue-dateutils';
                     ];
                 }
             },
+            checkData(){
+                let result = true;
+                this.invoiceData.map(item=>{
+                    if(!item.fileId || !item.invoiceNum){
+                        result = false;
+                    }
+                });
+                return result;
+            },
             //开票提交
             makeInvaiceSubmit(){
-                let params = [].concat(this.invoiceData);
-                this.$http.post('post-make-invoice', params).then((res)=>{
+                let result = this.checkData()
+                if(!result){
+                    this.$Notice.error({
+                        title:'请填写完整开票信息。'
+                    });
+                    return;
+                }
+                let params = this.invoiceData.map(item=>{
+                    item.invoiceId = this.editItem.id;
+                    return item;
+                });
+
+                let postData = {
+                    ticketList:JSON.stringify(params)
+                }
+                console.log('=====>',postData)
+                this.$http.post('post-new-invoice', postData).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchMakeInvaice();
                 }).catch((err)=>{
+                    console.log('=====',err)
                     this.$Notice.error({
                         title:err.message
                     });

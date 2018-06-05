@@ -10,6 +10,12 @@ export default  {
       url: '/api/order/csr-finance-openTicket',
       method: 'post'
     },
+    //开票接口
+    'post-new-invoice': {
+      url: '/api/order/csr-invoice-openTicket',
+      method: 'post'
+    },
+    
     //发票列表统一接口
     'invoice-list-unified': {
       url: '/api/order/csr-invoice-list',

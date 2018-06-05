@@ -681,7 +681,7 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        // }, 
+                        //}, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
@@ -720,6 +720,7 @@
                         router: 'inventory/enter-field',
                         type:'vue',
                         menuCode: 'imt_putaway_list',
+                        // menuCode: 'vueList',
                     },
                     {
                         primaryText: '已起租未付',

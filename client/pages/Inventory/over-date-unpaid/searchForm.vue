@@ -132,7 +132,7 @@
                         </Form-item>
                     </div>
                     
-                    <Button type="primary" @click="searchClick">搜索</Button>
+                    <Button type="primary" @click="searchClick">搜22索</Button>
                    
                 </div>
 

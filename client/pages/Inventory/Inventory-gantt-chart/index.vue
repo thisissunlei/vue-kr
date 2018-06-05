@@ -12,13 +12,21 @@
             @rightOver="rightOver"
             @lastTurnPage="lastTurnPage"
             @nextTurnPage="nextTurnPage"
-            @sortChange="sortChange"
             :head="head"
             :left="left"
             :width="width"
             :identify="identify"
             :sideBar="sideBar"
         >
+             <div slot="sort" style="display:inline-block;">
+                 <Select
+                    v-model="sortType"
+                    @on-change="sortChange"
+                    style="width:170px;margin-right:20px;text-align:left;color:#666;"
+                >
+                    <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+             </div>
              <div class='chart-inventory-left' slot="leftBar">
                     <div class='chart-left-table'>
                         <div :class="head?'view-table-list table-list-fixed':'view-table-list'">
@@ -118,7 +126,10 @@ export default {
             width:'',
             left:'',
 
-            sideBar:true
+            sideBar:true,
+            //排序下拉
+            sortList:[],
+            sortType:'default'
         }
     },
     mounted(){
@@ -138,6 +149,7 @@ export default {
         this.commonParams('today');
         this.leftOver();
         this.rightOver();
+        this.getSelectData();
     },
     watch:{
         tabForms:function(val){
@@ -155,6 +167,17 @@ export default {
         window.removeEventListener('resize',this.onResize);  
     },
     methods:{
+        getSelectData(){
+            this.$http.get('get-enum-all-data',{
+                enmuKey:'com.krspace.op.api.enums.inventory.OrderType'
+            }).then((response)=>{
+               this.sortList=response.data;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //排序
         sortChange(param){
            this.commonParams();

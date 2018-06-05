@@ -4,18 +4,8 @@
         <!-- 甘特图部分 -->
         <div class='chart-inventory-wrap'>
 
-                <div class="hander" >
-                    <!-- 新排序选择 -->
-                    <div style="display:inline-block;">
-                        <Select
-                            v-model="sortType"
-                            @on-change="sortChange"
-                            style="width:170px;margin-right:20px;text-align:left;color:#666;"
-                        >
-                            <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                    </div>
-
+                <div class="hander" >        
+                    <slot name="sort"></slot>
                     <!-- 刻度选择 -->
                     <div style="display:inline-block;">
                         <Select
@@ -299,18 +289,6 @@ export default {
                     label: '按天展示时间轴'
                 }
             ],
-            //排序下拉
-            sortList:[
-                {
-                    value: 'default',
-                    label: '默认排序'
-                },
-                {
-                    value: 'relationship',
-                    label: '按房间工位关联排序'
-                }
-            ],
-            sortType:'default',
             //下拉的默认值
             barType: 'month',
             isLoading:true,
@@ -356,9 +334,6 @@ export default {
         }, 100);
     },
     methods:{
-        sortChange(value){
-            this.$emit('sortChange',value); 
-        },
         scroolFix(data){
             var _this=this;
             var offerLeft = 0;

@@ -277,39 +277,39 @@ var layoutScrollHeight=0;
                 utils.commonExport(this.tabForms,'/api/krspace-op-web/operation/due/list-excel');
             },
             //滚动监听
-        onScrollListener(){            
-            var dom=document.getElementById('layout-content-main');
-            var headDom=document.getElementById('slot-head-daily-inventory');
-            if(headDom){
-                headDom.style.left=this.left+'px';
-                headDom.style.width=this.width+'px';
-            }
-            if(dom.scrollTop>200){
-                this.theHead=true;
-            }else{
-                this.theHead=false;
-            }
-            if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
-                this.theEnd=true;
-            }
-            if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
-                this.theEnd=false;
-            }
+            onScrollListener(){            
+                var dom=document.getElementById('layout-content-main');
+                var headDom=document.getElementById('slot-head-daily-inventory');
+                if(headDom){
+                    headDom.style.left=this.left+'px';
+                    headDom.style.width=this.width+'px';
+                }
+                if(dom.scrollTop>200){
+                    this.theHead=true;
+                }else{
+                    this.theHead=false;
+                }
+                if(!this.theEnd && (dom.scrollTop + dom.clientHeight >= dom.scrollHeight)){
+                    this.theEnd=true;
+                }
+                if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
+                    this.theEnd=false;
+                }
 
-            layoutScrollHeight=dom.scrollTop;
-            var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
-            if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
-                if(this.tabForms.page==totalPage){
-                    return ;
+                layoutScrollHeight=dom.scrollTop;
+                var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
+                if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
+                    if(this.tabForms.page==totalPage){
+                        return ;
+                    }
+                    if(!this.dailyIndentify.length){
+                        return ;
+                    }
+                    this.spinLoading=true;
+                    this.tabForms.page=Number(this.tabForms.page)+1;
+                    this.getData(this.tabForms);
                 }
-                if(!this.dailyIndentify.length){
-                    return ;
-                }
-                this.spinLoading=true;
-                this.tabForms.page=Number(this.tabForms.page)+1;
-                this.getData(this.tabForms);
-            }
-        },
+            },
         }
     }
 </script>

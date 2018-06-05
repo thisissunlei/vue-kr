@@ -63,7 +63,17 @@ export default  {
     'getInventoryMap': {
         url: '/api/krspace-finance-web/cmt/floor-graph/list',
         method: 'get'
-    }
+    },
+    // 即将进场
+    'getImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list',
+        method: 'post'
+    },
+    // 即将进场导出
+    'excelImtPutawayList': {
+        url: '/api/order/operation/imtPutaway/list-excel',
+        method: 'get'
+    },
     
   }
   

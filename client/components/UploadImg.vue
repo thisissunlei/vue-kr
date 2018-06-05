@@ -107,7 +107,7 @@ export default {
         let originalName='X:original_name';
         let content='Content-Disposition';
         this.data[originalName]=file.name;
-        this.data[content]=`attachment;filename=${file.name}`
+        //this.data[content]=`attachment;filename=${file.name}`
        
     },
     handleSuccess(res,file){

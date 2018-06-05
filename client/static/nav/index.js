@@ -703,24 +703,24 @@
                 iconName: 'icon-operation-home',
                 iconColor: '#79859a',
                 menuItems: [
-                    {
-                        primaryText: '社区主页',
-                        router: 'community/operation/index',
-                        // type:'vue',
-                        menuCode: 'operation_home',
-                    },
+                    // {
+                    //     primaryText: '社区主页',
+                    //     router: 'community/operation/index',
+                    //     // type:'vue',
+                    //     menuCode: 'operation_home',
+                    // },
                     {
                         primaryText: '即将到期',
                         router: 'inventory/over-date',
                         type:'vue',
-                        menuCode: 'operation_home',
+                        menuCode: 'vueList',
                     },
-                    // {
-                    //     primaryText: '即将进场',
-                    //     router: 'inventory/enter-field',
-                    //     type:'vue',
-                    //     menuCode: 'operation_home',
-                    // },
+                    {
+                        primaryText: '即将进场',
+                        router: 'inventory/enter-field',
+                        type:'vue',
+                        menuCode: 'imt_putaway_list',
+                    },
                     {
                         primaryText: '预约参观',
                         menuCode: 'com_sys_visitList_base',

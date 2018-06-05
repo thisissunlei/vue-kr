@@ -22,7 +22,7 @@
                  <Select
                     v-model="orderType"
                     @on-change="sortChange"
-                    style="width:170px;margin-right:20px;text-align:left;color:#666;"
+                    style="width:185px;margin-right:29px;text-align:left;color:#666;"
                 >
                     <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                 </Select>

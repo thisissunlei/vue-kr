@@ -20,11 +20,11 @@
         >
              <div slot="sort" style="display:inline-block;">
                  <Select
-                    v-model="sortType"
+                    v-model="orderType"
                     @on-change="sortChange"
                     style="width:170px;margin-right:20px;text-align:left;color:#666;"
                 >
-                    <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <Option v-for="item in sortList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                 </Select>
              </div>
              <div class='chart-inventory-left' slot="leftBar">
@@ -129,7 +129,7 @@ export default {
             sideBar:true,
             //排序下拉
             sortList:[],
-            sortType:'default'
+            orderType:'DEFAULT'
         }
     },
     mounted(){
@@ -146,14 +146,17 @@ export default {
         LISTENSIDEBAROPEN(function (params) {
             _this.sideBar=params;
         })
+
+        this.params.orderType=this.orderType;
         this.commonParams('today');
+
         this.leftOver();
         this.rightOver();
         this.getSelectData();
     },
     watch:{
         tabForms:function(val){
-            this.params=Object.assign({},this.paramsSwitch()); 
+            this.params=Object.assign({},this.paramsSwitch(),{orderType:this.orderType}); 
             this.endPosition='today';
             this.commonParams('today');
         },
@@ -180,6 +183,7 @@ export default {
         },
         //排序
         sortChange(param){
+           this.params.orderType=this.orderType;
            this.commonParams();
         },
         //窗口

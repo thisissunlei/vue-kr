@@ -185,7 +185,8 @@ export default {
         position: relative;
         background: transparent;
         height: 30px;
-        top: -1px;
+        //top: -1px;
+        top:0;
         width: 100%;
         .line{
             border-bottom:1px dashed #E9F0F6;

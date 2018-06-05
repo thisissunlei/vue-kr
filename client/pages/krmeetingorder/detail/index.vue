@@ -143,6 +143,7 @@ export default {
        SectionTitle
    },
    mounted(){
+       GLOBALSIDESWITCH('false');
        this.getkrmeetingStatus();
        this.getDetailInfo();
         
@@ -235,7 +236,7 @@ export default {
     }
     .content-box dl{
         float:left;
-        width:30%;
+        width:33%;
         height:30px;
     }
     .content-box dt{

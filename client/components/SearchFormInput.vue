@@ -290,7 +290,7 @@ export default {
 .renderFilter{
 	width: 310px;
 	.filter-show-form{
-		width: 265px;
+		width: 308px;
 		visibility: visible;
 		.search-filter,.search-val,.search-content{
 			width: auto;
@@ -299,7 +299,7 @@ export default {
 			width: 100%;
 		}
 		.search-content{
-			width: 150px;
+			width: 207px;
 		}
 		.filter-container{
 			width:100px;

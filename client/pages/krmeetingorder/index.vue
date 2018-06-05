@@ -182,5 +182,6 @@ export default {
     }
     .page-part{
         margin-top:10px;
+        text-align: right;
     }
 </style>

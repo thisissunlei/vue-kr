@@ -255,7 +255,7 @@ import dateUtils from 'vue-dateutils';
             },
             //跳转查看页面
             goView(data){
-              
+              window.open(`/publicPage/make-invoice/${data.id}/view-invoice`,data.id);
 
             },
             //回收按钮点击

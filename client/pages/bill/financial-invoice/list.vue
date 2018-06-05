@@ -83,6 +83,9 @@ import dateUtils from 'vue-dateutils';
             goView(params){
                 window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}`,params.id);
             },
+            goEdit(params){
+                window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}&disabled=false`,params.id);
+            },
             //格式转换
             dateSwitch(data){
                 if(data){
@@ -130,7 +133,7 @@ import dateUtils from 'vue-dateutils';
                             totalPages:res.data.totalPages,
                             pageSize:15
                         }
-                        this.tableParams = Object.assign({},pages)
+                        this.tableParams = Object.assign({},this.tableParams,pages)
                         this.listData=res.data.items;
                      
                 }).catch((err)=>{

@@ -177,7 +177,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    that.goView(colData)
+                                    that.goEdit(colData)
                                 }
                             }
                         }, '编辑') 

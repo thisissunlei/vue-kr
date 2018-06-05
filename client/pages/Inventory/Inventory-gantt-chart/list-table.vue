@@ -12,7 +12,7 @@
             :style="!data.location?'line-height:40px;':''"
             >
                 <div :style="(data.seatType!='SPACE'&&Number(data.spaceId)>0)?'text-align:right':''">{{data.name}}</div>
-                <div>{{data.location}}</div>
+                <div :style="(data.seatType!='SPACE'&&Number(data.spaceId)>0)?'text-align:right':''">{{data.location}}</div>
             </div>
         </Tooltip>
     </div>

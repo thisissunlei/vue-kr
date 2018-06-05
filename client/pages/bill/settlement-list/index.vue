@@ -196,9 +196,7 @@
                                         action:'//jsonplaceholder.typicode.com/posts/',
                                         file: newArr,//数据
                                         columnDetail:params.row||{},
-                                    },
-                                     on:{
-                                        upSuccess:this.urlUpLoad,
+                                        onUpUrl:this.urlUpLoad//成功后方法
                                     },
                                     style: {
                                         color:'#2b85e4'

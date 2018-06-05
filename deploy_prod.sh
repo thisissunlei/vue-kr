@@ -1,10 +1,6 @@
 #!/bin/bash
 
-<<<<<<< HEAD
- npm run build
-=======
 npm run build
->>>>>>> master
 
 build_dir=kr-vue
 echo $1

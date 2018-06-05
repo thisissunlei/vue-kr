@@ -4,8 +4,6 @@ import dataType from './dataType';
 import throttle from './throttle';
 import dateCompatible from './dateCompatible';
 import tableSort from './tableSort';
-import getEnumData from './getEnumData';
-import addAllselect from './addAllselect';
 
 
    /** 数字金额大写转换(可以处理整数,小数,负数) */
@@ -232,9 +230,7 @@ export default{
     dateCompatible,
     tableSort,
     dateRange,
-    downImg,
-    getEnumData,
-    addAllselect
+    downImg
 }
 
 

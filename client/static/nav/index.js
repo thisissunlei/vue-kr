@@ -1276,24 +1276,6 @@
                         router: 'statistical/agingaccount',
                         menuCode: 'finance_explan',
                     },
-                    {
-                        primaryText: "财务端",
-                        router: 'bill/make-invoice',
-                        type: 'vue',
-                        menuCode: 'pay_deal_flow_page'
-                    },
-                    {
-                        primaryText: "运营端",
-                        router: 'inventory/make-invoice',
-                        type: 'vue',
-                        menuCode: 'pay_deal_flow_page'
-                    },
-                    {
-                        primaryText: "发票资料",
-                        router: 'bill/financial-invoice',
-                        type: 'vue',
-                        menuCode: 'pay_deal_flow_page'
-                    },
                     ]
                 },
         ]

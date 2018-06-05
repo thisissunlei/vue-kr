@@ -545,11 +545,11 @@
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
-                        {
-                            primaryText: "客户门禁权限",
-                            router: 'user/memberManage/doormanage',
-                            menuCode: 'door_base',
-                        },
+                        // {
+                        //     primaryText: "客户门禁权限",
+                        //     router: 'user/memberManage/doormanage',
+                        //     menuCode: 'door_base',
+                        // },
                         {
                             primaryText: '客户线索',
                             router: 'user/customerManage/customerList',
@@ -748,7 +748,7 @@
                         menuCode: 'tv_ad_storage',
                         type: 'vue',
                         router: 'smart-hardware/map-depot'
-                    },
+                    }
                 ]
             },
         ]
@@ -1058,6 +1058,12 @@
                                 primaryText: '升级管理',
                                 menuCode: 'iot_upgrade_package',
                                 router: 'smarthardware/doorManage/upgrademanage',
+                            },
+                            {
+                                primaryText: '门禁级联关系',
+                                menuCode: 'door_relation',
+                                type: 'vue',
+                                router: 'doorrelationship/map',
                             }
                         ]
                 }, {

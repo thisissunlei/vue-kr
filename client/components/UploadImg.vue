@@ -111,7 +111,6 @@ export default {
        
     },
     handleSuccess(res,file){
-        console.log('res--->>>',res.data)
         let id=res.data.id;
         this.imgIds.push(id);
         let ids=this.imgIds.join(',');

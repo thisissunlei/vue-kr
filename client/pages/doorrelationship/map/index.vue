@@ -203,9 +203,7 @@ export default {
                             var x = loc.x;
                             var y = loc.y;
                             var newCreateNodeParams = Object.assign({},this.archetypeNodeData,{x:parseInt(x),y:parseInt(y),communityId : _this.communityId})
-                            console.log("this",this);
                             var oldcopies =  _this.myDiagram.model;
-                            console.log("oldcopies",oldcopies);
                             _this.selectedNodeData = this;
                             _this.addNewCreateDataReq(newCreateNodeParams);
                             return go.ClickCreatingTool.prototype.insertPart.call(this, loc);
@@ -316,6 +314,7 @@ export default {
             }
             _this.myDiagram.addDiagramListener("ObjectSingleClicked",
                 function(e) {
+                    console.log("e====?",e.subject.part.data);
                     var part = e.subject.part;
                     if ((part instanceof go.Link)) {
                         _this.selectedNodeData = part.data;
@@ -534,12 +533,12 @@ export default {
             })
         },
         newCreateConnect(param,linkData){
-            
+            var newCreateLinkData = linkData;
             let _this =this;
             this.$http.post('newCreateDoorGroupConnect',param).then((res)=>{
+                console.log("kdlfdkfld====>>>")
                 
-                
-                this.$Message.success('新增关系成功');
+                this.$Message.success('创建联系成功');
                 if(linkData){
                     
                     var link = _this.myDiagram.findLinksByExample({ __gohashid: linkData.__gohashid }).first();
@@ -554,8 +553,15 @@ export default {
                _this.selectedNodeData = newObj;
 
             }).catch((error)=>{
-                    
-                _this.myDiagram.commandHandler.undo()
+                
+                
+                var sendParam = {__gohashid: linkData.__gohashid}
+                var myDiagram = _this.myDiagram;
+                var linkDataToDelete = myDiagram.findLinksByExample(sendParam);
+                myDiagram.startTransaction('removing links');
+                myDiagram.removeParts(linkDataToDelete,false);
+                myDiagram.commitTransaction('removing links');
+                
                     
                 this.$Notice.error({
                     title:error.message

@@ -254,8 +254,8 @@ export default {
             this.$http.get('get-delete-permission',{
                 id:this.$route.query.id
             }).then((response)=>{
-                
-                this.isDelete = response;
+                console.log(response)
+                this.isDelete = response.data;
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;
@@ -279,7 +279,7 @@ export default {
         },
         tabClick(name){
             this.activeTab = name;
-            console.log(name,"ppppp")
+          
         },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-detail-list');

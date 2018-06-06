@@ -63,7 +63,7 @@
                   <Select 
                     v-model="formItem.manager" 
                     style="width:250px"
-                    placeholder="请输入账单类型" 
+                    placeholder="请选择" 
                 >
                     <Option 
                         v-for="item in typeList" 

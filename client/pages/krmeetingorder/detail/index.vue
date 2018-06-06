@@ -122,11 +122,11 @@ export default {
                     },
                     {
                         title: '商品总额（￥）',
-                        key: 'cost'
+                        key: 'totalAmount'
                     },
                     {
                         title: '订单金额（￥）',
-                        key: 'totalAmount'
+                        key: 'cost'
                     }],
            alertTimeOptions : [
                {

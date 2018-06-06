@@ -299,10 +299,10 @@ let windowHeight = 0
                 // }
                 var contentdom = document.querySelectorAll('.project-view-table-content');
                
-                contentdom[0].style.width = wWidth-70+200-scrollWidth +'px';
-                contentdom[1].style.width = wWidth-70+200-scrollWidth +'px';
-                contentdom[2].style.width = wWidth-70+200-scrollWidth +'px';
-                contentdom[3].style.width = wWidth-70+200-scrollWidth +'px';
+                contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[2].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[3].style.width = wWidth-70+400-scrollWidth +'px';
               
                 if(wWidth>1500  &&( flag||this.tdType!=='>1500')){
                     arr = data.map((item,index)=>{
@@ -313,10 +313,11 @@ let windowHeight = 0
                         if(item.key=='city'){
                             item.width = 80;
                         }
-                        if(item.key=='code'){
-                            item.width = 100;
-                        }
-                        if(item.key=='cmtName'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                       
@@ -333,10 +334,11 @@ let windowHeight = 0
                         if(item.key=='city'){
                             item.width = 80;
                         }
-                        if(item.key=='code'){
-                            item.width = 100;
-                        }
-                         if(item.key=='cmtName'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                         if(item.key=='k14'||item.key=='k13'||item.key=='k12'){
@@ -350,7 +352,11 @@ let windowHeight = 0
                 if(wWidth<=1400 && wWidth>1220 && (flag||this.tdType!=='1220-1400')){
                     arr = data.map((item,index)=>{
                         item.width=74;
-                        if(item.key=='code'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                          if(item.key=='name'){
@@ -359,9 +365,7 @@ let windowHeight = 0
                          if(item.key=='city'){
                             item.width = 57;
                         }
-                         if(item.key=='cmtName'){
-                            item.width = 100;
-                        }
+                       
                         if(item.key=='k14'){
                             delete item.width;
                         }
@@ -372,15 +376,17 @@ let windowHeight = 0
                  if(wWidth<=1220 && (flag||this.tdType!=='<1220')){
                     arr = data.map((item,index)=>{
                         item.width = 72;
-                        if(item.key=='code'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
-                         if(item.key=='city'){
+                        if(item.key=='city'){
                             item.width = 77;
                         }
-                         if(item.key=='cmtName'){
-                            item.width = 100;
-                        }
+                        
                         return item;
                     })
                     this.tdType = 'min';
@@ -779,7 +785,7 @@ let windowHeight = 0
             transition:width .2s;
         }
         .u-left-box-show{
-            width:440px;
+            width:640px;
             transition:width .2s;
         }
         
@@ -792,8 +798,8 @@ let windowHeight = 0
            .u-table-box-right{
                 width:100%; 
                 // min-width:1600px;
-                margin-left: -200px;
-                 transition:all .2s;
+                margin-left: -400px;
+                transition:all .2s;
                 table{
                         th,td{
                             &:nth-child(3){
@@ -902,7 +908,7 @@ let windowHeight = 0
                 transition:width .2s;
             }
             .u-left-box-show{
-                width:352px;
+                width:552px;
                 transition:width .2s;
             }
 
@@ -979,7 +985,7 @@ let windowHeight = 0
             transition:width .2s;
         }
         .u-table-list .u-left-box-show{
-            width:347px;
+            width:547px;
             transition:width .2s;
         }
        

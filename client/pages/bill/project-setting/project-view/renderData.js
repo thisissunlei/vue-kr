@@ -71,6 +71,38 @@ function renderData(){
             }
         },
         {
+            title: '租赁面积',
+            key: 'rentalArea',
+            align:'center',
+            width:100,
+            render:(h, obj)=>{
+                return h('div', {
+                    on: {
+                        click: () => {
+                            this.goView(obj.row)
+                        }
+                    }
+                },obj.row.cmtName);
+              
+            }
+        },
+        {
+            title: '工位数',
+            key: 'totalSeatNum',
+            align:'center',
+            width:100,
+            render:(h, obj)=>{
+                return h('div', {
+                    on: {
+                        click: () => {
+                            this.goView(obj.row)
+                        }
+                    }
+                },obj.row.cmtName);
+              
+            }
+        },
+        {
             title: '项目立项',
             key: 'k1',
             align:'center',

@@ -104,7 +104,7 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
-                       {{item.toPutawayDay?(Number(item.toPutawayDay)==1?'今日':(Number(item.toPutawayDay)==2?'明日':item.toPutawayDay+'日后')):'0'}}
+                       {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays+'日后')):'-'}}
                       </span>
                   </li>        
                 </ul>
@@ -136,7 +136,7 @@
                     <span class="table-cell">
                       <!-- {{item.rentDays}} -->
                         <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
-                          {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays+'日后')):'-'}}
+                          {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays+'日后')):'-'}}
                         </span> 
                   </li>        
                 </ul>
@@ -435,7 +435,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('getImtPutawayList',data).then((res)=>{         
-            // console.log('即将到期即将到期即将到期即将到期',res.data)
+            console.log('机枪进场',res.data)
              this.list=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -450,7 +450,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('getDueList',data).then((res)=>{         
-            // console.log('esesad',res.data)
+            console.log('即将到期',res.data)
              this.DueList=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -465,7 +465,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('unpaidList',data).then((res)=>{         
-            console.log('esesad起租未付esesad起租未付esesad起租未付esesad起租未付',res.data)
+            console.log('起租未付',res.data)
              this.unpaidList=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -480,7 +480,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('Overduelist',data).then((res)=>{         
-            // console.log('esesad',res.data)
+            console.log('逾期未付',res.data)
              this.Overdue=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -491,7 +491,7 @@ export default {
        //预约参观
       getAnappointmentListList(){ 
 				this.$http.get('AnappointmentList','').then((res)=>{         
-            // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu',res.data)
+            console.log('预约参观',res.data)
              this.appointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -502,7 +502,7 @@ export default {
          //会员访客
       getAnappointmentList(params){ 
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
-            // console.log('会员',res.data)
+            console.log('会员访客',res.data)
              this.nappointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({

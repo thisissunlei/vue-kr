@@ -198,8 +198,8 @@ export default {
                     communityId:'',
                     cityId:'',
                     //服务开始日
-                    serviceDateBegin:this.getToDay(),
-                    serviceDateEnd:this.getToDay(),
+                    serviceDateBegin:'',
+                    serviceDateEnd:'',
                     //欠款
                      debtMin:'',
                      debtMax:'',
@@ -247,7 +247,12 @@ export default {
         this.getSelectData();
         if(this.$route.query.communityId){
             this.params=this.$route.query;
+        
+            this.params.serviceDateBegin=this.dateSwitch(this.params.serviceDateBegin);
+            this.params.serviceDateEnd=this.dateSwitch(this.params.serviceDateEnd); 
+
         }  
+          
     },
     methods:{
         //获取账单类型
@@ -293,8 +298,6 @@ export default {
 
                if(this.num<=1){
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
-                    this.formItem.serviceDateBegin='';
-                    this.formItem.serviceDateEnd='';
                     this.$emit('initData',this.formItem);
                 }else{
                     this.formItem.communityId=this.communityList[0].id;
@@ -333,6 +336,10 @@ export default {
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
                     this.$emit('searchClick',this.formItem);
+
+                    //  this.formItem.serviceDateBegin=this.formItem.serviceDateBegin;
+                    //  this.formItem.serviceDateEnd=this.formItem.serviceDateBegin;
+
                 }
             })
         },

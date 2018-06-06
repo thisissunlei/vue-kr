@@ -743,15 +743,21 @@ export default {
                 this.myDiagram.clearHighlighteds();
                 _this.myDiagram.startTransaction();
                 var isHighlightedNodeIdArr = res.data.items ||[];
-                
+                var containInThisPage = 0;
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
                     var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
                     if (findNodeData) {
+                        containInThisPage++
                         _this.myDiagram.model.setDataProperty(findNodeData, "isHighlighted",true);
                     }
                     _this.myDiagram.commitTransaction("changed highLight");
                 }
-                
+                if(containInThisPage==0){
+                    this.$Notice.open({
+                        title: '查找的设备不在当前社区的设备组中',
+                        desc: true ? '' : ''
+                    });
+                }
             
 			}).catch((error)=>{
 				this.$Notice.error({

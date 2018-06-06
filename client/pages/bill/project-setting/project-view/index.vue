@@ -278,6 +278,8 @@ let windowHeight = 0
                 }else{
                     this.showHander = false;
                 }
+                var wWidth = document.body.clientWidth;
+                this.setContentWidth(wWidth);
                 if(!isEnd && (mainDom.scrollTop + mainDom.clientHeight >= mainDom.scrollHeight)){
                     
                     if(this.totalCount>this.tabParams.page*this.tabParams.pageSize){
@@ -285,6 +287,12 @@ let windowHeight = 0
                         this.getTableData(Object.assign({},this.tabParams));
                     }
                     isEnd = true;
+                }
+            },
+            setContentWidth(wWidth){
+                var contentdom = document.querySelectorAll('.project-view-table-content');
+                for(let i=0;i<contentdom.length;i++){
+                     contentdom[i].style.width = wWidth-70+400-scrollWidth +'px';
                 }
             },
             response(flag){
@@ -297,12 +305,7 @@ let windowHeight = 0
                 // if(boxDom){
                      
                 // }
-                var contentdom = document.querySelectorAll('.project-view-table-content');
-               
-                contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
-                contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
-                contentdom[2].style.width = wWidth-70+400-scrollWidth +'px';
-                contentdom[3].style.width = wWidth-70+400-scrollWidth +'px';
+               this.setContentWidth(wWidth);
               
                 if(wWidth>1500  &&( flag||this.tdType!=='>1500')){
                     arr = data.map((item,index)=>{

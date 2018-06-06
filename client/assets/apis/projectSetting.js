@@ -110,6 +110,10 @@ module.exports = {
       url: '/api/pm/project/activeCities',
       method: 'get'
     },
+    'delete-project-setting':{
+      url:'/api/pm/project/actions/delete',
+      method:'delete'
+    }
     
     
 }

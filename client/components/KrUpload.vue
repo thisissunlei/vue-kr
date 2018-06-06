@@ -132,6 +132,7 @@ export default{
 
 			this.defaultList = [].concat(list);
 			this.upIconShow =true;
+			this.$emit('onChange',[{}],this.columnDetail,this.defaultList);
 		},
 		upBtnClick(){
 			let fileDom = document.getElementById(this.inputId);
@@ -241,8 +242,9 @@ export default{
 				this.defaultList = [detail];
 				this.upIconShow = false;
 			}
+		
 			
-			// this.submitUpload([detail]);
+			this.$emit('onChange',[detail],this.columnDetail,this.defaultList);
 			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
 			
 		},

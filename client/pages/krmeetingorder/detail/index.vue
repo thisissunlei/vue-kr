@@ -12,7 +12,7 @@
                         <dt>订单生成时间：</dt><dd>{{this.returnCtime(detail.ctime)}}</dd>
                     </dl>
                      <dl>
-                        <dt>订单金额：￥</dt><dd>{{detail.cost}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{detail.totalAmount}}</dd>
                     </dl>
                     <dl>
                         <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderStatus)}}</dd>
@@ -68,7 +68,7 @@
                             <template v-for="item in arrivalList">
                                 <li class="list-li">
                                     <img v-if="item" v-bind:src="item &&item.wechatAvatar" class="head-img"/>
-                                    <img  src="./images/visitor.png" class="head-img"/>
+                                    <img  v-if="!item" src="./images/visitor.png" class="head-img"/>
                                     <span class="person-name">{{ (item && item.wechatNick) || "嘉宾" }}</span>
                                 </li>
                             </template>
@@ -121,7 +121,7 @@ export default {
                         key: 'promotionCost'
                     },
                     {
-                        title: '商品金额（￥）',
+                        title: '商品总额（￥）',
                         key: 'cost'
                     },
                     {
@@ -284,6 +284,7 @@ export default {
         background: #f6f6f6;
         margin-top: 20px;
         border-radius: 6px;
+        padding-bottom:20px; 
     }
     .arrival-list-box h1{
         font-size: 20px;

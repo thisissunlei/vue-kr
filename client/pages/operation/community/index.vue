@@ -84,11 +84,10 @@
               <div class="header">
                 <div class="header-left" @click="openEnter">即将进场  ></div>
                 <div class="header-right" v-if="list.length">今日：
-                  <span style="color: #FF6868;">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
-
               <div class="contents" style="text-align:center" v-if="!list.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
@@ -101,7 +100,7 @@
                         <div class="ellipsis">{{item.issueName}}</div>
                     </Tooltip>
                     <span  class="table-cell">{{item.capacity}}工位</span>
-                    <Tooltip :content="item.customerName" placement="top" class="table-cell customer" >
+                    <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer" >
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
@@ -116,8 +115,8 @@
               <div class="header">
                 <div class="header-left" @click="openOver">即将到期  ></div>
                 <div class="header-right" v-if="DueList.length">今日：
-                  <span style="color: #FF6868;">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span style="color: #FF6868;">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">
@@ -127,11 +126,11 @@
               <div class="contents" v-if="DueList.length">
                 <ul >
                   <li v-for="item in DueList" >
-                     <Tooltip :content="item.issueName" placement="top" class="table-cell">
+                     <Tooltip :content="item.issueName" placement="top-start" class="table-cell">
                         <div class="ellipsis" >{{item.issueName}}</div>
                     </Tooltip>
                     <span  class="table-cell">{{item.capacity}}工位</span>
-                    <Tooltip :content="item.customerName" placement="top" class="table-cell customer">
+                    <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
@@ -149,8 +148,8 @@
               <div class="header">
                 <div class="header-left" @click="openrented">已起租未付   ></div>
                 <div class="header-right" v-if="unpaidList.length">
-                  <span style="color: #FF6868;">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span style="color: #FF6868;">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -160,9 +159,13 @@
               <div class="contents" v-if="unpaidList.length">
                 <ul >
                   <li v-for="item in unpaidList" value="item.value" :key="item.value" >
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;flex:2">{{item.bizTypeName}}</div>
+                  <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">   
+
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;flex:2">{{item.bizTypeName+item.billId}}</div>
+                       </Tooltip>
+
                       <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top" class="table-cell customer">
+                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
                       <div class="ellipsis" >{{item.debt}}元</div>
                     </Tooltip>
 
@@ -175,8 +178,8 @@
               <div class="header">
                 <div class="header-left">逾期未付(工位) ></div>
                 <div class="header-right" v-if="Overdue.length">
-                  <span style="color: #FF6868;">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span style="color: #FF6868;">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -186,10 +189,11 @@
               <div class="contents" v-if="Overdue.length">
                 <ul >
                   <li v-for="item in Overdue" >
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName}}</div>
-                    
+                  <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                       </Tooltip>
                       <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top" class="table-cell customer">
+                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
                       <div class="ellipsis">{{item.debt}}元</div>
                     </Tooltip>
         
@@ -204,8 +208,8 @@
               <div class="header">
                 <div class="header-left">逾期未付(会议室) ></div>
                 <div class="header-right" v-if="Overdue.length">
-                  <span style="color: #FF6868;">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span style="color: #FF6868;">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!Overdue.length">
@@ -215,10 +219,11 @@
               <div class="contents" v-if="Overdue.length">
                 <ul >
                    <li v-for="item in Overdue" >
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName}}</div>
-                    
+                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                       </Tooltip>
                       <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top" class="table-cell customer">
+                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
                       <div class="ellipsis">{{item.debt}}元</div>
                     </Tooltip>
         
@@ -234,8 +239,8 @@
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('station')">逾期未付(打印) ></div>
                 <div class="header-right" v-if="Overdue.length">
-                  <span style="color: #FF6868;">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span style="color: #FF6868;">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!Overdue.length">
@@ -245,10 +250,11 @@
               <div class="contents" v-if="Overdue.length">
                 <ul >
                      <li v-for="item in Overdue" >
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName}}</div>
-                    
+                <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
+                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                       </Tooltip>
                       <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top" class="table-cell customer">
+                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
                       <div class="ellipsis">{{item.debt}}元</div>
                     </Tooltip>
         
@@ -275,7 +281,7 @@
                 <ul >
                   <li v-for="item in appointment" >
                     <span class="table-cell ellipsis" style="flex:2">{{item.name}}</span>
-                    <Tooltip :content="item.tel" placement="top" class="table-cell customer" style="flex:5">
+                    <Tooltip :content="item.tel" placement="top-start" class="table-cell customer" style="flex:5">
                       <div class="ellipsis" >{{item.tel}}</div>
                     </Tooltip>
                     <span class="table-cell">{{item.vtime}}</span>
@@ -283,7 +289,6 @@
                 </ul>
               </div>
             </div>
-
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openVisitor">会员访客   ></div>
@@ -302,7 +307,7 @@
                   <li v-for="item in nappointment" >
                     <span class="table-cell ellipsis" style="flex:2">{{item.visitName}}</span>
                     <span class="table-cell"> →》</span>
-                    <Tooltip :content="item.company" placement="top" class="table-cell customer" style="flex:5">
+                    <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex:5">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
                     <span class="table-cell">{{item.data}}</span>
@@ -477,7 +482,7 @@ export default {
        //预约参观
       getAnappointmentListList(){ 
 				this.$http.get('AnappointmentList','').then((res)=>{         
-            console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu',res.data)
+            // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu',res.data)
              this.appointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -488,7 +493,7 @@ export default {
          //会员访客
       getAnappointmentList(params){ 
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
-            console.log('eeeeeeeeeeeeeeeeeeeee',res.data)
+            // console.log('eeeeeeeeeeeeeeeeeeeee',res.data)
              this.nappointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({

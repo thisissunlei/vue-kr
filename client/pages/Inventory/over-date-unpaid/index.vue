@@ -132,10 +132,10 @@ var layoutScrollHeight=0;
                     }
                     },
                     {
-                        title: '服务开始日',
+                        title: '最晚付款日',
                         align:'center',
                         width:110,
-                        key: 'serviceStartDate',
+                        key: 'lastPayDate',
                     },
                     {
                         title: '账单金额',

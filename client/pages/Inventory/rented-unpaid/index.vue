@@ -104,7 +104,6 @@ var layoutScrollHeight=0;
                     {
                         title: '客户名称',
                         key: 'customerName',
-                        width:110,
                         align:'center',
                     },
                     {

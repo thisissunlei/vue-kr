@@ -50,7 +50,7 @@
         word-break: break-all;
         font-weight: 700;
         height: 50px;
-        &:nth-child(2),&:nth-child(4){
+      &:nth-child(4){
             width:110px;
         }
           &:nth-child(3){
@@ -62,7 +62,7 @@
         &:nth-child(7){
             width:200px;
         }
-         &:nth-child(1),&:nth-child(9){
+         &:nth-child(1),&:nth-child(9),&:nth-child(2){
             width:100%;
             flex: 1;
             /*-moz-box-flex: 1; */

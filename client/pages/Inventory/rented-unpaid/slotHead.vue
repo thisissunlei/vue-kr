@@ -50,13 +50,13 @@
         word-break: break-all;
         font-weight: 700;
         height: 50px;
-        &:nth-child(2),&:nth-child(4){
+       &:nth-child(4){
             width:110px;
         }
         &:nth-child(3){
             width:250px;
         }
-        &:nth-child(5),&:nth-child(6){
+        &:nth-child(5),&:nth-child(6), &:nth-child(2){
             width:100px;
         }
         &:nth-child(7){

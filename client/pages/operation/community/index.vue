@@ -28,7 +28,7 @@
               <img src="~/assets/images/member.png" alt="" style="margin:12px auto;width:36px;height:33px;margin-top:20px;">
             </span>
             <span class="content title">现入驻会员</span>
-            <span class="content number"><span>305{{pageData.settledMember}}</span>个</span>
+            <span class="content number"><span>{{pageData.settledMember}}</span>个</span>
           </div>
           <div class="card-three">
             <div class="tabs">
@@ -68,10 +68,10 @@
               </span>
               <span class="number">
                 <span class="title">不可用</span>
-                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #8290A8;">{{pageData.unusefulSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #8290A8;">{{pageData.unusefulSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #8290A8;">{{pageData.unusefulFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #8290A8;">{{pageData.unusefulMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulMoveStationsNum}}</span>
               </span>
             </div>
             
@@ -84,8 +84,8 @@
               <div class="header">
                 <div class="header-left" @click="openEnter">即将进场  ></div>
                 <div class="header-right" v-if="list.length">今日：
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -104,7 +104,7 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
-                       {{item.toPutawayDay?(Number(item.toPutawayDay)==1?'今日':(Number(item.toPutawayDay)==2?'明日':item.toPutawayDay+'日后')):'-'}}
+                       {{item.toPutawayDay?(Number(item.toPutawayDay)==1?'今日':(Number(item.toPutawayDay)==2?'明日':item.toPutawayDay+'日后')):'0'}}
                       </span>
                   </li>        
                 </ul>
@@ -136,7 +136,7 @@
                     <span class="table-cell">
                       <!-- {{item.rentDays}} -->
                         <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
-                          {{item.rentDays?(Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')):'-'}}
+                          {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays+'日后')):'-'}}
                         </span> 
                   </li>        
                 </ul>
@@ -284,7 +284,10 @@
                     <Tooltip :content="item.tel" placement="top-start" class="table-cell customer" style="flex:5">
                       <div class="ellipsis" >{{item.tel}}</div>
                     </Tooltip>
+                                       
+                  <Tooltip :content="item.vtime" placement="top-start" class="table-cell " style="flex:1">
                     <span class="table-cell">{{item.vtime}}</span>
+                    </Tooltip>
                   </li>        
                 </ul>
               </div>
@@ -305,12 +308,17 @@
               <div class="contents" v-if="nappointment.length">
                 <ul >
                   <li v-for="item in nappointment" >
-                    <span class="table-cell ellipsis" style="flex:2">{{item.visitName}}</span>
-                    <span class="table-cell"> →》</span>
-                    <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex:5">
+                 <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex:1.5">
+                    <span class="table-cell ellipsis" >{{item.visitName}}</span>
+                     </Tooltip>
+                    <span class="table-cell" style="flex:0.8"> →</span>
+                    <span class="table-cell" style="flex:0.5">{{item.name}}</span>
+                    <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex2">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
-                    <span class="table-cell">{{item.data}}</span>
+              <Tooltip :content="item.visitTime" placement="top-start" class="table-cell customer" style="flex:1">
+                    <span class="table-cell">{{item.visitTime}}</span>
+                     </Tooltip>
                   </li>        
                 </ul>
               </div>
@@ -381,6 +389,7 @@ export default {
 
   },
   methods:{
+ 
     //列表请求
     	getHomeList(){ 
         this.pageData={
@@ -409,7 +418,7 @@ export default {
         };
         // return ;
 				this.$http.get('getOperating','').then((res)=>{
-          console.log('wwwwwwwwwww',res.data)
+          // console.log('wwwwwwwwwww',res.data)
           this.pageData=res.data;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -426,7 +435,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('getImtPutawayList',data).then((res)=>{         
-            // console.log('esesad',res.data)
+            // console.log('即将到期即将到期即将到期即将到期',res.data)
              this.list=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -456,7 +465,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('unpaidList',data).then((res)=>{         
-            // console.log('esesad',res.data)
+            console.log('esesad起租未付esesad起租未付esesad起租未付esesad起租未付',res.data)
              this.unpaidList=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -471,7 +480,7 @@ export default {
              communityId:this.communityId
         };
 				this.$http.get('Overduelist',data).then((res)=>{         
-            console.log('esesad',res.data)
+            // console.log('esesad',res.data)
              this.Overdue=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -493,7 +502,7 @@ export default {
          //会员访客
       getAnappointmentList(params){ 
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
-            // console.log('eeeeeeeeeeeeeeeeeeeee',res.data)
+            // console.log('会员',res.data)
              this.nappointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({

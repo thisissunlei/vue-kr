@@ -132,7 +132,7 @@
                         </Form-item>
                     </div>
                     
-                    <Button type="primary" @click="searchClick">搜22索</Button>
+                    <Button type="primary" @click="searchClick">搜索</Button>
                    
                 </div>
 
@@ -293,8 +293,8 @@ export default {
 
                if(this.num<=1){
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
-                    this.formItem.serviceDateBegin=this.dateSwitch(this.formItem.serviceDateBegin);
-                    this.formItem.serviceDateEnd=this.dateSwitch(this.formItem.serviceDateEnd);
+                    this.formItem.serviceDateBegin='';
+                    this.formItem.serviceDateEnd='';
                     this.$emit('initData',this.formItem);
                 }else{
                     this.formItem.communityId=this.communityList[0].id;

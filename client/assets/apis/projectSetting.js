@@ -113,6 +113,10 @@ module.exports = {
     'delete-project-setting':{
       url:'/api/pm/project/actions/delete',
       method:'delete'
+    },
+    'get-delete-permission':{
+      url:'/api/pm/project/permission-check',
+      method:'get'
     }
     
     

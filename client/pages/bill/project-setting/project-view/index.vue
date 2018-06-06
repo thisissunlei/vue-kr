@@ -58,27 +58,27 @@
         
         
     </div>
-    <div class="u-table-list" :style="{height:'40px',position:'fixed',top:'60px',overflow:'hidden',zIndex:'900'}" v-show="showHander">
+    <div class="u-table-list" :style="{height:'40px',position:'fixed',top:'60px',overflow:'hidden',zIndex:'200'}" v-show="showHander">
             <div class="u-table-left">
                  
                  <div :class="[tableFlag?'u-left-box-show':'u-left-box-hide','u-table-box']">
                         <div class="u-table-content project-view-table-content">
                             <!--  -->
-                            <Table  border :columns="projectTabColumns" :data="projectList" ></Table>
+                            <Table  border :columns="projectTabColumns" :data="[]" ></Table>
                         </div>
                  </div>
             </div>
             <div class="u-table-right">
                 <div  style="overflow-x:auto;">
                     <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
-                        <Table  border :columns="projectTabColumns" :data="projectList"></Table>
+                        <Table  border :columns="projectTabColumns" :data="[]"></Table>
                     </div>
                 </div>
                 
             </div>
     </div>
 
-    <div class="u-table-list" :id="listId">
+    <div class="u-table-list" >
             <div class="u-table-left">
                  <div :id="arrowId" :class="[tableFlag?'u-left-arrow':'u-right-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div :class="[tableFlag?'u-left-box-show':'u-left-box-hide','u-table-box']">
@@ -910,8 +910,29 @@ let windowHeight = 0
         
      }
 }
-@media all and (min-width: 1400px)  and (max-width: 1500px){
+@media all and (min-width: 1440px)  and (max-width: 1500px){
     .project-view {
+        .u-search{
+            height: 75px;
+            .new-btn{
+                width: 108px;
+            }
+       
+            .u-search-content{
+
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0px;
+                .u-select{
+                    .task-select{
+                        width: 170px;
+                    }
+                }
+                .task-select-box{
+                    width: 300px;
+                }
+            }
+        }
         .u-status-done{
             width: 70px;
         }
@@ -928,6 +949,7 @@ let windowHeight = 0
         }
      }
 }
+
 @media all and (max-width: 1300px) {
     .project-view {
         .u-search{

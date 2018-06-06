@@ -13,7 +13,7 @@
                 </div>
 
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
-                <div class='title-right' style="margin-right:30px;"><Button @click="switchDelete">删除项目</Button></div>
+                <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">删除项目</Button></div>
             </div>
             <Tabs size="default" @on-click="tabClick" :animated="false">
                 <TabPane label="物业档案" name="property">
@@ -234,6 +234,7 @@ export default {
             taskList:[],
             watchTotalCount:1,
             watchPage:1,
+            isDelete:false,
         }
     },
     created(){
@@ -242,14 +243,26 @@ export default {
     mounted(){
        
          GLOBALSIDESWITCH("false");
-       
+        this.getDeletePermission();
     
     },
     methods:{
         switchDelete(){
             this.openDelete = !this.openDelete;
         },
-        
+        getDeletePermission(){
+            this.$http.get('get-delete-permission',{
+                id:this.$route.query.id
+            }).then((response)=>{
+                
+                this.isDelete = response;
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
+           
+        },
         deleteProject(){
              this.$http.delete('delete-project-setting',{
                 id:this.$route.query.id

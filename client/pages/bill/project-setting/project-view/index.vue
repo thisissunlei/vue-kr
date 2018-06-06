@@ -68,7 +68,7 @@
                         </div>
                  </div>
             </div>
-            <div class="u-table-right">
+            <div :id="handerId" class="u-table-right" style="position:relative;">
                 <div  style="overflow-x:auto;">
                     <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
                         <Table  border :columns="projectTabColumns" :data="[]"></Table>
@@ -89,7 +89,7 @@
                  </div>
             </div>
             <div class="u-table-right">
-                <div  style="overflow-x:auto;">
+                <div :id="contentId" style="overflow-x:auto;" >
                     <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
@@ -167,7 +167,11 @@ let projectViewDom = null;
 let isEnd = false;
 var scrollWidth = 0; 
 let arrowDom = null; 
-let windowHeight = 0
+let windowHeight = 0;
+let handerDom = null;
+let contentDom = null;
+
+
     export default {
         components:{
             SectionTitle,
@@ -190,6 +194,8 @@ let windowHeight = 0
                 // pageSize:20,
                 tdType:'>1500',
                 projectViewId:'projectView'+this._uid,
+                handerId:'handerList'+this._uid,
+                contentId:'contentList'+this._uid,
                 openMessage:false,
                 taskStatus:'',
                 itemDetail:{},
@@ -252,24 +258,58 @@ let windowHeight = 0
             
         },
         mounted(){
-            this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
-            this.tabParams.projectStatus=this.tab;
-            this.getTableData(this.tabParams);
-            this.getCityData(this.tab);
-            scrollWidth = utils.getScrollBarSize();
-            this.getSelect();
-            windowHeight = document.body.clientHeight;
-            this.response(true);
-            window.addEventListener('resize',this.response);
             mainDom = document.getElementById('layout-content-main');
             projectViewDom = document.getElementById(this.projectViewId);
             arrowDom = document.getElementById(this.arrowId);
-          
-            mainDom.addEventListener('scroll',this.mainScroll)
-        },
+            contentDom = document.getElementById(this.contentId);
+            handerDom = document.getElementById(this.handerId);
+            console.log("-----",contentDom,handerDom)
+            var wWidth = document.body.clientWidth;
+            this.setContentWidth(wWidth);
 
+            scrollWidth = utils.getScrollBarSize();
+           
+
+            this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
+            this.tabParams.projectStatus=this.tab;
+            
+           
+          
+            windowHeight = document.body.clientHeight;
+            this.response(true);
+            window.addEventListener('resize',this.response);
+
+            this.getTableData(this.tabParams);
+            this.getCityData(this.tab);
+            this.getSelect();
+           
+           
+           
+            if(mainDom){
+                mainDom.addEventListener('scroll',this.mainScroll);
+            }
+            if(contentDom){
+                contentDom.addEventListener('scroll',this.contentScroll);
+            }
+           
+        },
+       
+        beforeDestroy(){
+            mainDom.removeEventListener('scroll',this.mainScroll)
+            window.removeEventListener('resize',this.response);
+        },
         
         methods:{
+            contentScroll(){
+                if(this.showHander){
+                    
+                
+                    let scrollLeft = contentDom.scrollLeft;
+                    
+                    handerDom.style.left = -scrollLeft+'px'
+                }
+               
+            },
             mainScroll(){
                 let scrollTop = mainDom.scrollTop;
                 arrowDom.style.top = scrollTop+ (windowHeight-190)/2+'px'
@@ -474,6 +514,12 @@ let windowHeight = 0
                 })
             },
             stretchTable(){
+                
+                if(!contentDom || !handerDom){
+                    contentDom = document.getElementById(this.contentId);
+                    handerDom = document.getElementById(this.handerId);
+                    contentDom.addEventListener('scroll',this.contentScroll);
+                }
                 this.tableFlag=!this.tableFlag;
             },
             //跳转查看页面

@@ -766,6 +766,12 @@
                     iconColor: '#79859a',
                     menuItems: [
                         {
+                            primaryText: '产品运营主页',
+                            menuCode: 'mobile_app_operate_home',
+                            type: 'vue',
+                            router: 'app-manage/home'
+                        },
+                        {
                             primaryText: '公告',
                             menuCode: 'oper_notice_base',
                             router: 'operation/communityAllocation/noticemanage'

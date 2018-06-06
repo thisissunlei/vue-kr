@@ -4,6 +4,7 @@
             :class="indentify=='daily'?'slot-head-class':'slot-optional-class'"
             v-for="item in data"
             :key="item"
+            :style="index==0?'border-left:solid 1px #e9eaec':''"
          >
          <span>{{item}}</span>
             
@@ -21,7 +22,7 @@
     },
     data() {
         return{
-            data:['账单类型-ID','客户名称','账单明细','服务开始日','账单金额','欠款金额','逾期时长(服务开始日起)'],
+            data:['账单类型-ID','客户名称','账单明细','最晚付款日','账单金额','欠款金额','逾期时长(服务开始日起)'],
         }
     }
 }
@@ -53,16 +54,16 @@
       &:nth-child(4){
             width:110px;
         }
-          &:nth-child(3){
-            width:250px;
-        }
          &:nth-child(5),&:nth-child(6){
             width:100px;
         }
         &:nth-child(7){
             width:200px;
         }
-         &:nth-child(1),&:nth-child(9),&:nth-child(2){
+        &:nth-child(1){
+            width:150px;
+        }
+         &:nth-child(3),&:nth-child(2){
             width:100%;
             flex: 1;
             /*-moz-box-flex: 1; */

@@ -76,6 +76,7 @@ var layoutScrollHeight=0;
                      {
                         title: '账单类型-ID',
                         key: 'bizTypeName',
+                        width:150,
                         align:'center',
                         render:(h, obj)=>{
                             return h('div', {
@@ -103,7 +104,6 @@ var layoutScrollHeight=0;
                                        {
                         title: '账单明细',
                         align:'center',
-                        width:250,
                         key: 'billServiceDetail',
                         render(h, params){
                         var moneyDetail=params.row.bizType=='CONTRACT'?params.row.billServiceDetail:params.row.remark;

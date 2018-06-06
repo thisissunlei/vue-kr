@@ -2,8 +2,9 @@
     <div class='slot-head-warp' :id="indentify=='daily'?'slot-head-daily-inventory':'slot-head-optional-inventory'">
         <div
             :class="indentify=='daily'?'slot-head-class':'slot-optional-class'"
-            v-for="item in data"
+            v-for="(item,index) in data"
             :key="item"
+            :style="index==0?'border-left:solid 1px #e9eaec':''"
          >
          <span>{{item}}</span>
             
@@ -62,7 +63,10 @@
         &:nth-child(7){
             width:200px;
         }
-         &:nth-child(1),&:nth-child(9),&:nth-child(2){
+          &:nth-child(1){
+            width:150px;
+        }
+         &:nth-child(3),&:nth-child(2){
             width:100%;
             flex: 1;
             /*-moz-box-flex: 1; */

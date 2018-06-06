@@ -83,7 +83,8 @@
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openEnter">即将进场  ></div>
-                <div class="header-right" v-if="list.length">今日：
+                <div class="header-right" v-if="list.length">
+                  {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':list[0].toPutawayDays-1+'日后'}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -104,7 +105,7 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
-                       {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays+'日后')):'-'}}
+                       {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays-1+'日后')):'-'}}
                       </span>
                   </li>        
                 </ul>
@@ -114,7 +115,9 @@
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOver">即将到期  ></div>
-                <div class="header-right" v-if="DueList.length">今日：
+                <div class="header-right" v-if="DueList.length">
+             {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':DueList[0].leaseRemainingDays-1+'日后'}}:
+
                   <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -136,7 +139,7 @@
                     <span class="table-cell">
                       <!-- {{item.rentDays}} -->
                         <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
-                          {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays+'日后')):'-'}}
+                          {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays-1+'日后')):'-'}}
                         </span> 
                   </li>        
                 </ul>
@@ -432,7 +435,7 @@ export default {
       getComingList(){ 
         let data={
              ifHomePageFlag:'Y',
-             communityId:this.communityId
+             communityId:this.communityId,
         };
 				this.$http.get('getImtPutawayList',data).then((res)=>{         
             console.log('机枪进场',res.data)
@@ -499,6 +502,7 @@ export default {
 					});
 				})
       },
+
          //会员访客
       getAnappointmentList(params){ 
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
@@ -545,7 +549,7 @@ export default {
         this.getDueList();
         this.getunpaidList();
         this.getOverdueList();
-        this.getAnappointmentListList();
+        // this.getAnappointmentListList();
         this.getAnappointmentList();
 
 

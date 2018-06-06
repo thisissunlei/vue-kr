@@ -82,6 +82,7 @@ var layoutScrollHeight=0;
                         title: '账单类型-ID',
                         key: 'bizTypeName',
                         align:'center',
+                        width:150,
                         render:(h, obj)=>{
                             return h('div', {
                                 props: {
@@ -109,7 +110,6 @@ var layoutScrollHeight=0;
                     {
                         title: '账单明细',
                         align:'center',
-                        width:250,
                         key: 'billServiceDetail',
                         render(h, params){
                         var bill=params.row.billGuaDetail?params.row.billGuaDetail:'';

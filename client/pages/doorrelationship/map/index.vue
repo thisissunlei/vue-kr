@@ -328,10 +328,10 @@ export default {
             _this.myDiagram.addDiagramListener("SelectionMoved",
                 function(e) {
                     var partData= e.diagram.selection.first().data;
-                    
+                    if(!partData.loc){
+                        return;
+                    }
                     var location  = partData.loc.split(" ");
-                    console.log("location",location);
-                    // var myDiagramScale = _this.myDiagram.scale;
                     var x = location[0];
                     var y = location[1];
                     var params = {

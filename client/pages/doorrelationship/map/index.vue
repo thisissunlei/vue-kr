@@ -274,9 +274,12 @@ export default {
                 new go.Binding("points").makeTwoWay(),
                 new go.Binding("curviness"),
                 $(go.Shape,  // the link shape
-                { strokeWidth: 1.5 }),
+                { isPanelMain: true,strokeWidth: 1.5 }),
+                $(go.Shape,  // a thick transparent link shape
+                { isPanelMain: true, strokeWidth: 40, stroke: "transparent" }),
                 $(go.Shape,  // the arrowhead
                 { toArrow: "standard", stroke: null }),
+                
                 
                
             );

@@ -90,6 +90,7 @@ export default{
 		}
 	},
 	data(){
+		// console.log("-------",this.file)
 		return {
 			isOpenList:false,
 			listStyle:{
@@ -109,6 +110,21 @@ export default{
 		}
 		
 	},
+	watch:{
+		file(){
+			if(this.type=='only' && this.file && this.file.length){
+				console.log('file',this.file)
+				this.defaultList=[].concat(!this.file.length?[]:this.file)
+			}
+			
+		}
+	},
+	// updated(){
+	// 	if(this.type == 'only'){
+	// 		let arr = [].concat(!this.file.length?[]:this.file);
+	// 		this.defaultList = [].concat(arr);
+	// 	}
+	// },
 	methods:{
 		delClick(index){
 			var list = [].concat(this.defaultList);

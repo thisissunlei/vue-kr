@@ -34,7 +34,7 @@
                     <div style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">
                         <span>上传文件:</span>
                         <krUpload 
-                            :file="[]"
+                            :file="item.columnDetail||[]"
                             type="only"
                             :columnDetail="item.slogn"
                             :multiple="false"
@@ -89,7 +89,7 @@
     import publicFn from './pubilcFn';
     import KrField from '~/components/KrField';
     import krUpload from '~/components/KrUpload';
-import dateUtils from 'vue-dateutils';
+    import dateUtils from 'vue-dateutils';
     
     export default {
         components:{
@@ -194,13 +194,19 @@ import dateUtils from 'vue-dateutils';
             },
             //上传成功
             upSuccess(params,columnDetail){
-                console.log(params,'上传成功',columnDetail)
+                
                 let index = columnDetail.index;
                 this.invoiceData[index].fileId = params[0].fileId;
+                this.invoiceData[index].columnDetail = [].concat(params);
+                console.log(this.invoiceData,"-------")
                 this.changeData = new Date()
             },
             deleteData(index){
-                this.invoiceData.splice(index,1)
+                var invoiceData = [].concat(this.invoiceData);
+                // console.log()
+                invoiceData.splice(index,1)
+                console.log(invoiceData,"ppppp")
+                this.invoiceData = [].concat(invoiceData);
                 this.changeData = new Date()
             },
             addData(){
@@ -216,7 +222,7 @@ import dateUtils from 'vue-dateutils';
                     };
                 this.invoiceData.push(obj);
                 this.changeData = new Date()
-                console.log('=======',this.invoiceData)
+              
 
             },
             openpiaozi(index){

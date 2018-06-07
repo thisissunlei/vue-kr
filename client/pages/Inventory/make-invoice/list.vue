@@ -163,13 +163,17 @@ import dateUtils from 'vue-dateutils';
                    status.push('TO_RETURN');
                    break;
            } 
+           console.log('====>',this.type)
            var str='';
            status.map((item,index)=>{
                str=str?item+','+str:item;    
            })
            this.tableParams.invoiceStatusList=str;
+           console.log('tableParams======',this.tableParams)
+           console.log('searchForm======',this.searchForm)
 
            var params=Object.assign({},this.tableParams,this.searchForm);
+           console.log('params',params)
            this.tableParams=params; 
            this.getListData();
         },

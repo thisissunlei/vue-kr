@@ -498,7 +498,13 @@ export default {
             
         },
         changeInvoiceStatus(val){
-            this.formItem.invoiceStatusList = 'TO_RETURN,'+val
+            console.log('changeInvoiceStatus=====>')
+            var tab=localStorage.getItem('operation-side-invoice');
+            if(tab === 'TO_RETURN'){
+                this.formItem.invoiceStatusList = 'TO_RETURN,'+val
+            }
+            
+            
         },
         receiveBlur(value){
             if(value){

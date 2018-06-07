@@ -74,6 +74,10 @@ export default  {
         url: '/api/order/operation/imtPutaway/list-excel',
         method: 'get'
     },
-    
+    //商品列表
+    'getGoodsList': {//getGoodslist
+        url: '/song/api/order/goods/list',
+        method: 'get'
+    },
   }
   

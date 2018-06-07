@@ -10,17 +10,32 @@
         <SlotHead :class="theHead?'header-here':'header-no'"/>
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <div style="display:inline-block;margin-right:100px;">
-                    <div>已招商:60天内的库存状态有在租的</div>
-                    <div>未招商:60天内的库存状态全都是未租的</div>
-                    <div>60天:从社区开业日期算起，如已开业则从今天算起</div>
+                          <Button type="primary" @click="modal1 = true">批量操作</Button>
+                        <Modal
+                          width="660"
+                            v-model="modal1"
+                            title="批量操作">
+                    <Screening/>
+                       <div slot="footer">
+                   <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+                    <Button type="primary" @click="modal10 = true">确定</Button>
                 </div>
-                <div style="display:inline-block;vertical-align:top;">
-                    <div>招商中:60天内的库存中没有在租的,但有合同未生效的</div>
-                    <div>不可招商:60天内的库存中有不可用的,同时没有是在租或合同未生效的</div>
-                </div>
-            </div>
-            <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
+                        </Modal>
+
+
+    <Modal
+        title="Title"
+        v-model="modal10"
+        class-name="vertical-center-modal">
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+    </Modal>
+                        
+                    </div>
+
+
+                <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
                  <div slot="loading">
                     <Loading/>
                  </div>
@@ -32,7 +47,6 @@
                     <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
                 </div>
         </div>
-
         <Message 
             :type="MessageType" 
             :openMessage="openMessage"
@@ -43,6 +57,7 @@
 </template>
 
 <script>
+import Screening from './screening';
 import Loading from '~/components/Loading';
 import SearchForm from '../publicPage';
 import Message from '~/components/Message';
@@ -55,11 +70,15 @@ export default {
        Loading,
        SearchForm,
        Message,
-       SlotHead
+       SlotHead,
+       Screening
     },
     data() {
         return{
+            modal1: false,
+            modal10: false,
             warn:'',
+            modal2:'',
             MessageType:'',
             openMessage:false,
             tabForms:{
@@ -74,13 +93,18 @@ export default {
             totalCount:0,
             attractColumns:[
                 {
+                    title: '商品编号',
+                    key: 'code',
+                    align:'center',
+                },
+                {
                     title: '商品名称',
                     key: 'name',
                     align:'center',
                 },
                 {
                     title: '商品类型',
-                    key: 'type',
+                    key: 'goodsType',
                     align:'center',
                     width:100,
                 },
@@ -91,91 +115,89 @@ export default {
                     width:60,
                 },
                 {
-                    title: '商品定价',
-                    key: 'quotedPrice',
-                    align:'right',
-                    width:90
-                },
-                {
-                    title: '招商状态',
-                    key: 'investmentStatusName',
+                    title: '商品属性',
+                    key: 'locationType',
                     align:'center',
                     width:90,
-                    render(tag, params){
-                        var ren=params.row.investmentStatusName?params.row.investmentStatusName:'-'
-                        return <span style={params.row.investmentStatus=='AVAILABLE'?'color:red':''}>{ren}</span>
+                     render(h, params){
+                        var desc=params.row.suiteType?params.row.suiteType:'-'
+                        return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content: desc
+                                        }
+                                    }, [
+                                    h('div', [
+                                        h('div',{
+                                        },params.row.locationType),
+                                        h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
+                                        },params.row.suiteType),
+                                    ])
+                                ])
+                        ])
                     }
                 },
                 {
-                    title: '签约价',
-                    key: 'orderList',
+                    title: '面积',
+                    key: 'area',
+                    align:'center',
+                    width:90,
+                },
+                {
+                    title: '商品定价',
+                    key: 'quotedPrice',
                     className:'current-range',
                     width:90,
                     align:'right',
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'price')
-                    }
+                  
                 },
                 {
-                    title: '折扣',
-                    key: 'orderList',
+                    title: '当前状态',
+                    key: 'goodsStatus',
                     className:'current-range',
                     align:'center',
                     width:60,
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'discount')
-                    }
+                   render(tag, params){
+                     var status=params.row.goodsStatus?params.row.goodsStatus:'-';
+                     var colorClass='';
+                     if(status=='DISABLE'||status=='OFF'){
+                         colorClass='redClass'
+                     }else{
+                         colorClass=''
+                     }
+                    return <span class={`${colorClass}`}>{status}</span>
+                  }
                 },
                 {
-                    title: '合同开始',
-                    key: 'orderList',
+                    title: '后续状态变化',
+                    key: 'followStatus',
+                    className:'current-range',
+                    align:'center',
+                    width:100, 
+                },
+                {
+                    title: '设备绑定',
+                    key: 'startDate',
                     className:'current-range',
                     align:'center',
                     width:100,
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'startDate',true)
-                    }
+
                 },
                 {
-                    title: '合同结束',
-                    key: 'orderList',
+                    title: '商品位置',
+                    key: 'goodsLocation',
                     className:'current-range',
                     align:'center',
-                    width:100,
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'endDate',true)
-                    }
-                },
-                {
-                    title: '租期',
-                    key: 'orderList',
-                    className:'current-range',
-                    align:'center',
-                    width:90,
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'rentTime')
-                    }
-                },
-                {
-                    title: '渠道来源',
-                    key: 'orderList',
-                    className:'current-range',
-                    align:'center',
-                    render(h,obj){
-                         return publicFn.mergeCell(h,obj.row.orderList,'sourceName')
-                    }
-                },
-                {
-                    title: '销售员',
-                    key: 'orderList',
-                    className:'current-range',
-                    width:100,
-                    align:'center',
-                    render(h,obj){
-                        return publicFn.mergeCell(h,obj.row.orderList,'sellerName')
-                    }
+                    width:90
+                 
                 }
-            ],
+                ],
             attractData:[]    
         }
     },
@@ -190,8 +212,10 @@ export default {
         })
     },
     watch:{
+        
         sideBar:function(val){
             this.tableCommon();
+            this.getListData();
             this.onScrollListener();
         }
     },
@@ -201,6 +225,12 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
+         ok () {
+                this.$Message.info('Clicked ok');
+            },
+            cancel () {
+                this.$Message.info('Clicked cancel');
+            },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
         if(dailyTableDom){
@@ -230,9 +260,10 @@ export default {
          this.tabForms=Object.assign({},formItem,this.tabForms);
          this.getListData(this.tabForms);
       },
-      getListData(params){
+      getListData(params){//列表
            this.loading=true;
-           this.$http.get('community-investment-list', params).then((response)=>{
+           this.$http.get('getGoodsList', params).then((response)=>{
+               console.log('商品列表',response.data);
                 this.totalCount=response.data.totalCount;
                 this.attractData=response.data.items;
                 this.loading=false;
@@ -242,6 +273,13 @@ export default {
                 this.warn=error.message;
             })
       },
+      submitUpperSearch(){
+            this.modal1=!this.modal1; 
+      },
+         showSearch () {
+                this.modal1=!this.modal1;
+            },
+
       searchClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
          this.getListData(this.tabForms); 
@@ -276,6 +314,9 @@ export default {
         }
         .ivu-table-cell{ 
             padding:0;
+        }
+        .redClass{
+            color:red;
         }
         .current-range{
             .ivu-table-cell{ 

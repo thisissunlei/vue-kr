@@ -14,7 +14,7 @@
    export default {
     data() {
         return{
-            data:['商品名称','商品类型','工位数量','商品定价','招商状态','签约价','折扣','合同开始','合同结束','租期','渠道来源','销售员']
+            data:['商品编号','商品名称','商品类型','工位数量','商品属性','面积','商品定价','当前状态','后续状态变化','设备锁定','商品设置',]
         }
     }
 }
@@ -24,6 +24,7 @@
 .slot-head-attract-investment{
      position: fixed;
      top:60px;
+     text-align: center;
      display: -moz-box; 
      display: -webkit-box; 
      display: box; 

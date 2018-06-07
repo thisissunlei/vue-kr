@@ -14,7 +14,7 @@
                         >
                             <Option 
                                 v-for="item in cityList" 
-                                :value="item.cityId" 
+                                :value="''+item.cityId" 
                                 :key="item.cityId"
                             >
                                 {{ item.cityName }}
@@ -28,7 +28,7 @@
                             >
                                 <Option 
                                     v-for="item in communityList" 
-                                    :value="item.id" 
+                                    :value="''+item.id" 
                                     :key="item.id"
                                 >
                                     {{ item.name }}
@@ -280,23 +280,19 @@ export default {
         getCommunityList(id){
             let params = this.$route.query;
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-               
-                this.communityList=res.data.map(item=>{
-                    item.id = item.id+'';
-                    return item;
-                });
+                this.communityList=res.data;
                 if(!params.communityId){
-                    this.formItem.communityId=this.communityList[0].id;
+                    this.formItem.communityId=''+this.communityList[0].id;
                     this.formItemOld=Object.assign({},this.formItem);
                 }else{
-                    this.formItem.communityId = params.communityId;
+                    this.formItem.communityId = ''+params.communityId;
                 }
 
                if(this.num<=1){
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
                     this.$emit('initData',this.formItem);
                 }else{
-                    this.formItem.communityId=this.communityList[0].id;
+                    this.formItem.communityId=''+this.communityList[0].id;
                 }
             }).catch((error)=>{
                 this.$Notice.error({
@@ -308,18 +304,15 @@ export default {
         getCityList(){
             let params = this.$route.query;
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data.map(item=>{
-                    item.cityId = item.cityId+' ';
-                    return item;
-                });
+                this.cityList=res.data;
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
-                    this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItem.cityId=''+this.cityList[1].cityId;
                 }else{
-                    this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItem.cityId=''+this.cityList[0].cityId;
                 }
                 if(params.cityId){
-                    this.formItem.cityId = params.cityId;
+                    this.formItem.cityId = ''+params.cityId;
                 }
             }).catch((error)=>{
                 this.$Notice.error({

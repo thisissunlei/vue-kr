@@ -5,14 +5,14 @@
                 <!--项目管理档案列表
                  <Archives v-if="mask"/> 
                 -->
-                <ProjectView type="PREPARE"  v-if="tabs=='PREPARE'"/>
+                <ProjectView projectStatus="PREPARE"  v-if="tabs=='PREPARE'"/>
             </TabPane>
             <TabPane label="已开业项目" name="OPENED">
 
                 <!-- 项目总览
                     <ProgressView v-if="!mask"/> 
                 -->
-               <ProjectView type="OPENED"  v-if="tabs=='OPENED'" />
+               <ProjectView projectStatus="OPENED"  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
   </div>

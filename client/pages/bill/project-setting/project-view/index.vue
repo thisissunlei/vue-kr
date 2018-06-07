@@ -187,7 +187,7 @@ let contentDom = null;
             SearchForm
         },
          props:{
-                type:{
+                projectStatus:{
                     type:String,
                 }
             },
@@ -214,9 +214,7 @@ let contentDom = null;
                     cityId:'',
                     doneTaskId:'',
                     undoneTaskId:'',
-                    projectStatus:this.type
-
-
+                    projectStatus:this.projectStatus
                 },
                 citySelectData:[],
                 taskId:1869,//任务id
@@ -270,7 +268,7 @@ let contentDom = null;
             arrowDom = document.getElementById(this.arrowId);
             contentDom = document.getElementById(this.contentId);
             handerDom = document.getElementById(this.handerId);
-            console.log("-----",contentDom,handerDom)
+         
             var wWidth = document.body.clientWidth;
             this.setContentWidth(wWidth);
 
@@ -444,7 +442,7 @@ let contentDom = null;
             },
             getCityData(projectStatus){
                 this.$http.get('get-task-city-data',{
-                    projectStatus:projectStatus
+                    projectStatus:this.projectStatus
                 }).then((res)=>{
                     this.citySelectData = [].concat(res.data);
                     

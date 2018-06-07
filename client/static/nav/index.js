@@ -545,11 +545,11 @@
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
-                        // {
-                        //     primaryText: "客户门禁权限",
-                        //     router: 'user/memberManage/doormanage',
-                        //     menuCode: 'door_base',
-                        // },
+                        {
+                            primaryText: "客户门禁权限",
+                            router: 'user/memberManage/doormanage',
+                            menuCode: 'door_base',
+                        },
                         {
                             primaryText: '客户线索',
                             router: 'user/customerManage/customerList',
@@ -765,6 +765,12 @@
                     iconName: 'icon-app',
                     iconColor: '#79859a',
                     menuItems: [
+                        {
+                            primaryText: '产品运营主页',
+                            menuCode: 'mobile_app_operate_home',
+                            type: 'vue',
+                            router: 'app-manage/home'
+                        },
                         {
                             primaryText: '公告',
                             menuCode: 'oper_notice_base',

@@ -42,8 +42,8 @@
                 <span class="title">总数</span>
                 <span class="num" v-if="tab=='all'" style="font-size:40px;color: #232428;">{{pageData.allSeatsNum}}</span>
                 <span class="num" v-if="tab=='office'" style="font-size:40px;color: #232428;">{{pageData.allSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #232428;">{{pageData.noRentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #232428;">{{pageData.noRentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #232428;">{{pageData.allFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #232428;">{{pageData.allMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">在租</span>
@@ -54,7 +54,7 @@
               </span>
               <span class="number">
                 <span class="title">合同未生效</span>
-                <span class="num"  v-if="tab=='all'" style="font-size:40px;color: #FAD27B;">{{pageData.uneffectSpaceNum}}</span>
+                <span class="num"  v-if="tab=='all'" style="font-size:40px;color: #FAD27B;">{{pageData.uneffectSeatsNum}}</span>
                 <span class="num" v-if="tab=='office'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectFixStationsNum}}</span>
                 <span class="num" v-if="tab=='mobileDesk'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectMoveStationsNum}}</span>
@@ -64,7 +64,7 @@
                 <span class="num" v-if="tab=='all'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentSeatsNum}}</span>
                 <span class="num" v-if="tab=='office'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentSpaceNum}}</span>
                 <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #35BC9B;">{{pageData.rentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">不可用</span>
@@ -82,7 +82,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openEnter">即将进场  ></div>
+                <div class="header-left" @click="openEnter">即将进场  全部 ></div>
                 <div class="header-right" v-if="list.length">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':list[0].toPutawayDays-1+'日后'}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
@@ -114,12 +114,12 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOver">即将到期  ></div>
+                <div class="header-left" @click="openOver">即将到期 全部 ></div>
                 <div class="header-right" v-if="DueList.length">
              {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':DueList[0].leaseRemainingDays-1+'日后'}}:
 
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="DueList[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">
@@ -137,8 +137,10 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
+                      <!-- {{item.rentDays}} -->
+                        <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
                           {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays-1+'日后')):'-'}}
-                    </span> 
+                        </span> 
                   </li>        
                 </ul>
               </div>
@@ -147,57 +149,53 @@
           <div class="line-one">
            <div class="box">
               <div class="header">
-                <div class="header-left" @click="openrented">已起租未付   ></div>
+                <div class="header-left" @click="openrented">已起租未付 全部 ></div>
                 <div class="header-right" v-if="unpaidList.length">
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="unpaidList[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="unpaidList[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="!list.length">
+              <div class="contents" style="text-align:center" v-if="!unpaidList.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
               </div>
               <div class="contents" v-if="unpaidList.length">
                 <ul >
                   <li v-for="item in unpaidList" value="item.value" :key="item.value" >
-                  <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">   
-
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;flex:2">{{item.bizTypeName+item.billId}}</div>
-                       </Tooltip>
-
-                      <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
-                      <div class="ellipsis" >{{item.debt}}元</div>
-                    </Tooltip>
-
-                    <span class="table-cell">逾{{item.overdueDays}}天</span>
+                     <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
+                          <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                        </Tooltip>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
             </div>
              <div class="box">
               <div class="header">
-                <div class="header-left">逾期未付(工位) ></div>
-                <div class="header-right" v-if="Overdue.length">
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                <div class="header-left" @click="openOverUnpaid('CONTRACT')">逾期未付(工位) 全部 ></div>
+                <div class="header-right" v-if="OverdueStation.length">
+                  <span :style="OverdueStation[0].remark1==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverdueStation[0].remark2==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="!list.length">
+              <div class="contents" style="text-align:center" v-if="!OverdueStation.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
               </div>
-              <div class="contents" v-if="Overdue.length">
+              <div class="contents" v-if="OverdueStation.length">
                 <ul >
-                  <li v-for="item in Overdue" >
-                  <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                  <li v-for="item in OverdueStation" >
+                     <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
-                      <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
-                      <div class="ellipsis">{{item.debt}}元</div>
+                    <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                         <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-        
+                    <span class="table-cell">{{item.debt}}元</span>
                     <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -207,28 +205,27 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">逾期未付(会议室) ></div>
-                <div class="header-right" v-if="Overdue.length">
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                <div class="header-left" @click="openOverUnpaid('MEETING')">逾期未付(会议室) 全部 ></div>
+                <div class="header-right" v-if="OverdueMeeting.length">
+                  <span :style="OverdueMeeting[0].remark1==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverdueMeeting[0].remark2==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="!Overdue.length">
+              <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
               </div>
-              <div class="contents" v-if="Overdue.length">
+              <div class="contents" v-if="OverdueMeeting.length">
                 <ul >
-                   <li v-for="item in Overdue" >
-                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                   <li v-for="item in OverdueMeeting" >
+                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
-                      <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
-                      <div class="ellipsis">{{item.debt}}元</div>
-                    </Tooltip>
-        
-                    <span class="table-cell">逾{{item.overdueDays}}天</span>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
@@ -238,38 +235,38 @@
       
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('station')">逾期未付(打印) ></div>
-                <div class="header-right" v-if="Overdue.length">
-                  <span :style="list[0].remark1==0?'':'color: #FF6868;'">{{Overdue[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="list[0].remark2==0?'':'color: #FF6868;'">{{Overdue[0].remark2}}</span><span style="font-size:12px">元</span>
+                <div class="header-left" @click="openOverUnpaid('PRINT')">逾期未付(打印) 全部 ></div>
+                <div class="header-right" v-if="OverduePrint.length">
+                  <span :style="OverduePrint[0].remark1==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverduePrint[0].remark2==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
-              <div class="contents" style="text-align:center" v-if="!Overdue.length">
+              <div class="contents" style="text-align:center" v-if="!OverduePrint.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
               </div>
-              <div class="contents" v-if="Overdue.length">
+              <div class="contents" v-if="OverduePrint.length">
                 <ul >
-                     <li v-for="item in Overdue" >
-                <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell ">      
-                    <div class="ellipsis table-cell"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                     <li v-for="item in OverduePrint" >
+                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
+                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
-                      <span  class="table-cell">{{item.customerName}}</span>
-                    <Tooltip :content="item.debt" placement="top-start" class="table-cell customer">
-                      <div class="ellipsis">{{item.debt}}元</div>
-                    </Tooltip>
-        
-                    <span class="table-cell">逾{{item.overdueDays}}天</span>
+                      <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
+                          <div  class="ellipsis">{{item.customerName}}</div>
+                      </Tooltip>
+                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
             </div>
           </div>
 
+          <!-- @click="clappointment" -->
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="clappointment">预约参观  ></div>
+                <div class="header-left">预约参观  全部 ></div>
                  <div class="header-right" v-if="appointment.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
@@ -295,8 +292,9 @@
             </div>
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openVisitor">会员访客   ></div>
-                <div class="header-right" v-if="nappointment.length">今日：
+                <div class="header-left" @click="openVisitor">会员访客  全部 ></div>
+                <div class="header-right" v-if="nappointment.length"> 
+                  {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':nappointment[0].compareTime+'日后'}}:
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
               </div>
@@ -309,16 +307,18 @@
               <div class="contents" v-if="nappointment.length">
                 <ul >
                   <li v-for="item in nappointment" >
-                 <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex:1.5">
-                    <span class="table-cell ellipsis" >{{item.visitName}}</span>
-                     </Tooltip>
+                    <Tooltip :content="item.visitName" placement="top-start" class="table-cell customer" style="flex:1.5">
+                      <span class="table-cell ellipsis" >{{item.visitName}}</span>
+                    </Tooltip>
                     <span class="table-cell" style="flex:0.8"> →</span>
-                    <span class="table-cell" style="flex:0.5">{{item.name}}</span>
+                    <Tooltip :content="item.name" placement="top-start" class="table-cell" style="flex:0.5">
+                      <div class="ellipsis">{{item.name}}</div>
+                    </Tooltip>
                     <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex2">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
-                    <Tooltip :content="item.visitTime" placement="top-start" class="table-cell customer" style="flex:1">
-                      <span class="table-cell">{{item.visitTime}}</span>
+                    <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1">
+                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日后'}}</div>
                     </Tooltip>
                   </li>        
                 </ul>
@@ -335,6 +335,8 @@
 <script>
 import './index.less';
 import ToolTip from '~/components/ToolTip';
+import utils from '~/plugins/utils';
+import dateUtils from 'vue-dateutils';
 export default {
   name:'List',
   head(){
@@ -352,74 +354,38 @@ export default {
        list:[],
        DueList:[],
        unpaidList:[],
-       Overdue:[],
+       OverduePrint:[],
+       OverdueStation:[],
+       OverdueMeeting:[],
        appointment:[],
        nappointment:[],
-         page:1,
-        pageSize:100,
-         remark1:'',
-         remark2:'',
-         ifHomePageFlag:'',
-
-
-       pageData:{},
-
-        joinData:[],
+       pageData:{}
      }
   },
   components:{
     ToolTip
   },
-  watch:{
-    
-    city(value){
-      
-      let list = this.optionList.filter(item=>{
-        if(item.value == value){
-          return true;
-        }
-        return false;
-      })
-      this.communityList = list[0].communitys;
-      this.communityId = this.communityList[0].value;
-    }
+  watch:{ 
+      city(value){
+        
+        let list = this.optionList.filter(item=>{
+          if(item.value == value){
+            return true;
+          }
+          return false;
+        })
+        this.communityList = list[0].communitys;
+        this.communityId = this.communityList[0].value;
+      }
   },
-  mounted(){
-       
-              this.getCommunityList();
-
+  mounted(){      
+    this.getCommunityList();
   },
   methods:{
  
-    //列表请求
+      //顶部列表请求
     	getHomeList(){ 
-        this.pageData={
-          "settledCustomer":'',//现入住客户
-          "settledMember":'',//先入住会员
-          "allSeatsNum":'',//总数
-           "allSpaceNum":'',//再组
-          "noRentFixStationsNum":'',//固定办公
-           "noRentMoveStationsNum":'',//移动办公桌
-           "unusefulSeatsNum":'',//不可用工位数
-           "unusefulFixStationsNum":'',//不可用办公桌
-           "unusefulMoveStationsNum":'',//不可用移动办公室
-           "unusefulSpaceNum":'',//不可用办公室个数
-          "uneffectFixStationsNum":'',	//合同未生效固定办公桌数量	
-          "uneffectMoveStationsNum":'', //	合同未生效移动办公桌数量		
-          "uneffectSeatsNum":'',	//合同未生效工位数	
-          "uneffectSpaceNum":'',	//合同未生效办公室个数
-          "noRentFixStationsNum":'',	//未租固定办公桌数量		
-          "noRentMoveStationsNum":'',	//未租移动办公桌数量		
-          "noRentSeatsNum":'',	//未租工位数		
-          "noRentSpaceNum":'',	//未租办公室个数		
-          "rentFixStationsNum":'',	//在租固定办公桌数量		
-          "rentMoveStationsNum":'',	//在租移动办公桌数量		
-          "rentSeatsNum":'',	//在租工位数	
-          "rentSpaceNum":'',	//在租办公室个数
-        };
-        // return ;
-				this.$http.get('getOperating','').then((res)=>{
-          // console.log('wwwwwwwwwww',res.data)
+				this.$http.get('getOperating',{cmtId:this.communityId}).then((res)=>{
           this.pageData=res.data;
 				}).catch((err)=>{
 					this.$Notice.error({
@@ -430,11 +396,7 @@ export default {
       
       
       //即将进场
-      getComingList(){ 
-        let data={
-             ifHomePageFlag:'Y',
-             communityId:this.communityId,
-        };
+      getComingList(data){ 
 				this.$http.get('getImtPutawayList',data).then((res)=>{         
             console.log('机枪进场',res.data)
              this.list=res.data.items;
@@ -445,11 +407,7 @@ export default {
 				})
       },
       //即将到期
-      getDueList(){ 
-            let data={
-             ifHomePageFlag:'Y',
-             communityId:this.communityId
-        };
+      getDueList(data){ 
 				this.$http.get('getDueList',data).then((res)=>{         
             console.log('即将到期',res.data)
              this.DueList=res.data.items;
@@ -460,11 +418,7 @@ export default {
 				})
       },
       //起租未付
-      getunpaidList(){ 
-          let data={
-             ifHomePageFlag:'Y',
-             communityId:this.communityId
-        };
+      getunpaidList(data){ 
 				this.$http.get('unpaidList',data).then((res)=>{         
             console.log('起租未付',res.data)
              this.unpaidList=res.data.items;
@@ -475,14 +429,16 @@ export default {
 				})
       },
       //逾期未付
-      getOverdueList(){ 
-              let data={
-             ifHomePageFlag:'Y',
-             communityId:this.communityId
-        };
+      getOverdueList(data){ 
 				this.$http.get('Overduelist',data).then((res)=>{         
             console.log('逾期未付',res.data)
-             this.Overdue=res.data.items;
+            if(data.bizType=='CONTRACT'){
+              this.OverdueStation=res.data.items;
+            }else if(data.bizType=='PRINT'){
+              this.OverduePrint=res.data.items;
+            }else{
+              this.OverdueMeeting=res.data.items;
+            }
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -492,8 +448,7 @@ export default {
        //预约参观
       getAnappointmentListList(){ 
 				this.$http.get('AnappointmentList','').then((res)=>{         
-            console.log('预约参观',res.data)
-             this.appointment=res.data.items;
+          this.appointment=res.data.items;
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -502,18 +457,25 @@ export default {
       },
 
       //会员访客
-      getAnappointmentList(params){ 
+      getAnappointmentList(params){
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
-            console.log('会员访客',res.data)
-             this.nappointment=res.data.items;
+             this.nappointment=[].concat(res.data.items);
+             this.nappointment.map((item,index)=>{
+                var time=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.visitTime));
+                var today=this.getToDay();
+                item.compareTime=utils.timeRange(today,time);
+             })
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
 					});
 				})
       },
-  
-  
+    
+    getToDay() {
+        var today = dateUtils.dateToStr("YYYY-MM-DD", new Date());
+        return today; 
+    },
     getCommunityList(){
       this.$http.get('get-community-list', '').then( r => {
           this.optionList = r.data.map(item=>{
@@ -531,26 +493,29 @@ export default {
           })
           this.city = this.optionList[0].value;
           this.communityId = this.optionList[0].communitys[0].value;
-          console.log('wwwww11111111wwww',this.city);
-          console.log('222222222222222',this.communityId);
       }).catch( e => {
         this.$Notice.error({
             title:e.message
         })
       })
     },
+
     changeCommunity(value){
-      console.log('changeCommunity',value)
-      this.communityId = value;
+        this.communityId = value;
+        let data={
+             ifHomePageFlag:'Y',
+             communityId:this.communityId
+        };
+        let type=['CONTRACT','PRINT','MEETING'];
+        type.map((item,index)=>{
+            this.getOverdueList({ifHomePageFlag:'Y',communityId:this.communityId,bizType:item});
+        })
         this.getHomeList();
-        this.getComingList();
-        this.getDueList();
-        this.getunpaidList();
-        this.getOverdueList();
-        // this.getAnappointmentListList();
+        this.getComingList(data);
+        this.getDueList(data);
+        this.getunpaidList(data);
+        //this.getAnappointmentListList();
         this.getAnappointmentList();
-
-
     },
     changeTab(type){
       this.tab = type;
@@ -561,7 +526,7 @@ export default {
     openVisitor(){
       window.open('/new/#/community/visitor/list','_blank')
     },
-      clappointment(){
+    clappointment(){
       window.open('/new/#/community/communityManage/visitorsToRecord','_blank')
     },
     openEnter(){
@@ -577,12 +542,8 @@ export default {
       window.open('/inventory/rented-unpaid','_blank')
     },
     openOverUnpaid(type){
-      window.open('/inventory/over-date-unpaid?type='+type,'_blank')
+      window.open('/inventory/over-date-unpaid?bizType='+type,'_blank')
     },
-
-  },
-  created(){
-        this.getComingList();
 
   }
  }

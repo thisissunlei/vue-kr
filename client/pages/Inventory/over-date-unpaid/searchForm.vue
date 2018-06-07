@@ -247,7 +247,7 @@ export default {
         this.getSelectData();
         if(this.$route.query.communityId){
             this.params=this.$route.query;
-        
+            
             this.params.serviceDateBegin=this.dateSwitch(this.params.serviceDateBegin);
             this.params.serviceDateEnd=this.dateSwitch(this.params.serviceDateEnd); 
 

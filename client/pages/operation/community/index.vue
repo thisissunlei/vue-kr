@@ -504,11 +504,13 @@ export default {
         this.communityId = value;
         let data={
              ifHomePageFlag:'Y',
-             communityId:this.communityId
+             communityId:this.communityId,
+             page:1,
+             pageSize:4
         };
         let type=['CONTRACT','PRINT','MEETING'];
         type.map((item,index)=>{
-            this.getOverdueList({ifHomePageFlag:'Y',communityId:this.communityId,bizType:item});
+            this.getOverdueList({ifHomePageFlag:'Y',communityId:this.communityId,bizType:item,page:1,pageSize:4});
         })
         this.getHomeList();
         this.getComingList(data);

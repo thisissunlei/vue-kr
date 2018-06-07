@@ -357,7 +357,7 @@ export default {
             }
     },
     mounted(){
-        this.params=this.$route.query
+        this.params=this.$route.query;
         this.getCityList();
     },
     methods:{
@@ -489,7 +489,6 @@ export default {
                 if(param !== this.params.cityId){
                   this.params = {}  
                 }
-                
                 this.getCommunityList(param)  
             }
 

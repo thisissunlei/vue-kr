@@ -166,7 +166,12 @@ var layoutScrollHeight=0;
                           if(params.row.payableAmount){
                              var parent=(''+params.row.payableAmount/100).split('.');
                              var first=utils.thousand(parent[0]);
-                             var second=parent.length>1?parent[1]:'00';
+                             var second='';
+                             if(parent.length>1){
+                                 second=Number(parent[1])<10?parent[1]+'0':parent[1];
+                             }else{
+                                 second='00'; 
+                             }
                              end=first+'.'+second;
                           }else{
                              end='-';
@@ -186,7 +191,12 @@ var layoutScrollHeight=0;
                           if(params.row.debt){
                              var parent=(''+params.row.debt/100).split('.');
                              var first=utils.thousand(parent[0]);
-                             var second=parent.length>1?parent[1]:'00';
+                             var second='';
+                             if(parent.length>1){
+                                 second=Number(parent[1])<10?parent[1]+'0':parent[1];
+                             }else{
+                                 second='00'; 
+                             }
                              end=first+'.'+second;
                           }else{
                              end='-';

@@ -13,7 +13,7 @@
                 </div>
 
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
-                <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">删除项目</Button></div>
+                <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
             </div>
             <Tabs size="default" @on-click="tabClick" :animated="false">
                 <TabPane label="物业档案" name="property">

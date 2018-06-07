@@ -7,7 +7,7 @@
             <span class="u-prepare">未完成</span>
             <span class="u-opened">已完成</span>
         </div>
-        <div class="u-search-content" >
+        <div class="u-search-content">
             <div class="u-select" style="width:140px;">
                  <Select
                         v-model="formItem.cityId"
@@ -58,29 +58,9 @@
         
         
     </div>
-    <div class="u-table-list" :style="{height:'40px',position:'fixed',top:'60px',overflow:'hidden',zIndex:'200'}" v-show="showHander">
+    <div class="u-table-list">
             <div class="u-table-left">
-                 
-                 <div :class="[tableFlag?'u-left-box-show':'u-left-box-hide','u-table-box']">
-                        <div class="u-table-content project-view-table-content">
-                            <!--  -->
-                            <Table  border :columns="projectTabColumns" :data="[]" ></Table>
-                        </div>
-                 </div>
-            </div>
-            <div :id="handerId" class="u-table-right" style="position:relative;">
-                <div  style="overflow-x:auto;">
-                    <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
-                        <Table  border :columns="projectTabColumns" :data="[]"></Table>
-                    </div>
-                </div>
-                
-            </div>
-    </div>
-
-    <div class="u-table-list" >
-            <div class="u-table-left">
-                 <div :id="arrowId" :class="[tableFlag?'u-left-arrow':'u-right-arrow','u-table-arrow']" @click="stretchTable"></div>
+                 <div :class="[tableFlag?'u-left-arrow':'u-right-arrow','u-table-arrow']" @click="stretchTable"></div>
                  <div :class="[tableFlag?'u-left-box-show':'u-left-box-hide','u-table-box']">
                         <div class="u-table-content project-view-table-content">
                             <!--  -->
@@ -89,18 +69,25 @@
                  </div>
             </div>
             <div class="u-table-right">
-                <div :id="contentId" style="overflow-x:auto;" >
+                <div  style="overflow-x:auto;">
                     <div :class="[tableFlag?'u-show':'','u-table-box-right','project-view-table-content']">
                         <Table  border :columns="projectTabColumns" :data="projectList"></Table>
                     </div>
                 </div>
-                
+                <div style="margin: 10px;overflow: hidden">
+                    <div  style="float: right;">
+                        <Page 
+                            :current="page"
+                            :total="totalCount"
+                            :page-size="pageSize" 
+                            show-total 
+                            show-elevator
+                            @on-change="changePage"
+                        ></Page>
+                    </div>
+                </div>
             </div>
     </div>
-    <div v-if="isloading">
-        <Loading/>
-    </div>
-    
     <div id="gantt-chart-tool-tip"></div>
     <div id="gantt-chart-tool-tip-triangle" class="bottom-triangle"></div>
     <Modal
@@ -138,7 +125,6 @@
             :getEdit="Object.assign({},editTaskData)"
         />
     </Drawer>
-    
 
 </div>
 </template>
@@ -159,19 +145,9 @@ import Loading from '~/components/Loading'
 import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from '../project-detail/object-detail-title';
 import SearchForm from '~/components/SearchForm';
-import renderData from './renderData';
 import EditTask from '../project-detail/edit-task';
-
-let mainDom = null;
-let projectViewDom = null;
-let isEnd = false;
+import renderData from './renderData';
 var scrollWidth = 0; 
-let arrowDom = null; 
-let windowHeight = 0;
-let handerDom = null;
-let contentDom = null;
-
-
     export default {
         components:{
             SectionTitle,
@@ -186,35 +162,32 @@ let contentDom = null;
             EditTask,
             SearchForm
         },
-         props:{
-                projectStatus:{
-                    type:String,
-                }
-            },
+        props:{
+            projectStatus:{
+                type:String
+            }
+        },
         data () {
             return {
                 totalCount:0,
-                page:1,
-                arrowId:'arrow'+this._uid,
-                // pageSize:20,
                 tdType:'>1500',
                 projectViewId:'projectView'+this._uid,
-                handerId:'handerList'+this._uid,
-                contentId:'contentList'+this._uid,
                 openMessage:false,
                 taskStatus:'',
                 itemDetail:{},
+                pageSize:15,
+                page:1,
                 tableFlag:false,
-                isloading:false,
                 tabParams:{
                     page:1,
-                    pageSize:200,
+                    pageSize:15,
                     projectName:'',
                     projectCode:'',
                     cityId:'',
                     doneTaskId:'',
                     undoneTaskId:'',
                     projectStatus:this.projectStatus
+
                 },
                 citySelectData:[],
                 taskId:1869,//任务id
@@ -231,7 +204,6 @@ let contentDom = null;
                     doneTaskId:'',
                     undoneTaskId:''
                 },
-                showHander:false,
                 tab:'',
                 warn:'',
                 MessageType:'',
@@ -260,83 +232,24 @@ let contentDom = null;
             //      this.$route.query.customerName=""
             //  }
             //  this.tabParams=Object.assign({},this.$route.query,{page:1,pageSize:15});
+          
+            
             
         },
         mounted(){
-            mainDom = document.getElementById('layout-content-main');
-            projectViewDom = document.getElementById(this.projectViewId);
-            arrowDom = document.getElementById(this.arrowId);
-            contentDom = document.getElementById(this.contentId);
-            handerDom = document.getElementById(this.handerId);
-         
-            var wWidth = document.body.clientWidth;
-            this.setContentWidth(wWidth);
-
-            scrollWidth = utils.getScrollBarSize();
-           
-
-           
-          
-            windowHeight = document.body.clientHeight;
-            this.response(true);
-            window.addEventListener('resize',this.response);
-
+            this.tab=this.projectStatus;
+            this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
             this.getCityData(this.tab);
+            scrollWidth = utils.getScrollBarSize();
             this.getSelect();
-           
-           
-           
-            if(mainDom){
-                mainDom.addEventListener('scroll',this.mainScroll);
-            }
-            if(contentDom){
-                contentDom.addEventListener('scroll',this.contentScroll);
-            }
-           
+            
+            this.response(true);
+            window.addEventListener('resize',this.response)
         },
-       
-        beforeDestroy(){
-            mainDom.removeEventListener('scroll',this.mainScroll)
-            window.removeEventListener('resize',this.response);
-        },
+
         
         methods:{
-            contentScroll(){
-                if(this.showHander){
-                    
-                
-                    let scrollLeft = contentDom.scrollLeft;
-                    
-                    handerDom.style.left = -scrollLeft+'px'
-                }
-               
-            },
-            mainScroll(){
-                let scrollTop = mainDom.scrollTop;
-                arrowDom.style.top = scrollTop+ (windowHeight-190)/2+'px'
-                if(scrollTop>110){
-                    this.showHander = true;
-                }else{
-                    this.showHander = false;
-                }
-                var wWidth = document.body.clientWidth;
-                this.setContentWidth(wWidth);
-                if(!isEnd && (mainDom.scrollTop + mainDom.clientHeight >= mainDom.scrollHeight)){
-                    
-                    if(this.totalCount>this.tabParams.page*this.tabParams.pageSize){
-                        this.tabParams.page +=1;
-                        this.getTableData(Object.assign({},this.tabParams));
-                    }
-                    isEnd = true;
-                }
-            },
-            setContentWidth(wWidth){
-                var contentdom = document.querySelectorAll('.project-view-table-content');
-                for(let i=0;i<contentdom.length;i++){
-                     contentdom[i].style.width = wWidth-70+400-scrollWidth +'px';
-                }
-            },
             response(flag){
                 var data =[].concat(this.projectTabColumns);
                 var arr = [];
@@ -347,8 +260,12 @@ let contentDom = null;
                 // if(boxDom){
                      
                 // }
-               this.setContentWidth(wWidth);
-              
+                var contentdom = document.querySelectorAll('.project-view-table-content');
+               
+                contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
+                
+                // console.log(boxWidth.style.width ,"kkkkkkk")
                 if(wWidth>1500  &&( flag||this.tdType!=='>1500')){
                     arr = data.map((item,index)=>{
                         delete item.width;
@@ -410,7 +327,6 @@ let contentDom = null;
                          if(item.key=='city'){
                             item.width = 57;
                         }
-                       
                         if(item.key=='k14'){
                             delete item.width;
                         }
@@ -421,17 +337,12 @@ let contentDom = null;
                  if(wWidth<=1220 && (flag||this.tdType!=='<1220')){
                     arr = data.map((item,index)=>{
                         item.width = 72;
-                        if(item.key=='code'||
-                            item.key == 'rentalArea'||
-                            item.key == 'cmtName'||
-                            item.key == 'totalSeatNum'
-                        ){
+                        if(item.key=='code'){
                             item.width = 100;
                         }
-                        if(item.key=='city'){
+                         if(item.key=='city'){
                             item.width = 77;
                         }
-                        
                         return item;
                     })
                     this.tdType = 'min';
@@ -442,7 +353,7 @@ let contentDom = null;
             },
             getCityData(projectStatus){
                 this.$http.get('get-task-city-data',{
-                    projectStatus:this.projectStatus
+                    projectStatus:projectStatus
                 }).then((res)=>{
                     this.citySelectData = [].concat(res.data);
                     
@@ -454,10 +365,10 @@ let contentDom = null;
 
             },
             cityChange(value){
-               
+                console.log(value,"ppppppp")
                 this.tabParams.cityId = value;
                 var params = Object.assign({},this.tabParams);
-                this.getTableData(params,'search');
+                this.getTableData(params);
             },
             toolOut(event){
                 var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -473,20 +384,20 @@ let contentDom = null;
             dundoneTaskChange(form){
                 this.tabParams.undoneTaskId=form;
                 this.tabParams.page = 1;
-                this.getTableData(this.tabParams,'search');
+                this.getTableData(this.tabParams);
             },
             doneTaskChange(form){
                 this.tabParams.doneTaskId=form;
                 this.tabParams.page = 1;
-                this.getTableData(this.tabParams,'search');
+                this.getTableData(this.tabParams);
             },
             onSubmit(form){ 
-                
+                console.log(form,"pppppppp")
                 
                 this.tabParams.projectName=form.projectName||'';
                 this.tabParams.projectCode=form.projectCode||'';
                 let params = Object.assign({},this.tabParams);
-                this.getTableData(params,'search');
+                this.getTableData(params);
                 // utils.addParams(params);
             },
             getSelect(){
@@ -500,42 +411,22 @@ let contentDom = null;
                     })
 
             },
-            getTableData(tabParams,type){
-                this.isloading = true;
-                this.$http.get('get-project-home', tabParams).then((res)=>{
-                        let arr = [].concat(this.projectList); 
-                        this.isloading = false;
-                        if(type == 'search'){
-                             this.projectList=[].concat(res.data.items);
-                        }else{
-                             this.projectList=arr.concat(res.data.items);
-                        }
-                       
-                        this.tabParams.page = res.data.page;
-                        this.totalCount=res.data.totalCount;
-                        isEnd = false;
-                    }).catch((err)=>{
-                        this.$Notice.error({
-                            title:err.message
-                        });
-                })
+            getTableData(tabParams){
+                    this.$http.get('get-project-home', tabParams).then((res)=>{
+                            this.projectList=res.data.items;
+                            this.totalCount=res.data.totalCount;
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                    })
             },
             stretchTable(){
-                
-                if(!contentDom || !handerDom){
-                    contentDom = document.getElementById(this.contentId);
-                    handerDom = document.getElementById(this.handerId);
-                    if(contentDom){
-                        contentDom.addEventListener('scroll',this.contentScroll);
-                    }
-                    
-                }
                 this.tableFlag=!this.tableFlag;
             },
             //跳转查看页面
             goView(params){
-                window.open(`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`)
-           
+                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`; //${params.status}
             },
             //新建页数据更新
             onAddArchives(params){
@@ -577,7 +468,7 @@ let contentDom = null;
               
                 dataParams.actualEndTime= dataParams.actualEndTime?dataParams.actualEndTime+' 00:00:00':'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
-                    this.getTableData(this.tabParams,'search');
+                    this.getTableData(this.tabParams);
                     this.getEditTaskData(this.taskId,()=>{})
                    
                     if(callback){
@@ -629,7 +520,7 @@ let contentDom = null;
                 this.addData.county=this.addData.citys[2];
                 this.allowSubmit = false;
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
-                    this.getTableData(this.tabParams,'search');
+                    this.getTableData(this.tabParams);
                     this.newArchives();
                     this.getCityData(this.tab);
                     this.openMessage=true;
@@ -647,7 +538,12 @@ let contentDom = null;
             onChangeOpen(data){
                 this.openMessage=data;
             },
-          
+            //页面发生改变
+            changePage(page){
+                this.tabParams.page=page;
+                this.page=page;
+                this.getTableData(this.tabParams);
+            },
             //新建按钮被点击
             newArchives(){
                 utils.clearForm(this.addData);
@@ -1045,6 +941,4 @@ let contentDom = null;
        
     }
 }
-
-
 </style>

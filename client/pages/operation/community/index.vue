@@ -137,10 +137,8 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
-                      <!-- {{item.rentDays}} -->
-                        <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
                           {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays-1+'日后')):'-'}}
-                        </span> 
+                    </span> 
                   </li>        
                 </ul>
               </div>
@@ -319,9 +317,9 @@
                     <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex2">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
-              <Tooltip :content="item.visitTime" placement="top-start" class="table-cell customer" style="flex:1">
-                    <span class="table-cell">{{item.visitTime}}</span>
-                     </Tooltip>
+                    <Tooltip :content="item.visitTime" placement="top-start" class="table-cell customer" style="flex:1">
+                      <span class="table-cell">{{item.visitTime}}</span>
+                    </Tooltip>
                   </li>        
                 </ul>
               </div>
@@ -503,7 +501,7 @@ export default {
 				})
       },
 
-         //会员访客
+      //会员访客
       getAnappointmentList(params){ 
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
             console.log('会员访客',res.data)

@@ -175,12 +175,12 @@ var scrollWidth = 0;
                 openMessage:false,
                 taskStatus:'',
                 itemDetail:{},
-                pageSize:15,
+                pageSize:10,
                 page:1,
                 tableFlag:false,
                 tabParams:{
                     page:1,
-                    pageSize:15,
+                    pageSize:10,
                     projectName:'',
                     projectCode:'',
                     cityId:'',
@@ -426,7 +426,7 @@ var scrollWidth = 0;
             },
             //跳转查看页面
             goView(params){
-                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`; //${params.status}
+                window.open(`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`); //${params.status}
             },
             //新建页数据更新
             onAddArchives(params){

@@ -6,7 +6,14 @@
               @initData="initData"
               :type="type"
         />
+
         <div style="padding:0px 20px;">
+             <Button type="primary" @click="goAddPage">新建</Button>
+        </div>
+
+        <div style="padding:0px 20px;">
+       
+
             <Tabs 
                 :value="type"
                 :animated="false"
@@ -65,6 +72,9 @@
     
 
         methods:{
+            goAddPage(params){
+                 window.open(`/bill/make-invoice/${params.id}/add-invoice?id=${params.id}&isReady=edit`);
+            },
             tabsClick(val){
                 localStorage.setItem('operation-side-invoice-bill',val);
                 this.type = val;

@@ -304,7 +304,6 @@ import dateUtils from 'vue-dateutils';
                       pageSize:15
                   }
                   this.tableParams = Object.assign({},pages)
-                  console.log('获取列表数据===',this.tableParams)
                   this.listData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({

@@ -169,7 +169,7 @@
            status.map((item,index)=>{
                str=str?item+','+str:item;    
            })
-           this.tableParams.invoiceStatus=str;
+           this.tableParams.invoiceStatusList=str;
            
 
            var params=Object.assign({},this.tableParams,this.searchForm);

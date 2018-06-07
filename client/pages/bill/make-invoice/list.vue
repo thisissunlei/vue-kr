@@ -319,7 +319,7 @@
                 });
 
                 let postData = {
-                    ticketList:JSON.stringify(params)
+                    ticket:JSON.stringify(params)
                 }
                 console.log('=====>',postData)
                 this.$http.post('post-new-invoice', postData).then((res)=>{

@@ -2,7 +2,7 @@
     <div class='slot-head-warp' :id="indentify=='daily'?'slot-head-daily-inventory':'slot-head-optional-inventory'">
         <div
             :class="indentify=='daily'?'slot-head-class':'slot-optional-class'"
-            v-for="item in data"
+            v-for="(item,index) in data"
             :key="item"
             :style="index==0?'border-left:solid 1px #e9eaec':''"
          >

@@ -166,7 +166,7 @@ var layoutScrollHeight=0;
                         key: 'overdueDays',
                         render(tag,params){ 
                           var money=params.row.overdueDays?utils.thousand(params.row.overdueDays):params.row.overdueDays;                  
-                          return <span style='color:red'>{money}</span>;
+                          return <span style='color:red'>{money+'天'}</span>;
                         }
                     },
                 ],

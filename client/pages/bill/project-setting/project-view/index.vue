@@ -186,6 +186,11 @@ let contentDom = null;
             EditTask,
             SearchForm
         },
+         props:{
+                type:{
+                    type:String,
+                }
+            },
         data () {
             return {
                 totalCount:0,
@@ -209,6 +214,7 @@ let contentDom = null;
                     cityId:'',
                     doneTaskId:'',
                     undoneTaskId:'',
+
 
                 },
                 citySelectData:[],

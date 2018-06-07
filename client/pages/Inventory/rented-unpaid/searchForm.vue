@@ -14,7 +14,7 @@
                         >
                             <Option 
                                 v-for="item in cityList" 
-                                :value="item.cityId" 
+                                :value="''+item.cityId" 
                                 :key="item.cityId"
                             >
                                 {{ item.cityName }}
@@ -233,7 +233,6 @@ export default {
             this.params=this.$route.query;
             this.params.serviceDateBegin=this.dateSwitch(this.params.serviceDateBegin);
             this.params.serviceDateEnd=this.dateSwitch(this.params.serviceDateEnd); 
-
         }   
     },
     methods:{
@@ -319,6 +318,7 @@ export default {
         cityChange(param){
             this.num=this.num+1;
             this.getCommunityList(param)
+            console.log('parm--',param);
         }
     }
 }

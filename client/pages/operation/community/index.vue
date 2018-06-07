@@ -521,28 +521,25 @@ export default {
       this.tab = type;
     },
     openCustomer(){
-       window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.community,'_blank')
+       window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     openVisitor(){
-      window.open('/new/#/community/visitor/list','_blank')
+      window.open('/new/#/community/visitor/list?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     clappointment(){
-      window.open('/new/#/community/communityManage/visitorsToRecord','_blank')
+      window.open('/new/#/community/communityManage/visitorsToRecord?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     openEnter(){
-      window.open('/inventory/enter-field','_blank')
+      window.open('/inventory/enter-field?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     openOver(){
-      window.open('/inventory/over-date','_blank')
-    },
-    openOver(){
-      window.open('/inventory/over-date','_blank')
+      window.open('/inventory/over-date?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     openrented(){
-      window.open('/inventory/rented-unpaid','_blank')
+      window.open('/inventory/rented-unpaid?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
     openOverUnpaid(type){
-      window.open('/inventory/over-date-unpaid?bizType='+type,'_blank')
+      window.open('/inventory/over-date-unpaid?bizType='+type+'&pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
 
   }

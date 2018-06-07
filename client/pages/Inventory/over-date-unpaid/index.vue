@@ -143,8 +143,8 @@ var layoutScrollHeight=0;
                         width:100,
                         key: 'payableAmount',
                          render(tag,params){ 
-                          var money=params.row.payableAmount?utils.thousand(params.row.payableAmount):params.row.payableAmount;                  
-                          return <span >{money}</span>;
+                          var money=params.row.payableAmount?utils.thousand(params.row.payableAmount/100):params.row.payableAmount;                  
+                          return <span >{'¥'+money}</span>;
                         }
                        
                     },
@@ -155,8 +155,8 @@ var layoutScrollHeight=0;
                         width:100,
                         key: 'debt',
                          render(tag,params){ 
-                          var money=params.row.debt?utils.thousand(params.row.debt):params.row.debt;                  
-                          return <span  style='color:red'>{money}</span>;
+                          var money=params.row.debt?utils.thousand(params.row.debt/100):params.row.debt;                  
+                          return <span  style='color:red'>{'¥'+money}</span>;
                         }
                     },
                     {

@@ -82,7 +82,7 @@ function renderData(){
                             this.goView(obj.row)
                         }
                     }
-                },obj.row.cmtName);
+                },obj.row.rentalArea);
               
             }
         },
@@ -98,7 +98,7 @@ function renderData(){
                             this.goView(obj.row)
                         }
                     }
-                },obj.row.cmtName);
+                },obj.row.totalSeatNum);
               
             }
         },

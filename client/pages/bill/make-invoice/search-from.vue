@@ -342,8 +342,15 @@ export default {
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
-                this.formItem.communityId=res.data.length?res.data[0].id:'';
+                 this.communityList=res.data.map(item=>{
+                    item.id = item.id+'';
+                    return item;
+                });
+                if(this.params.communityId){
+                    this.formItem.communityId=this.params.communityId;
+                }else{
+                    this.formItem.communityId=res.data.length?res.data[0].id:'';
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -353,8 +360,16 @@ export default {
         //城市接口
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data;
-                this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                this.cityList=res.data.map(item=>{
+                    item.cityId = item.cityId+''
+                    return item;
+                });
+                if(this.params.cityId){
+                    this.formItem.cityId=this.params.cityId;
+                }else{
+                    this.formItem.cityId=res.data.length?res.data[0].cityId+'':'';
+
+                }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

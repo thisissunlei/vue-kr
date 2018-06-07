@@ -146,6 +146,7 @@ import Drawer from '~/components/Drawer';
 import ObjectDetailTitle from '../project-detail/object-detail-title';
 import SearchForm from '~/components/SearchForm';
 import EditTask from '../project-detail/edit-task';
+import renderData from './renderData';
 var scrollWidth = 0; 
     export default {
         components:{
@@ -160,6 +161,11 @@ var scrollWidth = 0;
             ObjectDetailTitle,
             EditTask,
             SearchForm
+        },
+        props:{
+            projectStatus:{
+                type:String
+            }
         },
         data () {
             return {
@@ -180,6 +186,7 @@ var scrollWidth = 0;
                     cityId:'',
                     doneTaskId:'',
                     undoneTaskId:'',
+                    projectStatus:this.projectStatus
 
                 },
                 citySelectData:[],
@@ -214,988 +221,7 @@ var scrollWidth = 0;
                         value:'projectCode'
                     }
                 ],
-                projectTabColumns:[
-                    {
-                        title: '项目名称',
-                        key: 'name',
-                        align:'center',
-                        render:(h, obj)=>{
-                            return h('div', {
-                                attrs: {
-                                    class: "task-name",
-                                },
-                                on: {
-                                    click: () => {
-                                        this.goView(obj.row)
-                                    }
-                                }
-                            },obj.row.name);
-                        }
-                       
-                    },
-                    {
-                        title: '城市',
-                        key: 'city',
-                        align:'center',
-                        render:(h, obj)=>{
-                             return h('div', {
-                                attrs:{
-                                    class:"task-city"
-                                },
-                                on: {
-                                    click: () => {
-                                        this.goView(obj.row)
-                                    }
-                                }
-                            },obj.row.city);
-                           
-                        }
-                       
-                    },
-                    {
-                        title: '项目编号',
-                        key: 'code',
-                        align:'center',
-                        width:100,
-                        render:(h, obj)=>{
-                            return h('div', {
-                                on: {
-                                    click: () => {
-                                        this.goView(obj.row)
-                                    }
-                                }
-                            },obj.row.code);
-                          
-                        }
-                    },
-                    {
-                        title: '项目立项',
-                        key: 'k1',
-                        align:'center',
-                        render:(h, obj)=>{
-                           
-                             switch (obj.row.k1.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k1)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k1.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k1)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k1.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k1)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k1,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                             }    
-                        }
-                    },
-                    {
-                        title: '项目决策',
-                        key: 'k2',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k2.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k2)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-
-                                            }
-                                        },obj.row.k2.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k2)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k2.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k2)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k2,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                        
-                    },
-                    {
-                        title: '意向书签订',
-                        key: 'k3',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k3.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k3)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k3.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k3)
-                                                }, 
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k3.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k3)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k3,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                       
-                    },
-                    {
-                        title: '支付意向金',
-                        key: 'k4',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k4.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k4)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k4.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k4)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k4.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k4)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k4,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    },
-                    {
-                        title: '租赁合同签订',
-                        key: 'k5',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k5.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k5)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k5.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k5)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k5.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k5)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k5,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                    {
-                        title: '支付履约保证金',
-                        key: 'k6',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k6.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k6)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k6.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k6)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k6.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k6)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k6,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                    {
-                        title: '产品平面决策',
-                        key: 'k7',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k7.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k7)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k7.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k7)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k7.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k7)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k7,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    },
-                     {
-                        title: '工程收房',
-                        key: 'k8',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k8.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k8)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k8.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k8)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k8.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k8)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k8,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    },
-                    {
-                        title: '图纸完成',
-                        key: 'k9',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k9.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k9)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k9.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k9)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k9.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k9)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k9,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                    {
-                        title: '报审完成',
-                        key: 'k10',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k10.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k10)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k10.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k10)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k10.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                             on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k10)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k10,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                     {
-                        title: '项目开工',
-                        key: 'k11',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k11.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k11)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k11.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k11)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k11.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k11)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k11,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    },
-                    {
-                        title: '项目竣工',
-                        key: 'k12',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k12.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k12)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k12.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k12)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k12.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k12)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k12,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                    {
-                        title: '项目交付',
-                        key: 'k13',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k13.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k13)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k13.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k13)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k13.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k13)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k13,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    }, 
-                     {
-                        title: '项目正式开业',
-                        key: 'k14',
-                        align:'center',
-                        render:(h, obj)=>{
-                            switch (obj.row.k14.taskStatus){
-                                case 'DONE':
-                                     return h('div', {
-                                            attrs: {
-                                                class: "u-status-done",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k14)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                                
-                                            }
-                                        },obj.row.k14.actualEndTimeStr);
-                                break;
-                                case 'UNDONE':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k14)
-                                                },
-                                                 mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },obj.row.k14.planEndTimeStr);
-                                  
-                                break;
-                                case 'UNPLANNED':
-                                    return h('div', {
-                                            attrs: {
-                                                class: "u-status-undone",
-                                            },
-                                            on: {
-                                                click: () => {
-                                                    this.openEditTaskDraw(obj.row.k14)
-                                                },
-                                                mouseover:(event)=>{
-                                                     publicFn.poptipOver(event,obj.row.k14,'projectSetting');
-                                                },
-                                                mouseout:()=>{
-                                                    this.toolOut(event)
-                                                }
-                                            }
-                                        },'');
-                                break;
-                                
-                             }    
-                           
-                        }
-                    },   
-                ],
+                projectTabColumns:[].concat(renderData.call(this)),
                 
             }
         },
@@ -1211,7 +237,7 @@ var scrollWidth = 0;
             
         },
         mounted(){
-            this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
+            this.tab=this.projectStatus;
             this.tabParams.projectStatus=this.tab;
             this.getTableData(this.tabParams);
             this.getCityData(this.tab);
@@ -1236,8 +262,8 @@ var scrollWidth = 0;
                 // }
                 var contentdom = document.querySelectorAll('.project-view-table-content');
                
-                contentdom[0].style.width = wWidth-70+100-scrollWidth +'px';
-                contentdom[1].style.width = wWidth-70+100-scrollWidth +'px';
+                contentdom[0].style.width = wWidth-70+400-scrollWidth +'px';
+                contentdom[1].style.width = wWidth-70+400-scrollWidth +'px';
                 
                 // console.log(boxWidth.style.width ,"kkkkkkk")
                 if(wWidth>1500  &&( flag||this.tdType!=='>1500')){
@@ -1249,7 +275,11 @@ var scrollWidth = 0;
                         if(item.key=='city'){
                             item.width = 80;
                         }
-                        if(item.key=='code'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                       
@@ -1266,7 +296,11 @@ var scrollWidth = 0;
                         if(item.key=='city'){
                             item.width = 80;
                         }
-                        if(item.key=='code'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                         if(item.key=='k14'||item.key=='k13'||item.key=='k12'){
@@ -1280,7 +314,11 @@ var scrollWidth = 0;
                 if(wWidth<=1400 && wWidth>1220 && (flag||this.tdType!=='1220-1400')){
                     arr = data.map((item,index)=>{
                         item.width=74;
-                        if(item.key=='code'){
+                        if(item.key=='code'||
+                            item.key == 'rentalArea'||
+                            item.key == 'cmtName'||
+                            item.key == 'totalSeatNum'
+                        ){
                             item.width = 100;
                         }
                          if(item.key=='name'){
@@ -1388,7 +426,7 @@ var scrollWidth = 0;
             },
             //跳转查看页面
             goView(params){
-                window.location.href=`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`; //${params.status}
+                window.open(`./project-setting/project-detail?name=${params.name}&id=${params.id}&city=${params.city}&status=1`); //${params.status}
             },
             //新建页数据更新
             onAddArchives(params){
@@ -1679,6 +717,7 @@ var scrollWidth = 0;
                 z-index:100;
                 right:-10px;
                 top:50%;
+                cursor: pointer;
                 transform: translateY(-50%);
             }
             .u-left-arrow{
@@ -1696,7 +735,7 @@ var scrollWidth = 0;
             transition:width .2s;
         }
         .u-left-box-show{
-            width:340px;
+            width:640px;
             transition:width .2s;
         }
         
@@ -1709,8 +748,8 @@ var scrollWidth = 0;
            .u-table-box-right{
                 width:100%; 
                 // min-width:1600px;
-                margin-left: -100px;
-                 transition:all .2s;
+                margin-left: -400px;
+                transition:all .2s;
                 table{
                         th,td{
                             &:nth-child(3){
@@ -1819,7 +858,7 @@ var scrollWidth = 0;
                 transition:width .2s;
             }
             .u-left-box-show{
-                width:252px;
+                width:552px;
                 transition:width .2s;
             }
 
@@ -1827,8 +866,29 @@ var scrollWidth = 0;
         
      }
 }
-@media all and (min-width: 1400px)  and (max-width: 1500px){
+@media all and (min-width: 1440px)  and (max-width: 1500px){
     .project-view {
+        .u-search{
+            height: 75px;
+            .new-btn{
+                width: 108px;
+            }
+       
+            .u-search-content{
+
+                width: 100%;
+                margin-top: 10px;
+                margin-left: 0px;
+                .u-select{
+                    .task-select{
+                        width: 170px;
+                    }
+                }
+                .task-select-box{
+                    width: 300px;
+                }
+            }
+        }
         .u-status-done{
             width: 70px;
         }
@@ -1845,6 +905,7 @@ var scrollWidth = 0;
         }
      }
 }
+
 @media all and (max-width: 1300px) {
     .project-view {
         .u-search{
@@ -1874,12 +935,10 @@ var scrollWidth = 0;
             transition:width .2s;
         }
         .u-table-list .u-left-box-show{
-            width:247px;
+            width:547px;
             transition:width .2s;
         }
        
     }
 }
-
-
 </style>

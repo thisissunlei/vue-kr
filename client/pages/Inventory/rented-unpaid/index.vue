@@ -294,6 +294,8 @@ var layoutScrollHeight=0;
             getData(params){
                 params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
                 params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
+                params.debtMin=params.debtMin?params.debtMin*100:'';
+                params.debtMax=params.debtMax?params.debtMax*100:'';
                 this.$http.get('unpaidList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;

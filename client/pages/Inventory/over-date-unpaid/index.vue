@@ -237,7 +237,7 @@ var layoutScrollHeight=0;
             window.removeEventListener('resize',this.onResize); 
         },
         methods:{
-             showDetail(params){
+            showDetail(params){
                 window.open(`../../bill/list/detail/${params.billId}`,'_blank')
             },
             getCommonParam(){
@@ -275,6 +275,8 @@ var layoutScrollHeight=0;
             getData(params){
                 params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
                 params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
+                params.debtMin=params.debtMin?params.debtMin*100:'';
+                params.debtMax=params.debtMax?params.debtMax*100:'';
                 this.$http.get('Overduelist', params).then((res)=>{
 
                     this.tableList=res.data.items;

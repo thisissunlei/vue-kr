@@ -168,11 +168,10 @@ export default {
             };
 
             const validatePrice = (rule, value, callback) => {
-                var reg = /^\+?[1-9]\d*$/;
+                 var reg=/^(([1-9]{1}[0-9]{0,6})|([0])|([0]\.\d{1,2}|[1-9]{1}[0-9]{0,6}\.\d{1,2}))$/;
+                // var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入正整数');
-                }else if(value&&value>9999999){ 
-                    callback('单价最高9999999');
+                    callback('最多2位小数的数字');
                 }else if (this.formItem.debtMin&&this.formItem.debtMax&&Number(this.formItem.debtMin)>Number(this.formItem.debtMax)) {
                     callback('后者需要大于前者');
                 }else{
@@ -247,12 +246,9 @@ export default {
         this.getSelectData();
         if(this.$route.query.communityId){
             this.params=this.$route.query;
-            
             this.params.serviceDateBegin=this.dateSwitch(this.params.serviceDateBegin);
             this.params.serviceDateEnd=this.dateSwitch(this.params.serviceDateEnd); 
-
-        }  
-          
+        }     
     },
     methods:{
         //获取账单类型
@@ -336,10 +332,6 @@ export default {
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
                     this.$emit('searchClick',this.formItem);
-
-                    //  this.formItem.serviceDateBegin=this.formItem.serviceDateBegin;
-                    //  this.formItem.serviceDateEnd=this.formItem.serviceDateBegin;
-
                 }
             })
         },

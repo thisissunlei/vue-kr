@@ -266,7 +266,7 @@ export default {
                     startTime:'',
                     endRefundTime:'',
                     endTicketTime:'',
-                    endTime:' ',
+                    endTime:'',
                 },
                 //发票规格数组
                 invoiceTypeList:[],

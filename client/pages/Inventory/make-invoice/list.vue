@@ -169,11 +169,7 @@ import dateUtils from 'vue-dateutils';
                str=str?item+','+str:item;    
            })
            this.tableParams.invoiceStatusList=str;
-           console.log('tableParams======',this.tableParams)
-           console.log('searchForm======',this.searchForm)
-
            var params=Object.assign({},this.tableParams,this.searchForm);
-           console.log('params',params)
            this.tableParams=params; 
            this.getListData();
         },
@@ -201,6 +197,7 @@ import dateUtils from 'vue-dateutils';
                     this.openMessage=true;
                     this.MessageType="success";
                     this.warn='邮寄成功';
+                    this.mailClick()
                     this.getListData();
                 }).catch((err)=>{
                   console.log('====',err)
@@ -296,6 +293,8 @@ import dateUtils from 'vue-dateutils';
                 params.receiveStartDate=this.dateSwitch(params.receiveStartDate);
                 params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
                 params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
+                params.invoiceStatusList = this.tableParams.invoiceStatusList;
+                console.log(this.tableParams,'params=====',params)
                 this.$http.get('invoice-list-unified',params).then((res)=>{
                   let pages = {
                       page:res.data.page,
@@ -303,7 +302,7 @@ import dateUtils from 'vue-dateutils';
                       totalPages:res.data.totalPages,
                       pageSize:15
                   }
-                  this.tableParams = Object.assign({},pages)
+                  this.tableParams = Object.assign({},this.tableParams,pages)
                   this.listData=res.data.items;
                 }).catch((err)=>{
                     this.$Notice.error({

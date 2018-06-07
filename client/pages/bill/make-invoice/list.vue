@@ -253,7 +253,7 @@
             //回退提交
             goBackSubmit(){
                 let params = Object.assign({},this.backData);
-                this.$http.post('get-project-home', params).then((res)=>{
+                this.$http.post('csr-invoice-refund', params).then((res)=>{
                     // this.listData=res.data.items;
                     this.getListData();
                     this.switchGoBack();

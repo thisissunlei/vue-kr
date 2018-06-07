@@ -1,7 +1,7 @@
 <template>
     <div class='make-invoice-form'>
         <div class="community-header">
-            <Form ref="formItemInvestment" :model="formItem"  label-position="left">
+            <Form ref="formItemInvestment" :model="formItem"  label-position="left" :rules="ruleOperation">
 
                 <!-- 第一行-->
                 <div style="white-space: nowrap;width:850px;"> 
@@ -81,17 +81,17 @@
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
-                            <Form-item label="申请时间" class='priceForm' prop="endTime">
+                            <Form-item label="申请时间" class='priceForm' prop="applyStartDate">
                                 <DatePicker 
-                                    v-model="formItem.startTime" 
+                                    v-model="formItem.applyStartDate" 
                                     placeholder="开始日期"
                                     style="width: 90px"
                                 />
                             </Form-item>
                             <span style="display:inline-block;margin: 7px 4px 0 5px;">至</span>
-                            <Form-item  class='priceForm' prop="endTime">
+                            <Form-item  class='priceForm' prop="applyEndDate">
                                 <DatePicker 
-                                    v-model="formItem.endTime" 
+                                    v-model="formItem.applyEndDate" 
                                     placeholder="结束日期"
                                     style="width: 90px"
                                 />
@@ -232,17 +232,47 @@ export default {
             //商品名称
             const validateName = (rule, value, callback) => {
                 // var str=publicFn.fucCheckLength(value);
-                if(value&&str>20){
+                if(value&&value.length>20){
                     callback('名称最多20个字节');
                 }else{
                     callback();
                 }
             };
-            //租期天数
-            const validateTime = (rule, value, callback) => {
+            const validateMoney = (rule, value, callback)=>{
                 var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
                     callback('请输入正整数');
+                }else if (this.formItem.startAmount&&this.formItem.endAmount&&Number(this.formItem.startAmount)>Number(this.formItem.endAmount)) {
+                    callback('后者需要大于前者');
+                }else{
+                    callback();
+                }
+            }
+            const validateApplyNum = (rule, value, callback) => {
+                // var str=publicFn.fucCheckLength(value);
+                if(value&&value.length>20){
+                    callback('最多20个字节');
+                }else{
+                    callback();
+                }
+            }; 
+            const validateBillNums =  (rule, value, callback) => {
+                // var str=publicFn.fucCheckLength(value);
+                if(value&&value.length>20){
+                    callback('最多20个字节');
+                }else{
+                    callback();
+                }
+            }; 
+             const validateTime = (rule, value, callback) => {
+                var start='';
+                var end='';
+                if(rule.field=='applyEndDate'||rule.field=='applyStartDate'){
+                    start=this.formItem.applyStartDate;
+                    end=this.formItem.applyEndDate;
+                }
+                if (start&&end&&start>end){
+                    callback('后者需要大于前者');
                 }else{
                     callback();
                 }
@@ -255,7 +285,7 @@ export default {
                     billNums:'',
                     communityId:' ',
                     companyId:'',
-                    endAmount:' ',
+                    endAmount:'',
                     invoiceTitle:' ',
                     invoiceType:' ',
                     startAmount:'',
@@ -284,6 +314,47 @@ export default {
                 ],
                 
                 formItemOld:{},
+                ruleOperation:{
+                    applyNum:[
+                        { validator: validateApplyNum, trigger: 'change' }
+                    ],
+                    billNums:[
+                        { validator: validateBillNums, trigger: 'change' }
+                    ],
+                    invoiceTitle: [
+                        { validator: validateName, trigger: 'change' }
+                    ],
+                    ticketEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    ticketStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    receiveEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    receiveStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    callbackStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    callbackEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    startAmount:[
+                        { validator: validateMoney, trigger: 'change' }
+                    ],
+                    endAmount:[
+                        { validator: validateMoney, trigger: 'change' }
+                    ],
+                    applyStartDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                    applyEndDate:[
+                        { validator: validateTime, trigger: 'change' }
+                    ],
+                }
             
             }
     },

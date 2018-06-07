@@ -214,6 +214,7 @@ let contentDom = null;
                     cityId:'',
                     doneTaskId:'',
                     undoneTaskId:'',
+                    projectStatus:this.type
 
 
                 },
@@ -276,9 +277,6 @@ let contentDom = null;
             scrollWidth = utils.getScrollBarSize();
            
 
-            this.tab=sessionStorage.getItem('chartSetting') ||'PREPARE';
-            this.tabParams.projectStatus=this.tab;
-            
            
           
             windowHeight = document.body.clientHeight;

@@ -82,7 +82,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openEnter">即将进场  全部 ></div>
+                <div class="header-left" @click="openEnter">即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="list.length">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':list[0].toPutawayDays-1+'日后'}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
@@ -114,7 +114,7 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOver">即将到期 全部 ></div>
+                <div class="header-left" @click="openOver">即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="DueList.length">
              {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':DueList[0].leaseRemainingDays-1+'日后'}}:
 
@@ -149,7 +149,7 @@
           <div class="line-one">
            <div class="box">
               <div class="header">
-                <div class="header-left" @click="openrented">已起租未付 全部 ></div>
+                <div class="header-left" @click="openrented">已起租未付 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="unpaidList.length">
                   <span :style="unpaidList[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="unpaidList[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -176,7 +176,7 @@
             </div>
              <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('CONTRACT')">逾期未付(工位) 全部 ></div>
+                <div class="header-left" @click="openOverUnpaid('CONTRACT')">逾期未付(工位) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="OverdueStation.length">
                   <span :style="OverdueStation[0].remark1==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverdueStation[0].remark2==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -205,7 +205,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('MEETING')">逾期未付(会议室) 全部 ></div>
+                <div class="header-left" @click="openOverUnpaid('MEETING')">逾期未付(会议室) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="OverdueMeeting.length">
                   <span :style="OverdueMeeting[0].remark1==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverdueMeeting[0].remark2==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -235,7 +235,7 @@
       
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('PRINT')">逾期未付(打印) 全部 ></div>
+                <div class="header-left" @click="openOverUnpaid('PRINT')">逾期未付(打印) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="OverduePrint.length">
                   <span :style="OverduePrint[0].remark1==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverduePrint[0].remark2==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -266,7 +266,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">预约参观  全部 ></div>
+                <div class="header-left">预约参观  <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                  <div class="header-right" v-if="appointment.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
@@ -292,7 +292,7 @@
             </div>
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openVisitor">会员访客  全部 ></div>
+                <div class="header-left" @click="openVisitor">会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
                 <div class="header-right" v-if="nappointment.length"> 
                   {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':nappointment[0].compareTime+'日后'}}:
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>

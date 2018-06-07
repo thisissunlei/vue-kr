@@ -143,8 +143,16 @@ var layoutScrollHeight=0;
                         width:100,
                         key: 'payableAmount',
                          render(tag,params){ 
-                          var money=params.row.payableAmount?utils.thousand(params.row.payableAmount/100):params.row.payableAmount;                  
-                          return <span >{'¥'+money}</span>;
+                          var end='';      
+                          if(params.row.payableAmount){
+                             var parent=(''+params.row.payableAmount/100).split('.');
+                             var first=utils.thousand(parent[0]);
+                             var second=parent.length>1?parent[1]:'00';
+                             end=first+'.'+second;
+                          }else{
+                             end='-';
+                          }
+                          return <span >{'¥'+end}</span>;
                         }
                        
                     },
@@ -155,8 +163,16 @@ var layoutScrollHeight=0;
                         width:100,
                         key: 'debt',
                          render(tag,params){ 
-                          var money=params.row.debt?utils.thousand(params.row.debt/100):params.row.debt;                  
-                          return <span  style='color:red'>{'¥'+money}</span>;
+                          var end='';      
+                          if(params.row.debt){
+                             var parent=(''+params.row.debt/100).split('.');
+                             var first=utils.thousand(parent[0]);
+                             var second=parent.length>1?parent[1]:'00';
+                             end=first+'.'+second;
+                          }else{
+                             end='-';
+                          }
+                          return <span  style='color:red'>{'¥'+end}</span>;
                         }
                     },
                     {

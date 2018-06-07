@@ -262,7 +262,6 @@ export default {
                 }else{
                     this.formItem.communityId = params.communityId;
                 }
-                
                 if(this.num<=1){
                     this.formItem = Object.assign({},this.formItem,this.$route.query);
                     this.$emit('initData',this.formItem);
@@ -285,11 +284,13 @@ export default {
                 });
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
+                    console.log('2');
                     this.formItem.cityId=this.cityList[1].cityId;
                 }else{
                     this.formItem.cityId=this.cityList[0].cityId;
                 }
                 if(params.cityId){
+                    console.log('2',params.cityId);
                     this.formItem.cityId = params.cityId;
                 }
             }).catch((error)=>{
@@ -317,8 +318,8 @@ export default {
         },
         cityChange(param){
             this.num=this.num+1;
-            this.getCommunityList(param)
             console.log('parm--',param);
+            this.getCommunityList(param)  
         }
     }
 }

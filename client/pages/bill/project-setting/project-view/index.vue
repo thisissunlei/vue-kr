@@ -455,7 +455,7 @@ let contentDom = null;
                
                 this.tabParams.cityId = value;
                 var params = Object.assign({},this.tabParams);
-                this.getTableData(params);
+                this.getTableData(params,'search');
             },
             toolOut(event){
                 var tirDom = document.getElementById('gantt-chart-tool-tip');
@@ -471,12 +471,12 @@ let contentDom = null;
             dundoneTaskChange(form){
                 this.tabParams.undoneTaskId=form;
                 this.tabParams.page = 1;
-                this.getTableData(this.tabParams);
+                this.getTableData(this.tabParams,'search');
             },
             doneTaskChange(form){
                 this.tabParams.doneTaskId=form;
                 this.tabParams.page = 1;
-                this.getTableData(this.tabParams);
+                this.getTableData(this.tabParams,'search');
             },
             onSubmit(form){ 
                 
@@ -484,7 +484,7 @@ let contentDom = null;
                 this.tabParams.projectName=form.projectName||'';
                 this.tabParams.projectCode=form.projectCode||'';
                 let params = Object.assign({},this.tabParams);
-                this.getTableData(params);
+                this.getTableData(params,'search');
                 // utils.addParams(params);
             },
             getSelect(){
@@ -498,12 +498,17 @@ let contentDom = null;
                     })
 
             },
-            getTableData(tabParams){
+            getTableData(tabParams,type){
                 this.isloading = true;
                 this.$http.get('get-project-home', tabParams).then((res)=>{
                         let arr = [].concat(this.projectList); 
                         this.isloading = false;
-                        this.projectList=arr.concat(res.data.items);
+                        if(type == 'search'){
+                             this.projectList=[].concat(res.data.items);
+                        }else{
+                             this.projectList=arr.concat(res.data.items);
+                        }
+                       
                         this.tabParams.page = res.data.page;
                         this.totalCount=res.data.totalCount;
                         isEnd = false;
@@ -518,7 +523,10 @@ let contentDom = null;
                 if(!contentDom || !handerDom){
                     contentDom = document.getElementById(this.contentId);
                     handerDom = document.getElementById(this.handerId);
-                    contentDom.addEventListener('scroll',this.contentScroll);
+                    if(contentDom){
+                        contentDom.addEventListener('scroll',this.contentScroll);
+                    }
+                    
                 }
                 this.tableFlag=!this.tableFlag;
             },
@@ -567,7 +575,7 @@ let contentDom = null;
               
                 dataParams.actualEndTime= dataParams.actualEndTime?dataParams.actualEndTime+' 00:00:00':'';
                 this.$http.post('project-edit-task',dataParams).then((response)=>{
-                    this.getTableData(this.tabParams);
+                    this.getTableData(this.tabParams,'search');
                     this.getEditTaskData(this.taskId,()=>{})
                    
                     if(callback){
@@ -619,7 +627,7 @@ let contentDom = null;
                 this.addData.county=this.addData.citys[2];
                 this.allowSubmit = false;
                 this.$http.post('project-archives-add',this.addData).then((res)=>{
-                    this.getTableData(this.tabParams);
+                    this.getTableData(this.tabParams,'search');
                     this.newArchives();
                     this.getCityData(this.tab);
                     this.openMessage=true;
@@ -637,12 +645,7 @@ let contentDom = null;
             onChangeOpen(data){
                 this.openMessage=data;
             },
-            //页面发生改变
-            changePage(page){
-                this.tabParams.page=page;
-                this.page=page;
-                this.getTableData(this.tabParams);
-            },
+          
             //新建按钮被点击
             newArchives(){
                 utils.clearForm(this.addData);

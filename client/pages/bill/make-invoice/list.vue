@@ -121,7 +121,6 @@
                     page:1,
                     pageSize:15,
                     totalCount:0,
-                    flag:'list',
                     invoiceStatus:this.status
                 },
                 backData:{
@@ -163,13 +162,15 @@
                    status.push('RECOVERYED');
                    break;
                default:
-                   status.push(' ');
+                   status.push('RECOVERYED,APPLYING,INVOICED');
                    break;
            } 
            var str='';
            status.map((item,index)=>{
                str=str?item+','+str:item;    
            })
+           this.tableParams.invoiceStatus=str;
+           
 
            var params=Object.assign({},this.tableParams,this.searchForm);
            this.tableParams=params; 

@@ -8,6 +8,7 @@
         />
         <div style="padding:0px 20px;">
             <Tabs 
+                :value="type"
                 :animated="false"
                 @on-click="tabsClick"
             >
@@ -21,7 +22,7 @@
                     <List v-if="type == 'returnMake'" :type="type" status="RECOVERYED" />
                 </TabPane>
                 <TabPane label="全部" name="all">
-                    <List v-if="type == 'all'" :type="type"/>
+                    <List v-if="type == 'all'" :type="type" status="RECOVERYED,APPLYING,INVOICED"/>
                 </TabPane>
             </Tabs>
         </div>
@@ -51,6 +52,8 @@
         },
         mounted(){
              var tab=localStorage.getItem('operation-side-invoice-bill');
+             console.log('=====>',tab)
+             this.tabsClick(tab)
              this.type=tab?tab:'waitMake';
         },
       

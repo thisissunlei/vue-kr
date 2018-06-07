@@ -77,7 +77,7 @@
                                 style="width: 200px"
                                 clearable
                             >
-                                <Option v-for="item in contentTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in contentTypeList" :value="item.value" :key="item.value">{{ item.desc }}</Option>
                             </Select> 
                         </Form-item>
                         <div style="display:inline-block">
@@ -253,13 +253,13 @@ export default {
                 formItem:{
                     applyNum:'',
                     billNums:'',
-                    communityId:'',
+                    communityId:' ',
                     companyId:'',
-                    contentType:'',
                     endAmount:' ',
-                    invoiceTitle:'',
-                    invoiceType:'',
+                    invoiceTitle:' ',
+                    invoiceType:' ',
                     startAmount:'',
+                    cityId:' ',
 
                     startRefundTime:'',
                     startTicketTime:'',
@@ -267,6 +267,7 @@ export default {
                     endRefundTime:'',
                     endTicketTime:'',
                     endTime:'',
+                    contentType:' ',
                 },
                 //发票规格数组
                 invoiceTypeList:[],
@@ -289,6 +290,7 @@ export default {
     mounted(){
         this.getCityList();
         this.getInvoiceTypeList();
+        this.getContentTypeList();
         var _this=this;
         this.params = _this.$route.query;
         _this.$emit('initData',this.formItem);      
@@ -320,8 +322,9 @@ export default {
             this.$http.get('get-enum-all-data',{
                 enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
             }).then((res)=>{
-                // utils.addAllselect('全部给个',res.data)
-                this.invoiceTypeList = [].concat(utils.addAllselect('全部规格',res.data));
+                res.data.unshift({code:'',desc:'全部',value:' '})
+
+                this.invoiceTypeList = res.data;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -330,9 +333,11 @@ export default {
         },
         getContentTypeList(){
             this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.order.api.enums.invoice.InvoiceType'
+                enmuKey:'com.krspace.order.api.enums.invoice.ContentType'
             }).then((res)=>{
-                this.contentTypeList = [].concat(utils.addAllselect('全部内容',res.data));
+                 res.data.unshift({code:'',desc:'全部',value:' '})
+
+                this.contentTypeList = res.data;
             }).catch((err)=>{
                 this.$Notice.error({
                     title:err.message
@@ -341,11 +346,14 @@ export default {
         },
         //社区接口
         getCommunityList(id){
+            console.log('---------');
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
+                 res.data.unshift({cityId:' ',name:'全部社区',id:' '})
                  this.communityList=res.data.map(item=>{
                     item.id = item.id+'';
                     return item;
                 });
+                 console.log('======')
                 if(this.params.communityId){
                     this.formItem.communityId=this.params.communityId;
                 }else{
@@ -360,16 +368,23 @@ export default {
         //城市接口
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
+               
+                res.data.unshift({cityId:' ',cityName:'全部城市'})
+
                 this.cityList=res.data.map(item=>{
                     item.cityId = item.cityId+''
                     return item;
                 });
+                 console.log('======',res.data)
+
                 if(this.params.cityId){
                     this.formItem.cityId=this.params.cityId;
                 }else{
-                    this.formItem.cityId=res.data.length?res.data[0].cityId+'':'';
+                    this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                    
 
                 }
+                this.getCommunityList(this.formItem.cityId)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
@@ -400,6 +415,7 @@ export default {
         },
         //城市change事件
         cityChange(param){
+            console.log('---------',param);
             this.getCommunityList(param)
         },
         //社区change事件

@@ -160,8 +160,13 @@ function initListData(){
             align:'center',
             type:'waitMake,alreadyMake,all',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ticketTime));
-                return time;
+                if(params.row.ticketTime){
+                    let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ticketTime));
+                    return time;
+                }else{
+                    return '--'
+                }
+                
             }
 
         },
@@ -171,8 +176,13 @@ function initListData(){
             align:'center',
             type:'returnMake',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.refundTime));
-                return time;
+                if(params.row.refundTime){
+                   let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.refundTime));
+                    return time; 
+                }else{
+                    return '--'
+                }
+                
             }
             
         },

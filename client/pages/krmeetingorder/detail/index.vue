@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="basic-info order-info">
-                <SectionTitle title="预订信息"></SectionTitle>
+                <SectionTitle title="商品信息"></SectionTitle>
                 <div class="basic-info-box">
                     <dl>
                         <dt>预订的会议室：</dt><dd>{{detail.roomName}}</dd>
@@ -40,6 +40,9 @@
                     </dl>
                     <dl>
                         <dt>预订时段：</dt><dd>{{detail.meetingHour}}</dd>
+                    </dl>
+                    <dl>
+                        <dt>会议室单价：</dt><dd>{{detail.unitCost}}￥/0.5h</dd>
                     </dl>
                     <dl>
                         <dt>会议主题：</dt><dd>{{detail.theme}}</dd>
@@ -114,19 +117,28 @@ export default {
            tilteAndStyle:[
                     {
                         title: '下单时会议室单价（￥/0.5h）',
-                        key: 'unitCost',
+                        key: 'promotionCost',
+                        align: 'center',
                     },
                     {
-                        title: '下单时会议室折扣价（￥/0.5h）',
-                        key: 'promotionCost'
+                        title: '数量（0.5h）',
+                        key: 'halfHourCount',
+                        align: 'center',
                     },
                     {
-                        title: '商品总额（￥）',
-                        key: 'totalAmount'
+                        title: '商品总价（￥）',
+                        key: 'totalAmount',
+                        align: 'center',
+                    },
+                    {
+                        title: '使用的优惠策略',
+                        key: 'discountDesc',
+                        align: 'center',
                     },
                     {
                         title: '订单金额（￥）',
-                        key: 'cost'
+                        key: 'cost',
+                        align: 'center',
                     }],
            alertTimeOptions : [
                {
@@ -157,9 +169,10 @@ export default {
 
                 var resData = res.data;
                 _this.orderAboutMoney = [{
-                    unitCost : resData.unitCost,
                     promotionCost : resData.promotionCost,
+                    halfHourCount :resData.halfHourCount,
                     cost : resData.cost,
+                    discountDesc : resData.discountDesc || "/",
                     totalAmount : resData.totalAmount,
                 }]
 

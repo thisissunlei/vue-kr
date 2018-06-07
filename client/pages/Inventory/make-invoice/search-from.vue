@@ -420,7 +420,8 @@ export default {
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data.map(item=>{
+                res.data.unshift({cityId:' ',name:'全部社区',id:' '})
+                 this.communityList=res.data.map(item=>{
                     item.id = item.id+'';
                     return item;
                 });
@@ -438,16 +439,21 @@ export default {
         //城市接口
         getCityList(){
             this.$http.get('getDailyCity').then((res)=>{
+                res.data.unshift({cityId:' ',cityName:'全部城市'})
+
                 this.cityList=res.data.map(item=>{
                     item.cityId = item.cityId+''
                     return item;
                 });
+
                 if(this.params.cityId){
                     this.formItem.cityId=this.params.cityId;
                 }else{
-                    this.formItem.cityId=res.data.length?res.data[0].cityId+'':'';
+                    this.formItem.cityId=res.data.length?res.data[0].cityId:'';
+                    
 
                 }
+                this.getCommunityList(this.formItem.cityId)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

@@ -15,7 +15,7 @@
                         <dt>订单金额：￥</dt><dd>{{detail.totalAmount}}</dd>
                     </dl>
                     <dl>
-                        <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderStatus)}}</dd>
+                        <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderShowStatus)}}</dd>
                     </dl>
                     <dl>
                         <dt>下单会员ID：</dt><dd>{{detail.uid}}</dd>

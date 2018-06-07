@@ -48,7 +48,7 @@ export default {
                         key: 'communityName'
                     },
                     {
-                        title: '预定的会议室',
+                        title: '预订的会议室',
                         key: 'roomName'
                     },
                     {
@@ -71,7 +71,7 @@ export default {
                         render: (h, params) => {
                             return h('div', [
                                
-                                h('span', this.returnText(params.row.orderStatus))
+                                h('span', this.returnText(params.row.orderShowStatus))
                             ]);
                         }
                     },
@@ -141,8 +141,9 @@ export default {
             })
         },
         returnText(param){
-            
+            console.log("param",param);
             var meetingStatusOptions = this.meetingStatusOptions;
+            console.log("meetingStatusOptions",meetingStatusOptions)
             for(var i =0;i<meetingStatusOptions.length;i++){
                 if(param == meetingStatusOptions[i].name){
                     

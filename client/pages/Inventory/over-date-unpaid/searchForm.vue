@@ -43,8 +43,8 @@
                             style="width: 150px"
                             clearable
                         >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">
-                                {{ item.billName}}
+                            <Option v-for="item in productList" :value="item.code" :key="item.code">
+                                {{ item.name}}
                                 </Option>
                         </Select> 
         
@@ -258,11 +258,9 @@ export default {
     methods:{
         //获取账单类型
         getSelectData(){
-            this.$http.get('get-enum-all-data',{
-                enmuKey:'com.krspace.pay.api.enums.BizType'
-            }).then((response)=>{
-               this.productList=response.data;
-               this.productList.unshift({value:' ',billName:'全部'})
+            this.$http.get('get-bill-type').then((response)=>{
+               this.productList=response.data.enums;   
+               this.productList.unshift({code:' ',name:'全部'})
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

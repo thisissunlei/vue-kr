@@ -95,12 +95,10 @@ export default  {
         method: 'get'
     },
     
-  // 方可
-  'gitVisitorsList': {
-    url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
-    method: 'get'
-},
-    
-
+    // 方可
+    'gitVisitorsList': {
+        url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
+        method: 'get'
+    },
   }
   

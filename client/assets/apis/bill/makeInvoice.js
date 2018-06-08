@@ -60,8 +60,8 @@ export default  {
       url: '/api/order/csr-invoice-refund',
       method: 'post'
     },
-    "csr-invoice-ticket":{
-      url: '/api/order/csr-invoice-ticket',
+    "csr-invoice-ticket-open":{
+      url: '/api/order/csr-invoice-ticket/open',
       method: 'post'
     },
     "csr-invoice-invoiceDetail":{

@@ -10,7 +10,7 @@
                     {{formItem.applyNum}}
                 </LabelText>
                 <LabelText  :inline="inline" label="发票规格：">
-                    {{formItem.invoiceType}}
+                    {{formItem.invoiceTypeName}}
                 </LabelText>
                 <LabelText :inline="inline" label="需退换发票金额："  v-if="invoiceStatus == 'TO_RETURN'">
                     {{formItem.needRefund}}
@@ -105,15 +105,15 @@
                 <LabelText :inline="inline" label="领取方式：">
                     {{formItem.receiveMethodName}}
                 </LabelText>
-               <!--  <LabelText :inline="inline" label="收件人员：">
+                <LabelText :inline="inline" label="收件人员：" v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.recipient}}
                 </LabelText>
-                <LabelText :inline="inline" label="手机号码：">
+                <LabelText :inline="inline" label="手机号码："v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.phone}}
                 </LabelText>
-                <LabelText :inline="inline" label="收件地址：">
+                <LabelText :inline="inline" label="收件地址："v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.recipientAddress}}
-                </LabelText> -->
+                </LabelText>
                 
             </Card>
             <span class="space" ></span>
@@ -239,6 +239,13 @@ export default {
 </script>
 
 <style lang='less'>
+    .ui-label-text-unline{
+        vertical-align: top;
+        margin-bottom: 35px;
+    }
+    .g-replace-order-detail .ui-labeltext{
+        margin-bottom: 40px;
+    }
     .create-order{
         padding:30px 20px;
     }

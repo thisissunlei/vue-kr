@@ -55,13 +55,15 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '--';
                 }
                 var detailList = [].concat(obj.row.invoiceDetailList)
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+
                 for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
-                            borderBottom:'1px solid #e9eaec',
+                            borderBottom:line,
                             padding:'8px 10px'
                         },
                         on: {
@@ -83,13 +85,16 @@ function initListData(){
                 var arr=[];
               
                 if( !obj.row.invoiceDetailList || !obj.row.invoiceDetailList.length){
-                    return ;
+                    return '--';
                 }
+
                 var detailList = [].concat(obj.row.invoiceDetailList)
+                let line = detailList.length>1?'1px solid #e9eaec':'none'
+
                 for(let i=0;i<detailList.length;i++){
                     arr.push(h('div', {
                         style: {
-                            borderBottom:'1px solid #e9eaec',
+                            borderBottom:line,
                             padding:'8px 10px'
                         },
                         on: {

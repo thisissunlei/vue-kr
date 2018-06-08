@@ -272,7 +272,7 @@ import utils from '~/plugins/utils';
                 console.log('params',params)
 
 
-                this.$http.post('csr-invoice-ticket',params).then((res)=>{
+                this.$http.post('csr-invoice-ticket-open',params).then((res)=>{
                     window.close();
                     window.opener.location.reload();
 

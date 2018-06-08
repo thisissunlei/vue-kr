@@ -89,10 +89,10 @@
                 </p>
                 <span class="card-header"></span>
 
-                <LabelText  :inline="inline"label="社区名称：">
+                <LabelText  :inline="inline" label="社区名称：">
                     {{formItem.communityName}}
                 </LabelText>
-                <LabelText  :inline="inline"label="公司名称">
+                <LabelText  :inline="inline" label="公司名称">
                     {{formItem.corporationName}}
                 </LabelText>
             </Card>
@@ -108,10 +108,10 @@
                 <LabelText :inline="inline" label="收件人员：" v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.recipient}}
                 </LabelText>
-                <LabelText :inline="inline" label="手机号码："v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
+                <LabelText :inline="inline" label="手机号码：" v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.phone}}
                 </LabelText>
-                <LabelText :inline="inline" label="收件地址："v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
+                <LabelText :inline="inline" label="收件地址：" v-if="formItem.invoicePostVO && formItem.receiveMethod=='RECEIVE_POST'">
                     {{formItem.invoicePostVO.recipientAddress}}
                 </LabelText>
                 
@@ -132,10 +132,10 @@
                 </p>
                 <span class="card-header"></span>
 
-                <LabelText  :inline="inline"label="开票人员：">
+                <LabelText  :inline="inline" label="开票人员：">
                     {{formItem.ticketer}}
                 </LabelText>
-                <LabelText  :inline="inline"label="开票时间：">
+                <LabelText  :inline="inline" label="开票时间：">
                     {{formItem.ticketTime   |dateFormat('YYYY-MM-dd')}}
                 </LabelText>
             </Card>

@@ -62,7 +62,7 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
                         <FormItem label="注册电话" style="width:252px" prop="registerPhone">
                             <Input 
                                 :disabled="isReady" 
@@ -72,7 +72,7 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
                         <FormItem label="开户银行" style="width:252px" prop="bank">
                             <Input 
                                 :disabled="isReady" 
@@ -82,7 +82,7 @@
                         </FormItem>
                         
                     </Col>
-                     <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                     <Col class="col" v-if="formItem.titleType=='COMPANY'">
                         <FormItem label="银行账户" style="width:252px" prop="bankAccount">
                             <Input 
                                 :disabled="isReady" 
@@ -106,6 +106,7 @@
                        >
                          {{item.fileName}}
                        </span>
+                       
                     </Col>
                     <Col style="display:block;margin-top:20px;">
                        一般纳税人证明:
@@ -120,7 +121,13 @@
                     </Col>
                 </Row>
             </DetailStyle>
-
+            <KrUpload 
+                :file="[]"
+                type="only"
+                :columnDetail="{}"
+                :multiple="true"
+               
+            />
             <PhotoAlbum 
                 :data="imgData" 
                 v-if="openBussiness" 
@@ -152,10 +159,22 @@ import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import PhotoAlbum from '~/components/PhotoAlbum';
+import KrUpload from '~/components/KrUpload';
+
 
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
     export default {
+        components:{
+            KrUpload,
+            SectionTitle,
+            selectCommunities,
+            DetailStyle,
+            selectCustomers,
+            SelectSaler,
+            planMap,
+            PhotoAlbum
+        },
         data() {
             const validateMust = (rule, value, callback) => {
                 if(this.formItem.titleType=='PERSON'){
@@ -296,15 +315,6 @@ import utils from '~/plugins/utils';
             return {
                 title: '新建订单'
             }
-        },
-        components: {
-            SectionTitle,
-            selectCommunities,
-            DetailStyle,
-            selectCustomers,
-            SelectSaler,
-            planMap,
-            PhotoAlbum
         },
          mounted(){
             let params = Object.assign({},this.$route.query);

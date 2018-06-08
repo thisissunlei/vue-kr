@@ -11,8 +11,11 @@
 				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
 					<div class="img-mask">
+						<div style="line-height:60px;text-align:center;">
+							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
+							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
+						</div>
 						
-						<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
 					</div>
 				</div>
 			</div>
@@ -53,6 +56,7 @@
 				
 			</div>
 		</div>
+		<PhotoAlbum @downFile="downImg" :data="imagesArr" v-if="openPhotoAlbum" :eyeIndex="eyeIndex" @close="close"/>
 	</div>
 </template>
 
@@ -61,10 +65,12 @@
 // import http from '~/plugins/http.js';
 import utils from '~/plugins/utils';
 import KrImg from './KrImg';
+import PhotoAlbum from './PhotoAlbum';
 export default{
 	name:'krUpload',
 	components: {
-		KrImg
+		KrImg,
+		PhotoAlbum
 	},
 	/**
 	 *  @param {Object} columnDetail 当用在列表是的上传组件所在行的所有数据
@@ -97,6 +103,9 @@ export default{
 				left:0,
 				top:0,
 			},
+			eyeIndex:1,
+			openPhotoAlbum:false,
+			imagesArr:[],
 			upIconShow:true,
 			inputId:'up-file'+this._uid,
 			newWin:'',
@@ -110,6 +119,7 @@ export default{
 		}
 		
 	},
+
 	watch:{
 		file(){
 			if(this.type=='only' && this.file && this.file.length){
@@ -126,6 +136,21 @@ export default{
 	// 	}
 	// },
 	methods:{
+		eyePhotoAlbum(index){
+			// let arr = [].concat(this.imagesArr);
+			this.eyeIndex = index;
+			this.imagesArr = [].concat(this.defaultList);
+			console.log(this.imagesArr,"pppppp",index)
+			this.close();
+
+			// for()
+		},
+		downImg(){
+
+		},
+		close(){
+			this.openPhotoAlbum  = !this.openPhotoAlbum;
+		},
 		delClick(index){
 			var list = [].concat(this.defaultList);
 			list.splice(index, 1);
@@ -201,7 +226,7 @@ export default{
 							// that.percent = 0;
 							var data = fileResponse.data;
 							var params = {};
-							
+							params.fieldUrl = fileResponse.data.url;
 							params.name = fileName;
 							params.url = fileResponse.data.url;
 							params.fileId = ""+fileResponse.data.id;
@@ -371,11 +396,7 @@ export default{
 		text-align: center;
 		.delete-icon{
 			cursor: pointer;
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			margin-left: -7px;
-			margin-top: -10px;
+			margin: 0px 5px;
 		}
 	}
 	

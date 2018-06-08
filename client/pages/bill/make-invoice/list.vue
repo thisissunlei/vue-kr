@@ -34,7 +34,7 @@
                     </div>
                     <div style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">
                         <span>上传文件:</span>
-                        <krUpload 
+                        <KrUpload 
                             :file="item.columnDetail||[]"
                             type="only"
                             :columnDetail="item.slogn"
@@ -89,14 +89,14 @@
 <script>
     import publicFn from './pubilcFn';
     import KrField from '~/components/KrField';
-    import krUpload from '~/components/KrUpload';
+    import KrUpload from '~/components/KrUpload';
     import dateUtils from 'vue-dateutils';
 import utils from '~/plugins/utils';
     
     export default {
         components:{
             KrField,
-            krUpload
+            KrUpload
         },
         props:{
             type:{

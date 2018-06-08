@@ -21,7 +21,7 @@ export default {
    name:'billList',
     head () {
             return {
-                title: "KM会议室"
+                title: "KM会议"
             }
     },
    data(){

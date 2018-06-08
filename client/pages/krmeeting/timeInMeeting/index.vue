@@ -142,6 +142,7 @@ export default {
     }
     .page-part{
         margin-top:20px;
+        text-align: right;
     }
     .table-box{
             padding-bottom: 20px;

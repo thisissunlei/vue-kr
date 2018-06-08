@@ -59,6 +59,10 @@ export default  {
     "csr-invoice-refund":{
       url: '/api/order/csr-invoice-refund',
       method: 'post'
+    },
+    "csr-invoice-ticket":{
+      url: '/api/order/csr-invoice-ticket',
+      method: 'post'
     }
    
    

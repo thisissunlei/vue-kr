@@ -168,7 +168,6 @@ export default {
        },
        refreshMap(){
            var dateTemplate =this.dateTemplate;
-            // console.log("dateTemplate",dateTemplate);
             this.model = go.Model.fromJson(dateTemplate);
             this.myDiagram.model = this.model;
        },
@@ -219,7 +218,6 @@ export default {
                 { 
                     click: function(e, obj) { 
                             _this.selectedNodeData = obj.part.data;
-                            // console.log("_this.selectedNodeData",_this.selectedNodeData)
                     },
                     doubleClick: function(e, node) {
                         _this.selectedNodeData = node.data;
@@ -246,7 +244,6 @@ export default {
                             "fill", 
                             "isHighlighted", 
                             function(h) { 
-                                console.log("h",h);
                                 return h ? "#f89903" : "#328cf1"; 
                             }
                     ).ofObject()
@@ -274,9 +271,12 @@ export default {
                 new go.Binding("points").makeTwoWay(),
                 new go.Binding("curviness"),
                 $(go.Shape,  // the link shape
-                { strokeWidth: 1.5 }),
+                { isPanelMain: true,strokeWidth: 1.5 }),
+                $(go.Shape,  // a thick transparent link shape
+                { isPanelMain: true, strokeWidth: 40, stroke: "transparent" }),
                 $(go.Shape,  // the arrowhead
                 { toArrow: "standard", stroke: null }),
+                
                 
                
             );
@@ -317,7 +317,6 @@ export default {
             // }
             _this.myDiagram.addDiagramListener("ObjectSingleClicked",
                 function(e) {
-                    console.log("e====?",e.subject.part.data);
                     var part = e.subject.part;
                     if ((part instanceof go.Link)) {
                         _this.selectedNodeData = part.data;
@@ -328,10 +327,10 @@ export default {
             _this.myDiagram.addDiagramListener("SelectionMoved",
                 function(e) {
                     var partData= e.diagram.selection.first().data;
-                    
+                    if(!partData.loc){
+                        return;
+                    }
                     var location  = partData.loc.split(" ");
-                    console.log("location",location);
-                    // var myDiagramScale = _this.myDiagram.scale;
                     var x = location[0];
                     var y = location[1];
                     var params = {
@@ -365,7 +364,6 @@ export default {
                 var setListData = reponseData.setList || [];
                 for(var i = 0 ;i< setListData.length;i++){
                     var countNum = setListData[i].elementCount || "0"
-                    console.log("countNum",countNum);
                     nodeDataArrayNew[i] = {
                         "id": setListData[i].id,
                         "loc": setListData[i].x + " "+ setListData[i].y,
@@ -469,12 +467,9 @@ export default {
         confirmDelete(){
             
             var param = this.selectedNodeData
-            console.log(param,"param");
             if(param.from){
-                console.log("dsklfkfdlkfd");
                 this.deleteLinkConnectFun(param);
             }else{
-                console.log("dsklfkfdlkfd=====");
                 
                 this.deleteEquipmentGroup(param);
             }
@@ -539,7 +534,6 @@ export default {
             var newCreateLinkData = linkData;
             let _this =this;
             this.$http.post('newCreateDoorGroupConnect',param).then((res)=>{
-                console.log("kdlfdkfld====>>>")
                 
                 this.$Message.success('创建联系成功');
                 if(linkData){
@@ -597,7 +591,6 @@ export default {
         editNodeDataInDetail(sendMsg,res){
            
             let _this =this;
-            console.log("sendMsg编辑完成传到map页",sendMsg,"res",res,"_this.selectNodeData",_this.selectedNodeData,"_this.editInitailData",_this.editInitailData);
             
             
             var newObj = Object.assign({},sendMsg);
@@ -693,10 +686,8 @@ export default {
         },
 
         deleteEquipmentSendReq(params){
-            console.log("params",params);
             let _this = this;
             var doorIdsArr = params.doorIds.split(",");
-            console.log("doorIdsArr",doorIdsArr);
             this.$http.delete('deleteEquipmentFromGroup', params).then((res)=>{
 
 
@@ -722,7 +713,6 @@ export default {
 
         searchEquipment(msg){
             let _this = this;
-            console.log("_this.selectedNodeData",_this.selectedNodeData);
             var idparam = {setId : _this.selectedNodeData.id}
             var newObj = Object.assign({},_this.detailMadalEquipmentListSearchData,msg,idparam)
             this.getEquipmentListData(newObj,"refresh");
@@ -743,15 +733,21 @@ export default {
                 this.myDiagram.clearHighlighteds();
                 _this.myDiagram.startTransaction();
                 var isHighlightedNodeIdArr = res.data.items ||[];
-                
+                var containInThisPage = 0;
                 for(var i=0;i<isHighlightedNodeIdArr.length;i++){
                     var findNodeData = _this.myDiagram.findNodesByExample({id:isHighlightedNodeIdArr[i] }).first();
                     if (findNodeData) {
+                        containInThisPage++
                         _this.myDiagram.model.setDataProperty(findNodeData, "isHighlighted",true);
                     }
                     _this.myDiagram.commitTransaction("changed highLight");
                 }
-                
+                if(containInThisPage==0){
+                    this.$Notice.open({
+                        title: '查找的设备不在当前社区的设备组中',
+                        desc: true ? '' : ''
+                    });
+                }
             
 			}).catch((error)=>{
 				this.$Notice.error({

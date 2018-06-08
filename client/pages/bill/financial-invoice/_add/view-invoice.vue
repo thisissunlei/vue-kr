@@ -5,12 +5,13 @@
             <DetailStyle info="基本信息">
                 <Row style="margin-bottom:30px">  
                     <Col span="12" class="col">
-                        <FormItem label="企业类别" style="width:252px" prop="customerId">
+                        <FormItem label="企业类别" style="width:252px" prop="titleType">
                             <Select 
                                 :disabled="isReady"
                                 v-model="formItem.titleType" 
                                 placeholder="请输入企业类别" 
                                 clearable
+                                @on-change="changeType"
                             >
                                 <Option v-for="item in unitTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select>
@@ -18,7 +19,18 @@
                     </Col>
 
                     <Col class="col">
-                        <FormItem label="纳税类型" style="width:252px"  prop="communityId">
+                        <FormItem label="发票抬头" style="width:252px" prop="invoiceTitle">
+                             <Input 
+                                :disabled="isReady" 
+                                v-model="formItem.invoiceTitle" 
+                                placeholder="请输入发票抬头" 
+                            />
+                        </FormItem>
+                    </Col>
+
+
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="纳税类型" style="width:252px"  prop="taxpayerType">
                             <Select 
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerType" 
@@ -29,17 +41,9 @@
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col class="col">
-                        <FormItem label="发票抬头" style="width:252px" prop="salerId">
-                             <Input 
-                                :disabled="isReady" 
-                                v-model="formItem.invoiceTitle" 
-                                placeholder="请输入发票抬头" 
-                            />
-                        </FormItem>
-                    </Col>
-                    <Col class="col">
-                        <FormItem label="纳税人识别码" style="width:252px" prop="startDate">
+                    
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="纳税人识别码" style="width:252px" prop="taxpayerNumber" >
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.taxpayerNumber" 
@@ -48,8 +52,8 @@
                         </FormItem>
                     </Col>
 
-                    <Col class="col">
-                        <FormItem label="注册地址" style="width:252px" prop="startDate">
+                    <Col class="col" v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="注册地址" style="width:252px" prop="registerAddress">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.registerAddress" 
@@ -58,8 +62,8 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col">
-                        <FormItem label="注册电话" style="width:252px" prop="startDate">
+                    <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="注册电话" style="width:252px" prop="registerPhone">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.registerPhone" 
@@ -68,8 +72,8 @@
                         </FormItem>
                         
                     </Col>
-                    <Col class="col">
-                        <FormItem label="开户银行" style="width:252px" prop="startDate">
+                    <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="开户银行" style="width:252px" prop="bank">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bank" 
@@ -78,8 +82,8 @@
                         </FormItem>
                         
                     </Col>
-                     <Col class="col">
-                        <FormItem label="银行账户" style="width:252px" prop="startDate">
+                     <Col class="col"v-if="formItem.titleType=='COMPANY'">
+                        <FormItem label="银行账户" style="width:252px" prop="bankAccount">
                             <Input 
                                 :disabled="isReady" 
                                 v-model="formItem.bankAccount" 
@@ -90,7 +94,7 @@
                     </Col>
                 </Row>
             </DetailStyle>
-            <DetailStyle info="开票信息">
+            <DetailStyle info="开票信息" v-if="formItem.titleType=='COMPANY'">
                 <Row  style="margin-bottom:30px">   
                     <Col style="display:block;">
                        营业执照:
@@ -127,7 +131,7 @@
             
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
-                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled">编辑</Button>
+                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
                     <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
                     <Button class="view-btn" @click="rejectedSubmit" v-if="!isReady">驳回</Button>
                 </div>
@@ -153,13 +157,26 @@ import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
     export default {
         data() {
-            const validateFirst = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请先选择首付款日期'));
-                } else if(new Date(this.formItem.startDate)<new Date(value)){
-                    callback(new Error('首付款日期不得晚于起始日期'));
+            const validateMust = (rule, value, callback) => {
+                if(this.formItem.titleType=='PERSON'){
+                    callback();
+                }
+                if(this.formItem.titleType!='PERSON' && value === ''){
+                    callback(new Error('此项为必填项。'));
                 }else{
                      callback();
+                }
+            };
+            const validatephone = (rule, value, callback) => {
+                if(this.formItem.titleType=='PERSON'){
+                    callback();
+                }
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (this.formItem.titleType!='PERSON' && !phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
                 }
             };
             return {
@@ -169,13 +186,11 @@ import utils from '~/plugins/utils';
                 openBussiness:false,
                 //单位类型
                 unitTypeList:[
-                    {value:' ',label:'全部'},
                     {value:'COMPANY',label:'企业单位'},
                     {value:'PERSON',label:'个人/非企业单位'}
                 ],
                 //纳税类型
                 taxTypeList:[
-                    {value:' ',label:'全部'},
                     {value:'SMALL',label:'小规模纳税人'},
                     {value:'GENERAL',label:'一般纳税人'}
                 ],
@@ -244,36 +259,36 @@ import utils from '~/plugins/utils';
                 },
                 //校验
                 ruleCustom:{
-                //     startDate: [
-                //         { required: true,type: 'date', message: '请先选择开始时间', trigger: 'change' }
-                //     ],
-                //     firstPayTime: [
-                //         { required: true, trigger: 'change' ,validator: validateFirst},
-                //     ],
-                //     endDate: [
-                //         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                //     ],
-                //     endDateStatus: [
-                //         { required: true, type: 'date',message: '请先选择结束时间', trigger: 'change' }
-                //     ],
-                //     communityId:[
-                //         { required: true, message: '请选择社区', trigger: 'change' }
-                //     ],
-                //     customerId:[
-                //         { required: true, message: '请选择客户', trigger: 'change' }
-                //     ],
-                //     salerId:[
-                //         { required: true, message: '请选择销售员', trigger: 'change' }
-                //     ],
-                //     signDate:[
-                //         { required: true,type: 'date', message: '请先选择签署时间', trigger: 'change' }
-                //     ]
+                    titleType: [
+                        { required: true, message: '请先选择企业类别', trigger: 'change' }
+                    ],
+                    taxpayerType: [
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    invoiceTitle: [
+                        { required: true, message: '请先选择结束时间', trigger: 'change' }
+                    ],
+                    taxpayerNumber: [
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    registerAddress:[
+                        {trigger: 'change' ,validator: validateMust},
+                    ],
+                    registerPhone:[
+                        {trigger: 'change' ,validator: validatephone},
+                    ],
+                    bank:[
+                       {trigger: 'change' ,validator: validateMust},
+                    ],
+                    bankAccount:[
+                       {trigger: 'change' ,validator: validateMust},
+                    ]
                 },
                 salerName:'请选择',
                 businessUrlName:[],
                 taxUrlName:[],
                 eyeIndex:0,
-                imgData:[]
+                imgData:[],
 
             }
         },
@@ -305,6 +320,22 @@ import utils from '~/plugins/utils';
             this.getViewDetail();
         },
         methods: {
+            changeType(value){
+                if(value){
+                    this.formItem.titleType = value;
+                }else{
+                    this.formItem.titleType = ''
+                }
+                //欢哥说的，切换类别，清空除抬头外其他数据
+                if(value=='PERSON'){
+                    let obj = {
+                        invoiceTitle : this.formItem.invoiceTitle,
+                        titleType :value,
+                        id:this.formItem.id
+                    }
+                    this.formItem = obj;
+                }
+            },
             bussinessClose(){
                 this.openBussiness=!this.openBussiness;
             },
@@ -321,13 +352,19 @@ import utils from '~/plugins/utils';
                 utils.downImg(url);
             },
             rejectedSubmit(){
-                // this.$http.put('get-financial-invoice-rejected',editData).then((res)=>{
-                //     console.log('editok',res);
-                // }).catch((err)=>{
-                //     this.$Notice.error({
-                //         title:err.message
-                //     });
-                // })
+                let param = Object.assign({},this.$route.query);
+                let params = {
+                    handleType:'reject',
+                    id :param.id,
+                }
+                this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
+                    // window.close();
+                // window.opener.location.reload(); 
+                }).catch((err)=>{
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
             },
             getViewDetail(){
                 let params = Object.assign({},this.$route.query);
@@ -362,14 +399,25 @@ import utils from '~/plugins/utils';
                let editData=Object.assign({},this.formItem);   
                delete editData.ctime;  
                delete editData.rejectTime;
-               delete editData.verifyTime ;  
-               this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
-                    console.log('editok',res);
-                }).catch((err)=>{
-                    this.$Notice.error({
-                        title:err.message
-                    });
+               delete editData.verifyTime ; 
+               delete editData.utime ;
+               editData.taxCertificate = JSON.stringify(editData.taxCertificate)
+               editData.businessLicense = JSON.stringify(editData.businessLicense)
+
+               this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
+                            console.log('editok',res);
+                            // window.close();
+                        // window.opener.location.reload();
+                        }).catch((err)=>{
+                            this.$Notice.error({
+                                title:err.message
+                            });
+                        })
+                    }
                 })
+               
             },
             changeCommunity(value){
                 // 选择社区

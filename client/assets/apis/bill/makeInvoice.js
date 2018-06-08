@@ -63,6 +63,10 @@ export default  {
     "csr-invoice-ticket":{
       url: '/api/order/csr-invoice-ticket',
       method: 'post'
+    },
+    "csr-invoice-invoiceDetail":{
+      url:"/api/order/csr-invoice-invoiceDetail",
+      method:'get'
     }
    
    

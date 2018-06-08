@@ -246,7 +246,7 @@
             },
             //跳转查看页面
             goView(params){
-                 window.open(`/publicPage/make-invoice/${params.id}/view-invoice`);
+                 window.open(`/publicPage/make-invoice/${params.id}/view-detail`);
             },
             //回退提交
             goBackSubmit(){

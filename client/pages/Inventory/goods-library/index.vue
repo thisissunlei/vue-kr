@@ -16,7 +16,15 @@
                 <Button type="primary" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
             </div>
             
-            <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
+            <Table 
+               ref="selectionGoodsLibrary" 
+               :loading="loading" 
+               stripe 
+               :columns="attractColumns" 
+               :data="attractData" 
+               border
+               @on-selection-change="tableChange"
+             >
                 <div slot="loading">
                     <Loading/>
                 </div>
@@ -32,12 +40,12 @@
         <Modal
             width="660"
             v-model="modal1"
-            title="批量操作">
-                <ChangeStatus/>
-                <div slot="footer">
-                    <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
-                    <Button type="primary" @click="modal10 = true">确定</Button>
-                </div>
+            title="修改状态">
+            <ChangeStatus/>
+            <div slot="footer">
+                <Button type="ghost" style="margin-left:8px" @click="closeStatus">取消</Button>
+                <Button type="primary" @click="submitStatus">确定</Button>
+            </div>
         </Modal>
 
         <Modal
@@ -59,6 +67,7 @@ import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
+import dateUtils from 'vue-dateutils';
 
 export default {
     components:{
@@ -91,7 +100,7 @@ export default {
                 {
                     title: '商品编号',
                     key: 'code',
-                    align:'center',
+                    align:'center' 
                 },
                 {
                     title: '商品名称',
@@ -100,40 +109,37 @@ export default {
                 },
                 {
                     title: '商品类型',
-                    key: 'goodsType',
+                    key: 'goodsTypeName',
                     align:'center',
-                    width:100,
+                    width:120,
                 },
                 {
                     title: '工位数量',
                     key: 'capacity',
                     align:'center',
-                    width:60,
+                    width:90,
                 },
                 {
                     title: '商品属性',
-                    key: 'locationType',
+                    key: 'locationTypeName',
                     align:'center',
-                    width:90,
+                    width:120,
                      render(h, params){
-                        var desc=params.row.suiteType?params.row.suiteType:'-'
                         return h('div', [
                                     h('Tooltip', {
                                         props: {
                                             placement: 'top',
-                                            content: desc
+                                            content: params.row.locationTypeName+' '+params.row.suiteTypeName
                                         }
                                     }, [
                                     h('div', [
                                         h('div',{
-                                        },params.row.locationType),
-                                        h('div',{
-                                            style:{
+                                          style:{
                                                 textOverflow:'ellipsis',
                                                 whiteSpace:'nowrap',
                                                 overflow: 'hidden'
-                                            }
-                                        },params.row.suiteType),
+                                           }
+                                        },params.row.locationTypeName+' '+params.row.suiteTypeName),
                                     ])
                                 ])
                         ])
@@ -148,26 +154,25 @@ export default {
                 {
                     title: '商品定价',
                     key: 'quotedPrice',
-                    className:'current-range',
                     width:90,
                     align:'right',
                   
                 },
                 {
                     title: '当前状态',
-                    key: 'goodsStatus',
-                    className:'current-range',
+                    key: 'goodsStatusName',
                     align:'center',
-                    width:60,
+                    width:90,
                    render(tag, params){
-                     var status=params.row.goodsStatus?params.row.goodsStatus:'-';
+                     var statusName=params.row.goodsStatusName?params.row.goodsStatusName:'-';
+                     var status=params.row.goodsStatus;
                      var colorClass='';
                      if(status=='DISABLE'||status=='OFF'){
                          colorClass='redClass'
                      }else{
                          colorClass=''
                      }
-                    return <span class={`${colorClass}`}>{status}</span>
+                    return <span class={`${colorClass}`}>{statusName}</span>
                   }
                 },
                 {
@@ -175,25 +180,60 @@ export default {
                     key: 'followStatus',
                     className:'current-range',
                     align:'center',
-                    width:100, 
+                    width:120, 
+                    render(h,obj){
+                        var rowArray=obj.row.followStatus;
+                        var row='';
+                        let classN='row-current-more current-more-task table-null';
+                        if(!rowArray){
+                            return  h('div', {
+                                attrs: {
+                                    class:classN
+                                },
+                            }, '-')
+                        }
+                        if(rowArray){
+                            row=rowArray.map((item,index)=>{
+                                var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+item.goodsStatusName;
+                                return h('div', [
+                                    h('Tooltip', {
+                                        props: {
+                                            placement: 'top',
+                                            content:endRender
+                                        }
+                                    }, [
+                                    h('div', {
+                                        attrs: {
+                                            class:classN,
+                                        }
+                                    },endRender)
+                                ])
+                            ])
+                            })
+                            return row
+                        }
+                    }
                 },
                 {
                     title: '设备绑定',
-                    key: 'startDate',
-                    className:'current-range',
+                    key: 'binding',
                     align:'center',
-                    width:100,
-
+                    width:60,
+                    render(h,params){
+                        return <span>-</span>
+                    }
                 },
                 {
                     title: '商品位置',
                     key: 'goodsLocation',
-                    className:'current-range',
                     align:'center',
-                    width:90
-                 
+                    width:120,
+                    render(h,params){
+                        var name=params.row.goodsLocation?'已配置':'未配置';
+                        return <span>{name}</span>
+                    }
                 }
-                ],
+            ],
             attractData:[]    
         }
     },
@@ -220,12 +260,6 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
-         ok () {
-                this.$Message.info('Clicked ok');
-            },
-            cancel () {
-                this.$Message.info('Clicked cancel');
-            },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
         if(dailyTableDom){
@@ -241,15 +275,20 @@ export default {
       openBatch(){
           this.isShowBatch=!this.isShowBatch;
           if(!this.isShowBatch){
-              this.attractColumns[0].type='selection';  
-              this.attractColumns=[].concat(this.attractColumns);  
+              this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
+              this.$refs.selectionGoodsLibrary.selectAll(true); 
           }else{
-              delete this.attractColumns[0].type;
-              this.attractColumns=[].concat(this.attractColumns);
+              this.attractColumns.splice(0,1);
           }
       },
       openStatus(){
           this.modal1=!this.modal1;
+      },
+      closeStatus(){
+          this.modal1=!this.modal1;
+      },
+      submitStatus(){
+
       },
       //滚动监听
       onScrollListener(){            
@@ -269,6 +308,9 @@ export default {
          this.tabForms=Object.assign({},formItem,this.tabForms);
          this.getListData(this.tabForms);
       },
+      tableChange(select){
+          console.log('select--',select);
+      },
       getListData(params){//列表
            this.loading=true;
            this.$http.get('getGoodsList', params).then((response)=>{
@@ -282,12 +324,6 @@ export default {
                 this.warn=error.message;
             })
       },
-      submitUpperSearch(){
-            this.modal1=!this.modal1; 
-      },
-      showSearch(){
-            this.modal1=!this.modal1;
-      },
       searchClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
          this.getListData(this.tabForms); 
@@ -295,9 +331,6 @@ export default {
       clearClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
          this.getListData(this.tabForms); 
-      },
-      submitExport(){
-          utils.commonExport(this.tabForms,'/api/krspace-finance-web/inventory/cmt-investment/list/export');
       },
       onPageChange(page){
          this.tabForms.page=page;

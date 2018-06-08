@@ -7,52 +7,47 @@
               @initData="initData"
             />
         </div>
+
         <SlotHead :class="theHead?'header-here':'header-no'"/>
+
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                          <Button type="primary" @click="modal1 = true">批量操作</Button>
-                        <Modal
-                          width="660"
-                            v-model="modal1"
-                            title="批量操作">
-                    <ChangeStatus/>
-                       <div slot="footer">
-                   <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
-                    <Button type="primary" @click="modal10 = true">确定</Button>
-                </div>
-                        </Modal>
-
-
-                <Modal
-                    title="Title"
-                    v-model="modal10"
-                    class-name="vertical-center-modal">
-                    <p>Content of dialog</p>
-                    <p>Content of dialog</p>
-                    <p>Content of dialog</p>
-                </Modal>
-                        
-                    </div>
-
-
-                <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
-                 <div slot="loading">
+                <Button type="primary" @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Button type="primary" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+            </div>
+            
+            <Table :loading="loading" stripe :columns="attractColumns" :data="attractData" border>
+                <div slot="loading">
                     <Loading/>
-                 </div>
+                </div>
             </Table>
         </div>
-        <div  class='list-footer'>
-                <Button type="primary" @click='submitExport'>导出</Button>
-                <div style="float: right;">
-                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
-                </div>
-        </div>
+
         <Message 
             :type="MessageType" 
             :openMessage="openMessage"
             :warn="warn"
             @changeOpen="onMessageChange"
         />
+        <Modal
+            width="660"
+            v-model="modal1"
+            title="批量操作">
+                <ChangeStatus/>
+                <div slot="footer">
+                    <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
+                    <Button type="primary" @click="modal10 = true">确定</Button>
+                </div>
+        </Modal>
+
+        <Modal
+            title="Title"
+            v-model="modal10"
+            class-name="vertical-center-modal">
+            <p>Content of dialog</p>
+            <p>Content of dialog</p>
+            <p>Content of dialog</p>
+        </Modal>
     </div>
 </template>
 
@@ -75,6 +70,7 @@ export default {
     },
     data() {
         return{
+            isShowBatch:true,
             modal1: false,
             modal10: false,
             warn:'',
@@ -211,8 +207,7 @@ export default {
             _this.sideBar=params;
         })
     },
-    watch:{
-        
+    watch:{   
         sideBar:function(val){
             this.tableCommon();
             this.getListData();
@@ -241,6 +236,20 @@ export default {
       onResize(){
             this.tableCommon();
             this.onScrollListener();
+      },
+      //批量修改
+      openBatch(){
+          this.isShowBatch=!this.isShowBatch;
+          if(!this.isShowBatch){
+              this.attractColumns[0].type='selection';  
+              this.attractColumns=[].concat(this.attractColumns);  
+          }else{
+              delete this.attractColumns[0].type;
+              this.attractColumns=[].concat(this.attractColumns);
+          }
+      },
+      openStatus(){
+          this.modal1=!this.modal1;
       },
       //滚动监听
       onScrollListener(){            
@@ -276,10 +285,9 @@ export default {
       submitUpperSearch(){
             this.modal1=!this.modal1; 
       },
-         showSearch () {
-                this.modal1=!this.modal1;
-            },
-
+      showSearch(){
+            this.modal1=!this.modal1;
+      },
       searchClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
          this.getListData(this.tabForms); 

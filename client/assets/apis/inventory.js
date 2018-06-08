@@ -78,6 +78,6 @@ export default  {
     'getGoodsList': {//getGoodslist
         url: '/song/api/order/goods/list',
         method: 'get'
-    },
+    }
   }
   

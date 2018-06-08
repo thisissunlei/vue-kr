@@ -33,15 +33,10 @@
                         <Radio label="下架"></Radio>
                     </RadioGroup> 
              </Form-item>
-  <Form-item style="margin-top:20px;">
-                        <span class="coloname">修改信息：</span>
-
-    <Input v-model="value6"  style="width:400px;margin-left:35px;" type="textarea" :rows="4" placeholder="Enter something..."></Input>
-
-             </Form-item>
-
-
-
+             <Form-item style="margin-top:20px;">
+               <span class="coloname">修改信息：</span>
+               <Input v-model="value6"  style="width:400px;margin-left:35px;" type="textarea" :rows="4" placeholder="Enter something..."></Input>
+              </Form-item>
          </Form>
 </template>
 

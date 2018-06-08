@@ -6,12 +6,33 @@
                 <!-- 第一行-->
                 <div style="white-space: nowrap;"> 
 
-                        <Form-item class="priceForm community-form">
+                  
+                        <Form-item label="商品名称" class='daily-form' prop="name" >
+                            <i-input 
+                                v-model="formItem.name" 
+                                placeholder="请输入商品名称"
+                                style="width: 200px"
+                                @keyup.enter.native="onKeyEnter($event)"
+                            />
+                        </Form-item>
+
+                  <Form-item label="商品类型" class='daily-form'> 
+                        <Select 
+                            v-model="formItem.goodsType" 
+                            placeholder="请输入商品类型" 
+                            style="width: 200px"
+                            clearable
+                        >
+                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select> 
+                    </Form-item>
+
+                          <Form-item class="priceForm community-form">
                             <span class="attract-font">社<span style="display:inline-block;width:26px;"></span>区</span>
                             <Select 
                                 v-model="formItem.cityId" 
                                 placeholder="请输入城市" 
-                                style="width: 90px;margin-right:20px;"
+                                style="width: 90px;margin-right:20px;margin-left:7px;"
                                 @on-change="cityChange"
                             >
                                 <Option 
@@ -53,29 +74,10 @@
                         </Form-item>
 
 
-                        <Form-item label="商品名称" class='daily-form' prop="name" style="margin-left:20px;">
-                            <i-input 
-                                v-model="formItem.name" 
-                                placeholder="请输入商品名称"
-                                style="width: 200px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-
-                  <Form-item label="商品类型" class='daily-form'> 
-                        <Select 
-                            v-model="formItem.goodsType" 
-                            placeholder="请输入商品类型" 
-                            style="width: 200px"
-                            clearable
-                        >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> 
-                    </Form-item>
                 </div>
 
                 <!-- 第二行-->
-                <div style="white-space: nowrap;">
+                <div style="white-space: nowrap; margin-right:0;">
                     <div class="daily-form">
            <Form-item label="当前状态" class='daily-form'> 
                             <Select 
@@ -108,14 +110,14 @@
                     <Form-item label="商品属性" class='daily-form'> 
                         <Select 
                             v-model="formItem.locationType" 
-                            style="width: 90px;margin-right:20px;"
+                            style="width: 90px;margin-right:20px;margin-left:9px;"
                             clearable
                         >
                             <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select> 
                     <Select 
                             v-model="formItem.suiteName" 
-                            style="width: 90px"
+                            style="width: 90px;margin-right:0;"
                             clearable
                         >
                             <Option v-for="item in suiteType" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -128,27 +130,7 @@
 
                 <!-- 第三行-->
                 <div style="white-space: nowrap;">
-                    <!-- <div class='daily-form'>
-                        <span class="attract-font" style="padding-top:7px;margin-right: 3px;">签约价</span>
-                        <Tooltip content="表中的签约价均只显示整数，实际签约金额以合同为准" placement="top">
-                            <span class="tip-pic"></span>
-                        </Tooltip>
-                        <Form-item  class="priceForm" prop="orderPriceMin">
-                            <i-input 
-                                v-model="formItem.orderPriceMin" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                        <span class="attract-line">至</span>
-                        <Form-item  class="priceForm" prop="orderPriceMax">
-                            <i-input 
-                                v-model="formItem.orderPriceMax" 
-                                style="width: 90px"
-                                @keyup.enter.native="onKeyEnter($event)"
-                            />
-                        </Form-item>
-                    </div> -->
+            
                              <span class="attract-font" style="padding-top:7px;">商品定价</span>
                         <Form-item  class="priceForm" prop="priceMin">
                             <i-input 
@@ -169,7 +151,7 @@
 
 
                     <div class='daily-form'>
-                        <span class="attract-font" style="padding-top:7px;margin-right:11px;margin-left:20px;">面<span style="display:inline-block;width:25px;"></span>积</span>
+                        <span class="attract-font" style="padding-top:7px;margin-right:13px;margin-left:20px;">面<span style="display:inline-block;width:25px;"></span>积</span>
                         <Form-item  class="priceForm" prop="areaMin">
                             <i-input 
                                 v-model="formItem.areaMin" 
@@ -205,7 +187,7 @@
                           :data="sourceData"    
                         />
                     </Form-item> -->
-                    <Button type="primary" @click="searchClick">搜索</Button>
+                    <Button type="primary" @click="searchClick" style="margin-left:18px;">搜索</Button>
                 </div>
 
 

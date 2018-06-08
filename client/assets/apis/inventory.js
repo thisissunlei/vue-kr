@@ -79,5 +79,9 @@ export default  {
         url: '/song/api/order/goods/list',
         method: 'get'
     },
+    'get-goodsStatusList-data':{
+        url:'/api/krspace-sso-web/sys/enmu',
+        method:'get'
+    },
   }
   

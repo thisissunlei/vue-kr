@@ -86,9 +86,10 @@
                                 style="width: 200px"
                                 multiple
                             >
-                                <Option v-for="item in inventoryList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Option v-for="item in goodsStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
-                        </Form-item>
+            </Form-item>
+
             <div class="daily-form">
                         <span class="attract-font" style="padding-top:7px;">工位数量</span>
                         <Form-item  class="priceForm" prop="stationsMin">
@@ -180,13 +181,6 @@
                         </Select> 
                     </Form-item>
 
-                    <!-- <Form-item label="渠道来源" class='daily-form'> 
-                        <Cascader 
-                          v-model="formItem.source"
-                          style="width: 200px"
-                          :data="sourceData"    
-                        />
-                    </Form-item> -->
                     <Button type="primary" @click="searchClick" style="margin-left:18px;">搜索</Button>
                 </div>
 
@@ -353,12 +347,9 @@ export default {
                     {value:'RENTING',label:'已招商'},
                     {value:'DISABLED',label:'不可招商'}
                 ],
-                    inventoryList2:[
-                    {value:' ',label:'全部'},
-                    {value:'INVITING',label:'启用'},
-                    {value:'RENTING',label:'不可用'},
-                    {value:'DISABLED',label:'下架'}
-                ],
+                    goodsStatusList:[ 
+                    
+                    ],
                    locationList:[
                     {value:' ',label:'全部方位'},
                     {value:'OUTSIDE_SPACE',label:'外侧间'},
@@ -414,6 +405,7 @@ export default {
     mounted(){
         this.getCityList();
         this.getSourceData();
+        this.getSelectData();
         var _this=this;
         setTimeout(() => {
             _this.$emit('initData',this.formItem);
@@ -421,6 +413,25 @@ export default {
         },500);
     },
     methods:{
+
+          getSelectData(){//当前状态
+                const goodsStatus=[
+                    {value:' ',label:'全部'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
+                    {value:'MOVE',label:'移动办公桌'}
+           ]
+            this.$http.get('get-goodsStatusList-data',{
+                enmuKey:'com.krspace.order.api.enums.community.GoodsStatus'
+            }).then((response)=>{
+                console.log('uuuuuuuuuuuuu',response.data)
+               this.goodsStatusList=goodsStatus;
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {

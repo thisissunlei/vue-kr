@@ -301,8 +301,8 @@ var layoutScrollHeight=0;
             getData(params){
                 params.serviceDateBegin=this.dateSwitch(params.serviceDateBegin);
                 params.serviceDateEnd=this.dateSwitch(params.serviceDateEnd);
-                params.debtMin=params.debtMin?params.debtMin*100:'';
-                params.debtMax=params.debtMax?params.debtMax*100:'';
+                params.debtMin=params.debtMin?(params.debtMin*100+'').split('.')[0]:'';
+                params.debtMax=params.debtMax?(params.debtMax*100+'').split('.')[0]:'';
                 this.$http.get('unpaidList', params).then((res)=>{
                     this.tableList=res.data.items;
                     this.dailyIndentify=res.data.items;
@@ -336,7 +336,7 @@ var layoutScrollHeight=0;
                     headDom.style.left=this.left+'px';
                     headDom.style.width=this.width+'px';
                 }
-                if(dom.scrollTop>200){
+                if(dom.scrollTop>250){
                     this.theHead=true;
                 }else{
                     this.theHead=false;

@@ -44,7 +44,7 @@
                             clearable
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">
-                                {{ item.desc}}
+                                {{ item.billName}}
                                 </Option>
                         </Select> 
         
@@ -262,7 +262,7 @@ export default {
                 enmuKey:'com.krspace.pay.api.enums.BizType'
             }).then((response)=>{
                this.productList=response.data;
-               this.productList.unshift({value:' ',desc:'全部'})
+               this.productList.unshift({value:' ',billName:'全部'})
             }).catch((error)=>{
                 this.MessageType="error";
                 this.openMessage=true;

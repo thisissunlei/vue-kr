@@ -15,7 +15,7 @@
                           width="660"
                             v-model="modal1"
                             title="批量操作">
-                    <Screening/>
+                    <ChangeStatus/>
                        <div slot="footer">
                    <Button type="ghost" style="margin-left:8px" @click="showSearch">取消</Button>
                     <Button type="primary" @click="modal10 = true">确定</Button>
@@ -23,14 +23,14 @@
                         </Modal>
 
 
-    <Modal
-        title="Title"
-        v-model="modal10"
-        class-name="vertical-center-modal">
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
-        <p>Content of dialog</p>
-    </Modal>
+                <Modal
+                    title="Title"
+                    v-model="modal10"
+                    class-name="vertical-center-modal">
+                    <p>Content of dialog</p>
+                    <p>Content of dialog</p>
+                    <p>Content of dialog</p>
+                </Modal>
                         
                     </div>
 
@@ -57,13 +57,13 @@
 </template>
 
 <script>
-import Screening from './screening';
+import ChangeStatus from './bulk-changes/change-status';
 import Loading from '~/components/Loading';
-import SearchForm from '../publicPage';
+import SearchForm from './search-form';
 import Message from '~/components/Message';
 import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
-import SlotHead from '../fixHead/attract-head';
+import SlotHead from './fixed-head';
 
 export default {
     components:{
@@ -71,7 +71,7 @@ export default {
        SearchForm,
        Message,
        SlotHead,
-       Screening
+       ChangeStatus
     },
     data() {
         return{

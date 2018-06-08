@@ -139,6 +139,17 @@ export default {
                         title: '订单金额（￥）',
                         key: 'cost',
                         align: 'center',
+                        render: (h, params) => {
+                            return h('div', [
+                                h('span', {
+                                   
+                                    style: {
+                                        color: 'red'
+                                    },
+                                }, params.row.cost),
+                                
+                            ]);
+                        }
                     }],
            alertTimeOptions : [
                {
@@ -310,5 +321,8 @@ export default {
     }
     .kr-meeting-detail{
         padding-bottom: 20px;
+    }
+    .final-cost{
+        color : red;
     }
 </style>

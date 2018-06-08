@@ -29,7 +29,7 @@ export default {
        return {
            krMeetingList : [],
            searchparams :{
-              isExpired : true,
+              expired : true,
 
            },
            tilteAndStyle : [

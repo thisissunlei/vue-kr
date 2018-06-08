@@ -312,6 +312,9 @@ export default {
                 _this.openDeleteTipModel();
 
             }
+            // _this.myDiagram.commandHandler.undo = function(e){
+                // console.log("e-------->",e)
+            // }
             _this.myDiagram.addDiagramListener("ObjectSingleClicked",
                 function(e) {
                     var part = e.subject.part;

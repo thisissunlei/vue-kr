@@ -733,6 +733,12 @@
 
                     },
                     {
+                        primaryText: "KM会议",
+                        router: 'krmeeting',
+                        type: 'vue',
+                        menuCode: 'kr_meeting'
+                    },
+                    {
                         primaryText: '会议室',
                         menuCode: 'oper_appointment_base',
                         router: 'community/communityManage/allAppointment'
@@ -1171,10 +1177,16 @@
                         menuCode: 'seat_order_list',
                     },
                     {
-                        primaryText: "会议室订单",
+                        primaryText: "APP会议室订单",
                         router: 'order/list',
                         type: 'vue',
                         menuCode: 'fina_meeting_order_page'
+                    },
+                    {
+                        primaryText: "KM会议室订单",
+                        router: 'krmeetingorder',
+                        type: 'vue',
+                        menuCode: 'krm_order_base'
                     },
                     {
                         primaryText: "通用订单",

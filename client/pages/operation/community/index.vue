@@ -109,7 +109,7 @@
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
                     <span class="table-cell">
-                       {{item.toPutawayDays?(Number(item.toPutawayDays)==1?'今日':(Number(item.toPutawayDays)==2?'明日':item.toPutawayDays-1+'日后')):'-'}}
+                       {{item.payDaysName}}
                       </span>
                   </li>        
                 </ul>
@@ -447,7 +447,21 @@ export default {
       getComingList(data){ 
 				this.$http.get('getImtPutawayList',data).then((res)=>{         
             console.log('机枪进场',res.data)
-             this.list=res.data.items;
+            this.list=res.data.items;
+            this.list.length&&this.list.map((item,index)=>{
+                var way=item.toPutawayDays;
+                if(way&&way==1){
+                   item.payDaysName='今日'
+                }else if(way&&way==2){
+                   item.payDaysName='明日'
+                }else if(way&&way<6){
+                   item.payDaysName=this.getWeekNum(item.startDate);
+                }else if(way&&way>=6){
+                   item.payDaysName=way-1+'日后'
+                }else{
+                   item.payDaysName='';
+                }
+            })
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message

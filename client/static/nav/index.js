@@ -736,7 +736,7 @@
                         primaryText: "KM会议",
                         router: 'krmeeting',
                         type: 'vue',
-                        menuCode: 'km-meeting'
+                        menuCode: 'km_meeting'
                     },
                     {
                         primaryText: '会议室',

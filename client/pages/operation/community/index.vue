@@ -83,12 +83,12 @@
             <div class="box">
               <div class="header">
                   <div class="header-left" @click="openEnter">
-                    <Tooltip content="包括即新客户将入驻的房间（工位）、在租客户即将增租或换租的房间（工位）" placement="top">
+                    <Tooltip content="包括新客户即将入驻的房间（工位）、在租客户即将增租或换租的房间（工位）" placement="top">
                       即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                     </Tooltip>
                   </div>
                 <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
-                  <span style="font-size:18px;">{{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:</span>
+                  {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -124,7 +124,7 @@
                   </Tooltip>
                 </div>   
                 <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
-                  <span style="font-size:18px;">{{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:</span>
+                  {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
                   <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="DueList[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -326,7 +326,7 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="nappointment.length&&(nappointment[0].compareTime<7)"> 
-                  <span style="font-size:18px;">{{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':this.getWeekNum(nappointment[0].visitTime)}}:</span>
+                  {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':this.getWeekNum(nappointment[0].visitTime)}}:
                   <span style="color: #FF6868;">{{visitNum}}</span><span style="font-size:12px">人</span>
                 </div>
               </div>

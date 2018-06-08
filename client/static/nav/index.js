@@ -681,7 +681,7 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        // }, 
+                        //}, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
@@ -705,9 +705,9 @@
                 menuItems: [
                     // {
                     //     primaryText: '社区主页',
-                    //     router: 'community/operation/index',
-                    //     // type:'vue',
-                    //     menuCode: 'operation_home',
+                    //     router: 'operation/community',
+                    //     type:'vue',
+                    //     menuCode: 'op_home',
                     // },
                     {
                         primaryText: '即将到期',
@@ -720,6 +720,19 @@
                         router: 'inventory/enter-field',
                         type:'vue',
                         menuCode: 'imt_putaway_list',
+                        //menuCode: 'vueList',
+                    },
+                    {
+                        primaryText: '已起租未付',
+                        router: 'inventory/rented-unpaid',
+                        type:'vue',
+                        menuCode: 'rent_no_pay',
+                    },
+                    {
+                        primaryText: '逾期未付',
+                        router: 'inventory/over-date-unpaid',
+                        type:'vue',
+                        menuCode: 'overdate_no_pay',
                     },
                     {
                         primaryText: '预约参观',

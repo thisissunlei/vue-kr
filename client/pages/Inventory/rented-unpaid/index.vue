@@ -83,7 +83,7 @@ var layoutScrollHeight=0;
                         title: '账单类型-ID',
                         key: 'bizTypeName',
                         align:'center',
-                        width:150,
+                        width:120,
                         render:(h, obj)=>{
                             return h('div', {
                                 props: {
@@ -99,7 +99,7 @@ var layoutScrollHeight=0;
                                         this.showDetail(obj.row)
                                     }
                                 }
-                            },obj.row.bizTypeName+'-'+obj.row.billId);
+                            },obj.row.billId);
                         }
 
                     },
@@ -111,13 +111,14 @@ var layoutScrollHeight=0;
                     {
                         title: '账单明细',
                         align:'center',
+                        className:'bill-detail',
                         key: 'billServiceDetail',
                         render(h, params){
                         var bill=params.row.billGuaDetail?params.row.billGuaDetail:'';
                         var billTitle=bill?'保证金:':'';
-                        var moneyDetail=params.row.billServiceDetail;
+                        var moneyDetail=params.row.billServiceDetail?params.row.billServiceDetail:'';
                         var isTitle=params.row.ifMultiperiod;
-                        var moneyDetailTitle=isTitle==1?'包含了多个时段的服务费:':params.row.serviceStartDate+'至'+params.row.serviceEndDate+'的服务费:';
+                        var moneyDetailTitle=moneyDetail?(isTitle==1?'包含了多个时段的服务费:':params.row.serviceStartDate+'至'+params.row.serviceEndDate+'的服务费:'):'';
                         return h('div', [
                                     h('Tooltip', {
                                         props: {
@@ -127,6 +128,11 @@ var layoutScrollHeight=0;
                                     }, [
                                     h('div', [
                                         h('div',{
+                                            style:{
+                                                textOverflow:'ellipsis',
+                                                whiteSpace:'nowrap',
+                                                overflow: 'hidden'
+                                            }
                                         },moneyDetailTitle),
                                         h('div',{
                                             style:{
@@ -363,8 +369,8 @@ var layoutScrollHeight=0;
 <style lang="less">
 .vertical-center-modal{
      .rig{
-                        padding: 0
-                    }
+            padding: 0
+        }
         .rig{
             padding: 0;
         }
@@ -376,6 +382,11 @@ var layoutScrollHeight=0;
         }
 }
 .enter-filed{
+    .bill-detail{
+        .ivu-table-cell{
+            padding:0 5px;
+        }
+    }
     .enter-filed-table{
         position: relative;
         padding: 0 ;

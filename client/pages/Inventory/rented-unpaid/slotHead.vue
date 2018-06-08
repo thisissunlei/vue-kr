@@ -64,7 +64,7 @@
             width:200px;
         }
           &:nth-child(1){
-            width:150px;
+            width:120px;
         }
          &:nth-child(3),&:nth-child(2){
             width:100%;

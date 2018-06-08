@@ -45,10 +45,6 @@ export default  {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
     },
-    //每日库存-平面图
-    'getInventoryMap': {
-        url: '/api/krspace-finance-web/cmt/floor-graph/list',
-    },
     // 运营主页
     'getOperating': {
         url: '/api/order/operation/home',
@@ -69,11 +65,6 @@ export default  {
         url: '/api/order/operation/rentNoPay/list',
         method: 'get'
     },
-    /*//运营首页
-         'Overduelist': {
-            url: '/api/order/operation/overDateNoPay/list',
-            method: 'get'
-        },*/
      //逾期未付
      'Overduelist': {
         url: '/api/order/operation/overDateNoPay/list',
@@ -82,6 +73,10 @@ export default  {
     //社区招商
     'community-investment-list': {
         url: '/api/krspace-finance-web/inventory/cmt-investment/list',
+    },
+    //每日库存-平面图
+    'getInventoryMap': {
+        url: '/api/krspace-finance-web/cmt/floor-graph/list',
         method: 'get'
     },
     // 即将进场

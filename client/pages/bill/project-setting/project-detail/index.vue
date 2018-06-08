@@ -11,7 +11,9 @@
                         </Breadcrumb>
                     </div>
                 </div>
+
                 <div class='title-right'><Button type="primary" @click="watchTask">查看编辑记录</Button></div>
+                <div v-if="isDelete" class='title-right' style="margin-right:30px;"><Button @click="switchDelete">终止该项目</Button></div>
             </div>
             <Tabs size="default" @on-click="tabClick" :animated="false">
                 <TabPane label="物业档案" name="property">
@@ -118,7 +120,7 @@
             <div class='sure-sign' v-if="grayStar==0">设置为“管理层关注”任务后，该任务会在项目总览中显示</div>
             <div class='sure-sign' v-if="grayStar==1">取消设置“管理层关注”任务后，该任务不会在项目总览中显示</div>
             <div slot="footer">
-                <Button type="primary" @click="submitStar()">确定</Button>
+                <Button type="primary" @click="deleteProject()">确定</Button>
                 <Button type="ghost" style="margin-left:8px" @click="cancelStar">取消</Button>
             </div>
         </Modal>
@@ -129,6 +131,18 @@
             :warn="warn"
             @changeOpen="onChangeOpen"
         />
+         <Modal
+            v-model="openDelete"
+            title="提示"
+            width="440"
+            >
+            <div class='sure-sign'>确认终止项目?</div>
+            
+            <div slot="footer">
+                <Button type="primary" @click="deleteProject">确定</Button>
+                <Button type="ghost" style="margin-left:8px" @click="switchDelete">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -172,6 +186,7 @@ export default {
             openDelete:false,
             openStar:false,
             upperError:false,
+            openDelete:false,
             addData:{},
             editData:{},
             getEdit:{},
@@ -219,6 +234,7 @@ export default {
             taskList:[],
             watchTotalCount:1,
             watchPage:1,
+            isDelete:false,
         }
     },
     created(){
@@ -227,13 +243,43 @@ export default {
     mounted(){
        
          GLOBALSIDESWITCH("false");
-       
+        this.getDeletePermission();
     
     },
     methods:{
+        switchDelete(){
+            this.openDelete = !this.openDelete;
+        },
+        getDeletePermission(){
+            this.$http.get('get-delete-permission',{
+                id:this.$route.query.id
+            }).then((response)=>{
+                console.log(response)
+                this.isDelete = response.data;
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
+           
+        },
+        deleteProject(){
+             this.$http.delete('delete-project-setting',{
+                id:this.$route.query.id
+            }).then((response)=>{
+                
+               this.switchDelete();
+                window.close();
+                window.opener.location.reload();
+            }).catch((error)=>{
+                this.MessageType="error";
+                this.openMessage=true;
+                this.warn=error.message;
+            })
+        },
         tabClick(name){
             this.activeTab = name;
-            console.log(name,"ppppp")
+          
         },
         leftOver(event){
             var leftDom=document.getElementById('vue-chart-left-detail-list');

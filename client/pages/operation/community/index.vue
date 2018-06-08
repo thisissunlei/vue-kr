@@ -517,7 +517,7 @@ export default {
         this.getDueList(data);
         this.getunpaidList(data);
         //this.getAnappointmentListList();
-        this.getAnappointmentList();
+        this.getAnappointmentList(data);
     },
     changeTab(type){
       this.tab = type;

@@ -28,14 +28,14 @@
               <img src="~/assets/images/member.png" alt="" style="margin:12px auto;width:36px;height:33px;margin-top:20px;">
             </span>
             <span class="content title">现入驻会员</span>
-            <span class="content number"><span>{{pageData.settledMember}}</span>个</span>
+            <span class="content number"><span>{{pageData.settledMember}}</span>位</span>
           </div>
           <div class="card-three">
             <div class="tabs">
               <span class="title"  v-bind:class="{active:tab=='all'}" v-on:click="changeTab('all')">全部工位数</span>
-              <span class="title" v-bind:class="{active:tab=='office'}" v-on:click="changeTab('office')">独立办公室(30间)</span>
-              <span class="title" v-bind:class="{active:tab=='fixedDest'}"  v-on:click="changeTab('fixedDest')">固定办公桌(10个)</span>
-              <span class="title" v-bind:class="{active:tab=='mobileDesk'}"  v-on:click="changeTab('mobileDesk')">移动办公桌(5个)</span>
+              <span class="title" v-bind:class="{active:tab=='office'}" v-on:click="changeTab('office')">{{'独立办公室('+pageData.allSpaceNum+'间)'}}</span>
+              <span class="title" v-bind:class="{active:tab=='fixedDest'}"  v-on:click="changeTab('fixedDest')">{{'固定办公桌('+pageData.allFixStationsNum+'个)'}}</span>
+              <span class="title" v-bind:class="{active:tab=='mobileDesk'}"  v-on:click="changeTab('mobileDesk')">{{'移动办公桌('+pageData.allMoveStationsNum+'个)'}}</span>
             </div>
             <div class="content">
               <span class="number">
@@ -82,7 +82,11 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openEnter">即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                  <div class="header-left" @click="openEnter">
+                    <Tooltip content="包括即新客户将入驻的房间（工位）、在租客户即将增租或换租的房间（工位）" placement="top">
+                      即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                    </Tooltip>
+                  </div>
                 <div class="header-right" v-if="list.length">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':list[0].toPutawayDays-1+'日后'}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
@@ -96,7 +100,7 @@
 
               <div class="contents"  v-if="list.length">
                 <ul >
-                  <li v-for="item in list" >
+                  <li v-for="item in list" :key="item.id">
                     <Tooltip :content="item.issueName" placement="top-start" class="table-cell">
                         <div class="ellipsis">{{item.issueName}}</div>
                     </Tooltip>
@@ -114,7 +118,11 @@
 
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOver">即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left" @click="openOver">
+                  <Tooltip content="即将到期而且还未续约的房间（工位）" placement="top">
+                    即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>   
                 <div class="header-right" v-if="DueList.length">
              {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':DueList[0].leaseRemainingDays-1+'日后'}}:
 
@@ -128,7 +136,7 @@
               </div>
               <div class="contents" v-if="DueList.length">
                 <ul >
-                  <li v-for="item in DueList" >
+                  <li v-for="item in DueList" :key="item.id">
                      <Tooltip :content="item.issueName" placement="top-start" class="table-cell">
                         <div class="ellipsis" >{{item.issueName}}</div>
                     </Tooltip>
@@ -149,7 +157,11 @@
           <div class="line-one">
            <div class="box">
               <div class="header">
-                <div class="header-left" @click="openrented">已起租未付 <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left" @click="openrented">
+                  <Tooltip content="已经过了已出账单的服务开始日依然没有付的账单" placement="top">
+                    已起租未付 <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
                 <div class="header-right" v-if="unpaidList.length">
                   <span :style="unpaidList[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="unpaidList[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -164,7 +176,7 @@
                   <li v-for="item in unpaidList" value="item.value" :key="item.value" >
                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
                           <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
-                        </Tooltip>
+                      </Tooltip>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
@@ -176,7 +188,11 @@
             </div>
              <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('CONTRACT')">逾期未付(工位) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left" @click="openOverUnpaid('CONTRACT')">
+                  <Tooltip content="已出的工位账单，过了最晚付款日但是还没到服务开始日，没有付款的" placement="top">
+                    逾期未付(工位) <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
                 <div class="header-right" v-if="OverdueStation.length">
                   <span :style="OverdueStation[0].remark1==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverdueStation[0].remark2==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -188,10 +204,10 @@
               </div>
               <div class="contents" v-if="OverdueStation.length">
                 <ul >
-                  <li v-for="item in OverdueStation" >
+                  <li v-for="item in OverdueStation" :key="item.id">
                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
                          <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
-                       </Tooltip>
+                      </Tooltip>
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
@@ -205,7 +221,11 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('MEETING')">逾期未付(会议室) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left" @click="openOverUnpaid('MEETING')">
+                  <Tooltip content="已经过该期会议室账单的最晚付款日依然没有付款的" placement="top">
+                    逾期未付(会议室) <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
                 <div class="header-right" v-if="OverdueMeeting.length">
                   <span :style="OverdueMeeting[0].remark1==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverdueMeeting[0].remark2==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -217,7 +237,7 @@
               </div>
               <div class="contents" v-if="OverdueMeeting.length">
                 <ul >
-                   <li v-for="item in OverdueMeeting" >
+                   <li v-for="item in OverdueMeeting" :key="item.id">
                       <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
                          <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
@@ -235,7 +255,11 @@
       
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openOverUnpaid('PRINT')">逾期未付(打印) <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left" @click="openOverUnpaid('PRINT')">
+                  <Tooltip content="已经过该期打印账单的最晚付款日依然没有付款的" placement="top">
+                    逾期未付(打印) <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
                 <div class="header-right" v-if="OverduePrint.length">
                   <span :style="OverduePrint[0].remark1==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1}}</span><span style="font-size:12px">笔</span>/共
                   <span :style="OverduePrint[0].remark2==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2}}</span><span style="font-size:12px">元</span>
@@ -247,7 +271,7 @@
               </div>
               <div class="contents" v-if="OverduePrint.length">
                 <ul >
-                     <li v-for="item in OverduePrint" >
+                     <li v-for="item in OverduePrint" :key="item.id">
                       <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
                          <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
@@ -266,7 +290,11 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">预约参观  <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left">
+                  <Tooltip content="潜在的客户，预约前来参观" placement="top">
+                    预约参观  <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                 </div>
                  <div class="header-right" v-if="appointment.length">今日：
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
@@ -277,24 +305,29 @@
               </div>
                   <div class="contents" v-if="appointment.length">
                 <ul >
-                  <li v-for="item in appointment" >
+                  <li v-for="item in appointment" :key="item.id">
                     <span class="table-cell ellipsis" style="flex:2">{{item.name}}</span>
                     <Tooltip :content="item.tel" placement="top-start" class="table-cell customer" style="flex:5">
                       <div class="ellipsis" >{{item.tel}}</div>
                     </Tooltip>
                                        
-                  <Tooltip :content="item.vtime" placement="top-start" class="table-cell " style="flex:1">
-                    <span class="table-cell">{{item.vtime}}</span>
+                   <Tooltip :content="item.vtime" placement="top-start" class="table-cell " style="flex:1">
+                      <span class="table-cell">{{item.vtime}}</span>
                     </Tooltip>
                   </li>        
                 </ul>
               </div>
             </div>
+            <!-- @click="openVisitor" -->
             <div class="box">
               <div class="header">
-                <div class="header-left" @click="openVisitor">会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span></div>
+                <div class="header-left">
+                  <Tooltip content="已入驻的会员通过APP邀请来的访客，前来探访入驻的会员" placement="top">
+                    会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                  </Tooltip>
+                </div>
                 <div class="header-right" v-if="nappointment.length"> 
-                  {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':nappointment[0].compareTime+'日后'}}:
+                  {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':nappointment[0].compareTime+'日前'}}:
                   <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
                 </div>
               </div>
@@ -306,7 +339,7 @@
 
               <div class="contents" v-if="nappointment.length">
                 <ul >
-                  <li v-for="item in nappointment" >
+                  <li v-for="item in nappointment" :key="item.id">
                     <Tooltip :content="item.visitName" placement="top-start" class="table-cell customer" style="flex:1.5">
                       <span class="table-cell ellipsis" >{{item.visitName}}</span>
                     </Tooltip>
@@ -318,7 +351,7 @@
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
                     <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1">
-                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日后'}}</div>
+                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日前'}}</div>
                     </Tooltip>
                   </li>        
                 </ul>
@@ -477,7 +510,7 @@ export default {
         return today; 
     },
     getCommunityList(){
-      this.$http.get('get-community-list', '').then( r => {
+      this.$http.get('get-community-list').then( r => {
           this.optionList = r.data.map(item=>{
 
             item.communitys = item.communitys.map(value=>{

@@ -1,5 +1,6 @@
 <template>
     <div class='daily-search-form'>
+        <SectionTitle title="已起租未付"></SectionTitle>
         <div class="daily-header">
             <Form ref="formItemDaily" :model="formItem" :rules="ruleDaily" label-position="left">
 
@@ -132,12 +133,16 @@
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
 import utils from '~/plugins/utils';
+import SectionTitle from '~/components/SectionTitle.vue'
 export default {
     props:{
        identify:{
            type:String,
            default:''
        }
+    },
+    components:{
+        SectionTitle
     },
     data() {
         const validateTime = (rule, value, callback) => {

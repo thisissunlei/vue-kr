@@ -1,6 +1,6 @@
 <template>
     <div class="add-invoice">
-        <SectionTitle title="申请开票"></SectionTitle>
+        <SectionTitle title="资料详情"></SectionTitle>
         <Form ref="formItem" :model="formItem" :rules="ruleCustom" class="creat-order-form">
             <DetailStyle info="基本信息">
                 <Row style="margin-bottom:30px">  
@@ -127,11 +127,10 @@
             
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
-                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="!disabled">编辑</Button>
-                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled" v-if="!disabled">确定</Button>
-                    <Button class="view-btn" @click="rejectedSubmit">驳回</Button>
+                    <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled">编辑</Button>
+                    <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
+                    <Button class="view-btn" @click="rejectedSubmit" v-if="!isReady">驳回</Button>
                 </div>
-                <!-- <Button type="ghost" style="margin-left: 8px" @click="back">返回</Button> -->
             </FormItem>
 
         </Form>
@@ -164,6 +163,7 @@ import utils from '~/plugins/utils';
                 }
             };
             return {
+
                 isReady:true, //只读页面
                 disabled:false,
                 openBussiness:false,
@@ -292,6 +292,15 @@ import utils from '~/plugins/utils';
             PhotoAlbum
         },
          mounted(){
+            let params = Object.assign({},this.$route.query);
+            if(params.type == 'edit'){
+                //编辑模式
+                this.isReady = false;
+                
+            }else{
+                //查看模式
+                this.isReady = true;
+            }
             GLOBALSIDESWITCH("false");
             this.getViewDetail();
         },
@@ -351,7 +360,9 @@ import utils from '~/plugins/utils';
             },
             handleSubmit:function(name) {
                let editData=Object.assign({},this.formItem);   
-               delete editData.ctime;     
+               delete editData.ctime;  
+               delete editData.rejectTime;
+               delete editData.verifyTime ;  
                this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
                     console.log('editok',res);
                 }).catch((err)=>{

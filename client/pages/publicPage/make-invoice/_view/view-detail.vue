@@ -105,7 +105,7 @@
                 <LabelText :inline="inline" label="领取方式：">
                     {{formItem.receiveMethodName}}
                 </LabelText>
-                <LabelText :inline="inline" label="收件人员：">
+               <!--  <LabelText :inline="inline" label="收件人员：">
                     {{formItem.invoicePostVO.recipient}}
                 </LabelText>
                 <LabelText :inline="inline" label="手机号码：">
@@ -113,7 +113,7 @@
                 </LabelText>
                 <LabelText :inline="inline" label="收件地址：">
                     {{formItem.invoicePostVO.recipientAddress}}
-                </LabelText>
+                </LabelText> -->
                 
             </Card>
             <span class="space" ></span>

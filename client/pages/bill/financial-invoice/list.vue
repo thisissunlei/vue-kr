@@ -84,7 +84,7 @@ import dateUtils from 'vue-dateutils';
                 window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}`,params.id);
             },
             goEdit(params){
-                window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}&disabled=false`,params.id);
+                window.open(`/bill/financial-invoice/${params.id}/view-invoice?id=${params.id}&type=edit`,params.id);
             },
             //格式转换
             dateSwitch(data){

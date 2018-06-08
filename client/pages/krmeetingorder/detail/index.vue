@@ -12,7 +12,7 @@
                         <dt>订单生成时间：</dt><dd>{{this.returnCtime(detail.ctime)}}</dd>
                     </dl>
                      <dl>
-                        <dt>订单金额：￥</dt><dd>{{detail.totalAmount}}</dd>
+                        <dt>订单金额：￥</dt><dd>{{detail.cost}}</dd>
                     </dl>
                     <dl>
                         <dt>订单状态：</dt><dd>{{this.returnMeetingStatus(detail.orderShowStatus)}}</dd>

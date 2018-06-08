@@ -144,7 +144,8 @@ export default {
                                 h('span', {
                                    
                                     style: {
-                                        color: 'red'
+                                        color: 'red',
+                                        fontSize : "20px",
                                     },
                                 }, params.row.cost),
                                 

@@ -29,7 +29,7 @@ export default {
        return {
            krMeetingList : [],
            searchparams :{
-              isExpired : true,
+              isExpired : false,
 
            },
            tilteAndStyle : [
@@ -61,7 +61,7 @@ export default {
                     },
                     {
                         title: '已到场人数',
-                        key: 'arrivedCount',
+                        key: 'arrivingCount',
                         align: 'center',
                     },
                     {
@@ -113,9 +113,8 @@ export default {
         getKrmeetingUsedDetailFun(){
 
             var params = this.searchparams;
-            this.$http.get('get-kr-meeting-list', params).then((res)=>{
             
-            // this.$http.get('getkrmeetingUsedDetail', params).then((res)=>{
+            this.$http.get('getkrmeetingUsedDetail', params).then((res)=>{
                 this.krMeetingList = res.data
             }).catch((err)=>{
                 this.$Notice.error({
@@ -143,5 +142,8 @@ export default {
     }
     .page-part{
         margin-top:20px;
+    }
+    .table-box{
+            padding-bottom: 20px;
     }
 </style>

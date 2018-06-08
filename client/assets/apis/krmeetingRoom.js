@@ -5,7 +5,7 @@
 export default {
     //
     'getkrmeetingUsedDetail': {
-        url: 'api/op/krmting//inviteeCommunity/list',
+        url: 'api/op/krmting/orderMeeting/list',
         method: 'get'
     }
 } 

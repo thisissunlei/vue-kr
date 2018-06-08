@@ -87,8 +87,8 @@
                       即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                     </Tooltip>
                   </div>
-                <div class="header-right" v-if="list.length">
-                  {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':list[0].toPutawayDays-1+'日后'}}:
+                <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
+                  <span style="font-size:18px;">{{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:</span>
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -123,9 +123,8 @@
                     即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>   
-                <div class="header-right" v-if="DueList.length">
-             {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':DueList[0].leaseRemainingDays-1+'日后'}}:
-
+                <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
+                  <span style="font-size:18px;">{{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:</span>
                   <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
                   <span :style="DueList[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
@@ -326,9 +325,9 @@
                     会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>
-                <div class="header-right" v-if="nappointment.length"> 
-                  {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':nappointment[0].compareTime+'日前'}}:
-                  <span style="color: #FF6868;">30</span><span style="font-size:12px">人</span>
+                <div class="header-right" v-if="nappointment.length&&(nappointment[0].compareTime<7)"> 
+                  <span style="font-size:18px;">{{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':this.getWeekNum(nappointment[0].visitTime)}}:</span>
+                  <span style="color: #FF6868;">{{visitNum}}</span><span style="font-size:12px">人</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
@@ -351,7 +350,7 @@
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
                     <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1">
-                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日前'}}</div>
+                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日后'}}</div>
                     </Tooltip>
                   </li>        
                 </ul>
@@ -392,7 +391,8 @@ export default {
        OverdueMeeting:[],
        appointment:[],
        nappointment:[],
-       pageData:{}
+       pageData:{},
+       visitNum:0
      }
   },
   components:{
@@ -415,7 +415,22 @@ export default {
     this.getCommunityList();
   },
   methods:{
- 
+      //获取某日为周几
+      getWeekNum(date){
+          var end='';
+          var today=new Date();
+          var todayWeek=today.getDay()==0?7:today.getDay(); 
+          var endDate = new Date(date);
+          var endDateWeek=endDate.getDay()==0?7:endDate.getDay();
+          var dateArray=[{label:'周日',value:7},{label:'周一',value:1},{label:'周二',value:2},{label:'周三',value:3},{label:'周四',value:4},{label:'周五',value:5},{label:'周六',value:6}]
+          for(var i=0;i<dateArray.length;i++){
+             if(dateArray[i].value==endDateWeek){
+                  end=(endDateWeek<todayWeek)?'下'+dateArray[i].label:dateArray[i].label;
+                  break;
+              }
+          }
+          return end;
+      },
       //顶部列表请求
     	getHomeList(){ 
 				this.$http.get('getOperating',{cmtId:this.communityId}).then((res)=>{
@@ -491,13 +506,29 @@ export default {
 
       //会员访客
       getAnappointmentList(params){
+        this.visitNum=0;
+        var sameArray=[];
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
              this.nappointment=[].concat(res.data.items);
-             this.nappointment.map((item,index)=>{
-                var time=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.visitTime));
-                var today=this.getToDay();
-                item.compareTime=utils.timeRange(today,time);
-             })
+             if(this.nappointment.length){
+                    var first=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.nappointment[0].visitTime));
+                  this.nappointment.map((item,index)=>{
+                    var time=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.visitTime));
+                    if(first==time){
+                       sameArray.push(item);
+                    }
+                    var today=this.getToDay();
+                    item.compareTime=utils.timeRange(today,time);
+                })
+              if(sameArray.length){
+                for(var i=0;i<sameArray.length;i++){
+                    if(sameArray.indexOf(sameArray[i].visitName)==-1){
+                       this.visitNum++;
+                    }
+                 }
+               }
+             }
+             
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -510,7 +541,7 @@ export default {
         return today; 
     },
     getCommunityList(){
-      this.$http.get('get-community-list').then( r => {
+      this.$http.get('get-community-list', '').then( r => {
           this.optionList = r.data.map(item=>{
 
             item.communitys = item.communitys.map(value=>{

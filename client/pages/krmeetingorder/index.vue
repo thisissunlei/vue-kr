@@ -58,6 +58,7 @@ export default {
                     {
                         title: '订单生成时间',
                         key: 'ctime',
+                        className: 'order-ctime',
                         render: (h, params) => {
                             return h('div', [
                                

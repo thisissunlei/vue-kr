@@ -210,7 +210,7 @@ function initListData(){
                             },
                             on: {
                                 click: () => {
-                                    this.goView()
+                                    this.goView(params.row)
                                 }
                             }
                         }, '查看'),

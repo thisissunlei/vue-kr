@@ -306,7 +306,6 @@ import utils from '~/plugins/utils';
             handleSubmit:function(name) {
                 console.log('=====>',this.formItem)
                 // 发票详情
-                // http://vuelocal.krspace.cn/publicPage/make-invoice/75/view-invoice
                 if(this.totalAmount==0){
                     this.$Notice.error({
                         title:'请仔细核对开票信息'

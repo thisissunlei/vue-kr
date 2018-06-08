@@ -245,8 +245,8 @@
                 this.openGoBack = !this.openGoBack;
             },
             //跳转查看页面
-            goView(){
-
+            goView(params){
+                 window.open(`/publicPage/make-invoice/${params.id}/view-invoice`);
             },
             //回退提交
             goBackSubmit(){

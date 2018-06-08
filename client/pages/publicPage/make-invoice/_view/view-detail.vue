@@ -64,22 +64,22 @@
                 <span class="card-header"></span>
 
                 <LabelText :inline="inline" label="发票抬头：">
-                    {{formItem.invoiceTitle}}
+                    {{info.invoiceTitle}}
                 </LabelText>
                 <LabelText :inline="inline" label="纳税人识别码：">
-                    {{formItem.taxpayerNumber}}
+                    {{info.taxpayerNumber}}
                 </LabelText>
                 <LabelText :inline="inline" label="注册地址：">
-                    {{formItem.registerAddress}}
+                    {{info.registerAddress}}
                 </LabelText>
                 <LabelText :inline="inline" label="注册电话：">
-                    {{formItem.registerPhone}}
+                    {{info.registerPhone}}
                 </LabelText>
                 <LabelText :inline="inline" label="开户银行：">
-                    {{formItem.bank}}
+                    {{info.bank}}
                 </LabelText>
                 <LabelText :inline="inline" label="银行账户：">
-                    {{formItem.bankAccount}}
+                    {{info.bankAccount}}
                 </LabelText>
             </Card>
             <span class="space"></span>
@@ -165,6 +165,7 @@ export default {
     },
     data(){
         return {
+            info:{},
             invoiceStatus:'normal',
             inline:true,
             invoicePostVO:[],
@@ -176,7 +177,7 @@ export default {
                 },
                 {
                     title: '账单类型',
-                    key: 'bizType',
+                    key: 'bizTypeName',
                     align:'center'
                 },
                 {
@@ -226,6 +227,7 @@ export default {
             let view = this.$route.params.view;
             this.$http.get('csr-invoice-invoiceDetail', {invoiceId:view}).then( r => {
                  this.formItem = r.data;
+                 this.info = this.formItem.qualificationVO
                  this.invoiceStatus = r.data.invoiceStatus;
             }).catch( e => {
                 this.$Notice.error({

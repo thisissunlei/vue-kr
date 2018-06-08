@@ -270,6 +270,9 @@ import utils from '~/plugins/utils';
                 })
                 params.amountDetailList = JSON.stringify(params.amountDetailList);
                 console.log('params',params)
+                // let data ={
+                //     data:JSON.stringify(params)
+                // }
 
 
                 this.$http.post('csr-invoice-ticket-open',params).then((res)=>{

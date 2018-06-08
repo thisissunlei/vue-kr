@@ -9,7 +9,7 @@
             
         </Table>
      <div style="margin: 10px;overflow: hidden">
-            <!-- <Button type="primary" @click="onExport">导出</Button> -->
+            <Button type="primary" @click="onExport" v-if="type == 'all'">导出</Button>
             <div style="float: right;">
                 <Page 
                     :current="tableParams.page"
@@ -91,6 +91,7 @@
     import KrField from '~/components/KrField';
     import krUpload from '~/components/KrUpload';
     import dateUtils from 'vue-dateutils';
+import utils from '~/plugins/utils';
     
     export default {
         components:{
@@ -190,6 +191,16 @@
         },
 
         methods:{
+            onExport(){
+                let params = Object.assign({},this.tableParams,this.$route.query);
+                params.startRefundTime=this.dateSwitch(params.startRefundTime);
+                params.startTicketTime=this.dateSwitch(params.startTicketTime);
+                params.startTime=this.dateSwitch(params.startTime);
+                params.endRefundTime=this.dateSwitch(params.endRefundTime);
+                params.endTicketTime=this.dateSwitch(params.endTicketTime);
+                params.endTime=this.dateSwitch(params.endTime);
+                utils.commonExport(params,'/api/order/csr-invoice/export');
+            },
             
             //上传成功
             upSuccess(params,columnDetail){

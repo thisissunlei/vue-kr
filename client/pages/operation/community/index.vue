@@ -289,7 +289,7 @@
           <div class="line-one">
             <div class="box">
               <div class="header">
-                <div class="header-left">
+                <div class="header-left" style="cursor:auto;">
                   <Tooltip content="潜在的客户，预约前来参观" placement="top">
                     预约参观  <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
@@ -320,7 +320,7 @@
             <!-- @click="openVisitor" -->
             <div class="box">
               <div class="header">
-                <div class="header-left">
+                <div class="header-left" style="cursor:auto;">
                   <Tooltip content="已入驻的会员通过APP邀请来的访客，前来探访入驻的会员" placement="top">
                     会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>

@@ -457,9 +457,11 @@ import utils from '~/plugins/utils';
                delete editData.rejectTime;
                delete editData.verifyTime ; 
                delete editData.utime ;
-               editData.taxCertificate = JSON.stringify(editData.taxCertificate)
-               editData.businessLicense = JSON.stringify(editData.businessLicense)
-
+               
+               editData.taxCertificateTemp = JSON.stringify(editData.taxCertificate)
+               editData.businessLicenseTemp = JSON.stringify(editData.businessLicense)
+                delete editData.taxCertificate;
+               delete editData.businessLicense;
                this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$http.post('get-financial-invoice-edit',editData).then((res)=>{

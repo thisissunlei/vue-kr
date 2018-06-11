@@ -658,6 +658,12 @@
                             menuCode: 'cmt_investment',
                         },
                         {
+                            primaryText: "商品库",
+                            router: 'inventory/goods-library',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
                             primaryText: '销控',
                             menuCode: 'cmt_sell_control',
                             router: 'product/communityManage/controlTable',

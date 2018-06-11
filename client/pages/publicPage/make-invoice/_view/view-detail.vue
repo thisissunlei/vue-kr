@@ -264,5 +264,11 @@ export default {
     .bill-list{
         display: inline-block;
         width: 45%;
+        padding-left: 14px;
+
+    }
+    .bill-title{
+        font-weight: bold;
+        line-height: 20px;
     }
 </style>

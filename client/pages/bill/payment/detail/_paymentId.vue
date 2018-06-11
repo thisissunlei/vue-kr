@@ -138,7 +138,7 @@ export default {
 				let data=res.data;
 				this.basicInfo=data;
 				data.occurDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.occurDate));
-				data.ctime=dateUtils.dateToStr("YYYY-MM-DD",new Date(data.ctime));
+				data.ctime=dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS",new Date(data.ctime));
 				data.payWay=payType[data.payWay];
 			}).catch((err)=>{
 				this.$Notice.error({

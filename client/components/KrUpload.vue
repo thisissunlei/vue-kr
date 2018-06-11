@@ -10,7 +10,7 @@
 			<div class="content-box">
 				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
-					<div class="img-mask">
+					<div v-if="!disabled" class="img-mask">
 						<div style="line-height:60px;text-align:center;">
 							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
 							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
@@ -19,7 +19,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="upIconShow" class="up-icon" @click="upBtnClick">
+			<div v-if="upIconShow && !disabled" class="up-icon" @click="upBtnClick">
 				<Icon type="plus-round"></Icon>
 			</div>
 			<slot  name="up-btn" ></slot>
@@ -93,10 +93,14 @@ export default{
 		multiple:{
 			type:Boolean,
 			default:true,
+		},
+		disabled:{
+			type:Boolean,
+			default:false
 		}
 	},
 	data(){
-		// console.log("-------",this.file)
+	
 		return {
 			isOpenList:false,
 			listStyle:{
@@ -135,12 +139,14 @@ export default{
 	// 		this.defaultList = [].concat(arr);
 	// 	}
 	// },
+	mounted(){
+		console.log(this.disabled,"pppppppp")
+	},
 	methods:{
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
 			this.eyeIndex = index;
 			this.imagesArr = [].concat(this.defaultList);
-			console.log(this.imagesArr,"pppppp",index)
 			this.close();
 
 			// for()
@@ -157,6 +163,7 @@ export default{
 
 			this.defaultList = [].concat(list);
 			this.upIconShow =true;
+			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.defaultList);
 		},
 		upBtnClick(){

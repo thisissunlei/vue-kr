@@ -232,7 +232,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过最晚付款日未付的账单（不含已过服务开始日的）</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了！没有逾期的会议室账单</div>
               </div>
               <div class="contents" v-if="OverdueMeeting.length">
                 <ul >
@@ -266,7 +266,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!OverduePrint.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过最晚付款日未付的账单（不含已过服务开始日的）</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了！没有逾期的打印账单</div>
               </div>
               <div class="contents" v-if="OverduePrint.length">
                 <ul >

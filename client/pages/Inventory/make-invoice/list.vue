@@ -92,7 +92,7 @@ import dateUtils from 'vue-dateutils';
         },
         data () {
            return {
-                listData:[{name:'123'}],
+                listData:[],
                 openModify:false,
                 openPost:false,
                 openGoBack:false,

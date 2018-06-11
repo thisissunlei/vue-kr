@@ -79,7 +79,7 @@
                 <!-- 第二行-->
                 <div style="white-space: nowrap; margin-right:0;">
                     <div class="daily-form">
-           <Form-item label="当前状态" class='daily-form'> 
+              <Form-item label="当前状态" class='daily-form'> 
                             <Select 
                                 v-model="formItem.goodsStatus" 
                                 placeholder="全部" 
@@ -125,9 +125,8 @@
                         </Select>
                     </Form-item>
                     </div>
-                    <Button type="ghost" style="vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
+                    <Button type="ghost" style="margin-left:13px;vertical-align: top;border:solid 1px #499df1;color:#499df1;box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2);" @click="clearClick">清除</Button>
                 </div>
-
 
                 <!-- 第三行-->
                 <div style="white-space: nowrap;">
@@ -177,27 +176,27 @@
                             style="width: 200px"
                             clearable
                         >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in graphList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
                     </Form-item>
 
-                    <Button type="primary" @click="searchClick" style="margin-left:18px;">搜索</Button>
+                    <Button type="primary" @click="searchClick" style="margin-left:30px;">搜索</Button>
                 </div>
 
 
                  <!-- 第四行-->
                 <div style="white-space: nowrap;">
                  
-                        <Form-item label="设备绑定" class='daily-form'> 
+                        <!-- <Form-item label="设备绑定" class='daily-form'> 
                         <Select 
-                            v-model="formItem.binding" 
+                            v-model="formItem.bindingText" 
                             placeholder="请输入商品类型" 
                             style="width: 200px"
                             clearable
                         >
-                            <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            <Option v-for="item in bindingtList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select> 
-                    </Form-item>
+                    </Form-item> -->
                    
                 </div>
 
@@ -315,7 +314,7 @@ export default {
                     stationsMin:'',
                     goodsType:' ',
                     goodsLocation:' ',
-                    binding:' ',
+                    bindingText:' ',
                     priceMin:'',
                     priceMax:'',
                     areaMin:'',
@@ -329,18 +328,28 @@ export default {
                     source:[],
 
                 },
+                
                 sourceData:[],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 sellerList:[],
-                
                 productList:[
                     {value:' ',label:'全部'},
                     {value:'OPEN',label:'固定办公桌'},
                     {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
+                graphList:[
+                    {value:' ',label:'全部'},
+                    {value:'GRAP',label:'已配置'},
+                    {value:'NOT',label:'未配置'},
+                ],
+                bindingtList:[
+                        {value:' ',label:'全部'},
+
+                ]
+                ,
                 inventoryList:[
                     {value:'AVAILABLE',label:'未招商'},
                     {value:'INVITING',label:'招商中'},
@@ -348,10 +357,10 @@ export default {
                     {value:'DISABLED',label:'不可招商'}
                 ],
                     goodsStatusList:[ 
-                      {value:' ',label:'全部'},
-                        {value:'OPEN',label:'固定办公桌'},
-                        {value:'SPACE',label:'独立办公室'},
-                        {value:'MOVE',label:'移动办公桌'}
+                      {value:' ',label:'全部（可多选）'},
+                        {value:'OPEN',label:'启用'},
+                        {value:'SPACE',label:'不可用'},
+                        {value:'MOVE',label:'下架'}
                     ],
                    locationList:[
                     {value:' ',label:'全部方位'},

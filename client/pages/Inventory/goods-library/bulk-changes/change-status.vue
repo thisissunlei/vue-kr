@@ -31,15 +31,17 @@
              </Form-item>
              <Form-item style="margin-top:20px;">
                         <span class="coloname" style="display:inline-block;margin-right:47px;">修改为：</span>
-                    <RadioGroup v-model="formItem.goodsStatus" >
-                        <Radio label="启动"></Radio>
-                        <Radio label="不可用"></Radio>
-                        <Radio label="下架"></Radio>
+                    <RadioGroup v-model="formItem.goodsStatus"  >
+                        <Radio label="startup">启动</Radio>
+                        <Radio label="Unavailable">不可用</Radio>
+                        <Radio label="frame">下架</Radio>
                     </RadioGroup> 
+                    <div v-show="startup"  style="display:inline-block;margin-right:47px;">1</div>
+                    <div v-show="Unavailable"  style="display:inline-block;margin-right:47px;">2</div>
              </Form-item>
              <Form-item style="margin-top:20px;">
                <span class="coloname">修改原因：</span>
-               <Input v-model="formItem.remark"  style="width:400px;margin-left:35px;" type="textarea" :rows="4" placeholder="请输入修改原因"/>>
+               <Input v-model="formItem.remark"  style="width:400px;margin-left:35px;" type="textarea" :rows="4" placeholder="请输入修改原因"/>
               </Form-item>
               <!-- <Button @click="onClick">fsfs</Button> -->
          </Form>
@@ -68,7 +70,10 @@
     
                 value6:'',
                 name:'',
-               
+               startup:false,
+               Unavailable:false,
+
+
                 dateError:false,
                 effectError:false,
                 name:'',
@@ -80,7 +85,7 @@
                     remark:'',//修改原因
                     startDate:'',//开始日期
                     endDate:'',//结束如期
-                    goodsStatus:'启动',
+                    goodsStatus:'startup',
                 },
                 orderList:[],
                 typeList:[],
@@ -107,7 +112,8 @@
             this.$emit('updateForm',this.formItem);
         },
         methods:{
-            dataFormat(data){
+
+              dataFormat(data){
                 let arr = [].concat(data);
                 let independentOfficeStr='';
                 let fixedLocationStr = '';

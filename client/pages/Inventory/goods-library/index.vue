@@ -7,19 +7,18 @@
               @initData="initData"
             />
         </div>
-
         <SlotHead :class="theHead?'header-here':'header-no'"/>
 
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button type="primary" @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Button type="primary" style="marign-ri" @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
                 <Button type="primary" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
             </div>
             
             <Table 
                ref="selectionGoodsLibrary" 
                :loading="loading" 
-               stripe ni
+               stripe   
                :columns="attractColumns" 
                :data="attractData" 
                border
@@ -199,6 +198,7 @@ export default {
                         var rowArray=obj.row.followStatus;
                         var row='';
                         let classN='row-current-more current-more-task table-null';
+                        // var colorClass='redClass';
                         if(!rowArray){
                             return  h('div', {
                                 attrs: {
@@ -246,7 +246,10 @@ export default {
                     width:120,
                     render(h,params){
                         var name=params.row.goodsLocation?'已配置':'未配置';
-                        return <span>{name}</span>
+                        return <span>>{name}</span>
+
+
+
                     }
                 }
             ],

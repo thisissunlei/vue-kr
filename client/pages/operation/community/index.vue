@@ -95,7 +95,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">还没有即将入驻的客户！只展示已生效的</div>
               </div>
 
               <div class="contents"  v-if="list.length">
@@ -131,7 +131,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">还没有入驻的客户哦！</div>
               </div>
               <div class="contents" v-if="DueList.length">
                 <ul >
@@ -146,7 +146,7 @@
                     <span class="table-cell">
                       <!-- {{item.rentDays}} -->
                         <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
-                          {{item.leaseRemainingDays?(Number(item.leaseRemainingDays)==1?'今日':(Number(item.leaseRemainingDays)==2?'明日':item.leaseRemainingDays-1+'日后')):'-'}}
+                          {{item.payDaysName}}
                         </span> 
                   </li>        
                 </ul>
@@ -168,7 +168,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!unpaidList.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过服务开始日仍未付的账单</div>
               </div>
               <div class="contents" v-if="unpaidList.length">
                 <ul >
@@ -199,7 +199,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueStation.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过最晚付款日未付的账单（不含已过服务开始日的）</div>
               </div>
               <div class="contents" v-if="OverdueStation.length">
                 <ul >
@@ -232,7 +232,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过最晚付款日未付的账单（不含已过服务开始日的）</div>
               </div>
               <div class="contents" v-if="OverdueMeeting.length">
                 <ul >
@@ -266,7 +266,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!OverduePrint.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">太棒了! 没有逾期的账单 !</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">没有已过最晚付款日未付的账单（不含已过服务开始日的）</div>
               </div>
               <div class="contents" v-if="OverduePrint.length">
                 <ul >
@@ -332,7 +332,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂时还没有这方面数据哦亲~</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂没有访客(入驻会员在APP上邀请来的)</div>
                 
               </div>
 
@@ -350,7 +350,7 @@
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
                     <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1">
-                       <div class="ellipsis">{{item.compareTime==0?'今日':item.compareTime==1?'明日':item.compareTime+'日后'}}</div>
+                       <div class="ellipsis">{{item.payDaysName}}</div>
                     </Tooltip>
                   </li>        
                 </ul>
@@ -459,7 +459,7 @@ export default {
                 }else if(way&&way>=6){
                    item.payDaysName=way-1+'日后'
                 }else{
-                   item.payDaysName='';
+                   item.payDaysName='-';
                 }
             })
 				}).catch((err)=>{
@@ -468,11 +468,26 @@ export default {
 					});
 				})
       },
+      
       //即将到期
       getDueList(data){ 
 				this.$http.get('getDueList',data).then((res)=>{         
             console.log('即将到期',res.data)
              this.DueList=res.data.items;
+             this.DueList.length&&this.DueList.map((item,index)=>{
+                var way=item.leaseRemainingDays;
+                if(way&&way==1){
+                   item.payDaysName='今日'
+                }else if(way&&way==2){
+                   item.payDaysName='明日'
+                }else if(way&&way<6){
+                   item.payDaysName=this.getWeekNum(item.endDate);
+                }else if(way&&way>=6){
+                   item.payDaysName=way-1+'日后'
+                }else{
+                   item.payDaysName='-';
+                }
+            })
 				}).catch((err)=>{
 					this.$Notice.error({
 						title:err.message
@@ -533,6 +548,17 @@ export default {
                     }
                     var today=this.getToDay();
                     item.compareTime=utils.timeRange(today,time);
+                    if(item.compareTime&&item.compareTime==0){
+                      item.payDaysName='今日'
+                    }else if(item.compareTime&&item.compareTime==1){
+                      item.payDaysName='明日'
+                    }else if(item.compareTime&&item.compareTime<6){
+                      item.payDaysName=this.getWeekNum(item.visitTime);
+                    }else if(item.compareTime&&item.compareTime>=6){
+                      item.payDaysName=item.compareTime+'日后'
+                    }else{
+                      item.payDaysName='-';
+                    }
                 })
               if(sameArray.length){
                 for(var i=0;i<sameArray.length;i++){

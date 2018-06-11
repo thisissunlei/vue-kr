@@ -19,3 +19,7 @@ kr-vue
 		pages 开发内容详情区
 		plugins 公用方法（通过import引入使用）
 		static 静态文件（icon，菜单栏等）
+
+
+###项目架构Nuxt.js
+https://zh.nuxtjs.org/guide

@@ -1,12 +1,22 @@
  <template>         
             <Form ref="formItem" :model="formItem"  :rules="ruleDaily"  label-position="left" class="goods-status">
                 <div class="coloname"><span>您选择了以下</span><span style="color:red;">{{num}}</span><span>个商品:</span></div>
-                <Form-item label="独立办公室:" style="margin-top:20px; word-wrap:break-word;" v-if="independentOfficeStr">
-                    {{independentOfficeStr}}
+                <Form-item label="独立办公室:" style="margin-top:20px; word-wrap:break-word;" v-if="independentOfficeStr.length">
+                    <span
+                      v-for="(item,index) in independentOfficeStr"
+                      :key="item.id"
+                    >
+                      <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
+                    </span>
                 </Form-item>
                 
-                <Form-item  label="固定办公桌:"  style="margin-top:20px; word-wrap:break-word;" v-if="fixedLocationStr">
-                    {{fixedLocationStr}}
+                <Form-item  label="固定办公桌:"  style="margin-top:20px; word-wrap:break-word;" v-if="fixedLocationStr.length">
+                    <span
+                      v-for="(item,index) in fixedLocationStr"
+                      :key="item.id"
+                    >
+                      <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
+                    </span>
                 </Form-item>
             
                 <Form-item label="选择库存日期:" style="margin-top:20px;">
@@ -63,6 +73,10 @@
              data:{
                  type:Array,
                  default:[],   
+             },
+             errorData:{
+                 type:Array,
+                 default:[],
              }
         },
         data (){
@@ -73,19 +87,20 @@
                     callback();
                 }
             };
-
+            
             return{
+                errorD:[],
                 dateError:false,
                 maxLength:200,
-                independentOfficeStr:'',
-                fixedLocationStr:'',
+                independentOfficeStr:[],
+                fixedLocationStr:[],
    
                 formItem:
                 {   
                     goodList:[],
                     remark:'',//修改原因
                     startDate:'',//开始日期
-                    endDate:'2018-12-31',//结束如期
+                    endDate:'2028-12-31',//结束如期
                     goodsStatus:'ON',
                 },
                 orderList:[],
@@ -105,34 +120,48 @@
         mounted(){
             this.dataFormat(this.data);
         },
+        watch:{
+            errorData:function(val){
+               this.errorD=val;
+               this.dataFormat(this.data);
+            }
+        },
         updated(){
             this.$emit('updateForm',this.formItem);
         },
         methods:{
             dataFormat(data){
+                this.independentOfficeStr=[];
+                this.fixedLocationStr=[];
                 let arr = [].concat(data);
+                let error=[].concat(this.errorD);
                 let goodsMiddle=[];
-                let independentOfficeStr='';
-                let fixedLocationStr = '';
                 this.num=arr.length;
                 arr.length&&arr.map((item,index)=>{
+                    error.map((items,indexs)=>{
+                        if(items==item.id){
+                            item.color='red';
+                        }else{
+                            item.color='';
+                        }
+                    })
+                    
                     if(item.goodsTypeName == '独立办公室'){
-                        independentOfficeStr+=!independentOfficeStr?item.code:','+item.code;
+                        this.independentOfficeStr.push(item);
                     }else if(item.goodsTypeName == '固定办公桌'){
-                        fixedLocationStr+=!fixedLocationStr?item.code:','+item.code
+                        this.fixedLocationStr.push(item);
                     }
-
+                    
                     var list={};
                     list.communityId=item.communityId;
                     list.floor=item.floor;
                     list.quotedPrice=item.quotedPrice;
                     list.seatId=item.id;
                     list.seatType=item.seatType;
+                    list.color=item.color;
                     goodsMiddle.push(list);
                 })
-                this.formItem.goodList=JSON.stringify(goodsMiddle);
-                this.independentOfficeStr = independentOfficeStr;
-                this.fixedLocationStr = fixedLocationStr;
+                this.formItem.goodListText=JSON.stringify(goodsMiddle);
             }
         }
     }
@@ -153,7 +182,6 @@
     .bill-search{
         display:inline-block;
         padding-left:32px;
-     
     }
    .u-date-txt{
         padding:0 10px;

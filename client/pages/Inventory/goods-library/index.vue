@@ -37,11 +37,11 @@
                 <ChangeStatus    
                      v-if="modifystate"
                     :data="statusData"
-                    @click="submitClick"
                     @updateForm="updateForm"
+                    :errorData="errorData"
                 />
             <div slot="footer">
-                <Button type="ghost" style="margin-left:8px" @click="closeStatus">取消</Button>
+                <Button type="ghost" style="margin-left:8px" @click="openStatus">取消</Button>
                 <Button type="primary" @click="submitStatus">确定</Button>
             </div>
         </Modal>
@@ -80,6 +80,7 @@ export default {
         },
     data() {
         return{
+            errorData:[],
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
@@ -292,7 +293,7 @@ export default {
         this.onScrollListener();
       },
       //批量修改
-        openBatch(){
+       openBatch(){
             this.isShowBatch=!this.isShowBatch;
             if(!this.isShowBatch){
                 this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
@@ -304,27 +305,35 @@ export default {
         openStatus(){
             this.modifystate=!this.modifystate;
         },
-        closeStatus(){
-            this.modifystate=!this.modifystate;
-        },
-        submitClick(){
-            console.log('submit',"pppppppppp")
-        },
         submitStatus(){
-            this.getStatus();
-        },
-        getStatus(){//提交
-            console.log('eee',this.statusForm);
-            this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+            this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
+            this.statusForm.endDate=this.dateSwitch(this.statusForm.endDate);
+            this.$http.post('get-change-status',this.statusForm).then((response)=>{ 
+              if(response.data.length){
+                  this.errorData=response.data;
+              }else{
+                  this.getListData(this.tabForms); 
+                  this.openMessage=true;
+                  this.MessageType="success";
+                  this.warn=this.statusData.length+'个商品修改状态成功！';
+              }   
               console.log('提交',response.data)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
                 });
             })
-      },
-      //滚动监听
-      onScrollListener(){            
+        },
+        //格式转换
+        dateSwitch(data){
+            if(data){
+                return utils.dateCompatible(data);
+            }else{
+                return '';
+            }
+        },
+       //滚动监听
+       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
             var headDom=document.querySelectorAll('div.slot-head-attract-investment')[0];
             if(headDom){
@@ -364,10 +373,6 @@ export default {
       },
       clearClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
-         this.getListData(this.tabForms); 
-      },
-      onPageChange(page){
-         this.tabForms.page=page;
          this.getListData(this.tabForms); 
       },
       onMessageChange(data){

@@ -113,6 +113,11 @@ export default  {
     'gitVisitorsList': {
         url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
         method: 'get'
+    },
+     //社区开业
+     'getCommunityList': {
+        url: '/song/api/order/cmt/community/date',
+        method: 'get'
     }
   }
   

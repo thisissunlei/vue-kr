@@ -1,16 +1,16 @@
  <template>         
-            <Form ref="formItem" :model="formItem"  :rules="ruleDaily"  label-position="top">
-                <Form-item style="margin-top:20px; word-wrap:break-word; ">
-                    <span class="coloname" style=" display: inline-block;   margin-right: 20px;">独立办公室：</span> <span>{{independentOfficeStr}}</span>
+            <Form ref="formItem" :model="formItem"  :rules="ruleDaily"  label-position="left" class="goods-status">
+                <div class="coloname"><span>您选择了以下</span><span style="color:red;">{{num}}</span><span>个商品:</span></div>
+                <Form-item label="独立办公室:" style="margin-top:20px; word-wrap:break-word;" v-if="independentOfficeStr">
+                    {{independentOfficeStr}}
                 </Form-item>
                 
-                  <Form-item  style="margin-top:20px; word-wrap:break-word;">
-                    <span class="coloname"  style=" display: inline-block; margin-right: 20px;">固定办公：</span> <span>{{fixedLocationStr}}</span>
+                <Form-item  label="固定办公桌:"  style="margin-top:20px; word-wrap:break-word;" v-if="fixedLocationStr">
+                    {{fixedLocationStr}}
                 </Form-item>
             
-                <Form-item   style="margin-top:20px;">
-                    <span class="coloname" style="float:left;">选择库存日期：</span>
-                    <Form-item prop="startDate" style=‘display:inline-block;float:left;’>
+                <Form-item label="选择库存日期:" style="margin-top:20px;">
+                    <Form-item prop="startDate" style=‘display:inline-block;float:left;margin-left:2px;’>
                     <DatePicker 
                         v-model="formItem.startDate"
                         type="date" 
@@ -29,26 +29,37 @@
                      </Form-item>
                     <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
              </Form-item>
-             <Form-item style="margin-top:20px;">
-                        <span class="coloname" style="display:inline-block;margin-right:47px;">修改为：</span>
-                    <RadioGroup v-model="formItem.goodsStatus"  >
-                        <Radio label="startup">启动</Radio>
-                        <Radio label="Unavailable">不可用</Radio>
-                        <Radio label="frame">下架</Radio>
+             <Form-item label="修改为:"  style="margin-top:20px;">
+                    <RadioGroup v-model="formItem.goodsStatus" style="margin-left:45px;"  >
+                        <Radio label="ON" >
+                           启用   
+                        </Radio>
+                        <Radio label="DISABLE">
+                           不可用
+                        </Radio>
+                        <Radio label="OFF">
+                            下架
+                        </Radio>
                     </RadioGroup> 
-                    <div v-show="startup"  style="display:inline-block;margin-right:47px;">1</div>
-                    <div v-show="Unavailable"  style="display:inline-block;margin-right:47px;">2</div>
+                    <!-- <div   v-show="ON" style="display:inline-block;margin-right:47px;">1</div>
+                    <div   v-show="DISABLE"  style="display:inline-block;margin-right:47px;">2</div> -->
              </Form-item>
-             <Form-item style="margin-top:20px;">
-               <span class="coloname">修改原因：</span>
-               <Input v-model="formItem.remark"  style="width:400px;margin-left:35px;" type="textarea" :rows="4" placeholder="请输入修改原因"/>
+             <Form-item label="修改原因:"  style="margin-top:20px;">
+               <Input 
+                 v-model="formItem.remark"  
+                 style="width:400px;margin-left:35px;" 
+                 type="textarea" 
+                 :autosize="{minRows:2,maxRows:2}" 
+                 :maxlength="maxLength"
+                 placeholder="请输入修改原因"
+               />
               </Form-item>
-              <!-- <Button @click="onClick">fsfs</Button> -->
          </Form>
 </template>
 
 
 <script>
+import dateUtils from 'vue-dateutils';
     export default{
         name:'HeighSearch',
         props: {
@@ -65,103 +76,98 @@
                     callback();
                 }
             };
-   
+
             return{
-    
-                value6:'',
-                name:'',
-               startup:false,
-               Unavailable:false,
-
-
                 dateError:false,
-                effectError:false,
-                name:'',
+                maxLength:200,
                 independentOfficeStr:'',
                 fixedLocationStr:'',
-   
+               communityId:'',
                 formItem:
-                {
+                {   
+                    goodList:[],
                     remark:'',//修改原因
                     startDate:'',//开始日期
-                    endDate:'',//结束如期
-                    goodsStatus:'startup',
+                    endDate:'2018-12-31',//结束如期
+                    goodsStatus:'ON',
+                    openDate:'',
                 },
                 orderList:[],
                 typeList:[],
                 communityList:[],
-                  ruleDaily:{
-                           startDate: [
+                ruleDaily:{
+                    startDate: [
                         { validator: validateDate, trigger: 'change' }
                     ],
                     endDate: [
                         { validator: validateDate, trigger: 'change' }
                     ],
-                  }
+                },
+                num:0
             }
         },
         mounted(){
             this.dataFormat(this.data);
-            this.getCommunity();
-            this.getOrderList();
-            console.log(this.data,"=========")
             
+            this.getCommunity();
+            
+     
         },
+      
         updated(){
-            console.log(this.formItem,"====formItem=====")
             this.$emit('updateForm',this.formItem);
         },
         methods:{
-
+  getCommunity(){
+            let id=this.data.length?this.data[0].communityId:'';
+             var data={
+                   communityId:id 
+               }
+                  this.$http.get('getCommunityList',data).then((response)=>{    
+              console.log('社区66666666666666666666666666666666666',response.data)
+                        this.formItem.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.openDate));
+                        
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
               dataFormat(data){
                 let arr = [].concat(data);
+                let goodsMiddle=[];
                 let independentOfficeStr='';
                 let fixedLocationStr = '';
-                arr.map((item,index)=>{
+                this.num=arr.length;
+                arr.length&&arr.map((item,index)=>{
                     if(item.goodsTypeName == '独立办公室'){
-                        independentOfficeStr+=item.code+','
+                        independentOfficeStr+=!independentOfficeStr?item.code:','+item.code;
                     }else if(item.goodsTypeName == '固定办公桌'){
-                        fixedLocationStr+=item.code+','
+                        fixedLocationStr+=!fixedLocationStr?item.code:','+item.code
                     }
+                    var list={};
+                    list.communityId=item.communityId;
+                    list.floor=item.floor;
+                    list.quotedPrice=item.quotedPrice;
+                    list.seatId=item.id;
+                    list.seatType=item.seatType;
+                    goodsMiddle.push(list);
                 })
+                this.formItem.goodList=JSON.stringify(goodsMiddle);
                 this.independentOfficeStr = independentOfficeStr;
                 this.fixedLocationStr = fixedLocationStr;
-                
-            },
-            getCommunity(){
-                this.$http.get('join-bill-community','').then((response)=>{    
-                        this.communityList=response.data.items 
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-            },
-
-            getOrderList(){
-                this.$http.get('order-pay-list','').then((response)=>{   
-                    this.orderList=response.data.orderTypeVos;
-                    this.typeList=response.data.seatOrderTypeVos;
-                }).catch((error)=>{
-                    this.$Notice.error({
-                        title:error.message
-                     });
-                })   
-            },
-            // onClick(e){
-            //     var dom = e.target;
-            //     // this.independentOfficeStr=
-            //     this.$emit('click',this.independentOfficeStr);
-            // }
-
+            }
         }
     }
 </script>
 
-<style lang='less' scoped>
-.coloname{
-    font-size: 16px;
-}
+<style lang='less'>
+.goods-status{
+    .coloname{
+        display:inline-block;
+        font-size: 14px;
+        font-weight:500;
+    }
     .bill-search-class{
         display:inline-block;
         width:50%;
@@ -173,8 +179,14 @@
      
     }
    .u-date-txt{
-            padding:0 25px;
-            font-size: 14px;
-            color: #666;
-        }
+        padding:0 10px;
+        font-size: 14px;
+        color: #666;
+   }
+   .ivu-form-item-label{
+       font-size: 14px;
+       font-weight:500;
+       margin-top: -2px;
+   }
+}
 </style>  

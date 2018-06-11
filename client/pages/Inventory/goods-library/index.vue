@@ -8,11 +8,10 @@
             />
         </div>
         <SlotHead :class="theHead?'header-here':'header-no'"/>
-
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
-                <Button type="primary" style="marign-ri" @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
-                <Button type="primary" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+                <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
+                <Button type="primary"  v-if="!isShowBatch" @click="openStatus">修改状态</Button>
             </div>
             
             <Table 
@@ -36,6 +35,7 @@
             :warn="warn"
             @changeOpen="onMessageChange"
         />
+
         <Modal
             width="660"
             v-model="modifystate"
@@ -43,7 +43,7 @@
         >
                 <ChangeStatus    
                      v-if="modifystate"
-                    :data="attractData"
+                    :data="statusData"
                     @click="submitClick"
                     @updateForm="updateForm"
                 />
@@ -87,14 +87,13 @@ export default {
         },
     data() {
         return{
-
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
             modal10: false,
             warn:'',
-            modal2:'',
             MessageType:'',
+   
             openMessage:false,
             statusForm:{},
             tabForms:{
@@ -111,13 +110,11 @@ export default {
                 {
                     title: '商品编号',
                     key: 'code',
-                     width:110,
                     align:'center' 
                 },
                 {
                     title: '商品名称',
                     key: 'name',
-                    width:100,
                     align:'center',
                 },
                 {
@@ -193,7 +190,7 @@ export default {
                     key: 'followStatus',
                     className:'current-range',
                     align:'center',
-                    width:120, 
+                    width:150, 
                     render(h,obj){
                         var rowArray=obj.row.followStatus;
                         var row='';
@@ -253,7 +250,8 @@ export default {
                     }
                 }
             ],
-            attractData:[]    
+            attractData:[],
+            statusData:[]    
         }
     },
        watch: {
@@ -279,7 +277,6 @@ export default {
         })
     },
     watch:{   
-
         sideBar:function(val){
             this.getListData();
             this.tableCommon();
@@ -291,11 +288,9 @@ export default {
         dom.removeEventListener("scroll",this.onScrollListener);
         window.removeEventListener('resize',this.onResize); 
     },
-
     methods:{
       updateForm(obj){
-          this.statusForm=Object.assign({},obj);
-          
+          this.statusForm=Object.assign({},obj);  
       },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
@@ -304,47 +299,48 @@ export default {
             this.width=dailyTableDom.getBoundingClientRect().width;
         }  
       },
-
       onResize(){
-            this.tableCommon();
-            this.onScrollListener();
-    
+        this.tableCommon();
+        this.onScrollListener();
       },
       //批量修改
-            openBatch(){
-                this.isShowBatch=!this.isShowBatch;
-                if(!this.isShowBatch){
-                    this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
-                    this.$refs.selectionGoodsLibrary.selectAll(true); 
-                }else{
-                    this.attractColumns.splice(0,1);
-                }
-            },
-            openStatus(){
-                this.modifystate=!this.modifystate;
-            },
-            closeStatus(){
-                this.modifystate=!this.modifystate;
-           },
-           submitClick(){
-               console.log('submit',"pppppppppp")
-           },
-            submitStatus(){
-                this.getStatus();
-                // alert(1)
-            },
-            getStatus(){//提交
-                console.log('eee',this.statusForm)
-                this.$http.post('get-change-status',this.statusForm).then((response)=>{    
-                    console.log('提交',response.data)
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-
-
-            },
+        openBatch(){
+   
+            this.isShowBatch=!this.isShowBatch;
+            if(!this.isShowBatch){
+                this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
+                this.$refs.selectionGoodsLibrary.selectAll(true); 
+            }else{
+                this.attractColumns.splice(0,1);
+            }
+        },
+        ee(){
+            
+        
+        },
+        openStatus(){
+         
+            this.modifystate=!this.modifystate;
+        },
+        closeStatus(){
+            this.modifystate=!this.modifystate;
+        },
+        submitClick(){
+            console.log('submit',"pppppppppp")
+        },
+        submitStatus(){
+            this.getStatus();
+        },
+        getStatus(){//提交
+            console.log('eee',this.statusForm);
+            this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+              console.log('提交',response.data)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+      },
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
@@ -364,11 +360,11 @@ export default {
          this.getListData(this.tabForms);
       },
       tableChange(select){
-          console.log('select--',select);
+          this.statusData=select;
       },
       getListData(params){//列表
            this.loading=true;
-           this.$http.get('getGoodsList', params).then((response)=>{
+           this.$http.get('getGoodsList',params).then((response)=>{
                console.log('商品列表',response.data);
                 this.totalCount=response.data.totalCount;
                 this.attractData=response.data.items;           
@@ -439,6 +435,7 @@ export default {
             }
             .table-null{
                 line-height: 47px;
+          
             }
         }
         .header-here{

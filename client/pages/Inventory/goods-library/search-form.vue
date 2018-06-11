@@ -323,13 +323,11 @@ export default {
               
                     rentTimeType:'GT',
                     locationType:' ',
-                     suiteName:' ',
+                    suiteName:' ',
 
                     source:[],
 
                 },
-                
-                sourceData:[],
                 communityList:[],
                 cityList:[],
                 floorList:[],
@@ -416,8 +414,6 @@ export default {
     },
     mounted(){
         this.getCityList();
-        this.getSourceData();
-        // this.getSelectData();
         var _this=this;
         setTimeout(() => {
             _this.$emit('initData',this.formItem);
@@ -425,20 +421,6 @@ export default {
         },500);
     },
     methods:{
-
-        //   getSelectData(){//当前状态
-        
-        //     this.$http.get('get-goodsStatusList-data',{
-        //         enmuKey:'com.krspace.order.api.enums.community.GoodsStatus'
-        //     }).then((response)=>{
-        //         console.log('uuuuuuuuuuuuu',response.data)
-        //        this.goodsStatusList=response.data;
-        //     }).catch((error)=>{
-        //         this.$Notice.error({
-        //             title:error.message
-        //         });
-        //     })
-        // },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {
@@ -455,16 +437,6 @@ export default {
                 list = res.data.slice(0,10);
                 this.loading= false;
                 this.sellerList=list;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
-        //渠道来源
-        getSourceData(){
-            this.$http.get('get-customer-source').then((res)=>{
-                this.sourceData=publicFn.sourceStyleSwitch(res.data);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

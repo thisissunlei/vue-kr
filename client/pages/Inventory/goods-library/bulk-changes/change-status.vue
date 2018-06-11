@@ -51,6 +51,7 @@
                             下架
                         </Radio>
                     </RadioGroup> 
+                    <span v-if="this.errorD.length" style="color:red">部分商品该时段有合同，不能设为下架或不可用</span>
              </Form-item>
              <Form-item label="修改原因:"  style="margin-top:20px;">
                <Input 
@@ -138,14 +139,16 @@
                 let goodsMiddle=[];
                 this.num=arr.length;
                 arr.length&&arr.map((item,index)=>{
-                    error.map((items,indexs)=>{
-                        if(items==item.id){
-                            item.color='red';
-                        }else{
-                            item.color='';
-                        }
-                    })
-                    
+                    if(error.length){
+                        error.map((items,indexs)=>{
+                            if(items==item.id){
+                                item.color='red';
+                            }
+                        })               
+                    }else{
+                        item.color='';
+                    }
+
                     if(item.goodsTypeName == '独立办公室'){
                         this.independentOfficeStr.push(item);
                     }else if(item.goodsTypeName == '固定办公桌'){

@@ -304,6 +304,9 @@ export default {
         },
         openStatus(){
             this.modifystate=!this.modifystate;
+            if(!this.modifystate){
+                this.errorData=[];
+            }
         },
         submitStatus(){
             this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);

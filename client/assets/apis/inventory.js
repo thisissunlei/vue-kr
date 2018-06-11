@@ -82,7 +82,11 @@ export default  {
     'get-goodsStatusList-data':{
         url:'/api/krspace-sso-web/sys/enmu',
         method:'get'
-    },
+    }, 
+    //批量修改状态借口
+    'get-change-status':{
+        url:'/song/api/order/goods/status/batch',
+        method:'post'
+    }, 
 
-    
     }

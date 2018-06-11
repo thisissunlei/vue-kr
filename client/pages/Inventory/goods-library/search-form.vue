@@ -348,7 +348,10 @@ export default {
                     {value:'DISABLED',label:'不可招商'}
                 ],
                     goodsStatusList:[ 
-                    
+                      {value:' ',label:'全部'},
+                        {value:'OPEN',label:'固定办公桌'},
+                        {value:'SPACE',label:'独立办公室'},
+                        {value:'MOVE',label:'移动办公桌'}
                     ],
                    locationList:[
                     {value:' ',label:'全部方位'},
@@ -405,7 +408,7 @@ export default {
     mounted(){
         this.getCityList();
         this.getSourceData();
-        this.getSelectData();
+        // this.getSelectData();
         var _this=this;
         setTimeout(() => {
             _this.$emit('initData',this.formItem);
@@ -414,24 +417,19 @@ export default {
     },
     methods:{
 
-          getSelectData(){//当前状态
-                const goodsStatus=[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-           ]
-            this.$http.get('get-goodsStatusList-data',{
-                enmuKey:'com.krspace.order.api.enums.community.GoodsStatus'
-            }).then((response)=>{
-                console.log('uuuuuuuuuuuuu',response.data)
-               this.goodsStatusList=goodsStatus;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
+        //   getSelectData(){//当前状态
+        
+        //     this.$http.get('get-goodsStatusList-data',{
+        //         enmuKey:'com.krspace.order.api.enums.community.GoodsStatus'
+        //     }).then((response)=>{
+        //         console.log('uuuuuuuuuuuuu',response.data)
+        //        this.goodsStatusList=response.data;
+        //     }).catch((error)=>{
+        //         this.$Notice.error({
+        //             title:error.message
+        //         });
+        //     })
+        // },
         //销售员搜索
         remoteSaler(query){
             if (query !== '') {

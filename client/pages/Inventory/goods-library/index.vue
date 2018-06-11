@@ -19,7 +19,7 @@
             <Table 
                ref="selectionGoodsLibrary" 
                :loading="loading" 
-               stripe 
+               stripe ni
                :columns="attractColumns" 
                :data="attractData" 
                border
@@ -39,9 +39,15 @@
         />
         <Modal
             width="660"
-            v-model="modal1"
-            title="修改状态">
-            <ChangeStatus/>
+            v-model="modifystate"
+            title="修改状态"
+        >
+                <ChangeStatus    
+                     v-if="modifystate"
+                    :data="attractData"
+                    @click="submitClick"
+                    @updateForm="updateForm"
+                />
             <div slot="footer">
                 <Button type="ghost" style="margin-left:8px" @click="closeStatus">取消</Button>
                 <Button type="primary" @click="submitStatus">确定</Button>
@@ -68,8 +74,8 @@ import utils from '~/plugins/utils';
 import publicFn from '../publicFn';
 import SlotHead from './fixed-head';
 import dateUtils from 'vue-dateutils';
-
 export default {
+          name:'Join',
     components:{
        Loading,
        SearchForm,
@@ -77,15 +83,21 @@ export default {
        SlotHead,
        ChangeStatus
     },
+      props:{
+            mask:String
+        },
     data() {
         return{
+
             isShowBatch:true,
-            modal1: false,
+            switchParams:{},
+            modifystate: false,
             modal10: false,
             warn:'',
             modal2:'',
             MessageType:'',
             openMessage:false,
+            statusForm:{},
             tabForms:{
                 page:1,
                 pageSize:100
@@ -100,11 +112,13 @@ export default {
                 {
                     title: '商品编号',
                     key: 'code',
+                     width:110,
                     align:'center' 
                 },
                 {
                     title: '商品名称',
                     key: 'name',
+                    width:100,
                     align:'center',
                 },
                 {
@@ -195,7 +209,9 @@ export default {
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
                                 var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+item.goodsStatusName;
+                                
                                 return h('div', [
+
                                     h('Tooltip', {
                                         props: {
                                             placement: 'top',
@@ -237,6 +253,18 @@ export default {
             attractData:[]    
         }
     },
+       watch: {
+            $props: {
+                deep: true,
+                handler(nextProps) {
+                    if(nextProps.mask=='join'){
+                       this.getListData(this.switchParams);
+                       this.params=this.switchParams; 
+                    }
+                }
+            }
+        },
+        
     mounted(){
         var dom=document.getElementById('layout-content-main');
         dom.addEventListener("scroll",this.onScrollListener);
@@ -248,9 +276,10 @@ export default {
         })
     },
     watch:{   
+
         sideBar:function(val){
-            this.tableCommon();
             this.getListData();
+            this.tableCommon();
             this.onScrollListener();
         }
     },
@@ -259,7 +288,12 @@ export default {
         dom.removeEventListener("scroll",this.onScrollListener);
         window.removeEventListener('resize',this.onResize); 
     },
+
     methods:{
+      updateForm(obj){
+          this.statusForm=Object.assign({},obj);
+          
+      },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
         if(dailyTableDom){
@@ -267,29 +301,47 @@ export default {
             this.width=dailyTableDom.getBoundingClientRect().width;
         }  
       },
+
       onResize(){
             this.tableCommon();
             this.onScrollListener();
+    
       },
       //批量修改
-      openBatch(){
-          this.isShowBatch=!this.isShowBatch;
-          if(!this.isShowBatch){
-              this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
-              this.$refs.selectionGoodsLibrary.selectAll(true); 
-          }else{
-              this.attractColumns.splice(0,1);
-          }
-      },
-      openStatus(){
-          this.modal1=!this.modal1;
-      },
-      closeStatus(){
-          this.modal1=!this.modal1;
-      },
-      submitStatus(){
+            openBatch(){
+                this.isShowBatch=!this.isShowBatch;
+                if(!this.isShowBatch){
+                    this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
+                    this.$refs.selectionGoodsLibrary.selectAll(true); 
+                }else{
+                    this.attractColumns.splice(0,1);
+                }
+            },
+            openStatus(){
+                this.modifystate=!this.modifystate;
+            },
+            closeStatus(){
+                this.modifystate=!this.modifystate;
+           },
+           submitClick(){
+               console.log('submit',"pppppppppp")
+           },
+            submitStatus(){
+                this.getStatus();
+                // alert(1)
+            },
+            getStatus(){//提交
+                console.log('eee',this.statusForm)
+                this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+                    console.log('提交',response.data)
+                    }).catch((error)=>{
+                        this.$Notice.error({
+                            title:error.message
+                        });
+                    })
 
-      },
+
+            },
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
@@ -316,7 +368,8 @@ export default {
            this.$http.get('getGoodsList', params).then((response)=>{
                console.log('商品列表',response.data);
                 this.totalCount=response.data.totalCount;
-                this.attractData=response.data.items;
+                this.attractData=response.data.items;           
+                this.name=response.data;    
                 this.loading=false;
             }).catch((error)=>{
                 this.openMessage=true;
@@ -342,7 +395,6 @@ export default {
     }
 }
 </script>
-
 <style lang='less'>
      .attract-investment{
          .attract-search{

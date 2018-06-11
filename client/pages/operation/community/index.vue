@@ -89,8 +89,8 @@
                   </div>
                 <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
-                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1Str}}</span><span style="font-size:12px">个</span>/
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2Str}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -125,8 +125,8 @@
                 </div>   
                 <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
                   {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
-                  <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
-                  <span :style="DueList[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="DueList[0].remark1Str==0?'':'color: #FF6868;'">{{DueList[0].remark1Str}}</span><span style="font-size:12px">个</span>/
+                  <span :style="DueList[0].remark2Str==0?'':'color: #FF6868;'">{{DueList[0].remark2Str}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">
@@ -162,8 +162,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="unpaidList.length">
-                  <span :style="unpaidList[0].remark1==0?'':'color: #FF6868;'">{{unpaidList[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="unpaidList[0].remark2==0?'':'color: #FF6868;'">{{unpaidList[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="unpaidList[0].remark1Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark1Str}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="unpaidList[0].remark2Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark2Str}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!unpaidList.length">
@@ -193,8 +193,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverdueStation.length">
-                  <span :style="OverdueStation[0].remark1==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="OverdueStation[0].remark2==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverdueStation[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1Str}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverdueStation[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2Str}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueStation.length">
@@ -226,8 +226,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverdueMeeting.length">
-                  <span :style="OverdueMeeting[0].remark1==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="OverdueMeeting[0].remark2==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverdueMeeting[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1Str}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverdueMeeting[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2Str}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
@@ -260,8 +260,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverduePrint.length">
-                  <span :style="OverduePrint[0].remark1==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1}}</span><span style="font-size:12px">笔</span>/共
-                  <span :style="OverduePrint[0].remark2==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverduePrint[0].remark1Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1Str}}</span><span style="font-size:12px">笔</span>/共
+                  <span :style="OverduePrint[0].remark2Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2Str}}</span><span style="font-size:12px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverduePrint.length">

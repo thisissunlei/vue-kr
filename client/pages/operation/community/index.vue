@@ -179,7 +179,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">{{item.debtStr}}元</span>
                       <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -210,7 +210,7 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell">{{item.debt}}元</span>
+                    <span class="table-cell">{{item.debtStr}}元</span>
                     <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -243,7 +243,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">{{item.debtStr}}元</span>
                       <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
@@ -251,7 +251,7 @@
             </div>
 
 
-      
+
             <div class="box">
               <div class="header">
                 <div class="header-left" @click="openOverUnpaid('PRINT')">
@@ -277,7 +277,7 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debt}}元</span>
+                      <span class="table-cell">{{item.debtStr}}元</span>
                       <span class="table-cell">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>

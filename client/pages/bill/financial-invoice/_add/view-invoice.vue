@@ -371,15 +371,14 @@ import utils from '~/plugins/utils';
                 let businessUrlName = [].concat(this.businessUrlName);
                 let taxUrlName = [].concat(this.taxUrlName);
                 if(type == 'taxUrlName'){
-                    taxUrlName.push(detail)
-                    this.taxUrlName = [].concat(taxUrlName);
+                   
+                    this.taxUrlName = taxUrlName.concat(detail);
                 }   
                 if(type == 'businessUrlName'){
-                    businessUrlName.push(detail);
-                    this.bussinessClose = [].concat(businessUrlName)
+                  
+                    this.bussinessClose = businessUrlName.concat(detail)
                 }
-                
-                // console.log(type,arr,list,detail,"pppppp")
+              
             },
             bussinessClose(){
                 this.openBussiness=!this.openBussiness;

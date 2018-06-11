@@ -89,8 +89,8 @@
                   </div>
                 <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
-                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1Str}}</span><span style="font-size:12px">个</span>/
-                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2Str}}</span><span style="font-size:12px">工位</span>
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -125,8 +125,8 @@
                 </div>   
                 <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
                   {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
-                  <span :style="DueList[0].remark1Str==0?'':'color: #FF6868;'">{{DueList[0].remark1Str}}</span><span style="font-size:12px">个</span>/
-                  <span :style="DueList[0].remark2Str==0?'':'color: #FF6868;'">{{DueList[0].remark2Str}}</span><span style="font-size:12px">工位</span>
+                  <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个</span>/
+                  <span :style="DueList[0].remark2==0?'':'color: #FF6868;'">{{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">

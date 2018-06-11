@@ -161,7 +161,7 @@
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
                     <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
-                    <Button class="view-btn" @click="rejectedSubmit" v-if="!isReady">驳回</Button>
+                    <Button class="view-btn" @click="rejectedSubmit" v-if="!isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
                 </div>
             </FormItem>
 
@@ -295,7 +295,8 @@ import utils from '~/plugins/utils';
                     registerAddress:'',
                     registerPhone:'',
                     bank:'',
-                    bankAccount:''   
+                    bankAccount:'' ,
+                    verifyStatus:''  
                 },
                 //校验
                 ruleCustom:{
@@ -334,7 +335,7 @@ import utils from '~/plugins/utils';
         },
         head() {
             return {
-                title: '新建订单'
+                title: '资料详情'
             }
         },
          mounted(){
@@ -362,7 +363,8 @@ import utils from '~/plugins/utils';
                     let obj = {
                         invoiceTitle : this.formItem.invoiceTitle,
                         titleType :value,
-                        id:this.formItem.id
+                        id:this.formItem.id,
+                        verifyStatus:this.formItem.verifyStatus
                     }
                     this.formItem = obj;
                 }
@@ -402,8 +404,8 @@ import utils from '~/plugins/utils';
                     id :param.id,
                 }
                 this.$http.put('get-financial-invoice-rejected', params).then((res)=>{
-                    // window.close();
-                // window.opener.location.reload(); 
+                    window.close();
+                window.opener.location.reload(); 
                 }).catch((err)=>{
                     this.$Notice.error({
                         title:err.message
@@ -419,6 +421,7 @@ import utils from '~/plugins/utils';
                          list.fieldUrl=list.url;
                          this.businessUrlName.push(list);
                     })
+                    console.log(this.formItem)
                     this.formItem.taxCertificate.map((item,index)=>{
                          var list=Object.assign({},item);
                          list.fieldUrl=list.url;
@@ -466,8 +469,8 @@ import utils from '~/plugins/utils';
                     if (valid) {
                         this.$http.post('get-financial-invoice-edit',editData).then((res)=>{
                             console.log('editok',res);
-                            // window.close();
-                        // window.opener.location.reload();
+                            window.close();
+                        window.opener.location.reload();
                         }).catch((err)=>{
                             this.$Notice.error({
                                 title:err.message

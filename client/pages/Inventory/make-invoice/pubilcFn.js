@@ -157,6 +157,7 @@ function initListData(){
             title: '发票张数',
             key: 'invoiceCount',
             align:'center',
+            width:70,
             type:'waitArrive,waitMail,waitReceive'
         },
         {
@@ -165,7 +166,7 @@ function initListData(){
             align:'center',
             type:'waitArrive,waitReceive,',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:ss",new Date(params.row.ctime));
                 return time;
             }
 

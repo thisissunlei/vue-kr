@@ -295,6 +295,10 @@ import dateUtils from 'vue-dateutils';
                 params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
                 params.invoiceStatusList = this.tableParams.invoiceStatusList;
                 console.log(this.tableParams,'params=====',params)
+                if(params.invoiceStatusList == 'TO_RETURN' && params.invoiceStatus!=' '){
+                  let str = ','+params.invoiceStatus
+                  params.invoiceStatusList+=str
+                }
                 this.$http.get('invoice-list-unified',params).then((res)=>{
                   let pages = {
                       page:res.data.page,

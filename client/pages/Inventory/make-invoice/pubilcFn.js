@@ -133,7 +133,7 @@ function initListData(){
         },
         {
             title: '收回状态',
-            key: 'name',
+            key: 'invoiceStatusName',
             align:'center',
             type:'waitReturn'
         },
@@ -241,8 +241,7 @@ function initListData(){
             type:'waitReturn',
             render:(h,params)=>{
                 let colData = params.row;
-               
-                return h('div', [
+                let arr = [
                         h('Button', {
                             props: {
                                 type: 'text',
@@ -256,22 +255,11 @@ function initListData(){
                                     this.goView(colData)
                                 }
                             }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    this.callbackClick(colData)
-                                }
-                            }
-                        }, '收回'),
-                        h('Button', {
+                        }, '查看') 
+                ];
+                
+                if(colData.invoiceStatus == 'RECOVERYED'){
+                    arr.push(h('Button', {
                             props: {
                                 type: 'text',
                                 size: 'small'
@@ -284,8 +272,26 @@ function initListData(){
                                     this.modifyClick(colData)
                                 }
                             }
-                        }, '修改')  
-                ]);  
+                        }, '修改') )
+                }
+                if(colData.invoiceStatus == 'RETURNING'){
+                    arr.push(h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.callbackClick(colData)
+                                }
+                            }
+                        }, '收回'),)
+                }
+               
+                return h('div',arr );  
               
             }
         }

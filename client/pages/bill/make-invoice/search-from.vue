@@ -286,7 +286,7 @@ export default {
                     communityId:' ',
                     companyId:'',
                     endAmount:'',
-                    invoiceTitle:' ',
+                    invoiceTitle:'',
                     invoiceType:' ',
                     startAmount:'',
                     cityId:' ',

@@ -38,7 +38,14 @@ function initListData(){
             title: '纳税人识别码',
             key: 'taxpayerNumber',
             align:'center',
-            type:'VERIFYING,PASSED'
+            type:'VERIFYING,PASSED',
+            render:(h,params)=>{
+                let {qualificationVO} =  params.row;
+                if(!qualificationVO){
+                    return '';
+                }
+                return qualificationVO.taxpayerNumber;
+            }
         },
         {
             title: '注册地址',

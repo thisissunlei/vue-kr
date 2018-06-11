@@ -31,14 +31,26 @@ function initListData(){
             align:'center',
             type:'waitArrive,waitMail,waitReceive,alreadyReceive,waitReturn',
             render:(h,params)=>{
-                return params.row.invoiceTitle
+               
+                let {qualificationVO} =  params.row;
+                if(!qualificationVO){
+                    return '';
+                }
+                return qualificationVO.invoiceTitle
             }
         },
         {
             title: '纳税人识别号',
             key: 'taxpayerNumber',
             align:'center',
-            type:'waitArrive,waitMail,waitReceive,alreadyReceive'
+            type:'waitArrive,waitMail,waitReceive,alreadyReceive',
+            render:(h,params)=>{
+                let {qualificationVO} =  params.row;
+                if(!qualificationVO){
+                    return '';
+                }
+                return qualificationVO.taxpayerNumber;
+            }
         },
         {
             title: '发票规格',

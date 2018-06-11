@@ -10,7 +10,7 @@
 			<div class="content-box">
 				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
-					<div class="img-mask">
+					<div v-if="!disabled" class="img-mask">
 						<div style="line-height:60px;text-align:center;">
 							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
 							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
@@ -19,7 +19,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="upIconShow" class="up-icon" @click="upBtnClick">
+			<div v-if="upIconShow && !disabled" class="up-icon" @click="upBtnClick">
 				<Icon type="plus-round"></Icon>
 			</div>
 			<slot  name="up-btn" ></slot>
@@ -93,10 +93,14 @@ export default{
 		multiple:{
 			type:Boolean,
 			default:true,
+		},
+		disabled:{
+			type:Boolean,
+			default:false
 		}
 	},
 	data(){
-		// console.log("-------",this.file)
+	
 		return {
 			isOpenList:false,
 			listStyle:{
@@ -121,13 +125,13 @@ export default{
 	},
 
 	watch:{
-		file(){
-			if(this.type=='only' && this.file && this.file.length){
-				console.log('file',this.file)
-				this.defaultList=[].concat(!this.file.length?[]:this.file)
-			}
+		// file(){
+		// 	if(this.type=='only' && this.file && this.file.length){
+		// 		// console.log('file',this.file)
+		// 		this.defaultList=[].concat(!this.file.length?[]:this.file)
+		// 	}
 			
-		}
+		// }
 	},
 	// updated(){
 	// 	if(this.type == 'only'){
@@ -135,12 +139,14 @@ export default{
 	// 		this.defaultList = [].concat(arr);
 	// 	}
 	// },
+	mounted(){
+		console.log(this.disabled,"pppppppp")
+	},
 	methods:{
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
 			this.eyeIndex = index;
 			this.imagesArr = [].concat(this.defaultList);
-			console.log(this.imagesArr,"pppppp",index)
 			this.close();
 
 			// for()
@@ -155,8 +161,13 @@ export default{
 			var list = [].concat(this.defaultList);
 			list.splice(index, 1);
 
+
 			this.defaultList = [].concat(list);
-			this.upIconShow =true;
+			if(this.multiple==false){
+					this.upIconShow =true;
+			}
+		
+			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.defaultList);
 		},
 		upBtnClick(){
@@ -268,7 +279,7 @@ export default{
 				this.upIconShow = false;
 			}
 		
-			
+			console.log(detail,"pppppp")
 			this.$emit('onChange',[detail],this.columnDetail,this.defaultList);
 			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
 			

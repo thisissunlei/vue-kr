@@ -98,43 +98,64 @@
                 <Row  style="margin-bottom:30px">   
                     <Col style="display:block;">
                        营业执照:
-                       <span 
+                        <KrUpload 
+                            :file="businessUrlName"
+                            type="only"
+                            :columnDetail="{}"
+                            :multiple="true"
+                            :disabled="isReady"
+                            @delete="(index)=>{
+                                imgDelete(index,'businessUrlName')
+                            }"
+                            @upSuccess="(detail)=>{
+                                upChange(detail,'businessUrlName')
+                            }"
+                        />
+                       <!-- <span 
                         v-for="(item,index) in businessUrlName"
                         :key="item.id"
                         style="color:#499df1;cursor:pointer;margin-right:10px;"
                         @click="businessClick(item,index,'bus')"
                        >
+                       
                          {{item.fileName}}
-                       </span>
+                       </span> -->
                        
                     </Col>
                     <Col style="display:block;margin-top:20px;">
                        一般纳税人证明:
-                       <span 
+                        <KrUpload 
+                            :file="taxUrlName"
+                            type="only"
+                            :columnDetail="{}"
+                            @delete="(index)=>{
+                                imgDelete(index,'taxUrlName')
+                            }"
+                            @upSuccess="(detail)=>{
+                                upChange(detail,'taxUrlName')
+                            }"
+                            :multiple="true"
+                            :disabled="isReady"
+                        />
+                       <!-- <span 
                         v-for="item in taxUrlName"
                         :key="item.id"
                         style="color:#499df1;cursor:pointer;margin-right:10px;"
                         @click="businessClick(item,index,'txt')"
                        >
                          {{item.fileName}}
-                       </span>
+                       </span> -->
                     </Col>
                 </Row>
             </DetailStyle>
-            <KrUpload 
-                :file="[]"
-                type="only"
-                :columnDetail="{}"
-                :multiple="true"
-               
-            />
-            <PhotoAlbum 
+            
+            <!-- <PhotoAlbum 
                 :data="imgData" 
                 v-if="openBussiness" 
                 :eyeIndex="eyeIndex" 
                 @close="bussinessClose"
                 @downFile="downImg"
-             />
+             /> -->
             
             <FormItem style="padding-left:24px;margin-top:40px; width:730px;" >
                 <div style="text-align: center;padding:0px 20px;">
@@ -346,6 +367,19 @@ import utils from '~/plugins/utils';
                     this.formItem = obj;
                 }
             },
+            upChange(detail,type){
+                let businessUrlName = [].concat(this.businessUrlName);
+                let taxUrlName = [].concat(this.taxUrlName);
+                if(type == 'taxUrlName'){
+                   
+                    this.taxUrlName = taxUrlName.concat(detail);
+                }   
+                if(type == 'businessUrlName'){
+                  
+                    this.bussinessClose = businessUrlName.concat(detail)
+                }
+              
+            },
             bussinessClose(){
                 this.openBussiness=!this.openBussiness;
             },
@@ -397,10 +431,22 @@ import utils from '~/plugins/utils';
                 })
             },
             tabelInputChange(event){
-                console.log(event,"pppppppppp")
+                // console.log(event,"pppppppppp")
             },
             editClick(){
                 this.isReady = false;
+            },
+            imgDelete(index,type){
+                let businessUrlName = [].concat(this.businessUrlName);
+                let taxUrlName = [].concat(this.taxUrlName);
+                if(type == 'taxUrlName'){
+                    taxUrlName.splice(index)
+                    this.taxUrlName = [].concat(taxUrlName);
+                }   
+                if(type == 'businessUrlName'){
+                    businessUrlName.splice(index)
+                    this.bussinessClose = [].concat(businessUrlName)
+                }
             },
             back(){
                 window.history.go(-1);

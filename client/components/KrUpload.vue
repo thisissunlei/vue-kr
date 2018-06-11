@@ -125,13 +125,13 @@ export default{
 	},
 
 	watch:{
-		file(){
-			if(this.type=='only' && this.file && this.file.length){
-				console.log('file',this.file)
-				this.defaultList=[].concat(!this.file.length?[]:this.file)
-			}
+		// file(){
+		// 	if(this.type=='only' && this.file && this.file.length){
+		// 		// console.log('file',this.file)
+		// 		this.defaultList=[].concat(!this.file.length?[]:this.file)
+		// 	}
 			
-		}
+		// }
 	},
 	// updated(){
 	// 	if(this.type == 'only'){
@@ -161,8 +161,12 @@ export default{
 			var list = [].concat(this.defaultList);
 			list.splice(index, 1);
 
+
 			this.defaultList = [].concat(list);
-			this.upIconShow =true;
+			if(this.multiple==false){
+					this.upIconShow =true;
+			}
+		
 			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.defaultList);
 		},
@@ -275,7 +279,7 @@ export default{
 				this.upIconShow = false;
 			}
 		
-			
+			console.log(detail,"pppppp")
 			this.$emit('onChange',[detail],this.columnDetail,this.defaultList);
 			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
 			

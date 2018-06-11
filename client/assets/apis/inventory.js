@@ -45,6 +45,11 @@ export default  {
         url: '/api/krspace-finance-web/inventory/rent-list/timeline',
         method: 'get'
     },
+    // 运营主页
+    'getOperating': {
+        url: '/api/order/operation/home',
+        method: 'get'
+    },
     // 即将到期
     'getDueList': {
         url: '/api/order/operation/due/list',
@@ -54,6 +59,16 @@ export default  {
     'excelDueList': {
         url: '/api/order/operation/due/list-excel',
         method: 'post'
+    },
+    //已起租未付
+    'unpaidList': {
+        url: '/api/order/operation/rentNoPay/list',
+        method: 'get'
+    },
+     //逾期未付
+     'Overduelist': {
+        url: '/api/order/operation/overDateNoPay/list',
+        method: 'get'
     },
     //社区招商
     'community-investment-list': {
@@ -75,10 +90,11 @@ export default  {
         method: 'get'
     },
     //商品列表
-    'getGoodsList': {//getGoodslist
+    'getGoodsList': {
         url: '/song/api/order/goods/list',
         method: 'get'
     },
+    //商品库枚举
     'get-goodsStatusList-data':{
         url:'/api/krspace-sso-web/sys/enmu',
         method:'get'
@@ -88,5 +104,15 @@ export default  {
         url:'/song/api/order/goods/status/batch',
         method:'post'
     }, 
-
+    // 预约参观
+    'AnappointmentList': {
+        url: '/api/krspace-finance-web/sys/visit-record/list',
+        method: 'get'
+    }, 
+    //会员访客
+    'gitVisitorsList': {
+        url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
+        method: 'get'
     }
+  }
+  

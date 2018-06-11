@@ -545,11 +545,11 @@
                             type:'vue',
                             menuCode: 'fina_manager_setting_page'
                         },
-                        // {
-                        //     primaryText: "客户门禁权限",
-                        //     router: 'user/memberManage/doormanage',
-                        //     menuCode: 'door_base',
-                        // },
+                        {
+                            primaryText: "客户门禁权限",
+                            router: 'user/memberManage/doormanage',
+                            menuCode: 'door_base',
+                        },
                         {
                             primaryText: '客户线索',
                             router: 'user/customerManage/customerList',
@@ -687,7 +687,7 @@
                         //     primaryText: '库存平面图',
                         //     menuCode: 'cmt_run',
                         //     router: 'product/communityManage/detail',
-                        // }, 
+                        //}, 
                         {
                             primaryText: '会议室设备配置',
                             menuCode: 'oper_cmt_deviceList_base',
@@ -711,9 +711,9 @@
                 menuItems: [
                     // {
                     //     primaryText: '社区主页',
-                    //     router: 'community/operation/index',
-                    //     // type:'vue',
-                    //     menuCode: 'operation_home',
+                    //     router: 'operation/community',
+                    //     type:'vue',
+                    //     menuCode: 'op_home',
                     // },
                     {
                         primaryText: '即将到期',
@@ -726,6 +726,19 @@
                         router: 'inventory/enter-field',
                         type:'vue',
                         menuCode: 'imt_putaway_list',
+                        //menuCode: 'vueList',
+                    },
+                    {
+                        primaryText: '已起租未付',
+                        router: 'inventory/rented-unpaid',
+                        type:'vue',
+                        menuCode: 'rent_no_pay',
+                    },
+                    {
+                        primaryText: '逾期未付',
+                        router: 'inventory/over-date-unpaid',
+                        type:'vue',
+                        menuCode: 'overdate_no_pay',
                     },
                     {
                         primaryText: '预约参观',
@@ -737,6 +750,12 @@
                         menuCode: 'visitRecord',
                         router: 'community/visitor/list'
 
+                    },
+                    {
+                        primaryText: "KM会议",
+                        router: 'krmeeting',
+                        type: 'vue',
+                        menuCode: 'kr_meeting'
                     },
                     {
                         primaryText: '会议室',
@@ -771,6 +790,12 @@
                     iconName: 'icon-app',
                     iconColor: '#79859a',
                     menuItems: [
+                        {
+                            primaryText: '产品运营主页',
+                            menuCode: 'mobile_app_operate_home',
+                            type: 'vue',
+                            router: 'app-manage/home'
+                        },
                         {
                             primaryText: '公告',
                             menuCode: 'oper_notice_base',
@@ -1171,10 +1196,16 @@
                         menuCode: 'seat_order_list',
                     },
                     {
-                        primaryText: "会议室订单",
+                        primaryText: "APP会议室订单",
                         router: 'order/list',
                         type: 'vue',
                         menuCode: 'fina_meeting_order_page'
+                    },
+                    {
+                        primaryText: "KM会议室订单",
+                        router: 'krmeetingorder',
+                        type: 'vue',
+                        menuCode: 'krm_order_base'
                     },
                     {
                         primaryText: "通用订单",

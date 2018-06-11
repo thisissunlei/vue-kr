@@ -5,14 +5,14 @@
                 <!--项目管理档案列表
                  <Archives v-if="mask"/> 
                 -->
-                <ProjectView  v-if="tabs=='PREPARE'"/>
+                <ProjectView projectStatus="PREPARE"  v-if="tabs=='PREPARE'"/>
             </TabPane>
             <TabPane label="已开业项目" name="OPENED">
 
                 <!-- 项目总览
                     <ProgressView v-if="!mask"/> 
                 -->
-               <ProjectView  v-if="tabs=='OPENED'" />
+               <ProjectView projectStatus="OPENED"  v-if="tabs=='OPENED'" />
             </TabPane>
         </Tabs>
   </div>
@@ -30,36 +30,28 @@ export default {
     },
     data(){
         return{
-            mask:true,
+         
             tabs:'PREPARE'
         }
     },
     mounted(){
         GLOBALSIDESWITCH("false");
-        var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+        // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
        
-        this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
-        if(this.tabs=='OPENED'){
-            this.mask=false;
-            tabDom.style.overflow = 'visible';
-        }else{
-             tabDom.style.overflow = 'hidden';
-        }
+        // this.tabs=sessionStorage.getItem('chartSetting') ||'PREPARE';
+        // if(this.tabs=='OPENED'){
+        //     this.mask=false;
+        //     tabDom.style.overflow = 'visible';
+        // }else{
+        //      tabDom.style.overflow = 'hidden';
+        // }
     },
     methods:{
         tabsClick(key){
-            var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
+            // var tabDom = document.querySelectorAll('.project-setting .ivu-tabs')[0];
 
-            if(key=='OPENED'){
-                tabDom.style.overflow = 'visible';
-                this.mask=false;
-
-            }else{
-                tabDom.style.overflow = 'hidden';
-                this.mask=true;
-            }
             this.tabs=key;
-            sessionStorage.setItem('chartSetting',key);
+            // sessionStorage.setItem('chartSetting',key);
         },
     }
 }

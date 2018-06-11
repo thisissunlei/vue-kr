@@ -15,7 +15,7 @@
                         >
                             <Option 
                                 v-for="item in cityList" 
-                                :value="item.cityId" 
+                                :value="''+item.cityId" 
                                 :key="item.cityId"
                             >
                                 {{ item.cityName }}
@@ -30,13 +30,13 @@
                             >
                                 <Option 
                                     v-for="item in communityList" 
-                                    :value="item.id" 
+                                    :value="''+item.id" 
                                     :key="item.id"
                                 >
                                     {{ item.name }}
                                 </Option>
                         </Select>
-                    
+                        
                         <Select 
                                 v-model="formItem.floor" 
                                 v-if="floorList && floorList.length !=0"
@@ -357,27 +357,24 @@ export default {
             }
     },
     mounted(){
-        this.params=this.$route.query
+        this.params=this.$route.query;
         this.getCityList();
     },
     methods:{
         //社区接口
         getCommunityList(id){
-           let params = this.params;
+           let params =Object.assign({},this.params);
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data.map(item=>{
-                    item.id = item.id+'';
-                    return item;
-                });
+                this.communityList=res.data;
                 if(this.communityList.length>1){
                     this.communityList.unshift({id:' ',name:"全部社区"})
                 }
                 if(!params.communityId){
-                    this.formItem.communityId=this.communityList[0].id;
+                    this.formItem.communityId=''+this.communityList[0].id;
                     this.floorList = []
                 }else{
                     this.getFloorList(params.communityId)
-                    this.formItem.communityId = params.communityId;
+                    this.formItem.communityId = ''+params.communityId;
                 }
                 
             }).catch((error)=>{
@@ -388,27 +385,24 @@ export default {
         },
         //城市接口
         getCityList(){
-            let params = this.params;
+            let params =Object.assign({},this.params);
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data.map(item=>{
-                    item.cityId = item.cityId+' ';
-                    return item;
-                });
+                this.cityList=res.data;
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
-                    this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItem.cityId=''+this.cityList[1].cityId;
                     this.formItemOld=Object.assign({},this.formItem,);
                 }else{
-                    this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItem.cityId=''+this.cityList[0].cityId;
                     this.formItemOld=Object.assign({},this.formItem);
                 }
                 if(params.cityId){
                     this.getCommunityList();
-                    this.formItem.cityId = params.cityId;
+                    this.formItem.cityId = ''+params.cityId;
                 }
                 
                 
-                this.formItem = Object.assign({},this.formItem,this.$route.query)
+                this.formItem = Object.assign({},this.formItem,this.$route.query);
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -418,18 +412,11 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            let params = this.params;
-            console.log(!params.floor,'=====',params.floor)
+           let params =Object.assign({},this.params);
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
                 if(!res.data.length){
                     this.floorList = []
-                }
-                if(this.floorList.length){
-                    this.floorList=res.data.map(item=>{
-                        item.floor = item.floor+'';
-                        return item;
-                    });
                 }
                 if(this.floorList.lengt==1){
                     this.formItem.floor=this.floorList.length?this.floorList[0].floor:' ';
@@ -463,7 +450,6 @@ export default {
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.floorList = []
-            console.log('this.formItem',this.formItem)
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -489,7 +475,6 @@ export default {
                 if(param !== this.params.cityId){
                   this.params = {}  
                 }
-                
                 this.getCommunityList(param)  
             }
 

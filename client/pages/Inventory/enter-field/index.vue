@@ -8,6 +8,7 @@
     />
     <div class='enter-filed-table' id="daily-inventory-table-list">
         <span class="line"></span>
+        <span style="color:#495060;font-size:12px;margin-bottom:10px;display:inline-block;">包括新客户即将入驻的房间（工位）、在租客户即将增租或换租的房间（工位）</span>
         <Table :loading="loading" border stripe :columns="columns" :data="dailyOldData">            
             <div slot="loading">
                     <Loading/>
@@ -366,7 +367,7 @@ var layoutScrollHeight=0;
             display:inline-block;
             width:100%;
             border-top:1px solid #dddee1;
-            margin-bottom:20px;
+            margin-bottom:10px;
         }
         .daily-table{
             padding-bottom:77px; 
@@ -435,7 +436,7 @@ var layoutScrollHeight=0;
      .enter-filed-table{
             padding-bottom:77px; 
             margin:0 20px;
-            margin-top: 30px;
+            //margin-top: 30px;
             position: relative;
             .ivu-tooltip{
                 width:100%

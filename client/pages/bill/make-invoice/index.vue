@@ -59,7 +59,6 @@
         },
         mounted(){
              var tab=localStorage.getItem('operation-side-invoice-bill');
-             console.log('=====>',tab)
              
              this.type=tab?tab:'waitMake';
              this.tabsClick(this.type)

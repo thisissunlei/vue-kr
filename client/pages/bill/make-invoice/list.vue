@@ -115,7 +115,7 @@ import utils from '~/plugins/utils';
                 number:true,
                 piaoNumber:null,
                 showSure:false,
-                listData:[{name:'11'}],
+                listData:[],
                 openMakeInvaice:false,
                 openGoBack:false,
                 listColumns:[].concat(this.formattingColumns(publicFn.initListData.call(this))),

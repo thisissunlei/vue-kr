@@ -53,7 +53,7 @@ import dateUtils from 'vue-dateutils';
         },
         data () {
            return {
-                listData:[{name:'123'}],
+                listData:[],
                 openMakeInvaice:false,
                 openGoBack:false,
                 isLoading:false,

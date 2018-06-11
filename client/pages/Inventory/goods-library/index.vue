@@ -15,15 +15,7 @@
                 <Button type="primary" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
             </div>
             
-            <Table 
-               ref="selectionGoodsLibrary" 
-               :loading="loading" 
-               stripe
-               :columns="attractColumns" 
-               :data="attractData" 
-               border
-               @on-selection-change="tableChange"
-             >
+            <Table ref="selectionGoodsLibrary" :loading="loading" stripe border :columns="attractColumns" :data="attractData"  @on-selection-change="tableChange">
                 <div slot="loading">
                     <Loading/>
                 </div>
@@ -112,13 +104,11 @@ export default {
                 {
                     title: '商品编号',
                     key: 'code',
-                     width:110,
                     align:'center' 
                 },
                 {
                     title: '商品名称',
                     key: 'name',
-                    width:100,
                     align:'center',
                 },
                 {
@@ -194,7 +184,7 @@ export default {
                     key: 'followStatus',
                     className:'current-range',
                     align:'center',
-                    width:120, 
+                    width:150, 
                     render(h,obj){
                         var rowArray=obj.row.followStatus;
                         var row='';
@@ -299,9 +289,8 @@ export default {
         }  
       },
       onResize(){
-            this.tableCommon();
-            this.onScrollListener();
-    
+        this.tableCommon();
+        this.onScrollListener();
       },
       //批量修改
         openBatch(){

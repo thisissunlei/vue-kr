@@ -9,7 +9,6 @@
         </div>
 
         <SlotHead :class="theHead?'header-here':'header-no'"/>
-
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Button type="primary" @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
@@ -19,7 +18,7 @@
             <Table 
                ref="selectionGoodsLibrary" 
                :loading="loading" 
-               stripe ni
+               stripe
                :columns="attractColumns" 
                :data="attractData" 
                border
@@ -37,6 +36,7 @@
             :warn="warn"
             @changeOpen="onMessageChange"
         />
+
         <Modal
             width="660"
             v-model="modifystate"
@@ -276,7 +276,6 @@ export default {
         })
     },
     watch:{   
-
         sideBar:function(val){
             this.getListData();
             this.tableCommon();
@@ -288,11 +287,9 @@ export default {
         dom.removeEventListener("scroll",this.onScrollListener);
         window.removeEventListener('resize',this.onResize); 
     },
-
     methods:{
       updateForm(obj){
-          this.statusForm=Object.assign({},obj);
-          
+          this.statusForm=Object.assign({},obj);  
       },
       tableCommon(){
         var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
@@ -301,47 +298,44 @@ export default {
             this.width=dailyTableDom.getBoundingClientRect().width;
         }  
       },
-
       onResize(){
             this.tableCommon();
             this.onScrollListener();
     
       },
       //批量修改
-            openBatch(){
-                this.isShowBatch=!this.isShowBatch;
-                if(!this.isShowBatch){
-                    this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
-                    this.$refs.selectionGoodsLibrary.selectAll(true); 
-                }else{
-                    this.attractColumns.splice(0,1);
-                }
-            },
-            openStatus(){
-                this.modifystate=!this.modifystate;
-            },
-            closeStatus(){
-                this.modifystate=!this.modifystate;
-           },
-           submitClick(){
-               console.log('submit',"pppppppppp")
-           },
-            submitStatus(){
-                this.getStatus();
-                // alert(1)
-            },
-            getStatus(){//提交
-                console.log('eee',this.statusForm)
-                this.$http.post('get-change-status',this.statusForm).then((response)=>{    
-                    console.log('提交',response.data)
-                    }).catch((error)=>{
-                        this.$Notice.error({
-                            title:error.message
-                        });
-                    })
-
-
-            },
+        openBatch(){
+            this.isShowBatch=!this.isShowBatch;
+            if(!this.isShowBatch){
+                this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
+                this.$refs.selectionGoodsLibrary.selectAll(true); 
+            }else{
+                this.attractColumns.splice(0,1);
+            }
+        },
+        openStatus(){
+            this.modifystate=!this.modifystate;
+        },
+        closeStatus(){
+            this.modifystate=!this.modifystate;
+        },
+        submitClick(){
+            console.log('submit',"pppppppppp")
+        },
+        submitStatus(){
+            this.getStatus();
+            // alert(1)
+        },
+        getStatus(){//提交
+            console.log('eee',this.statusForm)
+            this.$http.post('get-change-status',this.statusForm).then((response)=>{    
+                console.log('提交',response.data)
+                }).catch((error)=>{
+                    // this.$Notice.error({
+                    //     title:error.message
+                    // });
+                })
+        },
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');

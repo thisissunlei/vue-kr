@@ -329,7 +329,6 @@ export default {
                     source:[],
 
                 },
-                sourceData:[],
                 communityList:[],
                 cityList:[],
                 floorList:[],
@@ -407,7 +406,6 @@ export default {
     },
     mounted(){
         this.getCityList();
-        this.getSourceData();
         // this.getSelectData();
         var _this=this;
         setTimeout(() => {
@@ -446,16 +444,6 @@ export default {
                 list = res.data.slice(0,10);
                 this.loading= false;
                 this.sellerList=list;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
-        //渠道来源
-        getSourceData(){
-            this.$http.get('get-customer-source').then((res)=>{
-                this.sourceData=publicFn.sourceStyleSwitch(res.data);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

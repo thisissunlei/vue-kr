@@ -36,7 +36,7 @@
         >
                 <ChangeStatus    
                      v-if="modifystate"
-                    :data="attractData"
+                    :data="statusData"
                     @click="submitClick"
                     @updateForm="updateForm"
                 />
@@ -312,18 +312,17 @@ export default {
         },
         submitStatus(){
             this.getStatus();
-            // alert(1)
         },
         getStatus(){//提交
-            console.log('eee',this.statusForm)
+            console.log('eee',this.statusForm);
             this.$http.post('get-change-status',this.statusForm).then((response)=>{    
-                console.log('提交',response.data)
-                }).catch((error)=>{
-                    // this.$Notice.error({
-                    //     title:error.message
-                    // });
-                })
-        },
+              console.log('提交',response.data)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+      },
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
@@ -343,8 +342,7 @@ export default {
          this.getListData(this.tabForms);
       },
       tableChange(select){
-
-          console.log('select--',select);
+          this.statusData=select;
       },
       getListData(params){//列表
            this.loading=true;

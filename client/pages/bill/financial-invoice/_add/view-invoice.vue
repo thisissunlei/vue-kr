@@ -370,17 +370,19 @@ import utils from '~/plugins/utils';
                 }
             },
             upChange(detail,type){
+                console.log('upChange',detail)
                 let businessUrlName = [].concat(this.businessUrlName);
+                console.log('this.businessUrlName==',this.businessUrlName)
                 let taxUrlName = [].concat(this.taxUrlName);
-                if(type == 'taxUrlName'){
-                   
+                console.log('this.taxUrlName==',this.taxUrlName)
+                if(type == 'taxUrlName' && !this.taxUrlName.length){
+
                     this.taxUrlName = taxUrlName.concat(detail);
-                }   
-                if(type == 'businessUrlName'){
-                  
-                    this.bussinessClose = businessUrlName.concat(detail)
                 }
-              
+                if(type == 'businessUrlName' && !this.businessUrlName.length){
+
+                    this.businessUrlName = businessUrlName.concat(detail)
+                }
             },
             bussinessClose(){
                 this.openBussiness=!this.openBussiness;
@@ -460,11 +462,25 @@ import utils from '~/plugins/utils';
                delete editData.rejectTime;
                delete editData.verifyTime ; 
                delete editData.utime ;
+               this.businessUrlName = this.businessUrlName.map(item=>{
+                item.sourceType = 'BUSINESS_LICENSE';
+                item.qualificationId = this.formItem.id;
+                return item;
+               })
+               this.taxUrlName = this.taxUrlName.map(item=>{
+                item.sourceType = 'TAX_CERTIFICATE';
+                item.qualificationId = this.formItem.id;
+                return item;
+               })
                
-               editData.taxCertificateTemp = JSON.stringify(editData.taxCertificate)
-               editData.businessLicenseTemp = JSON.stringify(editData.businessLicense)
+               editData.taxCertificateTemp = JSON.stringify(this.taxUrlName)
+               editData.businessLicenseTemp = JSON.stringify(this.businessUrlName)
                 delete editData.taxCertificate;
                delete editData.businessLicense;
+
+
+               console.log('=====>',editData,this.businessUrlName)
+               // return;
                this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.$http.post('get-financial-invoice-edit',editData).then((res)=>{

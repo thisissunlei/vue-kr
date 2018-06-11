@@ -80,13 +80,11 @@ export default {
         },
     data() {
         return{
-
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
             modal10: false,
             warn:'',
-            modal2:'',
             MessageType:'',
             openMessage:false,
             statusForm:{},
@@ -240,7 +238,8 @@ export default {
                     }
                 }
             ],
-            attractData:[]    
+            attractData:[],
+            statusData:[]    
         }
     },
        watch: {
@@ -344,6 +343,7 @@ export default {
          this.getListData(this.tabForms);
       },
       tableChange(select){
+
           console.log('select--',select);
       },
       getListData(params){//列表

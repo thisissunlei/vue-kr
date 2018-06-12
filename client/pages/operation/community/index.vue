@@ -331,7 +331,7 @@
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
-                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <img src="~/assets/images/waiting.png" alt="" style="width:106px;margin-top:30px">
                 <div style="font-size: 14px;color: #666666;margin-top:15px;">小哥哥小姐姐正在尽全力开发，敬请期待哦亲~</div>
                 
               </div>

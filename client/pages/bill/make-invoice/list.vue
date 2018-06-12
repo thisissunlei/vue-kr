@@ -27,7 +27,7 @@
                 title="提示信息"
                 width="500"
             >
-            <div style="text-align:left;border:1px dashed #dddada;">
+            <div style="text-align:left;border:1px dashed #dddada;" v-if="openMakeInvaice">
                 <div v-for="(item,index) in invoiceData" :key="index">
                     <div  style="margin:20px 0px; text-align: left;width:350px;margin-left:20px;">  
                         <span>发票编号:</span><Input style="display:inline-block;width:255px;margin-left:10px" placeholder="请输入发票编号" v-model="item.invoiceNum" @on-blur="openpiaozi(index)"/>  

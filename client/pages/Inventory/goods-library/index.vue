@@ -44,6 +44,7 @@
                 <ChangeStatus    
                      v-if="modifystate"
                     :data="statusData"
+                    :errorData="errorData"
                     @click="submitClick"
                     @updateForm="updateForm"
                 />
@@ -56,16 +57,21 @@
 
         <Modal
             title="Title"
-            v-model="modal10"
-            class-name="vertical-center-modal">
-            <p>Content of dialog</p>
-            <p>Content of dialog</p>
-            <p>Content of dialog</p>
+            v-model="complete"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+                <span style="color:red;">{{this.statusData.length}}</span>个商品修改状态成功！
+                  <div slot="footer" style="text-align:center;">
+                 <Button type="primary" @click="openComplete" >成功</Button>
+
+            </div>
         </Modal>
     </div>
 </template>
 
 <script>
+
 import ChangeStatus from './bulk-changes/change-status';
 import Loading from '~/components/Loading';
 import SearchForm from './search-form';
@@ -88,10 +94,11 @@ export default {
         },
     data() {
         return{
+            errorData:[],
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
-            modal10: false,
+            complete: false,
             warn:'',
             MessageType:'',
    
@@ -321,6 +328,19 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
+          initData(formItem){
+                console.log('init---')
+                this.tabForms=Object.assign({},formItem,this.tabForms);
+                this.dataParams(this.tabForms);
+            },
+           dataParams(data){
+                    this.endParams=Object.assign({},data);
+                    // this.getData(this.endParams);
+            },
+
+
+
+
       updateForm(obj){
           this.statusForm=Object.assign({},obj);  
       },
@@ -351,8 +371,8 @@ export default {
         
         },
         openStatus(){
-         
             this.modifystate=!this.modifystate;
+       
         },
         closeStatus(){
             this.modifystate=!this.modifystate;
@@ -362,11 +382,37 @@ export default {
         },
         submitStatus(){
             this.getStatus();
+            
         },
+        openComplete(){
+
+                 this.complete=!this.complete;
+             
+        },
+
+
+         //格式转换
+            dateSwitch(data){
+                if(data){
+                    return utils.dateCompatible(data);
+                }else{
+                    return '';
+                }
+            },
         getStatus(){//提交
-            console.log('eee',this.statusForm);
+            // console.log('eee',this.statusForm);
+            this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
+             this.statusForm.endDate=this.dateSwitch(this.statusForm.endDate);
+
             this.$http.post('get-change-status',this.statusForm).then((response)=>{    
               console.log('提交',response.data)
+              if(response.data.length){
+                    this.errorData=response.data;
+              }else{
+                    this.openStatus()
+                     this.openComplete();
+                     this.getListData(this.tabForms);
+              }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

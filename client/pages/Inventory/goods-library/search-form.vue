@@ -209,7 +209,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
-
+import utils from '~/plugins/utils';
 import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
@@ -497,14 +497,17 @@ export default {
                         this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
                     }
                     this.$emit('searchClick',this.formItem);
+                    utils.addParams(this.tabForms);
                 }
             })
+            
         },
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
             this.formItem.goodsStatus=[];
             this.$emit('clearClick',this.formItem);
+             utils.addParams(this.tabForms);
         },
         //回车
         onKeyEnter(){

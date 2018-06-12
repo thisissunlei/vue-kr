@@ -127,6 +127,7 @@
                         <KrUpload 
                             :file="taxUrlName"
                             type="only"
+                            category="contract/upload"
                             :columnDetail="{}"
                             @delete="(index)=>{
                                 imgDelete(index,'taxUrlName')

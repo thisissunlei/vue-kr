@@ -89,7 +89,8 @@
                 </div>
             </Upload>
             <div v-if="isError" class="u-error">请选择要上传的图片</div>
-            
+
+            <UploadFile :multiple="true" />
         </FormItem>
         <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
@@ -111,10 +112,12 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
   components:{
      SectionTitle,
+     UploadFile
   },
   head () {
         return {

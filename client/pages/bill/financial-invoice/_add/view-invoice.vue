@@ -104,6 +104,7 @@
                             :columnDetail="{}"
                             :multiple="true"
                             :disabled="isReady"
+                            category="contract/upload"
                             @delete="(index)=>{
                                 imgDelete(index,'businessUrlName')
                             }"
@@ -127,6 +128,7 @@
                         <KrUpload 
                             :file="taxUrlName"
                             type="only"
+                            category="contract/upload"
                             :columnDetail="{}"
                             @delete="(index)=>{
                                 imgDelete(index,'taxUrlName')

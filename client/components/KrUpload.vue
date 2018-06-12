@@ -97,6 +97,10 @@ export default{
 		disabled:{
 			type:Boolean,
 			default:false
+		},
+		category:{
+			type:String,
+			default:'op/upload'
 		}
 	},
 	data(){

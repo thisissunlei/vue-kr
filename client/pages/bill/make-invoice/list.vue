@@ -37,6 +37,7 @@
                         <KrUpload 
                             :file="item.columnDetail||[]"
                             type="only"
+                            category="contract/upload"
                             :columnDetail="item.slogn"
                             :multiple="false"
                             @upSuccess="upSuccess"

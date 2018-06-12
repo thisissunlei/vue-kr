@@ -104,6 +104,7 @@
                             :columnDetail="{}"
                             :multiple="true"
                             :disabled="isReady"
+                            category="contract/upload"
                             @delete="(index)=>{
                                 imgDelete(index,'businessUrlName')
                             }"

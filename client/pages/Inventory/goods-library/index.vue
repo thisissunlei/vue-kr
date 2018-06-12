@@ -44,12 +44,13 @@
                 <ChangeStatus    
                      v-if="modifystate"
                     :data="statusData"
+                    @click="submitClick"
                     @updateForm="updateForm"
-                    :errorData="errorData"
                 />
             <div slot="footer">
-                <Button type="ghost" style="margin-left:8px" @click="openStatus">取消</Button>
-                <Button type="primary" @click="submitStatus">确定</Button>
+                 <Button type="primary" @click="submitStatus">修改</Button>
+                <Button type="ghost" style="margin-left:20px" @click="closeStatus">取消</Button>
+
             </div>
         </Modal>
 
@@ -87,7 +88,6 @@ export default {
         },
     data() {
         return{
-            errorData:[],
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
@@ -193,6 +193,17 @@ export default {
                     align:'center',
                     width:150, 
                     render(h,obj){
+                     var statusName=obj.row.goodsStatusName?obj.row.goodsStatusName:'-';
+                     var status=obj.row.goodsStatus;
+                     var colorClass='';
+                     if(status=='DISABLE'||status=='OFF'){
+                         colorClass='redClass'
+                     }else{
+                         colorClass=''
+                     }
+
+
+
                         var rowArray=obj.row.followStatus;
                         var row='';
                         let classN='row-current-more current-more-task table-null';
@@ -206,8 +217,8 @@ export default {
                         }
                         if(rowArray){
                             row=rowArray.map((item,index)=>{
-                                var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起'+item.goodsStatusName;
-                                
+                                var endRender=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.startDate))+'起';
+                                 var staRender=statusName;
                                 return h('div', [
 
                                     h('Tooltip', {
@@ -215,14 +226,27 @@ export default {
                                             placement: 'top',
                                             content:endRender
                                         }
-                                    }, [
-                                    h('div', {
-                                        attrs: {
+                                    },
+                                    
+                                    [
+                    
+                                    
+                                ])
+                            ]),
+                             h('div', [
+                                        h('span',{
+                                          attrs: {
                                             class:classN,
                                         }
-                                    },endRender)
-                                ])
-                            ])
+                                        },endRender),
+                                        h('span',{
+                                          
+                                             attrs: {
+                                            class:colorClass,
+                                        }
+
+                                        },staRender),
+                                    ])
                             })
                             return row
                         }
@@ -243,8 +267,15 @@ export default {
                     align:'center',
                     width:120,
                     render(h,params){
-                        var name=params.row.goodsLocation?'已配置':'未配置';
-                        return <span>>{name}</span>
+                        var statusName=params.row.goodsLocation?'已配置':'未配置';
+                        var colorClass='';
+                        if(statusName=='已配置'){
+                             colorClass=''
+                        }else if(statusName=='未配置'){
+                         colorClass='redClass'
+                        }
+
+                        return <span class={`${colorClass}`}>{statusName}</span>
 
 
 
@@ -305,7 +336,8 @@ export default {
         this.onScrollListener();
       },
       //批量修改
-       openBatch(){
+        openBatch(){
+   
             this.isShowBatch=!this.isShowBatch;
             if(!this.isShowBatch){
                 this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
@@ -321,39 +353,28 @@ export default {
         openStatus(){
          
             this.modifystate=!this.modifystate;
-            if(!this.modifystate){
-                this.errorData=[];
-            }
+        },
+        closeStatus(){
+            this.modifystate=!this.modifystate;
+        },
+        submitClick(){
+            console.log('submit',"pppppppppp")
         },
         submitStatus(){
-            this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
-            this.statusForm.endDate=this.dateSwitch(this.statusForm.endDate);
-            this.$http.post('get-change-status',this.statusForm).then((response)=>{ 
-              if(response.data.length){
-                  this.errorData=response.data;
-              }else{
-                  this.getListData(this.tabForms); 
-                  this.openMessage=true;
-                  this.MessageType="success";
-                  this.warn=this.statusData.length+'个商品修改状态成功！';
-              }   
+            this.getStatus();
+        },
+        getStatus(){//提交
+            console.log('eee',this.statusForm);
+            this.$http.post('get-change-status',this.statusForm).then((response)=>{    
               console.log('提交',response.data)
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
                 });
             })
-        },
-        //格式转换
-        dateSwitch(data){
-            if(data){
-                return utils.dateCompatible(data);
-            }else{
-                return '';
-            }
-        },
-       //滚动监听
-       onScrollListener(){            
+      },
+      //滚动监听
+      onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
             var headDom=document.querySelectorAll('div.slot-head-attract-investment')[0];
             if(headDom){
@@ -393,6 +414,10 @@ export default {
       },
       clearClick(values){
          this.tabForms=Object.assign({},this.tabForms,values);
+         this.getListData(this.tabForms); 
+      },
+      onPageChange(page){
+         this.tabForms.page=page;
          this.getListData(this.tabForms); 
       },
       onMessageChange(data){

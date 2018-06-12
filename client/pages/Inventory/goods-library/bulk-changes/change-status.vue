@@ -10,7 +10,7 @@
                     </span>
                 </Form-item>
                 
-                <Form-item  label="固定办公桌:"  style="margin-top:20px; word-wrap:break-word;" v-if="fixedLocationStr.length">
+                <Form-item  label="固定办公桌:"  style="margin-top:20px; word-wrap:break-word;margin-right:20px;" v-if="fixedLocationStr.length">
                     <span
                       v-for="(item,index) in fixedLocationStr"
                       :key="item.id"
@@ -51,9 +51,9 @@
                             下架
                         </Radio>
                     </RadioGroup> 
-                    <!-- <div   v-show="ON" style="display:inline-block;margin-right:47px;">1</div>
-                    <div   v-show="DISABLE"  style="display:inline-block;margin-right:47px;">2</div> -->
-                    <span v-if="this.errorD.length" style="color:red">部分商品该时段有合同，不能设为下架或不可用</span>
+                   <div   v-if="formItem.goodsStatus=='DISABLE'" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">显示</span>在平面图上，显<span style="color:red;">计入</span>出租率统计</div>
+                   <div   v-if="formItem.goodsStatus=='OFF'" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">不显示</span>在平面图上，显<span style="color:red;">不计入</span>出租率统计</div>
+
              </Form-item>
              <Form-item label="修改原因:"  style="margin-top:20px;">
                <Input 
@@ -76,11 +76,11 @@ import dateUtils from 'vue-dateutils';
         props: {
              data:{
                  type:Array,
-                 default:[],   
+                 default:()=>[],   
              },
              errorData:{
                  type:Array,
-                 default:[],
+                 default:()=>[],   
              }
         },
         data (){

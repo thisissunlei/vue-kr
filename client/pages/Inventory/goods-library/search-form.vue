@@ -209,6 +209,7 @@
 <script>
 import dateUtils from 'vue-dateutils';
 import publicFn from '../publicFn';
+
 import SelectSaler from '~/components/SelectSaler.vue'
 export default {
     props:{
@@ -284,8 +285,7 @@ export default {
             };    
             //商品名称
             const validateName = (rule, value, callback) => {
-                var str=publicFn.fucCheckLength(value);
-                if(value&&str>20){
+                if(value&&value.length>20){
                     callback('名称最多20个字节');
                 }else{
                     callback();

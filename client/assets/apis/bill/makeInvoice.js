@@ -67,7 +67,12 @@ export default  {
     "csr-invoice-invoiceDetail":{
       url:"/api/order/csr-invoice-invoiceDetail",
       method:'get'
+    },
+    "corporation-list":{
+      url:"/api/krspace-sso-web/dict/corporation/id-name",
+      method:'get'
     }
+    
    
    
 }

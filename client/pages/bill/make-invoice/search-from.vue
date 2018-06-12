@@ -130,7 +130,7 @@
                         </div>
                         <Form-item v-if="type =='all'"   label="我司主体" class='daily-form'> 
                             <Select 
-                                v-model="formItem.goodsType" 
+                                v-model="formItem.corporationId" 
                                 placeholder="请选择我司主体" 
                                 style="width: 200px"
                                 clearable
@@ -298,6 +298,7 @@ export default {
                     endTicketTime:'',
                     endTime:'',
                     contentType:' ',
+                    corporationId:' '
                 },
                 //发票规格数组
                 invoiceTypeList:[],
@@ -306,12 +307,7 @@ export default {
 
                 communityList:[],
                 cityList:[],
-                productList:[
-                    {value:' ',label:'全部'},
-                    {value:'OPEN',label:'固定办公桌'},
-                    {value:'SPACE',label:'独立办公室'},
-                    {value:'MOVE',label:'移动办公桌'}
-                ],
+                productList:[],
                 
                 formItemOld:{},
                 ruleOperation:{
@@ -362,6 +358,7 @@ export default {
         this.getCityList();
         this.getInvoiceTypeList();
         this.getContentTypeList();
+        this.getList();
         var _this=this;
         this.params = _this.$route.query;
         _this.$emit('initData',this.formItem);      
@@ -456,6 +453,23 @@ export default {
 
                 }
                 this.getCommunityList(this.formItem.cityId)
+            }).catch((error)=>{
+                this.$Notice.error({
+                    title:error.message
+                });
+            })
+        },
+        getList(){
+            this.$http.get('corporation-list').then((res)=>{
+               
+                res.data.unshift({cityId:' ',cityName:'全部'})
+                this.productList = res.data.map(item=>{
+                    item.value = item.id+'';
+                    item.label = item.corporationName;
+                    return item;
+                })
+
+
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

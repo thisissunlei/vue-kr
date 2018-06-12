@@ -6,7 +6,7 @@
 1. npm i 
 2. npm run dev //启动环境在nginx配置
 
-###项目目录
+### 项目目录
 kr-vue
 	.nuxt 项目打包文件
 	client 开发文件夹
@@ -21,5 +21,5 @@ kr-vue
 		static 静态文件（icon，菜单栏等）
 
 
-###项目架构Nuxt.js
+### 项目架构Nuxt.js
 https://zh.nuxtjs.org/guide

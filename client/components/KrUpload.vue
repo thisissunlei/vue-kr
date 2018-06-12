@@ -202,7 +202,7 @@ export default{
 		},
 		//获取上传的接口
 		getUpFileUrl(event){
-			let category = 'op/upload';
+			let category = this.category;
 			let that = this;
 			let file = event;
 			var fileName= event.name;

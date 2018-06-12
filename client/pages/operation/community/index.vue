@@ -174,7 +174,7 @@
                 <ul >
                   <li v-for="item in unpaidList" value="item.value" :key="item.value" >
                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
-                          <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                          <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
                       </Tooltip>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
@@ -205,7 +205,7 @@
                 <ul >
                   <li v-for="item in OverdueStation" :key="item.id">
                      <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
-                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
                       </Tooltip>
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
@@ -238,7 +238,7 @@
                 <ul >
                    <li v-for="item in OverdueMeeting" :key="item.id">
                       <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
-                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
@@ -272,7 +272,7 @@
                 <ul >
                      <li v-for="item in OverduePrint" :key="item.id">
                       <Tooltip :content="item.bizTypeName+item.billId" placement="top-start" class="table-cell">      
-                         <div class="ellipsis"  style="color:#4A90E2;">{{item.bizTypeName+item.billId}}</div>
+                         <div class="ellipsis"  style="color:#4A90E2;cursor:pointer;" @click="openDetail(item.billId)">{{item.bizTypeName+item.billId}}</div>
                        </Tooltip>
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
@@ -317,7 +317,7 @@
                 </ul>
               </div>
             </div>
-            <!-- @click="openVisitor" -->
+            <!-- @click="openVisitor暂没有访客(入驻会员在APP上邀请来的)" -->
             <div class="box">
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
@@ -332,7 +332,7 @@
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
                 <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂没有访客(入驻会员在APP上邀请来的)</div>
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">小哥哥小姐姐正在尽全力开发，敬请期待哦亲~</div>
                 
               </div>
 
@@ -621,7 +621,7 @@ export default {
         this.getDueList(data);
         this.getunpaidList(data);
         //this.getAnappointmentListList();
-        this.getAnappointmentList(data);
+        //this.getAnappointmentList(data);
     },
     changeTab(type){
       this.tab = type;
@@ -647,7 +647,9 @@ export default {
     openOverUnpaid(type){
       window.open('/inventory/over-date-unpaid?bizType='+type+'&pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
     },
-
+    openDetail(id){
+       window.open('/bill/list/detail/'+id,'_blank')
+    }
   }
  }
 </script>

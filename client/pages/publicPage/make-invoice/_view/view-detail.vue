@@ -21,12 +21,10 @@
                 <LabelText :inline="inline" label="发票内容：" v-if="invoiceStatus == 'TO_RETURN'">
                     {{formItem.invoiceContent}}
                 </LabelText>
-                <LabelText :inline="inline" label="相关账单：" v-if="invoiceStatus == 'TO_RETURN'">
-                    <div>343333</div>
-                            <div>343333</div>
-                            <div>343333</div>
-                            <div>343333</div>
-                </LabelText>
+                <div class="bill-list" v-if="invoiceStatus == 'TO_RETURN'">
+                    <div class="bill-title">相关账单：</div>
+                    <div v-for="item in formItem.amountDetailList">{{item.billNum}}</div>
+                </div>
                 <LabelText :inline="inline" label="发票金额："  v-if="invoiceStatus != 'TO_RETURN'">
                     {{formItem.amount}}
                 </LabelText>
@@ -262,5 +260,15 @@ export default {
         }
     .create-order .ivu-card-head{
         background-color: #f7f7f7;
+    }
+    .bill-list{
+        display: inline-block;
+        width: 45%;
+        padding-left: 14px;
+
+    }
+    .bill-title{
+        font-weight: bold;
+        line-height: 20px;
     }
 </style>

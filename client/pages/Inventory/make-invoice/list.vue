@@ -35,6 +35,20 @@
         </Modal>
 
         <Modal
+                v-model="openBack"
+                title="提示信息"
+                width="500"
+            >
+            <div v-if="openBack">
+                 <span>实际退回金额:</span>{{editItem.refund}}
+            </div>
+            <div slot="footer">
+                <Button type="primary" @click="backSubmit">确定</Button>
+                <Button type="ghost" style="margin-left: 8px" @click="changeMoneyButton">修改</Button>
+            </div>
+        </Modal>
+
+        <Modal
                 v-model="openPost"
                 title="邮寄信息"
                 width="500"
@@ -138,7 +152,8 @@ import dateUtils from 'vue-dateutils';
                 postNum:'',
                 openMessage:false,
                 MessageType:'',
-                warn:''
+                warn:'',
+                openBack:false,
            }
         },
          components:{
@@ -160,7 +175,7 @@ import dateUtils from 'vue-dateutils';
                    status.push('RECEIVED');
                    break;
                default:
-                   status.push('TO_RETURN');
+                   status.push('RETURNING');
                    break;
            } 
            console.log('====>',this.type)
@@ -174,6 +189,23 @@ import dateUtils from 'vue-dateutils';
            this.getListData();
         },
         methods:{
+          changeMoneyButton(){
+            this.openModify = !this.openModify;
+            this.openBack = false;
+          },
+          backSubmit(){
+            let item = this.editItem;
+            this.$http.put('change-modify-takeBack', {id:item.id}).then((res)=>{
+                    this.openBack = false;
+                    this.openModify = false;
+                    this.getListData();
+                }).catch((err)=>{
+                  console.log('====',err)
+                    this.$Notice.error({
+                        title:err.message
+                    });
+                })
+          },
            onMessageChange(data){
                 this.openMessage=data;
             },
@@ -225,10 +257,11 @@ import dateUtils from 'vue-dateutils';
               }
                 this.$http.put('change-modify-amount', tabParams).then((res)=>{
                     // this.listData=res.data.items;
-                    this.openMessage=true;
-                    this.MessageType="success";
-                    this.warn='修改成功';
-                    this.getListData();
+                    // this.openMessage=true;
+                    // this.MessageType="success";
+                    // this.warn='修改成功';
+                    // this.getListData();
+                    this.backSubmit()
                 }).catch((err)=>{
                   console.log('====',err)
                     this.$Notice.error({
@@ -261,15 +294,8 @@ import dateUtils from 'vue-dateutils';
             },
             //回收按钮点击
             callbackClick(item){
-              this.$http.put('change-modify-takeBack', {id:item.id}).then((res)=>{
-                    // this.listData=res.data.items;
-                    this.getListData();
-                }).catch((err)=>{
-                  console.log('====',err)
-                    this.$Notice.error({
-                        title:err.message
-                    });
-                })
+              this.editItem = item;
+              this.openBack = true;
             },
             //页面切换
             changePage(){
@@ -294,7 +320,6 @@ import dateUtils from 'vue-dateutils';
                 params.callbackStartDate=this.dateSwitch(params.callbackStartDate);
                 params.callbackEndDate=this.dateSwitch(params.callbackEndDate);
                 params.invoiceStatusList = this.tableParams.invoiceStatusList;
-                console.log(this.tableParams,'params=====',params)
                 this.$http.get('invoice-list-unified',params).then((res)=>{
                   let pages = {
                       page:res.data.page,

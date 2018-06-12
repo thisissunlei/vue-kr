@@ -116,7 +116,7 @@
                                 />
                             </Form-item>
                         </div>
-                          <div v-if="type =='waitReturn' " style="display:inline-block">
+                          <!-- <div v-if="type =='waitReturn' " style="display:inline-block">
                             <Form-item label="收回时间" class='priceForm' prop="callbackStartDate">
                                 <DatePicker 
                                     v-model="formItem.callbackStartDate" 
@@ -132,7 +132,7 @@
                                     style="width: 90px"
                                 />
                             </Form-item>
-                        </div>
+                        </div> -->
                          
                     </div>
 
@@ -163,7 +163,7 @@
                                 <Option v-for="(option, index) in receiverOptions" :value="option.uid" :key="option.name">{{option.name}}</Option>
                             </Select>
                         </Form-item>
-                        <Form-item v-if="type =='waitReturn'"   label="收回状态" class='daily-form'> 
+                       <!--  <Form-item v-if="type =='waitReturn'"   label="收回状态" class='daily-form'> 
                             <Select 
                                 v-model="formItem.invoiceStatus" 
                                 placeholder="请选择收回状态" 
@@ -173,7 +173,7 @@
                             >
                                 <Option v-for="item in returnList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
-                        </Form-item>
+                        </Form-item> -->
                         
                     </div>
                     <Button type="primary" @click="searchClick">搜索</Button>

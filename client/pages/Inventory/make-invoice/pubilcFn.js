@@ -133,7 +133,7 @@ function initListData(){
         },
         {
             title: '收回状态',
-            key: 'name',
+            key: 'invoiceStatusName',
             align:'center',
             type:'waitReturn'
         },
@@ -157,6 +157,7 @@ function initListData(){
             title: '发票张数',
             key: 'invoiceCount',
             align:'center',
+            width:70,
             type:'waitArrive,waitMail,waitReceive'
         },
         {
@@ -165,7 +166,7 @@ function initListData(){
             align:'center',
             type:'waitArrive,waitReceive,',
             render(tag, params){
-                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:SS",new Date(params.row.ctime));
+                let time=dateUtils.dateToStr("YYYY-MM-DD  HH:mm:ss",new Date(params.row.ctime));
                 return time;
             }
 
@@ -241,8 +242,7 @@ function initListData(){
             type:'waitReturn',
             render:(h,params)=>{
                 let colData = params.row;
-               
-                return h('div', [
+                let arr = [
                         h('Button', {
                             props: {
                                 type: 'text',
@@ -256,22 +256,11 @@ function initListData(){
                                     this.goView(colData)
                                 }
                             }
-                        }, '查看'),
-                        h('Button', {
-                            props: {
-                                type: 'text',
-                                size: 'small'
-                            },
-                            style: {
-                                color:'#2b85e4'
-                            },
-                            on: {
-                                click: () => {
-                                    this.callbackClick(colData)
-                                }
-                            }
-                        }, '收回'),
-                        h('Button', {
+                        }, '查看') 
+                ];
+                
+                if(colData.invoiceStatus == 'RECOVERYED'){
+                    arr.push(h('Button', {
                             props: {
                                 type: 'text',
                                 size: 'small'
@@ -284,8 +273,26 @@ function initListData(){
                                     this.modifyClick(colData)
                                 }
                             }
-                        }, '修改')  
-                ]);  
+                        }, '修改') )
+                }
+                if(colData.invoiceStatus == 'RETURNING'){
+                    arr.push(h('Button', {
+                            props: {
+                                type: 'text',
+                                size: 'small'
+                            },
+                            style: {
+                                color:'#2b85e4'
+                            },
+                            on: {
+                                click: () => {
+                                    this.callbackClick(colData)
+                                }
+                            }
+                        }, '收回'),)
+                }
+               
+                return h('div',arr );  
               
             }
         }

@@ -40,18 +40,18 @@ function initListData(){
             align:'center',
             type:'VERIFYING,PASSED',
             render:(h,params)=>{
-                let {qualificationVO} =  params.row;
-                if(!qualificationVO){
-                    return '';
-                }
-                return qualificationVO.taxpayerNumber;
+                return params.row.taxpayerNumber || '--';
             }
         },
         {
             title: '注册地址',
-            key: ' registerAddress',
+            key: 'registerAddress',
             align:'center',
-            type:'VERIFYING,PASSED'
+            type:'VERIFYING,PASSED',
+            render:(h,params)=>{
+                return params.row.registerAddress || '-';
+            }
+
         },
         {
             title: '注册电话',

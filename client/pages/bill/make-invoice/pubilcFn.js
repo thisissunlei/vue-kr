@@ -142,7 +142,10 @@ function initListData(){
             title: '备注',
             key: 'remark',
             align:'center',
-            type:'waitMake,alreadyMake,all'
+            type:'waitMake,alreadyMake,all',
+            render(tag, params){
+                return params.row.remark || '无';
+            }
         },
         {
             title: '申请时间',

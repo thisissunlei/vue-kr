@@ -40,38 +40,38 @@
             <div class="content">
               <span class="number">
                 <span class="title">总数</span>
-                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #232428;">{{pageData.allSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #232428;">{{pageData.allSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #232428;">{{pageData.allFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #232428;">{{pageData.allMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #232428;">{{pageData.allSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #232428;">{{pageData.allSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #232428;">{{pageData.allFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #232428;">{{pageData.allMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">在租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #F5A623;">{{pageData.rentSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #F5A623;">{{pageData.rentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #F5A623;">{{pageData.rentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #F5A623;">{{pageData.rentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #F5A623;">{{pageData.rentSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #F5A623;">{{pageData.rentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #F5A623;">{{pageData.rentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #F5A623;">{{pageData.rentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">合同未生效</span>
-                <span class="num"  v-if="tab=='all'" style="font-size:40px;color: #FAD27B;">{{pageData.uneffectSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:40px;color: #FAD27B;">{{pageData.uneffectMoveStationsNum}}</span>
+                <span class="num"  v-if="tab=='all'" style="font-size:44px;color: #FAD27B;">{{pageData.uneffectSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">未租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: #35BC9B;">{{pageData.noRentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">不可用</span>
-                <span class="num" v-if="tab=='all'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:40px;color: rgb(191, 196, 207);;">{{pageData.unusefulMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(191, 196, 207);;">{{pageData.unusefulSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(191, 196, 207);;">{{pageData.unusefulSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(191, 196, 207);;">{{pageData.unusefulFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(191, 196, 207);;">{{pageData.unusefulMoveStationsNum}}</span>
               </span>
             </div>
             
@@ -89,8 +89,8 @@
                   </div>
                 <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
-                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:12px">个 </span>/
-                  <span :style="!list.length?'':'color: #FF6868;'"> {{list[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:14px">个</span>
+                  <span style="font-size:14px">({{list[0].remark2}}工位)</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!list.length">
@@ -108,7 +108,7 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer" >
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell">
+                    <span class="table-cell" style="text-align:right">
                        {{item.payDaysName}}
                       </span>
                   </li>        
@@ -125,8 +125,8 @@
                 </div>   
                 <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
                   {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
-                  <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:12px">个 </span>/
-                  <span :style="DueList[0].remark2==0?'':'color: #FF6868;'"> {{DueList[0].remark2}}</span><span style="font-size:12px">工位</span>
+                  <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:14px">个</span>
+                  <span style="font-size:14px">({{DueList[0].remark2}}工位)</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!DueList.length">
@@ -143,7 +143,7 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                       <div class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell">
+                    <span class="table-cell" style="text-align:right">
                       <!-- {{item.rentDays}} -->
                         <!-- {{Number(item.rentDays)==1?'今日':(Number(item.rentDays)==2?'明日':item.rentDays+'日后')}} -->
                           {{item.payDaysName}}
@@ -162,8 +162,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="unpaidList.length">
-                  <span :style="unpaidList[0].remark1Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark1Str}}</span><span style="font-size:12px">笔 </span>/<span> 共</span>
-                  <span :style="unpaidList[0].remark2Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark2Str}}</span><span style="font-size:12px">元</span>
+                  <span :style="unpaidList[0].remark1Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark1Str}}</span><span style="font-size:14px">笔 </span>/<span> 共</span>
+                  <span :style="unpaidList[0].remark2Str==0?'':'color: #FF6868;'">{{unpaidList[0].remark2Str}}</span><span style="font-size:14px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!unpaidList.length">
@@ -179,8 +179,8 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debtStr}}元</span>
-                      <span class="table-cell">逾{{item.overdueDays}}天</span>
+                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
@@ -193,8 +193,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverdueStation.length">
-                  <span :style="OverdueStation[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1Str}}</span><span style="font-size:12px">笔 </span>/<span> 共</span>
-                  <span :style="OverdueStation[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2Str}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverdueStation[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark1Str}}</span><span style="font-size:14px">笔 </span>/<span> 共</span>
+                  <span :style="OverdueStation[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueStation[0].remark2Str}}</span><span style="font-size:14px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueStation.length">
@@ -210,8 +210,8 @@
                     <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                          <div  class="ellipsis">{{item.customerName}}</div>
                     </Tooltip>
-                    <span class="table-cell">{{item.debtStr}}元</span>
-                    <span class="table-cell">逾{{item.overdueDays}}天</span>
+                    <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                    <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
@@ -226,8 +226,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverdueMeeting.length">
-                  <span :style="OverdueMeeting[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1Str}}</span><span style="font-size:12px">笔 </span>/<span> 共</span>
-                  <span :style="OverdueMeeting[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2Str}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverdueMeeting[0].remark1Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark1Str}}</span><span style="font-size:14px">笔 </span>/<span> 共</span>
+                  <span :style="OverdueMeeting[0].remark2Str==0?'':'color: #FF6868;'">{{OverdueMeeting[0].remark2Str}}</span><span style="font-size:14px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverdueMeeting.length">
@@ -243,8 +243,8 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debtStr}}元</span>
-                      <span class="table-cell">逾{{item.overdueDays}}天</span>
+                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
@@ -260,8 +260,8 @@
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="OverduePrint.length">
-                  <span :style="OverduePrint[0].remark1Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1Str}}</span><span style="font-size:12px">笔 </span>/<span> 共</span>
-                  <span :style="OverduePrint[0].remark2Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2Str}}</span><span style="font-size:12px">元</span>
+                  <span :style="OverduePrint[0].remark1Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark1Str}}</span><span style="font-size:14px">笔 </span>/<span> 共</span>
+                  <span :style="OverduePrint[0].remark2Str==0?'':'color: #FF6868;'">{{OverduePrint[0].remark2Str}}</span><span style="font-size:14px">元</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!OverduePrint.length">
@@ -277,8 +277,8 @@
                       <Tooltip :content="item.customerName" placement="top-start" class="table-cell customer">
                           <div  class="ellipsis">{{item.customerName}}</div>
                       </Tooltip>
-                      <span class="table-cell">{{item.debtStr}}元</span>
-                      <span class="table-cell">逾{{item.overdueDays}}天</span>
+                      <span class="table-cell" style="text-align:right">{{item.debtStr}}元</span>
+                      <span class="table-cell" style="text-align:right">逾{{item.overdueDays}}天</span>
                   </li>        
                 </ul>
               </div>
@@ -322,12 +322,12 @@
               <div class="header">
                 <div class="header-left" style="cursor:auto;">
                   <Tooltip content="已入驻的会员通过APP邀请来的访客，前来探访入驻的会员" placement="top">
-                    会员访客  <span class="header-left-all" style="font-size:14px;">全部 ></span>
+                    预约访客  <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>
                 <div class="header-right" v-if="nappointment.length&&(nappointment[0].compareTime<7)"> 
                   {{nappointment[0].compareTime==0?'今日':nappointment[0].compareTime==1?'明日':this.getWeekNum(nappointment[0].visitTime)}}:
-                  <span style="color: #FF6868;">{{visitNum}}</span><span style="font-size:12px">人</span>
+                  <span style="color: #FF6868;">{{visitNum}}</span><span style="font-size:14px">人</span>
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
@@ -349,7 +349,7 @@
                     <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex2">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
-                    <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1">
+                    <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1;text-align:right;">
                        <div class="ellipsis">{{item.payDaysName}}</div>
                     </Tooltip>
                   </li>        

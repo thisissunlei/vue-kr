@@ -27,6 +27,11 @@
                     <Loading/>
                 </div>
             </Table>
+            <div  class='list-footer'>
+                <div style="float: right;">
+                    <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
+                </div>
+            </div>
         </div>
 
         <Message 
@@ -45,13 +50,11 @@
                      v-if="modifystate"
                     :data="statusData"
                     :errorData="errorData"
-                    @click="submitClick"
-                    @updateForm="updateForm"
+                    @updateForm="updateStatus"
                 />
             <div slot="footer">
                  <Button type="primary" @click="submitStatus">修改</Button>
-                <Button type="ghost" style="margin-left:20px" @click="closeStatus">取消</Button>
-
+                 <Button type="ghost" style="margin-left:20px" @click="openStatus">取消</Button>
             </div>
         </Modal>
 
@@ -61,11 +64,10 @@
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
-                <span style="color:red;">{{this.statusData.length}}</span>个商品修改状态成功！
+                <span style="color:red;">{{statusData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
-                 <Button type="primary" @click="openComplete" >成功</Button>
-
-            </div>
+                     <Button type="primary" @click="openComplete" >成功</Button>
+                </div>
         </Modal>
     </div>
 </template>
@@ -293,18 +295,6 @@ export default {
             statusData:[]    
         }
     },
-       watch: {
-            $props: {
-                deep: true,
-                handler(nextProps) {
-                    if(nextProps.mask=='join'){
-                       this.getListData(this.switchParams);
-                       this.params=this.switchParams; 
-                    }
-                }
-            }
-        },
-        
     mounted(){
         var dom=document.getElementById('layout-content-main');
         dom.addEventListener("scroll",this.onScrollListener);
@@ -317,9 +307,11 @@ export default {
     },
     watch:{   
         sideBar:function(val){
-            this.getListData();
             this.tableCommon();
             this.onScrollListener();
+        },
+        tabForms:function(val,old){
+            this.getListData(this.tabForms); 
         }
     },
     destroyed(){
@@ -328,36 +320,33 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
-          initData(formItem){
-                console.log('init---')
-                this.tabForms=Object.assign({},formItem,this.tabForms);
-                this.dataParams(this.tabForms);
-            },
-           dataParams(data){
-                    this.endParams=Object.assign({},data);
-                    // this.getData(this.endParams);
-            },
-
-
-
-
-      updateForm(obj){
-          this.statusForm=Object.assign({},obj);  
-      },
-      tableCommon(){
-        var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
-        if(dailyTableDom){
-            this.left=dailyTableDom.getBoundingClientRect().left;
-            this.width=dailyTableDom.getBoundingClientRect().width;
-        }  
-      },
-      onResize(){
-        this.tableCommon();
-        this.onScrollListener();
-      },
-      //批量修改
+        initData(formItem){
+            this.tabForms=Object.assign({},this.tabForms,formItem);
+        },
+        searchClick(values){
+            this.tabForms=Object.assign({},this.tabForms,values);
+            //utils.addParams(this.tabForms);
+        },
+        clearClick(values){
+            this.tabForms=Object.assign({},this.tabForms,values);
+            //utils.addParams(this.tabForms);
+        },
+        updateStatus(obj){
+           this.statusForm=Object.assign({},obj);  
+        },
+        tableCommon(){
+            var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
+            if(dailyTableDom){
+                this.left=dailyTableDom.getBoundingClientRect().left;
+                this.width=dailyTableDom.getBoundingClientRect().width;
+            }  
+       },
+       onResize(){
+         this.tableCommon();
+         this.onScrollListener();
+       },
+       //批量修改
         openBatch(){
-   
             this.isShowBatch=!this.isShowBatch;
             if(!this.isShowBatch){
                 this.attractColumns.unshift({type:'selection',width: 60,align: 'center'}); 
@@ -366,59 +355,38 @@ export default {
                 this.attractColumns.splice(0,1);
             }
         },
-        ee(){
-            
-        
-        },
         openStatus(){
             this.modifystate=!this.modifystate;
-       
-        },
-        closeStatus(){
-            this.modifystate=!this.modifystate;
-        },
-        submitClick(){
-            console.log('submit',"pppppppppp")
         },
         submitStatus(){
-            this.getStatus();
-            
-        },
-        openComplete(){
-
-                 this.complete=!this.complete;
-             
-        },
-
-
-         //格式转换
-            dateSwitch(data){
-                if(data){
-                    return utils.dateCompatible(data);
-                }else{
-                    return '';
-                }
-            },
-        getStatus(){//提交
-            // console.log('eee',this.statusForm);
             this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
-             this.statusForm.endDate=this.dateSwitch(this.statusForm.endDate);
-
+            this.statusForm.endDate=this.dateSwitch(this.statusForm.endDate);
             this.$http.post('get-change-status',this.statusForm).then((response)=>{    
               console.log('提交',response.data)
               if(response.data.length){
                     this.errorData=response.data;
               }else{
                     this.openStatus()
-                     this.openComplete();
-                     this.getListData(this.tabForms);
+                    this.openComplete();
+                    this.getListData(this.tabForms);
               }
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message
                 });
             })
-      },
+        },
+        openComplete(){
+           this.complete=!this.complete;      
+        },
+        //格式转换
+        dateSwitch(data){
+            if(data){
+                return utils.dateCompatible(data);
+            }else{
+                return '';
+            }
+        },
       //滚动监听
       onScrollListener(){            
             var dom=document.getElementById('layout-content-main');
@@ -432,10 +400,6 @@ export default {
             }else{
                 this.theHead=false;
             }
-      },
-      initData(formItem){
-         this.tabForms=Object.assign({},formItem,this.tabForms);
-         this.getListData(this.tabForms);
       },
       tableChange(select){
           this.statusData=select;
@@ -453,14 +417,6 @@ export default {
                 this.MessageType="error";
                 this.warn=error.message;
             })
-      },
-      searchClick(values){
-         this.tabForms=Object.assign({},this.tabForms,values);
-         this.getListData(this.tabForms); 
-      },
-      clearClick(values){
-         this.tabForms=Object.assign({},this.tabForms,values);
-         this.getListData(this.tabForms); 
       },
       onPageChange(page){
          this.tabForms.page=page;

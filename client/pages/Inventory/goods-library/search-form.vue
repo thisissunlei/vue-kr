@@ -79,16 +79,16 @@
                 <!-- 第二行-->
                 <div style="white-space: nowrap; margin-right:0;">
                     <div class="daily-form">
-              <Form-item label="当前状态" class='daily-form'> 
+                     <Form-item label="当前状态" class='daily-form'> 
                             <Select 
-                                v-model="formItem.goodsStatus" 
-                                placeholder="全部" 
+                                v-model="formItem.investmentStatus" 
+                                placeholder="全部(可多选)" 
                                 style="width: 200px"
                                 multiple
                             >
                                 <Option v-for="item in goodsStatusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                             </Select> 
-            </Form-item>
+             </Form-item>
 
             <div class="daily-form">
                         <span class="attract-font" style="padding-top:7px;">工位数量</span>
@@ -304,8 +304,8 @@ export default {
             return { 
                 loading:false, 
                 formItem:{
-                    investmentStatus:'',
-                    goodsStatus:[],
+                    investmentStatus:[],
+                    goodsStatus:'',
 
                     communityId:'',
                     cityId:'',
@@ -320,7 +320,7 @@ export default {
                     areaMin:'',
                     areaMax:'',
              
-              
+                   
                     rentTimeType:'GT',
                     locationType:' ',
                     suiteName:' ',
@@ -340,8 +340,8 @@ export default {
                 ],
                 graphList:[
                     {value:' ',label:'全部'},
-                    {value:'GRAP',label:'已配置'},
-                    {value:'NOT',label:'未配置'},
+                    {value:'1',label:'已配置'},
+                    {value:'0',label:'未配置'},
                 ],
                 bindingtList:[
                         {value:' ',label:'全部'},
@@ -354,13 +354,12 @@ export default {
                     {value:'RENTING',label:'已招商'},
                     {value:'DISABLED',label:'不可招商'}
                 ],
-                    goodsStatusList:[ 
-                      {value:' ',label:'全部（可多选）'},
-                        {value:'OPEN',label:'启用'},
-                        {value:'SPACE',label:'不可用'},
-                        {value:'MOVE',label:'下架'}
-                    ],
-                   locationList:[
+                goodsStatusList:[ 
+                    {value:'ON',label:'启用'},
+                    {value:'DISABLE',label:'不可用'},
+                    {value:'OFF',label:'下架'}
+                ],
+                locationList:[
                     {value:' ',label:'全部方位'},
                     {value:'OUTSIDE_SPACE',label:'外侧间'},
                     {value:'INSIDE_SPACE',label:'内侧间'},
@@ -418,31 +417,10 @@ export default {
         setTimeout(() => {
             _this.$emit('initData',this.formItem);
             _this.formItemOld=Object.assign({},this.formItem);
+            _this.formItem = Object.assign({},this.formItem,this.$route.query)
         },500);
     },
     methods:{
-        //销售员搜索
-        remoteSaler(query){
-            if (query !== '') {
-                this.loading = true;
-                setTimeout(() => {
-                    this.getSalerData(query)
-                }, 200);
-            }
-        },
-        //销售员
-        getSalerData(name){
-            let list = [];
-            this.$http.get('get-saler',{phoneOrEmail:name}).then((res)=>{
-                list = res.data.slice(0,10);
-                this.loading= false;
-                this.sellerList=list;
-            }).catch((error)=>{
-                this.$Notice.error({
-                    title:error.message
-                });
-            })
-        },
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
@@ -484,20 +462,15 @@ export default {
         searchClick(){
             this.$refs['formItemInvestment'].validate((valid) => {
                 if (valid) {
+                    console.log('form--11',this.formItem);
                     //招商状态格式转换
                     var str='';
-                    this.formItem.goodsStatus.map((item,index)=>{
-                            str=str?str+','+item:item;
+                    let invest=this.formItem.investmentStatus;
+                    invest.length&&invest.map((item,index)=>{
+                        str=str?str+','+item:item;
                     }) 
-                    this.formItem.investmentStatus=str; 
-                    //渠道来源格式转换
-                    var length=this.formItem.source.length;
-                    if(length){
-                        this.formItem.sourceId=this.formItem.source[0];
-                        this.formItem.subSourceId=length>1?this.formItem.source[1]:'';
-                    }
+                    this.formItem.goodsStatus=str; 
                     this.$emit('searchClick',this.formItem);
-                    utils.addParams(this.tabForms);
                 }
             })
             
@@ -505,9 +478,8 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
-            this.formItem.goodsStatus=[];
+            this.formItem.investmentStatus=[];
             this.$emit('clearClick',this.formItem);
-             utils.addParams(this.tabForms);
         },
         //回车
         onKeyEnter(){

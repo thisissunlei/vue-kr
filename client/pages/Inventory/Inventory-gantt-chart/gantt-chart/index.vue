@@ -4,13 +4,14 @@
         <!-- 甘特图部分 -->
         <div class='chart-inventory-wrap'>
 
-                <div class="hander" >
+                <div class="hander" >        
+                    <slot name="sort"></slot>
                     <!-- 刻度选择 -->
                     <div style="display:inline-block;">
                         <Select
                             v-model="barType"
                             @on-change="selectChange"
-                            style="width:220px;margin-right:20px;text-align:left;color:#666;"
+                            style="width:140px;margin-right:20px;text-align:left;color:#666;"
                         >
                             <Option v-for="item in timeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
@@ -270,7 +271,7 @@ export default {
             //所有周的数组数据
             weeks:[],
             //最小刻度的大小
-            minCalibration:20,
+            minCalibration:4,
             //原点数据
             leftEndpoint:{},
             //刻度的下拉选择项
@@ -289,7 +290,7 @@ export default {
                 }
             ],
             //下拉的默认值
-            barType: 'week',
+            barType: 'month',
             isLoading:true,
             scrollWidth:0,
             tagToLeft:0,
@@ -313,6 +314,10 @@ export default {
                 },
                 {
                     title:'不可用',
+                    color:"#bfc4cf"
+                },
+                {
+                    title:'下架',
                     color:"#E4E4E4"
                 }
             ],
@@ -1149,8 +1154,9 @@ export default {
         .day-bar,.month-bar,.week-bar,.year-bar{
             height: 50px;
             position: relative;
-
-
+        }
+        .month-bar{
+            background: #FAFCFF;
         }
         .year-bar{
             background: #fff;

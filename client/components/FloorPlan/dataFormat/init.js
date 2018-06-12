@@ -40,17 +40,22 @@ function init(data,picProperty,dataUrl){
         
         
         //scale计算
-        var minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
-        var minH=32/spaceArr[0].cellHeight;
-        var min=32;
-        spaceArr.map((item,index)=>{
-            if((item.parentMin/item.cellWidth)>minW){
-                minW=item.parentMin/item.cellWidth;
-            }
-            if((32/item.cellHeight)>minH){
-                minH=32/item.cellHeight;
-            }
-        }) 
+        var minW=0.5;
+        var minH=0.5;
+        var min=0.5;
+        if(spaceArr.length){
+            minW=spaceArr[0].parentMin/spaceArr[0].cellWidth;
+            minH=32/spaceArr[0].cellHeight;
+            
+            spaceArr.map((item,index)=>{
+                if((item.parentMin/item.cellWidth)>minW){
+                    minW=item.parentMin/item.cellWidth;
+                }
+                if((32/item.cellHeight)>minH){
+                    minH=32/item.cellHeight;
+                }
+            }) 
+        }
         min=minW>minH?minW:minH;
         if(min>1){
             scale=1

@@ -270,6 +270,7 @@
 
         methods:{
             urlUpLoad(detail,col){
+                console.log(col,"ppppp")
                 var _this = this;
                 this.$http.post("post-checklist-list", {
                     checklistId:col.id,

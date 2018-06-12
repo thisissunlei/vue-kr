@@ -719,8 +719,7 @@
                         primaryText: '即将进场',
                         router: 'inventory/enter-field',
                         type:'vue',
-                        //menuCode: 'imt_putaway_list',
-                        menuCode: 'vueList',
+                        menuCode: 'imt_putaway_list',
                     },
                     {
                         primaryText: '已起租未付',

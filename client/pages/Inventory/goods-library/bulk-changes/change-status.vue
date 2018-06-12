@@ -36,13 +36,13 @@
                         placeholder="创建结束日期" 
                         style="width: 180px"
                     />
-                     </Form-item>
+                     </Form-item>de
                     <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
              </Form-item>
              <Form-item label="修改为:"  style="margin-top:20px;">
                     <RadioGroup v-model="formItem.goodsStatus" style="margin-left:45px;"  >
                         <Radio label="ON" >
-                           启用   
+                           启用
                         </Radio>
                         <Radio label="DISABLE">
                            不可用
@@ -68,7 +68,7 @@
               </Form-item>
          </Form>
 </template>
-
+w
 
 <script>
 import dateUtils from 'vue-dateutils';
@@ -173,7 +173,6 @@ import dateUtils from 'vue-dateutils';
                     }else{
                         item.color='';
                     }
-
                     if(item.goodsTypeName == '独立办公室'){
                         this.independentOfficeStr.push(item);
                     }else if(item.goodsTypeName == '固定办公桌'){

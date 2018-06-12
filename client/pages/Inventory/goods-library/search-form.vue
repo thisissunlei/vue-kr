@@ -117,7 +117,7 @@
                             <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select> 
                     <Select 
-                            v-model="formItem.suiteName" 
+                            v-model="formItem.suiteType" 
                             style="width: 90px;margin-right:0;"
                             clearable
                         >
@@ -270,18 +270,22 @@ export default {
                     callback('后者需要大于前者');
                 }else{
                     callback();
-                }areaMin
+                }
             };    
             //面积
             const validatearea = (rule, value, callback) => {
-                var reg=/^(([1-9]{1})|([0-9]{1}\.\d{1}))$/;
+                   var reg = /^\+?[1-9]\d*$/;
                 if(value&&!reg.test(value)){
-                    callback('请输入0-10之间的数字,最多1位小数');
+                    callback('请输入正整数');
+                }else if(value&&value>999){
+                    callback('最大999面积');
                 }else if (this.formItem.areaMin&&this.formItem.areaMax&&Number(this.formItem.areaMin)>Number(this.formItem.areaMax)) {
                     callback('后者需要大于前者');
                 }else{
                     callback();
                 }
+
+
             };    
             //商品名称
             const validateName = (rule, value, callback) => {

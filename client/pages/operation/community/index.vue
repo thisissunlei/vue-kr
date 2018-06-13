@@ -331,8 +331,8 @@
                 </div>
               </div>
               <div class="contents" style="text-align:center" v-if="!nappointment.length">
-                <img src="~/assets/images/waiting.png" alt="" style="width:106px;margin-top:30px">
-                <div style="font-size: 14px;color: #666666;margin-top:15px;">小哥哥小姐姐正在尽全力开发，敬请期待哦亲~</div>
+                <img src="~/assets/images/none.png" alt="" style="width:106px;margin-top:30px">
+                <div style="font-size: 14px;color: #666666;margin-top:15px;">暂没有访客(入驻会员在APP上邀请来的)</div>
                 
               </div>
 
@@ -349,7 +349,7 @@
                     <Tooltip :content="item.company" placement="top-start" class="table-cell customer" style="flex2">
                       <div class="ellipsis" >{{item.company}}</div>
                     </Tooltip>
-                    <Tooltip :content="item.compareTime" placement="top-start" class="table-cell customer" style="flex:1;text-align:right;">
+                    <Tooltip :content="item.payDaysName" placement="top-end" class="table-cell customer" style="flex:1;text-align:right;">
                        <div class="ellipsis">{{item.payDaysName}}</div>
                     </Tooltip>
                   </li>        
@@ -540,7 +540,8 @@ export default {
 				this.$http.get('gitVisitorsList',params).then((res)=>{         
              this.nappointment=[].concat(res.data.items);
              if(this.nappointment.length){
-                    var first=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.nappointment[0].visitTime));
+                  this.visitNum=this.nappointment[0].visitorNum;
+                  var first=dateUtils.dateToStr("YYYY-MM-DD",new Date(this.nappointment[0].visitTime));
                   this.nappointment.map((item,index)=>{
                     var time=dateUtils.dateToStr("YYYY-MM-DD",new Date(item.visitTime));
                     if(first==time){
@@ -560,13 +561,6 @@ export default {
                       item.payDaysName='-';
                     }
                 })
-              if(sameArray.length){
-                for(var i=0;i<sameArray.length;i++){
-                    if(sameArray.indexOf(sameArray[i].visitName)==-1){
-                       this.visitNum++;
-                    }
-                 }
-               }
              }
              
 				}).catch((err)=>{
@@ -621,7 +615,8 @@ export default {
         this.getDueList(data);
         this.getunpaidList(data);
         //this.getAnappointmentListList();
-        //this.getAnappointmentList(data);
+        var obj=Object.assign({},data,{startTime:dateUtils.dateToStr("YYYY-MM-DD HH:mm:SS", new Date())})
+        this.getAnappointmentList(obj);
     },
     changeTab(type){
       this.tab = type;

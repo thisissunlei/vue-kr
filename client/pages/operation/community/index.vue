@@ -47,24 +47,24 @@
               </span>
               <span class="number">
                 <span class="title">在租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #F5A623;">{{pageData.rentSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #F5A623;">{{pageData.rentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #F5A623;">{{pageData.rentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #F5A623;">{{pageData.rentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(254, 220, 130);">{{pageData.rentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">合同未生效</span>
-                <span class="num"  v-if="tab=='all'" style="font-size:44px;color: #FAD27B;">{{pageData.uneffectSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: #FAD27B;">{{pageData.uneffectMoveStationsNum}}</span>
+                <span class="num"  v-if="tab=='all'" style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'"  style="font-size:44px;color: rgb(254, 168, 119);">{{pageData.uneffectMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">未租</span>
-                <span class="num" v-if="tab=='all'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentSeatsNum}}</span>
-                <span class="num" v-if="tab=='office'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentSpaceNum}}</span>
-                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentFixStationsNum}}</span>
-                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: #35BC9B;">{{pageData.noRentMoveStationsNum}}</span>
+                <span class="num" v-if="tab=='all'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentSeatsNum}}</span>
+                <span class="num" v-if="tab=='office'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentSpaceNum}}</span>
+                <span class="num" v-if="tab=='fixedDest'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentFixStationsNum}}</span>
+                <span class="num" v-if="tab=='mobileDesk'" style="font-size:44px;color: rgb(188, 229, 144);">{{pageData.noRentMoveStationsNum}}</span>
               </span>
               <span class="number">
                 <span class="title">不可用</span>
@@ -622,7 +622,7 @@ export default {
       this.tab = type;
     },
     openCustomer(){
-       window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')
+       window.open('/customer-manage/manage?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city+'&status=ENTERED','_blank')
     },
     openVisitor(){
       window.open('/new/#/community/visitor/list?pageSize=15&page=1&communityId='+this.communityId+'&cityId='+this.city,'_blank')

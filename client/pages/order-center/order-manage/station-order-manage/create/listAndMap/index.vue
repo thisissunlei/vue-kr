@@ -1,12 +1,12 @@
 
 <template>
    <div class="order-map-list">
-       <Tabs size="default" value="list" @on-click="tabsClick" :animated="false">
+       <Tabs size="default" value="list" :animated="false">
             <TabPane label="以列表方式选择" name="list">
-                123
+               <List :params.sync="params"  :floors.sync="floors"/>
             </TabPane>
             <TabPane label="以平面图方式选择" name="map">
-                456
+                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange"></planMap>
             </TabPane>
         </Tabs>
    </div>
@@ -14,6 +14,7 @@
 
 <script>
 import planMap from '~/components/PlanMap.vue';
+import List from './list';
 export default { 
     props:{
         params:{
@@ -21,7 +22,7 @@ export default {
             default:{}
         },
         floors:{
-            type:Object,
+            type:Array,
             default:()=>[]
         },
         stationData:{
@@ -30,7 +31,8 @@ export default {
         }
     },  
     components:{
-       planMap
+       planMap,
+       List
     }, 
     data() {
         return{
@@ -41,7 +43,9 @@ export default {
        
     },
     methods:{
-     
+       onResultChange(val){
+           this.$emit('on-result-change',val);
+       }
     }
 }
 </script>

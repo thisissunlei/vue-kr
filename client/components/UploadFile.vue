@@ -369,6 +369,9 @@ export default{
 					xhrfile.setRequestHeader(key,that.headers[key])
 				})
 			}
+			if(this.withCredentials){
+				xhrfile.withCredentials = true; 
+			}
 			xhrfile.responseType = 'json';
 			xhrfile.send(form);
 		},

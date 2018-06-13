@@ -51,6 +51,10 @@ export default {
         floors:{
             type:Array,
             default:()=>[]
+        },
+        originStationList:{
+            type:Array,
+            default:()=>[]
         }
     }, 
     components:{
@@ -79,7 +83,7 @@ export default {
                 },
                 {
                     title: '商品类型',
-                    key: 'code',
+                    key: 'spaceType',
                     align:'center' 
                 },
                 {
@@ -125,6 +129,11 @@ export default {
         }
      },
      mounted(){
+        let len=this.originStationList.length;
+        if(len){
+          
+        }
+        console.log('map',this.originStationList);
         //this.getListData(this.formItem);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },

@@ -235,7 +235,7 @@ import DetailStyle from '~/components/DetailStyle';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
-import ListAndMap from './listAndMap';
+import ListAndMap from '../listAndMap';
 
 
 

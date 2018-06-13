@@ -3,10 +3,10 @@
    <div class="order-map-list">
        <Tabs size="default" value="list" :animated="false">
             <TabPane label="以列表方式选择" name="list">
-               <List  :floors.sync="floors" @on-result-change="onResultChange"/>
+               <List  :floors.sync="floors" @on-result-change="onResultChange" :originStationList.sync="originStationList"/>
             </TabPane>
             <TabPane label="以平面图方式选择" name="map">
-                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange"></planMap>
+                <planMap  :params.sync="params" :floors.sync="floors" :stationData.sync="stationData" :originStationList.sync="originStationList" @on-result-change="onResultChange"></planMap>
             </TabPane>
         </Tabs>
    </div>
@@ -28,7 +28,11 @@ export default {
         stationData:{
             type:Object,
             default:{}
-        }
+        },
+        originStationList:{
+            type:Array,
+            default:()=>[]
+        },
     },  
     components:{
        planMap,
@@ -39,7 +43,7 @@ export default {
           
         }
     },
-    mounted(){
+    mounted(){ 
        
     },
     methods:{

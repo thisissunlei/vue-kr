@@ -176,12 +176,6 @@ export default{
 				return {};
 			}
 		},
-		onPreview: {
-			type: Function,
-			default () {
-				return {};
-			}
-		},
 		onExceededSize: {
 			type: Function,
 			default () {
@@ -189,6 +183,12 @@ export default{
 			}
 		},
 		onFormatError: {
+			type: Function,
+			default () {
+				return {};
+			}
+		},
+		onPreview: {
 			type: Function,
 			default () {
 				return {};
@@ -295,7 +295,6 @@ export default{
 				category:this.category,
 				isPublic:this.isPublic
 			}).then((res)=>{
-				
 				for(var i=0,item;item=file[i];i++){
 					  _this.setFormData(res.data,item);
 				}
@@ -321,10 +320,33 @@ export default{
 					form.append(key, this.data[key]);
 				})
 			}
-			this.upfile(form,response.serverUrl,file)
+
+			if (!this.beforeUpload) {
+				return this.upfile(form,response.serverUrl,file);
+			}
+
+			const before = this.beforeUpload(file);
+			if (before && before.then) {
+				before.then(processedFile => {
+					if (Object.prototype.toString.call(processedFile) === '[object File]') {
+						this.upfile(form,response.serverUrl,file)
+					} else {
+						this.upfile(form,response.serverUrl,file)
+					}
+				}, () => {
+					// this.$emit('cancel', file);
+				});
+			} else if (before !== false) {
+				this.upfile(form,response.serverUrl,file)
+			} else {
+				// this.$emit('cancel', file);
+			}
+
+			
 
 		},
 		upfile(form,serverUrl,file){
+
 			//校验文件格式
 			if (this.format.length) {
 				const _file_format = file.name.split('.').pop().toLocaleLowerCase();
@@ -366,7 +388,7 @@ export default{
 							params.type = "ATTACHMENT"
 							that.handleSuccess(params,xhrfile.response,file);
 						} else {
-							that.handleError(err,xhrfile.response,file)
+							
 						}
 					} else{
 						that.$Notice.error({
@@ -377,6 +399,10 @@ export default{
 					that.percent = 100;
 				}
 			};
+			
+			xhrfile.onerror = function error(err) {
+				that.handleError(err,xhrfile.response,file)
+			};
 			if (xhrfile.upload) {
 				xhrfile.upload.onprogress = function progress(e) {
 					if (e.total > 0) {
@@ -385,6 +411,7 @@ export default{
 					that.onProgress(e,file,this.fileList);
 				};
 			}
+
 			xhrfile.open('POST', serverUrl, true);
 			if(Object.keys(this.headers).length>0){
 				Object.keys(this.headers).forEach((key)=>{

@@ -94,7 +94,8 @@
             <UploadFile 
                 :multiple="false"
                 :on-progress="onProgress"
-                :on-success="onSuccess"
+                :on-error="onError"
+                :beforeUpload="beforeUpload"
             />
         </FormItem>
         <div class></div>
@@ -189,6 +190,14 @@ export default {
   },
 
   methods:{
+      beforeUpload(){
+         
+      },
+      onError(error,file,fileList){
+          console.log('fileSuccess--response---->>>',error)
+          console.log('fileSuccess---file--->>>',file)
+          console.log('fileSuccess---fileList--->>>',fileList)
+      },
       onProgress(e,file,fileList){
          // console.log('file----Progress',e,'00008888>>>>',file,'hdhdhhd----',fileList)
       },

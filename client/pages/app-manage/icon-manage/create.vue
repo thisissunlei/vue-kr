@@ -82,7 +82,6 @@
                 :on-success="handleSuccess"
                 :on-error="handleError"
                 type="drag"
-                :on-progress="onProgress"
                 action="/api/krspace-finance-web/app/icon/upload"
                 style="display: inline-block;width:58px;">
                 <div style="width: 58px;height:58px;line-height: 58px;">

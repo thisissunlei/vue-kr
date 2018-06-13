@@ -249,7 +249,6 @@ export default{
 			var list = [].concat(this.fileList);
 			list.splice(index, 1);
 			this.fileList = [].concat(list);
-			console.log('len',this.fileList.length,'maxLen',this.maxLen)
 			if(this.maxLen){
 				if(this.fileList.length<this.maxLen){
 					this.upIconShow =true;

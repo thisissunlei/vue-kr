@@ -152,7 +152,7 @@ export default{
 		// },
         
 		beforeUpload: Function,
-		//有问题
+		
 		onProgress: {
 			type: Function,
 			default () {
@@ -189,12 +189,12 @@ export default{
 				return {};
 			}
 		},
-		onPreview: {
-			type: Function,
-			default () {
-				return {};
-			}
-		},
+		// onPreview: {
+		// 	type: Function,
+		// 	default () {
+		// 		return {};
+		// 	}
+		// },
 		uiType:{
 			type:String,
 			default:'uploadImg'
@@ -404,12 +404,13 @@ export default{
 			xhrfile.onerror = function error(err) {
 				that.handleError(err,xhrfile.response,file)
 			};
+
 			if (xhrfile.upload) {
 				xhrfile.upload.onprogress = function progress(e) {
 					if (e.total > 0) {
 						e.percent = e.loaded / e.total * 100;
 					}
-					that.onProgress(e,file,this.fileList);
+					that.onProgress(e,file,that.fileList);
 				};
 			}
 

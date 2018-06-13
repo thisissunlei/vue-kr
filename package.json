@@ -39,11 +39,11 @@
     "nodemon": "1.12.5",
     "react": "^16.2.0",
     "scmp": "2.0.0",
-    "vue": "2.5.13",
+    "vue": "2.5.16",
     "vue-dateutils": "1.0.8",
     "vue-loader": "^13.7.0",
-    "vue-server-renderer": "2.5.13",
-    "vue-template-compiler": "2.5.13"
+    "vue-server-renderer": "2.5.16",
+    "vue-template-compiler": "2.5.16"
   },
   "dependencies": {
     "@nuxtjs/axios": "4.5.0",

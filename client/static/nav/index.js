@@ -628,6 +628,12 @@
                             router: 'product/communityAllocation/communityStation'
                         },
                         {
+                            primaryText: "商品库",
+                            router: 'inventory/goods-library',
+                            type: 'vue',
+                            menuCode: 'cmt_investment',
+                        },
+                        {
                             primaryText: '平面图配置',
                             menuCode: 'oper_cmt_graph_base',
                             router: 'product/communityAllocation/communityPlanList'
@@ -654,12 +660,6 @@
                         {
                             primaryText: "社区招商情况",
                             router: 'community/attract-investment',
-                            type: 'vue',
-                            menuCode: 'cmt_investment',
-                        },
-                        {
-                            primaryText: "商品库",
-                            router: 'inventory/goods-library',
                             type: 'vue',
                             menuCode: 'cmt_investment',
                         },

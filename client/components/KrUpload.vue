@@ -282,8 +282,8 @@ export default{
 				this.defaultList = [detail];
 				this.upIconShow = false;
 			}
-		
-			console.log(detail,"pppppp")
+			console.log(this.onUpUrl,"ppppppp")
+			// this.onUpUrl && this.onUpUrl();
 			this.$emit('onChange',[detail],this.columnDetail,this.defaultList);
 			this.$emit('upSuccess',[detail],this.columnDetail,this.defaultList);
 			

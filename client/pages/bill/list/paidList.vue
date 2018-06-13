@@ -105,6 +105,7 @@ import PdfDownload from './pdfDownload';
                 itemDetail:{},
                 pageSize:15,
                 page:1,
+                queryParams:{},
                 tabParams:{
                     page:1,
                     pageSize:15,
@@ -256,21 +257,28 @@ import PdfDownload from './pdfDownload';
                 
             }
         },
+        created(){
+             this.getTableData(this.$route.query);
+             this.tabParams=this.$route.query;
+        },
         mounted(){
-            if(sessionStorage.getItem('paidParams')){
-                this.tabParams=JSON.parse(sessionStorage.getItem('paidParams'))
+              let mask=this.$route.query.mask;
+            if(!mask||mask=='paid'){
+               sessionStorage.setItem('paramsPaid',JSON.stringify(this.$route.query));
             }
-             this.getTableData(this.tabParams);
+            let jsonPaid=JSON.parse(sessionStorage.getItem('paramsPaid'));
+            this.queryParams=Object.assign({},jsonPaid,{page:1,pageSize:15});
+            this.getTableData(this.queryParams);
+            this.tabParams=this.queryParams;
         },
          watch: {
             $props: {
                 deep: true,
                 handler(nextProps) {
                     if(nextProps.mask=='paid'){
-                      //this.tabParams=JSON.parse(sessionStorage.getItem('paidParams'))
-                      this.getTableData(this.tabParams);
+                       this.getTableData(this.queryParams);
+                       this.tabParams=this.tabParams;
                     }
-                  
                 }
             }
         },
@@ -367,8 +375,8 @@ import PdfDownload from './pdfDownload';
                 this.tabParams=this.searchData;
                 this.page=1;
                 this.tabParams.page=1;
-                this.getTableData(this.tabParams)
-                sessionStorage.setItem('paidParams',JSON.stringify(this.tabParams));
+                this.tabParams.mask='paid';
+                utils.addParams(this.tabParams);
 
             },
             onChangeOpen(data){
@@ -380,11 +388,10 @@ import PdfDownload from './pdfDownload';
                 this.tabParams={
                     page:1,
                     pageSize:15,
-                    customerName:customerName
+                    customerName:customerName,
+                    mask:'paid'
                 }
-                 this.getTableData(this.tabParams);
-                 sessionStorage.setItem('paidParams',JSON.stringify(this.tabParams));
-               
+                 utils.addParams(this.tabParams);
             },
             changePage(page){
                 this.tabParams.page=page;

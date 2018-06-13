@@ -25,7 +25,6 @@
 <script>
 import PaidList from './paidList';
 import WaitList from './waitList';
-//import utils from '~/plugins/utils';
 
 export default {
    name:'billList',

@@ -328,7 +328,6 @@ export default {
             if(this.theEnd && (dom.scrollTop + dom.clientHeight < dom.scrollHeight)){
                 this.theEnd=false;
             }
-
             layoutScrollHeight=dom.scrollTop;
             var totalPage=Math.ceil(this.totalCount/this.tabForms.pageSize);
             if(dom.scrollHeight-dom.scrollTop-dom.clientHeight<10){
@@ -358,7 +357,6 @@ export default {
     }
 }
 </script>
-
 <style lang='less'>
      .optional-table-list{
             padding-bottom:77px; 

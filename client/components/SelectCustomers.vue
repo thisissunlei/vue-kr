@@ -54,15 +54,7 @@ import http from '~/plugins/http.js';
         },
         methods: {
             changeContent:function(value){
-                let data = [].concat(this.customerOptions)
-                let obj = {};
-                for(let i=0;i<data.length;i++){
-                    if(data[i].value == value ){
-                        obj = Object.assign({},data[i])
-                    }
-                }
-                console.log(obj,"pppppppppp")
-                this.onchange(value,obj)
+                this.onchange(value)
             },
             remoteCustomer (query) {
                     this.loading1 = true;

@@ -15,7 +15,7 @@
                         >
                             <Option 
                                 v-for="item in cityList" 
-                                :value="item.cityId" 
+                                :value="''+item.cityId" 
                                 :key="item.cityId"
                             >
                                 {{ item.cityName }}
@@ -30,13 +30,13 @@
                             >
                                 <Option 
                                     v-for="item in communityList" 
-                                    :value="item.id" 
+                                    :value="''+item.id" 
                                     :key="item.id"
                                 >
                                     {{ item.name }}
                                 </Option>
                         </Select>
-                    
+                        
                         <Select 
                                 v-model="formItem.floor" 
                                 v-if="floorList && floorList.length !=0"
@@ -53,9 +53,9 @@
                         </Select> 
                     </Form-item>
                     
-                     <Form-item label="客户名称" class='daily-form' prop="goodsName">
+                     <Form-item label="客户名称" class='daily-form' prop="customerName">
                         <i-input 
-                            v-model="formItem.goodsName" 
+                            v-model="formItem.customerName" 
                             placeholder="请输入客户名称"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -80,18 +80,18 @@
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">距进场日</span>
                         <Form-item class='priceForm'> 
                             <Select 
-                                v-model="formItem.leaseRemainingType" 
+                                v-model="formItem.toPutawayType" 
                                 style="width: 90px;margin-right:20px;"
                                 clearable
                             >
                                 <Option value="EQ" >等于</Option>
-                                <Option value="LT" >长于</Option>
-                                <Option value="GT">少于</Option>
+                                <Option value="GT" >长于</Option>
+                                <Option value="LT">少于</Option>
                         </Select> 
                         </Form-item>
-                        <Form-item  prop="leaseRemainingDays" style="display:inline-block;">
+                        <Form-item  prop="toPutawayDays" style="display:inline-block;">
                             <i-input 
-                                v-model="formItem.leaseRemainingDays" 
+                                v-model="formItem.toPutawayDays" 
                                 style="width: 90px;"
                                 placeholder="请输入天数"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -101,10 +101,12 @@
                     </div>
 
                     <div style="display:inline-block;margin-right:20px;margin-left:90px;">
-                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">联系人：</span>
-                        <Form-item  style="width:auto;display:inline-block;" prop="customerName">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:7px;">联</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:7px;">系</span>
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">人</span>
+                        <Form-item  style="width:auto;display:inline-block;" prop="contactName">
                             <i-input 
-                                v-model="formItem.customerName" 
+                                v-model="formItem.contactName" 
                                 style="width: 200px"
                                 placeholder="请输入联系人"
                                 @keyup.enter.native="onKeyEnter($event)"
@@ -112,11 +114,12 @@
                         </Form-item>
                     </div>
 
-                     <div style="display:inline-block;">
-                        <Form-item label="商品名称" class='daily-form' prop="goodsName">
+                      <div style="display:inline-block">
+                        <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">商品名称</span>
+                        <Form-item class='daily-form' prop="goodsName">
                         <i-input 
                             v-model="formItem.goodsName" 
-                            placeholder="请输入商品名称"
+                            placeholder="房间号或工位编号"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
                         />
@@ -152,9 +155,9 @@
                     </div>
 
 
-                        <Form-item label="联系方式" class='daily-form' prop="goodsName"  style="margin-left:90px;">
+                        <Form-item label="联系方式" class='daily-form' prop="contactTel"  style="margin-left:90px;">
                         <i-input 
-                            v-model="formItem.goodsName" 
+                            v-model="formItem.contactTel" 
                             placeholder="请输入联系方式"
                             style="width: 200px"
                             @keyup.enter.native="onKeyEnter($event)"
@@ -162,7 +165,7 @@
                     </Form-item>
 
 
-                    <div style="display:inline-block;margin-right:20px">
+                    <div style="display:inline-block;margin-right:18px">
                         <span style="color:#333;font-weight: 500;display: inline-block;padding-top:7px;margin-right:11px;">工位数量</span>
                         <Form-item  style="width:auto;display:inline-block;" prop="stationsMin">
                             <i-input 
@@ -262,7 +265,24 @@ export default {
                     callback();
                 }
             };
-            return {  
+            const validateNames = (rule, value, callback) => {
+                if(value&&value.length>40){
+                    callback('名称最多40个字符');
+                }else{
+                    callback();
+                }
+            };
+            const validatephone = (rule, value, callback) => {
+                let phone=/(^(\d{3,4}-)?\d{3,4}-?\d{3,4}$)|(^(\+86)?(1[356847]\d{9})$)/;
+                if (value&&!phone.test(value)) {
+                    callback(new Error('请填写正确的联系方式'));
+                }else{
+                    callback()
+
+                }
+            };
+            return { 
+                params :{}, 
                 formItem:{
                     communityId:' ',
                     cityId:'',
@@ -270,25 +290,27 @@ export default {
                     stationsMax:'',
                     stationsMin:'',
                     goodsType:' ',
-                    leaseRemainingType:'GT',
+                    toPutawayType:'GT',
                     rentType:'GT',
                     reletTypeName:' ',
                     goodsName:'',
+                    customerName:'',
+                    contactTel:'',
                     customerName:'',
                 },
                 renewList:[
                     {value:' ',label:'全部'},
                     {value:'RENT_TIMELESS',label:'可续租（时长不限）'},
                     {value:'RENT_NO_PERMIT',label:'不可续租'},
-                    {value:'RENT_CAN_TO',label:'只可续部分时间'}
+                    {value:'RENT_CAN_TO',label:'只可续租一段时间'}
                 ],
                 communityList:[],
                 cityList:[],
                 floorList:[],
                 productList:[
                     {value:' ',label:'全部'},
-                    {value:'SPACE',label:'固定办公桌'},
-                    {value:'OPEN',label:'独立办公室'},
+                    {value:'OPEN',label:'固定办公桌'},
+                    {value:'SPACE',label:'独立办公室'},
                     {value:'MOVE',label:'移动办公桌'}
                 ],
                 inventoryList:[
@@ -311,7 +333,7 @@ export default {
                         { validator: validateStation, trigger: 'change' }
                     ],
                     goodsName:[
-                        { validator: validateName, trigger: 'change' }
+                        { validator: validateNames, trigger: 'change' }
                     ],
                     leaseRemainingDays: [
                         { validator: validateNum, trigger: 'change' }
@@ -322,34 +344,37 @@ export default {
                     customerName:[
                         { validator: validateName, trigger: 'change' }
                     ],
+                    contactName:[
+                        { validator: validateNames, trigger: 'change' }
+                    ],
+                    contactTel:[
+                        { validator: validatephone, trigger: 'change' }
+                    ],
+                    toPutawayDays:[
+                        { validator: validateNum, trigger: 'change' }
+                    ],
                 }
             }
     },
     mounted(){
+        this.params=this.$route.query;
         this.getCityList();
-    },
-    head() {
-        return {
-            title: '即将到期列表'
-        }
     },
     methods:{
         //社区接口
         getCommunityList(id){
-            let params = this.$route.query;
+           let params =Object.assign({},this.params);
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data.map(item=>{
-                    item.id = item.id+'';
-                    return item;
-                });
+                this.communityList=res.data;
                 if(this.communityList.length>1){
                     this.communityList.unshift({id:' ',name:"全部社区"})
                 }
                 if(!params.communityId){
-                    this.formItem.communityId=this.communityList[0].id;
+                    this.formItem.communityId=''+this.communityList[0].id;
+                    this.floorList = []
                 }else{
                     this.getFloorList(params.communityId)
-                    this.formItem.communityId = params.communityId;
+                    this.formItem.communityId = ''+params.communityId;
                 }
                 
             }).catch((error)=>{
@@ -360,26 +385,24 @@ export default {
         },
         //城市接口
         getCityList(){
-            let params = this.$route.query;
+            let params =Object.assign({},this.params);
             this.$http.get('getDailyCity').then((res)=>{
-                this.cityList=res.data.map(item=>{
-                    item.cityId = item.cityId+' ';
-                    return item;
-                });
+                this.cityList=res.data;
                 if(this.cityList.length>1){
                     this.cityList.unshift({cityId:' ',cityName:"全部城市"})
-                    this.formItem.cityId=this.cityList[1].cityId;
+                    this.formItem.cityId=''+this.cityList[1].cityId;
+                    this.formItemOld=Object.assign({},this.formItem,);
                 }else{
-                    this.formItem.cityId=this.cityList[0].cityId;
+                    this.formItem.cityId=''+this.cityList[0].cityId;
+                    this.formItemOld=Object.assign({},this.formItem);
                 }
                 if(params.cityId){
                     this.getCommunityList();
-                    this.formItem.cityId = params.cityId;
-                    console.log('=-0900',typeof params.cityId)
+                    this.formItem.cityId = ''+params.cityId;
                 }
                 
-                this.formItemOld=Object.assign({},this.formItem);
-                this.formItem = Object.assign({},this.formItem,this.$route.query)
+                
+                this.formItem = Object.assign({},this.formItem,this.$route.query);
                 this.$emit('initData',this.formItem);
             }).catch((error)=>{
                 this.$Notice.error({
@@ -389,16 +412,14 @@ export default {
         },
         //楼层接口
         getFloorList(param){
-            let params = this.$route.query;
-            console.log(!params.floor,'=====',params.floor)
+           let params =Object.assign({},this.params);
             this.$http.get('getDailyFloor', {communityId:param}).then((res)=>{
                 this.floorList=res.data;
-                
-                if(this.floorList.length){
-                    this.floorList=res.data.map(item=>{
-                        item.floor = item.floor+'';
-                        return item;
-                    });
+                if(!res.data.length){
+                    this.floorList = []
+                }
+                if(this.floorList.lengt==1){
+                    this.formItem.floor=this.floorList.length?this.floorList[0].floor:' ';
                 }
                 if(this.floorList.length>1){
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})
@@ -421,7 +442,6 @@ export default {
         searchClick(){
             this.$refs['formItemDaily'].validate((valid) => {
                 if (valid) {
-                    console.log('搜索',this.formItem)
                     this.$emit('searchClick',this.formItem);
                 }
             })
@@ -429,6 +449,7 @@ export default {
         //清除
         clearClick(){
             this.formItem=Object.assign({},this.formItemOld);
+            this.floorList = []
             this.$emit('clearClick',this.formItem);
         },
         //回车
@@ -450,10 +471,18 @@ export default {
             return sum;
         },
         cityChange(param){
-            this.getCommunityList(param)
+            if(param){
+                if(param !== this.params.cityId){
+                  this.params = {}  
+                }
+                this.getCommunityList(param)  
+            }
+
+            
         },
         communityChange(param){
             if(param){
+                this.params = {}
                 this.getFloorList(param);
             }
             

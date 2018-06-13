@@ -17,5 +17,10 @@ module.exports = {
         url:'/api/op/sys/downFile',
         method:'get'
     },
+    'type/page':{
+        url:'/mockdata/77/pm/role/list/type/page',
+        method:'get'
+    },
+    
    
 }

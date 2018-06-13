@@ -827,12 +827,12 @@
                             menuCode: 'sso_appVersion_base',
                         },
                        
-                        // {
-                        //     primaryText: '免费额度优惠券',
-                        //     menuCode: 'op_member_coupon_internal',
-                        //     type: 'vue',
-                        //     router: 'app-manage/coupon'
-                        // },
+                        {
+                            primaryText: '123123123',
+                            menuCode: 'sso_loginLog_base',
+                            type: 'vue',
+                            router: 'nav-config'
+                        },
                     ]
                 },
                 {

@@ -1321,7 +1321,7 @@
                     },
                     {
                         primaryText: "发票资料",
-                        router: '/bill/financial-invoice',
+                        router: 'bill/financial-invoice',
                         type: 'vue',
                         menuCode: 'pay_deal_flow_page'
                     },

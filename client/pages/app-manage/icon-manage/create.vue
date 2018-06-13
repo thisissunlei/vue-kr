@@ -94,6 +94,7 @@
             <UploadFile 
                 :multiple="false"
                 :on-progress="onProgress"
+                :on-success="onSuccess"
             />
         </FormItem>
         <div class></div>
@@ -189,7 +190,7 @@ export default {
 
   methods:{
       onProgress(e,file,fileList){
-          console.log('file----Progress',e,'00008888>>>>',file,'hdhdhhd----',fileList)
+         // console.log('file----Progress',e,'00008888>>>>',file,'hdhdhhd----',fileList)
       },
       getLocationList(){
             this.$http.get('get-icon-location', '').then((res)=>{

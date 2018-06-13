@@ -151,6 +151,7 @@ export default{
 		// },
         
 		beforeUpload: Function,
+		//有问题
 		onProgress: {
 			type: Function,
 			default () {
@@ -363,7 +364,7 @@ export default{
 							params.fileName = file.name;
 							params.fileUrl = fileResponse.data.url;
 							params.type = "ATTACHMENT"
-							that.handleSuccess(params);
+							that.handleSuccess(params,xhrfile.response,file);
 						} else {
 							that.handleError(err,xhrfile.response,file)
 						}
@@ -403,7 +404,7 @@ export default{
 			}
 		},
 		//上传成功
-		handleSuccess(params){
+		handleSuccess(params,response,file){
 			var detail = Object.assign({},params);
 			this.fileList.push(detail)
 			if(this.maxLen){
@@ -413,7 +414,7 @@ export default{
 					this.upIconShow =false;
 				}
 			}
-			this.onSuccess(this.fileList)
+			this.onSuccess(response,file,this.fileList)
 		},
 		handleError(err, response, file){
 			this.onError(err, response, file)

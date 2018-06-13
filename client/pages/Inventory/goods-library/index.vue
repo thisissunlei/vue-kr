@@ -357,6 +357,7 @@ export default {
         },
         openStatus(){
             this.modifystate=!this.modifystate;
+            this.errorData=[];
         },
         submitStatus(){
             this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
@@ -368,6 +369,7 @@ export default {
               }else{
                     this.openStatus()
                     this.openComplete();
+                    this.statusData=[];
                     this.getListData(this.tabForms);
               }
             }).catch((error)=>{

@@ -48,6 +48,19 @@ export default {
 
 <style lang="less">
   .order-map-list{
+      .ivu-tabs{
+            overflow: visible;
+        }
+        .nav-text.ivu-tabs-nav{
+            width: 100%;
+        }
+        .ivu-tabs-ink-bar{
+            top:0px;
+            height: 4px;
+            border-top: 0px;
+            border-bottom: 0px;
+            box-sizing: border-box;
+        }
       .ivu-tabs-nav .ivu-tabs-tab{
             width: 50%;
             text-align: center;

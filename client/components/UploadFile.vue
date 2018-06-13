@@ -15,7 +15,7 @@
 					<div v-if="!disabled" class="img-mask">
 						<div style="line-height:60px;text-align:center;">
 							<div class="delete-icon ivu-icon ivu-icon-ios-eye" @click="eyePhotoAlbum(index)"></div>
-							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="delClick(index)"></div>
+							<div class="delete-icon ivu-icon ivu-icon-trash-a" @click="handleRemove(index)"></div>
 						</div>
 						
 					</div>
@@ -197,7 +197,11 @@ export default{
 			type:Boolean,
 			default:false
 		},
-		file:Array
+		file:Array,
+		maxLen:{
+			type:Number,
+			default:null
+		}
 
 	},
 	data(){
@@ -240,18 +244,24 @@ export default{
 		close(){
 			this.openPhotoAlbum  = !this.openPhotoAlbum;
 		},
-		delClick(index){
+		handleRemove(index){
 			var list = [].concat(this.fileList);
 			list.splice(index, 1);
-
-
 			this.fileList = [].concat(list);
-			if(this.multiple==false){
+			console.log('len',this.fileList.length,'maxLen',this.maxLen)
+			if(this.maxLen){
+				if(this.fileList.length<this.maxLen){
 					this.upIconShow =true;
+				}else{
+					this.upIconShow =false;
+				}
 			}
+			
+			 
 		
 			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.fileList);
+			this.onRemove(this.fileList);
 		},
 		upBtnClick(){
 			let fileDom = document.getElementById(this.inputId);
@@ -352,7 +362,7 @@ export default{
 							params.type = "ATTACHMENT"
 							that.handleSuccess(params);
 						} else {
-						
+							that.handleError(err,xhrfile.response,file)
 						}
 					} else{
 						that.$Notice.error({
@@ -363,6 +373,7 @@ export default{
 					that.percent = 100;
 				}
 			};
+			
 			xhrfile.open('POST', serverUrl, true);
 			if(Object.keys(this.headers).length>0){
 				Object.keys(this.headers).forEach((key)=>{
@@ -384,14 +395,18 @@ export default{
 		//上传成功
 		handleSuccess(params){
 			var detail = Object.assign({},params);
-			if(this.multiple){
-				this.fileList.push(detail)
-				this.upIconShow = true;
-			}else{
-				this.fileList = [detail];
-				this.upIconShow = false;
+			this.fileList.push(detail)
+			if(this.maxLen){
+				if(this.fileList.length<this.maxLen){
+					this.upIconShow =true;
+				}else{
+					this.upIconShow =false;
+				}
 			}
 		},
+		handleError(err, response, file){
+			this.onError(err, response, file)
+		}
 		
 		
 	}

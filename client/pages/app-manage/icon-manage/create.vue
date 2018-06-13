@@ -91,12 +91,13 @@
             <div v-if="isError" class="u-error">请选择要上传的图片</div>
 
             <UploadFile 
-                :multiple="true" 
+                :multiple="false" 
                 :onFormatError="onFormatError"
                 :format="['jpg','png','jpeg']"
                 :max-size="100"
                 :on-exceeded-size="onExceededSize"
-                :headers="{'Content-Type':'application/x-www-form-urlencoded'}"
+                :max-len="2"
+               
             />
         </FormItem>
         <div class></div>

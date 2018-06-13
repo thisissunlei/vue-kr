@@ -195,7 +195,6 @@
          class-name="vertical-center-modal"
      >
         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
-        <!-- <planMap  :params.sync="params" @on-result-change="onResultChange"></planMap> -->
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
         </div>

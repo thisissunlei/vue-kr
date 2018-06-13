@@ -34,11 +34,13 @@
                 <Option v-for="item in suiteTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </div>
-        <Table :loading="loading" stripe  :columns="attractColumns" :data="attractData" border @on-selection-change="tableChange">
-            <div slot="loading">
-                <Loading/>
-            </div>
-        </Table>
+        <div style="margin-top:20px;">
+            <Table :loading="loading" stripe  :columns="attractColumns" :data="attractData" border @on-selection-change="tableChange">
+                <div slot="loading">
+                    <Loading/>
+                </div>
+            </Table>
+        </div>
     </div>
 </template>
 
@@ -46,10 +48,6 @@
 import Loading from '~/components/Loading';
 export default {
     props:{
-        params:{
-            type:Object,
-            default:{}
-        },
         floors:{
             type:Array,
             default:()=>[]
@@ -61,6 +59,8 @@ export default {
     data() {
         return{
             formItem:{
+                page:1,
+                pageSize:100,
                 floor:this.floors.length?this.floors[0].value:'',
                 goodsType:' ',
                 locationType:' ',
@@ -123,14 +123,18 @@ export default {
                 {value:'UNSUITE',label:'无套间'}
             ]
         }
-    },
-    mounted(){
-       this.getListData(this.formItem);
-    },
-    methods:{
+     },
+     mounted(){
+        //this.getListData(this.formItem);
+        this.$watch('formItem',this.itemChangeHandler,{ deep: true })
+     },
+     methods:{
+       itemChangeHandler(val){
+            this.getListData(this.formItem);
+       },
        getListData(params){
            this.loading=true;
-           this.$http.get('getGoodsList',params).then((response)=>{
+           this.$http.get('join-bill-list',params).then((response)=>{
                 this.attractData=response.data.items;             
                 this.loading=false;
             }).catch((error)=>{
@@ -140,7 +144,7 @@ export default {
             })
        },
        tableChange(params){
-
+         this.$emit('on-result-change',params);
        }
     }
 }

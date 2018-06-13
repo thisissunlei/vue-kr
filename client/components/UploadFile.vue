@@ -107,7 +107,10 @@ export default{
 			default:false,
 		},
 		data: {
-            type: Object
+			type: Object,
+			default () {
+				return {};
+			}
         },
 		name: {
 			type: String,
@@ -256,8 +259,6 @@ export default{
 					this.upIconShow =false;
 				}
 			}
-			
-			 
 		
 			this.$emit('delete',index)
 			this.$emit('onChange',[{}],this.columnDetail,this.fileList);
@@ -317,7 +318,12 @@ export default{
 			form.append('callback', response.callback);
 			form.append('key', response.pathPrefix+'/'+file.name);
 			form.append('x:original_name', file.name);
-			form.append('file', file);
+			form.append(this.name, file);
+			if(Object.keys(this.data).length>0){
+				Object.keys(this.data).forEach((key)=>{
+					form.append(key, this.data[key]);
+				})
+			}
 			this.upfile(form,response.serverUrl,file)
 
 		},
@@ -344,6 +350,7 @@ export default{
 			var that  = this;
 			var xhrfile = new XMLHttpRequest();
 			xhrfile.timeout = 600000;
+			
 			xhrfile.onreadystatechange = function() {
 				if (xhrfile.readyState === 4) {
 					var fileResponse = xhrfile.response;
@@ -373,7 +380,14 @@ export default{
 					that.percent = 100;
 				}
 			};
-			
+			if (xhrfile.upload) {
+				xhrfile.upload.onprogress = function progress(e) {
+					if (e.total > 0) {
+						e.percent = e.loaded / e.total * 100;
+					}
+					that.onProgress(e,file,this.fileList);
+				};
+			}
 			xhrfile.open('POST', serverUrl, true);
 			if(Object.keys(this.headers).length>0){
 				Object.keys(this.headers).forEach((key)=>{
@@ -403,10 +417,14 @@ export default{
 					this.upIconShow =false;
 				}
 			}
+			this.onSuccess(this.fileList)
 		},
 		handleError(err, response, file){
 			this.onError(err, response, file)
-		}
+		},
+		clearFiles() {
+            this.fileList = [];
+        }
 		
 		
 	}

@@ -82,6 +82,7 @@
                 :on-success="handleSuccess"
                 :on-error="handleError"
                 type="drag"
+                :on-progress="onProgress"
                 action="/api/krspace-finance-web/app/icon/upload"
                 style="display: inline-block;width:58px;">
                 <div style="width: 58px;height:58px;line-height: 58px;">
@@ -91,13 +92,8 @@
             <div v-if="isError" class="u-error">请选择要上传的图片</div>
 
             <UploadFile 
-                :multiple="false" 
-                :onFormatError="onFormatError"
-                :format="['jpg','png','jpeg']"
-                :max-size="100"
-                :on-exceeded-size="onExceededSize"
-                :max-len="2"
-               
+                :multiple="false"
+                :on-progress="onProgress"
             />
         </FormItem>
         <div class></div>
@@ -192,14 +188,9 @@ export default {
   },
 
   methods:{
-      onFormatError(format,item){
-          console.log('Format----->>>',format,'item----->>>',item)
+      onProgress(e,file,fileList){
+          console.log('file----Progress',e,'00008888>>>>',file,'hdhdhhd----',fileList)
       },
-      onExceededSize(size,item){
-           console.log('size----->>>',size,'item----->>>',item)
-      },
-
-
       getLocationList(){
             this.$http.get('get-icon-location', '').then((res)=>{
                   this.locationList=res.data.locations;

@@ -37,7 +37,7 @@
                         </Option>
                    </Select> 
                 </Form-item>
-                <Form-item label="客户二级来源" class="bill-search-class" prop="subSourceId">
+                <!-- <Form-item label="客户二级来源" class="bill-search-class" prop="subSourceId">
                     <Select 
                         v-model="formItem.subSourceId" 
                         placeholder="请输入订单类型" 
@@ -53,7 +53,7 @@
                             {{ item.label }}
                         </Option>
                    </Select> 
-                </Form-item>
+                </Form-item> -->
                 <Form-item label="客户联系人" class="bill-search-class" prop="contactName">
                     <i-input 
                         v-model="formItem.contactName" 
@@ -127,7 +127,6 @@
                 effectError:false,
                 canSubmit:true,
                 formItem:{
-                	subSourceId:'',
                 	sourceId:'',
                 	contactTel:'',
                 	contactName:'',

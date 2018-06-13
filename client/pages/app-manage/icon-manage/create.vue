@@ -90,7 +90,14 @@
             </Upload>
             <div v-if="isError" class="u-error">请选择要上传的图片</div>
 
-            <UploadFile :multiple="true" />
+            <UploadFile 
+                :multiple="true" 
+                :onFormatError="onFormatError"
+                :format="['jpg','png','jpeg']"
+                :max-size="100"
+                :on-exceeded-size="onExceededSize"
+                :headers="{'Content-Type':'application/x-www-form-urlencoded'}"
+            />
         </FormItem>
         <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
@@ -184,6 +191,14 @@ export default {
   },
 
   methods:{
+      onFormatError(format,item){
+          console.log('Format----->>>',format,'item----->>>',item)
+      },
+      onExceededSize(size,item){
+           console.log('size----->>>',size,'item----->>>',item)
+      },
+
+
       getLocationList(){
             this.$http.get('get-icon-location', '').then((res)=>{
                   this.locationList=res.data.locations;

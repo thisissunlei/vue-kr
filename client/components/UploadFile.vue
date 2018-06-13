@@ -10,7 +10,7 @@
 		>
 		<div class="only-up" v-if="uiType=='uploadImg'">
 			<div class="content-box">
-				<div class="up-show-box" v-for="(item,index) in defaultList" :key="index">
+				<div class="up-show-box" v-for="(item,index) in fileList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
 					<div v-if="!disabled" class="img-mask">
 						<div style="line-height:60px;text-align:center;">
@@ -49,7 +49,7 @@
 							
 					
 						<div class="item-box">
-							<div class="file-list" :key="item.id" v-for="item in defaultList" @click="downFille(item)" >
+							<div class="file-list" :key="item.id" v-for="item in fileList" @click="downFille(item)" >
 								{{item.fileName}}
 							</div>
 						</div>
@@ -215,7 +215,7 @@ export default{
 			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
-			defaultList:this.file?this.file:[],
+			fileList:this.file?this.file:[],
 			serverUrl:'',
 			nowFile:{},
 			fileDetail:{},
@@ -232,7 +232,7 @@ export default{
 		eyePhotoAlbum(index){
 			// let arr = [].concat(this.imagesArr);
 			this.eyeIndex = index;
-			this.imagesArr = [].concat(this.defaultList);
+			this.imagesArr = [].concat(this.fileList);
 			this.close();
 
 			// for()
@@ -241,17 +241,17 @@ export default{
 			this.openPhotoAlbum  = !this.openPhotoAlbum;
 		},
 		delClick(index){
-			var list = [].concat(this.defaultList);
+			var list = [].concat(this.fileList);
 			list.splice(index, 1);
 
 
-			this.defaultList = [].concat(list);
+			this.fileList = [].concat(list);
 			if(this.multiple==false){
 					this.upIconShow =true;
 			}
 		
 			this.$emit('delete',index)
-			this.$emit('onChange',[{}],this.columnDetail,this.defaultList);
+			this.$emit('onChange',[{}],this.columnDetail,this.fileList);
 		},
 		upBtnClick(){
 			let fileDom = document.getElementById(this.inputId);
@@ -287,7 +287,7 @@ export default{
 				category:this.category,
 				isPublic:this.isPublic
 			}).then((res)=>{
-				console.log('file----',file)
+				
 				for(var i=0,item;item=file[i];i++){
 					  _this.setFormData(res.data,item);
 				}
@@ -308,12 +308,30 @@ export default{
 			form.append('key', response.pathPrefix+'/'+file.name);
 			form.append('x:original_name', file.name);
 			form.append('file', file);
-			this.upfile(form,response.serverUrl,file.name)
+			this.upfile(form,response.serverUrl,file)
 
 		},
-		upfile(form,serverUrl,fileName){
-			var that  = this;
+		upfile(form,serverUrl,file){
+			//校验文件格式
+			if (this.format.length) {
+				const _file_format = file.name.split('.').pop().toLocaleLowerCase();
+				const checked = this.format.some(item => item.toLocaleLowerCase() === _file_format);
+				if (!checked) {
+					this.onFormatError(file, this.fileList);
+					return false;
+				}
+			}
+			//校验文件大小
+			if (this.maxSize) {
+				if (file.size > this.maxSize * 1024) {
+					this.onExceededSize(file, this.fileList);
+					return false;
+				}
+            }
+
+
 			
+			var that  = this;
 			var xhrfile = new XMLHttpRequest();
 			xhrfile.timeout = 600000;
 			xhrfile.onreadystatechange = function() {
@@ -326,10 +344,10 @@ export default{
 							var data = fileResponse.data;
 							var params = {};
 							params.fieldUrl = fileResponse.data.url;
-							params.name = fileName;
+							params.name = file.name;
 							params.url = fileResponse.data.url;
 							params.fileId = ""+fileResponse.data.id;
-							params.fileName = fileName;
+							params.fileName = file.name;
 							params.fileUrl = fileResponse.data.url;
 							params.type = "ATTACHMENT"
 							that.handleSuccess(params);
@@ -346,6 +364,11 @@ export default{
 				}
 			};
 			xhrfile.open('POST', serverUrl, true);
+			if(Object.keys(this.headers).length>0){
+				Object.keys(this.headers).forEach((key)=>{
+					xhrfile.setRequestHeader(key,that.headers[key])
+				})
+			}
 			xhrfile.responseType = 'json';
 			xhrfile.send(form);
 		},
@@ -359,16 +382,14 @@ export default{
 		handleSuccess(params){
 			var detail = Object.assign({},params);
 			if(this.multiple){
-				this.defaultList.push(detail)
+				this.fileList.push(detail)
 				this.upIconShow = true;
 			}else{
-				this.defaultList = [detail];
+				this.fileList = [detail];
 				this.upIconShow = false;
 			}
-			
-			
-			
 		},
+		
 		
 	}
 }

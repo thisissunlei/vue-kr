@@ -97,7 +97,7 @@ export default  {
     
     // 方可
     'gitVisitorsList': {
-        url: '/api/krspace-finance-web/cmt/visit/get-visit-list',
+        url: '/api/order/operation/op-visit-list',
         method: 'get'
     },
   }

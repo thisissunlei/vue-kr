@@ -38,6 +38,7 @@
 
 <script>
     import publicFn from './pubilcFn';
+    import KrTd from '~/components/KrTd';
     import utils from '~/plugins/utils';
 import dateUtils from 'vue-dateutils';
     

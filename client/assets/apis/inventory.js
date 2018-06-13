@@ -91,7 +91,7 @@ export default  {
     },
     //商品列表
     'getGoodsList': {
-        url: '/song/api/order/goods/list',
+        url: '/api/order/goods/list',
         method: 'get'
     },
     //商品库枚举
@@ -101,7 +101,7 @@ export default  {
     }, 
     //批量修改状态借口
     'get-change-status':{
-        url:'/song/api/order/goods/status/batch',
+        url:'/api/order/goods/status/batch',
         method:'post'
     }, 
     // 预约参观
@@ -116,8 +116,13 @@ export default  {
     },
      //社区开业
      'getCommunityList': {
-        url: '/song/api/order/cmt/community/date',
+        url: '/api/order/cmt/community/date',
         method: 'get'
-    }
+    },
+    //下单选择商品列表
+    'downOrderGoodsList': {
+        url: 'api/krspace-op-web/cmt/floor-graph/vue/list',
+        method: 'get'
+    },
   }
   

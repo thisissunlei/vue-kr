@@ -78,33 +78,37 @@ export default {
                 },
                 {
                     title: '商品',
-                    key: 'code',
+                    key: 'cellName',
                     align:'center' 
                 },
                 {
                     title: '商品类型',
-                    key: 'spaceType',
+                    key: 'goosTypeName',
                     align:'center' 
                 },
                 {
                     title: '工位数量',
-                    key: 'code',
+                    key: 'capacity',
                     align:'center' 
                 },
                 {
                     title: '商品属性',
-                    key: 'code',
+                    key: 'attrString',
                     align:'center' 
                 },
                 {
                     title: '商品定价',
-                    key: 'code',
+                    key: 'seatPrice',
                     align:'center' 
                 },
                 {
                     title: '可租时段',
-                    key: 'code',
-                    align:'center' 
+                    key: 'startDate',
+                    align:'center',
+                    render(tag, params){
+                      let end=params.row.endDate?dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.endDate)):'不限';
+                      return dateUtils.dateToStr("YYYY-MM-DD",new Date(params.row.startDate))+'至'+end;
+                    } 
                 },
             ],
             attractData:[],
@@ -129,12 +133,7 @@ export default {
         }
      },
      mounted(){
-        let len=this.originStationList.length;
-        if(len){
-          
-        }
-        console.log('map',this.originStationList);
-        //this.getListData(this.formItem);
+        this.getListData(this.formItem);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },
      methods:{
@@ -143,8 +142,20 @@ export default {
        },
        getListData(params){
            this.loading=true;
-           this.$http.get('join-bill-list',params).then((response)=>{
-                this.attractData=response.data.items;             
+           this.$http.get('downOrderGoodsList',params).then((response)=>{
+                this.attractData=response.data.items;   
+                let len=this.originStationList.length;
+                if(len){
+                   this.originStationList.map((item)=>{
+                       this.attractData.map((value)=>{
+                           if(item.id==value.id){
+                               value.$set('checked',true);
+                           }else{
+                               value.$set('checked',false);
+                           }
+                       })
+                   }) 
+                }          
                 this.loading=false;
             }).catch((error)=>{
                 this.$Notice.error({

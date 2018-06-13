@@ -631,7 +631,7 @@
                             primaryText: "商品库",
                             router: 'inventory/goods-library',
                             type: 'vue',
-                            menuCode: 'cmt_investment',
+                            menuCode: 'goods_list',
                         },
                         {
                             primaryText: '平面图配置',

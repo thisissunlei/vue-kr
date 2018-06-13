@@ -9,7 +9,7 @@
 			:accept="accept"	
 		>
 		<div class="only-up" v-if="uiType=='uploadImg'">
-			<div class="content-box">
+			<div class="content-box" >
 				<div class="up-show-box" v-for="(item,index) in fileList" :key="index">
 					<KrImg :src="item.url" width="60" height="60" type="cover"/>
 					<div v-if="!disabled" class="img-mask">
@@ -120,17 +120,6 @@ export default{
 			type: Boolean,
 			default: false
 		},
-		showUploadList: {
-			type: Boolean,
-			default: true
-		},
-		// type: {
-		// 	type: String,
-		// 	validator (value) {
-		// 		return oneOf(value, ['select', 'drag']);
-		// 	},
-		// 	default: 'select'
-		// },
 		format: {
 			type: Array,
 			default () {
@@ -139,10 +128,28 @@ export default{
 		},
 		accept: {
             type: String
-        },
-        maxSize: {
+		},
+		maxSize: {
             type: Number
-        },
+		},
+		maxLen:{
+			type:Number,
+			default:null
+		},
+		defaultFileList: {
+			type: Array,
+			default() {
+				return [];
+			}
+		},
+		// type: {
+		// 	type: String,
+		// 	validator (value) {
+		// 		return oneOf(value, ['select', 'drag']);
+		// 	},
+		// 	default: 'select'
+		// },
+        
 		beforeUpload: Function,
 		onProgress: {
 			type: Function,
@@ -186,12 +193,6 @@ export default{
 				return {};
 			}
 		},
-		defaultFileList: {
-			type: Array,
-			default() {
-				return [];
-			}
-		},
 		uiType:{
 			type:String,
 			default:'uploadImg'
@@ -200,11 +201,6 @@ export default{
 			type:Boolean,
 			default:false
 		},
-		file:Array,
-		maxLen:{
-			type:Number,
-			default:null
-		}
 
 	},
 	data(){
@@ -222,7 +218,7 @@ export default{
 			inputId:'up-file'+this._uid,
 			newWin:'',
 			params:{},
-			fileList:this.file?this.file:[],
+			fileList:this.defaultFileList?this.defaultFileList:[],
 			serverUrl:'',
 			nowFile:{},
 			fileDetail:{},

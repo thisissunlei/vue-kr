@@ -46,16 +46,15 @@
                             <Select 
                                     v-model="formItem.communityId" 
                                     placeholder="请输入社区" 
-                                    label-in-value	
                                     style="width: 90px;"
                                     @on-change="communityChange"
                                 >
                                     <Option 
                                         v-for="item in communityList" 
-                                        :value="item.value" 
-                                        :key="item.value"
+                                        :value="item.id" 
+                                        :key="item.id"
                                     >
-                                        {{ item.label }}
+                                        {{ item.value }}
                                     </Option>
                             </Select>
                             <Select 
@@ -429,13 +428,7 @@ export default {
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                var comList=[].concat(res.data);
-                this.communityList=comList.map((item,index)=>{
-                    var list={};
-                    list.value=item.id;
-                    list.label=item.name;
-                    return list
-                })
+                this.communityList=[].concat(res.data);
                 this.formItem.communityId=res.data.length?res.data[0].id:'';
             }).catch((error)=>{
                 this.$Notice.error({
@@ -502,8 +495,7 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            console.log('pamr--',param);
-            //this.getFloorList(param);
+            this.getFloorList(param.value);
         }
     }
 }

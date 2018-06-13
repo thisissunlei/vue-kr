@@ -27,6 +27,7 @@
 			<slot  name="up-btn" ></slot>
 		
 		</div>
+		 <slot name="tip"></slot>
 		<div v-if="uiType=='uploadFile'">
 		
 			<div 

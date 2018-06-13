@@ -94,9 +94,10 @@
             <UploadFile 
                 :multiple="false"
                 :on-progress="onProgress"
-                :on-error="onError"
-                :beforeUpload="beforeUpload"
-            />
+            >
+             
+           
+            </UploadFile>
         </FormItem>
         <div class></div>
         <FormItem label="图标描述：" style="width:552px" prop="iconDesc">
@@ -190,14 +191,8 @@ export default {
   },
 
   methods:{
-      beforeUpload(){
-         
-      },
-      onError(error,file,fileList){
-          console.log('fileSuccess--response---->>>',error)
-          console.log('fileSuccess---file--->>>',file)
-          console.log('fileSuccess---fileList--->>>',fileList)
-      },
+      
+     
       onProgress(e,file,fileList){
          // console.log('file----Progress',e,'00008888>>>>',file,'hdhdhhd----',fileList)
       },

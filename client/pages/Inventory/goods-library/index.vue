@@ -9,13 +9,15 @@
             />
         </div>
         <SlotHead :class="theHead?'header-here':'header-no'"/>
+
         <div style="margin:0 20px;" class="attract-investment-table">
-            <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
+
+        <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
                 <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
-              <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
-            <Button style="margin-right:20px;" type="primary" @click="importgoods">倒入商品</Button>
-            </div>
+                <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
+                <Button style="margin-right:20px;" type="primary" @click="importgoods">导入商品</Button>
+         </div>
 
             
             <Table 
@@ -31,6 +33,7 @@
                     <Loading/>
                 </div>
             </Table>
+
             <div  class='list-footer'>
                 <div style="float: right;">
                     <Page :total="totalCount" :page-size='tabForms.pageSize' show-total show-elevator @on-change="onPageChange"/>
@@ -103,7 +106,7 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品  <span style="color:black;text-decoration:underline;">802</span></h2>
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">802</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
     
@@ -143,26 +146,35 @@
                 
             </div>
             <div style="text-align:left;margin-top:20px;">
-         <Upload action="//jsonplaceholder.typicode.com/posts/">
-         <span class="ghost">上传文件：</span>
-        <Button type="ghost" class="upload" icon="ios-cloud-upload-outline" ><Icon style="color:#2d8cf0;font-size:50px;" type="arrow-up-a"></Icon></Button>
-        </Upload>
+   
+             <ImportFile 
+            url="//jsonplaceholder.typicode.com/posts/"
+            @downFile="downFile"
+            @close="close"
+            @success="success"
+            @error="error"
+             />
             </div>
-             <div slot="footer">
-                 <Button type="primary"  >确定导入</Button>
-                 <Button type="ghost" @click="celPush" style="margin-left:20px" >取消</Button>
-            </div>
+              <div slot="footer"></div>
+
     </Modal>
+
     <!-- 导入成功 -->
         <Modal
+            v-model="importsuccess"
             title="倒入商品"
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
             <div style="text-align:left;">
-
-        
-           
+                <Form-item label="独立办公室:" style="margin-top:20px; word-wrap:break-word;" v-if="spaces.length">
+                                <span
+                                v-for="(item,index) in spaces"
+                                :key="item.id"
+                                >
+                                <span v-if="index!=0">,</span><span :style="'color:'+item.color">{{item.code}}</span>
+                                </span>
+                    </Form-item>
             </div>
              <div slot="footer" style="text-align:center;">
                  <Button type="primary">继续</Button>
@@ -175,6 +187,9 @@
 </template>
 
 <script>
+import FlagLabel from '~/components/FlagLabel';
+import ToolTip from '~/components/ToolTip';
+import ImportFile from '~/components/ImportFile';
 
 import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
@@ -193,13 +208,19 @@ export default {
        Message,
        SlotHead,
        ChangeStatus,
-       Newgoods
+       Newgoods,
+         FlagLabel,
+        ToolTip,
+        ImportFile
     },
       props:{
             mask:String
         },
     data() {
         return{
+            spaces:[],//导入成功返回独立办公室列表	
+            stations:[],//导入成功返回固定办公桌列表
+            importsuccess:false,//导入成功	
             formItem:{
                   godsStatus:'',
                   good:'',
@@ -468,13 +489,18 @@ export default {
             //添加弹窗2
             subGoods(){
                 alert('重名接口')
-                    this.getsubGoods();
+
                     this.butNewgoods();
          //重名      
                      this.newgoodForm.name=this.newgoodForm.name;
                      this.newgoodForm.floor=this.newgoodForm.floor;
                      this.$http.get('getNew-Rename',this.newgoodForm).then((response)=>{
-
+                            if(code==-1){
+                                alert('-1')
+                            this.getsubGoods();
+                            }else if(code==1){
+                            this.getNew();
+                            }
 
                     }).catch((error)=>{
                         this.openMessage=true;
@@ -484,7 +510,7 @@ export default {
       },    
      
    
-                  //新增接口
+                  //新增接口a
          getNew(){
              alert('新增')
           this.$http.post('getNew-lyadded',this.newgoodForm).then((response)=>{    
@@ -502,6 +528,24 @@ export default {
         celPush(){
                  this.vImport=!this.vImport;
         },
+
+     downFile(){
+                  alert('1')
+        },
+       close(){
+             this.vImport=!this.vImport;
+               alert('2')
+       },
+       error(){n
+              alert('3')
+       },
+       success(){
+                alert('4')
+
+
+                },
+
+
 
 
 

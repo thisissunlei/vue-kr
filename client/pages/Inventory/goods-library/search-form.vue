@@ -54,7 +54,7 @@
                                         :value="item.id" 
                                         :key="item.id"
                                     >
-                                        {{ item.value }}
+                                        {{ item.name }}
                                     </Option>
                             </Select>
                             <Select 
@@ -496,7 +496,7 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            this.getFloorList(param.value);
+            this.getFloorList(param);
         }
     }
 }

@@ -26,7 +26,7 @@
                           <Select 
                             v-model="formItem.goodsType" 
                             placeholder="请输入商品类型" 
-                            style="width: 200px"
+                            style="width: 200px;"
                             clearable
                         >
                             <Option v-for="item in productList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -36,15 +36,17 @@
                     <Form-item v-if="formItem.goodsType=='SPACE'" prop="capacity" label="工位数" class='daily-form'> 
                             <i-input 
                                 v-model="formItem.capacity" 
+                               placeholder="请输入工位数" 
                                 style="width: 200px"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                     </Form-item>
 
-                     <Form-item label="面积" class='daily-form' prop="area"  style="padding-left:10px;"> 
+                     <Form-item label="面积" class='daily-form' prop="area"  style="padding-left:10px;margin-left:-5px;"> 
                             <i-input 
                                 v-model="formItem.area" 
                                 style="width: 200px;"
+                                placeholder="请输入面积"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />	
                      </Form-item>
@@ -52,7 +54,7 @@
                       <Form-item v-if="formItem.goodsType=='SPACE'"  label="方位" class='daily-form'>     
                         <Select 
                             v-model="formItem.locationType" 
-                            style="width: 200px;margin-right:20px;margin-left:9px;"
+                            style="width: 200px;"
                             clearable
                         >
                             <Option v-for="item in locationTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -62,7 +64,7 @@
                      <Form-item v-if="formItem.goodsType=='SPACE'"  label="是否套间" class='daily-form'>     
                                     <Select 
                                     v-model="formItem.suiteType" 
-                                    style="width: 200px;margin-right:20px;margin-left:9px;"
+                                    style="width: 200px;"
                                     clearable
                                 >
                                     <Option v-for="item in locationList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -72,14 +74,16 @@
                       <Form-item label="商品定价"  prop="quotedPrice" class='daily-form'>
                             <i-input 
                                 v-model="formItem.quotedPrice" 
-                                style="width: 200px"
+                                style="width: 200px;margin-right:3px;"
+                                 placeholder="请输入定价"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
-                        <Form-item label="补充描述" prop="descr" class='daily-form'>
+                        <Form-item label="补充描述" prop="descr"  class='daily-form'>
                             <i-input 
                                 v-model="formItem.descr" 
                                 style="width: 200px"
+                                placeholder="请输入描述"
                                 @keyup.enter.native="onKeyEnter($event)"
                             />
                       </Form-item>
@@ -212,7 +216,7 @@ import dateUtils from 'vue-dateutils';
         },
         mounted(){
         
-        
+        console.log('eeeeeeeeeeeee',this.floorList)
                 },
         watch:{
               

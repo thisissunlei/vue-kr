@@ -36,7 +36,7 @@
                         placeholder="创建结束日期" 
                         style="width: 180px"
                     />
-                     </Form-item>de
+                     </Form-item>
                     <div style="color:red;" v-show="dateError">开始日期不能大于结束日期</div>  
              </Form-item>
              <Form-item label="修改为:"  style="margin-top:20px;">

@@ -182,9 +182,10 @@ export default {
          var param=params.map((item,index)=>{
              var list=Object.assign({},item);
              list.name=list.cellName;
+             list.seatType = list.belongType == 'STATION'?'OPEN':'SPACE';
              return list
          })
-         this.endParams.submitData=[].concat(param);
+         this.endParams.submitData=[].concat(this.originStationList).concat(param);
          this.$emit('on-result-change',this.endParams);
        }
     }

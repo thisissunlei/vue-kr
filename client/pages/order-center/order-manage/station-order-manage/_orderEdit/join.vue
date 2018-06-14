@@ -1202,7 +1202,8 @@ import ListAndMap from '../listAndMap';
                 this.saleAmounts = utils.smalltoBIG(0)
             },
             onResultChange:function(val){//组件互通数据的触发事件
-                this.selectLen=val.submitData.length;
+                let len=this.originStationList.length;
+                this.selectLen=val.submitData.length-len;
                 this.stationData = val;    
             },
             cancelStation:function(){//工位弹窗的取消

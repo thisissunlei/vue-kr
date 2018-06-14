@@ -34,7 +34,7 @@
                 <Option v-for="item in suiteTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </div>
-        <div style="margin-top:20px;">
+        <div style="margin-top:20px;height:500px;overflow:auto;">
             <Table :loading="loading" stripe  :columns="attractColumns" :data="attractData" border @on-selection-change="tableChange">
                 <div slot="loading">
                     <Loading/>
@@ -46,6 +46,7 @@
 
 <script>
 import Loading from '~/components/Loading';
+import dateUtils from 'vue-dateutils';
 export default {
     props:{
         floors:{
@@ -55,7 +56,11 @@ export default {
         originStationList:{
             type:Array,
             default:()=>[]
-        }
+        },
+        params:{
+            type:Object,
+            default:{}
+        },
     }, 
     components:{
        Loading
@@ -137,37 +142,36 @@ export default {
      mounted(){
         this.floorList=[].concat(this.floors);
         let len=this.floorList.length;
-        this.floorList.map((item,index)=>{
-            this.floorStr+=(this.floorStr?this.floorStr+',':this.floorStr)+item.value;
-        })
         if(len&&len>1){
             this.floorList.unshift({label:'全部楼层',value:' '});
             this.formItem.floor=this.floorList[1].value;
         }else if(len&&len<=1){
             this.formItem.floor=this.floorList[0].value;
         }
-        this.getListData(this.formItem);
+        let params=Object.assign({},this.params,this.formItem);
+        this.getListData(params);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },
      methods:{
        itemChangeHandler(val){
             if(!this.formItem.floor){
-               this.formItem.floor=this.floorStr;
+               this.formItem.floor=this.params.floor;
             }
-            this.getListData(this.formItem);
+            let params=Object.assign({},this.params,this.formItem);
+            this.getListData(params);
        },
        getListData(params){
            this.loading=true;
            this.$http.get('downOrderGoodsList',params).then((response)=>{
-                this.attractData=response.data.items;   
+                this.attractData=response.data;   
                 let len=this.originStationList.length;
                 if(len){
                    this.originStationList.map((item)=>{
-                       this.attractData.map((value)=>{
+                       this.attractData.length&&this.attractData.map((value)=>{
                            if(item.id==value.id){
-                               value.$set('checked',true);
+                               value.$set(item,'checked',true);
                            }else{
-                               value.$set('checked',false);
+                               value.$set(item,'checked',false);
                            }
                        })
                    }) 

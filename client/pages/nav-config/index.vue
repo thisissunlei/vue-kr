@@ -6,7 +6,7 @@
             <Button type="primary" @click="goEdit">新建{{modalPerson}}</Button>
             <div class="div-table">
 
-                <Table border :columns="columns1" :data="dataTable"></Table>
+                <Table border :columns="columns" :data="dataTable"></Table>
                 <div class="div-page">
                   <Page :total="100" show-sizer :current="page" @on-change="getRoleS"></Page>
                 </div>
@@ -20,20 +20,19 @@
         @on-cancel="quit">
         <div v-if="modalPerson">
             <Transfer
-
                 filterable
                 :data="userData"
                 :titles="['选择分配人员','已选人员列表']"
                 :target-keys="targetKeys"
-                :render-format="render1"
-                @on-change="handleChange1">
+                :render-format="renderFormat"
+                @on-change="transferChange">
             </Transfer>
         </div>
     </Modal>
 
 
     <Modal
-        v-model="modalEdit"
+        v-model="openEdit"
         :title="title"
         @on-ok="ok"
         @on-cancel="cancel">
@@ -44,25 +43,24 @@
                         <Col span="12">
                             <FormItem label="名称">
                                 <Input v-model="formTop.name" />
-                            </FormItem>
-                            
-                            </Col>
-                            <Col span="12">
+                            </FormItem> 
+                        </Col>
+                        <Col span="12">
                             <FormItem label="编码">
                                 <Input v-bind:disabled="title=='编辑权限'" v-model="formTop.code" />
                             </FormItem>
-                            </Col>
+                        </Col>
                     </Row>
                 </Form>
-                </div>
-                <div>
-                    数据权限：
-                </div>
-                <div>
-                    <table class="table">
-                        <tbody v-for="data in roleEditS" :key="data.code">
-                            <tr>
-                                <td>
+            </div>
+            <div>
+                数据权限：
+            </div>
+            <div>
+                <table class="table">
+                    <tbody v-for="data in roleEditS" :key="data.code">
+                        <tr>
+                            <td>
                                 <table class="table">
                                     <tbody>
                                         <tr>
@@ -72,10 +70,10 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                </td>
-                            </tr>
-                             <tr >
-                                 <td>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td>
                                 <table class="table">
                                     <tbody>
                                         <tr v-for="(line,index) in  data.children" :key="line.groupId">
@@ -90,15 +88,12 @@
                                             </td>
                                     </tr>
                                     </tbody>
-                                 
                                 </table>
-                                 </td>
-                             
-                            </tr>
-                        </tbody>
-                       
-                    </table>
-                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
         </div>
     </Modal>
@@ -107,126 +102,25 @@
 
 <script>
 import SectionTitle from '~/components/SectionTitle';
+import getColumns from './getColumns';
 export default {
-  data(){
-    return{
-        userData: [],
-        targetKeys: [],
-        modalEdit: false,
-        roleEditS:[],
-        modalPerson:false,
-        title:'',
-        // UserListAll:[],
-        formTop: {
-                    name: '',
-                    code: ''
-                },
-        columnsEdit:[
-                    {
-                        title: '编码',
-                        key: 'code'
-                    },
-                    {
-                        title: '名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '分配人员',
-                        key: 'resources'
-                    },
-                    {
-                        title: '操作人',
-                        key: 'creator'
-                    },
-                    {
-                        title: '操作时间',
-                        key: 'cTime'
-                    }
-        ],
-        columns1: [
-                    {
-                        title: '编码',
-                        key: 'code'
-                    },
-                    {
-                        title: '名称',
-                        key: 'name'
-                    },
-                    {
-                        title: '分配人员',
-                        key: 'resources'
-                    },
-                    {
-                        title: '操作人',
-                        key: 'creator'
-                    },
-                    {
-                        title: '操作时间',
-                        key: 'cTime'
-                    },
-                    {
-                        title: '操作',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small',
-                                    },
-                                    style: {
-                                        marginRight: '5px',
-                                        cursor:'pointer'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.goUpdateRole("编辑权限")
-                                        }
-                                    }
-                                }, '编辑权限'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                     
-                                    },
-                                      style: {
-                                        marginRight: '5px',
-                                        cursor:'pointer'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            //@click="instance('warning')"
-                                            this.instance('warning')
-                                        }
-                                    }
-                                }, '删除'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small',
-                                       
-                                    },
-                                      style: {
-                                        marginRight: '5px',
-                                        cursor:'pointer'
-                                    },
-                                    on: {
-                                        click: () => {
-                                             this.goUpdatePerson()
-                                        }
-                                    }
-                                }, '分配人员')
-
-                            ]);
-                        }
-                    }
-                ],
-                dataTable: [
-                    
-                ],
-                pageSize:10,
-                page:1
-            }
+    data(){
+        return{
+            userData: [],
+            targetKeys: [],
+            openEdit: false,
+            roleEditS:[],
+            modalPerson:false,
+            title:'',
+            formTop: {
+                name: '',
+                code: ''
+            },
+            columns: getColumns.columns.call(this),
+            dataTable: [],
+            pageSize:10,
+            page:1
+        }
     },
 
     components:{
@@ -237,62 +131,72 @@ export default {
       this.getRoleEdit()
     },
     methods:{
-            getUserData () {
-                let userData = [];
-              this.$http.get('getSsoUserListAll',).then((res)=>{
-      
-                  for(let item of res.data.items){
-            
-                      userData.push({
-                        key: item.uid,
-                        label: item.name,
-                        description: item.nickname,
-                        disabled: false
-                    });
-
-                  }
-              })
-             this.userData = userData;
-            
-            },
-            getTargetKeys () {
-
-              let existUser = []
-                this.$http.get('existUserListAll',).then((res)=>{
-      
-                  for(let item of res.data.items){
+        getUserData () {
+            let userData = [];
+            this.$http.get('getSsoUserListAll',).then((res)=>{
+    
+                for(let item of res.data.items){
         
-                    existUser.push(
-                        item.uid
-                    );
+                    userData.push({
+                    key: item.uid,
+                    label: item.name,
+                    description: item.nickname,
+                    disabled: false
+                });
 
-                  }
-                
-         
-              })
-               this.targetKeys =  existUser
-              
-            },
-            render1 (item) {
-                return item.label;
-            },
-            handleChange1 (newTargetKeys, direction, moveKeys) {
-                console.log(newTargetKeys);
-                console.log(direction);
-                console.log(moveKeys);
-                this.targetKeys = newTargetKeys;
-            },
+                }
+            })
+            this.userData = userData;
+        
+        },
+        getTargetKeys () {
+
+            let existUser = []
+            this.$http.get('existUserListAll',).then((res)=>{
+    
+                for(let item of res.data.items){
+    
+                existUser.push(
+                    item.uid
+                );
+
+                }
+            })
+            this.targetKeys =  existUser
+            
+        },
+        /**
+         * 穿梭框显示的数据格式化
+         */
+        renderFormat (item) {
+            return item.label;
+        },
+        /**
+         * 穿梭框change的触发事件
+         */
+        transferChange (newTargetKeys, direction, moveKeys) {
+            // console.log(newTargetKeys);
+            // console.log(direction);
+            // console.log(moveKeys);
+            this.targetKeys = newTargetKeys;
+        },
+        /**
+         * 人员分配ok
+         */
         sure(){
 
-            console.log( this.targetKeys)
+            // console.log( this.targetKeys)
             this.$http.post('addUser',{ssolds:null,id:this.targetKeys}).then((res=>{
               console.log('success')
             }))
 
 
         },
+        /**
+         * 人员弹窗关闭按钮
+         */
         quit(){
-
+            this.openEdit=false;
         },
         instance (type) {
                 const title = '提示';
@@ -309,14 +213,14 @@ export default {
             })
         },
         ok () {
-      
-        let params = {name:this.formTop.name,code:this.formTop.code,groupList:this.roleEditS}
-
-        console.log(params)
-
-        this.$http.post("roleSave",params).then((res)=>{
-            console.log(res)
-        })
+            let params = {
+                name:this.formTop.name,
+                code:this.formTop.code,
+                groupList:this.roleEditS
+            }
+            this.$http.post("roleSave",params).then((res)=>{
+                console.log(res)
+            })
 
 
         },
@@ -327,12 +231,12 @@ export default {
             this.title = "新建"
             this.formTop.name=''
             this.formTop.code=''
-            this.modalEdit = true
+            this.openEdit = true
          },
          goUpdateRole(param){
              this.title = param
            
-            this.modalEdit = true
+            this.openEdit = true
          },
          goUpdatePerson(param){
     
@@ -342,9 +246,12 @@ export default {
             this.getUserData();
          },
         getRoleS(){
-            this.$http.get('type/page',{page:this.page,pageSize:this.pageSize}).then((res)=>{
-            this.dataTable = res.data.items
-
+            let params = {
+                page:this.page,
+                pageSize:this.pageSize
+            }
+            this.$http.get('type/page',params).then((res)=>{
+                this.dataTable = res.data.items
             })
 
         },
@@ -352,8 +259,11 @@ export default {
            
         },
         getRoleEdit(){
-            this.$http.get('roledetail',{page:this.page,pageSize:this.pageSize}).then((res)=>{
-   
+            let params = {
+                page:this.page,
+                pageSize:this.pageSize
+            }
+            this.$http.get('roledetail',).then((res)=>{
                 this.roleEditS = res.data.groupList;
 
             })

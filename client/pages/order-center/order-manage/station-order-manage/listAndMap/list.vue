@@ -7,7 +7,7 @@
                placeholder="全部楼层"
                clearable
             >
-                <Option v-for="item in floors" :value="item.value" :key="item.value" >{{ item.label }}</Option>
+                <Option v-for="item in floorList" :value="item.value" :key="item.value" >{{ item.label }}</Option>
             </Select>
             <Select 
                 v-model="formItem.goodsType" 
@@ -62,10 +62,12 @@ export default {
     },
     data() {
         return{
+            floorList:[],
+            floorStr:'',
             formItem:{
                 page:1,
                 pageSize:100,
-                floor:this.floors.length?this.floors[0].value:'',
+                floor:' ',
                 goodsType:' ',
                 locationType:' ',
                 suiteType:' '
@@ -133,11 +135,25 @@ export default {
         }
      },
      mounted(){
+        this.floorList=[].concat(this.floors);
+        let len=this.floorList.length;
+        this.floorList.map((item,index)=>{
+            this.floorStr+=(this.floorStr?this.floorStr+',':this.floorStr)+item.value;
+        })
+        if(len&&len>1){
+            this.floorList.unshift({label:'全部楼层',value:' '});
+            this.formItem.floor=this.floorList[1].value;
+        }else if(len&&len<=1){
+            this.formItem.floor=this.floorList[0].value;
+        }
         this.getListData(this.formItem);
         this.$watch('formItem',this.itemChangeHandler,{ deep: true })
      },
      methods:{
        itemChangeHandler(val){
+            if(!this.formItem.floor){
+               this.formItem.floor=this.floorStr;
+            }
             this.getListData(this.formItem);
        },
        getListData(params){

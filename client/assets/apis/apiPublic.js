@@ -21,6 +21,24 @@ module.exports = {
         url:'/mockdata/77/pm/role/list/type/page',
         method:'get'
     },
-    
-   
+    'roledetail':{
+        url:'/mockdata/77/api/pm/role/action/detail',
+        method:'get'
+    },
+    'roleSave':{
+        url:'/mockdata/77/api/pm/role/action/add',
+        method:'post'
+    },
+    'getSsoUserListAll':{
+        url:'/mockdata/77/api/pm/role-resource/pmUser',
+        method:'get'
+    },
+    'existUserListAll':{
+        url:'/mockdata/77/api/pm/role-resource/exist',
+        method:'get'
+    },
+    'addUser':{
+        url:'/mockdata/77/api/pm/role-resource/add',
+        method:'get'
+    },
 }

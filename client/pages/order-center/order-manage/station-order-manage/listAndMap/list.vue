@@ -183,8 +183,10 @@ export default {
        tableChange(params){
          var param=params.map((item,index)=>{
              var list=Object.assign({},item);
-             list.name=list.cellName;
-             list.seatType = list.belongType == 'STATION'?'OPEN':'SPACE';
+             list.name=item.cellName;
+             list.seatType = item.belongType == 'STATION'?'OPEN':'SPACE';
+             list.seatId=item.belongId;
+             list.id=item.belongId;
              return list
          })
          this.endParams.submitData=[].concat(this.originStationList).concat(param);

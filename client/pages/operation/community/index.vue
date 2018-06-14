@@ -20,14 +20,14 @@
             <span class="content">
               <img src="~/assets/images/customer.png" alt="" style="margin:15px auto;width:30px;height:30px;margin-top:20px;">
             </span>
-            <span class="content title">现入驻客户</span>
+            <span class="content title">在驻客户</span>
             <span class="content number"><span>{{pageData.settledCustomer}}</span>个</span>
           </div>
           <div class="card-two item">
             <span class="content">
               <img src="~/assets/images/member.png" alt="" style="margin:12px auto;width:36px;height:33px;margin-top:20px;">
             </span>
-            <span class="content title">现入驻会员</span>
+            <span class="content title">在驻会员</span>
             <span class="content number"><span>{{pageData.settledMember}}</span>位</span>
           </div>
           <div class="card-three">
@@ -449,14 +449,14 @@ export default {
             console.log('机枪进场',res.data)
             this.list=res.data.items;
             this.list.length&&this.list.map((item,index)=>{
-                var way=item.toPutawayDays;
+                var way=item.toPutawayDays-1;
                 if(way&&way==1){
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<6){
+                }else if(way&&way<7){
                    item.payDaysName=this.getWeekNum(item.startDate);
-                }else if(way&&way>=6){
+                }else if(way&&way>=7){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';
@@ -475,14 +475,14 @@ export default {
             console.log('即将到期',res.data)
              this.DueList=res.data.items;
              this.DueList.length&&this.DueList.map((item,index)=>{
-                var way=item.leaseRemainingDays;
+                var way=item.leaseRemainingDays-1;
                 if(way&&way==1){
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<6){
+                }else if(way&&way<7){
                    item.payDaysName=this.getWeekNum(item.endDate);
-                }else if(way&&way>=6){
+                }else if(way&&way>=7){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';
@@ -553,9 +553,9 @@ export default {
                       item.payDaysName='今日'
                     }else if(item.compareTime&&item.compareTime==1){
                       item.payDaysName='明日'
-                    }else if(item.compareTime&&item.compareTime<6){
+                    }else if(item.compareTime&&item.compareTime<7){
                       item.payDaysName=this.getWeekNum(item.visitTime);
-                    }else if(item.compareTime&&item.compareTime>=6){
+                    }else if(item.compareTime&&item.compareTime>=7){
                       item.payDaysName=item.compareTime+'日后'
                     }else{
                       item.payDaysName='-';

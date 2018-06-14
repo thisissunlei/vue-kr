@@ -20,6 +20,11 @@
                     <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
+                <Col class="col">
+                    <FormItem label="销售" style="width:252px" prop="salerId" v-show="showSaleChance">
+                    <SelectChance name="formItem.salerId" @onChange="changeChance" ></SelectChance>
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -230,7 +235,8 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-import SelectSaler from '~/components/SelectSaler.vue'
+import SelectSaler from '~/components/SelectSaler.vue';
+import SelectChance from  '~/components/SelectSaleChance.vue';
 import DetailStyle from '~/components/DetailStyle';
 import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
@@ -254,6 +260,8 @@ import utils from '~/plugins/utils';
                 }
             };
             return {
+                test:"test",
+                showSaleChance:false,
                 showFree:false,
                 openStation:false,
                 inputNumberType:true,
@@ -396,6 +404,7 @@ import utils from '~/plugins/utils';
                     rentAmount:'',
                     items:[],
                     stationAmount:0,
+                    saleChanceId:''
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
@@ -455,6 +464,7 @@ import utils from '~/plugins/utils';
             selectCustomers,
             SelectSaler,
             planMap,
+            SelectChance
         },
          mounted(){
             GLOBALSIDESWITCH("false");
@@ -1003,9 +1013,9 @@ import utils from '~/plugins/utils';
                 }else{
                     this.formItem.communityId = '';
                 }
-                this.clearStation()
-                this.getFloor = +new Date()
-                
+                this.clearStation();
+                this.getFloor = +new Date();
+                this.validSaleChance();
             },
             clearStation:function(){
                 // 清除所选的工位
@@ -1030,19 +1040,34 @@ import utils from '~/plugins/utils';
 
                 }
             },
-            changeCustomer:function(value){
+            changeCustomer(value){
                 // 客户
                 if(value){
                     this.formItem.customerId = value;
                 }else{
                     this.formItem.customerId = '';
                 }
-                this.getFloor = +new Date()
+                this.getFloor = +new Date();
+                this.validSaleChance();
 
             },
-            changeSaler:function(value){
+            changeSaler(value){
                 // 销售员
                 this.formItem.salerId = value;
+                this.validSaleChance();
+            },
+            changeChance(value){
+                if (!value||value==='请选择') {
+                    this.formItem.saleChanceId='';
+                } else {
+                    this.formItem.saleChanceId=value;
+                }
+                console.log(value);
+            },
+            validSaleChance(){
+                console.log('2324');
+                console.log(this.formItem)
+                this.showSaleChance=this.formItem.salerId&&this.formItem.customerId&&this.formItem.communityId;
             },
             deleteStation:function(){
                 // 工位表单的删除按钮

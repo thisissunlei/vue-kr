@@ -20,7 +20,20 @@
                         <SelectSaler name="formItem.salerId" :onchange="changeSaler" :value="salerName"></SelectSaler>
                     </FormItem>
                 </Col>
-                
+                <Col class="col">
+                    <FormItem label="销售" style="width:252px" prop="salerId" v-show="showSaleChance">
+                        <SelectChance name="formItem.saleChanceId" :onchange="changeChance" :value="saleChanceId"></SelectChance>
+                        <!-- <Select
+                          
+                            filterable
+                            :placeholder='placeholder'          
+                            :disabled="disabled"
+                            :value="saleChanceId"
+                        >
+                                <Option v-for="(option, index) in salerOptions" :value="option"  :key="index">{{option}}</Option>
+                        </Select> -->
+                    </FormItem>
+                </Col>
             </Row>
             </DetailStyle>
             <DetailStyle info="租赁信息">
@@ -229,7 +242,7 @@
 import SectionTitle from '~/components/SectionTitle.vue'
 import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
-
+import SelectChance from  '~/components/SelectSaleChance.vue';
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
 
@@ -255,16 +268,20 @@ import utils from '~/plugins/utils';
             };
             
             return {
+                showSaleChance:true,
                 showFree:false,
                 openStation:false,
                 customerName:'',
                 communityName:'',
+                //销售机会list
+                salerOptions:[{value:' ',label:'请选择'}],
                 selectAll:false,
                 discountError:false,
                 index:0,
                 saleAmount:0,
                 saleAmounts:0,
                 salerName:'',
+                saleChanceId:'请选择',
                 depositAmount:'',
                 errorAmount:false,
                 disabled:false,
@@ -404,6 +421,7 @@ import utils from '~/plugins/utils';
                     items:[],
                     signDate:dateUtils.dateToStr("YYYY-MM-DD 00:00:00",new Date()),
                     stationAmount:0,
+                    saleChanceId:''
                 },
 
                 errorPayType:false,//付款方式的必填错误信息
@@ -454,12 +472,14 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap
+            planMap,
+            SelectChance
         },
         mounted(){
             this.getDetailData();
             this.getFreeDeposit();
             GLOBALSIDESWITCH("false");
+            this.getSalerList();
         },
         watch:{
            getFloor(){
@@ -482,6 +502,22 @@ import utils from '~/plugins/utils';
            },
         },
         methods: {
+            //获取机会列表
+             getSalerList(name){
+                let params = {
+                    phoneOrEmail:''
+                }
+                // this.http.get(name,params,()=>{})
+                //
+                this.http.get('get-saler', params, r => {
+                    this.salerOptions = this.salerOptions.concat(r.data);
+
+                }, e => {
+
+                    console.log('error',e)
+                })
+
+            },
             submitPrice(){
                 let price = false;
                 let _this = this;
@@ -574,8 +610,12 @@ import utils from '~/plugins/utils';
                     _this.formItem.customerId = JSON.stringify(data.customerId);
                     _this.customerName = data.customerName;
                     _this.formItem.communityId = JSON.stringify(data.communityId);
-                     _this.salerName = data.salerName;
+                    _this.salerName = data.salerName;
                     _this.formItem.salerId = JSON.stringify(data.salerId);
+
+                    _this.saleChanceId=data.saleChanceId?JSON.stringify(data.saleChanceId):'';
+                    _this.formItem.saleChanceId = data.saleChanceId?JSON.stringify(data.saleChanceId):'';
+
                     _this.communityName = data.communityName;
                     _this.formItem.startDate = new Date(data.startDate);
                     _this.formItem.endDate = new Date(data.endDate);
@@ -1091,6 +1131,14 @@ import utils from '~/plugins/utils';
             changeSaler:function(value){
                 // 销售员
                 this.formItem.salerId = value;
+            },
+            changeChance:function(value){
+                if (!value||value==='请选择') {
+                    this.formItem.saleChanceId='';
+                } else {
+                    this.formItem.saleChanceId=value;
+                }
+                console.log(value);
             },
             deleteStation:function(){
                 // 工位表单的删除按钮

@@ -79,6 +79,11 @@ export default {
   'order-first-payed': {
     url: '/api/krspace-finance-web/order-seat/check-order-payed',
     method: 'get'
+  },
+  //订单合同是否首付款
+  'order-first-payed': {
+    url: '/api/krspace-op-web/order-seat/orderStatus',
+    method: 'get'
   }
   
 } 

@@ -41,4 +41,8 @@ module.exports = {
         url:'/mockdata/77/api/pm/role-resource/add',
         method:'get'
     },
+    'roleEdit':{
+        url:'/mockdata/77api/pm/role/action/edit',
+        method:'get'
+    },
 }

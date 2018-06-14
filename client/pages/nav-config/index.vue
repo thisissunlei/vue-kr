@@ -331,6 +331,7 @@ export default {
          },
          goUpdateRole(param){
              this.title = param
+           
             this.modalEdit = true
          },
          goUpdatePerson(param){

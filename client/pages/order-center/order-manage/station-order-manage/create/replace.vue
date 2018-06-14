@@ -139,7 +139,7 @@
                     </Row>
                     <!-- 选择工位 -->
                     <Row style="margin-bottom:30px">
-                        <Button type="primary" @click="openPlanMap">选择工位</Button>
+                        <Button type="primary" @click="openPlanMap">添加房间/工位</Button>
                         <span style="padding:0 5px"> </span>
                         <Button type="primary" @click="entryPrice">录入单价</Button>
                     </Row>
@@ -319,13 +319,13 @@
 
         <Modal
             v-model="showMap"
-            title="选择工位"
+            title="选择商品"
             ok-text="保存"
             cancel-text="取消"
             width="90%"
             class-name="vertical-center-modal"
          >
-            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap"/>
+            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" @clear="clear"/>
             <div slot="footer">
                 <span v-if="selectLen">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
                 <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
@@ -862,6 +862,9 @@
            }
         },
         methods: {
+            clear(val){
+                this.selectLen=val.length;
+            },
             changeSaler(value){
                 this.formItem.salerId = value;
             },
@@ -1489,6 +1492,7 @@
                     submitData:this.selecedStationList,
                     deleteData:[],
                 };
+                this.selectLen=0;
                 this.showMap = false
 
             },

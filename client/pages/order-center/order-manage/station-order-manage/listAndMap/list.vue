@@ -165,6 +165,8 @@ export default {
                this.formItem.floor=this.params.floor;
             }
             let params=Object.assign({},this.params,this.formItem);
+            let newStation=[].concat(this.originStationList);
+            this.$emit('clear',newStation);
             this.getListData(params);
         },
         getListData(params){

@@ -5,14 +5,18 @@
               @searchClick="searchClick"
               @clearClick="clearClick"
               @initData="initData"
+              @getFloor="getFloor"
             />
         </div>
         <SlotHead :class="theHead?'header-here':'header-no'"/>
         <div style="margin:0 20px;" class="attract-investment-table">
             <div style="margin-bottom:10px;margin-top:-10px;font-size:12px;">
                 <Button style="margin-right:20px;" type="primary"   @click="openBatch">{{isShowBatch?'批量操作':'关闭批量模式'}}</Button>
-                <Button type="primary"  v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+                <Button type="primary" style="margin-right:20px;" v-if="!isShowBatch" @click="openStatus">修改状态</Button>
+              <Button style="margin-right:20px;" type="primary"   @click="butNewgoods">新增商品</Button>
+            <Button style="margin-right:20px;" type="primary" @click="importgoods">倒入商品</Button>
             </div>
+
             
             <Table 
                ref="selectionGoodsLibrary" 
@@ -54,7 +58,7 @@
                 />
             <div slot="footer">
                  <Button type="primary" @click="submitStatus">修改</Button>
-                 <Button type="ghost" style="margin-left:20px" @click="openStatus">取消</Button>
+                 <Button type="ghost" style="margin-left:20px" >取消</Button>
             </div>
         </Modal>
 
@@ -69,11 +73,110 @@
                      <Button type="primary" @click="openComplete" >成功</Button>
                 </div>
         </Modal>
+
+          <Modal
+            title="新增商品"
+            v-model="newmodal"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <Newgoods
+                   v-if="newmodal"
+                   :data="newgoodsData"
+                   :newgooddata="newgooddata"
+                   @newdateForm="newStatus"
+                   :floorList="floorList"
+                   :floorValue='floor'
+                />
+             <div slot="footer">
+                 <Button type="primary" @click="subGoods">确定添加</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="showStatus">取消</Button>
+            </div>
+            
+
+        </Modal>
+          <Modal
+
+            title="注意！"
+            v-model="careful"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品  <span style="color:black;text-decoration:underline;">802</span></h2>
+                <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
+            </div>
+    
+             <div slot="footer">
+                 <Button type="primary" @click="buttPush" >确定添加</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="showtPush">取消</Button>
+            </div>
+        </Modal>
+
+      <Modal
+            title="添加成功!"
+            v-model="butpush"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+                <p>请及时在<span style="color:red;text-decoration:underline;">平面图配置</span>中配置商品位置</p>
+            </div>
+    
+             <div slot="footer" style="text-align:center;">
+                 <Button type="primary" @click="showpush">我知道了</Button>
+            </div>
+     </Modal>
+
+
+     <!-- 倒入商品 -->
+     <Modal
+            title="倒入商品"
+            v-model="vImport"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;" class="uploadss">
+                <p>请下载模板，填写后导入</p>
+                <p>模板的首行请勿删除</p>
+                <p>商品名称不能重复</p>
+                
+            </div>
+            <div style="text-align:left;margin-top:20px;">
+         <Upload action="//jsonplaceholder.typicode.com/posts/">
+         <span class="ghost">上传文件：</span>
+        <Button type="ghost" class="upload" icon="ios-cloud-upload-outline" ><Icon style="color:#2d8cf0;font-size:50px;" type="arrow-up-a"></Icon></Button>
+        </Upload>
+            </div>
+             <div slot="footer">
+                 <Button type="primary"  >确定导入</Button>
+                 <Button type="ghost" @click="celPush" style="margin-left:20px" >取消</Button>
+            </div>
+    </Modal>
+    <!-- 导入成功 -->
+        <Modal
+            title="倒入商品"
+            class-name="vertical-center-modal"
+            style="text-align:center;"
+            >
+            <div style="text-align:left;">
+
+        
+           
+            </div>
+             <div slot="footer" style="text-align:center;">
+                 <Button type="primary">继续</Button>
+            </div>
+    </Modal>
+
+
+
     </div>
 </template>
 
 <script>
 
+import Newgoods from './newgoods';
 import ChangeStatus from './bulk-changes/change-status';
 import Loading from '~/components/Loading';
 import SearchForm from './search-form';
@@ -89,23 +192,35 @@ export default {
        SearchForm,
        Message,
        SlotHead,
-       ChangeStatus
+       ChangeStatus,
+       Newgoods
     },
       props:{
             mask:String
         },
     data() {
         return{
+            formItem:{
+                  godsStatus:'',
+                  good:'',
+            },
             errorData:[],
+            typelist2:[],
+            newgooddata:[],
+            careful:false,
             isShowBatch:true,
             switchParams:{},
             modifystate: false,
             complete: false,
+            newmodal:false,
+            butpush:false,
+            vImport:false,//导入
             warn:'',
             MessageType:'',
    
             openMessage:false,
             statusForm:{},
+            newgoodForm:{},
             tabForms:{
                 page:1,
                 pageSize:100
@@ -174,6 +289,7 @@ export default {
                 {
                     title: '商品定价',
                     key: 'quotedPrice',
+                   
                     width:90,
                     align:'right',
                   
@@ -210,9 +326,6 @@ export default {
                      }else{
                          colorClass=''
                      }
-
-
-
                         var rowArray=obj.row.followStatus;
                         var row='';
                         let classN='row-current-more current-more-task table-null';
@@ -292,7 +405,10 @@ export default {
                 }
             ],
             attractData:[],
-            statusData:[]    
+            statusData:[],
+            newgoodsData:[],
+            floorList:[], 
+            floor:''
         }
     },
     mounted(){
@@ -312,7 +428,9 @@ export default {
         },
         tabForms:function(val,old){
             this.getListData(this.tabForms); 
-        }
+            this.floor=this.tabForms.floor;
+        },
+    
     },
     destroyed(){
         var dom=document.getElementById('layout-content-main');
@@ -320,6 +438,73 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
+        getFloor(list){
+            this.floorList = [].concat(list);
+        },
+         butNewgoods(){//新增商品
+                     this.newmodal=!this.newmodal;      
+                  },
+        showStatus(){
+                     this.newmodal=!this.newmodal;  
+        },       
+         getsubGoods(){//注意
+                     this.careful=!this.careful;
+                     },
+         butPush(){//成功
+                    this.butpush=!this.butpush;
+         } ,        
+         showpush(){
+                  this.butpush=!this.butpush;
+         },
+         showtPush(){//二次确定
+              this.careful=!this.careful;
+         },   
+
+            buttPush(){
+                    this.butPush();
+                    this.getsubGoods();
+                    this.getNew();
+            },
+            //添加弹窗2
+            subGoods(){
+                alert('重名接口')
+                    this.getsubGoods();
+                    this.butNewgoods();
+         //重名      
+                     this.newgoodForm.name=this.newgoodForm.name;
+                     this.newgoodForm.floor=this.newgoodForm.floor;
+                     this.$http.get('getNew-Rename',this.newgoodForm).then((response)=>{
+
+
+                    }).catch((error)=>{
+                        this.openMessage=true;
+                        this.MessageType="error";
+                        this.warn=error.message;
+                    })
+      },    
+     
+   
+                  //新增接口
+         getNew(){
+             alert('新增')
+          this.$http.post('getNew-lyadded',this.newgoodForm).then((response)=>{    
+              console.log('新增接口',response.data);
+                        }).catch((error)=>{
+                            this.$Notice.error({
+                                title:error.message
+                            });
+                        })
+         },
+        //导入入口
+        importgoods(){
+                this.vImport=!this.vImport;
+        },
+        celPush(){
+                 this.vImport=!this.vImport;
+        },
+
+
+
         initData(formItem){
             this.tabForms=Object.assign({},this.tabForms,formItem);
         },
@@ -334,6 +519,10 @@ export default {
         updateStatus(obj){
            this.statusForm=Object.assign({},obj);  
         },
+         newStatus(obj){
+           this.newgoodForm=Object.assign({},obj);  
+        },
+        
         tableCommon(){
             var dailyTableDom=document.querySelectorAll('div.attract-investment-table')[0];
             if(dailyTableDom){
@@ -379,6 +568,7 @@ export default {
         openComplete(){
            this.complete=!this.complete;      
         },
+ 
         //格式转换
         dateSwitch(data){
             if(data){
@@ -429,60 +619,16 @@ export default {
 }
 </script>
 <style lang='less'>
-     .attract-investment{
-         .attract-search{
-             border-bottom:solid 1px #dddee1;
-             margin-bottom:20px;
-         }
-         .list-footer{
-            margin: 10px 20px;
-            overflow: hidden;
+    .upload{
+        width: 200px;
+    }
+    .ghost{
+        font-size: 18px;
+    }
+    .uploadss{
+        p{
+            line-height: 25px;
+            font-size: 16px;
         }
-        .ivu-table-cell{ 
-            padding:0;
-        }
-        .redClass{
-            color:red;
-        }
-        .current-range{
-            .ivu-table-cell{ 
-                .ivu-tooltip{
-                    .row-current-more{
-                        padding: 15px 0 10px 0;
-                    }
-                    .noBorder{
-                        border-bottom:none;
-                    }
-                }
-            }
-            .ivu-table-cell > div{
-                    border-bottom:solid 1px #e9eaec;
-                    &:last-child{
-                        border-bottom:none;
-                    }
-                }
-            .current-more-task{
-                width:100%;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
-            }
-            .table-null{
-                line-height: 47px;
-          
-            }
-        }
-        .header-here{
-            opacity:1;
-        }
-        .header-no{
-            transition: opacity 0.2 ease;
-            opacity: 0;
-        }
-        .attract-investment-table{
-            .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
-                background-color: #f6f6f6;
-            }
-        }
-     }
+    }
 </style>

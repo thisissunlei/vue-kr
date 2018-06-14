@@ -455,7 +455,8 @@ export default {
                     this.floorList.unshift({floor:' ',floorName:"全部楼层"})                        
                 }
                 this.formItem.floor=this.floorList.length?this.floorList[0].floor:' '; 
-                
+                console.log(this.floorList)
+                this.$emit('getFloor',this.floorList);
             }).catch((error)=>{
                 this.$Notice.error({
                     title:error.message

@@ -118,6 +118,16 @@ export default  {
      'getCommunityList': {
         url: '/song/api/order/cmt/community/date',
         method: 'get'
-    }
+    },
+     //新增借口
+     'getNew-lyadded': {
+        url: '/song/api/order/goods/add',
+        method: 'post'
+    },
+    //重名借口
+    'getNew-Rename': {
+       url: '/song/api/order/goods/check-name',
+       method: 'get'
+   }
   }
   

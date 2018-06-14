@@ -9,16 +9,25 @@
             }"
             minCalibration="50"
         />
+        <ImportFile 
+            url="//jsonplaceholder.typicode.com/posts/"
+            @downFile="downFile"
+            @close="close"
+            @success="success"
+            @error="error"
+        />
     </div>
 </template>
 
 <script>
 import FlagLabel from '~/components/FlagLabel';
 import ToolTip from '~/components/ToolTip';
+import ImportFile from '~/components/ImportFile';
 export default {
     components:{
         FlagLabel,
-        ToolTip
+        ToolTip,
+        ImportFile
     },
     data() {
         return{
@@ -31,7 +40,18 @@ export default {
         }
     },
     methods:{
-      
+       downFile(){
+
+       },
+       close(){
+
+       },
+       error(){
+
+       },
+       success(){
+           
+       }
     }
 }
 </script>

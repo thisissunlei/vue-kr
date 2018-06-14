@@ -54,7 +54,7 @@
                                         :value="item.id" 
                                         :key="item.id"
                                     >
-                                        {{ item.name }}
+                                        {{ item.value }}
                                     </Option>
                             </Select>
                             <Select 
@@ -428,7 +428,7 @@ export default {
         //社区接口
         getCommunityList(id){
             this.$http.get('getDailyCommunity',{cityId:id}).then((res)=>{
-                this.communityList=res.data;
+                this.communityList=[].concat(res.data);
                 this.formItem.communityId=res.data.length?res.data[0].id:'';
             }).catch((error)=>{
                 this.$Notice.error({
@@ -496,7 +496,7 @@ export default {
         },
         //社区change事件
         communityChange(param){
-            this.getFloorList(param);
+            this.getFloorList(param.value);
         }
     }
 }

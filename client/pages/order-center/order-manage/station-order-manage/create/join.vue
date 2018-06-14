@@ -194,7 +194,7 @@
         width="90%"
          class-name="vertical-center-modal"
      >
-        <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="openStation"></planMap>
+        <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
         <div slot="footer">
             <Button type="primary" @click="submitStation">确定</Button>
         </div>
@@ -232,10 +232,10 @@ import selectCommunities from '~/components/SelectCommunities.vue'
 import selectCustomers from '~/components/SelectCustomers.vue'
 import SelectSaler from '~/components/SelectSaler.vue'
 import DetailStyle from '~/components/DetailStyle';
-import planMap from '~/components/PlanMap.vue';
 import dateUtils from 'vue-dateutils';
 import '~/assets/styles/createOrder.less';
 import utils from '~/plugins/utils';
+import ListAndMap from '../listAndMap';
 
 
 
@@ -454,7 +454,7 @@ import utils from '~/plugins/utils';
             DetailStyle,
             selectCustomers,
             SelectSaler,
-            planMap,
+            ListAndMap
         },
          mounted(){
             GLOBALSIDESWITCH("false");

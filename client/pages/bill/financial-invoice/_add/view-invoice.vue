@@ -163,7 +163,7 @@
                 <div style="text-align: center;padding:0px 20px;">
                     <Button class="view-btn" @click="editClick('formItem')" :disabled="disabled" v-if="isReady">编辑</Button>
                     <Button class="view-btn" @click="handleSubmit('formItem')" :disabled="disabled">确定</Button>
-                    <Button class="view-btn" @click="rejectedSubmit" v-if="!isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
+                    <Button class="view-btn" @click="rejectedSubmit" v-if="isReady && formItem.verifyStatus=='VERIFYING'">驳回</Button>
                 </div>
             </FormItem>
 

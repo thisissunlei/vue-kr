@@ -1,13 +1,287 @@
 <template>
-    
+    <div class="g-product-meeting">
+        <SectionTitle title="会议室配置"></SectionTitle>
+        <div class="m-meeting-operation">
+             <Button type="primary" @click="jumpCreate">新建</Button>
+             <div class="u-select">
+                 <div class="u-select-list">
+                    <span class="u-select-label">所属社区</span>
+                    <Select
+                        v-model="formItem.billType"
+                        style="width:200px"
+                        placeholder="请选择"
+                        clearable
+                    >
+                        <Option
+                            v-for="item in communityList"
+                            :value="item.value"
+                            :key="item.value"
+                        >
+                            {{ item.label }}
+                        </Option>
+                    </Select>
+                 </div>
+                 <div class="u-select-list">
+                        <span  class="u-select-label">APP上架状态</span>
+                        <Select
+                            v-model="formItem.appStatus"
+                            style="width:100px"
+                            placeholder="请选择"
+                            clearable
+                        >
+                            <Option
+                                v-for="item in appStatusList"
+                                :value="item.value"
+                                :key="item.value"
+                            >
+                                {{ item.label }}
+                            </Option>
+                        </Select>
+                 </div>
+                 <div class="u-select-list">
+                        <span  class="u-select-label">KM上架状态</span>
+                        <Select
+                            v-model="formItem.billType"
+                            style="width:100px"
+                            placeholder="请选择"
+                            clearable
+                        >
+                            <Option
+                                v-for="item in KMStatusList"
+                                :value="item.value"
+                                :key="item.value"
+                            >
+                                {{ item.label }}
+                            </Option>
+                        </Select>
+                 </div>
+                
+             </div>
+             <div class="u-search">
+                  <div class="u-select-list">
+                        <span class="u-select-label">可容纳人数</span>
+                        <Input
+                            v-model="formItem.customerName"
+                            placeholder="请输入正整数"
+                            style="width: 100px"
+                        />
+                        <span class="u-input-line"> - </span> 
+                        <Input
+                            v-model="formItem.customerName"
+                            placeholder="请输入正整数"
+                            style="width: 100px"
+                        /> 
+                  </div>
+                  <div class="u-select-list">
+                        <span class="u-select-label">会议室名称</span>
+                        <Input
+                            v-model="formItem.customerName"
+                            placeholder="请输入搜索关键词"
+                            style="width: 150px"
+                        />
+                  </div>
+                  <div class="u-select-list">
+                        <span class="u-select-label">会议室编号</span>
+                        <Input
+                            v-model="formItem.customerName"
+                            placeholder="请输入搜索关键词"
+                            style="width: 150px"
+                        />
+                  </div>
+                  <Button type="primary" @click="lowerSubmit">搜索</Button>
+                  <!-- <div class='m-search' @click="lowerSubmit">搜索</div> -->
+             </div>
+            
+        </div>
+        <div class="u-table">
+            <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
+            <div style="margin: 10px 0 ;overflow: hidden">
+                <!-- <Button type="primary" @click="onExport">导出</Button> -->
+                <div style="float: right;">
+                    <Page
+                        :current="page"
+                        :total="totalCount"
+                        :page-size="pageSize"
+                        @on-change="changePage"
+                        show-total
+                        show-elevator
+                    ></Page>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
+import SectionTitle from '~/components/SectionTitle';
 export default {
-    
+    components:{
+        SectionTitle,
+    },
+    head () {
+        return {
+            title: "会议室配置"
+        }
+    },
+    data(){
+        return{
+            totalCount:0,
+            page:1,
+            pageSize:15,
+            tableData:[],
+            tabParams:{
+                page:1,
+                pageSize:15,
+            },
+            formItem:{
+
+            },
+            communityList:[],
+            appStatusList:[],
+            KMStatusList:[],
+            columns:[
+                {
+                    title: '会议室编号',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: '会议室名称',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: '所属社区',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: '可容纳人数',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: '所在楼层',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: 'APP上架状态',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: 'KM上架状态',
+                    key: 'tradeNo',
+                    align:'center',
+                },
+                {
+                    title: '操作',
+                    key: 'operation',
+                    align:'center',
+                    render:(h,params)=>{
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.jumpEdit(params.row);
+                                        }
+                                    }
+                                }, '编辑'),
+                                
+                                h(Buttons, {
+                                    props: {
+                                        type: 'text',
+                                        size: 'small',
+                                        label:'删除',
+                                        styles:'color:#2b85e4;padding: 2px 7px;',
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.openDelete(params.row);
+                                        }
+                                    }
+                                })
+                                
+                            ]);
+                        }
+
+                },
+            ],
+           
+        }
+    },
+    mounted(){
+
+    },
+    methods:{
+        changePage(){
+            this.tabParams.page=page;
+            this.page=page;
+            this.getTableData(this.tabParams);
+        },
+        lowerSubmit(){
+
+        },
+        jumpCreate(){
+
+        },
+        jumpEdit(){
+
+        },
+        openDelete(){
+            
+        }
+    }
 }
 </script>
-<style lang="less">
 
+<style lang="less">
+.g-product-meeting{
+    .m-meeting-operation{
+         padding:20px 20px;
+         height:130px;
+         .u-select{
+            display: inline-block;
+            padding-left:20px;
+            height:40px;
+         }
+         .u-select-list{
+             display: inline-block;
+             margin:0 20px;
+            
+         }
+         .u-select-label{
+             padding-right:10px;
+             white-space:nowrap; 
+         }
+         .u-search{
+             height:50px;
+             margin-top:15px;
+             .u-select-list{
+                 margin-left:0;
+             }
+         }
+        .m-search{
+            color:#2b85e4;
+            display:inline-block;
+            margin-left:10px;
+            font-size:14px;
+            cursor:pointer;
+            
+        }
+    }
+    .u-table{
+        padding:0 20px;
+    }
+
+}
 </style>
 
 

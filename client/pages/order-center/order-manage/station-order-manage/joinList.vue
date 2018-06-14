@@ -53,8 +53,8 @@
             >
                 <Nullify/>
                 <div slot="footer">
-                    <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
-                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button>
+                    <!-- <Button type="primary" :disabled="nullDisabled" @click="submitNullify">确定</Button>
+                    <Button type="ghost" style="margin-left:8px" @click="closeNullify">取消</Button> -->
                 </div>
             </Modal>
 

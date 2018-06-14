@@ -79,7 +79,7 @@ export default {
 		 xhr.send(form);
        },
        success(res){
-
+         
        },
        error(res){
 
@@ -89,7 +89,7 @@ export default {
            this.judgeRepeat();
        },
        judgeRepeat(){
-           
+
        }
     }
 }

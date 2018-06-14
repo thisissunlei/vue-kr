@@ -196,8 +196,9 @@
      >
         <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="openStation"/>
         <div slot="footer">
-            <Button type="primary" @click="submitStation">确定</Button>
-            <Button  @click="closeStation">取消</Button>
+            <span v-if="selectLen">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+            <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+            <Button  @click="cancelStation">取消</Button>
         </div>
     </Modal>
 
@@ -440,7 +441,8 @@ import ListAndMap from '../listAndMap';
                 price:'',
                 priceError:false,
                 //录入单价的数组
-                priceToStation:[]
+                priceToStation:[],
+                selectLen:0
 
             }
         },
@@ -1146,9 +1148,6 @@ import ListAndMap from '../listAndMap';
                 
 
             },
-            closeStation(){
-                this.openStation = !this.openStation;
-            },
             clearSale(){
                 this.formItem.items= [];
                 this.saleAmounts = utils.smalltoBIG(0);
@@ -1156,8 +1155,9 @@ import ListAndMap from '../listAndMap';
             },
             onResultChange:function(val){//组件互通数据的触发事件
                 console.log('onResultChange',val)
+                this.selectLen=val.submitData.length;
                 this.stationData = val;
-                
+                 
             },
             cancelStation:function(){//工位弹窗的取消
                 this.stationData = {

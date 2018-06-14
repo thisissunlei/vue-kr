@@ -350,7 +350,9 @@
            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"/>
             <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap> -->
             <div slot="footer">
-                <Button type="primary" @click="submitStation">确定</Button>
+                <span v-if="selectLen">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+                <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
+                <Button  @click="cancelStation">取消</Button>
             </div>
         </Modal>
         <div class="view" v-if="orderStatus=='view'">
@@ -422,6 +424,7 @@
                 }
             };
             return {
+                selectLen:0,
                 originBeginTime:'',
                 discountCon:'',
                 entryPriceList:[],
@@ -1546,6 +1549,7 @@
                 this.showMap = true;
             },
             onResultChange:function(val){//组件互通数据的触发事件
+                this.selectLen=val.submitData.length;
                 this.stationData = val;
             },
             cancelStation:function(){//工位弹窗的取消

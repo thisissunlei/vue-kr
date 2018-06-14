@@ -146,7 +146,6 @@ import dateUtils from 'vue-dateutils';
                    communityId:id 
                }
                   this.$http.get('getCommunityList',data).then((response)=>{    
-              console.log('社区66666666666666666666666666666666666',response.data)
                         this.formItem.startDate=dateUtils.dateToStr("YYYY-MM-DD",new Date(response.data.openDate));
                         
             }).catch((error)=>{

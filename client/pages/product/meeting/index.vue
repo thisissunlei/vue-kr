@@ -217,9 +217,9 @@ export default {
            
         }
     },
-    mounted(){
-
-    },
+    mounted:function(){
+		GLOBALSIDESWITCH("false");
+	},
     methods:{
         changePage(){
             this.tabParams.page=page;
@@ -230,7 +230,7 @@ export default {
 
         },
         jumpCreate(){
-
+             window.open(`/product/meeting/create`,'_blank');
         },
         jumpEdit(){
 

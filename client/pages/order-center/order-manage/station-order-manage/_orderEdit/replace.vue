@@ -350,7 +350,7 @@
            <ListAndMap :params.sync="params" :floors.sync="floors" :stationData.sync="stationData"  @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"  @clear="clear"/>
             <!-- <planMap :floors.sync="floors" :params.sync="params" :stationData.sync="stationData" @on-result-change="onResultChange" v-if="showMap" :originStationList.sync="originStationList"></planMap> -->
             <div slot="footer">
-                <span v-if="selectLen">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
+                <span v-if="selectLen&&showMap">已选中<span style="color:red;">{{selectLen}}</span>个商品</span>
                 <Button type="primary" @click="submitStation" style="margin-left:15px;">确定</Button>
                 <Button  @click="cancelStation">取消</Button>
             </div>

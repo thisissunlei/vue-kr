@@ -6,6 +6,11 @@ export default  {
         url: '/api/krspace-finance-web/krmting/room/list',
         method: 'get'
     },
+    //会议室商品--新建、编辑
+    'add-krmting-room': {
+        url: '/api/krspace-finance-web/krmting/room/add',
+        method: 'get'
+    },
     
   }
   

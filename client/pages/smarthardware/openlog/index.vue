@@ -31,7 +31,7 @@ export default {
         page : '',
         allData : false,
         searchData :{
-            page: 1,
+            lastId: '',
             pageSize:15
         },
         loading : false,
@@ -152,11 +152,10 @@ export default {
        submitSearchData(data){
 
            let _this =this;
-           this.page = 1;
            var timeObj = {
                sdate :(data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
                edate :(data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
-               page :1
+               lastId :''
            }
            var newObj = Object.assign({},_this.searchData,data,timeObj);
            this.searchData = newObj;
@@ -165,26 +164,40 @@ export default {
        },
        getListData(){
 
+           let _this =this;
            let params = this.searchData;
             this.$http.get('get-open-log-list',params).then((res)=>{
 
                 
-                this.page = res.data.page;
-                this.lastReq = res.data.items;
+                var itmesList = res.data.items;
+                
+
+                _this.lastReq = itmesList;
+                
                 
                 if(res.data.items.length<15){
                     this.allData = true;
                 }
-                if(res.data.page>1){
+                
+                if(this.searchData.lastId){
+
                     var arr = this.openLogList;
-                    var newArr = arr.concat(res.data.items);
-                    this.openLogList = newArr;
+                    var newArr = arr.concat(itmesList);
+                    _this.openLogList = newArr;
+
                 }else{
-                    this.openLogList = res.data.items;
+                    _this.openLogList = itmesList;
                 }
-                this.loading = false
+                    
+
+                if(itmesList.length>0){
+                    _this.searchData.lastId = itmesList[itmesList.length-1].id;
+                }else{
+                    _this.searchData.lastId = '';
+                }
+                _this.loading = false
             }).catch((error)=>{
-                this.$Notice.error({
+                _this.$Notice.error({
                     title:error.message
                 });
             })
@@ -232,16 +245,12 @@ export default {
                 var boxScrollHeight = openlogDom.scrollHeight;
 
                 if(boxScrollHeight-boxOffsetHeight  <= boxScrollTop+300){
-                    if(_this.lastReq.length<15){
+                    
+                    if(_this.loading ||_this.allData || _this.lastReq.length<15){
                         return;
                     }
-                    if(_this.loading){
-                        return;
-                    }
-                    console.log("=====");
                     
                     _this.loading = true;
-                    _this.searchData.page = _this.page+1;
                     _this.getListData();
                 }
 

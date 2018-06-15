@@ -163,7 +163,6 @@
             return html;
         }
         sidebarNavs.menuItems.map(function (item) {
-            console.log(item,"kkkkkkkkkk")
             let iconName = item.iconName ? item.iconName : '';
             if (item.hasOwnProperty('menuItems') && item.menuItems.length) {
                 html += '<div class="item"><div class="item-title"><span class = "icon-style ' + iconName + '"></span><span style="padding-left:40px">' + item.primaryText + '</span></div>';
@@ -1072,7 +1071,8 @@
                             },{
                                 primaryText: '开门记录',
                                 menuCode: 'iot_door_open_log',
-                                router: 'smarthardware/doorManage/openlog',
+                                type: 'vue',
+                                router: 'smarthardware/openlog',
                             },
                             {
                                 primaryText: '故障报警',

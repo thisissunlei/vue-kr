@@ -56,7 +56,19 @@
                                         placeholder="请输入" 
                                     />
                                 </FormItem>
-
+                                <div class="u-upload">
+                                        <div>会议室图片</div>
+                                        <UploadFile 
+                                            multiple
+                                            :category="category"
+                                            withCredentials
+                                            :format="['jpg','png','gif']"
+                                            maxSize="300"
+                                            
+                                        >
+                                            <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                                        </UploadFile>
+                                </div>
                                 <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"
@@ -180,6 +192,9 @@
                         </FormItem>
                     </DetailStyle>
                 </div>
+                 <FormItem  style="padding-left:24px;margin-top:40px">
+                    <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
+                </FormItem>  
           </Form>
     </div>
 </template>
@@ -187,14 +202,17 @@
 <script>
 import SectionTitle from '~/components/SectionTitle';
 import DetailStyle from '~/components/DetailStyle';
+import UploadFile from  '~/components/UploadFile';
 
 export default {
     components:{
         SectionTitle,
-        DetailStyle
+        DetailStyle,
+        UploadFile
     },
     data(){
         return {
+            category:'',
             formItem:{
 
             },
@@ -208,7 +226,41 @@ export default {
         GLOBALSIDESWITCH("false");
     },
     methods:{
-
+        handleSubmit(){
+             let message = '请填写完表单';
+                this.$Notice.config({
+                    top: 80,
+                    duration: 3
+                });
+                let _this = this;
+            //    if(!this.formItem.iconUrl){
+            //         this.isError=true;
+            //    }
+                // this.$refs[name].validate((valid) => {
+                //     if (valid && this.formItem.iconUrl) {
+                //         _this.submitCreate();
+                //     } else {
+                //         _this.$Notice.error({
+                //             title:message
+                //         });
+                //     }
+                // }) 
+        },
+        submitCreate(){
+            this.$http.post('create-icon', this.formItem).then((res)=>{
+                this.$Notice.success({
+                        title:'新建成功'
+                    });
+                    setTimeout(function(){
+                        window.close();
+                        window.opener.location.reload();
+                    },1000) 
+            }).catch((err)=>{
+                this.$Notice.error({
+                        title:err.message
+                    });
+            })
+        },
     }
     
 }
@@ -243,6 +295,15 @@ export default {
             width:30px;
             text-align: center;
         }
+    }
+    .u-upload{
+        width:100%;
+    }
+    .u-unload-tip{
+        line-height:30px;
+        text-indent: 12px;
+        color:#495060;
+
     }
 }
 

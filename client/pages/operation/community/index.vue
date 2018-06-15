@@ -87,7 +87,7 @@
                       即将进场 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                     </Tooltip>
                   </div>
-                <div class="header-right" v-if="list.length&&(list[0].toPutawayDays-1<7)">
+                <div class="header-right" v-if="list.length&&(list[0].toPutawayDays<8)">
                   {{list[0].toPutawayDays==1?'今日':list[0].toPutawayDays==2?'明日':this.getWeekNum(list[0].startDate)}}:
                   <span :style="!list.length?'':'color: #FF6868;'">{{list[0].remark1}}</span><span style="font-size:14px">个</span>
                   <span style="font-size:14px">({{list[0].remark2}}工位)</span>
@@ -123,7 +123,7 @@
                     即将到期 <span class="header-left-all" style="font-size:14px;">全部 ></span>
                   </Tooltip>
                 </div>   
-                <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays-1<7)">
+                <div class="header-right" v-if="DueList.length&&(DueList[0].leaseRemainingDays<8)">
                   {{DueList[0].leaseRemainingDays==1?'今日':DueList[0].leaseRemainingDays==2?'明日':this.getWeekNum(DueList[0].endDate)}}:
                   <span :style="DueList[0].remark1==0?'':'color: #FF6868;'">{{DueList[0].remark1}}</span><span style="font-size:14px">个</span>
                   <span style="font-size:14px">({{DueList[0].remark2}}工位)</span>
@@ -449,14 +449,14 @@ export default {
             console.log('机枪进场',res.data)
             this.list=res.data.items;
             this.list.length&&this.list.map((item,index)=>{
-                var way=item.toPutawayDays-1;
+                var way=item.toPutawayDays;
                 if(way&&way==1){
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<7){
+                }else if(way&&way<8){
                    item.payDaysName=this.getWeekNum(item.startDate);
-                }else if(way&&way>=7){
+                }else if(way&&way>=8){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';
@@ -475,14 +475,14 @@ export default {
             console.log('即将到期',res.data)
              this.DueList=res.data.items;
              this.DueList.length&&this.DueList.map((item,index)=>{
-                var way=item.leaseRemainingDays-1;
+                var way=item.leaseRemainingDays;
                 if(way&&way==1){
                    item.payDaysName='今日'
                 }else if(way&&way==2){
                    item.payDaysName='明日'
-                }else if(way&&way<7){
+                }else if(way&&way<8){
                    item.payDaysName=this.getWeekNum(item.endDate);
-                }else if(way&&way>=7){
+                }else if(way&&way>=8){
                    item.payDaysName=way-1+'日后'
                 }else{
                    item.payDaysName='-';

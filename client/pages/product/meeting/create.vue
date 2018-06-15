@@ -57,7 +57,7 @@
                                     />
                                 </FormItem>
 
-                                <FormItem label="领取有效期"  class="u-input u-date">
+                                <FormItem label="领取有效期"  class="u-date">
                                     <DatePicker
                                         type="date"
                                         v-model="formItem.startTime"
@@ -216,6 +216,25 @@ export default {
         max-width: 450px;
         margin-right:120px;
         vertical-align:top;
+    }
+    .u-date{
+        width:530px;
+        display: inline-block;
+        margin-right:120px;
+        vertical-align:top;
+        label{
+            width:100%;
+            display: block;
+            text-align: left;
+
+        }
+        .u-date-txt{
+            font-size: 14px;
+            color: #666666;
+            display: inline-block;
+            width:30px;
+            text-align: center;
+        }
     }
 }
 

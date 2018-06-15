@@ -63,7 +63,7 @@
                 />
             <div slot="footer">
                  <Button type="primary" @click="submitStatus">修改</Button>
-                 <Button type="ghost" style="margin-left:20px" >取消</Button>
+                 <Button type="ghost" style="margin-left:20px" @click="openStatus">取消</Button>
             </div>
         </Modal>
 
@@ -719,16 +719,72 @@ export default {
 }
 </script>
 <style lang='less'>
-    .upload{
-        width: 200px;
-    }
-    .ghost{
-        font-size: 18px;
-    }
-    .uploadss{
-        p{
-            line-height: 25px;
-            font-size: 16px;
+ .attract-investment{
+          .upload{
+                width: 200px;
+           }
+           .ghost{
+            font-size: 18px;
+           }
+           .uploadss{
+            p{
+                line-height: 25px;
+                font-size: 16px;
+            }
+          }
+         .attract-search{
+             border-bottom:solid 1px #dddee1;
+             margin-bottom:20px;
+         }
+         .list-footer{
+            margin: 10px 20px;
+            overflow: hidden;
         }
-    }
+        .ivu-table-cell{ 
+            padding:0;
+        }
+        .redClass{
+            color:red;
+        }
+        .current-range{
+            .ivu-table-cell{ 
+                .ivu-tooltip{
+                    .row-current-more{
+                        padding: 15px 0 10px 0;
+                    }
+                    .noBorder{
+                        border-bottom:none;
+                    }
+                }
+            }
+            .ivu-table-cell > div{
+                    border-bottom:solid 1px #e9eaec;
+                    &:last-child{
+                        border-bottom:none;
+                    }
+                }
+            .current-more-task{
+                width:100%;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+            }
+            .table-null{
+                line-height: 47px;
+          
+            }
+        }
+        .header-here{
+            opacity:1;
+        }
+        .header-no{
+            transition: opacity 0.2 ease;
+            opacity: 0;
+        }
+        .attract-investment-table{
+            .ivu-table-stripe .ivu-table-body tr:nth-child(2n) td, .ivu-table-stripe .ivu-table-fixed-body tr:nth-child(2n) td{
+                background-color: #f6f6f6;
+            }
+        }
+     }
 </style>

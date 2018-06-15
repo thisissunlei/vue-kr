@@ -236,7 +236,6 @@ export default {
 		this.getTableData(this.tabParams)
 	},
     methods:{
-        //
         changePage(){
             this.tabParams.page=page;
             this.page=page;
@@ -261,8 +260,9 @@ export default {
         jumpCreate(){
              window.open(`/product/meeting/create`,'_blank');
         },
-        jumpEdit(){
-
+        jumpEdit(params){
+            window.open(`/product/meeting/edit/${params.id}`,'_blank');
+          
         },
         openDelete(){
             

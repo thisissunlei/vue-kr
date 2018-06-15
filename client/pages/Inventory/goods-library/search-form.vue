@@ -330,7 +330,7 @@ export default {
                    
                     rentTimeType:'GT',
                     locationType:' ',
-                    suiteName:' ',
+                    suiteType:' ',
 
                     source:[],
 

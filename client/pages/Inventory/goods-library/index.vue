@@ -73,7 +73,7 @@
             class-name="vertical-center-modal"
             style="text-align:center;"
             >
-                <span style="color:red;">{{statusData.length}}</span>个商品修改状态成功！
+                <span style="color:red;">{{statusOldData.length}}</span>个商品修改状态成功！
                   <div slot="footer" style="text-align:center;">
                      <Button type="primary" @click="openComplete" >成功</Button>
                 </div>
@@ -456,7 +456,8 @@ export default {
                 name:'',
                 
 
-            }
+            },
+            statusOldData:[]    
         }
     },
     mounted(){
@@ -635,7 +636,14 @@ export default {
             }
         },
         openStatus(){
+            if(!this.statusData.length){
+                this.$Notice.error({
+                    title:'请选择至少一个商品'
+                });
+                return ;
+            }
             this.modifystate=!this.modifystate;
+            this.errorData=[];
         },
         submitStatus(){
             this.statusForm.startDate=this.dateSwitch(this.statusForm.startDate);
@@ -648,6 +656,7 @@ export default {
                     this.openStatus()
                     this.openComplete();
                     this.getListData(this.tabForms);
+                    this.statusData=[];
               }
             }).catch((error)=>{
                 this.$Notice.error({
@@ -683,6 +692,7 @@ export default {
       },
       tableChange(select){
           this.statusData=select;
+          this.statusOldData=select;
       },
       getListData(params){//列表
            this.loading=true;

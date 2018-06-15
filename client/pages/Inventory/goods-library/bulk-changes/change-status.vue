@@ -53,7 +53,7 @@
                     </RadioGroup> 
                    <div   v-if="formItem.goodsStatus=='DISABLE'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">显示</span>在平面图上，显<span style="color:red;">计入</span>出租率统计</div>
                    <div   v-if="formItem.goodsStatus=='OFF'&&!errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;">不可用的商品<span style="color:red;">不显示</span>在平面图上，显<span style="color:red;">不计入</span>出租率统计</div>
-                  <div     v-if="errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;"><span style="color:red;">部分商品该时段有合同，不能设为下架或不可用</span></div>
+                   <div    v-if="errorData.length" style="margin-left:110px;display:inline-block;margin-right:47px;"><span style="color:red;">部分商品该时段有合同，不能设为下架或不可用</span></div>
 
              </Form-item>
              <Form-item label="修改原因:"  style="margin-top:20px;">
@@ -185,6 +185,7 @@ import dateUtils from 'vue-dateutils';
                     list.seatId=item.id;
                     list.seatType=item.seatType;
                     list.color=item.color;
+                    list.capacity=item.capacity;
                     goodsMiddle.push(list);
                 })
                 this.formItem.goodListText=JSON.stringify(goodsMiddle);

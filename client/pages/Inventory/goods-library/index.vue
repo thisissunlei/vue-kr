@@ -110,7 +110,7 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">802</span></h2>
+                <h2 style="color:red;margin-bottom:10px;">此社区内已有重名的商品<span style="color:black;text-decoration:underline;">{{errdate}}</span></h2>
                 <p>请确定是否真的要添加一个重名的商品，重名商品自动绑定相同的硬件设备</p>
             </div>
     
@@ -127,7 +127,7 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <p>请及时在<span style="color:red;text-decoration:underline;">平面图配置</span>中配置商品位置</p>
+                <p>请及时在<span  @click="clanar"  style="color:red;text-decoration:underline;cursor: pointer;">平面图配置</span>中配置商品位置</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -138,7 +138,7 @@
 
      <!-- 倒入商品 -->
      <Modal
-            title="倒入商品"
+            title="导入商品"
             v-model="vImport"
             class-name="vertical-center-modal"
             style="text-align:center;"
@@ -167,18 +167,15 @@
             v-model="importsuccess"
             title="导入商品"
             class-name="vertical-center-modal"
-            style="text-align:center;"
-            >
+            style="text-align:center;">
             <div style="text-align:left;">
             <span>独立办公室：</span>
             </div>
-
              <div style="text-align:left;">
             <span>固定办公室：</span>
             </div>
-
              <div slot="footer" style="text-align:center;">
-                 <Button type="primary" @click="subuccess" >继续</Button>
+                 <Button type="primary" @click="subsuccess" >继续</Button>
             </div>
     </Modal>
 
@@ -190,7 +187,7 @@
             style="text-align:center;"
             >
             <div style="text-align:left;">
-                <p>请及时在<span style="color:red;text-decoration:underline;">平面图配置</span>中配置商品位置</p>
+                <p>请及时在<span style="color:red;text-decoration:underline;" >平面图配置</span>中配置商品位置</p>
             </div>
     
              <div slot="footer" style="text-align:center;">
@@ -239,6 +236,7 @@ export default {
             stations:[],//导入成功返回固定办公桌列表
             importsuccess:false,//导入成功	
             butsuccess:false,
+            errdate:'',
             formItem:{
                   godsStatus:'',
                   good:'',
@@ -492,6 +490,9 @@ export default {
         window.removeEventListener('resize',this.onResize); 
     },
     methods:{
+        clanar(){
+            window.open('/new/#/product/communityAllocation/communityPlanList','_blank')
+        },
         getFloor(list){
             this.floorList = [].concat(list);
         },
@@ -521,26 +522,33 @@ export default {
             },
             //添加弹窗2
             subGoods(){
-                        //新增重名      
-                       console.log('66666666666666666666',this.serform)
-                     this.$http.get('getNew-Rename',this.serform).then((response)=>{
+                        //新增重名     
+                     let data=Object.assign({},this.newgoodForm,{communityId:this.serform.communityId}); 
+                       console.log('66666666666666666666',this.serform);
+                       
+                     this.$http.get('getNew-Rename',data).then((response)=>{
                              this.getNew();
                              this.butPush();
                              this.butNewgoods();
                     }).catch((error)=>{
-                              if(error.message){
+                        console.log('err',error)
+                              if(!error.message){
+                                   this.getsubGoods(error.data);
+                                   this.errdate=error.data;
+                            } else{
                                 this.openMessage=true;
                                 this.MessageType="error";
                                 this.warn=error.message;
-                            } else{
-                                this.getsubGoods(error.data);
                             } 
                     })
       },    
-                  //新增接口a
+
+
+       //新增接口a
              getNew(){
-                alert('新增')
-            this.$http.post('getNew-lyadded',this.newgoodForm).then((response)=>{    
+                console.log('新增',this.newgoodForm);
+            let data=Object.assign({},this.newgoodForm,{communityId:this.serform.communityId});
+            this.$http.post('getNew-lyadded',data).then((response)=>{    
                 console.log('新增接口',response.data);
                             }).catch((error)=>{
                                 this.$Notice.error({
@@ -561,6 +569,9 @@ export default {
                  this.vImport=!this.vImport;
         },
 
+    subsuccess(){
+                this.butsuccess=!this.butsuccess
+    },      
 
     
        close(){
@@ -607,6 +618,7 @@ export default {
            this.statusForm=Object.assign({},obj);  
         },
          newStatus(obj){
+           console.log('eeeeeeeeeeeeeeeee',obj)
            this.newgoodForm=Object.assign({},obj);  
         },
          searchstart(obj){
@@ -717,6 +729,7 @@ export default {
     }
     .uploadss{
         p{
+            
             line-height: 25px;
             font-size: 16px;
         }

@@ -121,12 +121,12 @@ export default  {
     },
      //新增借口
      'getNew-lyadded': {
-        url: '/api/krspace-op-web/cmt/goods/add',
+        url: '/zhongyu/api/krspace-op-web/cmt/goods/add',
         method: 'post'
     },
     //新曾重名借口
     'getNew-Rename': {
-       url: '/api/krspace-op-web/cmt/goods/check-name',
+       url: '/zhongyu/api/krspace-op-web/cmt/goods/check-name',
        method: 'get'
    },
     //下单选择商品列表

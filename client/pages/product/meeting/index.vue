@@ -89,14 +89,12 @@
                         />
                   </div>
                   <Button type="primary" @click="lowerSubmit">搜索</Button>
-                  <!-- <div class='m-search' @click="lowerSubmit">搜索</div> -->
              </div>
             
         </div>
         <div class="u-table">
             <Table border  :columns="columns" :data="meetingList" ref="table" stripe></Table>
             <div style="margin: 10px 0 ;overflow: hidden">
-                <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
                     <Page
                         :current="page"
@@ -255,7 +253,10 @@ export default {
                 
         },
         lowerSubmit(){
-
+            let params=Object.assign({},this.formItem);
+            params.page=1;
+            params.pageSize=15;
+            this.getTableData(params);
         },
         jumpCreate(){
              window.open(`/product/meeting/create`,'_blank');
@@ -264,7 +265,7 @@ export default {
             window.open(`/product/meeting/edit/${params.id}`,'_blank');
           
         },
-        openDelete(){
+        openDelete(params){
             
         }
     }

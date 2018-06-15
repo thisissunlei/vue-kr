@@ -4,14 +4,14 @@
          <Form ref="formItem" :model="formItem" :rules="ruleCustom">
                 <div class="m-detail-content">
                     <DetailStyle info="会议室基本信息">
-                               <FormItem label="会议室名称" class="u-input"  prop="value">
+                               <FormItem label="会议室名称" class="u-input"  prop="name">
                                     <Input 
-                                        v-model="formItem.value" 
+                                        v-model="formItem.name" 
                                         placeholder="请输入" 
                                         style="width:250px"
                                     />
                                 </FormItem>
-                                <FormItem label="所属社区" class="u-input">
+                                <FormItem label="所属社区" class="u-input" prop="communityId">
                                     <Select
                                         v-model="formItem.communityId"
                                         style="width:250px"
@@ -22,9 +22,9 @@
                                         <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                                     </Select>
                                  </FormItem>
-                                 <FormItem label="所在楼层" class="u-input">
+                                 <FormItem label="所在楼层" class="u-input" prop="floor">
                                     <Select
-                                        v-model="formItem.communityId"
+                                        v-model="formItem.floor"
                                         style="width:250px"
                                         placeholder="请选择"
                                         filterable
@@ -33,9 +33,9 @@
                                         <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                                <FormItem label="所属空间" class="u-input">
+                                <FormItem label="所属空间" class="u-input" prop="spaceId">
                                     <Select
-                                        v-model="formItem.communityId"
+                                        v-model="formItem.spaceId"
                                         style="width:250px"
                                         placeholder="请选择"
                                         filterable
@@ -44,18 +44,30 @@
                                         <Option  v-for="item in communityList" :value="item.id"  :key="item.id" >{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                                <FormItem label="面积（㎡）" class="u-input" prop="tradeNo">
+                                <FormItem label="面积（㎡）" class="u-input" prop="area">
                                     <Input 
-                                        v-model="formItem.tradeNo" 
+                                        v-model="formItem.area" 
                                         placeholder="请输入" 
                                     />
                                 </FormItem>
-                                 <FormItem label="可容纳人数" class="u-input" prop="tradeNo">
+                                 <FormItem label="可容纳人数" class="u-input" prop="capacity">
                                     <Input
-                                        v-model="formItem.tradeNo" 
+                                        v-model="formItem.capacity" 
                                         placeholder="请输入" 
                                     />
                                 </FormItem>
+                                <div class="u-upload">
+                                        <div class="u-unload-label">封面图片</div>
+                                        <UploadFile 
+                                            :category="category"
+                                            withCredentials
+                                            :format="['jpg','png','gif']"
+                                            maxSize="300"
+                                            
+                                        >
+                                            <div slot="tip" class="u-unload-tip">图片小于300KB，格式为JPG，PNG，GIF，建议图片比例为4:3；</div>
+                                        </UploadFile>
+                                </div>
                                 <div class="u-upload">
                                         <div class="u-unload-label">会议室图片</div>
                                         <UploadFile 
@@ -76,7 +88,7 @@
                                         placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
                                         @on-change="startChange"
-                                    ></DatePicker>
+                                    />
                                         <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
@@ -92,7 +104,7 @@
                                             placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
                                             @on-change="endChange"
-                                    ></DatePicker>
+                                    />
                                     <TimePicker 
                                             format="HH:mm" 
                                             placeholder="请选择" 
@@ -102,19 +114,18 @@
                                             @on-clear="endHourClear"
                                         />
                                 </FormItem>
-                                 <FormItem label="补充描述" style="width:552px" prop="iconDesc">
+                                 <FormItem label="补充描述" style="width:552px">
                                     <Input 
-                                        v-model="formItem.iconDesc" 
+                                        v-model="formItem.descr" 
                                         placeholder=""
                                         type="textarea"
-                                        
                                     />
                                 </FormItem>
-                               
                     </DetailStyle>
+
                     <DetailStyle info="APP商品信息">
-                        <FormItem label="上架状态" class="u-input" style="width:250px" prop="enable">
-                            <RadioGroup v-model="formItem.enable" style="width:250px">
+                        <FormItem label="上架状态" class="u-input" style="width:250px" prop="appPublish">
+                            <RadioGroup v-model="formItem.appPublish" style="width:250px">
                                 <Radio label="1">
                                     已上架
                                 </Radio>
@@ -129,32 +140,34 @@
                                     format="HH:mm" 
                                     placeholder="00:00" 
                                     style="width: 122px" 
+                                    v-model="formItem.appStartTime"
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
                                     format="HH:mm" 
                                     placeholder="24:00" 
                                     style="width: 122px" 
+                                    v-model="formItem.appEndTime"
                                 />
                            </div>
                         </FormItem>
-                         <FormItem label="忙时单价（￥/0.5h）（11：00-18：00）" class="u-input" prop="tradeNo">
+                         <FormItem label="忙时单价（￥/0.5h）（11：00-18：00）" class="u-input" prop="appBusyPrice">
                                 <Input
-                                    v-model="formItem.tradeNo" 
+                                    v-model="formItem.appBusyPrice" 
                                     placeholder="请输入" 
                                 />
                         </FormItem>
-                         <FormItem label="闲时单价（￥/0.5h）（其他时段）" class="u-input" prop="tradeNo">
+                         <FormItem label="闲时单价（￥/0.5h）（其他时段）" class="u-input" prop="appIdlePrice">
                                 <Input
-                                    v-model="formItem.tradeNo" 
+                                    v-model="formItem.appIdlePrice" 
                                     placeholder="请输入" 
                                 />
                         </FormItem>
                     </DetailStyle>
 
                     <DetailStyle info="KrMeeting商品信息">
-                        <FormItem label="上架状态" class="u-input" style="width:250px" prop="enable">
-                            <RadioGroup v-model="formItem.enable" style="width:250px">
+                        <FormItem label="上架状态" class="u-input" style="width:250px" prop="krmPublish">
+                            <RadioGroup v-model="formItem.krmPublish" style="width:250px">
                                 <Radio label="1">
                                     已上架
                                 </Radio>
@@ -169,32 +182,34 @@
                                     format="HH:mm" 
                                     placeholder="00:00" 
                                     style="width: 122px" 
+                                    v-model="formItem.krmStartTime"
                                 />
                                 <span style="padding:0 10px;">至</span>
                                 <TimePicker 
                                     format="HH:mm" 
                                     placeholder="24:00" 
-                                    style="width: 122px" 
+                                    style="width: 122px"
+                                    v-model="formItem.krmEndTime" 
                                 />
                            </div>
                         </FormItem>
-                         <FormItem label="单价（￥/0.5h）" class="u-input" prop="tradeNo">
+                         <FormItem label="单价（￥/0.5h）" class="u-input" prop="kmUnitPrice">
                                 <Input
-                                    v-model="formItem.tradeNo" 
+                                    v-model="formItem.kmUnitPrice" 
                                     placeholder="请输入" 
                                 />
                         </FormItem>
-                         <FormItem label="优惠后单价（￥/0.5h）" class="u-input" prop="tradeNo">
+                         <FormItem label="优惠后单价（￥/0.5h）" class="u-input" prop="kmPromotionUnitPrice">
                                 <Input
-                                    v-model="formItem.tradeNo" 
+                                    v-model="formItem.kmPromotionUnitPrice" 
                                     placeholder="请输入" 
                                 />
                         </FormItem>
                     </DetailStyle>
                 </div>
-                 <FormItem  style="padding-left:24px;margin-top:40px">
+                  <FormItem  style="padding-left:24px;margin-top:40px">
                     <Button type="primary" @click="handleSubmit('formItems')" >提交</Button>
-                </FormItem>  
+                </FormItem> 
           </Form>
     </div>
 </template>

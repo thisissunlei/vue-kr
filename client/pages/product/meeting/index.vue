@@ -7,7 +7,7 @@
                  <div class="u-select-list">
                     <span class="u-select-label">所属社区</span>
                     <Select
-                        v-model="formItem.billType"
+                        v-model="formItem.communityId"
                         style="width:200px"
                         placeholder="请选择"
                         clearable
@@ -24,13 +24,13 @@
                  <div class="u-select-list">
                         <span  class="u-select-label">APP上架状态</span>
                         <Select
-                            v-model="formItem.appStatus"
+                            v-model="formItem.appPublish"
                             style="width:100px"
                             placeholder="请选择"
                             clearable
                         >
                             <Option
-                                v-for="item in appStatusList"
+                                v-for="item in statusList"
                                 :value="item.value"
                                 :key="item.value"
                             >
@@ -41,13 +41,13 @@
                  <div class="u-select-list">
                         <span  class="u-select-label">KM上架状态</span>
                         <Select
-                            v-model="formItem.billType"
+                            v-model="formItem.kmPublish"
                             style="width:100px"
                             placeholder="请选择"
                             clearable
                         >
                             <Option
-                                v-for="item in KMStatusList"
+                                v-for="item in statusList"
                                 :value="item.value"
                                 :key="item.value"
                             >
@@ -61,13 +61,13 @@
                   <div class="u-select-list">
                         <span class="u-select-label">可容纳人数</span>
                         <Input
-                            v-model="formItem.customerName"
+                            v-model="formItem.minCapacity"
                             placeholder="请输入正整数"
                             style="width: 100px"
                         />
                         <span class="u-input-line"> - </span> 
                         <Input
-                            v-model="formItem.customerName"
+                            v-model="formItem.maxCapacity"
                             placeholder="请输入正整数"
                             style="width: 100px"
                         /> 
@@ -75,7 +75,7 @@
                   <div class="u-select-list">
                         <span class="u-select-label">会议室名称</span>
                         <Input
-                            v-model="formItem.customerName"
+                            v-model="formItem.roomName"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -83,7 +83,7 @@
                   <div class="u-select-list">
                         <span class="u-select-label">会议室编号</span>
                         <Input
-                            v-model="formItem.customerName"
+                            v-model="formItem.roomCode"
                             placeholder="请输入搜索关键词"
                             style="width: 150px"
                         />
@@ -136,8 +136,16 @@ export default {
 
             },
             communityList:[],
-            appStatusList:[],
-            KMStatusList:[],
+            statusList:[
+                {
+                 label:'已上架',
+                 value:'true'   
+                },
+                {
+                 label:'未上架',
+                 value:'false'   
+                },
+            ],
             columns:[
                 {
                     title: '会议室编号',

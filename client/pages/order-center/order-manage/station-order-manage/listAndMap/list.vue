@@ -106,7 +106,8 @@ export default {
                 {
                     title: '商品定价',
                     key: 'seatPrice',
-                    align:'center' 
+                    width:120,
+                    align:'right' 
                 },
                 {
                     title: '可租时段',

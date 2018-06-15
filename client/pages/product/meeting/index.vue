@@ -94,7 +94,7 @@
             
         </div>
         <div class="u-table">
-            <Table border  :columns="columns" :data="tableData" ref="table" stripe></Table>
+            <Table border  :columns="columns" :data="meetingList" ref="table" stripe></Table>
             <div style="margin: 10px 0 ;overflow: hidden">
                 <!-- <Button type="primary" @click="onExport">导出</Button> -->
                 <div style="float: right;">
@@ -127,7 +127,7 @@ export default {
             totalCount:0,
             page:1,
             pageSize:15,
-            tableData:[],
+            meetingList:[],
             tabParams:{
                 page:1,
                 pageSize:15,
@@ -218,13 +218,27 @@ export default {
         }
     },
     mounted:function(){
-		
+		this.getTableData(this.tabParams)
 	},
     methods:{
+        //
         changePage(){
             this.tabParams.page=page;
             this.page=page;
             this.getTableData(this.tabParams);
+        },
+        getTableData(params){
+                
+            this.$http.get('get-krmting-room-list', params).then((res)=>{
+                this.meetingList=res.data.items;
+                this.totalCount=res.data.totalCount;
+                this.openSearch=false;
+            }).catch((err)=>{
+                this.$Notice.error({
+                    title:err.message
+                });
+            })
+                
         },
         lowerSubmit(){
 

@@ -56,6 +56,40 @@
                                         placeholder="请输入" 
                                     />
                                 </FormItem>
+
+                                <FormItem label="领取有效期"  class="u-input u-date">
+                                    <DatePicker
+                                        type="date"
+                                        v-model="formItem.startTime"
+                                        placeholder="请选择开始日期"
+                                        style="width: 150px;margin-right:4px;"
+                                        @on-change="startChange"
+                                    ></DatePicker>
+                                        <TimePicker 
+                                            format="HH:mm" 
+                                            placeholder="请选择" 
+                                            style="width: 96px" 
+                                            v-model="formItem.startHour"
+                                            @on-change="startHourChange"
+                                            @on-clear="startHourClear"
+                                        />
+                                        <span class="u-date-txt">至</span>
+                                    <DatePicker
+                                            type="date"
+                                            v-model="formItem.endtime"
+                                            placeholder="请选择截止日期"
+                                            style="width: 150px;margin-right:4px;"
+                                            @on-change="endChange"
+                                    ></DatePicker>
+                                    <TimePicker 
+                                            format="HH:mm" 
+                                            placeholder="请选择" 
+                                            style="width: 96px" 
+                                            v-model="formItem.endHour"
+                                            @on-change="endHourChange"
+                                            @on-clear="endHourClear"
+                                        />
+                                </FormItem>
                                
                     </DetailStyle>
                     <DetailStyle info="APP商品信息">

@@ -218,7 +218,7 @@ export default {
         }
     },
     mounted:function(){
-		GLOBALSIDESWITCH("false");
+		
 	},
     methods:{
         changePage(){

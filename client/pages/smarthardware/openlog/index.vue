@@ -41,6 +41,7 @@ export default {
                         title: '时间',
                         key: 'time',
                         align:'center',
+                        width: "14%",
                         render(h,obj){
                            return h('div', [
                                
@@ -53,36 +54,63 @@ export default {
                         title: '社区',
                         key: 'communityName',
                         align:'center',
+                        width: "9%",
+                        
                     },
                     {
                         title: '设备展示编号',
                         key: 'doorCode',
                         align:'center',
+                        width: "10%",
+                        
                     },
                     {
                         title: '硬件ID',
                         key: 'deviceId',
                         align:'center',
+                        width: "27%",
+                        
                     },
                     {
                         title: '姓名',
                         key: 'memberName',
                         align:'center',
+                        width: "10%",
+                        render:(h,obj)=>{
+                            return h('div', [
+                               
+                                h('Tooltip',
+                                    {
+                                    props: {
+                                        placement: 'top',
+                                        content :obj.row.card
+                                    },
+                                }, obj.row.memberName),
+                            ]);
+                            
+                        }
+                        
                     },
                     {
                         title: '公司',
                         key: 'company',
                         align:'center',
+                        width: "13%",
+                        
                     },
                     {
                         title: '手机号',
                         key: 'phone',
                         align:'center',
+                        width: "8%",
+                        
                     },
                     {
                         title: '开门方式',
                         key: 'openType',
                         align:'center',
+                        width: "5%",
+                        
                         render:(h,obj)=>{
                             return h('div', [
                                
@@ -124,9 +152,11 @@ export default {
        submitSearchData(data){
 
            let _this =this;
+           this.page = 1;
            var timeObj = {
                sdate :(data.time[0] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[0])))||'',
                edate :(data.time[1] && dateUtils.dateToStr("YYYY-MM-DD HH:mm:ss",new Date(data.time[1])))||'',
+               page :1
            }
            var newObj = Object.assign({},_this.searchData,data,timeObj);
            this.searchData = newObj;
@@ -195,22 +225,24 @@ export default {
            
            
             openlogDom.onscroll=function(){
-                if(_this.lastReq.length<15){
-                    return;
-                }
-                if(_this.loading){
-                    return;
-                }
+                
                
                 var boxOffsetHeight = openlogDom.offsetHeight;
                 var boxScrollTop = openlogDom.scrollTop;
                 var boxScrollHeight = openlogDom.scrollHeight;
 
-                
-                if(boxScrollHeight-boxOffsetHeight  <= boxScrollTop+100){
+                if(boxScrollHeight-boxOffsetHeight  <= boxScrollTop+300){
+                    if(_this.lastReq.length<15){
+                        return;
+                    }
+                    if(_this.loading){
+                        return;
+                    }
+                    console.log("=====");
+                    
+                    _this.loading = true;
                     _this.searchData.page = _this.page+1;
                     _this.getListData();
-                    _this.loading = true;
                 }
 
                 

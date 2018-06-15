@@ -57,11 +57,11 @@
                                     />
                                 </FormItem>
 
-                                <FormItem label="领取有效期"  class="u-date">
+                                <FormItem label="会议室被占用设置"  class="u-date">
                                     <DatePicker
                                         type="date"
                                         v-model="formItem.startTime"
-                                        placeholder="请选择开始日期"
+                                        placeholder="日期"
                                         style="width: 150px;margin-right:4px;"
                                         @on-change="startChange"
                                     ></DatePicker>
@@ -77,7 +77,7 @@
                                     <DatePicker
                                             type="date"
                                             v-model="formItem.endtime"
-                                            placeholder="请选择截止日期"
+                                            placeholder="日期"
                                             style="width: 150px;margin-right:4px;"
                                             @on-change="endChange"
                                     ></DatePicker>
@@ -89,6 +89,14 @@
                                             @on-change="endHourChange"
                                             @on-clear="endHourClear"
                                         />
+                                </FormItem>
+                                 <FormItem label="补充描述" style="width:552px" prop="iconDesc">
+                                    <Input 
+                                        v-model="formItem.iconDesc" 
+                                        placeholder=""
+                                        type="textarea"
+                                        
+                                    />
                                 </FormItem>
                                
                     </DetailStyle>

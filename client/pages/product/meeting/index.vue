@@ -149,38 +149,46 @@ export default {
             columns:[
                 {
                     title: '会议室编号',
-                    key: 'tradeNo',
+                    key: 'id',
                     align:'center',
                 },
                 {
                     title: '会议室名称',
-                    key: 'tradeNo',
+                    key: 'name',
                     align:'center',
                 },
                 {
                     title: '所属社区',
-                    key: 'tradeNo',
+                    key: 'communityName',
                     align:'center',
                 },
                 {
                     title: '可容纳人数',
-                    key: 'tradeNo',
+                    key: 'capacity',
                     align:'center',
                 },
                 {
                     title: '所在楼层',
-                    key: 'tradeNo',
+                    key: 'floor',
                     align:'center',
                 },
                 {
                     title: 'APP上架状态',
-                    key: 'tradeNo',
+                    key: 'appPublish',
                     align:'center',
+                    render:(h,params)=>{
+                        let status=params.row.appPublish?'已上架':'未上架'
+                        return status
+                    }
                 },
                 {
                     title: 'KM上架状态',
-                    key: 'tradeNo',
+                    key: 'kmPublish',
                     align:'center',
+                    render:(h,params)=>{
+                        let status=params.row.kmPublish?'已上架':'未上架'
+                        return status
+                    }
                 },
                 {
                     title: '操作',
@@ -202,21 +210,20 @@ export default {
                                         }
                                     }
                                 }, '编辑'),
-                                
-                                h(Buttons, {
+                                 h('Button', {
                                     props: {
                                         type: 'text',
-                                        size: 'small',
-                                        label:'删除',
-                                        styles:'color:#2b85e4;padding: 2px 7px;',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        color:'#2b85e4'
                                     },
                                     on: {
                                         click: () => {
-                                            this.openDelete(params.row);
+                                             this.openDelete(params.row);
                                         }
                                     }
-                                })
-                                
+                                }, '删除')
                             ]);
                         }
 

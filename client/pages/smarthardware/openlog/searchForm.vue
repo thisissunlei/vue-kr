@@ -51,10 +51,7 @@ export default{
            
             communityList :[],
 			formItem : {
-                // communityId : '',
-                // deviceId:'',
-                // memberName : '',
-                // phone : '',
+               
 
             },
           
@@ -62,7 +59,8 @@ export default{
 
     },
     mounted(){
-
+       console.log("routerParam",this.$route.query)
+        this.formItem.deviceId = this.$route.query.deviceId || "";
         this.getCommunity();
         
     },
@@ -91,7 +89,6 @@ export default{
         },
         searchEquipment(){
 
-            console.log("searchEquipment---")
             this.$emit("submitSearchData",this.formItem);
         }
 
